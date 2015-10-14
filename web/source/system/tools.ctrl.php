@@ -38,7 +38,7 @@ if($do == 'scan') {
 	if($op == 'post') {
 		$config = iunserializer(cache_read('scan:config'));
 		$list = glob(IA_ROOT.'/*', GLOB_NOSORT);
-		$ignore = array('payment');
+		$ignore = array();
 		foreach($list as $key => $li) {
 			if(in_array(basename($li), $ignore)) {
 				unset($list[$key]);
@@ -47,7 +47,7 @@ if($do == 'scan') {
 
 		$safe = array (
 			'file_type' => 'php|js',
-			'code' => 'sinaapp',
+			'code' => 'sinaapp|safedog',
 			'func' => 'com|system|exec|eval|escapeshell|cmd|passthru|base64_decode|gzuncompress',
 			'dir' => '',
 		);
@@ -122,7 +122,7 @@ if($do == 'scan') {
 		@set_time_limit(0);
 		$config = iunserializer(cache_read('scan:config'));
 		$file = iunserializer(cache_read('scan:file'));
-		$badfiles = iunserializer(cache_read('scan:badfile'));
+		$badfiles = unserialize(cache_read('scan:badfile'));
 		if (isset($config['code']) && !empty($config['code'])) {
 			foreach ($file as $key => $val) {
 				if(!empty($config['code'])) {

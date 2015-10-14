@@ -17,7 +17,8 @@ $acl = array(
 	'account' => array(
 		'default' => 'welcome',
 		'direct' => array(
-			'welcome'
+			'welcome',
+			'auth'
 		),
 		'founder' => array(
 			'batch',

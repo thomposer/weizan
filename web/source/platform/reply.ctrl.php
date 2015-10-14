@@ -30,7 +30,7 @@ if(!in_array($m, $sysmods)) {
 	}
 $_W['page']['title'] = $module['title'];
 load()->model('extension');
-if (ext_module_checkupdate($module)) {
+if (ext_module_checkupdate($module['name'])) {
 	message('系统检测到该模块有更新，请点击“<a href="'.url('extension/module/upgrade', array('m' => $m)).'">更新模块</a>”后继续使用！', '', 'error');
 }
 

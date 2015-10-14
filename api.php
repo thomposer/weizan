@@ -12,6 +12,19 @@ $hash = $_GPC['hash'];
 if(!empty($hash)) {
 	$id = pdo_fetchcolumn("SELECT acid FROM " . tablename('account') . " WHERE hash = :hash", array(':hash' => $hash));
 }
+if(!empty($_GPC['appid'])) {
+	$appid = ltrim($_GPC['appid'], '/');
+	if ($appid == 'wx570bc396a51b8ff8') {
+		$_W['account'] = array(
+			'type' => '3',
+			'key' => 'wx570bc396a51b8ff8',
+			'level' => 4,
+			'token' => 'platformtestaccount'
+		);
+	} else {
+		$id = pdo_fetchcolumn("SELECT acid FROM " . tablename('account_wechats') . " WHERE `key` = :appid", array(':appid' => $appid));
+	}
+}
 if(empty($id)) {
 	$id = intval($_GPC['id']);
 }
@@ -26,7 +39,7 @@ if(empty($_W['account']['token'])) {
 }
 
 $_W['acid'] = $_W['account']['acid'];
-
+$_W['from'] == 'api';
 $_W['uniacid'] = $_W['account']['uniacid'];
 $_W['uniaccount'] = uni_fetch($_W['uniacid']);
 $_W['account']['groupid'] = $_W['uniaccount']['groupid'];

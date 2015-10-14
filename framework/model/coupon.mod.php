@@ -176,3 +176,9 @@ function coupon_qr($data) {
 	$return = $coupon->QrCard($data);
 	return $return;
 }
+
+function coupon_status() {
+	return array(
+		'CARD_STATUS_NOT_VERIFY' => 1, 		'CARD_STATUS_VERIFY_FAIL' => 2, 		'CARD_STATUS_VERIFY_OK' => 3, 		'CARD_STATUS_USER_DELETE' => 4,
+		'CARD_STATUS_DELETE' => 4,		'CARD_STATUS_USER_DISPATCH' => 5, 	);
+}

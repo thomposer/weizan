@@ -90,7 +90,7 @@ if(!empty($packet) && (!empty($packet['upgrade']) || !empty($packet['install']))
 		$scripts = array();
 	if(empty($packet['install'])) {
 		$updatefiles = array();
-		if(!empty($packet['scripts'])) {
+		if (!empty($packet['scripts']) && empty($packet['type'])) {
 			$updatedir = IA_ROOT . '/data/update/';
 			load()->func('file');
 			rmdirs($updatedir, true);

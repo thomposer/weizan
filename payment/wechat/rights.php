@@ -5,6 +5,10 @@
  */
 $input = file_get_contents('php://input');
 
+if (preg_match('/(\<\!DOCTYPE|\<\!ENTITY)/i', $input)) {
+	exit('fail');
+}
+libxml_disable_entity_loader(true);
 $obj = simplexml_load_string($input, 'SimpleXMLElement', LIBXML_NOCDATA);
 if($obj instanceof SimpleXMLElement && !empty($obj->FeedBackId)) {
 	$data = array(
