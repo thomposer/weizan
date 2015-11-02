@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $_W['page']['title'] = '发送客服消息 - 粉丝管理 - 粉丝管理';
@@ -31,7 +31,6 @@ if($do == 'keyword') {
 }
 
 if($do == 'fans') {
-	load()->func('tpl');
 	$fanid = intval($_GPC['fanid']);
 	$fans = pdo_fetch('SELECT acid,openid FROM ' . tablename('mc_mapping_fans') . ' WHERE uniacid = :uniacid AND fanid = :fanid', array(':uniacid' => $_W['uniacid'], ':fanid' => $fanid));
 	template('mc/notice');
@@ -40,8 +39,7 @@ if($do == 'fans') {
 
 if($do == 'post') {
 	$msgtype = trim($_GPC['msgtype']);
-	$acid = intval($_GPC['acid']);
-
+	$acid = $_W['acid'];
 	$send['touser'] = trim($_GPC['openid']);
 	$send['msgtype'] = $msgtype;
 	$fans = pdo_fetch('SELECT salt,acid,openid FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND openid = :openid', array(':acid' => $acid, ':openid' => $send['touser']));
@@ -146,12 +144,11 @@ if($do == 'post') {
 }
 
 if($do == 'tpl') {
-	load()->func('tpl');
 	$fanid = intval($_GPC['id']);
 	$fans = pdo_fetch('SELECT fanid,acid,uid,tag,openid FROM ' . tablename('mc_mapping_fans') . ' WHERE uniacid = :uniacid AND fanid = :id', array(':uniacid' => $_W['uniacid'], ':id' => $fanid));
 	$account = account_fetch($fans['acid']);
 	if(empty($account['original'])) {
-		message('发送客服消息前,您必须完善公众号原始ID', url('account/bind/post', array('acid' => $fans['acid'], 'uniacid' => $_W['uniacid'])));
+		message('发送客服消息前,您必须完善公众号原始ID', url('account/post', array('acid' => $fans['acid'], 'uniacid' => $_W['uniacid'])));
 	}
 	$maxid = pdo_fetchcolumn('SELECT id FROM ' . tablename('mc_chats_record') . ' WHERE acid=:acid AND openid = :openid  ORDER BY id DESC LIMIT 1', array(':acid' => $fans['acid'], ':openid' => $fans['openid']));
 	$maxid = ($maxid - 5) > 0 ? ($maxid - 5) : 0;
@@ -163,13 +160,11 @@ if($do == 'tpl') {
 			$fans['tag'] = iunserializer($fans['tag']);
 		}
 	}
-
 	if(!empty($fans['tag']['nickname'])) {
 		$nickname = $fans['tag']['nickname'];
 	} else {
 		$nickname = $fans['openid'];
 	}
-
 	template('mc/notice');
 }
 
@@ -191,8 +186,6 @@ if($do == 'log') {
 			$avatar = 'resource/images/noavatar_middle.gif';
 		}
 	}
-
-
 	if($type == 'asc') {
 		$data = pdo_fetchall('SELECT * FROM ' . tablename('mc_chats_record') . ' WHERE acid=:acid AND openid = :openid AND id > :id ORDER BY id ASC LIMIT 5', array(':acid' => $fans['acid'], ':openid' => $fans['openid'], ':id' => $id), 'id');
 	} else {

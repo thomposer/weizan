@@ -24,6 +24,7 @@ class Hx_subscribeModule extends WeModule {
 		}
 		if(checksubmit()) {
 			$cfg = array(
+				'status' => $_GPC['status'],
 				'credit_type' => $_GPC['credit_type'],
 				'credit_subscribe' => intval($_GPC['credit_subscribe']),
 				'credit_lever_1' => intval($_GPC['credit_lever_1']),

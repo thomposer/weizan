@@ -7,7 +7,7 @@ defined('IN_IA') or exit('Access Denied');
 
 
 function ext_module_convert($manifest) {
-	$module = array(
+	return array(
 		'name' => $manifest['application']['identifie'],
 		'title' => $manifest['application']['name'],
 		'version' => $manifest['application']['version'],
@@ -28,24 +28,23 @@ function ext_module_convert($manifest) {
 		'profile' => $manifest['bindings']['profile'],
 		'shortcut' => $manifest['bindings']['shortcut'],
 		'function' => $manifest['bindings']['function'],
-		'issolution' => $manifest['application']['type'] == 'biz',
+		'permissions' => $manifest['permissions'],
 		'issystem' => 0,
 	);
-	return $module;
 }
 
 
 function ext_module_manifest_parse($xml) {
 	$dom = new DOMDocument();
 	$dom->loadXML($xml);
-	if($dom->schemaValidateSource(ext_module_manifest_validate())) {
+	if ($dom->schemaValidateSource(ext_module_manifest_validate())) {
 				$root = $dom->getElementsByTagName('manifest')->item(0);
 		$vcode = explode(',', $root->getAttribute('versionCode'));
 		$manifest['versions'] = array();
-		if(is_array($vcode)) {
-			foreach($vcode as $v) {
+		if (is_array($vcode)) {
+			foreach ($vcode as $v) {
 				$v = trim($v);
-				if(!empty($v)) {
+				if (!empty($v)) {
 					$manifest['versions'][] = $v;
 				}
 			}
@@ -69,7 +68,7 @@ function ext_module_manifest_parse($xml) {
 			'setting' => trim($application->getAttribute('setting')) == 'true',
 		);
 		$platform = $root->getElementsByTagName('platform')->item(0);
-		if(!empty($platform)) {
+		if (!empty($platform)) {
 			$manifest['platform'] = array(
 				'subscribes' => array(),
 				'handles' => array(),
@@ -77,49 +76,80 @@ function ext_module_manifest_parse($xml) {
 				'iscard' => false,
 			);
 			$subscribes = $platform->getElementsByTagName('subscribes')->item(0);
-			if(!empty($subscribes)) {
+			if (!empty($subscribes)) {
 				$messages = $subscribes->getElementsByTagName('message');
-				for($i = 0; $i < $messages->length; $i++) {
+				for ($i = 0; $i < $messages->length; $i++) {
 					$t = $messages->item($i)->getAttribute('type');
-					if(!empty($t)) {
+					if (!empty($t)) {
 						$manifest['platform']['subscribes'][] = $t;
 					}
 				}
 			}
 			$handles = $platform->getElementsByTagName('handles')->item(0);
-			if(!empty($handles)) {
+			if (!empty($handles)) {
 				$messages = $handles->getElementsByTagName('message');
-				for($i = 0; $i < $messages->length; $i++) {
+				for ($i = 0; $i < $messages->length; $i++) {
 					$t = $messages->item($i)->getAttribute('type');
-					if(!empty($t)) {
+					if (!empty($t)) {
 						$manifest['platform']['handles'][] = $t;
 					}
 				}
 			}
 			$rule = $platform->getElementsByTagName('rule')->item(0);
-			if(!empty($rule) && $rule->getAttribute('embed') == 'true') {
+			if (!empty($rule) && $rule->getAttribute('embed') == 'true') {
 				$manifest['platform']['isrulefields'] = true;
 			}
 			$card = $platform->getElementsByTagName('card')->item(0);
-			if(!empty($card) && $card->getAttribute('embed') == 'true') {
+			if (!empty($card) && $card->getAttribute('embed') == 'true') {
 				$manifest['platform']['iscard'] = true;
 			}
 		}
 		$bindings = $root->getElementsByTagName('bindings')->item(0);
-		if(!empty($bindings)) {
+		if (!empty($bindings)) {
 			global $points;
 			if (!empty($points)) {
 				$ps = array_keys($points);
 				$manifest['bindings'] = array();
-				foreach($ps as $p) {
+				foreach ($ps as $p) {
 					$define = $bindings->getElementsByTagName($p)->item(0);
 					$manifest['bindings'][$p] = _ext_module_manifest_entries($define);
 				}
 			}
 		}
+				$permissions = $root->getElementsByTagName('permissions')->item(0);
+		if (!empty($permissions)) {
+			$manifest['permissions'] = array();
+			$items = $permissions->getElementsByTagName('entry');
+			for ($i = 0; $i < $items->length; $i++) {
+				$item = $items->item($i);
+				$row = array(
+					'title' => $item->getAttribute('title'),
+					'permission' => $item->getAttribute('do'),
+				);
+				if (!empty($row['title']) && !empty($row['permission'])) {
+					$manifest['permissions'][] = $row;
+				}
+			}
+		}
+		$crons = $root->getElementsByTagName('crons')->item(0);
+		if (!empty($crons)) {
+			$manifest['crons'] = array();
+			$items = $crons->getElementsByTagName('item');
+			for ($i = 0; $i < $items->length; $i++) {
+				$item = $items->item($i);
+				$dls = $item->getElementsByTagName('dl');
+				for ($j = 0; $j < $dls->length; $j++) {
+					$dl = $dls->item($j);
+					$row_c[$dl->getAttribute('name')] = $dl->getAttribute('value');
+				}
+				if (!empty($row_c['name']) && !empty($row_c['filename'])) {
+					$manifest['crons'][] = $row_c;
+				}
+			}
+		}
 	} else {
 		$err = error_get_last();
-		if($err['type'] == 2) {
+		if ($err['type'] == 2) {
 			return $err['message'];
 		}
 	}
@@ -233,10 +263,7 @@ function ext_module_clean($modulename, $isCleanRule = false) {
 	$sql = 'DELETE FROM ' . tablename('modules_bindings') . ' WHERE `module`=:module';
 	pdo_query($sql, $pars);
 
-	$sql = 'DELETE FROM ' . tablename('solution_acl') . ' WHERE `module`=:module';
-	pdo_query($sql, $pars);
-
-	if($isCleanRule) {
+	if ($isCleanRule) {
 		$sql = 'DELETE FROM ' . tablename('stat_rule') . ' WHERE `rid` IN (SELECT `id` FROM ' . tablename('rule') . ' WHERE `module`=:module)';
 		pdo_query($sql, $pars);
 
@@ -254,7 +281,7 @@ function ext_module_clean($modulename, $isCleanRule = false) {
 
 		$sql = 'SELECT rid FROM ' . tablename('cover_reply') . ' WHERE `module`=:module';
 		$data = pdo_fetchall($sql, $pars, 'rid');
-		if(!empty($data)) {
+		if (!empty($data)) {
 			$rids = array_keys($data);
 			$ridstr = implode(',', $rids);
 			pdo_query('DELETE FROM ' . tablename('rule_keyword') . " WHERE module = 'cover' AND rid IN ({$ridstr})");
@@ -275,15 +302,22 @@ function ext_module_clean($modulename, $isCleanRule = false) {
 
 
 function ext_module_manifest_validate() {
-	$xsd = <<<TPL
+	if(strcasecmp(ADDONS_URL,'http://addons.wdlcms.com')==0) {
+			$xsd = <<<TPL
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns="http://www.012wz.com" targetNamespace="http://www.012wz.com" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema xmlns='http://www.wdlcms.com' targetNamespace='http://www.wdlcms.com' xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<xs:element name="entry">
 		<xs:complexType>
 			<xs:attribute name="title" type="xs:string" />
 			<xs:attribute name="do" type="xs:string" />
 			<xs:attribute name="direct" type="xs:boolean" />
 			<xs:attribute name="state" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="dl">
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string" />
+			<xs:attribute name="value" type="xs:string" />
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="message">
@@ -401,6 +435,26 @@ function ext_module_manifest_validate() {
 						</xs:all>
 					</xs:complexType>
 				</xs:element>
+				<xs:element name="permissions" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="crons" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="item" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="dl" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 				<xs:element name="install" type="xs:string" minOccurs="0" maxOccurs="1" />
 				<xs:element name="uninstall" type="xs:string" minOccurs="0" maxOccurs="1" />
 				<xs:element name="upgrade" type="xs:string" minOccurs="0" maxOccurs="1" />
@@ -410,6 +464,331 @@ function ext_module_manifest_validate() {
 	</xs:element>
 </xs:schema>
 TPL;
+	}else if(strcasecmp(ADDONS_URL,'http://v2.addons.we7.cc')==0) {
+			$xsd = <<<TPL
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns='http://www.we7.cc' targetNamespace='http://www.we7.cc' xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="entry">
+		<xs:complexType>
+			<xs:attribute name="title" type="xs:string" />
+			<xs:attribute name="do" type="xs:string" />
+			<xs:attribute name="direct" type="xs:boolean" />
+			<xs:attribute name="state" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="dl">
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string" />
+			<xs:attribute name="value" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="message">
+		<xs:complexType>
+			<xs:attribute name="type" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="manifest">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="application" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+							<xs:element name="identifie" type="xs:string"  minOccurs="1" maxOccurs="1" />
+							<xs:element name="version" type="xs:string"  minOccurs="1" maxOccurs="1" />
+							<xs:element name="type" type="xs:string"  minOccurs="1" maxOccurs="1" />
+							<xs:element name="ability" type="xs:string"  minOccurs="1" maxOccurs="1" />
+							<xs:element name="description" type="xs:string"  minOccurs="1" maxOccurs="1" />
+							<xs:element name="author" type="xs:string"  minOccurs="1" maxOccurs="1" />
+							<xs:element name="url" type="xs:string"  minOccurs="1" maxOccurs="1" />
+						</xs:all>
+						<xs:attribute name="setting" type="xs:boolean" />
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="platform" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="subscribes" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="message" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="handles" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="message" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="rule" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:attribute name="embed" type="xs:boolean" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="card" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:attribute name="embed" type="xs:boolean" />
+								</xs:complexType>
+							</xs:element>
+						</xs:all>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="bindings" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="cover" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+									<xs:attribute name="call" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="rule" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+									<xs:attribute name="call" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="menu" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+									<xs:attribute name="call" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="home" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+									<xs:attribute name="call" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="profile" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+									<xs:attribute name="call" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="shortcut" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+									<xs:attribute name="call" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="function" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+									<xs:attribute name="call" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+						</xs:all>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="permissions" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="crons" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="item" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="dl" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="install" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="uninstall" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="upgrade" type="xs:string" minOccurs="0" maxOccurs="1" />
+			</xs:all>
+			<xs:attribute name="versionCode" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
+TPL;
+	}else{
+	$xsd = <<<TPL
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns='http://www.012wz.com' targetNamespace='http://www.012wz.com' xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="entry">
+		<xs:complexType>
+			<xs:attribute name="title" type="xs:string" />
+			<xs:attribute name="do" type="xs:string" />
+			<xs:attribute name="direct" type="xs:boolean" />
+			<xs:attribute name="state" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="dl">
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string" />
+			<xs:attribute name="value" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="message">
+		<xs:complexType>
+			<xs:attribute name="type" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="manifest">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="application" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+							<xs:element name="identifie" type="xs:string"  minOccurs="1" maxOccurs="1" />
+							<xs:element name="version" type="xs:string"  minOccurs="1" maxOccurs="1" />
+							<xs:element name="type" type="xs:string"  minOccurs="1" maxOccurs="1" />
+							<xs:element name="ability" type="xs:string"  minOccurs="1" maxOccurs="1" />
+							<xs:element name="description" type="xs:string"  minOccurs="1" maxOccurs="1" />
+							<xs:element name="author" type="xs:string"  minOccurs="1" maxOccurs="1" />
+							<xs:element name="url" type="xs:string"  minOccurs="1" maxOccurs="1" />
+						</xs:all>
+						<xs:attribute name="setting" type="xs:boolean" />
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="platform" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="subscribes" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="message" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="handles" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="message" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="rule" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:attribute name="embed" type="xs:boolean" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="card" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:attribute name="embed" type="xs:boolean" />
+								</xs:complexType>
+							</xs:element>
+						</xs:all>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="bindings" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="cover" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+									<xs:attribute name="call" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="rule" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+									<xs:attribute name="call" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="menu" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+									<xs:attribute name="call" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="home" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+									<xs:attribute name="call" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="profile" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+									<xs:attribute name="call" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="shortcut" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+									<xs:attribute name="call" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="function" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+									<xs:attribute name="call" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+						</xs:all>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="permissions" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="entry" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="crons" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="item" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="dl" minOccurs="0" maxOccurs="unbounded" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="install" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="uninstall" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="upgrade" type="xs:string" minOccurs="0" maxOccurs="1" />
+			</xs:all>
+			<xs:attribute name="versionCode" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
+TPL;
+	}
 	return trim($xsd);
 }
 

@@ -7,15 +7,6 @@
 	<li {if $do == 'deliver'}class="active"{/if}><a href="{php echo url('activity/goods/deliver');}">发货记录</a></li>
 	{if $do == 'receiver' && $id}<li class="active"><a href="{php echo url('activity/goods/receiver', array('id' => $id));}">编辑收货人信息</a></li>{/if}
 </ul>
-<script>
-	require(['bootstrap'],function($){
-		$('.btn').hover(function(){
-			$(this).tooltip('show');
-		},function(){
-			$(this).tooltip('hide');
-		});
-	});
-</script>
 {if $do == 'post'}
 <style>
 	.text-danger{color:red;}
@@ -146,9 +137,9 @@
 					<td>{$item['total']} 个</td>
 					<td>{php echo date('Y-m-d', $item['starttime'])} - {php echo date('Y-m-d', $item['endtime'])}</td>
 					<td style="text-align:right;">
-						<a href="{php echo url('activity/goods/post', array('id' => $item['id']))}" data-toggle="tooltip" data-placement="top" title="编辑" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-						<a href="{php echo url('activity/goods/del', array('id' => $item['id']))}" onclick="return confirm('此操作不可恢复，确认删除？');return false;" data-toggle="tooltip" data-placement="top" title="删除" class="btn btn-default btn-sm"><i class="fa fa-times"></i></a>
-						<a href="{php echo url('activity/goods/record', array('exid' => $item['id']))}" data-toggle="tooltip" data-placement="top" title="兑换记录" class="btn btn-default btn-sm"><i class="fa fa-clock-o"></i></a>
+						<a href="{php echo url('activity/goods/post', array('id' => $item['id']))}" title="编辑">编辑</a>&nbsp;-&nbsp;
+						<a href="{php echo url('activity/goods/del', array('id' => $item['id']))}" onclick="return confirm('此操作不可恢复，确认删除？');return false;" title="删除">删除</a>
+						<a href="{php echo url('activity/goods/record', array('exid' => $item['id']))}" title="兑换记录">兑换记录</a>
 					</td>
 				</tr>
 				{/loop}
@@ -157,15 +148,6 @@
 		</div>
 	</div>
 	{$pager}
-<script>
-	require(['bootstrap'],function($){
-		$('.btn').hover(function(){
-			$(this).tooltip('show');
-		},function(){
-			$(this).tooltip('hide');
-		});
-	});
-</script>
 </div>
 {elseif $do == 'record'}
 <div class="main">
@@ -312,8 +294,8 @@
 						{/if}
 					</td>
 					<td style="text-align:center;">
-						<a href="{php echo url('activity/goods/receiver',array('id'=>$item['tid']));}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></a>
-						<!--  <a onclick="return confirm('确定要删除当前物品吗？');" href="{php echo url('activity/exchange/shipping',array('op'=>'delete','id'=>$item['id']));}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="删除"><i class="fa fa-times"></i></a>-->
+						<a href="{php echo url('activity/goods/receiver',array('id'=>$item['tid']));}" title="编辑">编辑</a>
+						<!--  <a onclick="return confirm('确定要删除当前物品吗？');" href="{php echo url('activity/exchange/shipping',array('op'=>'delete','id'=>$item['id']));}" title="删除">删除</a>-->
 					</td>
 				</tr>
 				{/loop}

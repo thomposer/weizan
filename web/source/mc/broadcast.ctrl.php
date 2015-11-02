@@ -4,6 +4,7 @@
  * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
+uni_user_permission_check('mc_broadcast');
 $dos = array('display', 'send');
 if($_W['isajax']) {
 	$post = $_GPC['__input'];

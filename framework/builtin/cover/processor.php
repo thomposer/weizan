@@ -13,16 +13,13 @@ class CoverModuleProcessor extends WeModuleProcessor {
 		if(!empty($reply)) {
 			load()->model('module');
 			$module = module_fetch($reply['module']);
-			if (empty($module) && !in_array($reply['module'], array('site', 'mc', 'card'))) {
+			if (empty($module) && !in_array($reply['module'], array('site', 'mc', 'card', 'page', 'clerk'))) {
 				return '';
 			}
 			$url = $reply['url'];
 			if(empty($reply['url'])) {
 				$entry = pdo_fetch("SELECT eid FROM ".tablename('modules_bindings')." WHERE module = :module AND do = :do", array(':module' => $reply['module'], ':do' => $reply['do']));
 				$url = url('entry', array('eid' => $entry['eid']));
-			}
-			if (!strexists($url, '&j=') && !empty($_W['acid'])) {
-				$url = str_replace("?i={$_W['uniacid']}&", "?i={$_W['uniacid']}&j={$_W['acid']}&", $url);
 			}
 			$news = array();
 			$news[] = array(

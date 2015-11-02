@@ -1,12 +1,20 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
+$GLOBALS['top_nav'] = pdo_fetchall('SELECT name, title, append_title FROM ' . tablename('core_menu') . ' WHERE pid = 0 AND is_display = 1 ORDER BY displayorder DESC');
+buildframes();
+$_W['page']['title'] = '模拟测试';
 $development = 1;
 $accounts = uni_owned();
 foreach($accounts as &$account) {
-	$account['details'] = uni_accounts($account['uniacid']);
+	if($account['default_acid'] > 0) {
+		$account['default_account'] = pdo_fetch('SELECT acid,token,name FROM ' . tablename('account_wechats') . ' WHERE acid = :acid', array(':acid' => $account['default_acid']));
+	} else {
+		$account['default_account'] = pdo_fetch('SELECT acid,token,name FROM ' . tablename('account_wechats') . ' WHERE uniacid = :uniacid ORDER BY level DESC LIMIT 1', array(':uniacid' => $account['uniacid']));
+		$account['default_acid'] = $account['default_account']['acid'];
+	}
 }
 
 unset($account);
@@ -66,7 +74,8 @@ template('common/header');
 			<div class="form-group">
 				<label class="col-xs-12 col-sm-2 col-md-2 control-label"></label>
 				<div class="col-sm-10 col-xs-12">
-					<input name="submit" type="button" onclick="submitform()" value="发送" class="btn btn-primary">
+					<input name="submit" type="button" onclick="submitform()" value="发送" class="btn btn-primary" style="margin-right:15px">
+					<input name="submit" type="button" onclick="submitprocess()" value="查看触发过程" class="btn btn-success">
 				</div>
 			</div>
 			<div class="form-group">
@@ -76,26 +85,24 @@ template('common/header');
 					<?php
 						foreach($accounts as $account) {
 					?>
-						<optgroup label="<?php echo $account['name'];?>">
 						<?php
-							foreach ($account['details'] as $row) {
+							if(!empty($account['default_account'])) {
 								$timestamp = TIMESTAMP;
 								$nonce = random(5);
-								$token = $row['token'];
+								$token = $account['default_account']['token'];
 								$signkey = array($token, TIMESTAMP, $nonce);
 								sort($signkey, SORT_STRING);
 								$signString = implode($signkey);
 								$signString = sha1($signString);
 						?>
 						<?php if($development == 1) { ?>
-							<option <?php if ($_W['uniacid'] == $row['uniacid']) { ?>selected<?php } ?> value="<?php echo '../api.php?id='.$row['acid'] ?>&timestamp=<?php echo $timestamp ?>&nonce=<?php echo $nonce ?>&signature=<?php echo $signString ?>"><?php echo $row['name'] ?></option>
+							<option <?php if ($_W['acid'] == $account['default_acid']) { ?>selected<?php } ?> value="<?php echo '../api.php?id='.$account['default_acid'] ?>&timestamp=<?php echo $timestamp ?>&nonce=<?php echo $nonce ?>&signature=<?php echo $signString ?>"><?php echo $account['default_account']['name']?></option>
 						<?php } else { ?>
-							<option <?php if ($_W['uniacid'] == $row['uniacid']) { ?>selected<?php } ?> value="<?php echo $row['acid'];?>"><?php echo $row['name'] ?></option>
+							<option <?php if ($_W['acid'] == $account['default_acid']) { ?>selected<?php } ?> value="<?php echo $account['default_acid'];?>"><?php echo $account['default_account']['name'] ?></option>
 						<?php } ?>
 						<?php
 							}
 						?>
-						</optgroup>
 					<?php
 						}
 					?>
@@ -169,6 +176,11 @@ template('common/header');
 				<label class="col-xs-12 col-sm-2 col-md-2 control-label">发送消息</label>
 				<div class="col-sm-10 col-xs-12">
 					<textarea id="sendxml" rows="10" cols="50" class="form-control" readonly="readonly"></textarea>
+				</div>
+			</div>
+			<div class="form-group" style="display:none" id="process">
+				<label class="col-xs-12 col-sm-2 col-md-2 control-label">处理过程</label>
+				<div class="col-sm-10 col-xs-12 table-responsive">
 				</div>
 			</div>
 			<div class="form-group">
@@ -322,7 +334,91 @@ template('common/header');
 			}
 			$('#sendxml').val(xml);
 		}
+		function submitprocess() {
+			buildRequest(curtype);
+			$('#svtext').hide();$('#svurlbox').hide();$('#svinfolist').hide();
+			$('div.mediaFooterbox', $('#demoSendBox')).show();
+			var url = $('#account').val() + '&debug=1';
+			$.ajax(url, {
+				type : 'POST',
+				headers : {"Content-type" : "text/xml"},
+				data : $('#sendxml').val().replace(/[\r\n]/g,""),
+				beforeSend : function(){
+					if(curtype!='subscribe' && curtype!='unsubscribe'){
+						if(curtype=='text' || curtype=='image' || curtype == 'location'){
+							$('#svposttext').show();
+						}
+					}
+					$('#receive').text('加载中。。。');
+				}
+			}).done(function(data){
+				var data = $.parseJSON(data);
+				var s = data.resp;
+				var p = data.process;
+				if(1 || curtype!='unsubscribe'){
+					var xmlobject = getxml(s);
+					if(xmlobject){
+						var xmlobj = xmlobject.getElementsByTagName("xml");
+						if(xmlobj.length){
+							var xmls = xmlobj.item(0);
+							var xml = xmls;
+							if (xml.getElementsByTagName("FromUserName").length > 0) {
+								var FromUserName = xml.getElementsByTagName("FromUserName")[0].firstChild.nodeValue;
+								var ToUserName = xml.getElementsByTagName("ToUserName")[0].firstChild.nodeValue;
+								var MsgType = xml.getElementsByTagName("MsgType")[0].firstChild.nodeValue;
+							} else {
+								var MsgType = 'text';
+								var Content = '';
+							}
+
+							if(MsgType=='text'){
+								if (xml.getElementsByTagName("FromUserName").length > 0) {
+									var Content = xml.getElementsByTagName("Content")[0].firstChild.nodeValue;
+								} else {
+									var Content = '';
+								}
+								Content = nl2br(Content);
+								Content = Content.replace('./index', "../app/index");
+
+								Content && $('#svtext').show().find('div.btn').html(Content);
+							}else if(MsgType == 'news'){
+								var Title = xml.getElementsByTagName("Title")[0].firstChild.nodeValue;
+								var Description = xml.getElementsByTagName("Description")[0].firstChild.nodeValue;
+								var PicUrl = xml.getElementsByTagName("PicUrl")[0].firstChild.nodeValue;
+								var Url = xml.getElementsByTagName("Url")[0].firstChild.nodeValue;
+								if(Url.indexOf('http://') == -1 && Url.indexOf('https://') == -1) {
+									Url = '../app/' + Url;
+								}
+								$('#svtitle').html(Title);
+								$('#svinfo').html(Description);
+								$('#svpic').attr('src', PicUrl);
+								$('#svurlbox').show().find('a#svurl').attr('href', Url);
+								var titleObj = xml.getElementsByTagName("Title");
+								if(titleObj.length>1){
+									var svinfolist = imghtml = '';
+									var UrlObj = xml.getElementsByTagName("Url");
+									var PicUrlObj = xml.getElementsByTagName("PicUrl");
+									for(var ti=1;ti<titleObj.length;ti++){
+										imghtml = PicUrlObj[ti].firstChild.nodeValue ? '<img align="right" src="'+PicUrlObj[ti].firstChild.nodeValue+'">' : '';
+										svinfolist += '<p class="clearfix" onclick="popensvurl(\''+UrlObj[ti].firstChild.nodeValue+'\')">'+titleObj[ti].firstChild.nodeValue+imghtml+'</p>';
+									}
+									$('div.mediaFooterbox', $('#demoSendBox')).hide();
+									$('#svinfolist').show().html(svinfolist);
+								}
+							}
+						}
+					}
+					$('#receive').text(s);
+				}else{
+					$('#receive').text('模拟取消关注成功');
+				}
+				$('#process').find('div').html(p);
+				$('#process').show();
+			});
+		}
+
 		function submitform() {
+			$('#process').hide();
 			buildRequest(curtype);
 			$('#svtext').hide();$('#svurlbox').hide();$('#svinfolist').hide();
 			$('div.mediaFooterbox', $('#demoSendBox')).show();
@@ -339,7 +435,7 @@ template('common/header');
 				$('#receive').text('加载中。。。');
 			}
 			}).done(function(s){
-				if(curtype!='unsubscribe'){
+				if(1 || curtype!='unsubscribe'){
 					var xmlobject = getxml(s);
 					if(xmlobject){
 						var xmlobj = xmlobject.getElementsByTagName("xml");
@@ -540,7 +636,7 @@ template('common/header');
 							$('#receive').text('加载中。。。');
 						}
 					}).done(function(s){
-						if(curtype!='unsubscribe'){
+						if(1 || curtype!='unsubscribe'){
 							$.ajax('<?php echo $_W['siteroot']?>api.php?flag=2&id=' + id, {
 								type : 'POST',
 								headers : {"Content-type" : "text/xml"},
@@ -617,7 +713,6 @@ template('common/header');
 			var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br ' + '/>' : '<br>'; // Adjust comment to avoid issue on phpjs.org display
 			return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
 		}
-
 		</script>
 	<?php }
 ?>

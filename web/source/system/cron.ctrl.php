@@ -1,7 +1,7 @@
 <?php
 /**
- * 计划任务
- * [Weizan System] Copyright (c) 2013 012wz.com
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $dos = array('list', 'post', 'del', 'run');
@@ -95,8 +95,7 @@ if($do == 'del') {
 			if(preg_match('/^(\d{1,10},)*(\d{1,10})$/', $idstr)) {
 				$state = pdo_query('DELETE FROM ' . tablename('cron') . " WHERE cronid IN ({$idstr})");
 				if($state !== false) {
-					//没有删除计划任务的程序文件
-					message('删除计划任务成功', url('system/cron'), 'success');
+										message('删除计划任务成功', url('system/cron'), 'success');
 				} else {
 					message('删除计划任务失败', url('system/cron'), 'error');
 				}

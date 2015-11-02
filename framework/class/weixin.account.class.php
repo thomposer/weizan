@@ -48,7 +48,7 @@ class WeiXinAccount extends WeAccount {
 		$str = $this->buildSignature($encrypt_msg);
 		return $str == $_GET['msg_signature'];
 	}
-
+	
 	public function local_checkSignature($packet) {
 		$token = $this->account['token'];
 		$array = array($packet['Encrypt'], $token, $packet['TimeStamp'], $packet['Nonce']);
@@ -56,6 +56,52 @@ class WeiXinAccount extends WeAccount {
 		$str = implode($array);
 		$str = sha1($str);
 		return $str == $packet['MsgSignature'];
+	}
+	
+	
+	public function local_decryptMsg($postData) {
+		$token = $this->account['token'];
+		$encodingaeskey = $this->account['encodingaeskey'];
+		$appid = $this->account['key'];
+	
+		if(strlen($encodingaeskey) != 43) {
+			return error(-1, "微信公众平台返回接口错误. \n错误代码为: 40004 \n,错误描述为: " . $this->encrypt_error_code('40004'));
+		}
+		$key = base64_decode($encodingaeskey . '=');
+				$packet = $this->local_xmlExtract($postData);
+		if(is_error($packet)) {
+			return error(-1, $packet['message']);
+		}
+				$istrue = $this->local_checkSignature($packet);
+		if(!$istrue) {
+			return error(-1, "微信公众平台返回接口错误. \n错误代码为: 40001 \n,错误描述为: " . $this->encrypt_error_code('40001'));
+		}
+				$ciphertext_dec = base64_decode($packet['Encrypt']);
+		$module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
+		$iv = substr($key, 0, 16);
+		mcrypt_generic_init($module, $key, $iv);
+		$decrypted = mdecrypt_generic($module, $ciphertext_dec);
+		mcrypt_generic_deinit($module);
+		mcrypt_module_close($module);
+		$block_size = 32;
+	
+		$pad = ord(substr($decrypted, -1));
+		if ($pad < 1 || $pad > 32) {
+			$pad = 0;
+		}
+		$result = substr($decrypted, 0, (strlen($decrypted) - $pad));
+		if (strlen($result) < 16) {
+			return '';
+		}
+		$content = substr($result, 16, strlen($result));
+		$len_list = unpack("N", substr($content, 0, 4));
+		$xml_len = $len_list[1];
+		$xml_content = substr($content, 4, $xml_len);
+		$from_appid = substr($content, $xml_len + 4);
+		if ($from_appid != $appid) {
+			return error(-1, "微信公众平台返回接口错误. \n错误代码为: 40005 \n,错误描述为: " . $this->encrypt_error_code('40005'));
+		}
+		return $xml_content;
 	}
 
 	
@@ -99,15 +145,6 @@ class WeiXinAccount extends WeAccount {
 				$signature = $this->buildSignature($encrypt_msg);
 		return array($signature, $encrypt_msg);
 	}
-
-	
-	function xmlDetract($data) {
-				$xml['Encrypt'] = $data[1];
-		$xml['MsgSignature'] = $data[0];
-		$xml['TimeStamp'] = $_GET['timestamp'];
-		$xml['Nonce'] = $_GET['nonce'];
-		return array2xml($xml);
-	}
 	
 	
 	public function decryptMsg($postData) {
@@ -115,7 +152,7 @@ class WeiXinAccount extends WeAccount {
 		$encodingaeskey = $this->account['encodingaeskey'];
 		$appid = $this->account['key'];
 		$key = base64_decode($encodingaeskey . '=');
-
+	
 		if(strlen($encodingaeskey) != 43) {
 			return error(-1, "微信公众平台返回接口错误. \n错误代码为: 40004 \n,错误描述为: " . $this->encrypt_error_code('40004'));
 		}
@@ -135,7 +172,7 @@ class WeiXinAccount extends WeAccount {
 		mcrypt_generic_deinit($module);
 		mcrypt_module_close($module);
 		$block_size = 32;
-
+	
 		$pad = ord(substr($decrypted, -1));
 		if ($pad < 1 || $pad > 32) {
 			$pad = 0;
@@ -153,58 +190,22 @@ class WeiXinAccount extends WeAccount {
 			return error(-1, "微信公众平台返回接口错误. \n错误代码为: 40005 \n,错误描述为: " . $this->encrypt_error_code('40005'));
 		}
 		return $xml_content;
+	}
+
+	
+	function xmlDetract($data) {
+				$xml['Encrypt'] = $data[1];
+		$xml['MsgSignature'] = $data[0];
+		$xml['TimeStamp'] = $_GET['timestamp'];
+		$xml['Nonce'] = $_GET['nonce'];
+		return array2xml($xml);
 	}
 	
-	public function local_decryptMsg($postData) {
-		$token = $this->account['token'];
-		$encodingaeskey = $this->account['encodingaeskey'];
-		$appid = $this->account['key'];
-
-		if(strlen($encodingaeskey) != 43) {
-			return error(-1, "微信公众平台返回接口错误. \n错误代码为: 40004 \n,错误描述为: " . $this->encrypt_error_code('40004'));
-		}
-		$key = base64_decode($encodingaeskey . '=');
-				$packet = $this->local_xmlExtract($postData);
-		if(is_error($packet)) {
-			return error(-1, $packet['message']);
-		}
-				$istrue = $this->local_checkSignature($packet);
-		if(!$istrue) {
-			 return error(-1, "微信公众平台返回接口错误. \n错误代码为: 40001 \n,错误描述为: " . $this->encrypt_error_code('40001'));
-		}
-				$ciphertext_dec = base64_decode($packet['Encrypt']);
-		$module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
-		$iv = substr($key, 0, 16);
-		mcrypt_generic_init($module, $key, $iv);
-		$decrypted = mdecrypt_generic($module, $ciphertext_dec);
-		mcrypt_generic_deinit($module);
-		mcrypt_module_close($module);
-		$block_size = 32;
-
-		$pad = ord(substr($decrypted, -1));
-		if ($pad < 1 || $pad > 32) {
-			$pad = 0;
-		}
-		$result = substr($decrypted, 0, (strlen($decrypted) - $pad));
-		if (strlen($result) < 16) {
-			return '';
-		}
-		$content = substr($result, 16, strlen($result));
-		$len_list = unpack("N", substr($content, 0, 4));
-		$xml_len = $len_list[1];
-		$xml_content = substr($content, 4, $xml_len);
-		$from_appid = substr($content, $xml_len + 4);
-		if ($from_appid != $appid) {
-			return error(-1, "微信公众平台返回接口错误. \n错误代码为: 40005 \n,错误描述为: " . $this->encrypt_error_code('40005'));
-		}
-		return $xml_content;
-	}
-
 	
 	public function xmlExtract($message) {
 		$packet = array();
 		if (!empty($message)){
-			$obj = simplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA);
+			$obj = isimplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA);
 			if($obj instanceof SimpleXMLElement) {
 				$packet['encrypt'] = strval($obj->Encrypt);
 				$packet['to'] = strval($obj->ToUserName);
@@ -220,7 +221,7 @@ class WeiXinAccount extends WeAccount {
 	public function local_xmlExtract($message) {
 		$packet = array();
 		if (!empty($message)){
-			$obj = simplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA);
+			$obj = isimplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA);
 			if($obj instanceof SimpleXMLElement) {
 				$packet['Encrypt'] = strval($obj->Encrypt);
 				$packet['MsgSignature'] = strval($obj->MsgSignature);
@@ -310,11 +311,11 @@ class WeiXinAccount extends WeAccount {
 					} else {
 						$e['type'] = 'click';
 					}
-					$e['name'] = urlencode($s['title']);
-					if($e['type'] == 'view') {
-						$e['url'] = urlencode($s['url']);
-					} else {
-						$e['key'] = urlencode($s['forward']);
+						$e['name'] = urlencode($s['title']);
+						if($e['type'] == 'view') {
+							$e['url'] = urlencode($s['url']);
+						} else {
+							$e['key'] = urlencode($s['forward']);
 					}
 					$entry['sub_button'][] = $e;
 				}
@@ -341,7 +342,7 @@ class WeiXinAccount extends WeAccount {
 	
 	public function menuCreate($menu) {
 		$dat = $this->menuBuildMenuSet($menu);
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -351,7 +352,7 @@ class WeiXinAccount extends WeAccount {
 	}
 
 	public function menuDelete() {
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -365,7 +366,7 @@ class WeiXinAccount extends WeAccount {
 	}
 
 	public function menuQuery() {
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -374,7 +375,7 @@ class WeiXinAccount extends WeAccount {
 		if(!is_array($content)) {
 			return error(-1, '接口调用失败，请重试！' . (is_string($content) ? "微信公众平台返回元数据: {$content}" : ''));
 		}
-		$dat = $content['content'];
+		$dat = trim($content['content']);
 		$result = json_decode($dat, true);
 		if(is_array($result) && !empty($result['menu'])) {
 			$menus = array();
@@ -417,14 +418,14 @@ class WeiXinAccount extends WeAccount {
 			}
 		}
 	}
-	
+
 	public function fansQueryInfo($uniid, $isOpen = true) {
 		if($isOpen) {
 			$openid = $uniid;
 		} else {
 			exit('error');
 		}
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -441,10 +442,41 @@ class WeiXinAccount extends WeAccount {
 		}
 		return $result;
 	}
+
 	
+	public function fansBatchQueryInfo($data) {
+		if(empty($data)) {
+			return error(-1, '粉丝openid错误');
+		}
+		foreach($data as $da) {
+			$post[] = array(
+				'openid' => trim($da),
+				'lang' => 'zh-CN'
+			);
+		}
+		$data = array();
+		$data['user_list'] = $post;
+		$token = $this->getAccessToken();
+		if(is_error($token)){
+			return $token;
+		}
+		$url = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token={$token}";
+		$response = ihttp_post($url, json_encode($data));
+		if(is_error($response)) {
+			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
+		}
+		$result = @json_decode($response['content'], true);
+		if(empty($result)) {
+			return error(-1, "接口调用失败, 元数据: {$response['meta']}");
+		} elseif(!empty($result['errcode'])) {
+			return error(-1, "访问微信接口错误, 错误代码: {$result['errcode']}, 错误信息: {$result['errmsg']},错误详情：{$this->error_code($result['errcode'])}");
+		}
+		return $result['user_info_list'];
+	}
+
 	public function fansAll() {
 		global $_GPC;
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -478,7 +510,7 @@ class WeiXinAccount extends WeAccount {
 		if (empty($barcode['action_info']['scene']['scene_id']) || empty($barcode['action_name'])) {
 			return error('1', 'Invalid params');
 		}
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		$url = sprintf($this->apis['barcode']['post'], $token);
 		$response = ihttp_request($url, json_encode($barcode));
 		if (is_error($response)) {
@@ -496,10 +528,13 @@ class WeiXinAccount extends WeAccount {
 	
 	public function barCodeCreateFixed($barcode) {
 		unset($barcode['expire_seconds']);
-		if (empty($barcode['action_info']['scene']['scene_id']) || empty($barcode['action_name'])) {
-			return error('1', 'Invalid params');
+		if($barcode['action_name'] == 'QR_LIMIT_SCENE' && empty($barcode['action_info']['scene']['scene_id'])) {
+			return error('1', '场景值错误');
 		}
-		$token = $this->fetch_token();
+		if($barcode['action_name'] == 'QR_LIMIT_STR_SCENE' && empty($barcode['action_info']['scene']['scene_str'])) {
+			return error('1', '场景字符串错误');
+		}
+		$token = $this->getAccessToken();
 		$url = sprintf($this->apis['barcode']['post'], $token);
 		$response = ihttp_request($url, json_encode($barcode));
 		if (is_error($response)) {
@@ -636,9 +671,8 @@ class WeiXinAccount extends WeAccount {
 		);
 		$code = strval($code);
 		if($code == '40001' || $code == '42001') {
-			$rec = array();
-			$rec['access_token'] = '';
-			pdo_update('account_wechats', $rec, array('acid' => $this->account['acid']));
+			$cachekey = "accesstoken:{$this->account['acid']}";
+			cache_delete($cachekey);
 			return '微信公众平台授权异常, 系统已修复这个错误, 请刷新页面重试.';
 		}
 		if($errors[$code]) {
@@ -652,7 +686,7 @@ class WeiXinAccount extends WeAccount {
 		if (empty($send)) {
 			return error(-1, 'Invalid params');
 		}
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -667,15 +701,14 @@ class WeiXinAccount extends WeAccount {
 		}
 		return true;
 	}
-
-	public function fetch_token() {
+	
+	public function getAccessToken() {
 		load()->func('communication');
-		if(!empty($this->account['access_token'])
-		&& is_array($this->account['access_token']) 
-		&& !empty($this->account['access_token']['token']) 
-		&& !empty($this->account['access_token']['expire']) 
-		&& $this->account['access_token']['expire'] > TIMESTAMP) {
-			return $this->account['access_token']['token'];
+		$cachekey = "accesstoken:{$this->account['acid']}";
+		$cache = cache_load($cachekey);
+		if (!empty($cache) && !empty($cache['token']) && $cache['expire'] > TIMESTAMP) {
+			$this->account['access_token'] = $cache;
+			return $cache['token'];
 		}
 		if (empty($this->account['key']) || empty($this->account['secret'])) {
 			return error('-1', '未填写公众号的 appid 或 appsecret！');
@@ -694,51 +727,13 @@ class WeiXinAccount extends WeAccount {
 		$record = array();
 		$record['token'] = $token['access_token'];
 		$record['expire'] = TIMESTAMP + $token['expires_in'] - 200;
-		$row = array();
-		$row['access_token'] = iserializer($record);
-		pdo_update('account_wechats', $row, array('acid' => $this->account['acid']));
-		
 		$this->account['access_token'] = $record;
+		cache_write($cachekey, $record);
 		return $record['token'];
 	}
-
-	public function fetch_card_ticket(){
-		if(!empty($this->account['card_ticket'])
-			&& is_array($this->account['card_ticket'])
-			&& !empty($this->account['card_ticket']['ticket'])
-			&& !empty($this->account['card_ticket']['expire'])
-			&& $this->account['card_ticket']['expire'] > TIMESTAMP) {
-			return $this->account['card_ticket']['ticket'];
-		}
-
-		load()->func('communication');
-		$access_token = $this->fetch_token();
-		if(is_error($access_token)){
-			return $access_token;
-		}
-		$url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={$access_token}&type=wx_card";
-		$content = ihttp_get($url);
-		if(is_error($content)) {
-			return error(-1, '调用接口获取微信公众号 card_ticket 失败, 错误信息: ' . $content['message']);
-		}
-		$result = @json_decode($content['content'], true);
-		if(empty($result) || intval(($result['errcode'])) != 0 || $result['errmsg'] != 'ok') {
-			return error(-1, '获取微信公众号 card_ticket 结果错误, 错误信息: ' . $result['errmsg']);
-		}
-
-		$record = array();
-		$record['ticket'] = $result['ticket'];
-		$record['expire'] = TIMESTAMP + $result['expires_in'] - 200;
-		$row = array();
-		$row['card_ticket'] = iserializer($record);
-		pdo_update('account_wechats', $row, array('acid' => $this->account['acid']));
-
-		$this->account['card_ticket'] = $record;
-		return $record['ticket'];
-	}
 	
-	public function fetch_available_token() {
-				$accounts = pdo_fetchall("SELECT `key`, `secret`, `acid`, `access_token` FROM ".tablename('account_wechats')." WHERE uniacid = :uniacid ORDER BY `level` DESC ", array(':uniacid' => $GLOBALS['_W']['uniacid']));
+	public function getVailableAccessToken() {
+		$accounts = pdo_fetchall("SELECT `key`, `secret`, `acid` FROM ".tablename('account_wechats')." WHERE uniacid = :uniacid ORDER BY `level` DESC ", array(':uniacid' => $GLOBALS['_W']['uniacid']));
 		if (empty($accounts)) {
 			return error(-1, 'no permission');
 		}
@@ -746,45 +741,79 @@ class WeiXinAccount extends WeAccount {
 			if (empty($account['key']) || empty($account['secret'])) {
 				continue;
 			}
-			if (!empty($account['access_token'])) {
-				$account['access_token'] = unserialize($account['access_token']);
-				if ($account['access_token']['expire'] > TIMESTAMP) {
-					$token = $account['access_token']['token'];
-					break;
-				}
-			}
-			$url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$account['key']}&secret={$account['secret']}";
-			load()->func('communication');
-			$content = ihttp_get($url);
-			if(is_error($content)) {
-				$error = '获取微信公众号授权失败, 请稍后重试！错误详情: ' . $content['message'];
-				continue;
-			}
-			$token = @json_decode($content['content'], true);
-			if(empty($token) || !is_array($token) || empty($token['access_token']) || empty($token['expires_in'])) {
-				$errorinfo = substr($content['meta'], strpos($content['meta'], '{'));
-				$errorinfo = @json_decode($errorinfo, true);
-				$error = '获取微信公众号授权失败, 请稍后重试！ 公众平台返回原始数据为: 错误代码-' . $errorinfo['errcode'] . '，错误信息-' . $errorinfo['errmsg'];
-				continue;
-			}
-			$record = array();
-			$record['token'] = $token['access_token'];
-			$record['expire'] = TIMESTAMP + $token['expires_in'] - 200;
-			$row = array();
-			$row['access_token'] = iserializer($record);
-			pdo_update('account_wechats', $row, array('acid' => $account['acid']));
-			$token = $token['access_token'];
+			$acid = $account['acid'];
 			break;
 		}
-		if (empty($token)) {
-			return error(-1, $error);
+		$account = WeAccount::create($acid);
+		return $account->getAccessToken();
+	}
+
+	public function fetch_token() {
+		return $this->getAccessToken();
+	}
+
+	public function fetch_available_token() {
+		return $this->getVailableAccessToken();
+	}
+	
+	
+	public function getJsApiTicket(){
+		$cachekey = "jsticket:{$this->account['acid']}";
+		$cache = cache_load($cachekey);
+		if(!empty($cache) && !empty($cache['ticket']) && $cache['expire'] > TIMESTAMP) {
+			return $cache['ticket'];
 		}
-		return $token;
+		load()->func('communication');
+		$access_token = $this->getAccessToken();
+		if(is_error($access_token)){
+			return $access_token;
+		}
+		$url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={$access_token}&type=jsapi";
+		$content = ihttp_get($url);
+		if(is_error($content)) {
+			return error(-1, '调用接口获取微信公众号 jsapi_ticket 失败, 错误信息: ' . $content['message']);
+		}
+		$result = @json_decode($content['content'], true);
+		if(empty($result) || intval(($result['errcode'])) != 0 || $result['errmsg'] != 'ok') {
+			return error(-1, '获取微信公众号 jsapi_ticket 结果错误, 错误信息: ' . $result['errmsg']);
+		}
+		$record = array();
+		$record['ticket'] = $result['ticket'];
+		$record['expire'] = TIMESTAMP + $result['expires_in'] - 200;
+		$this->account['jsapi_ticket'] = $record;
+		cache_write($cachekey, $record);
+		return $record['ticket'];
+	}
+	
+	
+	public function getJssdkConfig(){
+		global $_W;
+		$jsapiTicket = $this->getJsApiTicket();
+		if(is_error($jsapiTicket)){
+			$jsapiTicket = $jsapiTicket['message'];
+		}
+		$nonceStr = random(16);
+		$timestamp = TIMESTAMP;
+		$url = $_W['siteurl'];
+		$string1 = "jsapi_ticket={$jsapiTicket}&noncestr={$nonceStr}&timestamp={$timestamp}&url={$url}";
+		$signature = sha1($string1);
+		$config = array(
+			"appId"		=> $this->account['key'],
+			"nonceStr"	=> $nonceStr,
+			"timestamp" => "$timestamp",
+			"signature" => $signature,
+		);
+		if(DEVELOPMENT) {
+			$config['url'] = $url;
+			$config['string1'] = $string1;
+			$config['name'] = $this->account['name'];
+		}
+		return $config;
 	}
 	
 	
 	public function long2short($longurl) {
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -807,13 +836,12 @@ class WeiXinAccount extends WeAccount {
 	
 	
 	public function downloadMedia($media) {
-		
 		$mediatypes = array('image', 'voice', 'thumb');
 		if (empty($media) || empty($media['media_id']) || (!empty($media['type']) && !in_array($media['type'], $mediatypes))) {
 			return error(-1, '微信下载媒体资源参数错误');
 		}
 		
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -846,16 +874,16 @@ class WeiXinAccount extends WeAccount {
 			return error(-1, '没有要查询的openid');
 		}
 		if(empty($params['pagesize'])) {
-			$params['pagesize'] = 1000;
+			$params['pagesize'] = 50;
 		}
 		if(empty($params['pageindex'])) {
 			$params['pageindex'] = 1;
 		}
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
-		$url = "https://api.weixin.qq.com/cgi-bin/customservice/getrecord?access_token={$token}";
+		$url = "https://api.weixin.qq.com/customservice/msgrecord/getrecord?access_token={$token}";
 		$response = ihttp_request($url, json_encode($params));
 		if(is_error($response)) {
 			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
@@ -870,13 +898,13 @@ class WeiXinAccount extends WeAccount {
 	}
 
 	
-	function fetchFansGroups() {
-		$token = $this->fetch_token();
+	public function fetchFansGroups() {
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
 		$url = "https://api.weixin.qq.com/cgi-bin/groups/get?access_token={$token}";
-		$response = ihttp_request($url, json_encode($params));
+		$response = ihttp_request($url);
 		if(is_error($response)) {
 			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
 		}
@@ -890,7 +918,7 @@ class WeiXinAccount extends WeAccount {
 	}
 
 	
-	function editFansGroupname($params = array()) {
+	public function editFansGroupname($params = array()) {
 		if(in_array($params['id'], array(0, 1, 2))) {
 						return '';
 		}
@@ -899,7 +927,7 @@ class WeiXinAccount extends WeAccount {
 		}
 
 		$data = '{"group": {"id": ' . $params['id'] . ', "name": "' . $params['name'] . '"}}';
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -918,12 +946,12 @@ class WeiXinAccount extends WeAccount {
 	}
 
 	
-	function addFansGroup($name) {
+	public function addFansGroup($name) {
 		if(empty($name)) {
 			return error(-1, '请填写分组名称');
 		}
 		$data = '{"group": {"name": "' . $name . '"}}';
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -942,11 +970,37 @@ class WeiXinAccount extends WeAccount {
 	}
 
 	
-	function fetchFansGroupid($openid) {
+	public function delFansGroup($groupid) {
+		$groupid = intval($groupid);
+		if(empty($groupid)) {
+			return error(-1, '分组id错误');
+		}
+		$token = $this->getAccessToken();
+		if(is_error($token)){
+			return $token;
+		}
+		$url = "https://api.weixin.qq.com/cgi-bin/groups/delete?access_token={$token}";
+		$data = array(
+			'group' => array('id' => $groupid)
+		);
+		$data = json_encode($data);
+		$response = ihttp_request($url, $data);
+		if(is_error($response)) {
+			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
+		}
+		$result = @json_decode($response['content'], true);
+		if(!empty($result['errcode'])) {
+			return error(-1, "访问微信接口错误, 错误代码: {$result['errcode']}, 错误信息: {$result['errmsg']}, 错误详情：{$this->error_code($result['errcode'])}");
+		}
+		return true;
+	}
+
+	
+	public function fetchFansGroupid($openid) {
 		if(empty($openid)) {
 			return error(-1, '没有填写openid');
 		}
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -965,12 +1019,12 @@ class WeiXinAccount extends WeAccount {
 	}
 
 	
-	function updateFansGroupid($openid, $groupid) {
+	public function updateFansGroupid($openid, $groupid) {
 		if(empty($openid)) {
 			return error(-1, '没有填写openid');
 		}
 		$data = array('openid' => $openid, 'to_groupid' => intval($groupid));
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -989,11 +1043,11 @@ class WeiXinAccount extends WeAccount {
 	}
 
 	
-	function sendCustomNotice($data) {
+	public function sendCustomNotice($data) {
 		if(empty($data)) {
 			return error(-1, '参数错误');
 		}
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -1011,12 +1065,37 @@ class WeiXinAccount extends WeAccount {
 		return $result;
 	}
 	
+	public function uploadMedia($path, $type = 'image') {
+		if(empty($path)) {
+			return error(-1, '参数错误');
+		}
+		$token = $this->getAccessToken();
+		if(is_error($token)){
+			return $token;
+		}
+		$url = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token={$token}&type={$type}";
+		$data = array(
+			'media' => '@'. ATTACHMENT_ROOT . ltrim($path, '/')
+		);
+		$response = ihttp_request($url, $data);
+		if(is_error($response)) {
+			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
+		}
+		$result = @json_decode($response['content'], true);
+		if(empty($result)) {
+			return error(-1, "接口调用失败, 元数据: {$response['meta']}");
+		} elseif(!empty($result['errcode'])) {
+			return error(-1, "访问微信接口错误, 错误代码: {$result['errcode']}, 错误信息: {$result['errmsg']}, 错误详情：{$this->error_code($result['errcode'])}");
+		}
+		return $result;
+	}
+
 	
-	function uploadVideo($data) {
+	public function uploadVideo($data) {
 		if(empty($data)) {
 			return error(-1, '参数错误');
 		}
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -1035,11 +1114,11 @@ class WeiXinAccount extends WeAccount {
 	}
 
 	
-	function uploadNews($data) {
+	public function uploadNews($data) {
 		if(empty($data)) {
 			return error(-1, '参数错误');
 		}
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -1058,11 +1137,11 @@ class WeiXinAccount extends WeAccount {
 	}
 
 	
-	function fansSendAll($data) {
+	public function fansSendAll($data) {
 		if(empty($data)) {
 			return error(-1, '参数错误');
 		}
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -1089,7 +1168,7 @@ class WeiXinAccount extends WeAccount {
 		if (empty($send)) {
 			return error(-1, '参数错误');
 		}
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
@@ -1119,7 +1198,7 @@ class WeiXinAccount extends WeAccount {
 		if(empty($postdata) || !is_array($postdata)) {
 			return error(-1, '参数错误,请根据模板规则完善消息内容');
 		}
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
@@ -1147,80 +1226,133 @@ class WeiXinAccount extends WeAccount {
 	}
 	
 	
-	public function getJsApiTicket(){
-		if(!empty($this->account['jsapi_ticket'])
-		&& is_array($this->account['jsapi_ticket'])
-		&& !empty($this->account['jsapi_ticket']['ticket'])
-		&& !empty($this->account['jsapi_ticket']['expire'])
-		&& $this->account['jsapi_ticket']['expire'] > TIMESTAMP) {
-			return $this->account['jsapi_ticket']['ticket'];
-		}
-		
-		load()->func('communication');
-		
-		$access_token = $this->fetch_token();
-		if(is_error($access_token)){
-			return $access_token;
-		}
-		$url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={$access_token}&type=jsapi";
-		$content = ihttp_get($url);
-			if(is_error($content)) {
-			return error(-1, '调用接口获取微信公众号 jsapi_ticket 失败, 错误信息: ' . $content['message']);
-		}
-		$result = @json_decode($content['content'], true);
-		if(empty($result) || intval(($result['errcode'])) != 0 || $result['errmsg'] != 'ok') {
-			return error(-1, '获取微信公众号 jsapi_ticket 结果错误, 错误信息: ' . $result['errmsg']);
-		}
-		
-		$record = array();
-		$record['ticket'] = $result['ticket'];
-		$record['expire'] = TIMESTAMP + $result['expires_in'] - 200;
-		$row = array();
-		$row['jsapi_ticket'] = iserializer($record);
-		pdo_update('account_wechats', $row, array('acid' => $this->account['acid']));
-		
-		$this->account['jsapi_ticket'] = $record;
-		return $record['ticket'];
-	}
-	
-	private function createNonceStr($length = 16) {
-		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-		$str = "";
-		for ($i = 0; $i < $length; $i++) {
-			$str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
-		}
-		return $str;
-	}
-	
-	
-	public function getJssdkConfig(){
+	public function batchGetMaterial($type = 'news', $offset = 0, $count = 20) {
 		global $_W;
-		
-		$jsapiTicket = $this->getJsApiTicket();
-		if(is_error($jsapiTicket)){
-			$jsapiTicket = $jsapiTicket['message'];
+		$token = $this->getAccessToken();
+		if(is_error($token)){
+			return $token;
 		}
-		$nonceStr = $this->createNonceStr();
-		$timestamp = TIMESTAMP;
-		$url = $_W['siteurl'];
-
-		$string1 = "jsapi_ticket={$jsapiTicket}&noncestr={$nonceStr}&timestamp={$timestamp}&url={$url}";
-		$signature = sha1($string1);
-
-		$config = array(
-			"appId"		=> $this->account['key'],
-			"nonceStr"	=> $nonceStr,
-			"timestamp" => "$timestamp",
-			"signature" => $signature,
+		$url = 'https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=' . $token;
+		$data = array(
+			'type' => $type,
+			'offset' => intval($offset),
+			'count' => $count,
 		);
-		
-		if(DEVELOPMENT) {
-			$config['url'] = $url;
-			$config['string1'] = $string1;
-			$config['name'] = $this->account['name'];
+		$response = ihttp_request($url, json_encode($data));
+		if(is_error($response)) {
+			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
 		}
-		
-		return $config; 
+		$result = @json_decode($response['content'], true);
+		if(empty($result)) {
+			return error(-1, "接口调用失败, 元数据: {$response['meta']}");
+		} elseif(!empty($result['errcode'])) {
+			return error(-1, "访问公众平台接口失败, 错误: {$result['errmsg']},错误详情：{$this->error_code($result['errcode'])}");
+		}
+		$return = array();
+		$return['total_count'] = $result['total_count'];
+		$return['item_count'] = $result['item_count'];
+		$return['data'] = $result['item'];
+		return $return;
+	}
+
+	
+	public function getMaterial($media_id, $type = 'image') {
+		global $_GPC;
+		$attachment = pdo_fetch('SELECT attachment,tag FROM ' . tablename('core_wechats_attachment') . ' WHERE acid = :acid AND media_id = :media_id', array(':acid' => $_W['acid'], ':media_id' => $li['thumb_media_id']));
+		if(!empty($thumb_cover)) {
+			$cover = empty($attachment['attachment']) ? $attachment['tag'] : $attachment['attachment'];
+			return $cover;
+		}
+		$token = $this->getAccessToken();
+		if(is_error($token)){
+			return $token;
+		}
+		$url = 'https://api.weixin.qq.com/cgi-bin/material/get_material?access_token=' . $token;
+		$data = array(
+			'media_id' => trim($media_id),
+		);
+		$response = ihttp_request($url, json_encode($data));
+		if(is_error($response)) {
+			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
+		}
+		$result = @json_decode($response['content'], true);
+		if(empty($result)) {
+		} elseif(!empty($result['errcode'])) {
+			return error(-1, "访问公众平台接口失败, 错误: {$result['errmsg']},错误详情：{$this->error_code($result['errcode'])}");
+		}
+		return $result;
+	}
+
+	
+	public function getMaterialCount() {
+		global $_GPC;
+		$token = $this->getAccessToken();
+		if(is_error($token)){
+			return $token;
+		}
+		$url = 'https://api.weixin.qq.com/cgi-bin/material/get_materialcount?access_token=' . $token;
+		$response = ihttp_request($url);
+		if(is_error($response)) {
+			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
+		}
+		$result = @json_decode($response['content'], true);
+		if(empty($result)) {
+			return error(-1, "接口调用失败, 元数据: {$response['meta']}");
+		} elseif(!empty($result['errcode'])) {
+			return error(-1, "访问公众平台接口失败, 错误: {$result['errmsg']},错误详情：{$this->error_code($result['errcode'])}");
+		}
+		return $result;
+	}
+
+	public function delMaterial($media_id) {
+		global $_GPC;
+		$media_id = trim($media_id);
+		if(empty($media_id)) {
+			return error(-1, '素材media_id错误');
+		}
+		$token = $this->getAccessToken();
+		if(is_error($token)){
+			return $token;
+		}
+		$url = 'https://api.weixin.qq.com/cgi-bin/material/del_material?access_token=' . $token;
+		$data = array(
+			'media_id' => trim($media_id),
+		);
+		$response = ihttp_request($url, json_encode($data));
+		if(is_error($response)) {
+			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
+		}
+		$result = @json_decode($response['content'], true);
+		if(empty($result)) {
+		} elseif(!empty($result['errcode'])) {
+			return error(-1, "访问公众平台接口失败, 错误: {$result['errmsg']},错误详情：{$this->error_code($result['errcode'])}");
+		}
+		return $result;
+	}
+	
+	public function getOauthUserInfo($accesstoken, $openid) {
+		$apiurl = "https://api.weixin.qq.com/sns/userinfo?access_token={$accesstoken}&openid={$openid}&lang=zh_CN";
+		$response = ihttp_get($apiurl);
+		if (is_error($response)) {
+			return $response;
+		}
+		return @json_decode($response['content'], true);
+	}
+	
+	public function getOauthInfo($code) {
+		$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$this->account['key']}&secret={$this->account['secret']}&code={$code}&grant_type=authorization_code";
+		$response = ihttp_get($url);
+		if (is_error($response)) {
+			return $response;
+		}
+		return @json_decode($response['content'], true);
+	}
+
+	public function getOauthCodeUrl($callback, $state = '') {
+		return "https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->account['key']}&redirect_uri={$callback}&response_type=code&scope=snsapi_base&state={$state}#wechat_redirect";
+	}
+	
+	public function getOauthUserInfoUrl($callback, $state = '') {
+		return "https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->account['key']}&redirect_uri={$callback}&response_type=code&scope=snsapi_userinfo&state={$state}#wechat_redirect";
 	}
 }
-

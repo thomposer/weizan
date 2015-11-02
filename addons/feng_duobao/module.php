@@ -18,6 +18,7 @@ class Feng_duobaoModule extends WeModule {
 			empty($dat['share_title']) && message('请填写分享标题');
 			empty($dat['share_image']) && message('请填写分享图片');
 			empty($dat['share_desc']) && message('请填写分享描述');
+			$dat['int_desc'] = htmlspecialchars_decode($dat['int_desc']);
 			//字段验证, 并获得正确的数据$dat
 			if (!$this->saveSettings($dat)) {
 				message('保存信息失败','','error');
@@ -33,9 +34,9 @@ class Feng_duobaoModule extends WeModule {
 				$uniacid=$_W['uniacid'];
 				$list = pdo_fetch("SELECT * FROM ".tablename('feng_wechat')." WHERE uniacid = '{$uniacid}'");
 				if (empty($list['uniacid'])) {
-					$ret = pdo_insert(feng_wechat, $share);
+					$ret = pdo_insert('feng_wechat', $share);
 				}else{
-					$ret = pdo_update(feng_wechat, $share, array('uniacid'=>$_W['uniacid']));
+					$ret = pdo_update('feng_wechat', $share, array('uniacid'=>$_W['uniacid']));
 				}
 				message('保存信息成功','','success');
 			}

@@ -167,8 +167,36 @@ require(['angular.sanitize', 'bootstrap', 'underscore', 'util'], function(angula
 		return function (scope, element, attr) {
 			scope.$eval(attr.ngInvoker);
 		};
+	}).directive('ngMyEditor', function(){
+		var editor = {
+			'scope' : {
+				'value' : '=ngMyValue'
+			},
+			'template' : '<textarea id="editor" style="height:600px;width:100%;"></textarea>',
+			'link' : function ($scope, element, attr) {
+				if(!element.data('editor')) {
+					editor = UE.getEditor('editor', ueditoroption);
+					element.data('editor', editor);
+					editor.addListener('contentChange', function() {
+						$scope.value = editor.getContent();
+						$scope.$root.$$phase || $scope.$apply('value');
+					});
+					editor.addListener('ready', function(){
+						if (editor && editor.getContent() != $scope.value) {
+							editor.setContent($scope.value);
+						}
+						$scope.$watch('value', function (value) {
+							if (editor && editor.getContent() != value) {
+								editor.setContent(value ? value : '');
+							}
+						});
+					});
+				}
+			}
+		};
+		return editor;
 	});
-	angular.bootstrap(document, ['app']);
+	angular.bootstrap($('#js-reply-form')[0], ['app']);
 
 
 	// 检测规则是否已经存在
@@ -219,7 +247,7 @@ require(['angular.sanitize', 'bootstrap', 'underscore', 'util'], function(angula
 });
 
 </script>
-<div class="clearfix ng-cloak" ng-controller="replyForm">
+<div class="clearfix ng-cloak" id="js-reply-form" ng-controller="replyForm">
 	<form id="reply-form" class="form-horizontal form" action="{php echo url('platform/reply/post', array('m' => $m, 'rid' => $rid))}" method="post" enctype="multipart/form-data">
 		<div class="form-group">
 			<div class="col-sm-12">

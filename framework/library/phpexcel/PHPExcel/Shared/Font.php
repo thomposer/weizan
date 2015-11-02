@@ -220,8 +220,8 @@ class PHPExcel_Shared_Font
 	 * Typical locations on variout some platforms:
 	 *	<ul>
 	 *		<li>C:/Windows/Fonts/</li>
-	 *		<li>/usr/share/fonts/truetype/</li>
-	 *		<li>~/.fonts/</li>
+	 *		<li>/usr/share/font/truetype/</li>
+	 *		<li>~/.font/</li>
 	 *	</ul>
 	 *
 	 * @param string $pValue

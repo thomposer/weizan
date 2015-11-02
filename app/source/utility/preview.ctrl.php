@@ -4,38 +4,14 @@
  * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-$dos = array('shortcut');
-$do = in_array($do, $dos) ? $do : 'shortcut';
+$dos = array('home');
+$do = in_array($do, $dos) ? $do : exit('Access Denied');
 
-if($do == 'shortcut') {
-	$templates = array();
-	$path = IA_ROOT . '/app/themes/quick';
-	if (is_dir($path)) {
-		if ($handle = opendir($path)) {
-			while (false !== ($templatepath = readdir($handle))) {
-				$ext = pathinfo($templatepath);
-				$ext = $ext['extension'];
-				if ($templatepath != '.' && $templatepath != '..' && !empty($ext)) {
-					$pathinfo = pathinfo($templatepath);
-					$templates[] = $pathinfo['filename'];
-				}
-			}
-		}
-	}
-	$template = $_GPC['file'];
-	$template = in_array($template, $templates) ? $template : 'default';
-	load()->model('app');
-	$_W['quickmenu']['menus'] = app_navs('shortcut', $multiid);
-	if(empty($_W['quickmenu']['menus'])) {
-		$_W['quickmenu']['menus'] = array(
-			array('name' => '菜单一', 'css' => array('icon' => array('icon' => 'fa-home'))),
-			array('name' => '菜单二', 'css' => array('icon' => array('icon' => 'fa-book'))),
-			array('name' => '菜单三', 'css' => array('icon' => array('icon' => 'fa-pencil'))),
-			array('name' => '菜单四', 'css' => array('icon' => array('icon' => 'fa-cog'))),
-			array('name' => '菜单五', 'css' => array('icon' => array('icon' => 'fa-flag'))),
-		);
-	}
-	$_W['quickmenu']['template'] = '../quick/' . $template;
-	template('../default/common/header');
-	template('../default/common/footer');
+if ($do == 'home') {
+	$multiid = intval($_GPC['multiid']);
+	$multi = pdo_fetch("SELECT styleid FROM ".tablename('site_multi')." WHERE id = :id", array(':id' => $multiid));
+	$sql = 'SELECT `s`.*, `t`.`name` AS `tname`, `t`.`title` FROM ' . tablename('site_styles') . ' AS `s`
+			LEFT JOIN ' . tablename('site_templates') . ' AS `t` ON `s`.`templateid` = `t`.`id` WHERE `s`.`uniacid` = :uniacid AND s.id = :styleid';
+	$style = pdo_fetch($sql, array(':uniacid' => $_W['uniacid'], ':styleid' => $multi['styleid']), 'id');
+	template("../{$style['tname']}/home/home");
 }

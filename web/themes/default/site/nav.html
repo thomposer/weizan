@@ -10,17 +10,14 @@
 	</ol>
 {/if}
 <ul class="nav nav-tabs">
+	<li><a href="{php echo url('site/multi/display');}">返回微站管理</a></li>
 	{if $type['name'] == 'home'}<li{if $do == 'display'} class="active"{/if}><a href="{php echo url('site/nav/home', array('m' => $m, 'mtid' => $_GPC['mtid'], 'f' => $_GPC['f']));}">微站首页导航图标</a></li>{/if}
 	{if $type['name'] == 'profile'}<li{if $do == 'display'} class="active"{/if}><a href="{php echo url('site/nav/profile', array('m' => $m, 'mtid' => $_GPC['mtid'], 'f' => $_GPC['f']));}">个人中心功能条目</a></li>{/if}
-	{if $type['name'] == 'shortcut'}<li{if $do == 'display'} class="active"{/if}><a href="{php echo url('site/nav/shortcut', array('m' => $m, 'mtid' => $_GPC['mtid'], 'f' => $_GPC['f']));}">快捷菜单</a></li>{/if}
 	{if empty($module)}
 	<li{if $do == 'post' && empty($id)} class="active"{/if}><a href="{php echo url('site/nav/' . $type['name'], array('foo' => 'post', 'mtid' => $_GPC['mtid'], 'f' => $_GPC['f']));}"><i class="fa fa-plus"></i> 添加条目</a></li>
 	{/if}
 	{if $do == 'post' && !empty($id)}
 	<li class="active"><a href="{php echo url('site/nav/' . $type['name'], array('id' => $id, 'foo' => 'post', 'mtid' => $_GPC['mtid'], 'f' => $_GPC['f']));}"><i class="fa fa-edit"></i> 编辑条目</a></li>
-	{/if}
-	{if $type['name'] == 'shortcut' && isset($_GPC['f'])}
-	<li><a href="{php echo url('site/multi/quickmenu', array('mtid' => $_GPC['mtid'], 'f' => $_GPC['f']))}">快捷菜单风格</a></li>
 	{/if}
 </ul>
 {if $do == 'post'}
@@ -222,7 +219,6 @@
 	</div>
 </div>
 <script type="text/javascript">
-	require(['jquery'], function($){
 		var icontype = $('input[name="icontype"]:checked').val();
 		if (icontype == 1) {
 			$(".system-icon").show();
@@ -254,11 +250,10 @@
 			$(".system-icon").hide();
 			$(".define-icon").show();
 		});
-	});
 </script>
 {elseif $do == 'display'}
 <script type="text/javascript">
-	require(['bootstrap.switch', 'util'], function($, u){
+	require(['bootstrap.switch'], function($){
 		$(function(){
 			$(':checkbox').bootstrapSwitch();
 			$(':checkbox').on('switchChange.bootstrapSwitch', function(e, state){
@@ -267,7 +262,7 @@
 				var ret = this.checked ? 1 : 0;
 				$.post(location.href, {dat: dat, ret: ret}, function(resp){
 					if(resp != 'success') {
-						u.message('操作失败, 请稍后重试.')
+						util.message('操作失败, 请稍后重试.')
 					}
 					{if !empty($module)}
 					else {
@@ -275,11 +270,6 @@
 					}
 					{/if}
 				});
-			});
-			$('.btn').hover(function(){
-				$(this).tooltip('show');
-			},function(){
-				$(this).tooltip('hide');
 			});
 		});
 	});
@@ -301,9 +291,9 @@
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">微站</label>
 					<div class="col-sm-9 col-md-8 col-lg-8 col-xs-12">
-						<select class="form-control" name="mtid" id="search">
+						<select class="form-control" name="multiid" id="search">
 							{loop $multis $multi}
-								<option value="{$multi['id']}" {if $multi['id'] == $_GPC['mtid'] || ($multi['id'] == $default_site && $_GPC['mtid'] == '')}selected{/if}>{$multi['title']}{if $default_site == $multi['id']}[默认微站]{/if}</option>
+								<option value="{$multi['id']}" {if $multi['id'] == $_GPC['multiid'] || ($multi['id'] == $default_site && $_GPC['multiid'] == '')}selected{/if}>{$multi['title']}{if $default_site == $multi['id']}[默认微站]{/if}</option>
 							{/loop}
 						</select>
 					</div>
@@ -354,8 +344,8 @@
 					<th class="text-center" style="width:80px;">来源</th>
 					<th class="text-center" style="width:80px;">排序</th>
 					{if $_GPC['do'] == 'home' && !empty($template['sections'])}<th class="text-center" style="width:100px;">位置</th>{/if}
-					<th class="text-center" style="width:100px;">操作</th>
 					<th class="text-right" style="width:130px;">是否在微站上显示</th>
+					<th class="text-center" style="width:100px;">操作</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -402,14 +392,14 @@
 							</select>
 						</td>
 						{/if}
-						<td class="text-center" style="width:100px;">
-							<div class="text-center" >
-								<a class="btn btn-default btn-sm" href="{php echo url('site/nav/'.$_GPC['do'], array('id' => $item['id'],'foo' =>'post', 'mtid' => $_GPC['mtid'], 'f' => $_GPC['f']));}" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-edit"></i></a>&nbsp;
-								<a class="btn btn-default btn-sm" href="{php echo url('site/nav/'.$_GPC['do'], array('id' => $item['id'],'foo'=>'delete', 'name' => $modulename));}" data-toggle="tooltip" data-placement="top" title="删除"><i class="fa fa-times"></i></a>
-							</div>
-						</td>
 						<td class="text-right" style="width:130px;">
 							<input type="checkbox" value="1"{if intval($item['status'])==1} checked="checked"{/if} data="{php echo base64_encode(json_encode($item));}"/>
+						</td>
+						<td class="text-center" style="width:100px;">
+							<div class="text-center" >
+								<a href="{php echo url('site/nav/'.$_GPC['do'], array('id' => $item['id'],'foo' =>'post', 'mtid' => $_GPC['mtid'], 'f' => $_GPC['f']));}" class="btn btn-default btn-sm">编辑</a>
+								<a href="{php echo url('site/nav/'.$_GPC['do'], array('id' => $item['id'],'foo'=>'delete', 'name' => $modulename));}" class="btn btn-default btn-sm">删除</a>
+							</div>
 						</td>
 					</tr>
 					{/if}
@@ -457,16 +447,16 @@
 						</select>
 					</td>
 					{/if}
+					<td class="text-right" style="width:130px;">
+						<input type="checkbox" value="1"{if intval($item['status'])==1} checked="checked"{/if} data="{php echo base64_encode(json_encode($item));}"/>
+					</td>
 					<td class="text-center" style="width:100px;">
 						{if $item['remove']}
 						<div class="text-center">
-							<a class="btn btn-default btn-sm" href="{php echo url('site/nav/'.$_GPC['do'], array('id' => $item['id'],'foo' =>'post'));}" title="编辑"><i class="fa fa-edit"></i></a>&nbsp;
-							<a class="btn btn-default btn-sm" href="{php echo url('site/nav/'.$_GPC['do'], array('id' => $item['id'],'foo'=>'delete', 'name' => $modulename));}" title="删除"><i class="fa fa-times"></i></a>
+							<a class="btn btn-default btn-sm" href="{php echo url('site/nav/'.$_GPC['do'], array('id' => $item['id'],'foo' =>'post'));}" title="编辑">编辑</a>
+							<a class="btn btn-default btn-sm" href="{php echo url('site/nav/'.$_GPC['do'], array('id' => $item['id'],'foo'=>'delete', 'name' => $modulename));}" title="删除">删除</a>
 						</div>
 						{/if}
-					</td>
-					<td class="text-right" style="width:130px;">
-						<input type="checkbox" value="1"{if intval($item['status'])==1} checked="checked"{/if} data="{php echo base64_encode(json_encode($item));}"/>
 					</td>
 				</tr>
 				{/if}

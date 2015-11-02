@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $_W['page']['title'] = '添加用户 - 用户管理 - 用户管理';
@@ -21,6 +21,17 @@ if(checksubmit()) {
 	}
 	$user['remark'] = $_GPC['remark'];
 	$user['groupid'] = intval($_GPC['groupid']) ? intval($_GPC['groupid']) : message('请选择所属用户组');
+	$group = pdo_fetch("SELECT id,timelimit FROM ".tablename('users_group')." WHERE id = :id", array(':id' => $user['groupid']));
+	if(empty($group)) {
+		message('会员组不存在');
+	}
+	$timelimit = intval($group['timelimit']);
+	$timeadd = 0;
+	if($timelimit > 0) {
+		$timeadd = strtotime($timelimit . ' days');
+	}
+	$user['starttime'] = TIMESTAMP;
+	$user['endtime'] = $timeadd;
 	$uid = user_register($user);
 	if($uid > 0) {
 		unset($user['password']);

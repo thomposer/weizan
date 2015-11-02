@@ -319,8 +319,7 @@ class Hx_lotteryModuleSite extends WeModuleSite {
 					$rate = $reply['rate'];
 					$prizes = iunserializer($reply['prizes']);
 					$p_num = $prizes['p1_num'] + $prizes['p2_num'] + $prizes['p3_num'] + $prizes['p4_num'];
-                                                                                          empty($p_num) && $p_num = 1;
-                                        
+					empty($p_num) && $p_num = 1;                                  
 					$arr['p1'] = round(100 * $rate * $prizes['p1_num']/$p_num);
 					$arr['p2'] = round(100 * $rate * $prizes['p2_num']/$p_num);
 					$arr['p3'] = round(100 * $rate * $prizes['p3_num']/$p_num);

@@ -2,64 +2,77 @@
 <style>
 	body{background:#d2e6e9;}
 	/*手机余额充值*/
-	.charge select{position:absolute;}
-	.charge .panel-body span input{position:absolute; width:150px; height:30px; top:2px; border:none; left:42px; z-index:10; padding-left:10px; outline:none;}
 	.charge.panel{margin:.5em; border:none;}
 	.charge.panel-info>.panel-heading {background: -webkit-gradient(linear, 0 0, 100% 0, from(#ebebeb), to(#f3f9fa), color-stop(30%, #f5f9f9)); color:#666666; border:none;}
 	a{color:#666666;}a:hover{color: #3ebacc;}
 	.charge .btn.btn-primary{background: #56c6d6; color: #FFF; border: 0;}
 	.charge i{display:inline-block; width:15px; height:15px; text-align:center; line-height:15px;}
 </style>
-<div class="charge panel panel-info">
+<div class=" panel panel-info charge">
 	<div class="panel-heading">
-		<h4>余额充值</h4>
+		<h4>会员卡充值</h4>
 	</div>
 	<div class="panel-body">
-		<form name="theform" method="get" role="form" id="form1">
+		<form  method="post" role="form" id="form1">
 			<input type="hidden" name="c" value="entry" />
 			<input type="hidden" name="m" value="recharge" />
 			<input type="hidden" name="i" value="{$_W['uniacid']}" />
 			<input type="hidden" name="do" value="pay" />
 			<div class="form-group input-group">
 				<div class="input-group-addon"><i class="fa fa-user"></i></div>
-				<input type="text" class="form-control" placeholder="用户名" value="{$username}" readonly>
+				<input type="text" class="form-control" placeholder="" value="{$name}" readonly>
 			</div>
-			<div class="form-group" style="position:relative;">
+			<div class="form-group">
 				<div class="input-group">
 					<div class="input-group-addon"><i class="fa fa-money"></i></div>
-					<select name="moneySe" id="moneySe" class="form-control">
-						<option value="0">请选择</option>
-						<option value="30">30元</option>
-						<option value="50">50元</option>
-						<option value="100">100元</option>
-						<option value="200">200元</option>
-						<option value="300">300元</option>
-					</select>
+					<input type="text" name="credit" class="form-control" placeholder="充值金额">
 				</div>
-				<span><input type="text" placeholder="请输入充值金额" name="money" id="money"></span>
+				{if !empty($recharge)}
+					<div class="help-block"><span class="text-danger">如果填写金额,将已填写的金额为最终充值金额</span></div>
+				{/if}
 			</div>
-			<input type="submit" name="submit" class="btn btn-primary btn-block" value="立即充值">
-			<input type="hidden" name="token" value="{$_W['token']}">
+			{if !empty($recharge)}
+				<div class="form-group clearfix">
+					{loop $recharge $row}
+						<a href="javascript:;" class="btn btn-warning {if $_GPC['fee'] == $row['recharge']}btn-danger{/if} col-lg-3 recharge" data-value="{$row['recharge']}">充{$row['recharge']}返{$row['back']}</a>
+					{/loop}
+				</div>
+			{/if}
+			<div class="form-group">
+				<input type="hidden" name="select" value="" id="select">
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" name="submit" class="btn btn-primary btn-block" value="立即充值">
+			</div>
 		</form>
 	</div>
 </div>
 <script>
-	$('#moneySe').change(function(){
-		var money = $('#moneySe').val();
-		if(parseFloat(money) > 0){
-			$('#money').val($('#moneySe').val());
-		} else {
-			$('#money').val('');
-		}
-	});
-	$('#form1').submit(function(){
-		var money = parseFloat($('#money').val().trim());
-		if(isNaN(money)) {
-			util.message('请输入正确的充值金额', '', 'error');
+	require(['util'], function(u){
+		$('.recharge').click(function(){
+			var has_danger = $(this).hasClass('btn-danger');
+			$('#select').val(0);
+			$('.recharge').removeClass('btn-danger');
+			if(has_danger) {
+				$(this).removeClass('btn-danger');
+			} else {
+				$(this).addClass('btn-danger');
+				$('#select').val($(this).data('value'));
+			}
 			return false;
-		}
+		});
+
+		$('#form1').submit(function(){
+			var credit = parseFloat($('#form1 :text[name="credit"]').val());
+			var select = $('#form1 a.recharge.btn-danger').size();
+			if(select == 1) {
+				$('#select').val($('#form1 a.recharge.btn-danger').data('value'));
+			}
+			if(isNaN(credit) && !$('#select').val()) {
+				u.message('请输入或选择充值金额', '', 'error');
+				return false;
+			}
+		});
 	});
 </script>
-
 {template 'common/toolbar'}
 

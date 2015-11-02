@@ -1,7 +1,7 @@
 <?php 
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -25,7 +25,7 @@ if ($do == 'display') {
 	$psize = 20;
 	$condition = '';
 	$params = array();
-	$multiid = intval($_GPC['mtid']);
+	$multiid = intval($_GPC['multiid']);
 	if($multiid > 0) {
 		$condition .= " AND multiid = {$multiid}";
 	}
@@ -39,7 +39,6 @@ if ($do == 'display') {
 
 if ($do == 'post') {
 	$_W['page']['title'] = '幻灯片添加- 幻灯片设置 - 功能组件';
-	load()->func('tpl');
 	$id = intval($_GPC['id']);
 	if (!empty($id)) {
 		$item = pdo_fetch("SELECT * FROM ".tablename('site_slide')." WHERE id = :id" , array(':id' => $id));
@@ -67,7 +66,7 @@ if ($do == 'post') {
 		} else {
 			pdo_update('site_slide', $data, array('id' => $id));
 		}
-		message('幻灯片更新成功！', url('site/slide/display', array('mtid' => $multiid, 'f' => $_GPC['f'])), 'success');
+		message('幻灯片更新成功！', url('site/slide/display', array('multiid' => $multiid, 'f' => $_GPC['f'])), 'success');
 	}
 }
 
@@ -79,7 +78,7 @@ if ($do == 'delete') {
 		message('抱歉，幻灯片不存在或是已经被删除！');
 	}
 	pdo_delete('site_slide', array('id' => $id));
-	message('删除成功！', url('site/slide/display', array('mtid' => $_GPC['mtid'] , 'f' => $_GPC['f'])), 'success');
+	message('删除成功！', url('site/slide/display', array('multiid' => $_GPC['multiid'] , 'f' => $_GPC['f'])), 'success');
 }
 
 template('site/slide');

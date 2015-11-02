@@ -149,105 +149,103 @@
 </script>
 <script type="text/javascript">
 <!--
-	require(['jquery'],function($){
-		$(function(){
-			$('#adv-setting').click(function(){
-				if(this.checked) {
-					$('.adv-setting').show();
-				} else {
-					$('.adv-setting').hide();
-				}
-			});
-			$('#adv-keyword').click(function(){
-				if(this.checked) {
-					$('.adv-keyword').show();
-				} else {
-					$('.adv-keyword').hide();
-				}
-			});
-		{if $rule['kwd-adv']}
-			$('#adv-keyword').attr('checked', 'checked');
-			$('.adv-keyword').show();
-		{/if}
+	$(function(){
+		$('#adv-setting').click(function(){
+			if(this.checked) {
+				$('.adv-setting').show();
+			} else {
+				$('.adv-setting').hide();
+			}
 		});
-		var keywordHandler = {
-			'buildForm' : function() {
-				var obj = buildAddForm('keyword-item-html', $('#keyword-list'));
-				obj.find('.btn-group .btn').on('click', function(){
-					$(this).parent().next().html($(this).attr('description'));
-					obj.find('#keyword-type-new').val($(this).attr('value'));
-				});
-				obj.find('#form').show();
-				obj.find('#show').hide();
-			},
-			'doAdd' : function(itemid) {
-				var parent = $('#' + itemid);
-				if ($('.keyword-name-new', parent).val() == '' && $('.keyword-type-new', parent).val() != 4) {
-					message('请输入关键字！', '', 'error');
+		$('#adv-keyword').click(function(){
+			if(this.checked) {
+				$('.adv-keyword').show();
+			} else {
+				$('.adv-keyword').hide();
+			}
+		});
+	{if $rule['kwd-adv']}
+		$('#adv-keyword').attr('checked', 'checked');
+		$('.adv-keyword').show();
+	{/if}
+	});
+	var keywordHandler = {
+		'buildForm' : function() {
+			var obj = buildAddForm('keyword-item-html', $('#keyword-list'));
+			obj.find('.btn-group .btn').on('click', function(){
+				$(this).parent().next().html($(this).attr('description'));
+				obj.find('#keyword-type-new').val($(this).attr('value'));
+			});
+			obj.find('#form').show();
+			obj.find('#show').hide();
+		},
+		'doAdd' : function(itemid) {
+			var parent = $('#' + itemid);
+			if ($('.keyword-name-new', parent).val() == '' && $('.keyword-type-new', parent).val() != 4) {
+				message('请输入关键字！', '', 'error');
+				return false;
+			}
+			if($('.keyword-type-new', parent).val() == 4) {
+				$('.keyword-name-new', parent).val('');
+			}
+			var typetips = $('.active', parent).html();
+			$('#show #type', parent).html(typetips);
+			$('#show #content', parent).html($('.keyword-name-new', parent).val());
+			$('#show', parent).css('display', 'block');
+			$('#form', parent).css('display', 'none');
+		},
+		'doEditItem' : function(itemid) {
+			$('#keyword-list .item').each(function(){
+				$('#form', $(this)).css('display', 'none');
+				$('#show', $(this)).css('display', 'block');
+			});
+			doEditItem(itemid);
+		}
+	};
+
+	function buildModuleForm(module) {
+		try {
+			$.ajax({
+			  url: "{php echo url('member/module', array('do' => 'form', 'id' => $rule['rule'][id]))}",
+			  type: "GET",
+			  data: {'name' : module.toLowerCase()},
+			  dataType: "html"
+			}).done(function(s) {
+				if (s && s.indexOf('"type":"error"') >= 0) {
+					message('请重新选择公众号！', '{php echo url('rule/post')}', 'error');
 					return false;
 				}
-				if($('.keyword-type-new', parent).val() == 4) {
-					$('.keyword-name-new', parent).val('');
-				}
-				var typetips = $('.active', parent).html();
-				$('#show #type', parent).html(typetips);
-				$('#show #content', parent).html($('.keyword-name-new', parent).val());
-				$('#show', parent).css('display', 'block');
-				$('#form', parent).css('display', 'none');
-			},
-			'doEditItem' : function(itemid) {
-				$('#keyword-list .item').each(function(){
-					$('#form', $(this)).css('display', 'none');
-					$('#show', $(this)).css('display', 'block');
-				});
-				doEditItem(itemid);
-			}
-		};
-
-		function buildModuleForm(module) {
-			try {
-				$.ajax({
-				  url: "{php echo url('member/module', array('do' => 'form', 'id' => $rule['rule'][id]))}",
-				  type: "GET",
-				  data: {'name' : module.toLowerCase()},
-				  dataType: "html"
-				}).done(function(s) {
-					if (s && s.indexOf('"type":"error"') >= 0) {
-						message('请重新选择公众号！', '{php echo url('rule/post')}', 'error');
-						return false;
-					}
-					formCheckers = [];
-					$('#module-form').html(s);
-				});
-			}
-			catch (e) {
-			}
+				formCheckers = [];
+				$('#module-form').html(s);
+			});
 		}
-
-		function formcheck(form) {
-			if (form['name'].value == '') {
-				message('抱歉，规则名称为必填项，请返回修改！', '', 'error');
-				return false;
-			}
-			if ($(':text[name="keywords"]').val() == '' && $('.keyword-name-new').val() == '' && $('.keyword-type-new').val() != 4) {
-				message('抱歉，您至少要设置一个触发关键字！', '', 'error');
-				return false;
-			}
-			$(':text[name="keywords"]').val($(':text[name="keywords"]').val().replace(/，/g, ','));
-			return true;
+		catch (e) {
 		}
+	}
 
-		{if empty($rid)}
-		$(function(){
-			keywordHandler.buildForm();
-		});
-		{else}
-		$('.btn-group .btn').on('click', function(){
-			$(this).parent().next().html($(this).attr('description'));
-			$(this).parent().parent().find('#keyword-type-new').val($(this).attr('value'));
-		});
-		{/if}
+	function formcheck(form) {
+		if (form['name'].value == '') {
+			message('抱歉，规则名称为必填项，请返回修改！', '', 'error');
+			return false;
+		}
+		if ($(':text[name="keywords"]').val() == '' && $('.keyword-name-new').val() == '' && $('.keyword-type-new').val() != 4) {
+			message('抱歉，您至少要设置一个触发关键字！', '', 'error');
+			return false;
+		}
+		$(':text[name="keywords"]').val($(':text[name="keywords"]').val().replace(/，/g, ','));
+		return true;
+	}
+
+	{if empty($rid)}
+	$(function(){
+		keywordHandler.buildForm();
 	});
+	{else}
+	$('.btn-group .btn').on('click', function(){
+		$(this).parent().next().html($(this).attr('description'));
+		$(this).parent().parent().find('#keyword-type-new').val($(this).attr('value'));
+	});
+	{/if}
 //-->
 </script>
 {template 'common/footer-gw'}

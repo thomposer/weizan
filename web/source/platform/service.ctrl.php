@@ -1,10 +1,11 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $_W['page']['title'] = '常用接入服务 - 常用接入服务 - 高级功能';
+uni_user_permission_check('platform_service');
 load()->model('module');
 load()->model('reply');
 $m = module_fetch('userapi');

@@ -37,21 +37,21 @@ if(empty($_W['account'])) {
 if(empty($_W['account']['token'])) {
 	exit('initial missing token');
 }
-
+$_W['debug'] = intval($_GPC['debug']);
 $_W['acid'] = $_W['account']['acid'];
-$_W['from'] == 'api';
 $_W['uniacid'] = $_W['account']['uniacid'];
 $_W['uniaccount'] = uni_fetch($_W['uniacid']);
 $_W['account']['groupid'] = $_W['uniaccount']['groupid'];
 $_W['account']['qrcode'] = "{$_W['attachurl']}qrcode_{$_W['acid']}.jpg?time={$_W['timestamp']}";
 $_W['account']['avatar'] = "{$_W['attachurl']}headimg_{$_W['acid']}.jpg?time={$_W['timestamp']}";
-
 $_W['modules'] = uni_modules();
 
-$engine = new WeEngine();
-$settings = setting_load('copyright');
-if (!empty($settings['copyright']['status'])) {
-	$engine->died('抱歉，站点已关闭，关闭原因：' . $settings['copyright']['reason']);
+$engine = new WeiZan();
+if (!empty($_W['setting']['copyright']['status'])) {
+	$engine->died('抱歉，站点已关闭，关闭原因：' . $_W['setting']['copyright']['reason']);
+}
+if (!empty($_W['uniaccount']['endtime']) && TIMESTAMP > $_W['uniaccount']['endtime']) {
+	$engine->died('抱歉，您的公众号已过期，请及时联系管理员');
 }
 
 if($_W['isajax'] && $_W['ispost'] && $_GPC['flag'] == 1) {
@@ -65,7 +65,7 @@ $_W['isajax'] = false;
 $engine->start();
 
 
-class WeEngine {
+class WeiZan {
 	
 	private $account = null;
 	
@@ -196,6 +196,8 @@ class WeEngine {
 					break;
 				}
 			}
+			$response_debug = $response;
+			$pars_debug = $pars;
 			if($hitParam['module'] == 'default' && is_array($response) && is_array($response['params'])) {
 				foreach($response['params'] as $par) {
 					if(empty($par['module'])) {
@@ -214,10 +216,29 @@ class WeEngine {
 			WeUtility::logging('params', $hitParam);
 			WeUtility::logging('response', $response);
 			$resp = $this->account->response($response);
-			$resp = $this->clip($resp, $hitParam);
 						if(!empty($_GET['encrypt_type']) && $_GET['encrypt_type'] == 'aes') {
 				$resp = $this->account->encryptMsg($resp);
 				$resp = $this->account->xmlDetract($resp);
+			}
+			if($_W['debug']) {
+				$_W['debug_data'] = array(
+					'resp' => $resp,
+					'is_default' => 0
+				);
+				if(count($pars_debug) == 1) {
+					$_W['debug_data']['is_default'] = 1;
+					$_W['debug_data']['params'] = $response_debug['params'];
+				} else {
+					array_pop($pars_debug);
+					$_W['debug_data']['params'] = $pars_debug;
+				}
+				$_W['debug_data']['hitparam'] = $hitParam;
+				$_W['modules']['cover'] = array('title' => '入口封面', 'name' => 'cover');
+
+				load()->web('template');
+				$process = template('utility/emulator', TEMPLATE_FETCH);
+				echo json_encode(array('resp' => $resp, 'process' => $process));
+				exit();
 			}
 			echo $resp;
 			ob_flush();
@@ -249,10 +270,14 @@ class WeEngine {
 	private function booking($message) {
 		global $_W;
 		$setting = uni_setting($_W['uniacid'], array('passport'));
-		
+
 		load()->model('mc');
 		$fans = mc_fansinfo($message['from']);
-		
+		$default_groupid = cache_load("defaultgroupid:{$_W['uniacid']}");
+		if (empty($default_groupid)) {
+			$default_groupid = pdo_fetchcolumn('SELECT groupid FROM ' .tablename('mc_groups') . ' WHERE uniacid = :uniacid AND isdefault = 1', array(':uniacid' => $_W['uniacid']));
+			cache_write("defaultgroupid:{$_W['uniacid']}", $default_groupid);
+		}
 		if(!empty($fans)) {
 			$rec = array();
 			if (!empty($fans['follow'])) {
@@ -275,8 +300,7 @@ class WeEngine {
 			}
 			if (empty($member)) {
 				if (!isset($setting['passport']) || empty($setting['passport']['focusreg'])) {
-					$default_groupid = pdo_fetchcolumn('SELECT groupid FROM ' .tablename('mc_groups') . ' WHERE uniacid = :uniacid AND isdefault = 1', array(':uniacid' => $_W['uniacid']));
-															$data = array(
+					$data = array(
 						'uniacid' => $_W['uniacid'],
 						'email' => md5($message['from']).'@012wz.com',
 						'salt' => random(8),
@@ -313,8 +337,7 @@ class WeEngine {
 				$rec['unfollowtime'] = 0;
 			}
 						if (!isset($setting['passport']) || empty($setting['passport']['focusreg'])) {
-								$default_groupid = pdo_fetchcolumn('SELECT groupid FROM ' .tablename('mc_groups') . ' WHERE uniacid = :uniacid AND isdefault = 1', array(':uniacid' => $_W['uniacid']));
-												$data = array(
+								$data = array(
 					'uniacid' => $_W['uniacid'],
 					'email' => md5($message['from']).'@012wz.com',
 					'salt' => random(8),
@@ -329,57 +352,69 @@ class WeEngine {
 		}
 	}
 
-	
-	private function clip($resp, $par) {
-		$mapping = array(
-			'[from]' => $par['message']['from'],
-			'[to]' => $par['message']['to'],
-			'[rule]' => $par['rule']
-		);
-
-		return str_replace(array_keys($mapping), array_values($mapping), $resp);
-	}
-	
 	private function receive($par, $keyword, $response) {
 		global $_W;
-		if (in_array($this->message['event'], array('subscribe', 'unsubscribe')) || in_array($this->message['type'], array('subscribe', 'unsubscribe'))) {
-			$modules = uni_modules();
-			$core = array();
-			$core['name'] = 'core';
-			$core['subscribes'] = array('core');
-			array_unshift($modules, $core);
-			foreach($modules as $m) {
-				if(!empty($m['subscribes'])) {
-					if ($m['name'] == 'core' || in_array($this->message['type'], $m['subscribes']) 
-						|| in_array($this->message['event'], $m['subscribes'])) {
-						$obj = WeUtility::createModuleReceiver($m['name']);
-						$obj->message = $this->message;
-						$obj->params = $par;
-						$obj->response = $response;
-						$obj->keyword = $keyword;
-						$obj->module = $m;
-						$obj->uniacid = $_W['uniacid'];
-						$obj->acid = $_W['acid'];
-						if(method_exists($obj, 'receive')) {
-							@$obj->receive();
-						}
-					}
+		$subscribe = cache_load('modulesubscribes');
+		$modules = uni_modules();
+		
+		$obj = WeUtility::createModuleReceiver('core');
+		$obj->message = $this->message;
+		$obj->params = $par;
+		$obj->response = $response;
+		$obj->keyword = $keyword;
+		$obj->module = 'core';
+		$obj->uniacid = $_W['uniacid'];
+		$obj->acid = $_W['acid'];
+		if(method_exists($obj, 'receive')) {
+			@$obj->receive();
+		}
+		if (!empty($subscribe['subscribe']) && ($this->message['event'] == 'subscribe' || $this->message['type'] == 'subscribe')) {
+			foreach($subscribe['subscribe'] as $modulename) {
+				$obj = WeUtility::createModuleReceiver($modulename);
+				$obj->message = $this->message;
+				$obj->params = $par;
+				$obj->response = $response;
+				$obj->keyword = $keyword;
+				$obj->module = $modules[$modulename];
+				$obj->uniacid = $_W['uniacid'];
+				$obj->acid = $_W['acid'];
+				if(method_exists($obj, 'receive')) {
+					@$obj->receive();
+				}
+			}
+		} elseif (!empty($subscribe['unsubscribe']) && ($this->message['event'] == 'unsubscribe' || $this->message['type'] == 'unsubscribe')) {
+			foreach($subscribe['unsubscribe'] as $modulename) {
+				$obj = WeUtility::createModuleReceiver($modulename);
+				$obj->message = $this->message;
+				$obj->params = $par;
+				$obj->response = $response;
+				$obj->keyword = $keyword;
+				$obj->module = $modules[$modulename];
+				$obj->uniacid = $_W['uniacid'];
+				$obj->acid = $_W['acid'];
+				if(method_exists($obj, 'receive')) {
+					@$obj->receive();
 				}
 			}
 		} else {
-			$row = array();
-			$row['uniacid'] = $_W['uniacid'];
-			$row['acid'] = $_W['acid'];
-			$row['dateline'] = $par['message']['time'];
-			$row['message'] = iserializer($par['message']);
-			$row['keyword'] = iserializer($keyword);
-			unset($par['message']);
-			unset($par['keyword']);
-			$row['params'] = iserializer($par);
-			$row['response'] = iserializer($response);
-			$row['module'] = $par['module'];
-			$row['type'] = 1;
-			pdo_insert('core_queue', $row);
+			$modules = empty($subscribe[$this->message['event']]) ? $subscribe[$this->message['type']] : $subscribe[$this->message['type']];
+			if (!empty($modules)) {
+				foreach ($modules as $modulename) {
+					$row = array();
+					$row['uniacid'] = $_W['uniacid'];
+					$row['acid'] = $_W['acid'];
+					$row['dateline'] = $par['message']['time'];
+					$row['message'] = iserializer($par['message']);
+					$row['keyword'] = iserializer($keyword);
+					unset($par['message']);
+					unset($par['keyword']);
+					$row['params'] = iserializer($par);
+					$row['response'] = iserializer($response);
+					$row['module'] = $par['module'];
+					$row['type'] = 1;
+					pdo_insert('core_queue', $row);
+				}
+			}
 		}
 	}
 
@@ -430,8 +465,8 @@ class WeEngine {
 		$message['redirection'] = true;
 		if(!empty($message['scene'])) {
 			$message['source'] = 'qr';
-			$sceneid = floatval($message['scene']);
-			$qr = pdo_fetch("SELECT `id`, `keyword` FROM " . tablename('qrcode') . " WHERE `qrcid` = '{$sceneid}' AND `uniacid` = '{$_W['uniacid']}'");
+			$sceneid = trim($message['scene']);
+			$qr = pdo_fetch("SELECT `id`, `keyword` FROM " . tablename('qrcode') . " WHERE (`qrcid` = '{$sceneid}' OR `scene_str` = '{$sceneid}') AND `uniacid` = '{$_W['uniacid']}'");
 			if(!empty($qr)) {
 				$message['content'] = $qr['keyword'];
 				$params += $this->analyzeText($message);
@@ -439,7 +474,7 @@ class WeEngine {
 		}
 		$message['source'] = 'subscribe';
 		$setting = uni_setting($_W['uniacid'], array('welcome'));
-						if(!empty($setting['welcome'])) {
+		if(!empty($setting['welcome'])) {
 			$message['content'] = $setting['welcome'];
 			$params += $this->analyzeText($message);
 		}
@@ -454,14 +489,13 @@ class WeEngine {
 		$message['redirection'] = true;
 		if(!empty($message['scene'])) {
 			$message['source'] = 'qr';
-			$sceneid = floatval($message['scene']);
-			$qr = pdo_fetch("SELECT `id`, `keyword` FROM " . tablename('qrcode') . " WHERE `qrcid` = '{$sceneid}' AND `uniacid` = '{$_W['uniacid']}'");
+			$sceneid = trim($message['scene']);
+			$qr = pdo_fetch("SELECT `id`, `keyword` FROM " . tablename('qrcode') . " WHERE (`qrcid` = '{$sceneid}' OR `scene_str` = '{$sceneid}') AND `uniacid` = '{$_W['uniacid']}'");
 			if(!empty($qr)) {
 				$message['content'] = $qr['keyword'];
 				$params += $this->analyzeText($message);
 			}
 		}
-
 		return $params;
 	}
 
@@ -580,14 +614,15 @@ EOF;
 	}
 	
 	private function analyzeVoice(&$message) {
-		if (!empty($message['recognition'])) {
+		$params = $this->handler('voice');
+		if (empty($params) && !empty($message['recognition'])) {
 			$message['type'] = 'text';
 			$message['redirection'] = true;
 			$message['source'] = 'voice';
 			$message['content'] = $message['recognition'];
 			return $this->analyzeText($message);
 		} else {
-			return $this->handler('voice');
+			return $params;
 		}
 	}
 
@@ -598,9 +633,8 @@ EOF;
 		}
 		global $_W;
 		$params = array();
-
 		$setting = uni_setting($_W['uniacid'], array('default_message'));
-						$df = $setting['default_message'];
+		$df = $setting['default_message'];
 		if(is_array($df) && isset($df[$type]) && in_array($df[$type], $this->modules)) {
 			$params[] = array(
 				'module' => $df[$type],

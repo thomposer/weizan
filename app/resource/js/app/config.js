@@ -2,19 +2,22 @@ require.config({
 	baseUrl: 'resource/js/app',
 	urlArgs: "v=" +  (new Date()).getHours(),
 	paths: {
-		'css': '../lib/css.min',
-		'jquery': '../lib/jquery-1.11.1.min',
-		'hammer': '../lib/hammer.min',
-		'angular': '../lib/angular.min',
-		'bootstrap': '../lib/bootstrap.min',
-		'underscore': '../lib/underscore-min',
-		'iscroll': '../lib/iscroll-lite',
-		'moment': '../lib/moment',
-		'filestyle': '../lib/bootstrap-filestyle.min',
+		'map': 'http://api.map.baidu.com/getscript?v=2.0&ak=F51571495f717ff1194de02366bb8da9&services=&t=20140530104353',
+		'css': '../../../../web/resource/js/lib/css.min',
+		'jquery': '../../../../web/resource/js/lib/jquery-1.11.1.min',
+		'angular': '../../../../web/resource/js/lib/angular.min',
+		'bootstrap': '../../../../web/resource/js/lib/bootstrap.min',
+		'underscore': '../../../../web/resource/js/lib/underscore-min',
+		'moment': '../../../../web/resource/js/lib/moment',
+		'filestyle': '../../../../web/resource/js/lib/bootstrap-filestyle.min',
 		'daterangepicker': '../../components/daterangepicker/daterangepicker',
 		'datetimepicker': '../../components/datetimepicker/bootstrap-datetimepicker.min',
-		'map': 'http://api.map.baidu.com/getscript?v=2.0&ak=F51571495f717ff1194de02366bb8da9&services=&t=20140530104353',
-		'webuploader' : '../../components/webuploader/webuploader.min'
+		'webuploader' : '../../../../web/resource/components/webuploader/webuploader.min',
+		'jquery.jplayer': '../../../../web/resource/components/jplayer/jquery.jplayer.min',
+		'hammer': '../lib/hammer.min',
+		'iscroll': '../lib/iscroll-lite',
+		'swiper': '../../components/swiper/swiper.min',
+		'calendar': '../lib/calendar',
 	},
 	shim:{
 		'angular': {
@@ -44,7 +47,15 @@ require.config({
 			exports: 'BMap'
 		},
 		'webuploader': {
-			deps: ['jquery', 'css!../../components/webuploader/webuploader.css', 'css!../../components/webuploader/style.css']
+			deps: ['jquery', 'css!../../../../web/resource/components/webuploader/webuploader.css', 'css!../../../../web/resource/components/webuploader/style.css']
+		},
+		'jquery.jplayer': {
+			exports: "$",
+			deps: ['jquery']
+		},
+		'calendar': {
+			exports: "$",
+			deps: ['jquery']
 		}
 	}
 });

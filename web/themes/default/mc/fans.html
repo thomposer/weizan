@@ -16,7 +16,7 @@
 		}
 	}
 	
-	require(['angular', 'jquery', 'util'], function(angular, $, u){
+	require(['angular'], function(angular){
 		$('#form1').submit(function(){
 			if($(":checkbox[name='delete[]']:checked").size() > 0){
 				return confirm('删除后不可恢复，您确定删除吗？');
@@ -29,14 +29,14 @@
 				running : false,
 				syncState : '',
 				downloadState : '',
-				enabled : {if $account && ($account['type'] == '1' && $account['level'] >= '3')}true{else}false{/if}
+				enabled : {if $_W['acid'] && $_W['account']['level'] >= '3'}true{else}false{/if}
 			};	
 			$scope.sync = function(){
 				if($(":checkbox:checked").size() <= 0){
 					alert('没有选择粉丝');
 					return;
 				}
-				u.message('正在同步粉丝信息<br>请不要离开页面或进行其他操作,同步成功后系统会自动刷新本页面');
+				util.message('正在同步粉丝信息<br>请不要离开页面或进行其他操作,同步成功后系统会自动刷新本页面');
 				$scope.adv.running = running = true;
 				var fanids = [];
 				$(':checkbox:checked').each(function(){
@@ -71,7 +71,7 @@
 					if(dat.errno || dat.type == 'error' || dat.type == 'info') {
 						$scope.adv.downloadState = '';
 						$scope.adv.running = running = false;
-						u.message(dat.message, location.href, 'error');
+						util.message(dat.message, location.href, 'error');
 						return;
 					}
 
@@ -79,7 +79,7 @@
 					if((dat.total <= count) || (!dat.count && !dat.next)) {
 						$scope.adv.downloadState = '';
 						$scope.adv.running = running = false;
-						u.message('粉丝下载完成,系统将开始更新粉丝数据,请不要离开页面', "{php echo url('mc/fans/initsync', array('acid' => $acid))}", 'success');
+						util.message('粉丝下载完成,系统将开始更新粉丝数据,请不要离开页面', "{php echo url('mc/fans/initsync', array('acid' => $acid))}", 'success');
 						return;
 					} else {
 						$scope.download(dat.next, count);
@@ -102,23 +102,12 @@
 				<input type="hidden" name="c" value="mc" />
 				<input type="hidden" name="a" value="fans" />
 				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label">所属公众号</label>
-					<div class="col-sm-9 col-md-8 col-lg-8 col-xs-12">
-						<select class="form-control" name="acid">
-							<option value="">所有公众号</option>
-							{loop $accounts $acc}
-							<option value="{$acc['acid']}"{if $acc['acid'] == $acid} selected="selected"{/if}>{$acc['name']}</option>
-							{/loop}
-						</select>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">昵称</label>
 					<div class="col-sm-9 col-md-8 col-lg-8 col-xs-12">
 						<input type="text" class="form-control" name="nickname" value="{$nickname}"/>
 					</div>
 				</div>
-					<div class="form-group">
+				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">用户组</label>
 					<div class="col-sm-9 col-md-8 col-lg-8 col-xs-12">
 						<label class="radio-inline">
@@ -149,7 +138,6 @@
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">关注/取消关注时间</label>
 					<div class="col-sm-9 col-md-8 col-lg-8 col-xs-12">
-						{php load()->func('tpl');}
 						{php echo tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d', $starttime),'endtime'=>date('Y-m-d', $endtime)));}
 					</div>
 					<div class="pull-right col-xs-12 col-sm-3 col-md-2 col-lg-2">
@@ -199,24 +187,21 @@
 					<td>
 						{if $item['follow'] == '1'}{php echo date('Y-m-d H:i:s', $item['followtime'])}{elseif !empty($item['unfollowtime'])}{php echo date('Y-m-d H:i:s', $item['unfollowtime'])}{else}&nbsp;{/if}
 					</td>
-					<td>{$item['account']}</td>
 					<td class="text-right" style="overflow:visible;">
-						{if !empty($groups[$acid])}
+						{if !empty($fans_group)}
 						<div class="btn-group">
 							<button class="btn btn-danger btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-								<span id="{$item['fanid']}-name">{$groups[$item['acid']][$item['groupid']]['name']}</span>
+								<span id="{$item['fanid']}-name">{$fans_group[$item['groupid']]['name']}</span>
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" role="menu">
-							{if !empty($groups[$item['acid']])}
-								{loop $groups[$item['acid']] $li}
-									<li><a href="javascript:;" class="groupedit" title="{$li['name']}" data-acid="{$item['acid']}" data-groupid="{$li['id']}" data-openid="{$item['openid']}" data-fanid="{$item['fanid']}">{$li['name']}</a></li>
+								{loop $fans_group $li}
+									<li><a href="javascript:;" class="groupedit" title="{$li['name']}" data-groupid="{$li['id']}" data-openid="{$item['openid']}" data-fanid="{$item['fanid']}">{$li['name']}</a></li>
 								{/loop}
-							{/if}
 							</ul>
 						</div>
 						{/if}
-						<a href="{php echo url('mc/notice/tpl', array('id' => $item['fanid']));}" id="{$item['fanid']}" class="btn btn-success btn-sm sms">发送消息</a>
+						<a href="{php echo url('mc/notice/tpl', array('id' => $item['fanid']));}" class="btn btn-success btn-sm sms">发送消息</a>
 						<a href="{php echo url('mc/fans/view', array('id' => $item['fanid']));}" class="btn btn-default btn-sm">查看详情</a>
 					</td>
 				</tr>
@@ -248,53 +233,21 @@
 	</form>
 </div>
 <script>
-	$('.btn, .title').hover(function(){
-		$(this).tooltip('show');
-	},function(){
-		$(this).tooltip('hide');
-	});
-
-	require(['util', 'jquery'], function(u, $){
-		$('.groupedit').click(function(){
-			var acid = $(this).attr('data-acid');
-			var groupid = $(this).attr('data-groupid');
-			var openid = $(this).attr('data-openid');
-			var fanid = $(this).attr('data-fanid');
-			var groupname = $(this).html();
-			if(!acid) {
-				u.message('公众号id错误', '', 'error');
+	$('.groupedit').click(function(){
+		var groupid = $(this).attr('data-groupid');
+		var openid = $(this).attr('data-openid');
+		if(!openid) {
+			util.message('粉丝openid错误', '', 'error');
+		}
+		$.post('{php echo url("mc/fans/updategroup");}', {'openid' : openid, 'groupid': groupid}, function(data){
+			var data = $.parseJSON(data);
+			if(data.status == 'error') {
+				util.message(data.mess, '', 'error');
+			} else if(data.status == 'success'){
+				location.reload();
 			}
-			if(!openid) {
-				u.message('粉丝openid错误', '', 'error');
-			}
-			$.post('{php echo url("mc/fans/updategroup");}', {'openid' : openid, 'acid' : acid, 'groupid': groupid}, function(data){
-				var data = $.parseJSON(data);
-				if(data.status == 'error') {
-					u.message(data.mess, '', 'error');
-				} else if(data.status == 'success'){
-					$('#' + fanid + '-name').html(groupname);
-				}
-			});
 		});
-
-/*
-		//发送消息
-		$('.sms').click(function(){
-			var fanid = $(this).attr('id');
-			if(!fanid) {
-				u.message('粉丝id错误', '', 'error');
-				return;
-			}
-
-			$.get("{php echo url('mc/notice/fans')}&fanid=" + fanid, function(data){
-				var obj = u.dialog('发送客服消息', data, '');
-				obj.modal('show');
-				return;
-			});
-		});
-*/
 	});
-
 </script>
 {/if}
 {if $do == 'view'}

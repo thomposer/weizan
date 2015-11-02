@@ -34,7 +34,7 @@ if($do == 'prepared') {
 	if (is_dir($path)) {
 		if ($handle = opendir($path)) {
 			while (false !== ($modulepath = readdir($handle))) {
-				$manifest = ext_template_manifest($modulepath);
+				$manifest = ext_template_manifest($modulepath, false);
 				if(!empty($manifest) && !in_array($manifest['name'], $templateids)) {
 					$uninstallTemplates[$manifest['name']] = $manifest;
 					$uninstallTemplates_title[$manifest['name']] = $manifest['title'];
@@ -221,6 +221,8 @@ if($do == 'upgrade') {
 	$info = cloud_t_info($id);
 	if(!is_error($info)) {
 		if(empty($_GPC['flag'])) {
+						load()->func('file');
+			rmdirs(IA_ROOT . '/app/themes/' . $id, true);
 			header('Location: ' . url('cloud/process', array('t' => $id, 'is_upgrade' => 1)));
 			exit;
 		} else {
@@ -272,7 +274,6 @@ if($do == 'web') {
 			}
 		}
 	}
-	setting_load();
 	template('extension/web');
 }
 

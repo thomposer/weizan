@@ -1,13 +1,36 @@
 <?php
+/** File PDOStatement_mysql.class.php	*
+ *(C) Andrea Giammarchi [2005/10/13]	*/
+
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * Class PDOStatement_mysql
+ * 	This class is used from class PDO_mysql to manage a MySQL database.
+ *	  Look at PDO.clas.php file comments to know more about MySQL connection.
+ * ---------------------------------------------
+ * @Compatibility	>= PHP 4
+ * @Dependencies	PDO.class.php
+ * 			PDO_mysql.class.php
+ * @Author		Andrea Giammarchi
+ * @Site		http://www.devpro.it/
+ * @Mail		andrea [ at ] 3site [ dot ] it
+ * @Date		2005/10/13
+ * @LastModified	2006/01/29 09:30 [fixed execute bug]
+ * @Version		0.1b - tested
  */
-
-
 class PDOStatement_mysql {
 
-	
+	/**
+	 * 'Private' variables:
+	 *	__connection:Resource		Database connection
+		 *	__dbinfo:Array			Array with 4 elements used to manage connection
+		 *	  __persistent:Boolean		Connection mode, is true on persistent, false on normal (deafult) connection
+		 *	  __query:String			Last query used
+		 *	  __result:Resource		Last result from last query
+		 *	  __fetchmode:Integer		constant PDO_FETCH_* result mode
+		 *	  __errorCode:String		Last error string code
+		 *	  __errorInfo:Array		Last error informations, code, number, details
+		 *	  __boundParams:Array		Stored bindParam
+	 */
 	var $__connection;
 	var $__dbinfo;
 	var $__persistent = false;
@@ -18,14 +41,29 @@ class PDOStatement_mysql {
 	var $__errorInfo = Array('');
 	var $__boundParams = Array();
 
-	
+	/**
+	 * Public constructor:
+	 *	Called from PDO to create a PDOStatement for this database
+		 *	   	new PDOStatement_sqlite( &$__query:String, &$__connection:Resource, $__dbinfo:Array )
+	 * @Param	String		query to prepare
+		 * @Param	Resource	database connection
+		 * @Param	Array		4 elements array to manage connection
+	 */
 	function PDOStatement_mysql(&$__query, &$__connection, &$__dbinfo) {
 		$this->__query = &$__query;
 		$this->__connection = &$__connection;
 		$this->__dbinfo = &$__dbinfo;
 	}
 
-	
+	/**
+	 * Public method:
+	 *	Replace ? or :named values to execute prepared query
+		 *	   	this->bindParam( $mixed:Mixed, &$variable:Mixed, $type:Integer, $lenght:Integer ):Void
+		 * @Param	Mixed		Integer or String to replace prepared value
+		 * @Param	Mixed		variable to replace
+		 * @Param	Integer		this variable is not used but respects PDO original accepted parameters
+		 * @Param	Integer		this variable is not used but respects PDO original accepted parameters
+	 */
 	function bindParam($mixed, &$variable, $type = null, $lenght = null) {
 		if(is_string($mixed))
 			$this->__boundParams[$mixed] = $variable;
@@ -33,7 +71,11 @@ class PDOStatement_mysql {
 			array_push($this->__boundParams, $variable);
 	}
 
-	
+	/**
+	 * Public method:
+	 *	Checks if query was valid and returns how may fields returns
+		 *	   	this->columnCount( void ):Void
+	 */
 	function columnCount() {
 		$result = 0;
 		if(!is_null($this->__result))
@@ -41,17 +83,36 @@ class PDOStatement_mysql {
 		return $result;
 	}
 
-	
+	/**
+	 * Public method:
+	 *	Returns a code rappresentation of an error
+		 *	   	this->errorCode( void ):String
+		 * @Return	String		String rappresentation of the error
+	 */
 	function errorCode() {
 		return $this->__errorCode;
 	}
 
-	
+	/**
+	 * Public method:
+	 *	Returns an array with error informations
+		 *	   	this->errorInfo( void ):Array
+		 * @Return	Array		Array with 3 keys:
+		 * 				0 => error code
+		 *							  1 => error number
+		 *							  2 => error string
+	 */
 	function errorInfo() {
 		return $this->__errorInfo;
 	}
 
-	
+	/**
+	 * Public method:
+	 *	Excecutes a query and returns true on success or false.
+		 *	   	this->exec( $array:Array ):Boolean
+		 * @Param	Array		If present, it should contain all replacements for prepared query
+		 * @Return	Boolean		true if query has been done without errors, false otherwise
+	 */
 	function execute($array = Array()) {
 		if(count($this->__boundParams) > 0)
 			$array = &$this->__boundParams;
@@ -75,7 +136,8 @@ class PDOStatement_mysql {
 					$search[$k] = '/' . preg_quote($tempf[$k],'`') . '\b/';
 				}
 				$__query = preg_replace($search, $tempr, $__query);
-							}
+				//$__query = str_replace($tempf, $tempr, $__query);
+			}
 		}
 		if(is_null($this->__result = &$this->__uquery($__query)))
 			$keyvars = false;
@@ -85,7 +147,16 @@ class PDOStatement_mysql {
 		return $keyvars;
 	}
 
-	
+	/**
+	 * Public method:
+	 *	Returns, if present, next row of executed query or false.
+		 *	   	this->fetch( $mode:Integer, $cursor:Integer, $offset:Integer ):Mixed
+		 * @Param	Integer		PDO_FETCH_* constant to know how to read next row, default PDO_FETCH_BOTH
+		 * 				NOTE: if $mode is omitted is used default setted mode, PDO_FETCH_BOTH
+		 * @Param	Integer		this variable is not used but respects PDO original accepted parameters
+		 * @Param	Integer		this variable is not used but respects PDO original accepted parameters
+		 * @Return	Mixed		Next row of executed query or false if there is nomore.
+	 */
 	function fetch($mode = PDO_FETCH_ASSOC, $cursor = null, $offset = null) {
 		if(func_num_args() == 0)
 			$mode = &$this->__fetchmode;
@@ -112,7 +183,15 @@ class PDOStatement_mysql {
 		return $result;
 	}
 
-	
+	/**
+	 * Public method:
+	 *	Returns an array with all rows of executed query.
+		 *	   	this->fetchAll( $mode:Integer ):Array
+		 * @Param	Integer		PDO_FETCH_* constant to know how to read all rows, default PDO_FETCH_BOTH
+		 * 				NOTE: this doesn't work as fetch method, then it will use always PDO_FETCH_BOTH
+		 *									if this param is omitted
+		 * @Return	Array		An array with all fetched rows
+	 */
 	function fetchAll($mode = PDO_FETCH_ASSOC) {
 		$result = array();
 		if(!is_null($this->__result)) {
@@ -140,7 +219,12 @@ class PDOStatement_mysql {
 		return $result;
 	}
 
-	
+	/**
+	 * Public method:
+	 *	Returns, if present, first column of next row of executed query
+		 *	   	this->fetchSingle( void ):Mixed
+		 * @Return	Mixed		Null or next row's first column
+	 */
 	function fetchSingle() {
 		$result = null;
 		if(!is_null($this->__result)) {
@@ -158,13 +242,29 @@ class PDOStatement_mysql {
 		return $row[$column];
 	}
 
-	
+	/**
+	 * Public method:
+	 *	Returns number of last affected database rows
+		 *	   	this->rowCount( void ):Integer
+		 * @Return	Integer		number of last affected rows
+		 * 				NOTE: works with INSERT, UPDATE and DELETE query type
+	 */
 	function rowCount() {
 		return mysql_affected_rows($this->__connection);
 	}
 
 
-			
+	// NOT TOTALLY SUPPORTED PUBLIC METHODS
+		/**
+	 * Public method:
+	 *	Quotes correctly a string for this database
+		 *	   	this->getAttribute( $attribute:Integer ):Mixed
+		 * @Param	Integer		a constant [	PDO_ATTR_SERVER_INFO,
+		 * 						PDO_ATTR_SERVER_VERSION,
+		 *											  PDO_ATTR_CLIENT_VERSION,
+		 *											  PDO_ATTR_PERSISTENT	]
+		 * @Return	Mixed		correct information or false
+	 */
 	function getAttribute($attribute) {
 		$result = false;
 		switch($attribute) {
@@ -184,7 +284,15 @@ class PDOStatement_mysql {
 		return $result;
 	}
 
-	
+	/**
+	 * Public method:
+	 *	Sets database attributes, in this version only connection mode.
+		 *	   	this->setAttribute( $attribute:Integer, $mixed:Mixed ):Boolean
+		 * @Param	Integer		PDO_* constant, in this case only PDO_ATTR_PERSISTENT
+		 * @Param	Mixed		value for PDO_* constant, in this case a Boolean value
+		 * 				true for permanent connection, false for default not permament connection
+		 * @Return	Boolean		true on change, false otherwise
+	 */
 	function setAttribute($attribute, $mixed) {
 		$result = false;
 		if($attribute === PDO_ATTR_PERSISTENT && $mixed != $this->__persistent) {
@@ -200,7 +308,14 @@ class PDOStatement_mysql {
 		return $result;
 	}
 
-	
+	/**
+	 * Public method:
+	 *	Sets default fetch mode to use with this->fetch() method.
+		 *	   	this->setFetchMode( $mode:Integer ):Boolean
+		 * @Param	Integer		PDO_FETCH_* constant to use while reading an execute query with fetch() method.
+		 * 				NOTE: PDO_FETCH_LAZY and PDO_FETCH_BOUND are not supported
+		 * @Return	Boolean		true on change, false otherwise
+	 */
 	function setFetchMode($mode) {
 		$result = false;
 		switch($mode) {
@@ -216,7 +331,8 @@ class PDOStatement_mysql {
 	}
 
 
-			function bindColumn($mixewd, &$param, $type = null, $max_length = null, $driver_option = null) {
+	// UNSUPPORTED PUBLIC METHODS
+		function bindColumn($mixewd, &$param, $type = null, $max_length = null, $driver_option = null) {
 		return false;
 	}
 

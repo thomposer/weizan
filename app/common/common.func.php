@@ -76,14 +76,13 @@ function checkauth() {
 
 function __buildSiteUrl($url) {
 	global $_W, $engine;
-
 	$mapping = array(
-		'[from]' => $engine->message['from'],
-		'[to]' => $engine->message['to'],
-		'[uniacid]' => $_W['uniacid'],
+			'[from]' => $engine->message['from'],
+			'[to]' => $engine->message['to'],
+			'[uniacid]' => $_W['uniacid'],
 	);
 	$url = str_replace(array_keys($mapping), array_values($mapping), $url);
-
+	
 	$pass = array();
 	$pass['openid'] = $engine->message['from'];
 	$pass['acid'] = $_W['acid'];
@@ -106,24 +105,6 @@ function __buildSiteUrl($url) {
 	$vars['forward'] = base64_encode($url);
 
 	return $_W['siteroot'] . 'app/' . url('auth/forward', $vars);
-}
-
-
-function init_quickmenus($multiid = 0) {
-	global $_W, $controller, $action;
-	$quickmenu = pdo_fetchcolumn('SELECT quickmenu FROM ' . tablename('site_multi') . ' WHERE uniacid = :uniacid AND id = :id', array(':uniacid' => $_W['uniacid'], ':id' => $multiid));
-	$quickmenu = iunserializer($quickmenu);
-	if(!empty($quickmenu)) {
-		$acl = array();
-		$acl['home'] = array(
-			'home'
-		);
-		if((is_array($acl[$controller]) && in_array($action, $acl[$controller])) || in_array(IN_MODULE, $quickmenu['enablemodule'])) {
-			$tpl = !empty($quickmenu['template']) ? $quickmenu['template'] : 'default';
-			$_W['quickmenu']['menus'] = app_navs('shortcut', $multiid);
-			$_W['quickmenu']['template'] = '../quick/' . $tpl;
-		}
-	}
 }
 
 function register_jssdk($debug = false){

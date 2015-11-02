@@ -10,9 +10,6 @@ if (!empty($_GPC['styleid'])) {
 	$_W['account']['template'] = pdo_fetchcolumn("SELECT name FROM ".tablename('site_templates')." WHERE id = '{$_W['account']['styleid']}'");
 }
 load()->model('app');
-$_W['account']['quickmenu'] = iunserializer($_W['account']['quickmenu']);
-$_W['quickmenu']['template'] = !empty($_W['account']['quickmenu']['template']) ? '../quick/' . $_W['account']['quickmenu']['template'] : '../quick/default';
-$_W['quickmenu']['menus'] = app_navs(3);
 
 $channel = array('index', 'mc', 'list', 'detail', 'album', 'photo','exchange');
 $name = $_GPC['name'];

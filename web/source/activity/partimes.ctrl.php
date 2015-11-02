@@ -24,7 +24,6 @@ foreach ($_W['modules'] as $key=>$value) {
 }
 
 if($do == 'post') {
-	load()->func('tpl');
 	$id = intval($_GPC['id']);
 	if(!empty($id)){
 		$item = pdo_fetch('SELECT * FROM '.tablename('activity_exchange').' WHERE id=:id AND uniacid=:uniacid',array(':id'=>$id, ':uniacid'=>$_W['uniacid']));

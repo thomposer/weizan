@@ -36,7 +36,7 @@
 class PHPExcel_Writer_Excel2007_Theme extends PHPExcel_Writer_Excel2007_WriterPart
 {
 	/**
-	 * Map of Major fonts to write
+	 * Map of Major font to write
 	 * @static	array of string
 	 *
 	 */
@@ -74,7 +74,7 @@ class PHPExcel_Writer_Excel2007_Theme extends PHPExcel_Writer_Excel2007_WriterPa
 			);
 
 	/**
-	 * Map of Minor fonts to write
+	 * Map of Minor font to write
 	 * @static	array of string
 	 *
 	 */
@@ -814,7 +814,7 @@ class PHPExcel_Writer_Excel2007_Theme extends PHPExcel_Writer_Excel2007_WriterPa
 	}
 
 	/**
-	 * Write fonts to XML format
+	 * Write font to XML format
 	 *
 	 * @param 	PHPExcel_Shared_XMLWriter	$objWriter
 	 * @param 	string						$latinFont

@@ -83,12 +83,14 @@
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style="color:topic">*</span>话题</label>
 					<div class="col-sm-9 col-xs-12">
 						<input type="text" id='rname' name="title" class="form-control" value="{$topic['title']}" />
+						<span class="help-block">#myuser#替换粉丝昵称</span>
 					</div>
 				</div>
 	<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">话题图片</label>
 					<div class="col-sm-9 col-xs-12">
 						{php echo tpl_form_field_image('pic', $topic['pic'])}
+						<span class="help-block">#myavatar#替换粉丝头像</span>
 					</div>
 				</div>
 
@@ -96,18 +98,21 @@
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">发起人昵称</label>
                   <div class="col-sm-9 col-xs-12">
 						<input type="text" id='nickname' name="nickname" class="form-control" value="{$topic['nickname']}" />
+						<span class="help-block">#myuser#替换粉丝昵称</span>
 					</div>                
                 </div>
               	<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">发起人头像</label>
 					<div class="col-sm-9 col-xs-12">
 						{php echo tpl_form_field_image('avatar', $topic['avatar'])}
+						<span class="help-block">#myavatar#替换粉丝头像</span>
 					</div>
 				</div>  
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">点赞的人</label>
 					<div class="col-sm-9 col-xs-12">
 						<input type="text" id='zan' name="zan" class="form-control" value="{$topic['zan']}" />
+						<span class="help-block">#myuser#替换粉丝昵称</span>
 					</div>
 				</div>
 				<div class="form-group">

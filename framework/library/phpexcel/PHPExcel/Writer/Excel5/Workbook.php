@@ -122,7 +122,7 @@ class PHPExcel_Writer_Excel5_Workbook extends PHPExcel_Writer_Excel5_BIFFwriter
 	private $_fontWriters = array();
 
 	/**
-	 * Added fonts. Maps from font's hash => index in workbook
+	 * Added font. Maps from font's hash => index in workbook
 	 *
 	 * @var array
 	 */
@@ -295,7 +295,7 @@ class PHPExcel_Writer_Excel5_Workbook extends PHPExcel_Writer_Excel5_BIFFwriter
 	}
 
 	/**
-	 * Add a font to added fonts
+	 * Add a font to added font
 	 *
 	 * @param PHPExcel_Style_Font $font
 	 * @return int Index to FONT record

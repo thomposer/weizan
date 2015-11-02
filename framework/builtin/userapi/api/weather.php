@@ -13,7 +13,7 @@ $url = sprintf($url, urlencode(iconv('utf-8', 'gb2312', $city)));
 $resp = ihttp_get($url);
 $response = array();
 if ($resp['code'] == 200 && $resp['content']) {
-	$obj = simplexml_load_string($resp['content'], 'SimpleXMLElement', LIBXML_NOCDATA);
+	$obj = isimplexml_load_string($resp['content'], 'SimpleXMLElement', LIBXML_NOCDATA);
 	$dat = $obj->Weather->city . '今日天气' . PHP_EOL .
 							'今天白天'.$obj->Weather->status1.'，'. $obj->Weather->temperature1 . '摄氏度。' . PHP_EOL .
 							$obj->Weather->direction1 . '，' . $obj->Weather->power1 . PHP_EOL .

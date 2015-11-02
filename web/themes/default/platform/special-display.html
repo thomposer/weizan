@@ -1,7 +1,6 @@
 {template 'common/header'}
 <ul class="nav nav-tabs">
 	<li class="active"><a href="{php echo url('platform/special/display')}">系统回复</a></li>
-	<li><a href="{php echo url('platform/special/message')}">特殊消息类型处理</a></li>
 </ul>
 <div class="clearfix">
 	<form class="form form-horizontal" action="" method="post">
@@ -60,9 +59,8 @@
 	</form>
 </div>
 <script>
-	require(['jquery', 'util'], function($, u){
-		u.emotion($("#default"), $("#defaultinput")[0]);
-		u.emotion($("#welcome"), $("#welcomeinput")[0]);
+		util.emotion($("#default"), $("#defaultinput")[0]);
+		util.emotion($("#welcome"), $("#welcomeinput")[0]);
 		function select_keyword(clickid, menuid, inputid){
 			$(clickid).click(function(){
 				var search_value = $(inputid).val(); 
@@ -103,6 +101,5 @@
 		}
 		select_keyword('#welcome_search', '#welcome_menu', '#welcomeinput');	
 		select_keyword('#default_search', '#default_menu', '#defaultinput');	
-	});
 </script>
 {template 'common/footer'}

@@ -1,34 +1,19 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012wz.com
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 defined('IN_IA') or exit('Access Denied');
 error_reporting(0);
 global $_W;
 load()->func('file');
-if($do == 'select_acid') {
-	$account = uni_accounts();
-	$data = array();
-	if(!empty($account)) {
-		foreach($account as $li) {
-			if($li['level'] < 3) continue;
-			$data['item'][] = $li;
-		}
-		$data['total'] = count($data['item']);
-		exit(json_encode($data));
-	} else {
-		exit('error');
-	}
-}
-
 $limit = array();
 $limit['temp'] = array(
 	'image' => array(
-		'ext' => array('jpg'),
+		'ext' => array('jpg', 'logo'),
 		'size' => 1024 * 1024,
-		'errmsg' => '临时图片只支持jpg格式,大小不超过为1M',
+		'errmsg' => '临时图片只支持jpg/logo格式,大小不超过为1M',
 	),
 	'voice' => array(
 		'ext' => array('amr', 'mp3'),
@@ -41,9 +26,9 @@ $limit['temp'] = array(
 		'errmsg' => '临时视频只支持mp4格式,大小不超过为10M',
 	),
 	'thumb' => array(
-		'ext' => array('jpg'),
+		'ext' => array('jpg', 'logo'),
 		'size' => 64 * 1024,
-		'errmsg' => '临时缩略图只支持jpg格式,大小不超过为64K',
+		'errmsg' => '临时缩略图只支持jpg/logo格式,大小不超过为64K',
 	),
 );
 $limit['perm'] = array(
@@ -66,11 +51,12 @@ $limit['perm'] = array(
 		'errmsg' => '永久视频只支持rm/rmvb/wmv/avi/mpg/mpeg/mp4格式,大小不超过为20M',
 	),
 	'thumb' => array(
-		'ext' => array('jpg'),
-		'size' => 64 * 1024,
-		'max' => 1000,
-		'errmsg' => '永久缩略图只支持jpg格式,大小不超过为64K',
+		'ext' => array('bmp', 'png', 'jpeg', 'jpg', 'gif'),
+		'size' => 2048 * 1024,
+		'max' => 5000,
+		'errmsg' => '永久缩略图只支持bmp/png/jpeg/jpg/gif格式,大小不超过为2M',
 	),
+
 );
 
 $limit['file_upload'] = array(
@@ -102,7 +88,6 @@ $apis['file_upload'] = array(
 	'post_key' => 'buffer',
 );
 
-
 $result = array(
 	'error' => 1,
 	'message' => '',
@@ -123,7 +108,7 @@ $setting['folder'] = "{$type}s/{$_W['uniacid']}" . '/'.date('Y/m/');
 if ($do == 'upload') {
 	$type = trim($_GPC['types']);
 	$mode = trim($_GPC['mode']);
-	$acid = intval($_GPC['acid']);
+	$acid = $_W['acid'];
 	if($mode == 'perm') {
 		$now_count = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('core_wechats_attachment') . ' WHERE uniacid = :aid AND acid = :acid AND model = :model AND type = :type', array(':aid' => $_W['uniacid'], ':acid' => $acid, ':model' => $mode, ':type' => $type));
 		if($now_count >= $limit['perm'][$type]['max']) {
@@ -131,11 +116,8 @@ if ($do == 'upload') {
 			die(json_encode($result));
 		}
 	}
-		if($type == 'thumb') {
-		$mode = 'temp';
-	}
 
-	if(empty($mode) || empty($type) || !$acid) {
+	if(empty($mode) || empty($type) || !$_W['acid']) {
 		$result['message'] = '上传配置出错';
 		die(json_encode($result));
 	}
@@ -170,12 +152,11 @@ if ($do == 'upload') {
 
 		load()->model('account');
 	$acc = WeAccount::create($acid);
-	$token = $acc->fetch_token();
+	$token = $acc->getAccessToken();
 	if (is_error($token)) {
 		$result['message'] = $token['message'];
 		die(json_encode($result));
 	}
-
 	if($mode == 'perm' || $mode == 'temp') {
 		$sendapi = $apis[$mode]['add'] . "?access_token={$token}&type={$type}";
 		$data = array(
@@ -243,13 +224,18 @@ if ($do == 'upload') {
 		$size = getimagesize($fullname);
 		$insert['width'] = $size[0];
 		$insert['height'] = $size[1];
+		if($mode == 'perm') {
+						$insert['tag'] = $content['url'];
+		}
+		$result['width'] = $size[0];
+		$result['hieght'] = $size[1];
 	}
 	if($type == 'video') {
 		$insert['tag'] = iserializer($description);
 	}
 	pdo_insert('core_wechats_attachment', $insert);
 	$result['type'] = $type;
-	$result['url'] = $_W['attachurl'] . $file['path'];
+	$result['url'] = tomedia($file['path'], true);
 
 	if($type == 'image' || $type == 'thumb') {
 		@unlink($fullname);
@@ -266,9 +252,9 @@ if ($do == 'browser') {
 	$types = array('image', 'thumb', 'voice', 'video');
 	$type = in_array($_GPC['type'], $types) ? $_GPC['type'] : 'image';
 	$mode = trim($_GPC['mode']);
-	$acid = intval($_GPC['acid']);
+	$acid = $_W['acid'];
 	$condition = ' WHERE uniacid = :uniacid AND acid = :acid';
-	$param = array(':uniacid' => $_W['uniacid'], ':acid' => $acid);
+	$param = array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid']);
 	if(empty($mode)) {
 		$condition .= ' AND type = :type AND model = :model';
 		$param[':type'] = $type;
@@ -279,11 +265,15 @@ if ($do == 'browser') {
 	}
 	$page = intval($_GPC['page']);
 	$page = max(1, $page);
-	$size = 32;
+	$size = intval($_GPC['psize']) ? intval($_GPC['psize']) : 32;
 	$sql = 'SELECT * FROM '.tablename('core_wechats_attachment')."{$condition} ORDER BY id DESC LIMIT ".(($page-1) * $size).','.$size;
 	$list = pdo_fetchall($sql, $param, 'id');
 	foreach ($list as &$item) {
-		$item['url'] = tomedia($item['attachment']);
+		$item['url'] = tomedia($item['attachment'], true);
+		$item['createtime'] = date('Y-m-d H:i', $item['createtime']);
+		if($item['type'] == 'video') {
+			$item['tag'] = iunserializer($item['tag']);
+		}
 		unset($item['uid']);
 	}
 	$total = pdo_fetchcolumn('SELECT count(*) FROM '.tablename('core_wechats_attachment') . $condition, $param);
@@ -292,16 +282,16 @@ if ($do == 'browser') {
 
 if ($do == 'delete') {
 	$id = intval($_GPC['id']);
-	$acid = intval($_GPC['acid']);
+	$acid = $_W['acid'];
 	$data = pdo_fetch('SELECT * FROM ' . tablename('core_wechats_attachment') . ' WHERE acid = :acid AND id = :id', array(':acid' => $acid, ':id' => $id));
 	if(empty($data)) {
 		$result['error'] = 0;
 		$result['message'] = '素材不存在';
 		die(json_encode($result));
 	}
-		load()->model('account');
+	load()->model('account');
 	$acc = WeAccount::create($acid);
-	$token = $acc->fetch_token();
+	$token = $acc->getAccessToken();
 	if (is_error($token)) {
 		$result['error'] = 0;
 		$result['message'] = $token['message'];

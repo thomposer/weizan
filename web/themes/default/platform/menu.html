@@ -1,7 +1,7 @@
 {php $newUI = true;}
 {template 'common/header'}
 <script type="text/javascript">
-	require(['angular', 'jquery.ui', 'underscore', 'util'], function(angular, $, _, util){
+	require(['angular', 'jquery.ui', 'underscore'], function(angular, $, _){
 		angular.module('app', []).controller('menuDesigner', function($scope, $http){
 			$scope.menus = {php echo json_encode($menus);};
 			$scope.hmenus = {php echo json_encode($hmenus);};
@@ -254,7 +254,7 @@
 			}
 			
 		});
-		angular.bootstrap(document, ['app']);
+		angular.bootstrap($('#menuDesigner')[0], ['app']);
 		
 		$(function(){
 			$('.designer').sortable({handle: '.fa.fa-arrows'});
@@ -290,7 +290,7 @@
 	.modal-dialog .radio-inline{width:32.5%; padding:5px 0 5px 20px; margin-left:0;}
 </style>
 <div class="clearfix">
-	<div class="ng-cloak" ng-controller="menuDesigner">
+	<div class="ng-cloak" ng-controller="menuDesigner" id="menuDesigner">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				菜单设计器 <span class="text-muted">编辑和设置公众号菜单, 必须自定义菜单权限。</span>
@@ -371,7 +371,6 @@
 					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">支持的公众号</label>
 					<div class="col-sm-9 col-xs-12">
 						<div class="checkbox">
-							{loop $accs $acc}
 							<label>
 								{if $acc['level'] > 1}
 								<i class="fa fa-check-square-o"> &nbsp; {$acc['name']}</i>
@@ -379,7 +378,6 @@
 								<i class="fa fa-square-o"> &nbsp; {$acc['name']} (权限不足)</i>
 								{/if}
 							</label>
-							{/loop}
 						</div>
 					</div>
 				</div>

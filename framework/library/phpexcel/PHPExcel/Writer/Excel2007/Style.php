@@ -71,8 +71,8 @@ class PHPExcel_Writer_Excel2007_Style extends PHPExcel_Writer_Excel2007_WriterPa
 
 			$objWriter->endElement();
 
-			// fonts
-			$objWriter->startElement('fonts');
+			// font
+			$objWriter->startElement('font');
 			$objWriter->writeAttribute('count', $this->getParentWriter()->getFontHashTable()->count());
 
 				// font
@@ -634,15 +634,15 @@ class PHPExcel_Writer_Excel2007_Style extends PHPExcel_Writer_Excel2007_WriterPa
 	}
 
 	/**
-	 * Get an array of all fonts
+	 * Get an array of all font
 	 *
 	 * @param 	PHPExcel						$pPHPExcel
-	 * @return 	PHPExcel_Style_Font[]		All fonts in PHPExcel
+	 * @return 	PHPExcel_Style_Font[]		All font in PHPExcel
 	 * @throws 	PHPExcel_Writer_Exception
 	 */
 	public function allFonts(PHPExcel $pPHPExcel = null)
 	{
-		// Get an array of unique fonts
+		// Get an array of unique font
 		$aFonts 	= array();
 		$aStyles 	= $this->allStyles($pPHPExcel);
 

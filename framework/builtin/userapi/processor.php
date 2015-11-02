@@ -50,7 +50,7 @@ class UserapiModuleProcessor extends WeModuleProcessor {
 				$result = $this->buildResponse($temp);
 			} else {
 				if (!empty($response['content'])){
-					$obj = @simplexml_load_string(trim($response['content']), 'SimpleXMLElement', LIBXML_NOCDATA);
+					$obj = @isimplexml_load_string(trim($response['content']), 'SimpleXMLElement', LIBXML_NOCDATA);
 					if($obj instanceof SimpleXMLElement) {
 						$type = strtolower(strval($obj->MsgType));
 						if($type == 'text') {

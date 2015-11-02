@@ -1,44 +1,38 @@
 <?php 
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 load()->model('reply');
-load()->func('tpl');
-
-$dos = array('site', 'mc', 'card', 'module');
+$dos = array('mc', 'card', 'module', 'clerk');
 $do = in_array($do, $dos) ? $do : 'module';
-$multiid = intval($_GPC['multiid']);
-$entries = array();
-$entries['site']['title'] = '微站入口设置';
-if(!empty($multiid)) {
-	$multi_title = pdo_fetchcolumn('SELECT title FROM ' . tablename('site_multi') . ' WHERE uniacid = :uniacid AND id = :id', array(':uniacid' => $_W['uniacid'], ':id' => $multiid));
-	$entries['site']['title'] = $multi_title . '入口设置';
-}
 
-$entries['site']['module'] = 'site';
-$entries['site']['do'] = '';
-$entries['site']['url'] = url('home', array('i' => $_W['uniacid'], 't' => $multiid));
-
+uni_user_permission_check('platform_cover_' . $do, true, 'cover');
 $entries['mc']['title'] = '个人中心入口设置';
 $entries['mc']['module'] = 'mc';
 $entries['mc']['do'] = '';
 $entries['mc']['url'] = url('mc/home', array('i' => $_W['uniacid']));
-$entries['mc']['url_show'] = murl('mc/home', array('i' => $_W['uniacid']), true, true); 
+$entries['mc']['url_show'] = murl('mc/home', array(), true, true); 
 $entries['card']['title'] = '会员卡入口设置';
 $entries['card']['module'] = 'card';
 $entries['card']['do'] = '';
 $entries['card']['url'] = url('mc/bond/card', array('i' => $_W['uniacid']));
-$entries['card']['url_show'] = murl('mc/bond/card', array('i' => $_W['uniacid']), true, true);
+$entries['card']['url_show'] = murl('mc/bond/card', array(), true, true);
+
+$entries['clerk']['title'] = '店员操作入口设置';
+$entries['clerk']['module'] = 'clerk';
+$entries['clerk']['do'] = '';
+$entries['clerk']['url'] = url('clerk/check', array('i' => $_W['uniacid']));
+$entries['clerk']['url_show'] = murl('clerk/check', array(), true, true);
 
 if($do != 'module') {
 	$entry = $entries[$do];
-	if($do == 'site') {
-		$_W['page']['title'] = '微站入口设置 - 微站访问入口 - 微站功能';
-	}
 	if($do == 'mc') {
 		$_W['page']['title'] = '个人中心入口设置 - 会员中心访问入口- 会员中心';
+	}
+	if($do == 'clerk') {
+		$_W['page']['title'] = '店员操作入口设置 - 店员操作';
 	}
 	if($do == 'card') {
 		
@@ -69,25 +63,18 @@ if($do != 'module') {
 	$entry['url'] = murl('entry', array('do' => $entry['do'], 'm' => $entry['module']));
 	$entry['url_show'] = murl('entry', array('do' => $entry['do'], 'm' => $entry['module']), true, true);
 	$cover['title'] = $entry['title'];
-
-		if($module['issolution']) {
-		$solution = $module;
-		define('FRAME', 'solution');
-	} else {
 		define('FRAME', 'ext');
-		$types = module_types();
-		define('ACTIVE_FRAME_URL', url('home/welcome/ext', array('m' => $entry['module'])));
-	}
+	$types = module_types();
+	define('ACTIVE_FRAME_URL', url('home/welcome/ext', array('m' => $entry['module'])));
 	$frames = buildframes(array(FRAME), $entry['module']);
 	$frames = $frames[FRAME];
 	}
 
-$sql = "SELECT * FROM " . tablename('cover_reply') . ' WHERE `module` = :module AND `do` = :do AND uniacid = :uniacid AND multiid = :multiid';
+$sql = "SELECT * FROM " . tablename('cover_reply') . ' WHERE `module` = :module AND `do` = :do AND uniacid = :uniacid';
 $pars = array();
 $pars[':module'] = $entry['module'];
 $pars[':do'] = $entry['do'];
 $pars[':uniacid'] = $_W['uniacid'];
-$pars[':multiid'] = $multiid;
 $cover = pdo_fetch($sql, $pars);
 
 if(!empty($cover)) {
@@ -157,7 +144,7 @@ if (checksubmit('submit')) {
 		
 		$entry = array(
 			'uniacid' => $_W['uniacid'],
-			'multiid' => $multiid,
+			'multiid' => 0,
 			'rid' => $rid,
 			'title' => $_GPC['title'],
 			'description' => $_GPC['description'],

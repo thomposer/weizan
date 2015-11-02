@@ -11,10 +11,14 @@ if (defined('IN_MOBILE')) {
 	load()->web('tpl');
 }
 
+function tpl_form_field_date($name, $value = '', $withtime = false) {
+	return _tpl_form_field_date($name, $value, $withtime);
+}
+
 
 function tpl_form_field_daterange($name, $value = array(), $time = false) {
 	$s = '';
-	
+
 	if (empty($time) && !defined('TPL_INIT_DATERANGE_DATE')) {
 		$s = '
 <script type="text/javascript">
@@ -25,7 +29,7 @@ function tpl_form_field_daterange($name, $value = array(), $time = false) {
 				$(this).daterangepicker({
 					startDate: $(elm).prev().prev().val(),
 					endDate: $(elm).prev().val(),
-					format: "YYYY-MM-DD",
+					format: "YYYY-MM-DD"
 				}, function(start, end){
 					$(elm).find(".date-title").html(start.toDateStr() + " 至 " + end.toDateStr());
 					$(elm).prev().prev().val(start.toDateStr());
@@ -37,8 +41,8 @@ function tpl_form_field_daterange($name, $value = array(), $time = false) {
 </script>
 ';
 		define('TPL_INIT_DATERANGE_DATE', true);
-	} 
-	
+	}
+
 	if (!empty($time) && !defined('TPL_INIT_DATERANGE_TIME')) {
 		$s = '
 <script type="text/javascript">
@@ -66,7 +70,7 @@ function tpl_form_field_daterange($name, $value = array(), $time = false) {
 ';
 		define('TPL_INIT_DATERANGE_TIME', true);
 	}
-	
+
 	if($value['start']) {
 		$value['starttime'] = empty($time) ? date('Y-m-d',strtotime($value['start'])) : date('Y-m-d H:i',strtotime($value['start']));
 	}
@@ -81,65 +85,6 @@ function tpl_form_field_daterange($name, $value = array(), $time = false) {
 	<button class="btn btn-default daterange '.(!empty($time) ? 'daterange-time' : 'daterange-date').'" type="button"><span class="date-title">'.$value['starttime'].' 至 '.$value['endtime'].'</span> <i class="fa fa-calendar"></i></button>
 	';
 	return $s;
-}
-
-
-function tpl_form_field_date($name, $value = '', $withtime = false) {
-	
-	$html = '';
-	
-	if ($withtime && !defined('TPL_INIT_DATA_TIME')) {
-		$html = '
-<script type="text/javascript">
-	require(["datetimepicker"], function($){
-		$(function(){
-			$(".datetimepicker.datetime").each(function(){
-				var opt = {
-					language: "zh-CN",
-					minView: 0,
-					autoclose: true,
-					format : "yyyy-mm-dd hh:ii",
-					todayBtn: true,
-					minuteStep: 5
-				};
-				$(this).datetimepicker(opt);
-			});
-		});
-	});
-</script>
-';
-		define('TPL_INIT_DATA_TIME', true);
-	}
-	
-	if (!$withtime  && !defined('TPL_INIT_DATA') ) {
-		$html = '
-<script type="text/javascript">
-	require(["datetimepicker"], function($){
-		$(function(){
-			$(".datetimepicker.date").each(function(){
-				var opt = {
-					language: "zh-CN",
-					minView: 2,
-					format: "yyyy-mm-dd",
-					autoclose: true,
-					todayBtn: true
-				};
-				$(this).datetimepicker(opt);
-			});
-		});
-	});
-</script>
-';
-		define('TPL_INIT_DATA', true);
-	}
-	
-	$class = $withtime ? 'datetime' : 'date';
-	$placeholder = $withtime ? '日期时刻' : '日期';
-	$value = !empty($value) ? $value : ($withtime ? date('Y-m-d H:i') : date('Y-m-d')); 
-	
-	$html .= '<input type="text" name="' . $name . '" value="'.$value.'" placeholder="'.$placeholder.'"  readonly="readonly" class="datetimepicker '.$class.' form-control" style="padding:6px 12px;"/>';
-	
-	return $html;
 }
 
 
@@ -185,7 +130,7 @@ function tpl_form_field_calendar($name, $values = array()) {
 	$values['year'] = intval($values['year']);
 	$values['month'] = intval($values['month']);
 	$values['day'] = intval($values['day']);
-	
+
 	if (empty($values['year'])) {
 		$values['year'] = '1980';
 	}
@@ -194,16 +139,16 @@ function tpl_form_field_calendar($name, $values = array()) {
 			<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 				<select name="' . $name . '[year]" onchange="handlerCalendar(this)" class="form-control tpl-year">
 					<option value="">年</option>';
-	for($i = $year[1]; $i <= $year[0]; $i++) {
-		$html .= '<option value="' . $i . '"'.($i == $values['year'] ? ' selected="selected"' : '').'>' . $i . '</option>';
+	for ($i = $year[1]; $i <= $year[0]; $i++) {
+		$html .= '<option value="' . $i . '"' . ($i == $values['year'] ? ' selected="selected"' : '') . '>' . $i . '</option>';
 	}
 	$html .= '	</select>
 			</div>
 			<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 				<select name="' . $name . '[month]" onchange="handlerCalendar(this)" class="form-control tpl-month">
 					<option value="">月</option>';
-	for($i = 1; $i <= 12; $i++) {
-		$html .= '<option value="' . $i . '"'.($i == $values['month'] ? ' selected="selected"' : '').'>' . $i . '</option>';
+	for ($i = 1; $i <= 12; $i++) {
+		$html .= '<option value="' . $i . '"' . ($i == $values['month'] ? ' selected="selected"' : '') . '>' . $i . '</option>';
 	}
 	$html .= '	</select>
 			</div>
@@ -271,59 +216,59 @@ function tpl_form_field_district($name, $values = array()) {
 
 function tpl_form_field_category_2level($name, $parents, $children, $parentid, $childid){
 	$html = '
-<script type="text/javascript">
-	window._'.$name.' = '.json_encode($children).';
-</script>';
-	if (!defined('TPL_INIT_CATEGORY')) {
-		$html .= '	
-<script type="text/javascript">
-	function renderCategory(obj, name){
-		var index = obj.options[obj.selectedIndex].value;
-		require([\'jquery\', \'util\'], function($, u){
-			$selectChild = $(\'#\'+name+\'_child\');
-			var html = \'<option value="0">请选择二级分类</option>\';
-			if (!window[\'_\'+name] || !window[\'_\'+name][index]) {
-				$selectChild.html(html);
-				return false;
+		<script type="text/javascript">
+			window._' . $name . ' = ' . json_encode($children) . ';
+		</script>';
+			if (!defined('TPL_INIT_CATEGORY')) {
+				$html .= '
+		<script type="text/javascript">
+			function renderCategory(obj, name){
+				var index = obj.options[obj.selectedIndex].value;
+				require([\'jquery\', \'util\'], function($, u){
+					$selectChild = $(\'#\'+name+\'_child\');
+					var html = \'<option value="0">请选择二级分类</option>\';
+					if (!window[\'_\'+name] || !window[\'_\'+name][index]) {
+						$selectChild.html(html);
+						return false;
+					}
+					for(var i=0; i< window[\'_\'+name][index].length; i++){
+						html += \'<option value="\'+window[\'_\'+name][index][i][\'id\']+\'">\'+window[\'_\'+name][index][i][\'name\']+\'</option>\';
+					}
+					$selectChild.html(html);
+				});
 			}
-			for(var i=0; i< window[\'_\'+name][index].length; i++){
-				html += \'<option value="\'+window[\'_\'+name][index][i][\'id\']+\'">\'+window[\'_\'+name][index][i][\'name\']+\'</option>\';
+		</script>
+					';
+				define('TPL_INIT_CATEGORY', true);
 			}
-			$selectChild.html(html);
-		});
-	}
-</script>
-			';
-		define('TPL_INIT_CATEGORY', true);
-	}
-	
-	$html .= 
-'<div class="row row-fix tpl-category-container">
-	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-		<select class="form-control tpl-category-parent" id="'.$name.'_parent" name="'.$name.'[parentid]" onchange="renderCategory(this,\''.$name.'\')">
-			<option value="0">请选择一级分类</option>';
-	$ops = '';
-	foreach ($parents as $row) {
-		$html .= '
-			<option value="'.$row['id'].'" '.(($row['id'] == $parentid) ? 'selected="selected"' : '').'>'.$row['name'].'</option>';
-	}
-	$html .='
-		</select>
-	</div>
-	<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-		<select class="form-control tpl-category-child" id="'.$name.'_child" name="'.$name.'[childid]">
-			<option value="0">请选择二级分类</option>';
-			if (!empty($parentid) && !empty($children[$parentid])){
+
+			$html .=
+				'<div class="row row-fix tpl-category-container">
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				<select class="form-control tpl-category-parent" id="' . $name . '_parent" name="' . $name . '[parentid]" onchange="renderCategory(this,\'' . $name . '\')">
+					<option value="0">请选择一级分类</option>';
+			$ops = '';
+			foreach ($parents as $row) {
+				$html .= '
+					<option value="' . $row['id'] . '" ' . (($row['id'] == $parentid) ? 'selected="selected"' : '') . '>' . $row['name'] . '</option>';
+			}
+			$html .= '
+				</select>
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				<select class="form-control tpl-category-child" id="' . $name . '_child" name="' . $name . '[childid]">
+					<option value="0">请选择二级分类</option>';
+			if (!empty($parentid) && !empty($children[$parentid])) {
 				foreach ($children[$parentid] as $row) {
 					$html .= '
-			<option value="'.$row['id'].'"'.(($row['id'] == $childid)? 'selected="selected"':'').'>'.$row['name'].'</option>';
+					<option value="' . $row['id'] . '"' . (($row['id'] == $childid) ? 'selected="selected"' : '') . '>' . $row['name'] . '</option>';
 				}
 			}
-	$html .='
-		</select>
-	</div>
-</div>
-';
+			$html .= '
+				</select>
+			</div>
+		</div>
+	';
 	return $html;
 }
 
@@ -384,7 +329,7 @@ function tpl_form_field_coordinate($field, $value = array()) {
 
 
 function tpl_fans_form($field, $value = '') {
-	
+
 	switch ($field) {
 		case 'avatar':
 			$avatar_url = '../attachment/images/global/avatars/';
@@ -419,9 +364,7 @@ function tpl_fans_form($field, $value = '') {
 				define('TPL_INIT_AVATAR', true);
 			}
 			if (!defined('TPL_INIT_IMAGE')) {
-				
 				global $_W;
-				
 				if (defined('IN_MOBILE')) {
 					$html .= <<<EOF
 <script type="text/javascript">
@@ -433,8 +376,8 @@ function tpl_fans_form($field, $value = '') {
 			var val = ipt.val();
 			var img = ipt.parent().next().children();
 			util.image(elm, function(url){
-				img.get(0).src = util.tomedia(url);
-				ipt.val(url);
+				img.get(0).src = url.url;
+				ipt.val(url.attachment);
 			});
 		});
 	}
@@ -452,8 +395,8 @@ EOF;
 			var img = ipt.parent().next().find('img');
 			util.image(val, function(url){
 				img.get(0).src = url.url;
-				ipt.val(url.filename);
-			}, opts);
+				ipt.val(url.attachment);
+			}, opts, {multiple:false,type:"image",direct:true});
 		});
 	}
 </script>
@@ -462,13 +405,13 @@ EOF;
 				define('TPL_INIT_IMAGE', true);
 			}
 			$val = './resource/images/nopic.jpg';
-			if(!empty($value)) {
+			if (!empty($value)) {
 				$val = tomedia($value);
 			}
 			$options = array();
 			$options['width'] = '200';
 			$options['height'] = '200';
-			
+
 			if (defined('IN_MOBILE')) {
 				$html .= <<<EOF
 <div class="input-group">
@@ -485,7 +428,7 @@ EOF;
 			} else {
 				$html .= '
 <div class="input-group">
-	<input type="text" value="'.$value.'" name="'.$field.'" class="form-control" autocomplete="off">
+	<input type="text" value="' . $value . '" name="' . $field . '" class="form-control" autocomplete="off">
 	<span class="input-group-btn">
 		<button class="btn btn-default" type="button" onclick="showImageDialog(this, \'' . base64_encode(iserializer($options)) . '\');">选择图片</button>
 		<button class="btn btn-default" type="button" onclick="showAvatarDialog(this);">系统头像</button>
@@ -495,7 +438,7 @@ EOF;
 	<img src="' . $val . '" class="img-responsive img-thumbnail" width="150" />
 </div>';
 			}
-			
+
 			break;
 		case 'birth':
 		case 'birthyear':
@@ -511,14 +454,14 @@ EOF;
 			break;
 		case 'bio':
 		case 'interest':
-			$html = '<textarea name="' . $field . '" class="form-control">'.$value.'</textarea>';
+			$html = '<textarea name="' . $field . '" class="form-control">' . $value . '</textarea>';
 			break;
 		case 'gender':
 			$html = '
 					<select name="gender" class="form-control">
-						<option value="0" '.($value == 0 ? 'selected ' : '').'>保密</option>
-						<option value="1" '.($value == 1 ? 'selected ' : '').'>男</option>
-						<option value="2" '.($value == 2 ? 'selected ' : '').'>女</option>
+						<option value="0" ' . ($value == 0 ? 'selected ' : '') . '>保密</option>
+						<option value="1" ' . ($value == 1 ? 'selected ' : '') . '>男</option>
+						<option value="2" ' . ($value == 2 ? 'selected ' : '') . '>女</option>
 					</select>';
 			break;
 		case 'education':
@@ -527,16 +470,16 @@ EOF;
 		case 'bloodtype':
 			if ($field == 'bloodtype') {
 				$options = array('A', 'B', 'AB', 'O', '其它');
-			} elseif($field == 'zodiac'){
-				$options = array('鼠','牛','虎','兔','龙','蛇','马','羊','猴','鸡','狗','猪');
-			} elseif($field == 'constellation'){
-				$options = array('水瓶座','双鱼座','白羊座','金牛座','双子座','巨蟹座','狮子座','处女座','天秤座','天蝎座','射手座','摩羯座');
-			} elseif($field == 'education'){
-				$options = array('博士','硕士','本科','专科','中学','小学','其它');
+			} elseif ($field == 'zodiac') {
+				$options = array('鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪');
+			} elseif ($field == 'constellation') {
+				$options = array('水瓶座', '双鱼座', '白羊座', '金牛座', '双子座', '巨蟹座', '狮子座', '处女座', '天秤座', '天蝎座', '射手座', '摩羯座');
+			} elseif ($field == 'education') {
+				$options = array('博士', '硕士', '本科', '专科', '中学', '小学', '其它');
 			}
-			$html = '<select name="'.$field.'" class="form-control">';
+			$html = '<select name="' . $field . '" class="form-control">';
 			foreach ($options as $item) {
-				$html .= '<option value="'.$item.'" '.($value == $item ? 'selected ' : '').'>'.$item.'</option>';
+				$html .= '<option value="' . $item . '" ' . ($value == $item ? 'selected ' : '') . '>' . $item . '</option>';
 			}
 			$html .= '</select>';
 			break;
@@ -566,7 +509,7 @@ EOF;
 		case 'position':
 		case 'revenue':
 		default:
-			$html = '<input type="text" class="form-control" name="' . $field . '" value="'.$value.'" />';
+			$html = '<input type="text" class="form-control" name="' . $field . '" value="' . $value . '" />';
 			break;
 	}
 	return $html;

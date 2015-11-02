@@ -36,9 +36,25 @@ small a{color:#999;}
 	<div class="form">
 		<h5 class="page-header">已安装的模块</h5>
 	</div>
+	<nav role="navigation" class="navbar navbar-default" style="margin-bottom:20px;">
+		<div class="container-fluid">
+			<div class="navbar-header"><a href="" class="navbar-brand">模块类型</a></div>
+			<ul class="nav navbar-nav nav-btns">
+				<li class="active"><a href="">全部</a></li>
+				{loop $modtypes $type}
+				<li><a href="#" data-type={$type['name']} class="type">{$type['title']}</a></li>
+				{/loop}
+				<div class="navbar-form navbar-right" role="search">
+						<div id="search-menu">
+							<input type="text" name="keyword" class="form-control" placeholder="搜索模块">
+					</div>
+				</div>
+			</ul>
+		</div>
+	</nav>
 	<div class="module form-horizontal">
 		{loop $modules $row}
-		<div class="item">
+		<div class="item" data-title={$row['title']} data-type={$row['type']}>
 			<div class="media">
 				<div class="pull-right" style="width:500px;">
 					<div class="input-prepend">
@@ -85,7 +101,33 @@ small a{color:#999;}
 		</div>
 		{/loop}
 	</div>
-
+	<script type="text/javascript">
+		require(['bootstrap'],function(){
+		$('#search-menu input').keyup(function() {
+			var a = $(this).val();
+			$('.item').hide();
+			$('.item').each(function() {
+				if(a.length > 0 && $(this).attr('data-title').indexOf(a) >= 0) {
+					$(this).show();
+				}
+			});
+			if(a.length ==0) {
+				$('.item').show();
+			}
+		});
+		$('.type').click(function() {
+			var b = $(this).attr('data-type');
+			$('.active').attr('class','');
+			$(this).parent('li').attr('class','active');
+			$('.item').hide();
+			$('.item').each(function() {
+				if($(this).attr('data-type')==b) {
+					$(this).show();
+				}
+			});
+		});
+		})
+	</script>
 	<div class="modal fade" id="module-info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog" style="width:800px">
 			<div class="modal-content">
@@ -222,6 +264,7 @@ small a{color:#999;}
 						$('#upgradeprice').text(response.message.version.upgradeprice);
 						var upgradelink = $('#confirm').attr('href') + '&m=' + modulename;
 						$('#upgrade').modal('show');
+						$('#confirm').unbind();
 						if (response.message.version.upgradeprice > '0') {
 							$('#confirm').click(function() {
 								return confirm('更新此版本需要花费 ' + response.message.version.upgradeprice + ' 个微币，您确认要升级到此版本吗？');
@@ -264,11 +307,11 @@ small a{color:#999;}
 				<div class="pull-right" style="width:230px;">
 					<div class="module-set">
 						<a href="{php echo url('extension/module/install')}m={{m.name.toLowerCase()}}">安装</a>
-						<a href="http://addons.012wz.com/web/index.php?c=store&a=author&do=application&id={{m.id}}" target="_blank">查看详情</a>
+						<a href="{ADDONS_URL}/web/index.php?c=store&a=author&do=application&id={{m.id}}" target="_blank">查看详情</a>
 						&nbsp;
 					</div>
 				</div>
-				<img class="media-object img-rounded gray" ng-src="http://addons.012wz.com/resource/attachment/{{m.thumb}}" onerror="this.src='../web/resource/images/nopic-small.jpg'">
+				<img class="media-object img-rounded gray" ng-src="{ADDONS_URL}/resource/attachment/{{m.thumb}}" onerror="this.src='../web/resource/images/nopic-small.jpg'">
 				<div class="media-body">
 					<h4 class="media-heading">
 						{{m.title}}<small>（标识：{{m.name}}&nbsp;&nbsp;&nbsp;版本：{{m.version}}&nbsp;&nbsp;&nbsp;作者：{{m.author}}）</small>

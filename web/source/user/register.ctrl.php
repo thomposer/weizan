@@ -1,17 +1,16 @@
 <?php 
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 define('IN_GW', true);
 $_W['page']['title'] = '注册选项 - 用户设置 - 用户管理';
-
-$setting = cache_load('setting');
+$setting = $_W['setting'];
 if (empty($setting['register']['open'])) {
 	message('本站暂未开启注册功能，请联系管理员！');
 }
-$extendfields = pdo_fetchall("SELECT field, title, description, required FROM ".tablename('profile_fields')." WHERE available = '1' AND showinregister = '1' ORDER BY displayorder DESC");
+$extendfields = pdo_fetchall("SELECT field, title, description, required FROM ".tablename('profile_fields')." WHERE available = '1' AND showinregister = '1' ORDER BY displayorder DESC", array(), 'field');
 if(checksubmit()) {
 	load()->model('user');
 	$member = array();
@@ -28,6 +27,21 @@ if(checksubmit()) {
 	}
 	$profile = array();
  	if (!empty($extendfields)) {
+		$fields = array_keys($extendfields);
+		if(in_array('birthyear', $fields)) {
+			$extendfields[] = array('field' => 'birthmonth', 'title' => '出生生日', 'required' => $extendfields['birthyear']['required']);
+			$extendfields[] = array('field' => 'birthday', 'title' => '出生生日', 'required' => $extendfields['birthyear']['required']);
+			$_GPC['birthyear'] = $_GPC['birth']['year'];
+			$_GPC['birthmonth'] = $_GPC['birth']['month'];
+			$_GPC['birthday'] = $_GPC['birth']['day'];
+		}
+		if(in_array('resideprovince', $fields)) {
+			$extendfields[] = array('field' => 'residecity', 'title' => '居住地址', 'required' => $extendfields['resideprovince']['required']);
+			$extendfields[] = array('field' => 'residedist', 'title' => '居住地址', 'required' => $extendfields['resideprovince']['required']);
+			$_GPC['resideprovince'] = $_GPC['reside']['province'];
+			$_GPC['residecity'] = $_GPC['reside']['city'];
+			$_GPC['residedist'] = $_GPC['reside']['district'];
+		}
 		foreach ($extendfields as $row) {
 			if (!empty($row['required']) && empty($_GPC[$row['field']])) {
 				message('“'.$row['title'].'”此项为必填项，请返回填写完整！');
@@ -51,6 +65,15 @@ if(checksubmit()) {
 		$member['groupid'] = pdo_fetchcolumn('SELECT id FROM '.tablename('users_group').' ORDER BY id ASC LIMIT 1');
 		$member['groupid'] = intval($member['groupid']);
 	}
+		$group = pdo_fetch('SELECT * FROM '.tablename('users_group').' WHERE id = :id', array(':id' => $member['groupid']));
+	$timelimit = intval($group['timelimit']);
+	$timeadd = 0;
+	if($timelimit > 0) {
+		$timeadd = strtotime($timelimit . ' days');
+	}
+	$member['starttime'] = TIMESTAMP;
+	$member['endtime'] = $timeadd;
+
 	$uid = user_register($member);
 	if($uid > 0) {
 		unset($member['password']);
@@ -65,5 +88,4 @@ if(checksubmit()) {
 	}
 	message('增加用户失败，请稍候重试或联系网站管理员解决！');
 }
-load()->func('tpl');
 template('user/register');

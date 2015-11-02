@@ -1,4 +1,7 @@
 {template 'common/header'}
+<style>
+	table>tbody>tr>td{white-space:normal}
+</style>
 <ul class="nav nav-tabs">
 	<li {if $do  == 'stat'} class="active"{/if}><a href="{php echo url('mc/creditmanage/stat', array('type' => 1, 'uid' => $uid));}">数据概况</a></li>
 	{loop $creditnames $index $creditname}
@@ -13,9 +16,14 @@
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th style="width:100px">积分类型</th>
+					<th style="width:100px">账户类型</th>
 					<th style="width:100px">操作员</th>
-					<th style="width:100px">积分数量</th>
+					{if $type == 'credit2'}
+						<th style="width:100px">消费金额</th>
+						<th style="width:100px">实收金额</th>
+					{/if}
+					<th style="width:100px">数量</th>
+					<th style="width:100px">模块</th>
 					<th style="width:200px">操作时间</th>
 					<th>备注</th>
 				</tr>
@@ -24,10 +32,21 @@
 				{loop $data $da}
 					<tr>
 						<td>{$creditnames[$type]['title']}</td>
-						<td>{if $da['username']}{$da['username']}{else}本人{/if}</td>	
+						<td>{if $da['username']}{$da['username']}{else}本人{/if}</td>
+						{if $type == 'credit2'}
+							<td>{php echo abs($da['num'])}元</td>
+							<td>{php echo abs($da['final_num'])}元</td>
+						{/if}
 						<td>{$da['num']}</td>
+						<td>
+							{if !empty($da['module'])}
+							{$modules['card']['title']}
+							{else}
+							未知
+							{/if}
+						</td>
 						<td>{php echo date('Y-m-d H:i:s', $da['createtime'])}</td>	
-						<td>{$da['remark']}</td>
+						<td style="white-space:normal">{$da['remark']}</td>
 					</tr>
 				{/loop}
 			</tbody>
@@ -76,7 +95,7 @@
 	</div>
 </div>
 <script>
-	require(['chart', 'jquery', 'daterangepicker'], function(c, $) {
+	require(['chart', 'daterangepicker'], function(c) {
 		$('.daterange').on('apply.daterangepicker', function(ev, picker) {
 			$('#form1')[0].submit();
 		});

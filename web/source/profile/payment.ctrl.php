@@ -1,15 +1,14 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
+uni_user_permission_check('profile_payment');
 $_W['page']['title'] = '支付参数 - 公众号选项';
-if (!checkpermission('wechats', $id)) {
-	message('公众号不存在或是您没有权限操作！');
-}
-$setting = uni_setting($_W['uniacid'], array('payment'));
+$setting = uni_setting($_W['uniacid'], array('payment', 'recharge'));
 $pay = $setting['payment'];
+$recharge =  $setting['recharge'];
 if(!is_array($pay)) {
 	$pay = array();
 }
@@ -25,6 +24,8 @@ if($_W['ispost']) {
 	$alipay['secret'] = trim($alipay['secret']);
 	$delivery = array_elements(array('switch'), $_GPC['delivery']);
 	$delivery['switch'] = $delivery['switch'] == 'true';
+	$line = array_elements(array('switch'),$_GPC['line']);
+	$line['switch'] = $line['switch'] == 'true';
 	if($alipay['switch'] && (empty($alipay['account']) || empty($alipay['partner']) || empty($alipay['secret']))) {
 		message('请输入完整的支付宝接口信息.');
 	}
@@ -63,6 +64,8 @@ if($_W['ispost']) {
 	if($baifubao['switch'] && (empty($baifubao['signkey']) || empty($baifubao['mchid']))) {
 		message('请输入完整的百付宝支付接口信息.');
 	}
+	$line = array_elements(array('switch','message'),$_GPC['line']);
+	$line['switch'] = $line['switch'] == 'true';
 	if(!is_array($pay)) {
 		$pay = array();
 	}
@@ -73,6 +76,7 @@ if($_W['ispost']) {
 	$pay['unionpay'] = $unionpay;
 	$pay['baifubao'] = $baifubao;
 	$pay['card'] = $card;
+	$pay['line'] = $line;
 	
 	if ($unionpay['switch'] && !empty($_FILES['unionpay']['tmp_name']['signcertpath'])) {
 		load()->func('file');
@@ -100,9 +104,20 @@ YspJ5MXOYLZN7A==
 -----END CERTIFICATE-----';
 		file_put_contents(IA_ROOT . '/attachment/unionpay/UpopRsaCert.cer', trim($public_rsa));
 	}
-	
+		$recharge = array();
+	foreach($_GPC['recharge'] as $key=>$row) {
+		$row = floatval($row);
+		$back = floatval($_GPC['back'][$key]);
+		if(!$row || !$back) continue;
+		$recharge[] = array(
+			'recharge' => $row,
+			'back' => $back,
+		);
+	}
+	$recharge = iserializer($recharge);
 	$dat = iserializer($pay);
-	if(pdo_update('uni_settings', array('payment' => $dat), array('uniacid' => $_W['uniacid'])) !== false) {
+	if(pdo_update('uni_settings', array('payment' => $dat, 'recharge' => $recharge), array('uniacid' => $_W['uniacid'])) !== false) {
+		cache_delete("unisetting:{$_W['uniacid']}");
 		message('保存支付信息成功. ', 'refresh');
 	} else {
 		message('保存支付信息失败, 请稍后重试. ');
@@ -110,14 +125,6 @@ YspJ5MXOYLZN7A==
 	exit();
 }
 $pay['unionpay']['signcertexists'] = file_exists(IA_ROOT . '/attachment/unionpay/PM_'.$_W['uniacid'].'_acp.pfx');
-
-$accs = uni_accounts();
 $accounts = array();
-if(!empty($accs)) {
-	foreach($accs as $acc) {
-		if($acc['type'] == '1' && $acc['level'] >= '3') {
-			$accounts[$acc['acid']] = array_elements(array('name', 'acid', 'key', 'secret'), $acc);
-		}
-	}
-}
+$accounts[$_W['acid']] = array_elements(array('name', 'acid', 'key', 'secret', 'level'), $_W['account']);
 template('profile/payment');

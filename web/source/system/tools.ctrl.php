@@ -1,7 +1,7 @@
 <?php 
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 $_W['page']['title'] = '工具 - 系统管理';
 $dos = array('bom', 'scan');
@@ -47,7 +47,7 @@ if($do == 'scan') {
 
 		$safe = array (
 			'file_type' => 'php|js',
-			'code' => 'sinaapp|safedog',
+			'code' => 'weidongli|sinaapp|safedog',
 			'func' => 'com|system|exec|eval|escapeshell|cmd|passthru|base64_decode|gzuncompress',
 			'dir' => '',
 		);

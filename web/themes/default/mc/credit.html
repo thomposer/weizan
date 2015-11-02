@@ -5,33 +5,31 @@
 </ul>
 {if $do == 'display'}
 <script type="text/javascript">
-require(['jquery', 'util'], function($, u){
-	$("#form1").submit(function(){
-		var colarr=new Array();
-		var col;
-		var bool=true;
-		$(":checkbox[name^=enabled]:checked").each(function(){
-			var key=$(this).attr('name').substr(8,7);
-			if($("#"+key).val().trim()==''){
-				u.message('启用某个积分后，对应的积分名称不能为空.', '', 'error');
-				bool = false;
-			}
-		})
+$("#form1").submit(function(){
+	var colarr=new Array();
+	var col;
+	var bool=true;
+	$(":checkbox[name^=enabled]:checked").each(function(){
+		var key=$(this).attr('name').substr(8,7);
+		if($("#"+key).val().trim()==''){
+			util.message('启用某个积分后，对应的积分名称不能为空.', '', 'error');
+			bool = false;
+		}
+	})
 
-		$(":text.form-control").each(function(index){
-			value=$(this).val().trim();
-			if(value !=""){
-				for(col in colarr){
-					if(colarr[col]==value){
-						u.message('积分名称重复.', '', 'error');
-						bool = false;
-					}		
-				}
-				colarr[index+1]=value;	
-			}	
-		})
-		if(!bool) return false;
-	});
+	$(":text.form-control").each(function(index){
+		value=$(this).val().trim();
+		if(value !=""){
+			for(col in colarr){
+				if(colarr[col]==value){
+					util.message('积分名称重复.', '', 'error');
+					bool = false;
+				}		
+			}
+			colarr[index+1]=value;	
+		}	
+	})
+	if(!bool) return false;
 });
 </script>
 <form action="" method="post" id="form1">

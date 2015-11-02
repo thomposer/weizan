@@ -7,24 +7,31 @@ defined('IN_IA') or exit('Access Denied');
 define('PDO_DEBUG', true);
 
 class DB {
+	protected $pdo;
+	protected $cfg;
+	protected $result;
+	protected $statement;
+	protected $errors = array();
+	protected $link = array();
 
-	private $pdo;
-	private $cfg;
-	private $errors = array();
-	
 	public function getPDO() {
 		return $this->pdo;
 	}
-	
-	public function __construct($name = 'default') {
+
+	public function __construct($name = 'master') {
 		global $_W;
+		$this->cfg = $_W['config']['db'];
+		$this->connect($name);
+	}
+
+	public function connect($name = 'master') {
 		if(is_array($name)) {
 			$cfg = $name;
 		} else {
-			$cfg = $_W['config']['db'][$name];
+			$cfg = $this->cfg[$name];
 		}
 		if(empty($cfg)) {
-			message("没有找到名为 {$name} 的数据库配置项.");
+			exit("The master database is not found, Please checking 'data/config.php'");
 		}
 		$dsn = "mysql:dbname={$cfg['database']};host={$cfg['host']};port={$cfg['port']}";
 		$dbclass = '';
@@ -47,13 +54,18 @@ class DB {
 		$sql = "SET NAMES '{$cfg['charset']}';";
 		$this->pdo->exec($sql);
 		$this->pdo->exec("SET sql_mode='';");
-		$this->cfg = $cfg;
+		$this->link[$name] = $this->pdo;
 		if(PDO_DEBUG) {
 			$info = array();
 			$info['sql'] = $sql;
 			$info['error'] = $this->pdo->errorInfo();
 			$this->debug(false, $info);
 		}
+	}
+
+	public function prepare($sql) {
+		$statement = $this->pdo->prepare($sql);
+		return $statement;
 	}
 	
 	
@@ -69,7 +81,7 @@ class DB {
 			}
 			return $result;
 		}
-		$statement = $this->pdo->prepare($sql);
+		$statement = $this->prepare($sql);
 		$result = $statement->execute($params);
 		if(PDO_DEBUG) {
 			$info = array();
@@ -90,7 +102,7 @@ class DB {
 	
 	public function fetchcolumn($sql, $params = array(), $column = 0) {
 		$starttime = microtime();
-		$statement = $this->pdo->prepare($sql);
+		$statement = $this->prepare($sql);
 		$result = $statement->execute($params);
 		if(PDO_DEBUG) {
 			$info = array();
@@ -111,7 +123,7 @@ class DB {
 	
 	public function fetch($sql, $params = array()) {
 		$starttime = microtime();
-		$statement = $this->pdo->prepare($sql);
+		$statement = $this->prepare($sql);
 		$result = $statement->execute($params);
 		if(PDO_DEBUG) {
 			$info = array();
@@ -132,7 +144,7 @@ class DB {
 	
 	public function fetchall($sql, $params = array(), $keyfield = '') {
 		$starttime = microtime();
-		$statement = $this->pdo->prepare($sql);
+		$statement = $this->prepare($sql);
 		$result = $statement->execute($params);
 		if(PDO_DEBUG) {
 			$info = array();
@@ -163,6 +175,56 @@ class DB {
 				return $rs;
 			}
 		}
+	}
+	
+	public function get($tablename, $params = array(), $fields = array()) {
+		$select = '*';
+		if (!empty($fields)){
+			if (is_array($fields)) {
+				$select = '`'.implode('`,`', $fields).'`';
+			} else {
+				$select = $fields;
+			}
+		}
+		$condition = $this->implode($params, 'AND');
+		$sql = "SELECT {$select} FROM " . tablename($tablename) . (!empty($condition['fields']) ? " WHERE {$condition['fields']}" : '') . " LIMIT 1";
+		return $this->fetch($sql, $condition['params']);
+	}
+	
+	public function getall($tablename, $params = array(), $fields = array(), $keyfield = '') {
+		$select = '*';
+		if (!empty($fields)){
+			if (is_array($fields)) {
+				$select = '`'.implode('`,`', $fields).'`';
+			} else {
+				$select = $fields;
+			}
+		}
+		$condition = $this->implode($params, 'AND');
+		$sql = "SELECT {$select} FROM " . tablename($tablename) . (!empty($condition['fields']) ? " WHERE {$condition['fields']}" : '') . $limitsql;
+		return $this->fetchall($sql, $condition['params'], $keyfield);
+	}
+	
+	public function getslice($tablename, $params = array(), $limit = array(), &$total = null, $fields = array(), $keyfield = '') {
+		$select = '*';
+		if (!empty($fields)){
+			if (is_array($fields)) {
+				$select = '`'.implode('`,`', $fields).'`';
+			} else {
+				$select = $fields;
+			}
+		}
+		$condition = $this->implode($params, 'AND');
+		if (!empty($limit)) {
+			if (is_array($limit)) {
+				$limitsql = " LIMIT " . ($limit[0] - 1) * $limit[1] . ', ' . $limit[1];
+			} else {
+				$limitsql = strexists(strtoupper($limit), 'LIMIT') ? " $limit " : " LIMIT $limit";
+			}
+		}
+		$sql = "SELECT {$select} FROM " . tablename($tablename) . (!empty($condition['fields']) ? " WHERE {$condition['fields']}" : '') . $limitsql;
+		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename($tablename) . (!empty($condition['fields']) ? " WHERE {$condition['fields']}" : ''));
+		return $this->fetchall($sql, $condition['params'], $keyfield);
 	}
 
 	
@@ -225,9 +287,13 @@ class DB {
 		if (is_array($params)) {
 			$result['fields'] = '';
 			foreach ($params as $fields => $value) {
-				$result['fields'] .= $split . "`$fields` =  :{$suffix}$fields";
-				$split = ' ' . $glue . ' ';
-				$result['params'][":{$suffix}$fields"] = is_null($value) ? '' : $value;
+				if (is_array($value)) {
+					$result['fields'] .= $split . "`$fields` IN ('".implode("','", $value)."')";
+				} else {
+					$result['fields'] .= $split . "`$fields` =  :{$suffix}$fields";
+					$split = ' ' . $glue . ' ';
+					$result['params'][":{$suffix}$fields"] = is_null($value) ? '' : $value;
+				}
 			}
 		}
 		return $result;
@@ -237,8 +303,8 @@ class DB {
 	public function run($sql, $stuff = 'ims_') {
 		if(!isset($sql) || empty($sql)) return;
 
-		$sql = str_replace("\r", "\n", str_replace(' ' . $stuff, ' ' . $this->cfg['tablepre'], $sql));
-		$sql = str_replace("\r", "\n", str_replace(' `' . $stuff, ' `' . $this->cfg['tablepre'], $sql));
+		$sql = str_replace("\r", "\n", str_replace(' ' . $stuff, ' ' . $this->cfg['master']['tablepre'], $sql));
+		$sql = str_replace("\r", "\n", str_replace(' `' . $stuff, ' `' . $this->cfg['master']['tablepre'], $sql));
 		$ret = array();
 		$num = 0;
 		$sql = preg_replace("/\;[ \f\t\v]+/", ';', $sql);
@@ -254,21 +320,21 @@ class DB {
 		foreach($ret as $query) {
 			$query = trim($query);
 			if($query) {
-				$this->query($query);
+				$this->query($query, array());
 			}
 		}
 	}
 	
 	
 	public function fieldexists($tablename, $fieldname) {
-		$isexists = $this->fetch("DESCRIBE " . $this->tablename($tablename) . " `{$fieldname}`");
+		$isexists = $this->fetch("DESCRIBE " . $this->tablename($tablename) . " `{$fieldname}`", array());
 		return !empty($isexists) ? true : false;
 	}
 	
 	
 	public function indexexists($tablename, $indexname) {
 		if (!empty($indexname)) {
-			$indexs = pdo_fetchall("SHOW INDEX FROM " . $this->tablename($tablename));
+			$indexs = $this->fetchall("SHOW INDEX FROM " . $this->tablename($tablename), array(), '');
 			if (!empty($indexs) && is_array($indexs)) {
 				foreach ($indexs as $row) {
 					if ($row['Key_name'] == $indexname) {
@@ -282,7 +348,7 @@ class DB {
 	
 	
 	public function tablename($table) {
-		return "`{$this->cfg['tablepre']}{$table}`";
+		return "`{$this->cfg['master']['tablepre']}{$table}`";
 	}
 
 	
@@ -316,10 +382,10 @@ class DB {
 	
 	public function tableexists($table) {
 		if(!empty($table)) {
-			$data = $this->fetch("SHOW TABLES LIKE '{$this->cfg['tablepre']}{$table}'");
+			$data = $this->fetch("SHOW TABLES LIKE '{$this->cfg['master']['tablepre']}{$table}'", array());
 			if(!empty($data)) {
 				$data = array_values($data);
-				$tablename = $this->cfg['tablepre'] . $table;
+				$tablename = $this->cfg['master']['tablepre'] . $table;
 				if(in_array($tablename, $data)) {
 					return true;
 				} else {

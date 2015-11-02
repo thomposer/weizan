@@ -9,18 +9,6 @@
 			<input type="hidden" name="do" value="chatlog">
 			<input type="hidden" name="token" value="{$_W['token']}">
 			<input type="hidden" name="page" value="1" id="page">
-
-			<div class="form-group">
-				<label class="col-xs-12 col-sm-3 col-md-2 control-label">公众号</label>
-				<div class="col-sm-6 col-md-8 col-lg-8">
-					<select name="acid" class="form-control" id="acid">
-						<option value="" selected="selected">请选择公众号</option>
-						{loop $data $da}
-						<option value="{$da['acid']}"{if $_GPC['acid'] == $da['acid']} selected="selected"{/if}>{$da['name']}</option>
-						{/loop}
-					</select>
-				</div>
-			</div>
 			<div class="form-group">
 				<label class="col-xs-12 col-sm-3 col-md-2 control-label">粉丝昵称</label>
 				<div class="col-sm-6 col-md-8 col-lg-8">
@@ -36,7 +24,7 @@
 			<div class="form-group">
 				<label class="col-xs-12 col-sm-3 col-md-2 control-label">时间</label>
 				<div class="col-sm-6 col-md-8 col-lg-8">
-					{php echo tpl_form_field_date('starttime', date('Y-m-d H:i',$starttime), false)}
+					{php echo tpl_form_field_date('starttime', $starttime, false)}
 					<div class="help-block">公众平台不支持跨日查询</div>
 				</div>
 				<div class="pull-right col-xs-12 col-sm-3 col-md-2 col-lg-2">
@@ -171,14 +159,9 @@
 <script>
 	require(['util'], function(u) {
 		$('#form1').submit(function(){
-			var acid = $('#acid').val().trim();
 			var nickname = $('#nickname').val().trim();
 			var openid = $('#openid').val().trim();
 			var starttime = $('input[name="starttime"]').val();
-			if(acid == '') {
-				u.message('请选择公众号');
-				return false;
-			}
 			if(nickname == '' && openid == '') {
 				u.message('粉丝openid和粉丝昵称必须填写一项');
 				return false;

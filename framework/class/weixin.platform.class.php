@@ -11,6 +11,8 @@ define('ACCOUNT_PLATFORM_API_LOGIN', 'https://mp.weixin.qq.com/cgi-bin/component
 define('ACCOUNT_PLATFORM_API_QUERY_AUTH_INFO', 'https://api.weixin.qq.com/cgi-bin/component/api_query_auth?component_access_token=');
 define('ACCOUNT_PLATFORM_API_ACCOUNT_INFO', 'https://api.weixin.qq.com/cgi-bin/component/api_get_authorizer_info?component_access_token=');
 define('ACCOUNT_PLATFORM_API_REFRESH_AUTH_ACCESSTOKEN', 'https://api.weixin.qq.com/cgi-bin/component/api_authorizer_token?component_access_token=');
+define('ACCOUNT_PLATFORM_API_OAUTH_CODE', 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&component_appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=%s#wechat_redirect');
+define('ACCOUNT_PLATFORM_API_OAUTH_INFO', 'https://api.weixin.qq.com/sns/oauth2/component/access_token?appid=%s&component_appid=%s&code=%s&grant_type=authorization_code&component_access_token=');
 
 load()->classs('weixin.account');
 load()->func('communication');
@@ -22,7 +24,7 @@ class WeiXinPlatform extends WeiXinAccount {
 	public $token;
 	public $refreshtoken;
 	public $account;
-	
+
 	function __construct($account = array()) {
 		$setting = setting_load('platform');
 		$this->appid = $setting['platform']['appid'];
@@ -34,9 +36,10 @@ class WeiXinPlatform extends WeiXinAccount {
 			$this->account['key'] = $this->appid;
 			$this->openPlatformTestCase();
 		}
+		$this->account['account_appid'] = $this->account['key'];
 		$this->account['key'] = $this->appid;
 	}
-	
+
 	function getComponentAccesstoken() {
 		$accesstoken = cache_load('account:component:assesstoken');
 		if (empty($accesstoken) || empty($accesstoken['value']) || $accesstoken['expire'] < TIMESTAMP) {
@@ -61,9 +64,9 @@ class WeiXinPlatform extends WeiXinAccount {
 		}
 		return $accesstoken['value'];
 	}
-	
+
 	function getPreauthCode() {
-				$preauthcode = cache_load('account:preauthcode');
+		$preauthcode = cache_load('account:preauthcode');
 		if (true || empty($preauthcode) || empty($preauthcode['value']) || $preauthcode['expire'] < TIMESTAMP) {
 			$component_accesstoken = $this->getComponentAccesstoken();
 			if (is_error($component_accesstoken)) {
@@ -84,7 +87,7 @@ class WeiXinPlatform extends WeiXinAccount {
 		}
 		return $preauthcode['value'];
 	}
-	
+
 	public function getAuthInfo($code) {
 		$component_accesstoken = $this->getComponentAccesstoken();
 		if (is_error($component_accesstoken)) {
@@ -101,13 +104,13 @@ class WeiXinPlatform extends WeiXinAccount {
 		$this->setAuthRefreshToken($response['authorization_info']['authorizer_refresh_token']);
 		return $response;
 	}
-	
+
 	public function getAccountInfo($appid = '') {
 		$component_accesstoken = $this->getComponentAccesstoken();
 		if (is_error($component_accesstoken)) {
 			return $component_accesstoken;
 		}
-		$appid = !empty($appid) ? $appid : $this->account['key'];
+		$appid = !empty($appid) ? $appid : $this->account['account_appid'];
 		$post = array(
 			'component_appid' => $this->appid,
 			'authorizer_appid' => $appid,
@@ -118,9 +121,9 @@ class WeiXinPlatform extends WeiXinAccount {
 		}
 		return $response;
 	}
-	
+
 	public function getAccessToken() {
-		$cachename = 'account:auth:accesstoken:'.$this->account['key'];
+		$cachename = 'account:auth:accesstoken:'.$this->account['account_appid'];
 		$auth_accesstoken = cache_load($cachename);
 		if (empty($auth_accesstoken) || empty($auth_accesstoken['value']) || $auth_accesstoken['expire'] < TIMESTAMP) {
 			$component_accesstoken = $this->getComponentAccesstoken();
@@ -130,7 +133,7 @@ class WeiXinPlatform extends WeiXinAccount {
 			$this->refreshtoken = $this->getAuthRefreshToken();
 			$data = array(
 				'component_appid' => $this->appid,
-				'authorizer_appid' => $this->account['key'],
+				'authorizer_appid' => $this->account['account_appid'],
 				'authorizer_refresh_token' => $this->refreshtoken,
 			);
 			$response = $this->request(ACCOUNT_PLATFORM_API_REFRESH_AUTH_ACCESSTOKEN . $component_accesstoken, $data);
@@ -148,21 +151,88 @@ class WeiXinPlatform extends WeiXinAccount {
 		}
 		return $auth_accesstoken['value'];
 	}
-	
+
 	public function fetch_token() {
 		return $this->getAccessToken();
 	}
-	
+
 	public function getAuthLoginUrl() {
 		$preauthcode = $this->getPreauthCode();
 		if (is_error($preauthcode)) {
-			$authurl = "javascript:alert('缺少接入平台关键数据，等待微信开放平台推送数据，请十分钟后再试');";
+			$authurl = "javascript:alert('确保您已经成功接入微信开放平台或是缺少接入平台关键数据，等待微信开放平台推送数据，请十分钟后再试');";
 		} else {
 			$authurl = sprintf(ACCOUNT_PLATFORM_API_LOGIN, $this->appid, $preauthcode, urlencode($GLOBALS['_W']['siteroot'] . 'index.php?c=account&a=auth&do=forward'));
 		}
 		return $authurl;
 	}
+
+	public function getOauthCodeUrl($callback, $state = '') {
+		return sprintf(ACCOUNT_PLATFORM_API_OAUTH_CODE, $this->account['account_appid'], $this->appid, $callback, $state);
+	}
+
+	public function getOauthUserInfoUrl($callback, $state = '') {
+		return sprintf(ACCOUNT_PLATFORM_API_OAUTH_CODE, $this->account['account_appid'], $this->appid, $callback, $state);
+	}
+
+	public function getOauthInfo($code) {
+		$component_accesstoken = $this->getComponentAccesstoken();
+		if (is_error($component_accesstoken)) {
+			return $component_accesstoken;
+		}
+		$apiurl = sprintf(ACCOUNT_PLATFORM_API_OAUTH_INFO . $component_accesstoken, $this->account['account_appid'], $this->appid, $code);
+		$response = $this->request($apiurl);
+		if (is_error($response)) {
+			return $response;
+		}
+		cache_write('account:oauth:refreshtoken:'.$this->account['account_appid'], $response['refresh_token']);
+		return $response;
+	}
 	
+	public function getJsApiTicket(){
+		$cachename = 'account:jsapi_ticket';
+		$js_ticket = cache_load($cachename);
+		if (empty($js_ticket) || empty($js_ticket['value']) || $js_ticket['expire'] < TIMESTAMP) {
+			$access_token = $this->getAccessToken();
+			if(is_error($access_token)){
+				return $access_token;
+			}
+			$apiurl = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={$access_token}&type=jsapi";
+			$response = $this->request($apiurl);
+			$js_ticket = array(
+					'value' => $response['ticket'],
+					'expire' => TIMESTAMP + $response['expires_in'] - 200,
+			);
+			cache_write('account:jsapi_ticket', $js_ticket);
+		}
+		$this->account['jsapi_ticket'] = $js_ticket;
+		return $js_ticket['value'];
+	}
+	
+	public function getJssdkConfig(){
+		global $_W;
+		$jsapiTicket = $this->getJsApiTicket();
+		if(is_error($jsapiTicket)){
+			$jsapiTicket = $jsapiTicket['message'];
+		}
+		$nonceStr = random(16);
+		$timestamp = TIMESTAMP;
+		$url = $_W['siteurl'];
+		$string1 = "jsapi_ticket={$jsapiTicket}&noncestr={$nonceStr}&timestamp={$timestamp}&url={$url}";
+		$signature = sha1($string1);
+		$config = array(
+			"appId" => $this->account['account_appid'],
+			"nonceStr" => $nonceStr,
+			"timestamp" => "$timestamp",
+			"signature" => $signature,
+		);
+		if(DEVELOPMENT) {
+			$config['url'] = $url;
+			$config['string1'] = $string1;
+			$config['name'] = $this->account['name'];
+		}
+		return $config;
+	}
+
 	public function openPlatformTestCase() {
 		global $_GPC;
 		$post = file_get_contents('php://input');
@@ -171,11 +241,11 @@ class WeiXinPlatform extends WeiXinAccount {
 		$message = aes_decode($encode_message['encrypt'], $this->encodingaeskey);
 		$message = $this->parse($message);
 		$response = array(
-				'ToUserName' => $message['from'],
-				'FromUserName' => $message['to'],
-				'CreateTime' => TIMESTAMP,
-				'MsgId' => TIMESTAMP,
-				'MsgType' => 'text',
+			'ToUserName' => $message['from'],
+			'FromUserName' => $message['to'],
+			'CreateTime' => TIMESTAMP,
+			'MsgId' => TIMESTAMP,
+			'MsgType' => 'text',
 		);
 		if ($message['content'] == 'TESTCOMPONENT_MSG_TYPE_TEXT') {
 			$response['Content'] = 'TESTCOMPONENT_MSG_TYPE_TEXT_callback';
@@ -207,7 +277,7 @@ class WeiXinPlatform extends WeiXinAccount {
 		$xml['MsgSignature'] = sha1($signature);
 		exit(array2xml($xml));
 	}
-	
+
 	private function request($url, $post = array()) {
 		$response = ihttp_request($url, json_encode($post));
 		$response = json_decode($response['content'], true);
@@ -216,7 +286,7 @@ class WeiXinPlatform extends WeiXinAccount {
 		}
 		return $response;
 	}
-	
+
 	private function getAuthRefreshToken() {
 		$auth_refresh_token = cache_load('account:auth:refreshtoken:'.$this->account['key']);
 		if (empty($auth_refresh_token)) {
@@ -225,7 +295,7 @@ class WeiXinPlatform extends WeiXinAccount {
 		}
 		return $auth_refresh_token;
 	}
-	
+
 	private function setAuthRefreshToken($token) {
 		pdo_update('account_wechats', array('auth_refresh_token' => $token), array('acid' => $this->account['acid']));
 		cache_write('account:auth:refreshtoken:'.$this->account['key'], $token);

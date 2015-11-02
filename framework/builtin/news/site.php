@@ -16,6 +16,7 @@ class NewsModuleSite extends WeModuleSite {
 			header("Location: ".$row['url']);
 		}
 		$row = istripslashes($row);
+		$title = $row['title'];
 		
 		if($_W['os'] == 'android' && $_W['container'] == 'wechat' && $_W['account']['account']) {
 			$subscribeurl = "weixin://profile/{$_W['account']['account']}";

@@ -1,14 +1,5 @@
 {template 'common/header'}
 {template 'wechat/nav'}
-<script>
-	require(['bootstrap'],function($){
-		$('.btn').hover(function(){
-			$(this).tooltip('show');
-		},function(){
-			$(this).tooltip('hide');
-		});
-	});
-</script>
 <style>
 	.text-danger{color:red;}
 </style>
@@ -40,7 +31,7 @@
 	</div>
 </div>
 {elseif $do == 'location_post'}
-		<div class="clearfix">
+	<div class="clearfix">
 		<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" id="form1">
 			<div class="panel panel-default" id="step1">
 				<div class="panel-heading">
@@ -101,7 +92,7 @@
 					<div class="form-group">
 						<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 图片列表</label>
 						<div class="col-sm-8 col-xs-12">
-							{php echo tpl_form_field_wechat_multi_image('photo_list', '', '', array('mode' => 'file_upload', 'acid' => $acid));}
+							{php echo tpl_form_field_wechat_multi_image('photo_list', '', '', array('mode' => 'file_upload'));}
 							<span class="help-block">图片只支持jpg格式,大小不超过为1M</span>
 						</div>
 					</div>
@@ -153,59 +144,85 @@
 		</form>
 	</div>
 {/if}
+
 {if $do == 'location_edit'}
 <div class="clearfix">
+	<div class="alert alert-info">
+		<i class="fa fa-info-circle"></i> 系统提示：更新服务信息后，需要微信进行审核，审核通过后可在门店详情页显示。在审核通过前，不能再次修改服务信息。<br>
+		<i class="fa fa-info-circle"></i> 注意：系统不会保存修改的服务信息，你可以通过“更新门店信息”来保持门店信息的有效性
+	</div>
+	{if $update_status == 1}
+	<div class="alert alert-danger"><i class="fa fa-info-circle"></i> 系统提示：服务信息正在更新中，尚未生效，不允许再次更新</div>
+	{/if}
 	<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" id="form1">
-		<div class="panel panel-default" id="step1">
+		<div class="panel panel-default">
 			<div class="panel-heading">
-				基本信息 <small class="text-danger">不可修改</small>
+				基本信息 <small class="text-danger">微信公众平台规定：基本信息不可以修改</small>
 			</div>
 			<div class="panel-body">
 				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 门店名</label>
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 门店状态</label>
 					<div class="col-sm-8 col-xs-12">
-						<input type="text" class="form-control" name="business_name" value="{$location['business_name']}" disabled/>
-						<span class="help-block">门店名不得含有区域地址信息（如，北京市XXX公司）</span>
+						<p class="form-control-static">
+							{if $location['status'] == 1}
+							<span class="label label-success">审核通过</span>
+							{elseif $location['status'] == 2}
+							<span class="label label-default">审核中</span>
+							{else}
+							<span class="label label-danger">审核未通过</span>
+							{/if}
+						</p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 分店名(选填)</label>
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 门店sid</label>
 					<div class="col-sm-8 col-xs-12">
-						<input type="text" class="form-control" name="branch_name" value="{$location['branch_name']}" disabled/>
-						<span class="help-block">分店名不得含有区域地址信息（如，“北京国贸店”中的“北京”）</span>
+						<p class="form-control-static">{$location['sid']}</p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 类目</label>
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 门店名</label>
 					<div class="col-sm-8 col-xs-12">
-						{php echo tpl_form_field_location_category("class", $location['category']);}
+						<p class="form-control-static">{$location['business_name']}</p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 地址</label>
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 分店名</label>
 					<div class="col-sm-8 col-xs-12">
-						{php echo tpl_fans_form('reside',array('province' => $location['province'],'city' => $location['city'],'district' => $location['district']));}
+						<p class="form-control-static">{$location['branch_name']}</p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 详细地址</label>
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 类目</label>
 					<div class="col-sm-8 col-xs-12">
-						<input type="text" name="address" id="addresss" class="form-control" disabled placeholder="输入详细地址，请勿重复填写省市区信息" value="{$location['address']}"/>
+						<p class="form-control-static">{$location['category']}</p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 定位</label>
-					<div class="col-sm-8 col-xs-12" id="map">
-						{php echo tpl_form_field_coordinate('baidumap', $location['baidumap'])}
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 地址</label>
+					<div class="col-sm-8 col-xs-12">
+						<p class="form-control-static">{$location['address']}</p>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="panel panel-default" id="step1">
+		<div class="panel panel-default">
 			<div class="panel-heading">
-				服务信息 <small class="text-danger">可修改</small>
+				服务信息
 			</div>
 			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 是否可修改服务信息</label>
+					<div class="col-sm-8 col-xs-12">
+							{if $update_status == 1 || $location['status'] != 1}
+							<p class="form-control-static"><span class="label label-danger">不可修改</span></p>
+							<div class="help-block">服务信息正在更新中，尚未生效，不允许再次更新。审核通过后，可再次更新。</div>
+							{else}
+							<p class="form-control-static"><span class="label label-success">可修改</span></p>
+							{/if}
+
+					</div>
+				</div>
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 电话</label>
 					<div class="col-sm-8 col-xs-12">
@@ -224,7 +241,7 @@
 					<div class="col-sm-9 col-xs-4 col-md-3">
 						<div class="input-group">
 							<input type="text" class="form-control" placeholder="8:00" name="open_time_start" value="{$location['open_time_start']}">
-							<span class="input-group-addon" id="basic-addon2">-</span>
+							<span class="input-group-addon">-</span>
 							<input type="text" class="form-control" placeholder="24:00" name="open_time_end" value="{$location['open_time_end']}">
 						</div>
 						<span class="help-block">营业时间，24小时制表示，如 8:00-20:00</span>
@@ -261,112 +278,8 @@
 			</div>
 		</div>
 		<div class="form-group col-sm-12">
-			<input name="submit" id="submit" type="submit" value="提交" class="btn btn-primary col-lg-1">
+			<input name="submit" type="submit" value="提交" class="btn btn-primary col-lg-1" {if $update_status == 1}disabled{/if}>
 			<input type="hidden" name="token" value="{$_W['token']}" />
-		</div>
-	</form>
-</div>
-<script>
-	$(function(){
-		$('select[name^="class_0"]').attr('disabled', 'disabled');
-		$('select[name^="reside"]').attr('disabled', 'disabled');
-		$('input[name^="baidumap"]').attr('disabled', 'disabled');
-	});
-</script>
-{/if}
-
-{if $do == 'location_view'}
-<div class="clearfix">
-	<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" id="form1">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				基本信息 <small class="text-danger"></small>
-			</div>
-			<div class="panel-body">
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 门店名</label>
-					<div class="col-sm-8 col-xs-12">
-						<p class="form-control-static">{$location['business_name']}</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 分店名</label>
-					<div class="col-sm-8 col-xs-12">
-						<p class="form-control-static">{$location['branch_name']}</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 类目</label>
-					<div class="col-sm-8 col-xs-12">
-						<p class="form-control-static">{$location['category']}</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 地址</label>
-					<div class="col-sm-8 col-xs-12">
-						<p class="form-control-static">{$location['address']}</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 定位</label>
-					<div class="col-sm-8 col-xs-12">
-						{php echo tpl_form_field_coordinate('baidumap', $location['baidumap'])}
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				服务信息 <small class="text-danger"></small>
-			</div>
-			<div class="panel-body">
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 门店图片</label>
-					<div class="col-sm-8 col-xs-12 multi-img-details">
-						{loop $location['photo_list'] $photo}
-						<div class="multi-item">
-							<img src="{php echo url('utility/wxcode/image', array('attach' => $photo['photo_url']));}" class="img-responsive img-thumbnail">
-						</div>
-						{/loop}
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 电话</label>
-					<div class="col-sm-8 col-xs-12">
-						<p class="form-control-static">{$location['telephone']}</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 人均价格</label>
-					<div class="col-sm-8 col-xs-12">
-						<p class="form-control-static">{$location['avg_price']}</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 营业时间</label>
-					<div class="col-sm-8 col-xs-12">
-						<p class="form-control-static">{$location['open_time']}</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 推荐</label>
-					<div class="col-sm-8 col-xs-12">
-						<p class="form-control-static">{$location['recommend']}</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 特色服务</label>
-					<div class="col-sm-8 col-xs-12">
-						<p class="form-control-static">{$location['special']}</p>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 简介</label>
-					<div class="col-sm-8 col-xs-12">
-						<p class="form-control-static">{$location['introduction']}</p>
-					</div>
-				</div>
-			</div>
 		</div>
 	</form>
 </div>
@@ -376,8 +289,9 @@
 	<div class="clearfix">
 		<div class="form-group" style="margin-bottom: 40px;margin-left:-15px">
 			<div class="col-sm-12">
-				<a href="{php echo url('wechat/manage/location_post')}" class="btn btn-success col-lg-1" style="margin-right:20px;">添加门店</a>
-				<a href="{php echo url('wechat/manage/export')}" class="btn btn-danger col-lg-1">从微信导入</a>
+				<a href="{php echo url('wechat/manage/location_post')}" class="btn btn-success col-lg-1" style="margin-right:10px;">添加门店</a>
+				<a href="{php echo url('wechat/manage/export')}" class="btn btn-danger col-lg-1" style="margin-right:10px;">微信导入</a>
+				<a href="{php echo url('wechat/manage/export')}" class="btn btn-danger col-lg-1">更新门店</a>
 			</div>
 		</div>
 		<div class="panel panel-info">
@@ -414,7 +328,7 @@
 							<th>地址</th>
 							<th width="100">审核状态</th>
 							<th width="170">审核说明</th>
-							<th width="100" style="text-align:right">操作</th>
+							<th width="250" style="text-align:right">操作</th>
 						</tr>
 						</thead>
 						<tbody>
@@ -443,8 +357,9 @@
 										{/if}
 									</td>
 									<td style="text-align:right">
-										<a class="btn btn-default btn-sm" href="{php echo url('wechat/manage/location_view', array('id' => $li['id']))}" data-toggle="tooltip" data-placement="top" title="详情"><i class="fa fa-eye"></i></a>
-										<a class="btn btn-default btn-sm" href="{php echo url('wechat/manage/location_del', array('id' => $li['id']))}" onclick="if(!confirm('您确定要删除吗？')) return false;" data-toggle="tooltip" data-placement="top" title="删除"><i class="fa fa-times"></i></a>
+										<a href="{php echo url('wechat/manage/location_edit', array('id' => $li['id']))}" class="btn btn-default" title="详情">编辑</a>
+										<a href="{php echo url('wechat/manage/location_sync', array('id' => $li['id']))}" class="btn btn-default" title="更新门店信息">更新门店信息</a>
+										<a href="{php echo url('wechat/manage/location_del', array('id' => $li['id']))}" class="btn btn-default" onclick="if(!confirm('您确定要删除吗？')) return false;" title="删除">删除</a>
 									</td>
 								</tr>
 							{/loop}
@@ -456,6 +371,7 @@
 		</form>
 	</div>
 {/if}
+
 {if $do == 'whitelist'}
 <div class="clearfix">
 	<div class="alert alert-warning"><i class="fa fa-info-circle"> 由于卡券有审核要求，为方便公众号调试，可以设置一些测试帐号，这些帐号可领取未通 过审核的卡券，体验整个流程。最多可添加10个测试白名单</i></div>
@@ -497,14 +413,7 @@
 {/if}
 <script>
 	require(['bootstrap'], function($){
-		$('.btn').hover(function(){
-			$(this).tooltip('show');
-		},function(){
-			$(this).tooltip('hide');
-		});
-
 		$('[data-toggle="popover"]').popover();
-
 		$('#add').click(function(){
 			var html = '<tr>' +
 							'<td><input type="text" name="username[]" value="" placeholder="填写微信号" class="form-control"/></td>' +

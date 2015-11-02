@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $templateid = intval($_GPC['templateid']);
@@ -9,6 +9,7 @@ $dos = array('default', 'designer', 'module', 'createtemplate', 'template', 'cop
 $do = in_array($do, $dos) ? $do : 'display';
 
 if ($do == 'template') {
+	uni_user_permission_check('site_style_template');
 	$setting = uni_setting($_W['uniacid'], array('default_site'));
 	$setting['styleid'] = pdo_fetchcolumn('SELECT styleid FROM ' . tablename('site_multi') . ' WHERE uniacid = :uniacid AND id = :id', array(':uniacid' => $_W['uniacid'], ':id' => $setting['default_site']));
 	$_W['page']['title'] = '风格管理 - 网站风格设置 - 微站功能';
@@ -115,7 +116,6 @@ if($do == 'default') {
 }
 
 if($do == 'designer') {
-	load()->func('tpl');
 	$styleid = intval($_GPC['styleid']);
 	$style = pdo_fetch("SELECT * FROM ".tablename('site_styles')." WHERE id = :id AND uniacid = '{$_W['uniacid']}'", array(':id' => $styleid));
 	if(empty($style)) {
@@ -199,6 +199,7 @@ if($do == 'designer') {
 }
 
 if($do == 'module') {
+	uni_user_permission_check('site_style_module');
 	$_W['page']['title'] = '模块扩展模板说明 - 网站风格设置 - 微站功能';
 	if(empty($_W['isfounder'])) {
 		message('您无权进行该操作！');

@@ -1,10 +1,11 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 defined('IN_IA') or exit('Access Denied');
+uni_user_permission_check('platform_url2qr');
 $dos = array('display', 'change', 'qr', 'chat');
 $do = !empty($_GPC['do']) && in_array($do, $dos) ? $do : 'display';
 load()->model('account');
@@ -31,7 +32,6 @@ if($do == 'change') {
 		} elseif(!empty($result['errcode'])) {
 			$result = error(-1, "访问微信接口错误, 错误代码: {$result['errcode']}, 错误信息: {$result['errmsg']}");
 		}
-
 		if(is_error($result)) {
 			exit(json_encode(array('errcode' => -1, 'errmsg' => $result['message'])));
 		}

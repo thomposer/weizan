@@ -1,14 +1,14 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
+uni_user_permission_check('site_category');
 $do = !empty($do) ? $do : 'display';
 $do = in_array($do, array('display', 'post', 'delete', 'fetch', 'check')) ? $do : 'display';
 $setting = uni_setting($_W['uniacid'], 'default_site');
 $default_site = intval($setting['default_site']);
-
 if ($do == 'display') {
 	if (!empty($_GPC['displayorder'])) {
 		foreach ($_GPC['displayorder'] as $id => $displayorder) {
@@ -28,7 +28,6 @@ if ($do == 'display') {
 	}
 	template('site/category');
 } elseif ($do == 'post') {
-	load()->func('tpl');
 	$parentid = intval($_GPC['parentid']);
 	$id = intval($_GPC['id']);
 		$setting = uni_setting($_W['uniacid'], array('default_site'));

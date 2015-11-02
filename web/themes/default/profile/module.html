@@ -74,15 +74,13 @@ p.module-description{display:block;padding:3px 10px;}
 				container.find(".module_description").hide();
 			}
 		}
-		require(['jquery'],function($){
-			$('.module .thumbnails').delegate('li .module-button-switch', 'click', function(){ //控制模块开关
-				if($(this).hasClass('btn-primary')) { //禁用模块
-					$(this).removeClass('btn-primary').addClass('btn-danger').html('开启');
-				} else if($(this).hasClass('btn-danger')) { //开启模块
-					$(this).removeClass('btn-danger').addClass('btn-primary').html('禁用');
-				}
-				$(this).parent().parent().find('.module-pic img').toggleClass('gray');
-			});
+		$('.module .thumbnails').delegate('li .module-button-switch', 'click', function(){ //控制模块开关
+			if($(this).hasClass('btn-primary')) { //禁用模块
+				$(this).removeClass('btn-primary').addClass('btn-danger').html('开启');
+			} else if($(this).hasClass('btn-danger')) { //开启模块
+				$(this).removeClass('btn-danger').addClass('btn-primary').html('禁用');
+			}
+			$(this).parent().parent().find('.module-pic img').toggleClass('gray');
 		});
 	</script>
 {template 'common/footer'}

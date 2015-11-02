@@ -5,33 +5,163 @@
 	{loop $accounts $account}
 	<div class="panel panel-default row">
 		<div class="panel-body">
-			<div class="col-sm-3">
-				<img src="{$_W['attachurl']}headimg_{$account['acid']}.jpg?acid={$account['acid']}" alt="{$account['name']}" class="img-rounded" onerror="this.src='resource/images/gw-wx.gif'" >
-			</div>
-			<div class="col-sm-7">
-				<p><strong>{$account['name']}</strong></p>
-				<p><strong>接口地址： </strong> <a href="javascript:;" title="点击复制Token">{$_W['siteroot']}api.php?id={$account['acid']}</a></p>
-				<p><strong>Token： </strong> <a href="javascript:;" title="点击复制Token">{$account['token']}</a></p>
-			</div>
-			<div class="col-sm-2">
-				{if $account['isconnect'] == 1}
-				<span class="text-success"><i class="fa fa-check-circle"></i> 成功接入{$accounttypes[$account['type']]['title']}</span>
-				{else}
-				<span class="text-warning"><i class="fa fa-times-circle"></i> 未接入{$accounttypes[$account['type']]['title']}</span>
-				{/if}
+			<div class="clearfix">
+				<div class="col-sm-7">
+					<p>
+						<strong>{$account['name']}</strong>
+						<span class="label label-success" style="display:inline-block; margin-right:10px;">
+						{if $account['level'] == 1}订阅号{/if}
+						{if $account['level'] == 2}普通服务号{/if}
+						{if $account['level'] == 3}认证订阅号{/if}
+						{if $account['level'] == 4}认证服务号/认证媒体/政府订阅号{/if}
+						</span>
+						{if $account['isconnect'] == 1}
+						<span class="text-success"><i class="fa fa-check-circle"></i> 成功接入{$accounttypes[$account['type']]['title']}</span>
+						{else}
+						<span class="text-warning"><i class="fa fa-times-circle"></i> 未接入{$accounttypes[$account['type']]['title']}</span>
+						{/if}
+					</p>
+					<p><strong>接口地址： </strong> <a href="javascript:;" style="color:#66667C;">{$_W['siteroot']}api.php?id={$account['acid']}</a></p>
+					<p><strong>　Token： </strong> <a href="javascript:;" title="点击复制Token" style="color:#66667C;">{$account['token']}</a></p>
+				</div>
+				<div class="col-sm-5 text-right">
+					<img {if file_exists(IA_ROOT . '/attachment/qrcode_'.$account['acid'].'.jpg')} src="{$_W['attachurl_local']}qrcode_{$account['acid']}.jpg?acid={$account['acid']}"{else}src="resource/images/gw-qr.jpg"{/if} class="img-responsive img-thumbnail" width="150" />
+					<img {if file_exists(IA_ROOT . '/attachment/headimg_'.$account['acid'].'.jpg')} src="{$_W['attachurl_local']}headimg_{$account['acid']}.jpg?acid={$account['acid']}"{else}src="resource/images/gw-wx.gif"{/if} class="img-responsive img-thumbnail" width="150" />
+				</div>
 			</div>
 		</div>
 	</div>
 	{/loop}
 </div>
 <script>
-	require(['jquery', 'util'], function($, u){
-		$('.account p a').each(function(){
-			u.clip(this, $(this).text());
+	$('.account p a').each(function(){
+		util.clip(this, $(this).text());
+	});
+</script>
+{if $_W['acid'] == $_W['uniaccount']['default_acid']}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		关键指标详解
+		<a class="text-danger" href="{php echo url('account/summary/', array('acid' => $_W['acid'], 'uniacid' => $_W['uniacid']));}" target="_blank">查看更多</a>
+	</div>
+	<div class="panel-body" id="scroll">
+		<div class="account-stat">
+			<div class="account-stat-btn">
+				<div>今日新关注人数<span>{$today_add_num}</span></div>
+				<div>今日取消关注人数<span>{$today_cancel_num}</span></div>
+				<div>今日净增关注人数<span>{$today_jing_num}</span></div>
+				<div>累积关注人数<span>{$today_total_num}</span></div>
+			</div>
+		</div>
+		<div class="pull-right">
+			<div class="checkbox">
+				<label style="color:#57B9E6;"><input checked type="checkbox"> 新关注人数</label>&nbsp;
+				<label style="color:rgba(203,48,48,1)"><input checked type="checkbox"> 取消关注人数</label>&nbsp;
+				<label style="color:rgba(149,192,0,1);;"><input checked type="checkbox"> 净增人数</label>&nbsp;
+				<label style="color:#e7a017;"><input type="checkbox"> 累积关注人数</label>
+			</div>
+		</div>
+		<div style="margin-top:20px">
+			<canvas id="myChart1" width="1200" height="300"></canvas>
+		</div>
+	</div>
+</div>
+<script>
+	require(['chart', 'daterangepicker'], function(c) {
+		var chart = null;
+		var chartDatasets = null;
+		var templates = {
+			flow1: {
+				label: '新关注人数',
+				fillColor : "rgba(36,165,222,0.1)",
+				strokeColor : "rgba(36,165,222,1)",
+				pointColor : "rgba(36,165,222,1)",
+				pointStrokeColor : "#fff",
+				pointHighlightFill : "#fff",
+				pointHighlightStroke : "rgba(36,165,222,1)",
+			},
+			flow2: {
+				label: '取消关注人数',
+				fillColor : "rgba(203,48,48,0.1)",
+				strokeColor : "rgba(203,48,48,1)",
+				pointColor : "rgba(203,48,48,1)",
+				pointStrokeColor : "#fff",
+				pointHighlightFill : "#fff",
+				pointHighlightStroke : "rgba(203,48,48,1)",
+			},
+			flow3: {
+				label: '净增人数',
+				fillColor : "rgba(149,192,0,0.1)",
+				strokeColor : "rgba(149,192,0,1)",
+				pointColor : "rgba(149,192,0,1)",
+				pointStrokeColor : "#fff",
+				pointHighlightFill : "#fff",
+				pointHighlightStroke : "rgba(149,192,0,1)",
+			},
+			flow4: {
+				label: '累计人数',
+				fillColor : "rgba(231,160,23,0.1)",
+				strokeColor : "rgba(231,160,23,1)",
+				pointColor : "rgba(231,160,23,1)",
+				pointStrokeColor : "#fff",
+				pointHighlightFill : "#fff",
+				pointHighlightStroke : "rgba(231,160,23,1)"
+			}
+		};
+
+		function refreshData() {
+			if(!chart || !chartDatasets) {
+				return;
+			}
+			var visables = [];
+			var i = 0;
+			$('.checkbox input[type="checkbox"]').each(function(){
+				if($(this).attr('checked')) {
+					visables.push(i);
+				}
+				i++;
+			});
+			var ds = [];
+			$.each(visables, function(){
+				var o = chartDatasets[this];
+				ds.push(o);
+			});
+			chart.datasets = ds;
+			chart.update();
+		}
+
+		var url = './index.php?c=account&a=summary&acid={$_W['acid']}&uniacid={$_W['uniacid']}&#aaaa';
+		$.post(url, function(data){
+			var data = $.parseJSON(data)
+			var datasets = data.datasets;
+			if(!chart) {
+				var label = data.label;
+				var ds = $.extend(true, {}, templates);
+				ds.flow1.data = datasets.flow1;
+				ds.flow2.data = datasets.flow2;
+				ds.flow3.data = datasets.flow3;
+				ds.flow4.data = datasets.flow4;
+				var lineChartData = {
+					labels : label,
+					datasets : [ds.flow1, ds.flow2, ds.flow3, ds.flow4]
+				};
+
+				var ctx = document.getElementById("myChart1").getContext("2d");
+				chart = new Chart(ctx).Line(lineChartData, {
+					responsive: true
+				});
+				chartDatasets = $.extend(true, {}, chart.datasets);
+			}
+			refreshData();
+		});
+
+		$('.checkbox input[type="checkbox"]').on('click', function(){
+			$(this).attr('checked', !$(this).attr('checked'))
+			refreshData();
 		});
 	});
 </script>
-
+{/if}
 <style>
 	.account-stat{overflow:hidden; color:#666;}
 	.account-stat .account-stat-btn{width:100%; overflow:hidden;}
@@ -39,7 +169,6 @@
 	.account-stat .account-stat-btn > div:first-child{border-left:0;}
 	.account-stat .account-stat-btn > div span{display:block; font-size:30px; font-weight:bold}
 </style>
-
 <div class="page-header">
 	<h4><i class="fa fa-android"></i> 基本回复统计情况</h4>
 </div>
@@ -89,7 +218,7 @@
 </div>
 
 <script>
-	require(['chart', 'jquery'], function(c, $) {
+	require(['chart'], function(c) {
 		$('.dropdown').click(function(){
 			$('.nav.nav-btns>li').removeClass('active');
 			$(this).toggleClass('active');
@@ -114,19 +243,19 @@
 			$('#show').attr('href', show_url + data.stat.m_name);
 			$('#add').attr('href', add_url + data.stat.m_name);
 
-			 lineChartData = {
-					labels : data.key,
-					datasets : [
-						{
-							fillColor : "rgba(36,165,222,0.1)",
-							strokeColor : "rgba(36,165,222,1)",
-							pointColor : "rgba(36,165,222,1)",
-							pointStrokeColor : "#fff",
-							pointHighlightFill : "#fff",
-							pointHighlightStroke : "rgba(36,165,222,1)",
-							data : data.value
-						}
-					]
+			lineChartData = {
+				labels : data.key,
+				datasets : [
+					{
+						fillColor : "rgba(36,165,222,0.1)",
+						strokeColor : "rgba(36,165,222,1)",
+						pointColor : "rgba(36,165,222,1)",
+						pointStrokeColor : "#fff",
+						pointHighlightFill : "#fff",
+						pointHighlightStroke : "rgba(36,165,222,1)",
+						data : data.value
+					}
+				]
 			}
 			 obj = myLine.Line(lineChartData, {responsive: true});
 		});

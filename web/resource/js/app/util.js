@@ -1,6 +1,6 @@
 (function(window) {
 	var util = {};
-	util.tomedia = function(src){
+	util.tomedia = function(src, forcelocal){
 		if(src.indexOf('http://') == 0 || src.indexOf('https://') == 0 || src.indexOf('./resource') == 0) {
 			return src;
 		} else if(src.indexOf('./addons') == 0) {
@@ -13,7 +13,11 @@
 			}
 			return host + src;
 		} else {
-			return '../attachment/' + src;
+			if(!forcelocal) {
+				return window.sysinfo.attachurl + src;
+			} else {
+				return window.sysinfo.attachurl_local + src;
+			}
 		}
 	};
 	util.clip = function(elm, str) {
@@ -95,6 +99,9 @@
 		require(['jquery', 'fileUploader'], function($, fileUploader){
 			fileUploader.show(function(images){
 				if(images.length > 0){
+					for (i in images) {
+						images[i].filename = images[i].attachment;
+					}
 					if($.isFunction(callback)){
 						callback(images);
 					}
@@ -459,16 +466,10 @@
 	 * options: {tabs: {'browser': 'active', 'upload': '', 'remote': ''}
 	 **/
 	util.image = function(val, callback, base64options, options) {
-
 		var opts = {
 			type :'image',
 			direct : false,
-			multi : false,
-			tabs : {
-				'upload' : 'active',
-				'browser' : '',
-				'crawler' : ''
-			},
+			multiple : false,
 			path : val,
 			dest_dir : '',
 			global : false,
@@ -494,18 +495,14 @@
 		var opts = {
 			type :'image',
 			direct : false,
-			multi : false,
+			multiple : false,
 			acid : 0,
-			tabs : {
-				'upload' : 'active',
-				'browser' : ''
-			},
 			path : val,
 			dest_dir : ''
 		};
 		opts = $.extend({}, opts, options);
-		require(['jquery', 'wechat_fileUploader'], function($, wechat_fileUploader){
-			wechat_fileUploader.show(function(images){
+		require(['jquery', 'wechatFileUploader'], function($, wechatFileUploader){
+			wechatFileUploader.show(function(images){
 				if(images){
 					if($.isFunction(callback)){
 						callback(images);
@@ -519,11 +516,7 @@
 		var opts = {
 			type :'audio',
 			direct : false,
-			multi : false,
-			tabs : {
-				'upload' : 'active',
-				'browser' : ''
-			},
+			multiple : false,
 			path : '',
 			dest_dir : ''
 		};
@@ -577,7 +570,7 @@
 			}
 		}
 		modalobj.find('.modal-body').load(url, function(){
-			$('form').each(function(){
+			$('form.ajaxfrom').each(function(){
 				$(this).attr('action', $(this).attr('action') + '&isajax=1&target=formtarget');
 				$(this).attr('target', '_formtarget');
 			})
@@ -636,21 +629,16 @@
 		var opts = {
 			type :'voice',
 			direct : false,
-			multi : false,
-			acid : 0,
-			tabs : {
-				'browser' : ''
-			},
+			multiple : false,
 			path : '',
 			dest_dir : ''
 		};
 		if(val){
 			opts.path = val;
 		}
-
 		opts = $.extend({}, opts, options);
-		require(['jquery', 'wechat_fileUploader'], function($, wechat_fileUploader){
-			wechat_fileUploader.show(function(audios){
+		require(['jquery', 'wechatFileUploader'], function($, wechatFileUploader){
+			wechatFileUploader.show(function(audios){
 				if(audios){
 					if($.isFunction(callback)){
 						callback(audios);

@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -22,6 +22,7 @@ if ($do == 'display') {
 		));
 		$pdata['styleid'] = intval($_GPC['styleid']);
 		pdo_update('uni_settings', $pdata, array('uniacid' => $_W['uniacid']));
+		cache_delete("unisetting:{$_W['uniacid']}");
 		message('信息设置成功！', url('site/info/display'), 'success');
 	}
 }

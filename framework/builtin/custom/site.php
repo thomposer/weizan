@@ -15,23 +15,14 @@ class CustomModuleSite extends WeModuleSite {
 	public function doWebChatlog(){
 		global $_GPC, $_W;
 		load()->func('tpl');
-		$acids = uni_accounts($_W['uniacid']);
-		if(!empty($acids)) {
-			$data = array();
-			foreach($acids as $acid) {
-				if(in_array($acid['level'], array(3, 4))) {
-					$data[] = $acid;
-				}
-			}
-		}
 		$starttime = empty($_GPC['starttime']) ? strtotime(date('Y-m-d')) : strtotime($_GPC['starttime']);
 		if(!empty($_GPC['token'])) {
 			unset($_GPC['token']);
 			$avatar = '';
 			$endtime = $starttime + 23 * 3600 + 3599;
-			$acid = intval($_GPC['acid']);
+			$acid = $_W['acid'];
 			if(!empty($_GPC['nickname']) && empty($_GPC['openid'])) {
-				$user = pdo_fetch('SELECT b.openid,a.avatar FROM ' . tablename('mc_members') . ' AS a LEFT JOIN ' . tablename('mc_mapping_fans') . ' AS b ON a.uid = b.uid WHERE a.nickname = :nickname', array(':nickname' => trim($_GPC['nickname'])));
+				$user = pdo_fetch('SELECT b.openid,a.avatar,b.nickname FROM ' . tablename('mc_members') . ' AS a LEFT JOIN ' . tablename('mc_mapping_fans') . ' AS b ON a.uid = b.uid WHERE b.acid = :acid AND a.nickname = :nickname', array(':nickname' => trim($_GPC['nickname']), ':acid' => $_W['acid']));
 				if(empty($user['openid'])) {
 					message('没有找到昵称为 "'. $_GPC['nickname'] .'" 的用户', $this->createWebUrl('chatlog', array('acid' => $acid, 'nickname' => $_GPC['nickname'], 'openid' => $_GPC['openid'], 'starttime' => $_GPC['starttime'])), 'error');
 				} else {
@@ -42,16 +33,19 @@ class CustomModuleSite extends WeModuleSite {
 				}
 			} else {
 				$openid = trim($_GPC['openid']);
-				$user = pdo_fetch('SELECT b.openid,a.avatar,a.nickname FROM ' . tablename('mc_members') . ' AS a LEFT JOIN ' . tablename('mc_mapping_fans') . ' AS b ON a.uid = b.uid WHERE b.openid = :openid', array(':openid' => trim($_GPC['openid'])));
+				$user = pdo_fetch('SELECT b.openid,a.avatar,b.nickname FROM ' . tablename('mc_members') . ' AS a LEFT JOIN ' . tablename('mc_mapping_fans') . ' AS b ON a.uid = b.uid WHERE b.acid = :acid AND b.openid = :openid', array(':openid' => trim($_GPC['openid']), ':acid' => $_W['acid']));
 				if(!empty($user['avatar'])) {
 					$avatar = tomedia($user['avatar']);
 					$nickname = $user['nickname'];
 				}
 			}
-			if($acid > 0 && !empty($starttime) && !empty($endtime) && !empty($openid)) {
+			if(empty($user['openid'])) {
+				message('请输入粉丝昵称或者粉丝openid', referer(), 'error');
+			}
+			if($acid > 0 && !empty($starttime) && !empty($endtime)) {
 				$pindex = max(1, intval($_GPC['page']));
 				$acc = WeAccount::create($acid);
-				$params = array('openid' => trim($_GPC['openid']), 'starttime' => $starttime, 'endtime' => $endtime, 'pageindex' => $pindex, 'pagesize' => 1000);
+				$params = array('openid' => trim($user['openid']), 'starttime' => $starttime, 'endtime' => $endtime, 'pageindex' => $pindex, 'pagesize' => 50);
 				$logs = $acc->fetchChatLog($params);
 				$next = 1;
 				if(is_error($logs) || empty($logs['recordlist']) || (count($logs['recordlist']) < $params['pagesize'])) {

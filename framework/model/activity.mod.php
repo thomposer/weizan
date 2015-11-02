@@ -35,7 +35,7 @@ function activity_coupon_available($uid, $pindex = 1, $psize = 10) {
 }
 
 
-function activity_coupon_owned($uid, $filter = array(), $pindex = 1, $psize = 10) {
+function activity_coupon_owned($uid, $filter = array(), $pindex = 10, $psize = 0) {
 	$condition = '';
 	if (!empty($filter['used'])) {
 		$condition .= ' AND r.`status` = ' . $filter['used'];
@@ -129,7 +129,7 @@ function activity_coupon_grant($uid, $couponid, $module = '', $remark = '') {
 
 
 
-function activity_coupon_use($uid, $couponid, $operator, $recid = '', $module = 'system') {
+function activity_coupon_use($uid, $couponid, $operator, $clerk_id = 0, $recid = '', $module = 'system') {
 	global $_W;
 	$coupon = pdo_fetch("SELECT * FROM " . tablename('activity_coupon') . " WHERE `type` = 1 AND `couponid` = :couponid LIMIT 1", array(':couponid' => $couponid));
 	if (empty($coupon)) {
@@ -155,7 +155,8 @@ function activity_coupon_use($uid, $couponid, $operator, $recid = '', $module = 
 		'status' => 2,
 		'usemodule' => $module,
 		'usetime' => TIMESTAMP,
-		'operator' => $operator
+		'operator' => $operator,
+		'clerk_id' => intval($clerk_id)
 	);
 	pdo_update('activity_coupon_record', $update, array('recid' => $precord['recid']));
 	return true;
@@ -306,7 +307,7 @@ function activity_token_grant($uid, $couponid, $module = '', $remark = '') {
 }
 
 
-function activity_token_use($uid, $couponid, $operator, $recid = '', $module = 'system') {
+function activity_token_use($uid, $couponid, $operator, $clerk_id = 0, $recid = '', $module = 'system') {
 	global $_W;
 	$coupon = pdo_fetch("SELECT * FROM " . tablename('activity_coupon') . " WHERE `type` = 2 AND `couponid` = :couponid LIMIT 1", array(':couponid' => $couponid));
 	if (empty($coupon)) {
@@ -332,7 +333,8 @@ function activity_token_use($uid, $couponid, $operator, $recid = '', $module = '
 		'status' => 2,
 		'usemodule' => $module,
 		'usetime' => TIMESTAMP,
-		'operator' => $operator
+		'operator' => $operator,
+		'clerk_id' => $clerk_id,
 	);
 	pdo_update('activity_coupon_record', $update, array('recid' => $precord['recid']));
 	return true;
@@ -375,7 +377,7 @@ function activity_goods_grant($uid, $exid){
 		$insert = array(
 		'tid' => $insert_id,
 		'uniacid' => $_W['uniacid'],
-		'uid' => $_W['member']['uid'],
+		'uid' => $uid,
 		'status' => 0,
 		'exid' => $exid,
 		'createtime' => TIMESTAMP

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * [Weizan System] Copyright (c) 2014 012WZ.COM
  * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
@@ -6,31 +6,32 @@
 load()->func('communication');
 load()->model('cloud');
 $r = cloud_prepare();
-if(is_error($r)) {
+if (is_error($r)) {
 	message($r['message'], url('cloud/profile'), 'error');
 }
 
 $step = $_GPC['step'];
 $steps = array('files', 'schemas', 'scripts');
 $step = in_array($step, $steps) ? $step : 'files';
-if($step == 'files' && $_W['ispost']) {
+
+if ($step == 'files' && $_W['ispost']) {
 	$post = $_GPC['__input'];
 	$ret = cloud_download($post['path'], $post['type']);
-	if(!is_error($ret)) {
+	if (!is_error($ret)) {
 		exit('success');
 	}
 	exit();
 }
-if($step == 'scripts' && $_W['ispost']) {
+
+if ($step == 'scripts' && $_W['ispost']) {
 	$post = $_GPC['__input'];
 	$fname = $post['fname'];
 	$entry = IA_ROOT . '/data/update/' . $fname;
-	if(is_file($entry) && preg_match('/^update\(\d{12}\-\d{12}\)\.php$/', $fname)) {
+	if (is_file($entry) && preg_match('/^update\(\d{12}\-\d{12}\)\.php$/', $fname)) {
 		$evalret = include $entry;
-		if(!empty($evalret)) {
+		if (!empty($evalret)) {
 			cache_build_users_struct();
 			cache_build_setting();
-			cache_build_modules();
 			@unlink($entry);
 			exit('success');
 		}
@@ -43,6 +44,12 @@ if (!empty($_GPC['m'])) {
 	$type = 'module';
 	$is_upgrade = intval($_GPC['is_upgrade']);
 	$packet = cloud_m_build($_GPC['m']);
+
+		if (is_numeric($packet['upgrade_version'])) {
+		foreach ($packet['files'] as &$packet_file) {
+			$packet_file .= '/' . $packet['upgrade_version'];
+		}
+	}
 } elseif (!empty($_GPC['t'])) {
 	$m = $_GPC['t'];
 	$type = 'theme';
@@ -51,44 +58,43 @@ if (!empty($_GPC['m'])) {
 } else {
 	$packet = cloud_build();
 }
-
-if($step == 'schemas' && $_W['ispost']) {
+if ($step == 'schemas' && $_W['ispost']) {
 	$post = $_GPC['__input'];
 	$tablename = $post['table'];
-	foreach($packet['schemas'] as $schema) {
-		if(substr($schema['tablename'], 4) == $tablename) {
+	foreach ($packet['schemas'] as $schema) {
+		if (substr($schema['tablename'], 4) == $tablename) {
 			$remote = $schema;
 			break;
 		}
 	}
-	if(!empty($remote)) {
+	if (!empty($remote)) {
 		load()->func('db');
 		$local = db_table_schema(pdo(), $tablename);
 		$sqls = db_table_fix_sql($local, $remote);
 		$error = false;
-		foreach($sqls as $sql) {
-			if(pdo_query($sql) === false) {
+		foreach ($sqls as $sql) {
+			if (pdo_query($sql) === false) {
 				$error = true;
 				$errormsg .= pdo_debug(false);
 				break;
 			}
 		}
-		if(!$error) {
+		if (!$error) {
 			exit('success');
 		}
 	}
 	exit;
 }
 
-if(!empty($packet) && (!empty($packet['upgrade']) || !empty($packet['install']))) {
+if (!empty($packet) && (!empty($packet['upgrade']) || !empty($packet['install']))) {
 	$schemas = array();
-	if(!empty($packet['schemas'])) {
-		foreach($packet['schemas'] as $schema) {
+	if (!empty($packet['schemas'])) {
+		foreach ($packet['schemas'] as $schema) {
 			$schemas[] = substr($schema['tablename'], 4);
 		}
 	}
-		$scripts = array();
-	if(empty($packet['install'])) {
+	$scripts = array();
+	if (empty($packet['install'])) {
 		$updatefiles = array();
 		if (!empty($packet['scripts']) && empty($packet['type'])) {
 			$updatedir = IA_ROOT . '/data/update/';
@@ -97,14 +103,14 @@ if(!empty($packet) && (!empty($packet['upgrade']) || !empty($packet['install']))
 			mkdirs($updatedir);
 			$cversion = IMS_VERSION;
 			$crelease = IMS_RELEASE_DATE;
-			foreach($packet['scripts'] as $script) {
-				if($script['release'] <= $crelease) {
+			foreach ($packet['scripts'] as $script) {
+				if ($script['release'] <= $crelease) {
 					continue;
 				}
 				$fname = "update({$crelease}-{$script['release']}).php";
 				$crelease = $script['release'];
 				$script['script'] = @base64_decode($script['script']);
-				if(empty($script['script'])) {
+				if (empty($script['script'])) {
 					$script['script'] = <<<DAT
 <?php
 load()->model('setting');

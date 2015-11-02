@@ -2,7 +2,7 @@
 /**
  * 调用第三方数据接口处理类
  * 
- * [WeEngine System] Copyright (c) 2013 012wz.com
+ * [WeiZan System] Copyright (c) 2013 012wz.com
  */
 defined('IN_IA') or exit('Access Denied');
 class Meepo_weixiangqinModuleProcessor extends WeModuleProcessor {

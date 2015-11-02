@@ -24,7 +24,6 @@ $_GPC['__entry'] = $entry['title'];
 $_GPC['__state'] = $entry['state'];
 
 define('IN_MODULE', $entry['module']);
-init_quickmenus($multiid);
 
 $site = WeUtility::createModuleSite($entry['module']);
 if(!is_error($site)) {

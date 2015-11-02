@@ -1,7 +1,7 @@
 {php $newUI = true;}
 {template 'common/header'}
 <script type="text/javascript">
-	require(['angular', 'jquery', 'util'], function(angular, $, u){
+	require(['angular'], function(angular){
 		angular.module('app', []).controller('ucSetting', function($scope, $http) {
 			$scope.uc = {php echo json_encode($uc);};
 		});
@@ -39,54 +39,54 @@
 		$("#form1").submit(function(){
 			if($(':radio[name="status"]:checked').val()=='1'){
 				if($.trim($(':text[name="title"]').val()) == '') {
-					u.message('必须输入通行证名称.', '', 'error');
+					util.message('必须输入通行证名称.', '', 'error');
 					return false;
 				}
 				var appid = parseInt($(':text[name="appid"]').val());
 				if(isNaN(appid)) {
-					u.message('必须输入UCenter应用的ID.', '', 'error');
+					util.message('必须输入UCenter应用的ID.', '', 'error');
 					return false;
 				}
 				if($.trim($(':text[name="key"]').val()) == '') {
-					u.message('必须输入与UCenter的通信密钥.', '', 'error');
+					util.message('必须输入与UCenter的通信密钥.', '', 'error');
 					return false;
 				}
 				if($.trim($(':text[name="charset"]').val()) == '') {
-					u.message('必须输入UCenter的字符集.', '', 'error');
+					util.message('必须输入UCenter的字符集.', '', 'error');
 					return false;
 				}
 				if($(':radio[name="connect"]:checked').val() == 'mysql') {
 					if($.trim($(':text[name="dbhost"]').val()) == '') {
-						u.message('必须输入UCenter数据库主机地址.', '', 'error');
+						util.message('必须输入UCenter数据库主机地址.', '', 'error');
 						return false;
 					}
 					if($.trim($(':text[name="dbuser"]').val()) == '') {
-						u.message('必须输入UCenter数据库用户名.', '', 'error');
+						util.message('必须输入UCenter数据库用户名.', '', 'error');
 						return false;
 					}
 					if($.trim($(':text[name="dbpw"]').val()) == '') {
-						u.message('必须输入UCenter数据库密码.', '', 'error');
+						util.message('必须输入UCenter数据库密码.', '', 'error');
 						return false;
 					}
 					if($.trim($(':text[name="dbname"]').val()) == '') {
-						u.message('必须输入UCenter数据库名称.', '', 'error');
+						util.message('必须输入UCenter数据库名称.', '', 'error');
 						return false;
 					}
 					if($.trim($(':text[name="dbcharset"]').val()) == '') {
-						u.message('必须输入UCenter数据库字符集.', '', 'error');
+						util.message('必须输入UCenter数据库字符集.', '', 'error');
 						return false;
 					}
 					if($.trim($(':text[name="dbtablepre"]').val()) == '') {
-						u.message('必须输入UCenter数据表前缀.', '', 'error');
+						util.message('必须输入UCenter数据表前缀.', '', 'error');
 						return false;
 					}
 				} else if($(':radio[name="connect"]:checked').val() == 'http'){
 					if($.trim($(':text[name="api"]').val()) == '') {
-						u.message('必须输入UCenter 服务端的URL地址.', '', 'error');
+						util.message('必须输入UCenter 服务端的URL地址.', '', 'error');
 						return false;
 					}
 					if($.trim($(':text[name="ip"]').val()) == '') {
-						u.message('必须输入UCenter的IP.', '', 'error');
+						util.message('必须输入UCenter的IP.', '', 'error');
 						return false;
 					}
 				}

@@ -6,21 +6,22 @@
 defined('IN_IA') or exit('Access Denied');
 
 $do = $_GPC['do'];
-$dos = array('deny', 'delete', 'auth', 'revo', 'revos', 'select', 'role');
+$dos = array('deny', 'delete', 'auth', 'revo', 'revos', 'select', 'role', 'user');
 $do = in_array($do, $dos) ? $do: 'edit';
-
-if (empty($_W['isfounder'])) {
-	message('您无权限进行该操作！', referer(), 'error');
-}
 $uniacid = intval($_GPC['uniacid']);
 
+$state = uni_permission($_W['uid'], $uniacid);
+if($state != 'founder' && $state != 'manager') {
+	message('没有该公众号操作权限！', url('accound/display'), 'error');
+}
+
 if($do == 'edit') {
-	$_W['page']['title'] = '账号操作员列表 - 编辑主公众号';
+	$_W['page']['title'] = '账号操作员列表';
 	$account = pdo_fetch("SELECT * FROM ".tablename('uni_account')." WHERE uniacid = :uniacid", array(':uniacid' => $uniacid));
 	if (empty($account)) {
 		message('抱歉，您操作的公众号不存在或是已经被删除！');
 	}
-	$permission = pdo_fetchall("SELECT id, uid, role FROM ".tablename('uni_account_users')." WHERE uniacid = '$uniacid'", array(), 'uid');
+	$permission = pdo_fetchall("SELECT id, uid, role FROM ".tablename('uni_account_users')." WHERE uniacid = '$uniacid' ORDER BY uid ASC, role DESC", array(), 'uid');
 	if (!empty($permission)) {
 		$member = pdo_fetchall("SELECT username, uid FROM ".tablename('users')." WHERE uid IN (".implode(',', array_keys($permission)).")", array(), 'uid');
 	}
@@ -33,6 +34,9 @@ if($do == 'edit') {
 }
 
 if ($do == 'auth') {
+	if(!$_W['isfounder']) {
+		exit('您没有进行该操作的权限');
+	}
 	$uids = $_GPC['uid'];
 	if(empty($uids) || !is_array($uids) || empty($uniacid)) {
 		exit('error');
@@ -40,15 +44,12 @@ if ($do == 'auth') {
 	foreach($uids as $v) {
 		$tmpuid = intval($v);
 		$data = array(
-				'uniacid' => $uniacid,
-				'uid' => $tmpuid,
-				'role' => 'manager',
+			'uniacid' => $uniacid,
+			'uid' => $tmpuid,
 		);
-		if ($_GPC['reference'] == 'solution') {
-			$data['role'] = 'operator';
-		}
 		$exists = pdo_fetch("SELECT * FROM ".tablename('uni_account_users')." WHERE uid = :uid AND uniacid = :uniacid", array(':uniacid' => $uniacid, ':uid' => $tmpuid));
 		if(empty($exists)) {
+			$data['role'] = 'operator';
 			pdo_insert('uni_account_users', $data);
 		}
 	}
@@ -113,4 +114,26 @@ if ($do == 'role') {
 	$role = !empty($_GPC['role']) && in_array($_GPC['role'], array('operator', 'manager')) ? $_GPC['role'] : 'operator';
 	$state = pdo_update('uni_account_users', array('role' => $role), array('uid' => $uid, 'uniacid' => $uniacid));
 	if($state === false) exit('error'); else exit('success');
+}
+
+if($do == 'user') {
+	load()->model('user');
+	$post = array();
+	$post['username'] = trim($_GPC['username']);
+	$user = user_single($post);
+	if(!empty($user)) {
+		$data = array(
+			'uniacid' => $uniacid,
+			'uid' => $user['uid'],
+		);
+		$exists = pdo_fetch("SELECT * FROM ".tablename('uni_account_users')." WHERE uid = :uid AND uniacid = :uniacid", array(':uniacid' => $uniacid, ':uid' => $user['uid']));
+		if(empty($exists)) {
+			$data['role'] = 'operator';
+			pdo_insert('uni_account_users', $data);
+		} else {
+			exit("{$post['username']} 已经是该公众号的操作员或管理员，请勿重复添加");
+		}
+		exit('success');
+	}
+	exit('用户不存在或已被删除！');
 }

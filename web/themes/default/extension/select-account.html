@@ -24,16 +24,14 @@
 		</div>
 	</form>
 	<script>
-		require(['jquery', 'util'], function($, u){
-			$('#form1').submit(function(){
-				var accs = $(this).find('select')[0];
-				var acc = accs.options[accs.options.selectedIndex];
-				if(acc.value == '') {
-					u.message('请选择要安装模块的公众账号.');
-					return false;
-				}
-				return confirm("确定要将 {$module['title']} 安装至" + acc.text + "?");
-			});
+		$('#form1').submit(function(){
+			var accs = $(this).find('select')[0];
+			var acc = accs.options[accs.options.selectedIndex];
+			if(acc.value == '') {
+				u.message('请选择要安装模块的公众账号.');
+				return false;
+			}
+			return confirm("确定要将 {$module['title']} 安装至" + acc.text + "?");
 		});
 	</script>
 	<div class="alert alert-danger">

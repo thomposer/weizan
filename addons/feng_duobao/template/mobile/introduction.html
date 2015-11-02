@@ -16,11 +16,14 @@
 <div class="g-body">
     <div class="m-help">
 	<div class="m-simpleHeader" id="dvHeader">
-	    <!-- <a href="javascript:history.back(-1);" data-pro="back" data-back="true" class="m-simpleHeader-back"><i class="ico-back"></i></a> -->
+	    <a href="javascript:history.back(-1);" data-pro="back" data-back="true" class="m-simpleHeader-back"><i class="ico-back"></i></a>
 	    <h1>什么是一元夺宝</h1>
 	</div>
         <!-- 正文 -->
         <div class="g-wrap">
+            {if !empty($share_data['int_desc'])}
+            {php echo $share_data['int_desc']}
+            {else}
             <div class="m-help-main">
                 <h3>一元夺宝</h3>
                 <div class="m-help-main-txt">
@@ -41,8 +44,8 @@
                     <li><span class="index">1</span>奖品的最后一个号码分配完毕后，将随机产生幸运号码；</li>
                     <li><span class="index">2</span>最终产生幸运号码，拥有该幸运号码者，直接获得该奖品。</li>
                 </ol>
-
             </div>
+            {/if}
         </div>
     </div>
 </div>

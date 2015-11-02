@@ -12,22 +12,22 @@ function app_navs($type = 'home', $multiid = 0, $section = 0) {
 	$pos['home'] = 1;
 	$pos['profile'] = 2;
 	$pos['shortcut'] = 3;
-	if(empty($multiid) && $type != 'profile') {
+	if (empty($multiid) && $type != 'profile') {
 		load()->model('account');
 		$setting = uni_setting($_W['uniacid'], array('default_site'));
 		$multiid = $setting['default_site'];
 	}
-	$sql = "SELECT id,name, description, url, icon, css, position, module FROM ".tablename('site_nav')." WHERE position = '{$pos[$type]}' AND status = 1 AND uniacid = '{$_W['uniacid']}' AND multiid = '{$multiid}' ORDER BY displayorder DESC, id DESC";
+	$sql = "SELECT id,name, description, url, icon, css, position, module FROM " . tablename('site_nav') . " WHERE position = '{$pos[$type]}' AND status = 1 AND uniacid = '{$_W['uniacid']}' AND multiid = '{$multiid}' ORDER BY displayorder DESC, id DESC";
 	$navs = pdo_fetchall($sql);
 	if (!empty($navs)) {
 		foreach ($navs as &$row) {
 			if (!strexists($row['url'], 'tel:') && !strexists($row['url'], '://') && !strexists($row['url'], 'www') && !strexists($row['url'], 'i=')) {
 				$row['url'] .= strexists($row['url'], '?') ? "&i={$_W['uniacid']}" : "?i={$_W['uniacid']}";
 			}
-			if(is_serialized($row['css'])){
+			if (is_serialized($row['css'])) {
 				$row['css'] = unserialize($row['css']);
 			}
-			if(empty($row['css']['icon']['icon'])){
+			if (empty($row['css']['icon']['icon'])) {
 				$row['css']['icon']['icon'] = 'fa fa-external-link';
 			}
 			if ($row['position'] == '3') {

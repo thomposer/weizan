@@ -35,7 +35,8 @@ class cachemodel {
 		);
 	}
 
-		function updatedata($cachefile = '') {
+	//public
+	function updatedata($cachefile = '') {
 		if($cachefile) {
 			foreach((array)$this->map[$cachefile] as $modules) {
 				$s = "<?php\r\n";
@@ -63,7 +64,8 @@ class cachemodel {
 
 	}
 
-		function _get_badwords() {
+	//private
+	function _get_badwords() {
 		$data = $this->db->fetch_all("SELECT * FROM ".UC_DBTABLEPRE."badwords");
 		$return = array();
 		if(is_array($data)) {
@@ -75,7 +77,8 @@ class cachemodel {
 		return $return;
 	}
 
-		function _get_apps() {
+	//private
+	function _get_apps() {
 		$this->base->load('app');
 		$apps = $_ENV['app']->get_apps();
 		$apps2 = array();

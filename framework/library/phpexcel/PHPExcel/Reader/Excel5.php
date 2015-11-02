@@ -239,7 +239,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
 	private $_formats;
 
 	/**
-	 * Shared fonts
+	 * Shared font
 	 *
 	 * @var array
 	 */

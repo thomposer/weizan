@@ -43,7 +43,7 @@
 	{/loop}
 </div>
 	<script>
-		require(['chart', 'jquery', 'daterangepicker'], function(c, $){
+		require(['chart', 'daterangepicker'], function(c){
 			$('.daterange').on('apply.daterangepicker', function(ev, picker) {
 				$('#form1')[0].submit();
 			});

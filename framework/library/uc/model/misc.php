@@ -35,7 +35,8 @@ class miscmodel {
 	function update_app($appid, $name, $url, $authkey, $charset, $dbcharset) {
 	}
 
-		function alter_app_table($appid, $operation = 'ADD') {
+	//private
+	function alter_app_table($appid, $operation = 'ADD') {
 	}
 
 	function get_host_by_url($url) {
@@ -60,7 +61,8 @@ class miscmodel {
 	}
 
 	function dfopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE	, $ip = '', $timeout = 15, $block = TRUE, $encodetype  = 'URLENCODE') {
-				$return = '';
+		//error_log("[uc_client]\r\nurl: $url\r\npost: $post\r\n\r\n", 3, 'c:/log/php_fopen.txt');
+		$return = '';
 		$matches = parse_url($url);
 		$host = $matches['host'];
 		$path = $matches['path'] ? $matches['path'].($matches['query'] ? '?'.$matches['query'] : '') : '/';
@@ -69,7 +71,8 @@ class miscmodel {
 		if($post) {
 			$out = "POST $path HTTP/1.0\r\n";
 			$out .= "Accept: */*\r\n";
-						$out .= "Accept-Language: zh-cn\r\n";
+			//$out .= "Referer: $boardurl\r\n";
+			$out .= "Accept-Language: zh-cn\r\n";
 			$boundary = $encodetype == 'URLENCODE' ? '' : ';'.substr($post, 0, trim(strpos($post, "\n")));
 			$out .= $encodetype == 'URLENCODE' ? "Content-Type: application/x-www-form-urlencoded\r\n" : "Content-Type: multipart/form-data$boundary\r\n";
 			$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
@@ -82,7 +85,8 @@ class miscmodel {
 		} else {
 			$out = "GET $path HTTP/1.0\r\n";
 			$out .= "Accept: */*\r\n";
-						$out .= "Accept-Language: zh-cn\r\n";
+			//$out .= "Referer: $boardurl\r\n";
+			$out .= "Accept-Language: zh-cn\r\n";
 			$out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
 			$out .= "Host: $host\r\n";
 			$out .= "Connection: Close\r\n";

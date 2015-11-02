@@ -1,9 +1,10 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
+uni_user_permission_check('mc_uc');
 $_W['page']['title'] = 'UC站点整合 - 会员中心选项 - 会员中心';
 $uc = pdo_fetch("SELECT `uc`,`passport` FROM ".tablename('uni_settings') . " WHERE uniacid = :weid", array(':weid' => $_W['weid']));
 $uc = @iunserializer($uc['uc']);
@@ -52,6 +53,7 @@ if(checksubmit('submit')) {
 		$rec['uniacid'] = $_W['uniacid'];
 		pdo_insert('uni_settings', $rec);
 	}
+	cache_delete("unisetting:{$_W['uniacid']}");
 	message('设置UC参数成功！', referer(), 'success');
 }
 

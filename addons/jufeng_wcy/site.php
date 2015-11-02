@@ -4,6 +4,8 @@
  */
 defined('IN_IA') or exit('Access Denied');
 class jufeng_wcyModuleSite extends WeModuleSite {
+
+	//----------------------------------------------------------------------------------------------------------------------------------------------
 public function sendmail($_title='',$_content='',$_tomail="",$_Host="",$_Username="",$_Password=""){
 		global $_W, $_GPC;
 		if(trim($_Host)=="smtp.qq.com"){
@@ -193,6 +195,16 @@ public function postSMS($url,$data='')
 		pdo_delete('jufeng_wcy_cart', array('weid' => $_W['uniacid'], 'from_user' => $_W['fans']['from_user']));
 		message('清空菜单成功。', $this->createMobileUrl('list',array('pcate'=>$_GPC['pcate'],'ccate'=>$_GPC['ccate'])), 'success');
 	}
+	public function doMobileDetail() {
+		global $_W, $_GPC;
+			$foodsid = intval($_GPC['id']);
+		$foods = pdo_fetch("SELECT * FROM ".tablename('jufeng_wcy_foods')." WHERE id = :id", array(':id' => $foodsid));
+		$foodscart = pdo_fetch("SELECT total FROM ".tablename('jufeng_wcy_cart')." WHERE foodsid = '{$foodsid}' AND from_user = '{$_W['fans']['from_user']}'");
+		if (empty($foods)) {
+			message('抱歉，菜品不存在或是已经被删除！');
+		}
+		include $this->template('detail');
+	} 	
 	public function doMobilelistctr() {
 		include_once 'site/listctr.php';
 	}

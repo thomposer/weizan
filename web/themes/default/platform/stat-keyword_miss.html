@@ -27,7 +27,7 @@
 						
 						<td>{if $rules[$row['rid']]['module']}{$rules[$row['rid']]['module']}{else}default{/if}</td>
 						<td>
-							<a target="main" href="{php echo url('platform/stat/trend', array('id' => $row['rid']))}" class="btn btn-default btn-sm" title="使用率走势"><i class="fa fa-bar-chart-o"></i></a>
+							<a target="main" href="{php echo url('platform/stat/trend', array('id' => $row['rid']))}" title="使用率走势">使用率走势</a>
 						</td>
 					</tr>
 					{/loop}

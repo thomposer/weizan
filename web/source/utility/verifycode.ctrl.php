@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $_W['uniacid'] = intval($_GPC['uniacid']);
@@ -21,6 +21,13 @@ if($receiver == ''){
 	exit('您输入的邮箱或手机号格式错误');
 }
 
+$table = trim($_GPC['table']);
+if(!empty($table)) {
+	$isexist = pdo_get($table, array($receiver_type => $receiver, 'uniacid' => $_W['uniacid'] ));
+	if(!empty($isexist)) {
+		exit('手机或邮箱已被注册');
+	}
+}
 
 $sql = 'DELETE FROM ' . tablename('uni_verifycode') . ' WHERE `createtime`<' . (TIMESTAMP - 1800);
 pdo_query($sql);
@@ -56,10 +63,14 @@ if($receiver_type == 'email') {
 	$content = "您的邮箱验证码为: {$code} 您正在使用{$uniacid_arr['name']}相关功能, 需要你进行身份确认.";
 	$result = ihttp_email($receiver, "{$uniacid_arr['name']}身份确认验证码", $content);
 } else {
+	load()->model('cloud');
+	$r = cloud_prepare();
+	if(is_error($r)) {
+		exit($r['message']);
+	}
 	$setting = uni_setting($_W['uniacid'], 'notify');
 	$content = "您的短信验证码为: {$code} 您正在使用{$uniacid_arr['name']}相关功能, 需要你进行身份确认. ".random(3);
-        
-	load()->func('sms');$result  =  sms_send($receiver, $content);
+	$result = cloud_sms_send($receiver, $content);
 }
 
 if(is_error($result)) {

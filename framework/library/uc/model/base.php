@@ -214,7 +214,11 @@ class base {
 	function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
 		return uc_authcode($string, $operation, $key, $expiry);
 	}
+/*
+	function serialize() {
 
+	}
+*/
 	function unserialize($s) {
 		return uc_unserialize($s);
 	}

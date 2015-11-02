@@ -1,10 +1,10 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-
+uni_user_permission_check('platform_special');
 $dos = array('display', 'set', 'cancel', 'message', 'search_key');
 $do = !empty($_GPC['do']) && in_array($do, $dos) ? $do : 'display';
 
@@ -45,6 +45,7 @@ if($do == 'display') {
 			$settings['uniacid'] = $_W['uniacid'];
 			pdo_insert('uni_settings', $settings);
 		}
+		cache_delete("unisetting:{$_W['uniacid']}");
 		message('系统回复更新成功！', url('platform/special/display'));
 	}
 	$setting = uni_setting($_W['uniacid'], array('default', 'welcome'));
@@ -62,7 +63,6 @@ if($do == 'message') {
 	$mtypes['location'] = '位置消息';
 	$mtypes['trace'] = '上报地理位置';
 	$mtypes['link'] = '链接消息';
-	$mtypes['enter'] = '进入聊天窗口';
 	$mtypes['merchant_order'] = '微小店消息';
 	if(checksubmit()) {
 		$s = array_elements(array_keys($mtypes), $_GPC);
@@ -78,6 +78,7 @@ if($do == 'message') {
 		$row = array();
 		$row['default_message'] = iserializer($s);
 		if(pdo_update('uni_settings', $row, array('uniacid' => $_W['uniacid']))!== FALSE) {
+			cache_delete("unisetting:{$_W['uniacid']}");
 			message('保存特殊类型消息处理成功.', 'refresh');
 		} else {
 			message('保存失败, 请稍后重试. ');
@@ -122,6 +123,7 @@ if($do == 'set') {
 		);
 	}
 	pdo_update('uni_settings', $data, array('uniacid' => $_W['uniacid']));
+	cache_delete("unisetting:{$_W['uniacid']}");
 	message('设置系统回复更新成功！', referer(), 'success');
 }
 
@@ -136,6 +138,7 @@ if($do == 'cancel') {
 		);
 	}
 	pdo_update('uni_settings', $data, array('uniacid' => $_W['uniacid']));
+	cache_delete("unisetting:{$_W['uniacid']}");
 	message('取消系统回复成功！', referer(), 'success');
 }
 

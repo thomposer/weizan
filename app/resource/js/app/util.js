@@ -9,7 +9,7 @@ define(['bootstrap', 'webuploader' ], function($, WebUploader){
 		return result[1]; 
 	}
 	
-	module.tomedia = function(src){
+	module.tomedia = function(src, local_path){
 		if(src.indexOf('http://') == 0 || src.indexOf('https://') == 0) {
 			return src;
 		} else if(src.indexOf('../addons') == 0 || src.indexOf('../attachment') == 0) {
@@ -19,7 +19,11 @@ define(['bootstrap', 'webuploader' ], function($, WebUploader){
 			src=src.substr(2);
 			return window.sysinfo.siteroot + 'app/' + src;
 		} else if(src.indexOf('images/') == 0) {
-			return window.sysinfo.attachurl+ src;
+			if(!local_path) {
+				return window.sysinfo.attachurl.src;
+			} else {
+				return window.sysinfo.attachurl_local.src;
+			}
 		}
 	};
 	
@@ -275,6 +279,9 @@ define(['bootstrap', 'webuploader' ], function($, WebUploader){
 		var params = {};
 		params.receiver = no;
 		params.uniacid = $(elm).attr('uniacid');
+		if($(elm).attr('table')) {
+			params.table = $(elm).attr('table');
+		}
 		$.post('../web/index.php?c=utility&a=verifycode', params).success(function(dat){
 			if(dat == 'success') {
 				if($.isFunction(callback)) {
@@ -343,7 +350,7 @@ define(['bootstrap', 'webuploader' ], function($, WebUploader){
 				});
 			} else {
 				if($.isFunction(callback)){
-					callback(result.result);
+					callback(result);
 				}
 				uploader.reset();
 				module.loaded();

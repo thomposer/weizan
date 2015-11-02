@@ -5,7 +5,7 @@
  */
 defined('IN_IA') or exit('Access Denied');
 load()->model('app');
-$dos = array('display', 'credits', 'address', 'card', 'mycard', 'mobile', 'email', 'barcode', 'qrcode');
+$dos = array('display', 'credits', 'address', 'card', 'mycard', 'record', 'mobile', 'email', 'barcode', 'qrcode', 'consume', 'card_qrcode');
 $do = in_array($do, $dos) ? $do : 'display';
 load()->func('tpl');
 load()->model('user');
@@ -112,7 +112,6 @@ if ($do == 'address') {
 	} else {
 		$address = pdo_fetch($sql, $params);
 	}
-
 }
 
 
@@ -129,9 +128,15 @@ if ($do == 'card') {
 		$setting['color'] = iunserializer($setting['color']);
 		$setting['background'] = iunserializer($setting['background']);
 		$setting['fields'] = iunserializer($setting['fields']);
+		$setting['grant'] = iunserializer($setting['grant']);
+		$coupon_id = intval($setting['grant']['coupon']);
+		if($coupon_id > 0) {
+			$coupon = pdo_fetch('SELECT couponid,title,type FROM ' . tablename('activity_coupon') . ' WHERE uniacid = :uniacid AND couponid = :couponid', array(':uniacid' => $_W['uniacid'], ':couponid' => $coupon_id));
+		}
 	} else {
 		message('公众号尚未开启会员卡功能', url('mc'), 'error');
 	}
+
 	if(!empty($setting['fields'])) {
 		$fields = array();
 		foreach($setting['fields'] as $li) {
@@ -148,13 +153,26 @@ if ($do == 'card') {
 			}
 		}
 		$member_info = mc_fetch($_W['member']['uid'], $fields);
+		if(strlen($member_info['email']) == 39 && strexists($member_info['email'], '@012wz.com')) {
+			$member_info['email'] = '';
+		}
 	}
 	if (checksubmit('submit')) {
 		$data = array();
 		if (!empty($setting['fields'])) {
 			foreach ($setting['fields'] as $row) {
 				if (!empty($row['require']) && empty($_GPC[$row['bind']])) {
-					message('请输入'.$row['title'].'！');
+					message('请输入'.$row['title'].'！', referer(), 'info');
+				}
+				if(!empty($row['require']) && $row['bind'] == 'birth') {
+					if (empty($_GPC['birth']['year']) || empty($_GPC['birth']['month']) || empty($_GPC['birth']['day'])) {
+						message('请输入完整的出生日期！', referer(), 'info');
+					}
+				}
+				if(!empty($row['require']) && $row['bind'] == 'reside') {
+					if (empty($_GPC['reside']['province']) || empty($_GPC['reside']['city']) || empty($_GPC['reside']['district'])) {
+						message('请输入完整的居住地！', referer(), 'info');
+					}
 				}
 				$data[$row['bind']] = $_GPC[$row['bind']];
 			}
@@ -180,12 +198,14 @@ if ($do == 'card') {
 		pdo_update('mc_card', array('snpos' => $_GPC['snpos']), array('uniacid' => $_W['uniacid'], 'id' => $_GPC['cardid']));
 		
 		$record = array(
-				'uniacid' => $_W['uniacid'],
-				'uid' => $_W['member']['uid'],
-				'cid' => $_GPC['cardid'],
-				'cardsn' => $cardsn,
-				'status' => '1',
-				'createtime' => TIMESTAMP
+			'uniacid' => $_W['uniacid'],
+			'openid' => $_W['openid'],
+			'uid' => $_W['member']['uid'],
+			'cid' => $_GPC['cardid'],
+			'cardsn' => $cardsn,
+			'status' => '1',
+			'createtime' => TIMESTAMP,
+			'endtime' => TIMESTAMP
 		);
 		$check = mc_check($data);
 		if(is_error($check)) {
@@ -195,7 +215,41 @@ if ($do == 'card') {
 			if(!empty($data)){
 				mc_update($_W['member']['uid'], $data);
 			}
-			message('领取会员卡成功.', url('mc/bond/mycard'), 'success');
+						$notice = '';
+			if($setting['grant']['credit1'] > 0) {
+				$log = array(
+					$_W['member']['uid'],
+					"领取会员卡，赠送{$setting['grant']['credit1']}积分"
+				);
+				mc_credit_update($_W['member']['uid'], 'credit1', $setting['grant']['credit1'], $log);
+				$notice .= "赠送【{$setting['grant']['credit1']}】积分";
+			}
+			if($setting['grant']['credit2'] > 0) {
+				$log = array(
+					$_W['member']['uid'],
+					"领取会员卡，赠送{$setting['credit2']['credit1']}余额"
+				);
+				mc_credit_update($_W['member']['uid'], 'credit2', $setting['grant']['credit2'], $log);
+				$notice .= ",赠送【{$setting['grant']['credit2']}】余额";
+			}
+			if($setting['grant']['coupon'] > 0 && !empty($coupon)) {
+				if($coupon['type'] == 1) {
+					$status = activity_coupon_grant($_W['member']['uid'], $coupon['couponid'], 'card', '领取会员卡，赠送优惠券');
+				} else {
+					$status = activity_token_grant($_W['member']['uid'], $coupon['couponid'], 'card', '领取会员卡，赠送优惠券');
+				}
+				if(!is_error($status)) {
+					$notice .= ",赠送【{$coupon['title']}】优惠券";
+				}
+			}
+
+			$time = date('Y-m-d H:i');
+			$url = murl('mc/bond/mycard/', array(), true, true);
+			$info = "【{$_W['account']['name']}】- 领取会员卡通知\n";
+			$info .= "您在{$time}成功领取会员卡，{$notice}。\n\n";
+			$info .= "<a href='{$url}'>点击查看详情</a>";
+			$status = mc_notice_custom_text($info, $_W['openid']);
+			message("领取会员卡成功<br>{$notice}", url('mc/bond/mycard'), 'success');
 		} else {
 			message('领取会员卡失败.', referer(), 'error');
 		}
@@ -208,14 +262,108 @@ if ($do == 'mycard') {
 	if(empty($mcard)) {
 		header('Location:' . url('mc/bond/card'));
 	}
+	if(empty($mcard['openid']) && !empty($_W['openid'])) {
+		pdo_update('mc_card_members', array('openid' => $_W['openid']), array('uniacid' => $_W['uniacid'], 'uid' => $_W['member']['uid']));
+	}
 	if (!empty($mcard['status'])) {
 		$setting = pdo_fetch('SELECT * FROM ' . tablename('mc_card') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
 		if(!empty($setting)) {
 			$setting['color'] = iunserializer($setting['color']);
 			$setting['background'] = iunserializer($setting['background']);
 			$setting['business'] = iunserializer($setting['business']) ? iunserializer($setting['business']) : array();
+			if(!empty($setting['discount']) && $setting['discount_type'] > 0) {
+				$setting['discount'] = iunserializer($setting['discount']);
+			}
+			if(!empty($setting['nums']) && $setting['nums_status'] == 1) {
+				$setting['nums'] = iunserializer($setting['nums']);
+			}
+			if(!empty($setting['times']) && $setting['times_status'] == 1) {
+				$setting['times'] = iunserializer($setting['times']);
+			}
+			$unisetting = uni_setting($_W['uniacid'], array('recharge'));
+			$recharge =  $unisetting['recharge'];
 		}
 	}
+}
+
+
+if($do == 'consume') {
+	load()->model('card');
+	$setting = card_setting();
+		$stores = pdo_fetchall('SELECT id,business_name FROM ' . tablename('activity_stores') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']), 'id');
+
+	if(checksubmit()) {
+		$credit = floatval($_GPC['credit']);
+		$discount_credit = $credit;
+		$store_id = intval($_GPC['store_id']);
+		$store_str = (!$store_id || empty($stores[$store_id])) ? '未知' : $stores[$store_id]['business_name'];
+		if(!$credit) {
+			message('请输入消费金额', referer(), 'error');
+		}
+				if($setting['discount_type'] > 0 && !empty($setting['discount'])) {
+			$discount = $setting['discount'][$_W['member']['groupid']];
+			if(!empty($discount['condition']) && !empty($discount['discount']) && $credit >= $discount['condition']) {
+				if($setting['discount_type'] == 1) {
+					$discount_credit = $credit - $discount['discount'];
+					$discount_str = "，该会员属于【{$_W['member']['groupname']}】，可享受【满{$discount['condition']}元减{$discount['discount']}元】，最终支付【{$discount_credit}】元";
+				} else {
+					$rate = $discount['discount'];
+					$discount_credit = $credit * $rate;
+					$discount_str = "，该会员属于【{$_W['member']['groupname']}】，可享受【满{$discount['condition']}元打{$rate}折】，最终支付【{$discount_credit}】元";
+				}
+				if($discount_credit < 0) {
+					$discount_credit = 0;
+				}
+			}
+		}
+
+		if($_W['member']['credit2'] < $discount_credit) {
+			message('余额不足', referer(), 'error');
+		}
+				if($setting['grant_rate'] > 0) {
+			$credit1 = $discount_credit * $setting['grant_rate'];
+			$log_credit1 = array(
+				$_W['member']['uid'],
+				"使用会员卡消费【{$discount_credit}】元,消费返积分比率：【1:{$setting['grant_rate']}】,共赠送积分{$credit1}"
+			);
+			mc_credit_update($_W['member']['uid'], 'credit1', $credit1, $log_credit1);
+			$discount_str .= "，消费返积分比率：【1:{$setting['grant_rate']}】,共赠送积分{$credit1}";
+		}
+		$log_credit2 = array(
+			$_W['member']['uid'],
+			"使用会员卡消费【{$credit}】元 {$discount_str},消费门店：{$store_str}"
+		);
+		mc_credit_update($_W['member']['uid'], 'credit2', -$discount_credit, $log_credit2);
+		mc_notice_credit2($_W['openid'], $_W['member']['uid'], -$discount_credit, $credit1, $store_str);
+		message("消费成功，共扣除余额{$discount_credit}元，赠送{$credit1}积分", url('mc/bond/mycard'), 'success');
+	}
+
+	if($setting['discount_type'] != 0 && !empty($setting['discount'])) {
+		$discount = $setting['discount'];
+		if(!empty($discount[$_W['member']['groupid']])) {
+			$tips = "您当前会员组 {$_W['member']['groupname']} ,可享受满 {$discount[$_W['member']['groupid']]['condition']}元";
+			if($setting['discount_type'] == 2) {
+				$rate = $discount[$_W['member']['groupid']]['discount'] * 10;
+				$tips .= "打{$rate}折";
+			} else {
+				$tips .= "减{$discount[$_W['member']['groupid']]['discount']}元";
+			}
+			$mine_discount = $discount[$_W['member']['groupid']];
+		}
+	}
+	$url = $_W['siteroot'] . 'app' . ltrim(murl('clerk/card', array('uid' => $_W['member']['uid'])), '.');
+	template('mc/consume');
+	exit();
+}
+
+
+if($do == 'card_qrcode') {
+	require_once('../framework/library/qrcode/phpqrcode.php');
+	$errorCorrectionLevel = "L";
+	$matrixPointSize = "8";
+	$url = $_W['siteroot'] . 'app' . ltrim(murl('clerk/card', array('uid' => $_W['member']['uid'])), '.');
+	QRcode::png($url, false, $errorCorrectionLevel, $matrixPointSize);
+	exit();
 }
 
 
@@ -261,6 +409,24 @@ if ($do == 'qrcode') {
 	$matrixPointSize = "8";
 	$cardsn = $_W['member']['uid'];
 	QRcode::png($cardsn, false, $errorCorrectionLevel, $matrixPointSize);
+}
+
+if($do == 'record') {
+	$setting = pdo_get('mc_card', array('uniacid' => $_W['uniacid']), array('nums_text', 'times_text'));
+	$card = pdo_get('mc_card_members', array('uniacid' => $_W['uniacid'], 'uid' => $_W['member']['uid']));
+	$type = trim($_GPC['type']);
+	$where = ' WHERE uniacid = :uniacid AND uid = :uid AND type = :type';
+	$params = array(
+		':uniacid' => $_W['uniacid'],
+		':uid' => $_W['member']['uid'],
+		':type' => $type,
+	);
+	$pindex = max(1, intval($_GPC['page']));
+	$psize = 20;
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_card_record') . $where, $params);
+	$limit = ' ORDER BY id DESC LIMIT ' . ($pindex - 1) * $psize . ', ' . $psize;
+	$data = pdo_fetchall('SELECT * FROM ' . tablename('mc_card_record') . $where . $limit, $params);
+	$pager = pagination($total, $pindex, $psize, '', array('before' => 0, 'after' => 0, 'ajaxcallback' => ''));
 }
 
 if($do == 'mobile') {

@@ -79,14 +79,14 @@ function addOption(point, title) {
 								'<span class="input-group-addon">操作附加数据</span>' +
 								'<input class="form-control" name="bindings[' + point + '][state][]" type="text" placeholder="操作附加数据"> ' +
 							'</div>' +
-						'</div>' + 
-						'<div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">' + 
-							'<div style="margin-left:-15px;">' +
-								'<label class="checkbox-inline" style="vertical-align:bottom"> ' +
-									'<input type="hidden" name="bindings[' + point + '][direct][]" value="false" /> ' +
-									'<input type="checkbox" onclick="$(this).prev().val(this.checked ? \'true\' : \'false\');" /> 无需登陆直接展示 ' +
-								'</label> ' +
-								'&nbsp; &nbsp; &nbsp; <a href="javascript:;" onclick="deleteOption(this)" class="fa fa-times-circle" title="删除此操作"></a> ' +
+						'</div>' +
+						'<div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 '+ (point == 'menu' ? 'hide' : '') +'">' +
+								'<div style="margin-left:-15px;">' +
+									'<label class="checkbox-inline" style="vertical-align:bottom"> ' +
+										'<input type="hidden" name="bindings[' + point + '][direct][]" value="false" /> ' +
+										'<input type="checkbox" onclick="$(this).prev().val(this.checked ? \'true\' : \'false\');" /> 无需登陆直接展示 ' +
+									'</label> ' +
+									'&nbsp; &nbsp; &nbsp; <a href="javascript:;" onclick="deleteOption(this)" class="fa fa-times-circle" title="删除此操作"></a> ' +
 							'</div>' +
 						'</div>' +
 					'</div>' +
@@ -261,11 +261,27 @@ function deleteOption(o) {
 								<input type="checkbox" onclick="$(this).prev().val(this.checked ? 'true' : 'false');" /> 无需登陆直接展示
 							</label>
 							&nbsp; &nbsp; &nbsp; <a href="javascript:;" onclick="deleteOption(this)" class="fa fa-times-circle" title="删除此操作"></a>	
-						</div>	
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		{if $point == 'menu' && !$flag}
+		{php $flag = 1;}
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">权限标识</label>
+			<div class="col-sm-10 col-xs-12">
+				<textarea name="permission" class="form-control" cols="30" rows="10" placeholder="添加门店：we7_demo_store_add"></textarea>
+				<span class="help-block">
+					<strong class="text-danger">
+					如果您设计的模块需要对某些操作设置权限，您可以在这里输入权限标识，并在对应的文件进行标识判断<br>
+					权限标识由：标识名称和标识组成。例如,添加门店：we7_demo_store_add"。标识格式：模块名称_标识。例如，名称名称为：we7_demo,标识为：store_add,则对应标识为：we7_demo_store_add<br>
+					标识名称和标识之间使用英文半角“：”隔开。多个权限标识使用换行隔开
+					</strong>
+				</span>
+			</div>
+		</div>
+		{/if}
 		<div class="form-group">
 			<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label"></label>
 			<div class="col-sm-10 col-xs-12">
@@ -277,6 +293,18 @@ function deleteOption(o) {
 			</div>
 		</div>
 		{/loop}
+		<h5 class="page-header">计划任务 <small>这里来定义模块的计划任务<span class="text-danger">(如果您的模块不需要计划任务,跳过此项)</span></small></h5>
+		<div id="cron-container"></div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label"></label>
+			<div class="col-sm-10 col-xs-12">
+				<div class="well well-sm">
+					<a href="javascript:;" onclick="addCronOption();">添加计划任务 <i class="fa fa-plus-circle" title="添加菜单"></i></a>
+				</div>
+				<span class="help-block"><strong>注意: XXXXXX</strong></span>
+			</div>
+		</div>
+
 
 		<h5 class="page-header">模块发布 <small>这里来定义模块发布时需要的配置项</small></h5>
 		<div class="form-group">
@@ -352,6 +380,8 @@ function deleteOption(o) {
 				<span class="help-block">如果您的服务器不能直接读写文件, 请下载后上传至服务器目录 addons/<span class="identifie"></span> 下来编辑开发 </span>
 			</div>
 		</div>
+	</form>
+</div>
 	</form>
 </div>
 {template 'common/footer-gw'}

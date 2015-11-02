@@ -268,17 +268,13 @@
 		});
 		$('#submit').click(function(){
 			var openid = $(':hidden[name="openid"]').val();
-			var acid = $(':hidden[name="acid"]').val();
 			if(!openid) {
 				util.message('粉丝openid丢失', '', 'error');
 				return;
 			}
-
 			var params = {
-				'openid' : openid,
-				'acid' : acid
+				'openid' : openid
 			};
-
 			var msgtype = $('#form0 :radio:checked').val();
 			if(msgtype == '7') {
 				var content = $('#form7 textarea[name="content"]').val();

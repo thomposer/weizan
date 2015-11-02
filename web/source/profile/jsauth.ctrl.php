@@ -1,10 +1,10 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-
+uni_user_permission_check('profile_jsauth');
 $_W['page']['title'] = '功能选项 - 公众号选项 - 借用js分享权限';
 
 $where = '';
@@ -40,6 +40,7 @@ if(checksubmit('submit')) {
 	}
 
 	pdo_update('uni_settings', array('jsauth_acid' => $jsauth_acid), array('uniacid' => $_W['uniacid']));
+	cache_delete("unisetting:{$_W['uniacid']}");
 	message('设置借用 js 分享权限成功', referer() ,'success');
 }
 

@@ -6,7 +6,7 @@
 		<li class="row list-group-item" ng-repeat="item in context.items">
 			<div class="block">
 				<div class="col-xs-12 col-sm-12">
-					<textarea class="form-control content" ng-hide="item.saved" placeholder="添加要回复的内容" ng-model="item.content"></textarea>
+					<textarea class="form-control content" ng-hide="item.saved" placeholder="添加要回复的内容" ng-model="item.content" rows="4" onkeyup="if (this.value.split('\n').length>4) this.rows=this.value.split('\n').length;"></textarea>
 					<p class="form-control-static" ng-show="item.saved" ng-bind-html="item.content | nl2br"></p>
 				</div>
 				<div class="col-xs-12 col-sm-12 help-block">您还可以使用表情和链接。<a class="emotion-triggers" href="javascript:;" ng-init="initEmotion(this);"><i class="fa fa-github-alt"></i> 表情</a> <a class="emoji-triggers" href="javascript:;" ng-click="selectEmoji(this)" title="添加表情"><i class="fa fa-github-alt"></i> Emoji</a></div>

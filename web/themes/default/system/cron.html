@@ -140,8 +140,8 @@
 							<td>{$cron['lastrun']}</td>
 							<td>{$cron['nextrun']}</td>
 							<td>
-								<a title="编辑" href="{php echo url('system/cron/post', array('id' => $cron['cronid']))}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-								<a title="执行" href="{php echo url('system/cron/run', array('id' => $cron['cronid']))}" class="btn btn-default btn-sm"><i class="fa fa-play"></i></a>
+								<a title="编辑" href="{php echo url('system/cron/post', array('id' => $cron['cronid']))}">编辑</a>&nbsp;-&nbsp;
+								<a title="执行" href="{php echo url('system/cron/run', array('id' => $cron['cronid']))}">执行</a>
 							</td>
 						</tr>
 						{/loop}

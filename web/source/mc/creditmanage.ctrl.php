@@ -1,9 +1,11 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
+uni_user_permission_check('mc_creditmanage');
+$_W['page']['title'] = '积分列表 - 会员积分管理 - 会员中心';
 
 $dos = array('display', 'manage', 'modal', 'credit_record', 'stat');
 $do = in_array($do, $dos) ? $do : 'display';
@@ -22,14 +24,13 @@ if($creditnames) {
 }
 
 if($do == 'display') {
-	$_W['page']['title'] = '积分列表 - 会员积分管理 - 会员中心';
-	
 	$where = ' WHERE uniacid = :uniacid ';
 	$params = array(':uniacid' => $_W['uniacid']);
 	$type = intval($_GPC['type']);
 	$keyword = trim($_GPC['keyword']);
-	if($type == 1) {
+	if($type == 1 || $type == '') {
 		$keyword = intval($_GPC['keyword']);
+
 		if ($keyword > 0) {
 			$where .= ' AND uid = :uid';
 			$params[':uid'] = $keyword;
@@ -76,19 +77,36 @@ if($do == 'display') {
 			}
 		}
 		$status = 0;
-	}
+ 	}
 }
 
 if($do == 'manage') {
 	load()->model('mc');
+	$clerk = pdo_get('activity_coupon_password', array('uniacid' => $_W['uniacid'], 'password' => trim($_GPC['password'])));
+	if(empty($clerk)) {
+		message('店员密码错误');
+	}
 	$uid = intval($_GPC['uid']);
 	if($uid) {
 		foreach($creditnames as $index => $creditname) {
 			if(($_GPC[$index . '_type'] == 1 || $_GPC[$index . '_type'] == 2) && $_GPC[$index . '_value']) {
 				$value = $_GPC[$index . '_type'] == 1 ? $_GPC[$index . '_value'] : - $_GPC[$index . '_value'];
-				$return = mc_credit_update($uid, $index, $value, array($_W['uid'], trim($_GPC['remark'])));
+				$return = mc_credit_update($uid, $index, $value, array($_W['uid'], trim($_GPC['remark']), 'system', $clerk['id'], $clerk['store_id']));
 				if(is_error($return)) {
 					message($return['message']);
+				}
+				$openid = pdo_fetchcolumn('SELECT openid FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND uid = :uid', array(':acid' => $_W['acid'], ':uid' => $uid));
+				if(!empty($openid)) {
+					if($index == 'credit1') {
+						mc_notice_credit1($openid, $uid, $value, '管理员后台操作积分');
+					}
+					if($index == 'credit2') {
+						if($value > 0) {
+							mc_notice_recharge($openid, $uid, $value, '', "管理员后台操作余额,增加{$value}余额");
+						} else {
+							mc_notice_credit2($openid, $uid, $value, 0, "管理员后台操作余额,减少{$value}余额");
+						}
+					}
 				}
 			} else {
 				continue;
@@ -122,12 +140,13 @@ if($do == 'credit_record') {
 	$total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('mc_credits_record') . ' WHERE uid = :uid AND uniacid = :uniacid AND credittype = :credittype ', array(':uniacid' => $_W['uniacid'], ':uid' => $uid, ':credittype' => $type));
 	$data = pdo_fetchall("SELECT r.*, u.username FROM " . tablename('mc_credits_record') . ' AS r LEFT JOIN ' .tablename('users') . ' AS u ON r.operator = u.uid ' . ' WHERE r.uid = :uid AND r.uniacid = :uniacid AND r.credittype = :credittype ORDER BY id DESC LIMIT ' . ($pindex - 1) * $psize .',' . $psize, array(':uniacid' => $_W['uniacid'], ':uid' => $uid, ':credittype' => $type));
 	$pager = pagination($total, $pindex, $psize);
+	$modules = pdo_getall('modules', array('issystem' => 0), array('title', 'name'), 'name');
+	$modules['card'] = array('title' => '会员卡', 'name' => 'card');
 	template('mc/credit_record');
 	exit;
 }
 
 if($do == 'stat') {
-	load()->func('tpl');
 	$uid = intval($_GPC['uid']);
 	$credits = array_keys($creditnames);
 	$count = 5 - count($creditnames);

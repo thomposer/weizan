@@ -65,11 +65,10 @@ class Mon_WeiShareModuleSite extends WeModuleSite {
 				if (empty ( $_GPC ['background'] )) {
 					message ( '请选择活动背景颜色!' );
 				}
-				
 				if (empty ( $_GPC ['title'] )) {
 					message ( '请输入活动名称!' );
 				}
-				
+				//$item['title'] = empty($_GPC['title']) ? "微助力活动开始啦！" : $_GPC['title'];
 				if (empty ( $_GPC ['thumb'] )) {
 					message ( '请上传活动图片!' );
 				}
@@ -77,7 +76,7 @@ class Mon_WeiShareModuleSite extends WeModuleSite {
 				if (empty ( $_GPC ['image'] )) {
 					message ( '请上传活动背景图片!' );
 				}
-				
+				//$item['image'] = empty($_GPC['image']) ? "../addons/mon_weishare/images/sharebg.jpg" : $_GPC['image'];
 				if (empty ( $_GPC ['unit'] )) {
 					message ( '请输入积分单位!' );
 				}
@@ -89,9 +88,6 @@ class Mon_WeiShareModuleSite extends WeModuleSite {
 					message ( '请输入初始分值!' );
 				}
 				
-				if (empty ( $_GPC ['image'] )) {
-					message ( '请选择活动背景！' );
-				}
 				
 				if ($_GPC ['steptype'] == 0) {
 					if (empty ( $_GPC ['step'] )) {

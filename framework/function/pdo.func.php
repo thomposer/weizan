@@ -10,7 +10,18 @@ function pdo() {
 	global $_W;
 	static $db;
 	if(empty($db)) {
-		$db = new DB($_W['config']['db']);
+		if($_W['config']['db']['slave_status'] == true && !empty($_W['config']['db']['slave'])) {
+			load()->classs('slave.db');
+			$db = new SlaveDb('master');
+		} else {
+			load()->classs('db');
+			if(empty($_W['config']['db']['master'])) {
+				$db = new DB($_W['config']['db']);
+				$_W['config']['db']['master'] = $GLOBALS['_W']['config']['db'];
+			} else {
+				$db = new DB('master');
+			}
+		}
 	}
 	return $db;
 }
@@ -31,6 +42,19 @@ function pdo_fetch($sql, $params = array()) {
 
 function pdo_fetchall($sql, $params = array(), $keyfield = '') {
 	return pdo()->fetchall($sql, $params, $keyfield);
+}
+
+
+function pdo_get($tablename, $condition = array(), $fields = array()) {
+	return pdo()->get($tablename, $condition, $fields);
+}
+
+function pdo_getall($tablename, $condition = array(), $fields = array(), $keyfield = '') {
+	return pdo()->getall($tablename, $condition, $fields, $keyfield);
+}
+
+function pdo_getslice($tablename, $condition = array(), $limit = array(), &$total = null, $fields = array(), $keyfield = '') {
+	return pdo()->getslice($tablename, $condition, $limit, $total, $fields, $keyfield);
 }
 
 

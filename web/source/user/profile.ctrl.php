@@ -1,22 +1,21 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
 $do = !empty($_GPC['do']) && in_array($_GPC['do'], array('profile','base')) ? $_GPC['do'] : 'profile';
 if ($do == 'profile') {
 	$_W['page']['title'] = '账号信息 - 我的账户 - 用户管理';
+	$sql = "SELECT username, password, salt, groupid, starttime, endtime FROM " . tablename('users') . " WHERE `uid` = '{$_W['uid']}'";
+	$user = pdo_fetch($sql);
+	if (empty($user)) {
+		message('抱歉，用户不存在或是已经被删除！', url('user/profile'), 'error');
+	}
+	$user['groupname'] = pdo_fetchcolumn('SELECT name FROM ' . tablename('users_group') . ' WHERE id = :id', array(':id' => $user['groupid']));
+
 	if (checksubmit('submit')) {
-		$sql = "SELECT username, password, salt FROM " . tablename('users') . " WHERE `username` = '{$_GPC['name']}'";
-		$user = pdo_fetch($sql);
-		if (!strcasecmp($_GPC['name'],'test')) {
-			message('这个是测试账号，不允许修改！', create_url('setting/profile'), 'error');
-		}
-		if (empty($user)) {
-			message('抱歉，用户不存在或是已经被删除！', url('user/profile'), 'error');
-		}
 		if (empty($_GPC['name']) || empty($_GPC['pw']) || empty($_GPC['pw2'])) {
 			message('管理账号或者密码不能为空，请重新填写！', url('user/profile'), 'error');
 		}
@@ -39,7 +38,6 @@ if ($do == 'profile') {
 
 if($do == 'base') {
 	$_W['page']['title'] = '基本信息 - 我的账户 - 用户管理';
-	load()->func('tpl');
 	$extendfields = pdo_fetchall("SELECT field, title, description, required FROM ".tablename('profile_fields')." WHERE available = '1' AND showinregister = '1' ORDER BY displayorder DESC");
 	
 	if (checksubmit('submit')) {

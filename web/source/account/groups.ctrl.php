@@ -11,10 +11,11 @@ if ($do == 'display') {
 	if (checksubmit('submit')) {
 		if (!empty($_GPC['delete'])) {
 			pdo_query("DELETE FROM ".tablename('uni_group')." WHERE id IN ('".implode("','", $_GPC['delete'])."')");
+			cache_build_account_modules();
 		}
 		message('用户组更新成功！', referer(), 'success');
 	}
-	$list = pdo_fetchall("SELECT * FROM ".tablename('uni_group'));
+	$list = pdo_fetchall("SELECT * FROM ".tablename('uni_group') . ' WHERE uniacid = 0');
 	if (!empty($list)) {
 		foreach ($list as &$row) {
 			if (!empty($row['modules'])) {
@@ -51,12 +52,13 @@ if ($do == 'post') {
 		$data = array(
 			'name' => $_GPC['name'],
 			'modules' => iserializer($_GPC['modules']),
-			'templates' => iserializer($_GPC['templates']),
+			'templates' => iserializer($_GPC['templates'])
 		);
 		if (empty($id)) {
 			pdo_insert('uni_group', $data);
 		} else {
 			pdo_update('uni_group', $data, array('id' => $id));
+			cache_build_account_modules();
 		}
 		load()->model('module');
 		module_build_privileges();

@@ -1,12 +1,12 @@
 <?php
 /**
- * [WeiZan System] Copyright (c) 2014 WeiZan.Com
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
  * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-
+uni_user_permission_check('mc_fans');
 load()->model('mc');
-$dos = array('display', 'view', 'initsync', 'updategroup', 'sms');
+$dos = array('display', 'view', 'initsync', 'updategroup');
 $do = in_array($do, $dos) ? $do : 'display';
 if($do == 'display') {
 	$_W['page']['title'] = '粉丝列表 - 粉丝 - 会员中心';
@@ -17,26 +17,10 @@ if($do == 'display') {
 				$fanids[] = intval($v);
 			}
 			pdo_query("DELETE FROM " . tablename('mc_mapping_fans') . " WHERE uniacid = :uniacid AND fanid IN ('" . implode("','", $fanids) . "')",array(':uniacid' => $_W['uniacid']));
-			message('粉丝删除成功！', url('mc/fans/', array('type' => $_GPC['type'], 'acid' => $_GPC['acid'])), 'success');
+			message('粉丝删除成功！', url('mc/fans/', array('type' => $_GPC['type'])), 'success');
 		}
 	}
-	$accounts = uni_accounts();
-	if(empty($accounts) || !is_array($accounts) || count($accounts) == 0){
-		message('请指定公众号');
-	}
-	if(!isset($_GPC['acid'])){
-		$account = current($accounts);
-		if($account !== false){
-			$acid = intval($account['acid']);
-		}
-	} else {
-		$acid = intval($_GPC['acid']);
-		if(!empty($acid) && !empty($accounts[$acid])) {
-			$account = $accounts[$acid];
-		}
-	}
-	reset($accounts);
-	
+	$acid = $_W['acid'];
 	if($_W['isajax']) {
 		$post = $_GPC['__input'];
 		if($post['method'] == 'sync') {
@@ -146,16 +130,12 @@ if($do == 'display') {
 			}
 		}
 	}
-	
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 20;
-	$condition = ' WHERE `uniacid`=:uniacid';
+	$condition = ' WHERE `uniacid`=:uniacid AND `acid`=:acid';
 	$pars = array();
 	$pars[':uniacid'] = $_W['uniacid'];
-	if(!empty($acid)) {
-		$condition .= ' AND `acid`=:acid';
-		$pars[':acid'] = $acid;
-	}
+	$pars[':acid'] = $_W['acid'];
 	if($_GPC['type'] == 'bind') {
 		$condition .= ' AND `uid`>0';
 		$type = 'bind';
@@ -168,7 +148,7 @@ if($do == 'display') {
 	if(!empty($nickname)) {
 		$condition .= " AND nickname LIKE '%{$nickname}%'";
 	}
-	$starttime = empty($_GPC['time']['start']) ? strtotime('-30 days') : strtotime($_GPC['time']['start']);
+	$starttime = empty($_GPC['time']['start']) ? strtotime('-60 days') : strtotime($_GPC['time']['start']);
 	$endtime = empty($_GPC['time']['end']) ? TIMESTAMP + 86399 : strtotime($_GPC['time']['end']) + 86399;
 	$follow = intval($_GPC['follow']);
 	if(!$follow) {
@@ -183,14 +163,8 @@ if($do == 'display') {
 	}
 	$pars[':starttime'] = $starttime;
 	$pars[':endtime'] = $endtime;
-	
-	$groups_data = pdo_fetchall('SELECT * FROM ' . tablename('mc_fans_groups') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
-	if(!empty($groups_data)) {
-		$groups = array();
-		foreach($groups_data as $gr) {
-			$groups[$gr['acid']] = iunserializer($gr['groups']);
-		}
-	}
+	$fans_group = pdo_fetch('SELECT * FROM ' . tablename('mc_fans_groups') . ' WHERE uniacid = :uniacid AND acid = :acid', array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid']));
+	$fans_group = iunserializer($fans_group['groups']);
 	$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('mc_mapping_fans').$condition, $pars);
 	$list = pdo_fetchall("SELECT * FROM ".tablename('mc_mapping_fans') . $condition . $orderby . ' LIMIT ' .($pindex - 1) * $psize.','.$psize, $pars);
 	if(!empty($list)) {
@@ -240,8 +214,6 @@ if($do == 'display') {
 			if(empty($v['user']['avatar']) && !empty($v['tag']['avatar'])){
 				$v['user']['avatar'] = $v['tag']['avatar'];
 			}
-			$v['account'] = $accounts[$v['acid']]['name'];
-			
 			unset($user,$niemmo,$niemmo_effective);
 		}
 	}
@@ -254,7 +226,7 @@ if($do == 'view') {
 	if(empty($fanid)) {
 		message('访问错误.');
 	}
-	$row = pdo_fetch("SELECT * FROM ".tablename('mc_mapping_fans')." WHERE fanid = :fanid AND uniacid = :uniacid LIMIT 1", array(':fanid' => $fanid,':uniacid' => $_W['uniacid']));	
+	$row = pdo_fetch("SELECT * FROM ".tablename('mc_mapping_fans')." WHERE fanid = :fanid AND uniacid = :uniacid LIMIT 1", array(':fanid' => $fanid,':uniacid' => $_W['uniacid']));
 	$account = WeAccount::create($row['acid']);
 	$accountInfo = $account->fetchAccountInfo();
 	$row['account'] = $accountInfo['name'];
@@ -276,8 +248,7 @@ if($do == 'view') {
 }
 
 if($do == 'initsync') {
-	$acid = intval($_GPC['acid']);
-
+	$acid = intval($_W['acid']);
 	if(intval($_GPC['page']) == 0) {
 		message('正在更新粉丝数据,请不要关闭浏览器', url('mc/fans/initsync', array('page' => 1, 'acid' => $acid)), 'success');
 	}
@@ -346,20 +317,19 @@ if($do == 'initsync') {
 
 if($do == 'updategroup') {
 	if($_W['isajax']) {
-		$acid = intval($_GPC['acid']);
 		$groupid = intval($_GPC['groupid']);
 		$openid = trim($_GPC['openid']);
-		if($acid > 0 && !empty($openid)) {
-			$acc = WeAccount::create($acid);
+		if(!empty($openid)) {
+			$acc = WeAccount::create($_W['acid']);
 			$data = $acc->updateFansGroupid($openid, $groupid);
 			if(is_error($data)) {
 				exit(json_encode(array('status' => 'error', 'mess' => $data['message'])));
 			} else {
-				pdo_update('mc_mapping_fans', array('groupid' => $groupid), array('uniacid' => $_W['uniacid'], 'openid' => $openid));
+				pdo_update('mc_mapping_fans', array('groupid' => $groupid), array('uniacid' => $_W['uniacid'], 'acid' => $_W['acid'], 'openid' => $openid));
 				exit(json_encode(array('status' => 'success')));
 			}
 		} else {
-			exit(json_encode(array('status' => 'error', 'mess' => '公众号信息和粉丝openid错误')));
+			exit(json_encode(array('status' => 'error', 'mess' => '粉丝openid错误')));
 		}
 	}
 }

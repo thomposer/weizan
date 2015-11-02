@@ -1,35 +1,14 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
+uni_user_permission_check('wechat_consume');
 $dos = array('account', 'record');
-$do = in_array($do, $dos) ? $do : 'account';
-
-if($do == 'account') {
-	$accounts = uni_accounts();
-	if(!empty($accounts)) {
-		foreach($accounts as $key => $li) {
-			if($li['level'] < 3) {
-				unset($accounts[$key]);
-			}
-		}
-	}
-	template('wechat/consume');
-}
-
+$do = in_array($do, $dos) ? $do : 'record';
 if($do == 'record') {
-	$accounts = uni_accounts();
-	$acid = intval($_GET['__acid']);
-	if(empty($acid)) {
-		$acid = intval($_GPC['__acid']);
-	}
-	if(!$acid || empty($accounts[$acid])) {
-		message('公众号不存在', url('wechat/consume'), 'error');
-	} else {
-		isetcookie('__acid', $acid, 86400 * 3);
-	}
+	$acid = $_W['acid'];
 	$op = empty($_GPC['op']) ? 'list' : $_GPC['op'];
 	if($op == 'list') {
 		$condition = ' WHERE acid = :acid';
@@ -158,6 +137,5 @@ if($do == 'record') {
 		}
 		message('核销卡券成功', referer(), 'success');
 	}
-
 	template('wechat/consume');
 }

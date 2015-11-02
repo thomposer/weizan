@@ -19,5 +19,14 @@ if (!empty($unisettings) && !empty($unisettings['creditnames'])) {
 $sql = 'SELECT `status` FROM ' . tablename('mc_card') . " WHERE `uniacid` = :uniacid";
 $cardstatus = pdo_fetch($sql, array(':uniacid' => $_W['uniacid']));
 
+if($do == 'token_qrcode') {
+	require_once('../framework/library/qrcode/phpqrcode.php');
+	$errorCorrectionLevel = "L";
+	$matrixPointSize = "8";
+	$token_id = intval($_GPC['id']);
+	$url = $_W['siteroot'] . 'app' . ltrim(murl('clerk/token', array('uid' => $_W['member']['uid'], 'id' => $token_id)), '.');
+	QRcode::png($url, false, $errorCorrectionLevel, $matrixPointSize);
+	exit();
+}
 
 

@@ -34,14 +34,12 @@
 		<input type="hidden" name="tid" value="{$tid}">
 	</form>
 	<script>
-		require(['jquery', 'util'], function($, u){
-			$('#form1').submit(function(){
-				var num = $("input[name='group[]']:checked").length;
-				if(num == 0) {
-					return confirm("您没有选择可使用该模块/模板的公众号服务套餐组,模块/模板安装成功后可在 公众号服务套餐 编辑");
-				}
-				return true;
-			});
+		$('#form1').submit(function(){
+			var num = $("input[name='group[]']:checked").length;
+			if(num == 0) {
+				return confirm("您没有选择可使用该模块/模板的公众号服务套餐组,模块/模板安装成功后可在 公众号服务套餐 编辑");
+			}
+			return true;
 		});
 	</script>
 </div>

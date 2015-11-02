@@ -55,29 +55,9 @@
 					<span class="pull-right"><i class="fa fa-angle-right"></i></span>
 				</a>
 			</li>
-			<!--<li>-->
-				<!--<a class="mnav-box-list" href="{php echo url('activity/partimes/mine');}">-->
-					<!--<i class="fa fa-money"></i>-->
-					<!--<span>我的活动参与次数</span>-->
-					<!--<span class="pull-right"><i class="fa fa-angle-right"></i></span>-->
-				<!--</a>-->
-			<!--</li>-->
 		</ul>
-	{loop $groups $name $navs}
 		<ul>
-			{loop $navs $nav}
-			<li>
-				<a class="mnav-box-list" href="{$nav['url']}">
-					<i class="fa fa-fw {if empty($nav['css']['icon']['icon'])} fa-money{else} {$nav['css']['icon']['icon']}{/if}"></i>
-					<span class="mnav-title">{$nav['name']}</span>
-					<span class="pull-right"><i class="fa fa-angle-right"></i></span>
-				</a>
-			</li>
-			{/loop}
-		</ul>
-	{/loop}
-	{if !empty($others)}
-		<ul>
+		{if !empty($others)}
 			{loop $others $nav}
 			<li>
 				<a class="mnav-box-list" href="{$nav['url']}">
@@ -87,6 +67,20 @@
 				</a>
 			</li>
 			{/loop}
+		{/if}
+		{loop $groups $name $navs}
+			{loop $navs $nav}
+			<li>
+				<a class="mnav-box-list" href="{$nav['url']}">
+					<i class="fa fa-fw {if empty($nav['css']['icon']['icon'])} fa-money{else} {$nav['css']['icon']['icon']}{/if}"></i>
+					<span class="mnav-title">{$nav['name']}</span>
+					<span class="pull-right"><i class="fa fa-angle-right"></i></span>
+				</a>
+			</li>
+			{/loop}
+		{/loop}
+		</ul>
+		<ul>
 			{if isset($setting['uc']['status']) && $setting['uc']['status'] == '1'}
 			{if !empty($ucUser)}
 			<li>
@@ -104,9 +98,6 @@
 			</li>
 			{/if}
 			{/if}
-		</ul>
-	{/if}
-		<ul>
 			<li>
 				<a class="mnav-box-list" href="{php echo url('mc/bond/mobile')}">
 					<i class="fa fa-mobile-phone"></i>
@@ -138,7 +129,8 @@
 				</a>
 			</li>
 		</ul>
-</div>
+		{$ucpage['html']}
+	</div>
 {/if}
 
 <script>

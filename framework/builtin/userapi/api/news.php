@@ -3,7 +3,7 @@ $url = 'http://news.163.com/special/00011K6L/rss_newstop.xml';
 
 $resp = ihttp_get($url);
 if ($resp['code'] == 200 && $resp['content']) {
-	$obj = simplexml_load_string($resp['content'], 'SimpleXMLElement', LIBXML_NOCDATA);
+	$obj = isimplexml_load_string($resp['content'], 'SimpleXMLElement', LIBXML_NOCDATA);
 	$news = array();
 	$news[] = array('title' => '网易头条新闻', 'description' => '网易门户新闻中心', 'url' => 'http://news.163.com', 'picurl' => 'http://cimg.163.com/news/0408/20/netease-logo.gif');
 	$cnt = min(count($obj->channel->item), 8);

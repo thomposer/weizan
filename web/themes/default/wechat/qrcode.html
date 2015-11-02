@@ -110,13 +110,13 @@
 					</td>
 					<td>
 						{if $row['model'] == 2}
-							<a href="{php echo url('wechat/card/qr', array('op' => 'del','id'=> $row['id'], 'cid' => $cid))}" class="btn btn-default" data-toggle="tooltip" title="强制删除" onclick="return confirm('您确定要删除该二维码以及其统计数据吗？')"><i class="fa fa-times"></i></a>
+							<a href="{php echo url('wechat/card/qr', array('op' => 'del','id'=> $row['id'], 'cid' => $cid))}" title="强制删除" onclick="return confirm('您确定要删除该二维码以及其统计数据吗？')">强制删除</a>&nbsp;-&nbsp;
 						{/if}
 						{if $row['model'] == 1}
-						<a href="{php echo url('wechat/card/qr', array('op' => 'extend', 'id'=> $row['id']))}" class="btn btn-default" data-toggle="tooltip" title="延时"><i class="fa fa-clock-o"></i></a>
+						<a href="{php echo url('wechat/card/qr', array('op' => 'extend', 'id'=> $row['id']))}" title="延时">延时</a>&nbsp;-&nbsp;
 						{/if}
-						<a href="{php echo url('wechat/card/qr', array('op' => 'post', 'id'=> $row['id'], 'cid'=> $row['extra']))}"class="btn btn-default" data-toggle="tooltip" data-placement="top" title="编辑"><i class="fa fa-pencil"></i></a>
-						<a href="{php echo url('wechat/card/record', array('outer_id'=> $row['qrcid'], 'op' => 'list', 'cid'=> $row['extra']))}"class="btn btn-default" data-toggle="tooltip" data-placement="top" title="扫描统计"><i class="fa fa-bar-chart"></i></a>
+						<a href="{php echo url('wechat/card/qr', array('op' => 'post', 'id'=> $row['id'], 'cid'=> $row['extra']))}" title="编辑">编辑</a>&nbsp;-&nbsp;
+						<a href="{php echo url('wechat/card/record', array('outer_id'=> $row['qrcid'], 'op' => 'list', 'cid'=> $row['extra']))}"title="扫描统计">扫描统计</a>
 					</td>
 				</tr>
 				{/loop}
@@ -132,14 +132,5 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript">
-	require(['bootstrap'],function($){
-		$('.btn').hover(function(){
-			$(this).tooltip('show');
-		},function(){
-			$(this).tooltip('hide');
-		});
-	});
-</script>
 {/if}
 {template 'common/footer'}

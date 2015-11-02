@@ -4,7 +4,6 @@
  * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-
 $dos = array('platform', 'site', 'mc', 'setting', 'ext', 'solution');
 $do = in_array($do, $dos) ? $do : 'platform';
 $title = array('platform'=>'公众平台','site'=>'微站功能','mc'=>'会员及会员营销','setting'=>'功能选项','ext'=>'扩展功能','solution'=>'行业功能');
@@ -19,14 +18,6 @@ if (!empty($_W['setting']['permurls']['sections']) && !in_array($do, $_W['settin
 }
 
 if($do != 'solution') {
-	if (!empty($_W['setting']['permurls']['urls'])) {
-		foreach ($_W['setting']['permurls']['urls'] as $url) {
-			if (strexists($url, 'c=home&a=welcome&do=ext')) {
-				parse_str($url, $urls);
-				$showmodules[] = $urls['m'];
-			}
-		}
-	}
 	$modules = uni_modules();
 	$settings = uni_setting($_W['uniacid'], array('shortcuts'));
 	$shorts = $settings['shortcuts'];
@@ -35,13 +26,15 @@ if($do != 'solution') {
 	}
 	$shortcuts = array();
 	foreach($shorts as $i => $shortcut) {
-		if (!empty($showmodules) && !in_array($shortcut['name'], $showmodules)) {
+		if (!empty($_W['setting']['permurls']['modules']) && !in_array($shortcut['name'], $_W['setting']['permurls']['modules'])) {
 			continue;
 		}
 		$module = $modules[$shortcut['name']];
 		if(!empty($module)) {
 			$shortcut['title'] = $module['title'];
-			if(file_exists('../addons/' . $module['name'] . '/icon.jpg')) {
+			if(file_exists('../addons/' . $module['name'] . '/icon-custom.jpg')) {
+				$shortcut['image'] = '../addons/' . $module['name'] . '/icon-custom.jpg';
+			} elseif(file_exists('../addons/' . $module['name'] . '/icon.jpg')) {
 				$shortcut['image'] = '../addons/' . $module['name'] . '/icon.jpg';
 			} else {
 				$shortcut['image'] = '../web/resource/images/nopic-small.jpg';
@@ -52,7 +45,6 @@ if($do != 'solution') {
 	}
 	unset($shortcut);
 }
-
 
 if($do == 'platform') {
 	$title = '平台相关数据';
@@ -89,8 +81,12 @@ if($do == 'platform') {
 		exit(json_encode(array('key' => $days, 'value' => array_values($datasets), 'stat' => $stat)));
 	}
 
+		$today_add_num = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND uniacid = :uniacid AND follow = :follow AND followtime >= :starttime AND followtime <= :endtime', array(':acid' => $_W['acid'], ':uniacid' => $_W['uniacid'], ':starttime' => strtotime(date('Y-m-d')), ':endtime' => TIMESTAMP, ':follow' => 1));
+	$today_cancel_num = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND uniacid = :uniacid AND follow = :follow AND unfollowtime >= :starttime AND unfollowtime <= :endtime', array(':acid' => $_W['acid'], ':uniacid' => $_W['uniacid'], ':starttime' => strtotime(date('Y-m-d')), ':endtime' => TIMESTAMP, ':follow' => 0));
+	$today_jing_num = $today_add_num - $today_cancel_num;
+	$today_total_num = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND uniacid = :uniacid AND follow = :follow AND followtime <= :endtime', array(':acid' => $_W['acid'], ':uniacid' => $_W['uniacid'], ':endtime' => TIMESTAMP, ':follow' => 1));
+
 	load()->model('reply');
-	
 		$cfg = $modules['userapi']['config'];
 	$ds = reply_search("`uniacid` = 0 AND module = 'userapi' AND `status`=1");
 	$apis = array();
@@ -157,7 +153,7 @@ if($do == 'site') {
 	$title = '微站功能概况';
 		$setting = uni_setting($_W['uniacid'], array('default_site'));
 	$default_site = intval($setting['default_site']);
-	$setting = pdo_fetch('SELECT styleid,id,quickmenu FROM ' . tablename('site_multi') . ' WHERE uniacid =:uniacid AND id = :id ', array(':uniacid' => $_W['uniacid'], ':id' => $setting['default_site']));
+	$setting = pdo_fetch('SELECT styleid,id FROM ' . tablename('site_multi') . ' WHERE uniacid =:uniacid AND id = :id ', array(':uniacid' => $_W['uniacid'], ':id' => $setting['default_site']));
 	$templates_id = pdo_fetchcolumn('SELECT templateid FROM ' . tablename('site_styles') . ' WHERE id = :id', array(':id' => $setting['styleid']));
 	$template = pdo_fetch('SELECT * FROM ' . tablename('site_templates') . ' WHERE id = :id ', array(':id' => $templates_id));
 	
@@ -174,9 +170,6 @@ if($do == 'site') {
 		load()->model('app');
 	$home_navs = app_navs('home', $setting['id']);
 	$profile_navs = app_navs('profile');
-	$shortcut_navs = app_navs('shortcut', $setting['id']);
-	$quickmenu = iunserializer($setting['quickmenu']);
-	$quickmenu = !empty($quickmenu) ? $quickmenu : array();
 		$slides = pdo_fetchall("SELECT * FROM ".tablename('site_slide')." WHERE uniacid = '{$_W['uniacid']}' AND multiid = {$default_site}  ORDER BY displayorder DESC, id DESC ");
 	foreach ($slides as $key=>$value) {
 		$slides[$key]['thumb'] = tomedia($value['thumb']);
@@ -209,22 +202,14 @@ if($do == 'setting') {
 
 if($do == 'ext') {
 	$title = '扩展功能概况';
-	if (!empty($_W['setting']['permurls']['urls'])) {
-		foreach ($_W['setting']['permurls']['urls'] as $url) {
-			if (strexists($url, 'c=home&a=welcome&do=ext')) {
-				parse_str($url, $urls);
-				$showmodules[] = $urls['m'];
-			}
-		}
-	}
 	$installedmodulelist = uni_modules(false);
 	foreach ($installedmodulelist as $k => &$value) {
-		$value['official'] = empty($value['issystem']) && (strexists($value['author'], 'WEIZAN Team') || strexists($value['author'], '微赞团队'));
+		$value['official'] = empty($value['issystem']) && (strexists($value['author'], 'WeiZan Team') || strexists($value['author'], '微赞团队'));
 	}
 	$m = $_GPC['m'];
 	if(empty($m)) {
 		foreach($installedmodulelist as $name => $module) {
-			if (!empty($showmodules) && !in_array($name, $showmodules)) {
+			if (!empty($_W['setting']['permurls']['modules']) && !in_array($name, $_W['setting']['permurls']['modules'])) {
 				continue;
 			}
 
@@ -252,73 +237,43 @@ if($do == 'ext') {
 	} else {
 		$module = $installedmodulelist[$m];
 		$title .= ' - ' . $module['title'];
-		$entries = module_entries($m, array('menu', 'home', 'profile', 'shortcut', 'cover'));
-	}
-}
-
-if($do == 'solution') {
-	$solutions = array();
-	$modules = uni_modules();
-	foreach($modules as $modulename => $module) {
-		if(!is_error(module_solution_check($modulename))) {
-			if($_W['role'] == 'operator') {
-				$sql = 'SELECT COUNT(*) FROM ' . tablename('solution_acl') . ' WHERE `uid`=:uid AND `module`=:module';
-				$pars = array();
-				$pars[':uid'] = $_W['uid'];
-				$pars[':module'] = $modulename;
-				if(pdo_fetchcolumn($sql, $pars) > 0) {
-					$solutions[] = $module;
+		$entries = module_entries($m, array('menu', 'home', 'profile', 'shortcut', 'cover', 'mine'));
+		$status = uni_user_permission_exist();
+		if(is_error($status)) {
+			$permission = uni_user_permission($m);
+			if($permission[0] != 'all') {
+				if(!in_array($m.'_rule', $permission)) {
+					unset($module['isrulefields']);
 				}
-			} else {
-				$solutions[] = $module;
-			}
-		}
-	}
-
-	$m = $_GPC['m'];
-	if(!empty($m)) {
-		load()->model('module');
-		$error = module_solution_check($m);
-		if(is_error($error)) {
-			message($error['message']);
-		}
-		$solution = module_fetch($m);
-		$title = ' 行业解决方案 - ' . $solution['title'];
-		$site = WeUtility::createModuleSite($m);
-		if(!is_error($site)) {
-			$method = 'doWebWelcome';
-			$welcome = @$site->$method();
-		}
-		if(empty($welcome)) {
-						$entries = module_entries($m, array('menu', 'home', 'profile', 'shortcut', 'cover'));
-			if($_W['role'] == 'operator') {
-				foreach($entries as $index1 => &$entry1) {
-					if($index1 == 'cover') {
-						continue;
-					}
-					foreach($entry1 as $index2 => &$entry2) {
-						$url_arr = parse_url($entry2['url']);
-						$url_query = $url_arr['query'];
-						parse_str($url_query, $query_arr);
-						$eid = intval($query_arr['eid']);
-						$data = pdo_fetch('SELECT * FROM ' . tablename('modules_bindings') . ' WHERE eid = :eid', array(':eid' => $eid));
-						$ixes = pdo_fetchcolumn('SELECT id FROM ' . tablename('solution_acl') . ' WHERE uid = :uid AND module = :module AND do = :do AND state = :state', array('uid' => $_W['uid'], ':module' => $m, ':do' => $data['do'], 'state' => $data['state']));
-						if(empty($ixes)) {
-							unset($entry1[$index2]);
+				if(!in_array($m.'_settings', $permission)) {
+					unset($module['settings']);
+				}
+				if(!in_array($m.'_home', $permission)) {
+					unset($entries['home']);
+				}
+				if(!in_array($m.'_profile', $permission)) {
+					unset($entries['profile']);
+				}
+				if(!in_array($m.'_shortcut', $permission)) {
+					unset($entries['shortcut']);
+				}
+				if(!empty($entries['cover'])) {
+					foreach($entries['cover'] as $k => $row) {
+						if(!in_array($m.'_cover_'.$row['do'], $permission)) {
+							unset($entries['cover'][$k]);
 						}
 					}
 				}
-			} 
+				if(!empty($entries['menu'])) {
+					foreach($entries['menu'] as $k => $row) {
+						if(!in_array($m.'_menu_'.$row['do'], $permission)) {
+							unset($entries['menu'][$k]);
+						}
+					}
+				}
+			}
 		}
-	} else {
-		if(empty($solutions)) {
-			message('没有您可以使用的功能, 请联系系统管理员.');
-		} else {
-			header('location: ' . url('home/welcome/solution', array('m' => $solutions[0]['name'])));
-		}
-		exit;
 	}
-	define('IN_SOLUTION', true);
 }
 
 template('home/welcome');

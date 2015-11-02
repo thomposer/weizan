@@ -13,4 +13,3 @@ if(in_array($action, array('profile', 'device', 'callback', 'appstore'))) {
 if($action == 'touch') {
 	exit('success');
 }
-setting_load('site');

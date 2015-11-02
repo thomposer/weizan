@@ -4,7 +4,7 @@
  * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-
+$GLOBALS['_W']['config']['db']['tablepre'] = empty($GLOBALS['_W']['config']['db']['tablepre']) ? $GLOBALS['_W']['config']['db']['master']['tablepre'] : $GLOBALS['_W']['config']['db']['tablepre'];
 
 function db_table_schema($db, $tablename = '') {
 	$result = $db->fetch("SHOW TABLE STATUS LIKE '" . trim($db->tablename($tablename), '`') . "'");
@@ -83,8 +83,8 @@ function db_table_create_sql($schema) {
 
 
 function db_schema_compare($table1, $table2) {
-		$table1['charset'] == $table2['charset'] ? '' : $ret['diffs']['charset'] = true;
-
+	$table1['charset'] == $table2['charset'] ? '' : $ret['diffs']['charset'] = true;
+	
 	$fields1 = array_keys($table1['fields']);
 	$fields2 = array_keys($table2['fields']);
 	$diffs = array_diff($fields1, $fields2);

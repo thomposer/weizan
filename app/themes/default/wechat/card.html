@@ -23,7 +23,19 @@
 		.page .pagination{padding:0;margin:0;}
 		.page .pagination a{color:#5ac5d4;background:#d2e6e9;border:1px solid #a5d7de;}
 		.page .pagination a:hover{color:#FFF;background:#addbe1;border:1px solid #a5d7de;}
+
+		.card-info .card-top{ position:relative; width:100%; color:#fff; background-color:#a9d92d; padding:21px 12px 12px;}
+		.card-top .logo img{width:38px; height:38px; border-radius:100%; margin-right:10px;}
+		.card-top .title{font-size:24px; margin-bottom:10px;}
+		.card-top .sub-title{margin-bottom:10px;}
+		.card-top .border-img{position: absolute; bottom: -1px; left: 0; width: 100%; height: 5px; background: url(./resource/images/card_tpl.png) repeat-x;}
+		.card-bottom{background:#fff; margin-bottom:15px; text-align:center; padding:15px 0;}
+		.card-bottom .bar-code img{width:100%; height:auto; margin-bottom:5px;}
+		.card-bottom .tips{margin:10px 0;}
+		.wx-card .operate{background:#fff; padding:15px 10px;}
+		.wx-card .operate input{margin-bottom:5px;}
 	</style>
+	{if $do == 'display'}
 	<div class="btn-group-top-box">
 		<div class="btn-group btn-group-top">
 			<a href="{php echo url('wechat/card/display', array('type' => 'discount'))}" class="btn btn-default {if $type == 'discount'}active{/if}">折扣券</a>
@@ -71,4 +83,60 @@
 			});
 		});
 	</script>
+{elseif $do == 'use'}
+<form action="" method="post" id="form1">
+	<input type="hidden" name="token" value="{$_W['token']}"/>
+	<div class="wx-card">
+		<div class="card-info">
+			<div class="card-top" style="background: {$colors[$card['color']]}">
+				<div class="logo">
+					<img src="{$card['logo_url']}" alt="" class="img-circle">
+					<span>{$card['brand_name']}</span>
+				</div>
+				<div class="title text-center">{$card['title']}</div>
+				<div class="sub-title text-center">{$card['sub_title']}</div>
+				<div class="date text-center">
+					{if $card['date_info']['time_type'] == 1}
+					有效期:{$card['date_info']['time_limit_start']}~{$card['date_info']['time_limit_end']}
+					{else}
+					有效期:领取后{$card['date_info']['deadline']}天后生效,{$card['date_info']['limit']}天有效
+					{/if}
+				</div>
+				<div class="border-img"></div>
+			</div>
+			<div class="card-bottom">
+				{if $error_code == 1}
+				<div class="text-muted">code码错误</div>
+				{else}
+				<img src="{php echo url('wechat/card/qr', array('id' => $record['id'], 'code' => $code['code']));}" alt=""/>
+				<div class="text-muted">店员可使用微信扫描上面二维码进行核销</div>
+				<div class="text-muted">code码：{$code['code']}</div>
+				{/if}
+				<div class="tips hide">{$card['notice']}</div>
+			</div>
+		</div>
+		<div class="operate">
+			{if $error_code == 1}
+			<a class="btn btn-danger btn-block" disabled>code码错误</a>
+			{elseif $error_signature == 1}
+			<a class="btn btn-danger btn-block" disabled>签名错误</a>
+			{else}
+			<input type="password" id="password" name="password" class="form-control" placeholder="请输入店员密码" style="margin-bottom:20px">
+			<input type="submit" class="btn btn-success btn-block" name="submit" value="确定核销"/>
+			{/if}
+		</div>
+	</div>
+</form>
+<script>
+	require(['util'], function(u){
+		$('#form1').submit(function(){
+			if(!$.trim($('#password').val())) {
+				u.message('请输入店员密码');
+				return false;
+			}
+			return true;
+		});
+	});
+</script>
+{/if}
 {template 'common/footer'}

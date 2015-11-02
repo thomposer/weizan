@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $do = !empty($_GPC['do']) ? $_GPC['do'] : 'display';
@@ -25,7 +25,6 @@ if ($do == 'post') {
 		$group['package'] = iunserializer($group['package']);
 	}
 	$packages = uni_groups();
-	
 	if (checksubmit('submit')) {
 		if (empty($_GPC['name'])) {
 			message('请输入用户组名称！');
@@ -39,7 +38,7 @@ if ($do == 'post') {
 			'name' => $_GPC['name'],
 			'package' => iserializer($package),
 			'maxaccount' => intval($_GPC['maxaccount']),
-			'maxsubaccount' => intval($_GPC['maxsubaccount']),
+			'timelimit' => intval($_GPC['timelimit'])
 		);
 		if (empty($id)) {
 			pdo_insert('users_group', $data);

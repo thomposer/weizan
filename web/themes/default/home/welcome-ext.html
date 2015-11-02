@@ -111,7 +111,6 @@
 			</a>
 		{/if}
 	</div>
-	{if empty($module['issolution'])}
 	{if $entries['menu']}
 	<div class="page-header">
 		<h4><i class="fa fa-plane"></i> 业务功能菜单</h4>
@@ -119,25 +118,23 @@
 	<div class="shortcut clearfix">
 		{loop $entries['menu'] $menu}
 		<a href="{$menu['url']}" title="{$menu['title']}">
-			<i class="fa fa-puzzle-piece"></i>
+			<i class="{$menu['icon']}"></i>
 			<span>{$menu['title']}</span>
 		</a>
 		{/loop}
 	</div>
 	{/if}
-	{else}
+	{if $entries['mine']}
 	<div class="page-header">
-		<h4><i class="fa fa-plane"></i> 功能分权 (仅限行业模块)</h4>
+		<h4><i class="fa fa-plane"></i> 自定义菜单</h4>
 	</div>
 	<div class="shortcut clearfix">
-		<a href="{url 'profile/worker' array('m' => $m, 'reference' => 'solution')}">
-			<i class="fa fa-users"></i>
-			<span>设置操作用户</span>
+		{loop $entries['mine'] $mine}
+		<a href="{$mine['url']}" title="{$mine['title']}">
+			<i class="{$mine['icon']}"></i>
+			<span>{$mine['title']}</span>
 		</a>
-		<a href="{url 'home/welcome/solution' array('m' => $m)}">
-			<i class="fa fa-cogs"></i>
-			<span>进入管理后台</span>
-		</a>
+		{/loop}
 	</div>
 	{/if}
 {/if}

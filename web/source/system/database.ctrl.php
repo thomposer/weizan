@@ -1,7 +1,7 @@
 <?php 
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 $dos = array('backup', 'restore', 'trim', 'optimize', 'run');
 $do = in_array($do, $dos) ? $do : 'backup';
@@ -76,7 +76,7 @@ if($do == 'restore') {
 						fseek($fp, -27, SEEK_END);
 						$end = fgets($fp);
 						fclose($fp);
-						if($end == '----WeEngine MySQL Dump End') {
+						if($end == '----WeiZan MySQL Dump End') {
 							$row = array();
 							$row['bakdir'] = $bakdir;
 							$row['time'] = $time;
@@ -341,7 +341,7 @@ function dump_export($continue = array()) {
 	}
 
 	$bakfile = $bakdir . "/volume-{$prefix}-{$series}.sql";
-	$dump .= "\n\n----WeEngine MySQL Dump End";
+	$dump .= "\n\n----WeiZan MySQL Dump End";
 	file_put_contents($bakfile, $dump);
 	return false;
 }

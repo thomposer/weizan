@@ -1,32 +1,35 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 defined('IN_IA') or exit('Access Denied');
-
-$dos = array('display', 'post', 'list', 'del', 'delsata', 'extend', 'SubDisplay');
+uni_user_permission_check('platform_qr');
+$dos = array('display', 'post', 'list', 'del', 'delsata', 'extend', 'SubDisplay', 'check_scene_str');
 $do = !empty($_GPC['do']) && in_array($do, $dos) ? $do : 'list';
 load()->model('account');
+
+if($do == 'check_scene_str') {
+	$scene_str = trim($_GPC['scene_str']);
+	$is_exist = pdo_fetchcolumn('SELECT id FROM ' . tablename('qrcode') . ' WHERE uniacid = :uniacid AND acid = :acid AND scene_str = :scene_str AND model = 2', array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid'], ':scene_str' => $scene_str));
+	if(!empty($is_exist)) {
+		exit('repeat');
+	}
+	exit('success');
+}
+
 if($do == 'list') {
 	$_W['page']['title'] = '管理二维码 - 二维码管理 - 高级功能';
-	$acidarr = uni_accounts($_W['uniacid']);
-	$acid = intval($_GPC['acid']);
+	$wheresql = " WHERE uniacid = :uniacid AND acid = :acid AND type = 'scene'";
+	$param = array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid']);
 	$keyword = trim($_GPC['keyword']);
-	$wheresql = " WHERE uniacid = {$_W['uniacid']} AND type = 'scene'";
-	if($acid > 0) {
-		$wheresql .= " AND acid = {$acid} ";
-	}
 	if(!empty($keyword)) {
 		$wheresql .= " AND name LIKE '%{$keyword}%'";
 	}
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 20;
-	$list = pdo_fetchall("SELECT * FROM ".tablename('qrcode'). $wheresql . ' ORDER BY `id` DESC LIMIT '.($pindex - 1) * $psize.','. $psize);
-	foreach ($list as $key=>$value) {
-		$list[$key]['uniname'] = $acidarr[$value['acid']]['name'];
-	}
+	$list = pdo_fetchall("SELECT * FROM ".tablename('qrcode'). $wheresql . ' ORDER BY `id` DESC LIMIT '.($pindex - 1) * $psize.','. $psize, $param);
 	if (!empty($list)) {
 		foreach ($list as $index => &$qrcode) {
 			$qrcode['showurl'] = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' . urlencode($qrcode['ticket']);
@@ -45,7 +48,7 @@ if($do == 'list') {
 			}
 		}
 	}
-	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('qrcode') . $wheresql);
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('qrcode') . $wheresql, $param);
 	$pager = pagination($total, $pindex, $psize);
 		pdo_query("UPDATE ".tablename('qrcode')." SET status = '0' WHERE uniacid = '{$_W['uniacid']}' AND model = '1' AND createtime < '{$_W['timestamp']}' - expire");
 	template('platform/qr-list');
@@ -53,7 +56,7 @@ if($do == 'list') {
 
 if($do == 'del') {
 	if ($_GPC['scgq']) {
-		$list = pdo_fetchall("SELECT id FROM ".tablename('qrcode')." WHERE uniacid = '{$_W['uniacid']}' AND status = '0' AND type='scene'", array(), 'id');
+		$list = pdo_fetchall("SELECT id FROM ".tablename('qrcode')." WHERE uniacid = :uniacid AND acid = :acid AND status = '0' AND type='scene'", array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid']), 'id');
 		if (!empty($list)) {
 			pdo_query("DELETE FROM ".tablename('qrcode')." WHERE id IN (".implode(',', array_keys($list)).")");
 			pdo_query("DELETE FROM ".tablename('qrcode_stat')." WHERE qid IN (".implode(',', array_keys($list)).")");
@@ -69,22 +72,21 @@ if($do == 'del') {
 
 if($do == 'post') {
 	$_W['page']['title'] = '生成二维码 - 二维码管理 - 高级功能';
-	$acidarr = uni_accounts($_W['uniacid']);
 	load()->func('communication');
 	if(checksubmit('submit')){
 				$barcode = array(
 				'expire_seconds' => '',
 				'action_name' => '',
 				'action_info' => array(
-					'scene' => array('scene_id' => ''),
+					'scene' => array(),
 				),
 		);
 		$qrctype = intval($_GPC['qrc-model']);
-		$acid = intval($_GPC['acid']);
+		$acid = intval($_W['acid']);
 		$uniacccount = WeAccount::create($acid);
 		$id = intval($_GPC['id']);
 		if (!empty($id)) {
-			$qrcrow = pdo_fetch("SELECT * FROM ".tablename('qrcode')." WHERE uniacid = {$_W['uniacid']} AND id = '{$id}'");
+			$qrcrow = pdo_fetch("SELECT * FROM ".tablename('qrcode')." WHERE uniacid = :uniacid AND id = :id", array(':uniacid' => $_W['uniacid'], ':id' => $id));
 			$update = array(
 					'keyword' => $_GPC['keyword'],
 					'name' => $_GPC['scene-name'],
@@ -100,8 +102,14 @@ if($do == 'post') {
 				$update['url'] = $result['url'];
 				$update['createtime'] = TIMESTAMP;
 			} elseif ($qrcrow['model'] == 2) {
-				$barcode['action_info']['scene']['scene_id'] = $qrcrow['qrcid'];
-				$barcode['action_name'] = 'QR_LIMIT_SCENE';
+				$qrcid = intval($qrcrow['qrcid']);
+				if($qrcid > 0) {
+					$barcode['action_info']['scene']['scene_id'] = $qrcrow['qrcid'];
+					$barcode['action_name'] = 'QR_LIMIT_SCENE';
+				} else {
+					$barcode['action_info']['scene']['scene_str'] = $qrcrow['scene_str'];
+					$barcode['action_name'] = 'QR_LIMIT_STR_SCENE';
+				}
 				$result = $uniacccount->barCodeCreateFixed($barcode);
 				$update['ticket'] = $result['ticket'];
 				$update['url'] = $result['url'];
@@ -118,12 +126,18 @@ if($do == 'post') {
 			$barcode['action_name'] = 'QR_SCENE';
 			$result = $uniacccount->barCodeCreateDisposable($barcode);
 		} else if ($qrctype == 2) {
-			$qrcid = pdo_fetchcolumn("SELECT qrcid FROM ".tablename('qrcode')." WHERE acid = :acid AND model = '2' ORDER BY qrcid DESC LIMIT 1", array(':acid' => $acid));
-			$barcode['action_info']['scene']['scene_id'] = !empty($qrcid) ? ($qrcid+1) : 1;
-			if ($barcode['action_info']['scene']['scene_id'] > 100000) {
-				message('抱歉，永久二维码已经生成最大数量，请先删除一些。');
+			$scene_str = trim($_GPC['scene_str']);
+			if(!empty($scene_str)) {
+				$barcode['action_info']['scene']['scene_str'] = $scene_str;
+				$barcode['action_name'] = 'QR_LIMIT_STR_SCENE';
+			} else {
+				$qrcid = pdo_fetchcolumn("SELECT qrcid FROM ".tablename('qrcode')." WHERE acid = :acid AND model = '2' ORDER BY qrcid DESC LIMIT 1", array(':acid' => $acid));
+				$barcode['action_info']['scene']['scene_id'] = !empty($qrcid) ? ($qrcid+1) : 1;
+				if ($barcode['action_info']['scene']['scene_id'] > 100000) {
+					message('抱歉，永久二维码已经生成最大数量，请先删除一些。');
+				}
+				$barcode['action_name'] = 'QR_LIMIT_SCENE';
 			}
-			$barcode['action_name'] = 'QR_LIMIT_SCENE';
 			$result = $uniacccount->barCodeCreateFixed($barcode);
 		} else {
 			message('抱歉，此公众号暂不支持您请求的二维码类型！');
@@ -134,6 +148,7 @@ if($do == 'post') {
 				'uniacid' => $_W['uniacid'],
 				'acid' => $acid,
 				'qrcid' => $barcode['action_info']['scene']['scene_id'],
+				'scene_str' => $barcode['action_info']['scene']['scene_str'],
 				'keyword' => $_GPC['keyword'],
 				'name' => $_GPC['scene-name'],
 				'model' => $_GPC['qrc-model'],
@@ -159,7 +174,7 @@ if($do == 'extend') {
 	load()->func('communication');
 	$id = intval($_GPC['id']);
 	if (!empty($id)) {
-		$qrcrow = pdo_fetch("SELECT * FROM ".tablename('qrcode')." WHERE uniacid = {$_W['uniacid']} AND id = '{$id}' LIMIT 1");
+		$qrcrow = pdo_fetch("SELECT * FROM ".tablename('qrcode')." WHERE uniacid = :uniacid AND id = :id LIMIT 1", array(':uniacid' => $_W['uniacid'], ':id' => $id));
 		$update = array();
 		if ($qrcrow['model'] == 1) {
 			$uniacccount = WeAccount::create($qrcrow['acid']);
@@ -182,18 +197,14 @@ if($do == 'extend') {
 
 if($do == 'display') {
 	$_W['page']['title'] = '扫描统计 - 二维码管理 - 高级功能';
-	load()->func('tpl');
-	$acidarr = uni_accounts($_W['uniacid']);
-
 	$starttime = empty($_GPC['time']['start']) ? TIMESTAMP -  86399 * 30 : strtotime($_GPC['time']['start']);
-	$endtime = empty($_GPC['time']['end']) ? TIMESTAMP + 6*86400: strtotime($_GPC['time']['end']);
-	$where .= " AND createtime >= '$starttime' AND createtime < '$endtime'";
-	intval($_GPC['acid']) > 0 && $where .= ' AND acid = ' . intval($_GPC['acid']);
+	$endtime = empty($_GPC['time']['end']) ? TIMESTAMP + 6*86400: strtotime($_GPC['time']['end']) + 86399;
+	$where .= " WHERE uniacid = :uniacid AND acid = :acid AND createtime >= :starttime AND createtime < :endtime";
+	$param = array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid'], ':starttime' => $starttime, ':endtime' => $endtime);
 	!empty($_GPC['keyword']) && $where .= " AND name LIKE '%{$_GPC['keyword']}%'";
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 10;
-	$list = pdo_fetchall("SELECT * FROM ".tablename('qrcode_stat')." WHERE uniacid = '{$_W['uniacid']}' $where ORDER BY id DESC LIMIT ".($pindex - 1) * $psize.','. $psize);
-
+	$list = pdo_fetchall("SELECT * FROM ".tablename('qrcode_stat')." $where ORDER BY id DESC LIMIT ".($pindex - 1) * $psize.','. $psize, $param);
 	if (!empty($list)) {
 		$openid = array();
 		foreach ($list as $index => &$qrcode) {
@@ -207,16 +218,11 @@ if($do == 'display') {
 			}
 		}
 		$openids = implode("','", $openid);
-		$acid = intval($_GPC['acid']);
-		$param[':uniacid'] = $_W['uniacid'];
-		$condition = '';
-		if($acid > 0) {
-			$condition = ' AND acid = :acid';
-			$param[':acid'] = $acid;
-		}
-		$nickname = pdo_fetchall('SELECT nickname, openid FROM ' . tablename('mc_mapping_fans') . " WHERE uniacid = :uniacid " .$condition." AND openid IN ('{$openids}')", $param, 'openid');
+		$param_temp[':uniacid'] = $_W['uniacid'];
+		$param_temp[':acid'] = $_W['acid'];
+		$nickname = pdo_fetchall('SELECT nickname, openid FROM ' . tablename('mc_mapping_fans') . " WHERE uniacid = :uniacid AND acid = :acid AND openid IN ('{$openids}')", $param_temp, 'openid');
 	}
-	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('qrcode_stat') . " WHERE uniacid = '{$_W['uniacid']}' $where");
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('qrcode_stat') . $where, $param);
 	$pager = pagination($total, $pindex, $psize);
 	template('platform/qr-display');
 }

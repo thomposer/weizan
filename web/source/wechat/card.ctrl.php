@@ -1,26 +1,16 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-$dos = array('module', 'coupon', 'location', 'discount', 'display', 'del', 'modifystock', 'toggle', 'qr', 'record', 'cash', 'gift', 'groupon', 'general_coupon');
+$dos = array('module', 'coupon', 'location', 'discount', 'display', 'del', 'sync', 'modifystock', 'toggle', 'qr', 'record', 'cash', 'gift', 'groupon', 'general_coupon');
 $do = in_array($do, $dos) ? $do : 'display';
 $op = trim($_GPC['op']) ? trim($_GPC['op']) : 'post';
-$accounts = uni_accounts();
-if(!empty($accounts)) {
-	foreach($accounts as $key => $li) {
-		if($li['level'] < 3) {
-			unset($accounts[$key]);
-		}
-	}
-}
-$acid = intval($_GPC['__acid']);
+$acid = intval($_W['acid']);
 
-if(!$acid || empty($accounts[$acid])) {
+if(!$acid) {
 	message('公众号不存在', url('wechat/account'), 'error');
-} else {
-	isetcookie('__acid', $acid, 86400 * 3);
 }
 
 if($do == 'location') {
@@ -29,7 +19,6 @@ if($do == 'location') {
 	exit();
 }
 
-$accdata = $accounts[$acid];
 if(empty($_GPC['__color'])) {
 	load()->classs('coupon');
 	$acc = new coupon($acid);
@@ -45,7 +34,6 @@ if(empty($_GPC['__color'])) {
 }
 $colors = iunserializer(base64_decode($_GPC['__color']));
 
-load()->func('tpl');
 load()->model('coupon');
 load()->classs('coupon');
 
@@ -88,6 +76,24 @@ if($do == 'display') {
  	}
 	$pager = pagination($total, $pindex, $psize);
 	template('wechat/card');
+}
+
+if($do == 'sync') {
+	$id = intval($_GPC['cid']);
+	$card = pdo_fetch('SELECT id,status,card_id,acid FROM ' . tablename('coupon') . ' WHERE acid = :acid AND id = :id', array(':acid' => $acid, ':id' => $id));
+	if(empty($card) || empty($card['card_id'])) {
+		message('卡券不存在或卡券id为空', referer(), 'error');
+	}
+	$coupon = new coupon($acid);
+	$card = $coupon->fetchCard($card['card_id']);
+	if(is_error($card)) {
+		message($card['message'], referer(), 'error');
+	}
+	$type = strtolower($card['card_type']);
+	$coupon_status = coupon_status();
+	$status = $coupon_status[$card[$type]['base_info']['status']];
+	pdo_update('coupon', array('status' => $status), array('acid' => $acid, 'id' => $id));
+	message('更新卡券状态成功', referer(), 'success');
 }
 
 if($do == 'del') {
@@ -305,7 +311,6 @@ if($do == 'record') {
 		$id = intval($_GPC['id']);
 		$del = intval($_GPC['del']);
 		$record = pdo_fetch('SELECT code,status FROM ' . tablename('coupon_record') . ' WHERE acid = :acid AND id = :id', array(':acid' => $acid, ':id' => $id));
-
 		if(empty($record)) {
 			message('对应code码不存在', referer(), 'error');
 		}
@@ -382,11 +387,8 @@ if($do == 'discount') {
 		template('wechat/coupon-post');
 	} elseif($op == 'post_save') {
 		$post = array();
-		$data = explode('&', urldecode($_GPC['data']));
-		foreach($data as $da) {
-			if(empty($da)) continue;
-			$arr = explode('=', $da);
-			$post[$arr[0]] = trim($arr[1]);
+		foreach($_GPC['data'] as $da) {
+			$post[$da['name']] = trim($da['value']);
 		}
 		$out['errno'] = 1;
 		$out['error'] = '';
@@ -469,11 +471,8 @@ if($do == 'cash') {
 		template('wechat/cash-post');
 	} elseif($op == 'post_save') {
 		$post = array();
-		$data = explode('&', urldecode($_GPC['data']));
-		foreach($data as $da) {
-			if(empty($da)) continue;
-			$arr = explode('=', $da);
-			$post[$arr[0]] = trim($arr[1]);
+		foreach($_GPC['data'] as $da) {
+			$post[$da['name']] = trim($da['value']);
 		}
 		$out['errno'] = 1;
 		$out['error'] = '';
@@ -559,11 +558,8 @@ if($do == 'gift') {
 		template('wechat/gift-post');
 	} elseif($op == 'post_save') {
 		$post = array();
-		$data = explode('&', urldecode($_GPC['data']));
-		foreach($data as $da) {
-			if(empty($da)) continue;
-			$arr = explode('=', $da);
-			$post[$arr[0]] = trim($arr[1]);
+		foreach($_GPC['data'] as $da) {
+			$post[$da['name']] = trim($da['value']);
 		}
 		$out['errno'] = 1;
 		$out['error'] = '';
@@ -632,11 +628,8 @@ if($do == 'groupon') {
 		template('wechat/groupon-post');
 	} elseif($op == 'post_save') {
 		$post = array();
-		$data = explode('&', urldecode($_GPC['data']));
-		foreach($data as $da) {
-			if(empty($da)) continue;
-			$arr = explode('=', $da);
-			$post[$arr[0]] = trim($arr[1]);
+		foreach($_GPC['data'] as $da) {
+			$post[$da['name']] = trim($da['value']);
 		}
 		$out['errno'] = 1;
 		$out['error'] = '';
@@ -704,11 +697,8 @@ if($do == 'general_coupon') {
 		template('wechat/general_coupon-post');
 	} elseif($op == 'post_save') {
 		$post = array();
-		$data = explode('&', urldecode($_GPC['data']));
-		foreach($data as $da) {
-			if(empty($da)) continue;
-			$arr = explode('=', $da);
-			$post[$arr[0]] = trim($arr[1]);
+		foreach($_GPC['data'] as $da) {
+			$post[$da['name']] = trim($da['value']);
 		}
 		$out['errno'] = 1;
 		$out['error'] = '';
@@ -747,7 +737,7 @@ if($do == 'general_coupon') {
 		$post['uniacid'] = $_W['uniacid'];
 		$post['acid'] = $acid;
 		$post['type'] = 'general_coupon';
-		$post['default_detail'] = $post['default_detail'];
+		$post['extra'] = $post['default_detail'];
 		$post['is_display'] = intval($post['is_display']);
 		empty($post['code_type']) && $post['code_type'] = 1;
 		$post['status'] = 1;

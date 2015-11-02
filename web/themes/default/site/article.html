@@ -43,7 +43,7 @@
 					<th style="width:50px">排序</th>
 					<th>标题</th>
 					<th style="width:180px;">属性</th>
-					<th style="width:100px; text-align:right;">操作</th>
+					<th style="width:200px; text-align:right;">操作</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -58,9 +58,10 @@
 						{if $item['ishot']}<span class="label label-success">头条</span>{/if}
 						{if $item['iscommend']}<span class="label label-warning">推荐</span>{/if}
 					</td>
-					<td style="text-align:right;">
-						<a href="{php echo url('site/article/post', array('id' => $item['id']))}" title="编辑" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-						<a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo url('site/article/delete', array('id' => $item['id']))}" title="删除" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm"><i class="fa fa-times"></i></a>
+					<td style="text-align:right; position:relative;">
+						<a href="javascript:;" data-url="{php echo murl('site/site/detail', array('id' => $item['id']), true, true)}" class="js-clip" title="复制链接">复制链接</a>&nbsp;-&nbsp;
+						<a href="{php echo url('site/article/post', array('id' => $item['id']))}" title="编辑">编辑</a>&nbsp;-&nbsp;
+						<a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo url('site/article/delete', array('id' => $item['id']))}" title="删除">删除</a>
 					</td>
 				</tr>
 				{/loop}
@@ -71,13 +72,6 @@
 {$pager}
 <script type="text/javascript">
 	var category = {php echo json_encode($children)};
-	require(['bootstrap'],function($){
-		$('.btn').hover(function(){
-			$(this).tooltip('show');
-		},function(){
-			$(this).tooltip('hide');
-		});
-	});
 </script>
 {elseif $do == 'post'}
 <div class="clearfix">
@@ -112,7 +106,7 @@
 					<label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">文章触发关键字</label>
 					<div class="col-sm-8 col-xs-12">
 						<input type="text" class="form-control" placeholder="" name="keyword" value="{$keywords}">
-						<div class="help-block">添加关键字以后,系统将生成一条图文规则,用户可以通过输入关键字来阅读文章</div>
+						<div class="help-block">添加关键字以后,系统将生成一条图文规则,用户可以通过输入关键字来阅读文章。多个关键字请用英文“,”隔开</div>
 					</div>
 				</div>
 				<div class="form-group">

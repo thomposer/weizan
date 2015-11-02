@@ -10,6 +10,9 @@ load()->func('cache.' . $_W['config']['setting']['cache']);
 
 function cache_load($key, $unserialize = false) {
 	global $_W;
+	if (!empty($_W['cache'][$key])) {
+		return $_W['cache'][$key];
+	}
 	$data = $_W['cache'][$key] = cache_read($key);
 	if ($key == 'setting') {
 		$_W['setting'] = $data;
@@ -21,6 +24,7 @@ function cache_load($key, $unserialize = false) {
 		return $unserialize ? iunserializer($data) : $data;
 	}
 }
+
 
 function &cache_global($key) {
 	

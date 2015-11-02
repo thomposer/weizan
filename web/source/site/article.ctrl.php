@@ -1,9 +1,10 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
+uni_user_permission_check('site_article');
 $do = in_array($do, array('display', 'post', 'delete')) ? $do : 'display';
 
 $category = pdo_fetchall("SELECT id,parentid,name FROM ".tablename('site_category')." WHERE uniacid = '{$_W['uniacid']}' ORDER BY parentid ASC, displayorder ASC, id ASC ", array(), 'id');
@@ -21,8 +22,7 @@ if (!empty($category)) {
 	}
 }
 
-if($do == 'display') {	
-	load()->func('tpl');
+if($do == 'display') {
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 20;
 	$condition = '';
@@ -43,10 +43,8 @@ if($do == 'display') {
 	$list = pdo_fetchall("SELECT * FROM ".tablename('site_article')." WHERE uniacid = '{$_W['uniacid']}' $condition ORDER BY displayorder DESC, id DESC LIMIT ".($pindex - 1) * $psize.','.$psize, $params);
 	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('site_article') . " WHERE uniacid = '{$_W['uniacid']}'");
 	$pager = pagination($total, $pindex, $psize);
-	
 	template('site/article');
 } elseif($do == 'post') {
-	load()->func('tpl');
 	load()->func('file');
 	$id = intval($_GPC['id']);
 		$template = uni_templates();
@@ -60,7 +58,14 @@ if($do == 'display') {
 		if (empty($item)) {
 			message('抱歉，文章不存在或是已经删除！', '', 'error');
 		}
-		$keywords = pdo_fetchcolumn('SELECT content FROM ' . tablename('rule_keyword') . ' WHERE id = :id AND uniacid = :uniacid ', array(':id' => $item['kid'], ':uniacid' => $_W['uniacid']));
+		$key = pdo_fetchall('SELECT content FROM ' . tablename('rule_keyword') . ' WHERE rid = :rid AND uniacid = :uniacid', array(':rid' => $item['rid'], ':uniacid' => $_W['uniacid']));
+		if(!empty($key)) {
+			$keywords = array();
+			foreach($key as $row) {
+				$keywords[] = $row['content'];
+			}
+			$keywords = implode(',', array_values($keywords));
+		}
 		$item['credit'] = iunserializer($item['credit']) ? iunserializer($item['credit']) : array();
 		if(!empty($item['credit']['limit'])) {
 						$credit_num = pdo_fetchcolumn('SELECT SUM(credit_value) FROM ' . tablename('mc_handsel') . ' WHERE uniacid = :uniacid AND module = :module AND sign = :sign', array(':uniacid' => $_W['uniacid'], ':module' => 'article', ':sign' => md5(iserializer(array('id' => $id)))));
@@ -103,19 +108,26 @@ if($do == 'display') {
 		} else {
 			$data['thumb'] = '';
 		}
-		if(!empty($_GPC['keyword'])) {
+		$keyword = str_replace('，', ',', trim($_GPC['keyword']));
+		$keyword = explode(',', $keyword);
+		if(!empty($keyword)) {
 			$rule['uniacid'] = $_W['uniacid'];
 			$rule['name'] = '文章：' . $_GPC['title'] . ' 触发规则';
 			$rule['module'] = 'news';
 			$rule['status'] = 1;
-
-			$keyword = array('uniacid' => $_W['uniacid']);
-			$keyword['module'] = 'news';
-			$keyword['content'] = $_GPC['keyword'];
-			$keyword['status'] = 1;
-			$keyword['type'] = 1;
-			$keyword['displayorder'] = 1;
-
+			$keywords = array();
+			foreach($keyword as $key) {
+				$key = trim($key);
+				if(empty($key)) continue;
+				$keywords[] = array(
+					'uniacid' => $_W['uniacid'],
+					'module' => 'news',
+					'content' => $key,
+					'status' => 1,
+					'type' => 1,
+					'displayorder' => 1,
+				);
+			}
 			$reply['title'] = $_GPC['title'];
 			$reply['description'] = $_GPC['description'];
 			$reply['thumb'] = $_GPC['thumb'];
@@ -131,18 +143,16 @@ if($do == 'display') {
 			$data['credit'] = iserializer(array('status' => 0, 'limit' => 0, 'share' => 0, 'click' => 0));
 		}	
 		if (empty($id)) {
-			if(!empty($_GPC['keyword'])) {
+			if(!empty($keywords)) {
 				pdo_insert('rule', $rule);
 				$rid = pdo_insertid();
-
-				$keyword['rid'] = $rid;
-				pdo_insert('rule_keyword', $keyword);
-				$kid = pdo_insertid();
-				
+				foreach($keywords as $li) {
+					$li['rid'] = $rid;
+					pdo_insert('rule_keyword', $li);
+				}
 				$reply['rid'] = $rid;
 				pdo_insert('news_reply', $reply);
 				$data['rid'] = $rid;
-				$data['kid'] = $kid;
 			}
 			pdo_insert('site_article', $data);
 			$aid = pdo_insertid();
@@ -152,18 +162,18 @@ if($do == 'display') {
 			pdo_delete('rule', array('id' => $item['rid'], 'uniacid' => $_W['uniacid']));
 			pdo_delete('rule_keyword', array('rid' => $item['rid'], 'uniacid' => $_W['uniacid']));
 			pdo_delete('news_reply', array('rid' => $item['rid']));
-			if(!empty($_GPC['keyword'])) {
+			if(!empty($keywords)) {
 				pdo_insert('rule', $rule);
 				$rid = pdo_insertid();
 
-				$keyword['rid'] = $rid;
-				pdo_insert('rule_keyword', $keyword);
-				$kid = pdo_insertid();
-					
+				foreach($keywords as $li) {
+					$li['rid'] = $rid;
+					pdo_insert('rule_keyword', $li);
+				}
+
 				$reply['rid'] = $rid;
 				pdo_insert('news_reply', $reply);
 				$data['rid'] = $rid;
-				$data['kid'] = $kid;
 			} else {
 				$data['rid'] = 0;
 				$data['kid'] = 0;
@@ -191,6 +201,6 @@ if($do == 'display') {
 	}
 	pdo_delete('site_article', array('id' => $id));
 	message('删除成功！', referer(), 'success');
-} 
+}
 
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 defined('IN_IA') or exit('Access Denied');
@@ -9,8 +9,8 @@ defined('IN_IA') or exit('Access Denied');
 $dos = array('keyword', 'rule', 'history', 'trend', 'del', 'setting', 'browser');
 $do = !empty($_GPC['do']) && in_array($do, $dos) ? $do : 'keyword';
 
-load()->func('tpl');
 if($do == 'history') {
+	uni_user_permission_check('platform_stat_history');
 	$_W['page']['title'] = '聊天记录 - 数据统计';
 	$where = '';
 	$starttime = empty($_GPC['time']['start']) ? TIMESTAMP - 86400 * 60 : strtotime($_GPC['time']['start']);
@@ -100,6 +100,7 @@ if($do == 'del') {
 	}
 }
 if($do == 'rule') {
+	uni_user_permission_check('platform_stat_rule');
 	$_W['page']['title'] = '回复规则使用情况 - 数据统计';
 	$foo = !empty($_GPC['foo']) ? $_GPC['foo'] : 'hit';
 	
@@ -159,6 +160,7 @@ if($do == 'rule') {
 	
 }
 if($do == 'keyword') {
+	uni_user_permission_check('platform_stat_keyword');
 	$_W['page']['title'] = '关键字命中情况 - 数据统计';
 	$foo = !empty($_GPC['foo']) ? $_GPC['foo'] : 'hit';
 	
@@ -237,6 +239,7 @@ if($do == 'keyword') {
 }
 
 if($do == 'setting') {
+	uni_user_permission_check('platform_stat_setting');
 	$_W['page']['title'] = '参数 - 数据统计';
 	$settings = uni_setting($_W['uniacid'], array('stat'));
 	$settings = $settings['stat'];
@@ -249,6 +252,7 @@ if($do == 'setting') {
 		$stat['use_ratio'] = intval($_GPC['use_ratio']);
 		$stat = iserializer($stat);
 		pdo_update('uni_settings', array('stat' => $stat), array('uniacid' => $_W['uniacid']));
+		cache_delete("unisetting:{$_W['uniacid']}");
 		message('设置参数成功', 'refresh', 'success');
 	}
 	template('platform/stat-setting');

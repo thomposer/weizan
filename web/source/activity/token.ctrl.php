@@ -4,6 +4,7 @@
  * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
+uni_user_permission_check('activity_token');
 $dos = array('display', 'post','del', 'record', 'record-del');
 $do = in_array($do, $dos) ? $do : 'display';
 
@@ -17,7 +18,6 @@ foreach ($unisettings['creditnames'] as $key=>$credit) {
 
 if($do == 'post') {
 	global $_W, $_GPC;
-	load()->func('tpl');
 	$couponid = intval($_GPC['id']);
 	$_W['page']['title'] = !empty($couponid) ? '代金券编辑 - 折扣券 - 会员营销' : '代金券添加 - 折扣券 - 会员营销';
 	$item = pdo_fetch('SELECT * FROM ' . tablename('activity_coupon') . " WHERE uniacid = '{$_W['uniacid']}' AND couponid = '{$couponid}'");
@@ -183,7 +183,7 @@ if($do == 'record') {
 		$clerk = pdo_fetch($sql, array(':uniacid' => $_W['uniacid'], ':password' => $password));
 		if(!empty($clerk)) {
 			load()->model('activity');
-			$status = activity_token_use($uid, $couponid, $clerk['name'], $recid);
+			$status = activity_token_use($uid, $couponid, $clerk['name'], $clerk['id'], $recid);
 			if (!is_error($status)) {
 				message('折扣券使用成功！', referer(), 'success');
 			} else {
@@ -192,7 +192,6 @@ if($do == 'record') {
 		}
 		message('店员密码错误！', referer(), 'error');
 	}
-	load()->func('tpl');
 	$modules = uni_modules();
 	$coupons = pdo_fetchall('SELECT couponid, title FROM ' . tablename('activity_coupon') . ' WHERE uniacid = :uniacid AND type = 2 ORDER BY couponid DESC', array(':uniacid' => $_W['uniacid']), 'couponid');
 	$starttime = empty($_GPC['time']['start']) ? strtotime('-1 month') : strtotime($_GPC['time']['start']);

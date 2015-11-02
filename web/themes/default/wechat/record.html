@@ -14,7 +14,7 @@
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
 					<div class="col-sm-7 col-lg-8 col-md-8 col-xs-12">
-						<a class="btn btn-default {if $_GPC['status'] == ''}btn-primary{/if}" href="{php echo url('wechat/card/record', array('op' => 'list', 'status' => '', 'card_id' => $card_id))}">不限</a>
+						<a class="btn btn-default {if $_GPC['status'] == '0'||$_GPC['status'] == ''}btn-primary{/if}" href="{php echo url('wechat/card/record', array('op' => 'list', 'status' => '0', 'card_id' => $card_id))}">不限</a>
 						<a class="btn btn-default {if $_GPC['status'] == '1'}btn-primary{/if}" href="{php echo url('wechat/card/record', array('op' => 'list', 'status' => '1', 'card_id' => $card_id))}">未使用</a>
 						<a class="btn btn-default {if $_GPC['status'] == '2'}btn-primary{/if}" href="{php echo url('wechat/card/record', array('op' => 'list', 'status' => '2', 'card_id' => $card_id))}">已失效</a>
 						<a class="btn btn-default {if $_GPC['status'] == '3'}btn-primary{/if}" href="{php echo url('wechat/card/record', array('op' => 'list', 'status' => '3', 'card_id' => $card_id))}">已核销</a>
@@ -112,10 +112,10 @@
 						<td>{$dca['clerk_name']}</td>
 						<td style="text-align:right;">
 							{if $dca['status'] == 1}
-								<a href="{php echo url('wechat/card/record', array('op' => 'unavailable', 'id' => $dca['id']))}" class="btn btn-default btn-sm" title="设置为失效" data-toggle="tooltip" data-placement="top" onclick="if(!confirm('设置为失效后将不可恢复，确定设置失效吗?')) return false;"><i class="fa fa-power-off"> </i></a>
-								<a href="javascript:;" class="btn btn-default btn-sm consume" title="核销卡券" data-toggle="tooltip" data-placement="top" data-id="{$dca['id']}"><i class="fa fa-key"> </i></a>
+								<a href="{php echo url('wechat/card/record', array('op' => 'unavailable', 'id' => $dca['id']))}" title="设置为失效" onclick="if(!confirm('设置为失效后将不可恢复，确定设置失效吗?')) return false;">设置为失效</a>&nbsp;-&nbsp;
+								<a href="javascript:;" class="consume" title="核销卡券" data-id="{$dca['id']}">核销卡券</a>&nbsp;-&nbsp;
 							{/if}
-							<a href="{php echo url('wechat/card/record', array('op' => 'unavailable', 'del' => 1, 'id' => $dca['id']))}" class="btn btn-default btn-sm" title="删除" data-toggle="tooltip" data-placement="top" onclick="if(!confirm('删除后不可恢复，确定删除吗?')) return false;"><i class="fa fa-times"> </i></a>
+							<a href="{php echo url('wechat/card/record', array('op' => 'unavailable', 'del' => 1, 'id' => $dca['id']))}" onclick="if(!confirm('删除后不可恢复，确定删除吗?')) return false;">删除</a>
 						</td>
 					</tr>
 					{/loop}
@@ -143,21 +143,11 @@
 </div>
 
 <script>
-	require(['jquery', 'util'], function($, u){
-		$('.consume').click(function(){
-			var id = $(this).attr('data-id');
-			$('#content input[name="id"]').val(id);
-			var obj = u.dialog('', $('#content').html());
-			obj.modal('show');
-
-		});
-
-
-	});
-	$('.btn').hover(function(){
-		$(this).tooltip('show');
-	},function(){
-		$(this).tooltip('hide');
+	$('.consume').click(function(){
+		var id = $(this).attr('data-id');
+		$('#content input[name="id"]').val(id);
+		var obj = util.dialog('', $('#content').html());
+		obj.modal('show');
 	});
 </script>
 {template 'common/footer'}

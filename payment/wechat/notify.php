@@ -51,7 +51,27 @@ if(is_array($setting['payment'])) {
 				$record['status'] = '1';
 				$record['tag'] = iserializer($log['tag']);
 				pdo_update('core_paylog', $record, array('plid' => $log['plid']));
-				
+				if($log['is_usecard'] == 1 && $log['card_type'] == 1 &&  !empty($log['encrypt_code']) && $log['acid']) {
+					load()->classs('coupon');
+					$acc = new coupon($log['acid']);
+					$codearr['encrypt_code'] = $log['encrypt_code'];
+					$codearr['module'] = $log['module'];
+					$codearr['card_id'] = $log['card_id'];
+					$acc->PayConsumeCode($codearr);
+				}
+				load()->model('mc');
+				$log['uid'] = mc_openid2uid($log['openid']);
+				if($log['is_usecard'] == 1 && $log['card_type'] == 2) {
+					$now = time();
+					$log['card_id'] = intval($log['card_id']);
+					$iscard = pdo_fetchcolumn('SELECT iscard FROM ' . tablename('modules') . ' WHERE name = :name', array(':name' => $log['module']));
+					$condition = '';
+					if($iscard == 1) {
+						$condition = " AND grantmodule = '{$log['module']}'";
+					}
+					pdo_query('UPDATE ' . tablename('activity_coupon_record') . " SET status = 2, usetime = {$now}, usemodule = '{$log['module']}' WHERE uniacid = :aid AND couponid = :cid AND uid = :uid AND status = 1 {$condition} LIMIT 1", array(':aid' => $_W['uniacid'], ':uid' => $log['uid'], ':cid' => $log['card_id']));
+				}
+
 				$site = WeUtility::createModuleSite($log['module']);
 				if(!is_error($site)) {
 					$method = 'payResult';
@@ -67,6 +87,10 @@ if(is_array($setting['payment'])) {
 						$ret['user'] = $log['openid'];
 						$ret['fee'] = $log['fee'];
 						$ret['tag'] = $log['tag'];
+						$ret['is_usecard'] = $log['is_usecard'];
+						$ret['card_type'] = $log['card_type'];
+						$ret['card_fee'] = $log['card_fee'];
+						$ret['card_id'] = $log['card_id'];
 						$site->$method($ret);
 						exit('success');
 					}

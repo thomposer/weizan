@@ -4,7 +4,7 @@
  *
  * @author 大路货 QQ:792454007
  * @url 
- * [WeEngine System] Copyright (c) 2013 012wz.com
+ * [WeiZan System] Copyright (c) 2013 012wz.com
  */
 defined('IN_IA') or exit('Access Denied');
 

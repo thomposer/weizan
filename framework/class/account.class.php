@@ -87,7 +87,7 @@ abstract class WeAccount {
 			$data['location_id'] = trim($packet['poiid']);
 			$data['message'] = trim($packet['msg']);
 			$id = intval($packet['uniqid']);
-			pdo_update('coupon_location', $data, array('id' => $id));
+			pdo_update('coupon_location', $data, array('sid' => $id, 'acid' => $_W['acid']));
 			exit();
 		}
 				if(in_array($packet['event'], array('card_pass_check', 'card_not_pass_check'))) {
@@ -622,6 +622,7 @@ abstract class WeBase {
 		$pars = array('module' => $this->modulename, 'uniacid' => $_W['uniacid']);
 		$row = array();
 		$row['settings'] = iserializer($settings);
+		cache_build_account_modules();
 		if (pdo_fetchcolumn("SELECT module FROM ".tablename('uni_account_modules')." WHERE module = :module AND uniacid = :uniacid", array(':module' => $this->modulename, ':uniacid' => $_W['uniacid']))) {
 			return pdo_update('uni_account_modules', $row, $pars) !== false;
 		} else {
@@ -906,20 +907,19 @@ abstract class WeModuleProcessor extends WeBase {
 	
 	protected function buildSiteUrl($url) {
 		global $_W;
-
-		$mapping = array(
-			'[from]' => $this->message['from'],
-			'[to]' => $this->message['to'],
-			'[rule]' => $this->rule,
-			'[uniacid]' => $_W['uniacid'],
-		);
-		
-		$url = str_replace(array_keys($mapping), array_values($mapping), $url);
 		if(strexists($url, 'http://') || strexists($url, 'https://')) {
 			return $url;
 		}
+		$mapping = array(
+				'[from]' => $this->message['from'],
+				'[to]' => $this->message['to'],
+				'[rule]' => $this->rule,
+				'[uniacid]' => $_W['uniacid'],
+		);
 		
-		if (strexists($url, './index.php?i=') && !strexists($url, '&j=') && !empty($_W['acid'])) {
+		$url = str_replace(array_keys($mapping), array_values($mapping), $url);
+		
+		if (uni_is_multi_acid() && strexists($url, './index.php?i=') && !strexists($url, '&j=') && !empty($_W['acid'])) {
 			$url = str_replace("?i={$_W['uniacid']}&", "?i={$_W['uniacid']}&j={$_W['acid']}&", $url);
 		}
 		
@@ -949,7 +949,7 @@ abstract class WeModuleProcessor extends WeBase {
 
 		return $_W['siteroot'] . 'app/' . str_replace('./', '', url('auth/forward', $vars));
 	}
-	
+
 	
 	protected function extend_W(){
 		global $_W;
@@ -969,8 +969,8 @@ abstract class WeModuleProcessor extends WeBase {
 			}
 			if (empty($_W['account'])) {
 				$_W['account'] = account_fetch($_W['acid']);
-				$_W['account']['qrcode'] = "{$_W['attachurl']}qrcode_{$_W['acid']}.jpg?time={$_W['timestamp']}";
-				$_W['account']['avatar'] = "{$_W['attachurl']}headimg_{$_W['acid']}.jpg?time={$_W['timestamp']}";
+				$_W['account']['qrcode'] = "{$_W['attachurl_local']}qrcode_{$_W['acid']}.jpg?time={$_W['timestamp']}";
+				$_W['account']['avatar'] = "{$_W['attachurl_local']}headimg_{$_W['acid']}.jpg?time={$_W['timestamp']}";
 				$_W['account']['groupid'] = $_W['uniaccount']['groupid'];
 			}
 		}

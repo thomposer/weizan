@@ -1,26 +1,64 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-$dos = array('display', 'post','del');
+uni_user_permission_check('mc_member');
+$dos = array('display', 'post','del', 'trade', 'add');
 $do = in_array($do, $dos) ? $do : 'display';
 load()->model('mc');
 
 if($do == 'display') {
 	$_W['page']['title'] = '会员列表 - 会员 - 会员中心';
-	global $_GPC, $_W;
 	$groups = mc_groups();
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 50;
 	$condition = '';
-	$condition .= empty($_GPC['mobile']) ? '' : " AND `mobile` LIKE '%".trim($_GPC['mobile'])."%'";
-	$condition .= empty($_GPC['email']) ? '' : " AND `email` LIKE '%".trim($_GPC['email'])."%'";
-	$condition .= empty($_GPC['username']) ? '' : " AND (( `realname` LIKE '%".trim($_GPC['username'])."%' ) OR ( `nickname` LIKE '%".trim($_GPC['username'])."%' )) ";
+	$starttime = empty($_GPC['time']['start']) ? strtotime('-90 days') : strtotime($_GPC['time']['start']);
+	$endtime = empty($_GPC['time']['end']) ? TIMESTAMP + 86399 : strtotime($_GPC['time']['end']) + 86399;
+	$condition .= " AND createtime >= {$starttime} AND createtime <= {$endtime}";
+	$condition .= empty($_GPC['username']) ? '' : " AND (( `realname` LIKE '%".trim($_GPC['username'])."%' ) OR ( `nickname` LIKE '%".trim($_GPC['username'])."%' ) OR ( `mobile` LIKE '%".trim($_GPC['username'])."%' )) ";
 	$condition .= intval($_GPC['groupid']) > 0 ?  " AND `groupid` = '".intval($_GPC['groupid'])."'" : '';
-	$sql = "SELECT uid, uniacid, groupid, realname, nickname, email, mobile, createtime  FROM ".tablename('mc_members')." WHERE uniacid = '{$_W['uniacid']}' ".$condition." ORDER BY createtime DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize;
+	$sql = "SELECT uid, uniacid, groupid, realname, nickname, email, mobile, credit1, credit2, createtime  FROM ".tablename('mc_members')." WHERE uniacid = '{$_W['uniacid']}' ".$condition." ORDER BY createtime DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize;
 	$list = pdo_fetchall($sql);
+	if(checksubmit('export_submit', true)) {
+		$header = array(
+			'uid' => 'UID', 'realname' => '姓名', 'groupid' => '会员组', 'mobile' => '手机', 'email' => '邮箱',
+			'credit1' => '积分', 'credit2' => '余额', 'createtime' => '注册时间',
+		);
+		$keys = array_keys($header);
+		$html = "\xEF\xBB\xBF";
+		foreach($header as $li) {
+			$html .= $li . "\t ,";
+		}
+		$html .= "\n";
+		if(!empty($list)) {
+			$size = ceil(count($list) / 500);
+			for($i = 0; $i < $size; $i++) {
+				$buffer = array_slice($list, $i * 500, 500);
+				foreach($buffer as $row) {
+					if(strexists($row['email'], '012wz.com')) {
+						$row['email'] = '';
+					}
+					$row['createtime'] = date('Y-m-d H:i:s', $row['createtime']);
+					$row['groupid'] = $groups[$row['groupid']]['title'];
+					foreach($keys as $key) {
+						$data[] = $row[$key];
+					}
+					$user[] = implode("\t ,", $data) . "\t ,";
+					unset($data);
+				}
+			}
+			$html .= implode("\n", $user);
+		}
+		
+		header("Content-type:text/csv");
+		header("Content-Disposition:attachment; filename=会员数据.csv");
+		echo $html;
+		exit();
+	}
+
 	if(!empty($list)) {
 		foreach($list as &$li) {
 			if(empty($li['email']) || (!empty($li['email']) && substr($li['email'], -6) == '012wz.com' && strlen($li['email']) == 39)) {
@@ -32,6 +70,8 @@ if($do == 'display') {
 	}
 	$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('mc_members')." WHERE uniacid = '{$_W['uniacid']}' ".$condition);
 	$pager = pagination($total, $pindex, $psize);
+	$stat['total'] = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_members') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
+	$stat['today'] = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_members') . ' WHERE uniacid = :uniacid AND createtime >= :starttime AND createtime <= :endtime', array(':uniacid' => $_W['uniacid'], ':starttime' => strtotime('Y-m-d'), ':endtime' =>  strtotime('Y-m-d') + 86399));
 }
 
 if($do == 'post') {
@@ -86,6 +126,7 @@ if($do == 'post') {
 						unset($_GPC[$field]);
 					}
 				}
+
 				if(!empty($_GPC['avatar'])) {
 					if(strexists($_GPC['avatar'], 'attachment/images/global/avatars/avatar_')) {
 						$_GPC['avatar'] = str_replace($_W['attachurl'], '', $_GPC['avatar']);
@@ -115,15 +156,14 @@ if($do == 'post') {
 				if(($email_effective == 1 && empty($_GPC['email']))) {
 					unset($_GPC['email']);
 				}
+
 				$uid = mc_update($uid, $_GPC);
 			}
 		}
 		message('更新资料成功！', referer(), 'success');
 	}
-	
-	load()->func('tpl');
 	$groups = mc_groups($_W['uniacid']);
-	$profile = mc_fetch($uid);
+	$profile = pdo_get('mc_members', array('uniacid' => $_W['uniacid'], 'uid' => $uid));
 	if(!empty($profile)) {
 		if(empty($profile['email']) || (!empty($profile['email']) && substr($profile['email'], -6) == '012wz.com' && strlen($profile['email']) == 39)) {
 						$profile['email_effective'] = 1;
@@ -177,4 +217,54 @@ if($do == 'del') {
 	}
 }
 
+if($do == 'add') {
+	if($_W['isajax']) {
+		$type = trim($_GPC['type']);
+		$data = trim($_GPC['data']);
+		if(empty($data) || empty($type)) {
+			exit(json_encode(array('valid' => false)));
+		}
+		$user = pdo_get('mc_members', array('uniacid' => $_W['uniacid'], $type => $data));
+		if(empty($user)) {
+			exit(json_encode(array('valid' => true)));
+		} else {
+			exit(json_encode(array('valid' => false)));
+		}
+	}
+	if(checksubmit('form')) {
+		$realname = trim($_GPC['realname']) ? trim($_GPC['realname']) : message('姓名不能为空');
+		$mobile = trim($_GPC['mobile']) ? trim($_GPC['mobile']) : message('手机不能为空');
+		$user = pdo_get('mc_members', array('uniacid' => $_W['uniacid'], 'mobile' => $mobile));
+		if(!empty($user)) {
+			message('手机号被占用');
+		}
+		$email = trim($_GPC['email']);
+		if(!empty($email)) {
+			$user = pdo_get('mc_members', array('uniacid' => $_W['uniacid'], 'email' => $email));
+			if(!empty($user)) {
+				message('邮箱被占用');
+			}
+		}
+		$salt = random(8);
+		$data = array(
+			'uniacid' => $_W['uniacid'],
+			'realname' => $realname,
+			'mobile' => $mobile,
+			'email' => $email,
+			'salt' => $salt,
+			'password' => md5(trim($_GPC['password']) . $salt . $_W['config']['setting']['authkey']),
+			'credit1' => intval($_GPC['credit1']),
+			'credit2' => intval($_GPC['credit2']),
+			'groupid' => intval($_GPC['groupid']),
+			'createtime' => TIMESTAMP,
+		);
+		pdo_insert('mc_members', $data);
+		$uid = pdo_insertid();
+		message('添加会员成功,将进入编辑页面', url('mc/member/post', array('uid' => $uid)), 'success');
+	}
+}
+
+if($do == 'trade') {
+	$_W['page']['title'] = '会员交易-会员中心';
+}
 template('mc/member');

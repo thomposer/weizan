@@ -1,21 +1,14 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-
+uni_user_permission_check('platform_menu');
 $current['designer'] = ' class="current"';
+$acc = account_fetch($_W['acid']);
+$acc = array_elements(array('name', 'acid', 'level'), $acc);
 
-$accs = uni_accounts();
-$accounts = array();
-if(!empty($accs)) {
-	foreach($accs as $acc) {
-		if($acc['level'] > 1) {
-			$accounts[$acc['acid']] = array_elements(array('name', 'acid'), $acc);
-		}
-	}
-}
 $dos = array('display', 'save', 'remove', 'refresh', 'search_key');
 if($_W['isajax']) {
 	if($do == 'search_key') {
@@ -44,19 +37,18 @@ $do = in_array($do, $dos) ? $do : 'display';
 
 if($do == 'remove') {
 	$flag = true;
-	foreach($accounts as $acc) {
-		$account = WeAccount::create($acc['acid']);
-		$update = $account->menuQuery();
+	$account = WeAccount::create($_W['acid']);
+	$update = $account->menuQuery();
+	if($flag && is_array($update)) {
 		$update[] = array('createtime' => time());
-		if($flag) {
-			pdo_update('uni_settings', array('menuset' => iserializer($update)), array('uniacid' => $_W['uniacid']));
-			$flag = false;
-		}
-		$ret = $account->menuDelete();
-		if(is_error($ret)) {
-			exit(json_encode($ret));
-		}
+		pdo_update('uni_settings', array('menuset' => base64_encode(iserializer($update))), array('uniacid' => $_W['uniacid']));
+		$flag = false;
 	}
+	$ret = $account->menuDelete();
+	if(is_error($ret)) {
+		exit(json_encode($ret));
+	}
+	cache_delete("unisetting:{$_W['uniacid']}");
 	exit('success');
 }
 
@@ -87,25 +79,20 @@ if($do == 'save') {
 		$menuset[] = array('createtime' => time());
 		pdo_update('uni_settings', array('menuset' => base64_encode(iserializer($menuset))), array('uniacid' => $_W['uniacid']));
 	}
-	
-	foreach($accounts as $acc) {
-		$account = WeAccount::create($acc['acid']);
-		$ret = $account->menuCreate($menus);
-		if(is_error($ret)) {
-			exit(json_encode($ret));
-		}
+	$account = WeAccount::create($_W['acid']);
+	$ret = $account->menuCreate($menus);
+	if(is_error($ret)) {
+		exit(json_encode($ret));
 	}
+	cache_delete("unisetting:{$_W['uniacid']}");
 	exit('success');
 }
 
 if($do == 'display') {
 	$_W['page']['title'] = '菜单设计器 - 自定义菜单 - 高级功能';
-	if(!empty($accounts)) {
-		if(empty($menus) || !is_array($menus)) {
-			$acc = array_shift($accounts);
-			$account = WeAccount::create($acc['acid']);
-			$menus = $account->menuQuery();
-		}
+	if(empty($menus) || !is_array($menus)) {
+		$account = WeAccount::create($_W['acid']);
+		$menus = $account->menuQuery();
 	}
 	if (is_error($menus)) {
 		message($menus['message'], '', 'error');

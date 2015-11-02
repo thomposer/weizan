@@ -11,6 +11,7 @@ $do = in_array($do, $dos) ? $do : 'register';
 $setting = uni_setting($_W['uniacid'], array('uc', 'passport'));
 $uc_setting = $setting['uc'] ? $setting['uc'] : array();
 $item = empty($setting['passport']['item']) ? 'random' : $setting['passport']['item'];
+$audit = intval($setting['passport']['audit']);
 
 $forward = url('mc');
 if(!empty($_GPC['forward'])) {
@@ -32,6 +33,7 @@ if($do == 'register') {
 	if($_W['ispost'] && $_W['isajax']) {
 		$post = $_GPC['__input'];
 		$username = trim($post['username']);
+		$code = trim($post['code']);
 		$password = trim($post['password']);
 		$repassword = trim($post['repassword']);
 		$repassword != $password && exit('两次密码输入不一致');
@@ -65,6 +67,12 @@ if($do == 'register') {
 				$pars[':email'] = $username;
 			} else {
 				exit('您输入的用户名格式错误');
+			}
+		}
+		if($audit == 1) {
+			load()->model('utility');
+			if(!code_verify($_W['uniacid'], $post['username'], $post['code'])) {
+				exit('验证码错误.');
 			}
 		}
 		$user = pdo_fetch($sql, $pars);

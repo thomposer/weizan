@@ -1,0 +1,38 @@
+{template 'common/header-gw'}
+<ol class="breadcrumb">
+	<li><a href="./?refresh"><i class="fa fa-home"></i></a></li>
+	<li><a href="{url 'system/welcome'}">系统</a></li>
+	<li class="active">切换应用商城</li>
+</ol>
+<div class="clearfix">
+	<h5 class="page-header">切换应用商城</h5>
+	<form action="" method="post"  class="form-horizontal" role="form" enctype="multipart/form-data" id="form1">
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">切换商城</label>
+			<div class="col-sm-10 col-xs-12">
+				<label class="radio-inline">
+					<input type="radio" name="addons_url" {if ($_W['setting']['addons']['addons_url'] == "http://addons.012wz.com") && ($_W['setting']['addons']['c_url'] == "http://www.012wz.com")} checked="checked" {/if} value="1" /> 微赞官网
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="addons_url" {if ($_W['setting']['addons']['addons_url'] == "http://addons.wdlcms.com") && ($_W['setting']['addons']['c_url'] == "http://www.wdlcms.com")} checked="checked" {/if} value="2" /> 微动力官网
+				</label>
+				
+			</div>
+			<div class="col-sm-10 col-xs-12">
+				<label class="radio-inline">
+					<input type="text"  name="addons_url" value="{$_W['setting']['addons']['addons_url']}" /><span>&nbsp;&nbsp;填写其他应用商城网址，例:http://addons.012wz.com </span>
+				</label>
+				<label class="radio-inline">
+					<input type="text"  name="c_url" value="{$_W['setting']['addons']['c_url']}"/><span>&nbsp;&nbsp;填写其他应用xmlns网址，例:http://www.012wz.com </span>
+				</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-md-offset-2 col-lg-offset-1 col-xs-12 col-sm-10 col-md-10 col-lg-11">
+				<input name="submit" type="submit" value="提交" class="btn btn-primary span3" />
+				<input type="hidden" name="token" value="{$_W['token']}" />
+			</div>
+		</div>
+	</form>
+</div>
+{template 'common/footer-gw'}

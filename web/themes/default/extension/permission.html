@@ -194,7 +194,7 @@ small a{color:#999;}
 									<input class="form-control" type="text" disabled	value="{$v['state']}">
 								</div>
 							</div>
-							{if $v['direct']}
+							{if $v['direct'] && $point != 'menu'}
 								<div class="col-xs-12 col-sm-3 col-md-2" style="margin-bottom:1em;">
 									<label class="checkbox inline">
 										<i class="fa fa-check-square-o"> &nbsp; 无需登录</i>
@@ -206,6 +206,20 @@ small a{color:#999;}
 					</ul>
 					<span class="help-block">{$row['desc']}</span>
 					<span class="help-block"><strong>注意: {$row['title']}扩展功能定义于 WeSite 类的实现中</strong></span>
+					{if $point == 'menu' && !$flag && !empty($manifest['permissions'])}
+						{php $flag = 1;}
+						<h4>权限标识</h4>
+						<div class="clearfix" style="margin-left:-15px">
+							{loop $manifest['permissions'] $permission}
+							<div class="col-xs-12 col-lg-2" style="margin-bottom:1em;">
+								<div class="input-group">
+									<span class="input-group-addon">{$permission['title']}</span>
+									<input class="form-control" type="text" disabled	value="{$permission['permission']}">
+								</div>
+							</div>
+							{/loop}
+						</div>
+					{/if}
 					{else}
 					<span class="help-block">未定义</span>
 					{/if}

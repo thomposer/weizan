@@ -14,7 +14,7 @@ require.config({
 		'chart': '../lib/chart.min',
 		'moment': '../lib/moment',
 		'filestyle': '../lib/bootstrap-filestyle.min',
-		'datetimepicker': '../../components/datetimepicker/bootstrap-datetimepicker.min',
+		'datetimepicker': '../../components/datetimepicker/jquery.datetimepicker',
 		'daterangepicker': '../../components/daterangepicker/daterangepicker',
 		'colorpicker': '../../components/colorpicker/spectrum',
 		'map': 'http://api.map.baidu.com/getscript?v=2.0&ak=F51571495f717ff1194de02366bb8da9&services=&t=20140530104353',
@@ -22,7 +22,11 @@ require.config({
 		'kindeditor':'../../components/kindeditor/lang/zh_CN',
 		'kindeditor.main':'../../components/kindeditor/kindeditor-min',
 		'css': '../lib/css.min',
-		'webuploader' : '../../components/webuploader/webuploader.min'
+		'webuploader' : '../../components/webuploader/webuploader.min',
+		'json2' : '../lib/json2',
+		'wapeditor' : './wapeditor',
+		'jquery.wookmark': '../lib/jquery.wookmark.min',
+		'validator': '../lib/bootstrapValidator.min'
 	},
 	shim:{
 		'jquery.ui': {
@@ -63,13 +67,13 @@ require.config({
 			exports: '$',
 			deps: ['bootstrap']
 		},
-		'datetimepicker': {
-			exports: '$',
-			deps: ['bootstrap', 'css!../../components/datetimepicker/bootstrap-datetimepicker.min.css']
-		},
 		'daterangepicker': {
 			exports: '$',
 			deps: ['bootstrap', 'moment', 'css!../../components/daterangepicker/daterangepicker.css']
+		},
+		'datetimepicker' : {
+			exports : '$',
+			deps: ['jquery', 'css!../../components/datetimepicker/jquery.datetimepicker.css']
 		},
 		'kindeditor': {
 			deps: ['kindeditor.main', 'css!../../components/kindeditor/themes/default/default.css']
@@ -81,8 +85,24 @@ require.config({
 		'map': {
 			exports: 'BMap'
 		},
+		'json2': {
+			exports: 'JSON'
+		},
 		'webuploader': {
-			deps: ['jquery', 'css!../../components/webuploader/webuploader.css', 'css!../../components/webuploader/style.css']
+			deps: ['css!../../components/webuploader/webuploader.css', 'css!../../components/webuploader/style.css']
+		},
+		'wapeditor' : {
+			exports : 'angular',
+			deps: ['angular.sanitize', 'jquery.ui', 'underscore', 'fileUploader', 'json2', 'datetimepicker']
+		},
+		'jquery.wookmark': {
+			exports: "$",
+			deps: ['jquery']
+		},
+		'validator': {
+			exports: "$",
+			deps: ['bootstrap']
 		}
+
 	}
 });

@@ -77,6 +77,7 @@
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style="color:red">*</span>评论</label>
 					<div class="col-sm-9 col-xs-12">
 						<input type="text" id='rname' name="comment" class="form-control" value="{$comment['comment']}" />
+						<span class="help-block">#myuser#替换粉丝昵称</span>
 					</div>
 				</div>
 
@@ -84,12 +85,14 @@
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">评论人昵称</label>
                   <div class="col-sm-9 col-xs-12">
 						<input type="text" id='nickname' name="nickname" class="form-control" value="{$comment['nickname']}" />
+						<span class="help-block">#myuser#替换粉丝昵称</span>
 					</div>                
                 </div>
               	<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">评论人头像</label>
 					<div class="col-sm-9 col-xs-12">
 						{php echo tpl_form_field_image('avatar', $comment['avatar'])}
+						<span class="help-block">#myavatar#替换粉丝头像</span>
 					</div>
 				</div>  
 

@@ -4,7 +4,7 @@
  * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-function coupon_colors($name, $value, $options = array()) {
+function coupon_colors($name, $value = 'Color082', $options = array()) {
 	empty($name) && ($name = 'coupon_color');
 	if (!defined('TPL_INIT_COUPON_COLOR')) {
 		$html .= '
@@ -36,9 +36,9 @@ function coupon_colors($name, $value, $options = array()) {
 	$html .= '
 		<div class="col-sm-9 col-xs-12 coupon-color" style="position: relative;width:200px;">
 			<div class="input-group" style="width:200px;">
-				<input type="text" class="form-control" name="'.$name.'"/>
-				<input type="hidden" name="'.$name.'-value" class="form-control" value=""/>
-				<span class="input-group-addon" style="width:35px;background:'.$options[$name].'"></span>
+				<input type="text" class="form-control" name="'.$name.'" value="'.$value.'"/>
+				<input type="hidden" name="'.$name.'-value" class="form-control" value="'.$value.'"/>
+				<span class="input-group-addon" style="width:35px;background:'.$options[$value]['value'].'"></span>
 				<span class="input-group-btn">
 					<button class="btn btn-default" type="button" onclick="showCouponColor(this);">选择颜色</button>
 				</span>

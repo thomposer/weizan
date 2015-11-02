@@ -12,9 +12,10 @@ class We7_businessModule extends WeModule {
 
     public function settingsDisplay($settings) {
         global $_GPC, $_W;
-        if (checksubmit()) {
+        if (checksubmit('submit')) {
             $cfg = array(
                 'range' => intval($_GPC['range']),
+                'info' => $_GPC['info']
             );
             if ($this->saveSettings($cfg)) {
                 message('保存成功', 'refresh');

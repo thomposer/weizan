@@ -166,10 +166,10 @@ require(['angular.sanitize', 'bootstrap', 'underscore', 'util'], function(angula
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">直接URL</label>
 					<div class="col-sm-9 col-xs-12 ">
-						<input type="text" class="form-control" readonly="readonly" value="{$entry['url']}" />
-				<span class="help-block">
-					<strong>直接指向到入口的URL。您可以在自定义菜单（有oAuth权限）或是其它位置直接使用。</strong>
-				</span>
+						<input type="text" class="form-control" readonly="readonly" value="{$entry['url_show']}" />
+						<span class="help-block">
+							<strong>直接指向到入口的URL。您可以在自定义菜单（有oAuth权限）或是其它位置直接使用。</strong>
+						</span>
 					</div>
 				</div>
 			</div>
@@ -327,7 +327,7 @@ require(['angular.sanitize', 'bootstrap', 'underscore', 'util'], function(angula
 								<div class="form-group">
 									<label class="col-xs-12 col-sm-3 col-md-2 control-label">直接URL</label>
 									<div class="col-sm-9 col-xs-12">
-										<p class="form-control-static" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{$entry['url']}</p>
+										<p class="form-control-static" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{$entry['url_show']}</p>
 									</div>
 								</div>
 							</div>
@@ -340,7 +340,7 @@ require(['angular.sanitize', 'bootstrap', 'underscore', 'util'], function(angula
 											<span class="help-block">{{entry.description}}</span>
 										</div>
 										<div class="panel-footer" style="border-top:0;">
-											<a ng-href="{{'../app/' + entry.url}}" href="javascript:;" target="_blank" class="btn btn-defualt btn-block">查看原文</a>
+											<a ng-href="{{entry.url_show}}" href="javascript:;" target="_blank" class="btn btn-defualt btn-block">查看原文</a>
 										</div>
 									</div>
 								</div>

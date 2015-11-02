@@ -4,7 +4,7 @@
  * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 load()->model('user');
-
+load()->func('tpl');
 $_W['token'] = token();
 $session = json_decode(base64_decode($_GPC['__session']), true);
 if(is_array($session)) {
@@ -29,16 +29,15 @@ unset($session);
 
 if(!empty($_GPC['__uniacid'])) {
 	$_W['uniacid'] = intval($_GPC['__uniacid']);
-	$_W['weid'] = $_W['uniacid'];
 	$_W['uniaccount'] = $_W['account'] = uni_fetch($_W['uniacid']);
+	$_W['acid'] = $_W['account']['acid'];
+	$_W['weid'] = $_W['uniacid'];
 	if(!empty($_W['uid'])) {
 		$_W['role'] = uni_permission($_W['uid'], $_W['uniacid']);
 	}
 }
-setting_load('basic');
 $_W['template'] = 'default';
 if(!empty($_W['setting']['basic']['template'])) {
 	$_W['template'] = $_W['setting']['basic']['template'];
 }
-
 load()->func('compat.biz');

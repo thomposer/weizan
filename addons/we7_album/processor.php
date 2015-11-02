@@ -2,7 +2,7 @@
 /**
  * 微相册模块处理程序
  *
- * @author WeEngine Team
+ * @author WeiZan System
  * @url http://www.012wz.com
  */
 defined('IN_IA') or exit('Access Denied');

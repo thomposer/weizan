@@ -1,22 +1,22 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
 $type = $do;
 $do = $_GPC['foo'];
 $m = $_GPC['m'];
+uni_user_permission_check('platform_nav_' . $do, true, 'nav');
 $dos = array('post', 'delete', 'saves', 'display');
 $do = in_array($do, $dos) ? $do : 'display';
 $types = array(
 	'home' => array('name' => 'home', 'title' => '首页', 'visiable' => true, 'position' => 1),
 	'profile' => array('name' => 'profile', 'title' => '个人中心', 'visiable' => true, 'position' => 2),
-	'shortcut' => array('name' => 'shortcut', 'title' => '快捷菜单', 'visiable' => true, 'position' => 3),
 );
 $type = array_key_exists($type, $types) ? $types[$type] : $types['home'];
-$titles = array('home'=>'微站首页导航图标', 'profile'=>'个人中心功能条目', 'shortcut'=>'快捷菜单');
+$titles = array('home'=>'微站首页导航图标', 'profile'=>'个人中心功能条目');
 $_W['page']['title'] = $titles[$type['name']];
 $setting = uni_setting($_W['uniacid'], 'default_site');
 $default_site = intval($setting['default_site']);
@@ -98,10 +98,8 @@ if($do == 'post') {
 		} else {
 			pdo_update('site_nav', $data, array('id' => $id));
 		}
-		message('导航更新成功！', url('site/nav', array('do'=>$type['name'], 'mtid' => $_GPC['mtid'], 'f' => $_GPC['f'])), 'success');
+		message('导航更新成功！', url('site/nav', array('do'=>$type['name'], 'multiid' => $_GPC['multiid'], 'f' => $_GPC['f'])), 'success');
 	}
-	
-	load()->func('tpl');
 	template('site/nav');
 }
 
@@ -146,7 +144,7 @@ if($do == 'display') {
 	if(!empty($module)) {
 				$types = module_types();
 		define('ACTIVE_FRAME_URL', url('home/welcome/ext', array('m' => $_GPC['m'])));
-		$tytitle = array('home' => '微站首页导航图标', 'profile' => '个人中心功能条目', 'shortcut' => '快捷菜单');
+		$tytitle = array('home' => '微站首页导航图标', 'profile' => '个人中心功能条目');
 
 		$entries = module_entries($m, array($type['name']));
 		if(empty($entries)) {
@@ -236,7 +234,7 @@ if($do == 'display') {
 			}
 		}
 	}
-	$multiid = intval($_GPC['mtid']);
+	$multiid = intval($_GPC['multiid']);
 	$multis = pdo_fetchall('SELECT * FROM ' . tablename('site_multi') .' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']), 'id');
 	$site = $multis[$multiid];
 	
@@ -248,7 +246,7 @@ if($do == 'display') {
 		$pars[':module'] = $m;
 	}
 	if(!empty($_GPC['do']) && $_GPC['do'] != 'profile') {
-		if(!empty($_GPC['mtid'])) {
+		if(!empty($_GPC['multiid'])) {
 			if($multiid > 0) {
 				$condition .= ' AND `multiid`=:multiid';
 				$pars[':multiid'] = $multiid;
@@ -309,8 +307,7 @@ if($do == 'display') {
 		'call' => '动态数据',
 				'custom' => '用户添加',
 	);
-	load()->func('tpl');
-	$siteid = intval($_GPC['mtid']);
+	$siteid = intval($_GPC['multiid']);
 	if(empty($siteid)) {
 		$siteid = $default_site;
 	}

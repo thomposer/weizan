@@ -36,7 +36,6 @@ function ihttp_request($url, $post = '', $extra = array(), $timeout = 60) {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		@curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt($ch, CURLOPT_HEADER, 1);
-		curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
 		if ($post) {
 			if (is_array($post)) {
 				$filepost = false;
@@ -55,16 +54,18 @@ function ihttp_request($url, $post = '', $extra = array(), $timeout = 60) {
 		}
 		if (!empty($GLOBALS['_W']['config']['setting']['proxy'])) {
 			$urls = parse_url($GLOBALS['_W']['config']['setting']['proxy']['host']);
-			curl_setopt($ch, CURLOPT_PROXY, "{$urls['host']}:{$urls['port']}");
-			$proxytype = 'CURLPROXY_' . strtoupper($urls['scheme']);
-			if (!empty($urls['scheme']) && defined($proxytype)) {
-				curl_setopt($ch, CURLOPT_PROXYTYPE, constant($proxytype));
-			} else {
-				curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
-				curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, 1);
-			}
-			if (!empty($GLOBALS['_W']['config']['setting']['proxy']['auth'])) {
-				curl_setopt($ch, CURLOPT_PROXYUSERPWD, $GLOBALS['_W']['config']['setting']['proxy']['auth']);
+			if (!empty($urls['host'])) {
+				curl_setopt($ch, CURLOPT_PROXY, "{$urls['host']}:{$urls['port']}");
+				$proxytype = 'CURLPROXY_' . strtoupper($urls['scheme']);
+				if (!empty($urls['scheme']) && defined($proxytype)) {
+					curl_setopt($ch, CURLOPT_PROXYTYPE, constant($proxytype));
+				} else {
+					curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+					curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, 1);
+				}
+				if (!empty($GLOBALS['_W']['config']['setting']['proxy']['auth'])) {
+					curl_setopt($ch, CURLOPT_PROXYUSERPWD, $GLOBALS['_W']['config']['setting']['proxy']['auth']);
+				}
 			}
 		}
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);

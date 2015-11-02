@@ -34,13 +34,11 @@
 </div>
 <script type="text/javascript">
 	function createtemplate(name, file) {
-		require(['jquery'], function($){
-			if (file && confirm('此操作辅助生成您需要重定义的模板空文件，你也可以在文件目录中手动添加或是修改些文件，是否确定要生成吗？')) {
-				$.post("{url 'site/style/createtemplate'}" + 'name=' + name + '&file=' + file).success(function(){
-					location.reload();
-				});
-			}
-		});
+		if (file && confirm('此操作辅助生成您需要重定义的模板空文件，你也可以在文件目录中手动添加或是修改些文件，是否确定要生成吗？')) {
+			$.post("{url 'site/style/createtemplate'}" + 'name=' + name + '&file=' + file).success(function(){
+				location.reload();
+			});
+		}
 	}
 </script>
 {/if}
@@ -229,11 +227,7 @@
 .template .item-build-div2{text-align:center; line-height:30px; padding-top:150px;}
 </style>
 <div class="clearfix template">
-<div class='alert alert-warning' style='font-size:14px'>
-        微站栏目不显示？可能没有设置‘导航显示位置’： <a href='http://bbs.012wz.com/forum.php?mod=viewthread&tid=1622&page=1&extra=#pid10746' target='_blank'>http://bbs.012wz.com/forum.php?mod=viewthread&tid=1622&page=1&extra=#pid10746</a>
-    </div>
 	<div class="panel panel-default">
-	  
 		<nav role="navigation" class="navbar navbar-default navbar-static-top" style="margin-bottom:0;">
 			<div class="container-fluid">
 				<div class="navbar-header">
@@ -298,41 +292,39 @@
 	});
 	//预览风格时,预览的是默认微站的导航链接和快捷操作
 	function preview(styleid) {
-		require(['jquery', 'util'], function($, u){
-			var content = '<iframe width="320" scrolling="yes" height="480" frameborder="0" src="about:blank"></iframe>';
-			var footer =
-					'			<a href="{url 'site/style/default'}&styleid=' + styleid + '" class="btn btn-primary">设为默认模板</a>' +
-					'			<a href="{url 'site/style/designer'}&styleid=' + styleid + '" class="btn btn-primary">设计风格</a>' +
-					'			<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>';
-			var dialog = u.dialog('预览模板', content, footer);
-			dialog.find('iframe').on('load', function(){
-				$('a', this.contentWindow.document.body).each(function(){
-					var href = $(this).attr('href');
-					if(href && href[0] != '#') {
-						var arr = href.split(/#/g);
-						var url = arr[0];
-						if(url.slice(-1) != '&') {
-							url += '&';
-						}
-						if(url.indexOf('?') != -1) {
-							url += ('s=' + styleid);
-						}
-						if(arr[1]) {
-							url += ('#' + arr[1]);
-						}
-						if (url.substr(0, 10) == 'javascript' || url.indexOf('?') == -1) {
-							url = url.substr(0, url.lastIndexOf('&'));
-						}
-						$(this).attr('href', url);
+		var content = '<iframe width="320" scrolling="yes" height="480" frameborder="0" src="about:blank"></iframe>';
+		var footer =
+				'			<a href="{url 'site/style/default'}styleid=' + styleid + '" class="btn btn-primary">设为默认模板</a>' +
+				'			<a href="{url 'site/style/designer'}styleid=' + styleid + '" class="btn btn-primary">设计风格</a>' +
+				'			<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>';
+		var dialog = util.dialog('预览模板', content, footer);
+		dialog.find('iframe').on('load', function(){
+			$('a', this.contentWindow.document.body).each(function(){
+				var href = $(this).attr('href');
+				if(href && href[0] != '#') {
+					var arr = href.split(/#/g);
+					var url = arr[0];
+					if(url.slice(-1) != '&') {
+						url += '&';
 					}
-				});
+					if(url.indexOf('?') != -1) {
+						url += ('s=' + styleid);
+					}
+					if(arr[1]) {
+						url += ('#' + arr[1]);
+					}
+					if (url.substr(0, 10) == 'javascript' || url.indexOf('?') == -1) {
+						url = url.substr(0, url.lastIndexOf('&'));
+					}
+					$(this).attr('href', url);
+				}
 			});
-			var url = '../app/{php echo murl('home')}&s=' + styleid;
-			dialog.find('iframe').attr('src', url);
-			dialog.find('.modal-dialog').css({'width': '322px'});
-			dialog.find('.modal-body').css({'padding': '0', 'height': '480px'});
-			dialog.modal('show');
 		});
+		var url = '{php echo murl('home', array(), true, true)}&s=' + styleid;
+		dialog.find('iframe').attr('src', url);
+		dialog.find('.modal-dialog').css({'width': '322px'});
+		dialog.find('.modal-body').css({'padding': '0', 'height': '480px'});
+		dialog.modal('show');
 	}
 </script>
 {/if}

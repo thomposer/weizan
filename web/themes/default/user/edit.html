@@ -6,24 +6,22 @@
 	<li class="active">编辑用户</li>
 </ol>
 <script type="text/javascript">
-	require(['jquery', 'util'], function($, u){
 		$('#form1').submit(function(){
 		if($('#password').val().trim() != '') {
 				if($('#password').val().length < 8) {
-					u.message('密码长度不能小于8个字符.', '', 'error');
+					util.message('密码长度不能小于8个字符.', '', 'error');
 					return false;
 				}
 				if($('#password').val() != $('#repassword').val()) {
-					u.message('两次输入的密码不一致.', '', 'error');
+					util.message('两次输入的密码不一致.', '', 'error');
 					return false;
 				}
 			}
 			if($('#groupid option:selected').val() == 0) {
-				u.message('请选择所属用户组.', '', 'error');
+				util.message('请选择所属用户组.', '', 'error');
 				return false;
 			}
 		});
-	});
 </script>
 <ul class="nav nav-tabs">
 	<li><a href="{php echo url('user/display');}">用户列表</a></li>
@@ -56,6 +54,26 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">服务时间</label>
+			<div class="col-sm-10 col-xs-12">
+				<p class="form-control-static">
+					<strong class="text-danger">
+						开始时间：{php echo date('Y-m-d', $user['starttime'])}
+						~~
+						到期时间：{if !$user['endtime']}永久有效{else}{php echo date('Y-m-d', $user['endtime'])}{/if}
+					</strong>
+				</p>
+				<span class="help-block">重复输入密码，确认正确输入。如果不更改密码此处请留空</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">设置到期时间</label>
+			<div class="col-sm-10 col-xs-12">
+				{php echo tpl_form_field_date('endtime',$user['endtime'],false)}
+				<span class="help-block">设置到期时间，留空为不限制</span>
+			</div>
+		</div>
+		<div class="form-group">
 			<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">所属用户组</label>
 			<div class="col-sm-10 col-xs-12">
 				<select name="groupid" class="form-control" id="groupid">
@@ -65,6 +83,7 @@
 					{/loop}
 				</select>
 				<span class="help-block">分配用户所属用户组后，该用户会自动拥有此用户组内的模块操作权限</span>
+				<span class="help-block"><strong class="text-danger">更改用户的所属会员组后，该用户的服务到期时间为：当前时间 + 更改用户组的服务有效期。</strong></span>
 			</div>
 		</div>
 		<div class="form-group">

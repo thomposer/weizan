@@ -14,6 +14,10 @@ class Hx_subscribeModuleReceiver extends WeModuleReceiver {
 		load()->func('communication');
 		$event = $this->message['event'];
 		$openid = $this->message['from'];
+		$status = isset($this->module['config']['status']) ? $this->module['config']['status'] : '0';
+		if ($status == 0) {
+			return '';
+		}
 		$f_log = pdo_fetch("SELECT * FROM ".tablename('mc_mapping_fans') . " WHERE `uniacid` = '{$_W['uniacid']}' AND `openid` = '{$openid}'");
 		if ($f_log['uid'] != 0) {
 			pdo_update('hx_subscribe_data', array('uid'=>$f_log['uid']), array('openid' => $openid));

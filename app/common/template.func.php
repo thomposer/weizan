@@ -18,6 +18,50 @@ function template_compat($filename) {
 	return '';
 }
 
+function template_page($id, $flag = TEMPLATE_DISPLAY) {
+	global $_W;
+	$page = pdo_fetch("SELECT * FROM ".tablename('site_page')." WHERE id = :id LIMIT 1", array(':id' => $id));
+	if (empty($page)) {
+		return error(1, 'Error: Page is not found');
+	}
+	if (empty($page['html'])) {
+		return '';
+	}
+	$page['params'] = json_decode($page['params'], true);
+	$GLOBALS['title'] = $page['title'];
+
+	$compile = IA_ROOT . "/data/tpl/app/{$id}.{$_W['template']}.tpl.php";
+	$path = dirname($compile);
+	if (!is_dir($path)) {
+		load()->func('file');
+		mkdirs($path);
+	}
+	$content = template_parse($page['html']);
+	$content .= "<script type=\"text/javascript\" src=\"./resource/js/app/common.js\"></script>";
+	file_put_contents($compile, $content);
+	switch ($flag) {
+		case TEMPLATE_DISPLAY:
+		default:
+			extract($GLOBALS, EXTR_SKIP);
+			template('common/header');
+			include $compile;
+			template('common/footer');
+			break;
+		case TEMPLATE_FETCH:
+			extract($GLOBALS, EXTR_SKIP);
+			ob_clean();
+			ob_start();
+			include $compile;
+			$contents = ob_get_contents();
+			ob_clean();
+			return $contents;
+			break;
+		case TEMPLATE_INCLUDEPATH:
+			return $compile;
+			break;
+	}
+}
+
 function template($filename, $flag = TEMPLATE_DISPLAY) {
 	global $_W, $_GPC;
 	$source = IA_ROOT . "/app/themes/{$_W['template']}/{$filename}.html";
@@ -330,4 +374,86 @@ function site_slide_search($params = array()) {
 
 function app_slide($params = array()) {
 	return site_slide_search($params);
+}
+
+function site_widget_link($params = array()) {
+	$widgetparams = json_decode($params['params'], true);
+	$sql = 'SELECT * FROM ' .tablename('site_article')." WHERE uniacid = :uniacid ";
+	$sqlparams = array(':uniacid' => $params['uniacid']);
+	if (!empty($widgetparams['selectCate']['pid'])) {
+		$sql .= " AND pcate = :pid";
+		$sqlparams[':pid'] = $widgetparams['selectCate']['pid'];
+	}
+	if (!empty($widgetparams['selectCate']['cid'])) {
+		$sql .= " AND ccate = :cid";
+		$sqlparams[':cid'] = $widgetparams['selectCate']['cid'];
+	}
+	if (!empty($widgetparams['iscommend'])) {
+		$sql .= " AND iscommend = '1'";
+	}
+	if (!empty($widgetparams['ishot'])) {
+		$sql .= " AND ishot = '1'";
+	}
+	if (!empty($widgetparams['isnew'])) {
+		$sql .= " ORDER BY id DESC ";
+	}
+	if (!empty($widgetparams['pageSize'])) {
+		$limit = intval($widgetparams['pageSize']);
+		$sql .= " LIMIT {$limit}";
+	}
+	$list = pdo_fetchall($sql, $sqlparams);
+	if (!empty($list)) {
+		foreach ($list as $i => &$row) {
+			$row['title'] = cutstr($row['title'], 20, true);
+			$row['thumb_url'] = tomedia($row['thumb']);
+			$row['url'] = url('site/site/detail', array('id' => $row['id']));
+		}
+	}
+	return (array)$list;
+}
+
+function site_quickmenu() {
+	global $_W, $_GPC;
+	if ($_GPC['c'] == 'mc') {
+		if ($_GPC['a'] == 'card' || $_GPC['a'] == 'bond') {
+			return false;
+		}
+		$quickmenu = pdo_fetch("SELECT html, params FROM ".tablename('site_page')." WHERE uniacid = :uniacid AND type = '4' AND status = '1'", array(':uniacid' => $_W['uniacid']));
+	} elseif ($_GPC['c'] == 'activity') {
+		return false;
+	} else {
+		$multiid = intval($_GPC['t']);
+		if (empty($multiid)) {
+			$setting = uni_setting($_W['uniacid'], array('default_site'));
+			$multiid = $setting['default_site'];
+		}
+		$quickmenu = pdo_fetch("SELECT html, params FROM ".tablename('site_page')." WHERE multiid = :multiid AND type = '2' AND status = '1'", array(':multiid' => $multiid));
+	}
+	if (empty($quickmenu)) {
+		return false;
+	}
+	$params = $quickmenu['params'];
+	$quickmenu['params'] = json_decode($quickmenu['params'], true);
+	if ($_GPC['c'] == 'home' && empty($quickmenu['params']['position']['homepage'])) {
+		return false;
+	}
+	if (!empty($_GPC['m']) && !empty($quickmenu['params']['ignoreModules'][$_GPC['m']])) {
+		return false;
+	}
+
+	echo $quickmenu['html'];
+	echo "<script type=\"text/javascript\">
+	$('.js-quickmenu').find('a').each(function(){
+		if ($(this).attr('href')) {
+			var url = $(this).attr('href').replace('./', '');
+			if (location.href.indexOf(url) > -1) {
+				var onclass = $(this).find('i').attr('js-onclass-name');
+				if (onclass) {
+					$(this).find('i').attr('class', onclass);
+					$(this).find('i').css('color', $(this).find('i').attr('js-onclass-color'));
+				}
+			}
+		}
+	});
+</script>";
 }

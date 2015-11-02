@@ -17,7 +17,7 @@ $site = WeUtility::createModuleSite($modulename);
 if(!is_error($site)) {
  	$method = 'doWebPrint';
  	//$site->module = array_merge($_W['modules'][$modulename], $_W['account']['modules'][$_W['modules'][$modulename]['mid']]);
-	$site->weid = $_W['weid'];
+	$site->weid = $_W['uniacid'];
 	$site->inMobile = false;
 	if (method_exists($site, $method)) {
 		exit($site->$method());

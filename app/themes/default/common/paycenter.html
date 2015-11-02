@@ -122,6 +122,7 @@
 <ul class="nav nav-tabs" role="tablist" style="margin-bottom:0;">
 	<li class="active" data-id="direct"><a href="#direct" role="tab" data-toggle="tab" style="border-left:0;">直接到账</a></li>
 	{if $pay['delivery']['switch']}<li data-id="delivery" class="delivery"><a href="#collect" role="tab" data-toggle="tab">货到付款</a></li>{/if}
+	{if $pay['line']['switch']}<li data-id="line" class="line"><a href="#line" role="tab" data-toggle="tab">线下汇款</a></li>{/if}
 	<!--li><a href="#">微赞担保</a></li-->
 </ul>
 <div class="panel clearfix" style="border-top-left-radius:0; border-top-right-radius:0;">
@@ -207,6 +208,12 @@
 					<button class="btn btn-warning btn-block col-sm-12" type="submit" value="delivery">货到付款</button>
 				</form>
 			</div>
+			{/if}
+		</div>
+		<!-- 线下汇款 -->
+		<div class="tab-pane animated" id="line">
+			{if $pay['line']['switch']}
+			{php echo htmlspecialchars_decode($pay['line']['message'])}
 			{/if}
 		</div>
 		<div class="tab-pane animated" id="guarantee">

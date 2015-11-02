@@ -4,53 +4,74 @@
  * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-$dos = array('display');
+uni_user_permission_check('mc_business');
+$dos = array('display', 'post','delete');
 $do = in_array($do, $dos) ? $do : 'display';
-load()->func('tpl');
+$_W['page']['title'] = '商家设置-粉丝营销';
 
-if ($do == 'display') {
-	if (checksubmit('submit')) {
-		
-		$setting = array(
-			'title' => $_GPC['title'],
-			'thumb' => $_GPC['thumb'],
-			'content' => $_GPC['content'],
-			'phone' => $_GPC['phone'],
-			'qq' => $_GPC['qq'],
-			'province' => $_GPC['dis']['province'],
-			'city' =>$_GPC['dis']['city'],
-			'district' => $_GPC['dis']['district'],
-			'address' => $_GPC['address'],
-			'lng' => $_GPC['baidumap']['lng'],
-			'lat' => $_GPC['baidumap']['lat'],
-			'industry1' => $_GPC['industry']['parent'],
-			'industry2' => $_GPC['industry']['child'],
-		);
-		
-		
-		$data['business'] = iserializer($setting);
-		$sql = 'SELECT `id` FROM ' . tablename('mc_card') . " WHERE `uniacid` = :uniacid";
-		$count = pdo_fetch($sql, array(':uniacid' => $_W['uniacid']));
-		if (!empty($count)) {
-			pdo_update('mc_card', $data, array('uniacid' => $_W['uniacid']));
-		} else {
-			$data['uniacid'] = $_W['uniacid'];
-			pdo_insert('mc_card', $data);
+if($do == 'post') {
+	$id = intval($_GPC['id']);
+	if($id > 0) {
+		$sql = 'SELECT * FROM '.tablename('activity_stores').' WHERE id = :id AND uniacid = :uniacid';
+		$item = pdo_fetch($sql, array(':id' => $id, ':uniacid' => $_W['uniacid']));
+		if(empty($item)) {
+			message('商家不存在',referer(),'info');
 		}
-		message('商家设置成功！', referer(), 'success');
+		$item['category'] = iunserializer($item['category']);
+		$item['photo_list'] = iunserializer($item['photo_list']);
+		$item['opentime'] = explode('-', $item['opentime']);
+		$item['open_time_start'] = $item['opentime'][0];
+		$item['open_time_end'] = $item['opentime'][1];
+	}else {
+		$item['open_time_start'] = '8:00';
+		$item['open_time_end'] = '24:00';
 	}
-	
-	$sql = 'SELECT `status`, `business` FROM ' . tablename('mc_card') . " WHERE `uniacid` = :uniacid";
-	$list = pdo_fetch($sql, array(':uniacid' => $_W['uniacid']));
-	if ($list['status'] == 0) {
-		message('会员卡功能未开启', url('mc/card'), 'error');
-	}
-	if (!empty($list['business'])) {
-		$item = iunserializer($list['business']);
-		$reside['province'] = $item['province'];
-		$reside['city'] = $item['city'];
-		$reside['district'] = $item['district'];
+	if(checksubmit('submit')) {
+		$insert = array();
+		$insert['uniacid'] = intval($_W['uniacid']);
+		$insert['business_name'] = trim($_GPC['business_name']);
+		$insert['branch_name'] = trim($_GPC['branch_name']);
+		$insert['category'] = iserializer(array(
+				'cate' => trim($_GPC['class']['cate']),
+				'sub' => trim($_GPC['class']['sub']),
+				'clas' => trim($_GPC['class']['clas'])
+			));
+		$insert['province'] = trim($_GPC['reside']['province']);
+		$insert['city'] = trim($_GPC['reside']['city']);
+		$insert['district'] = trim($_GPC['reside']['district']);
+		$insert['address'] = trim($_GPC['address']);
+		$insert['longitude'] = trim($_GPC['baidumap']['lng']);
+		$insert['latitude'] = trim($_GPC['baidumap']['lat']);
+		$insert['telephone'] = trim($_GPC['telephone']);
+		$insert['photo_list'] = iserializer($_GPC['photo_list']);
+		$insert['avg_price'] = intval($_GPC['avg_price']);
+		$insert['opentime'] = trim($_GPC['open_time_start']). '-'.trim($_GPC['open_time_end']);
+		$insert['recommend'] = trim($_GPC['recommend']);
+		$insert['special'] = trim($_GPC['special']);
+		$insert['introduction'] = trim($_GPC['introduction']);
+		if($id > 0) {
+			pdo_update('activity_stores',$insert,array('id' => $id, 'uniacid' => $_W['uniacid']));
+			message('更新商家成功',url('mc/business/display'),'success');
+		}else {
+			pdo_insert('activity_stores', $insert);
+			message('添加门店成功', url('mc/business/display'), 'success');
+		}
 	}
 }
-
+if($do == 'display') {
+	$pindex = max(1, intval($_GPC['page']));
+	$psize = 15;
+	$limit = 'ORDER BY id DESC LIMIT ' . ($pindex - 1) * $psize . ", {$psize}";
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename('activity_stores').' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
+	$list = pdo_fetchall('SELECT * FROM '.tablename('activity_stores'). " WHERE uniacid = :uniacid {$limit}", array(':uniacid' => $_W['uniacid']));
+	$pager = pagination($total,$pindex,$psize);
+	foreach($list as &$key) {
+		$key['category'] = iunserializer($key['category']);
+		$key['category'] = implode('-', $key['category']);
+	}
+}
+if($do =='delete') {
+	pdo_delete('activity_stores',array('id' => $_GPC['id'], 'uniacid' => $_W['uniacid']));
+	message('删除成功',referer(), 'success');
+}
 template('mc/business');

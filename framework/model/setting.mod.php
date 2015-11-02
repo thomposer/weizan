@@ -12,10 +12,10 @@ function setting_save($data = '', $key = '') {
 	}
 	if (is_array($data) && empty($key)) {
 		foreach ($data as $key => $value) {
-			$record[] = "('$key', '".iserializer($value)."')";
+			$record[] = "('$key', '" . iserializer($value) . "')";
 		}
 		if ($record) {
-			$return = pdo_query("REPLACE INTO ".tablename('core_settings')." (`key`, `value`) VALUES " . implode(',', $record));
+			$return = pdo_query("REPLACE INTO " . tablename('core_settings') . " (`key`, `value`) VALUES " . implode(',', $record));
 		}
 	} else {
 		$record = array();
@@ -23,25 +23,26 @@ function setting_save($data = '', $key = '') {
 		$record['value'] = iserializer($data);
 		$return = pdo_insert('core_settings', $record, TRUE);
 	}
-	cache_build_setting();
+	$cachekey = "setting";
+	cache_write($cachekey, '');
 	return $return;
 }
 
 
 function setting_load($key = '') {
 	global $_W;
-	if (empty($key)) {
+	$cachekey = "setting";
+	$settings = cache_load($cachekey);
+	if (empty($settings)) {
 		$settings = pdo_fetchall('SELECT * FROM ' . tablename('core_settings'), array(), 'key');
-	} else {
-		$key = is_array($key) ? $key : array($key);
-		$settings = pdo_fetchall('SELECT * FROM ' . tablename('core_settings') . " WHERE `key` IN ('".implode("','", $key)."')", array(), 'key');
-	}
-	if(is_array($settings)) {
-		foreach($settings as $k => &$v) {
-			$settings[$k] = iunserializer($v['value']);
+		if (is_array($settings)) {
+			foreach ($settings as $k => &$v) {
+				$settings[$k] = iunserializer($v['value']);
+			}
 		}
+		cache_write($cachekey, $settings);
 	}
-	if(!is_array($_W['setting'])) {
+	if (!is_array($_W['setting'])) {
 		$_W['setting'] = array();
 	}
 	$_W['setting'] = array_merge($_W['setting'], $settings);

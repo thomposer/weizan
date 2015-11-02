@@ -10,15 +10,16 @@
 		<input type="hidden" name="c" value="mc">
 		<input type="hidden" name="a" value="creditmanage">
 		<input type="hidden" name="token" value="{$_W['token']}">
+		<input type="hidden" name="type" value="{$type}">
 			<div class="form-group">
 				<label class="col-xs-12 col-sm-2 col-md-2 control-label">关键字类型</label>
-				<div class="col-sm-8 col-xs-12">
-					<select name="type" class="form-control">
-						<option value="4" {if $_GPC['type'] == 4}selected{/if}>真实姓名</option>
-						<option value="3" {if $_GPC['type'] == 3}selected{/if}>昵称</option>
-						<option value="2" {if $_GPC['type'] == 2}selected{/if}>手机号</option>
-						<option value="1" {if $_GPC['type'] == 1 || empty($_GPC['type'])}selected{/if}>用户UID</option>
-					</select>
+				<div class="col-sm-8 col-lg-9 col-xs-12">
+					<div class="btn-group">
+						<a href="{php echo filter_url('type:4');}" class="btn {if $type == 4}btn-primary{else}btn-default{/if}">真实姓名</a>
+						<a href="{php echo filter_url('type:3');}" class="btn {if $type == 3}btn-primary{else}btn-default{/if}">昵称</a>
+						<a href="{php echo filter_url('type:2');}" class="btn {if $type == 2}btn-primary{else}btn-default{/if}">手机号</a>
+						<a href="{php echo filter_url('type:1');}" class="btn {if $type == 1 || $type == ''}btn-primary{else}btn-default{/if}">用户UID</a>
+					</div>
 				</div>
 			</div>
 			<div class="form-group">
@@ -72,8 +73,8 @@
 				<td style="vertical-align:middle">{$li[$index]}</td>
 				{/loop}
 				<td>
-					<a href="javascript:void(0)" id="{$li['uid']}" class="btn btn-default btn-sm recharge" data-toggle="tooltip" data-placement="top" title="充值"><i class="fa fa-dollar"></i></a>
-					<a href="{php echo url('mc/creditmanage/stat', array('type' => '1', 'uid' => $li['uid']))}" id="{$li['uid']}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="积分变动日志"><i class="fa fa-clock-o"></i></a>
+					<a href="javascript:void(0)" id="{$li['uid']}" class="recharge" title="充值">充值</a>&nbsp;-&nbsp;
+					<a href="{php echo url('mc/creditmanage/stat', array('type' => '1', 'uid' => $li['uid']))}" id="{$li['uid']}" title="积分变动日志">积分变动日志</a>
 				</td>
 			</tr>
 		</thead>
@@ -82,42 +83,53 @@
 </div>
 </div>
 {$pager}
-<div id="footer" class="hide">
-		<span name="submit" id="submit" class="pull-right btn btn-primary" onclick="$('#form1').submit();">保存</span>
+<!-- 积分设置模态框开始 -->
+<div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">会员积分操作</h4>
+			</div>
+			<div class="modal-body">
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<span name="submit" id="submit" class="pull-right btn btn-primary" onclick="$('#form1').submit();">保存</span>
+			</div>
+		</div>
+	</div>
 </div>
+<!-- 积分设置模态框结束 -->
 <script>
-	require(['jquery', 'util'], function($, u){
+	require(['bootstrap'], function($){
 		$('.recharge').click(function(){
 			var uid = parseInt($(this).attr('id'));
 			$.get("{php echo url('mc/creditmanage/modal')}&uid=" + uid, function(data){
 				if(data == 'dataerr') {
-					u.message('未找到指定会员', '', 'error');
+					util.message('未找到指定会员', '', 'error');
 				} else {
-					var obj = u.dialog('会员积分操作', data, $('#footer').html());
+					$('#user-modal .modal-body').html(data);
+					$('#user-modal').modal('show');
 				}
-				obj.modal('show');
 			});
-		})
-		$('#keyword').focus().select().change(function(){
-			$('#form').submit();
 		});
+
+		$('#keyword').focus().select();
+
 		var status = "{$status}";
 		if(status == 1) {
 			var uid = "{$uid}";
 			$.get("{php echo url('mc/creditmanage/modal')}&uid=" + uid, function(data){
 				if(data == 'dataerr') {
-					u.message('未找到指定会员', '', 'error');
+					util.message('未找到指定会员', '', 'error');
 				} else {
-					var obj = u.dialog('会员积分操作', data, $('#footer').html());
+					$('#user-modal .modal-body').html(data);
+					$('#user-modal').modal('show');
 				}
-				obj.modal('show');
 			});
 		}
-		$('.btn').hover(function(){
-			$(this).tooltip('show');
-		},function(){
-			$(this).tooltip('hide');
-		});
 	});
 </script>
 {/if}

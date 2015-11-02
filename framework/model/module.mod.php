@@ -68,7 +68,7 @@ function module_entries($name, $types = array(), $rid = 0, $args = null) {
 		$types = array_intersect($types, $ts);
 	}
 	$fields = implode("','", $types);
-	$sql = 'SELECT * FROM ' . tablename('modules_bindings')." WHERE `module`=:module AND `entry` IN ('{$fields}') ORDER BY eid ASC";
+	$sql = 'SELECT * FROM ' . tablename('modules_bindings')." WHERE `module`=:module AND `entry` IN ('{$fields}') ORDER BY displayorder DESC, eid ASC";
 	$pars = array();
 	$pars[':module'] = $name;
 	$bindings = pdo_fetchall($sql, $pars);
@@ -89,7 +89,7 @@ function module_entries($name, $types = array(), $rid = 0, $args = null) {
 			if(is_array($ret)) {
 				foreach($ret as $et) {
 					$et['url'] .= '&__title=' . urlencode($et['title']);
-					$entries[$bind['entry']][] = array('title' => $et['title'], 'url' => $et['url'], 'from' => 'call');
+					$entries[$bind['entry']][] = array('title' => $et['title'], 'do' => $et['do'], 'url' => $et['url'], 'from' => 'call', 'icon' => $et['icon'], 'displayorder' => $et['displayorder']);
 				}
 			}
 		} else {
@@ -98,6 +98,9 @@ function module_entries($name, $types = array(), $rid = 0, $args = null) {
 			}
 			if($bind['entry'] == 'menu') {
 				$url = wurl("site/entry", array('eid' => $bind['eid']));
+			}
+			if($bind['entry'] == 'mine') {
+				$url = $bind['url'];
 			}
 			if($bind['entry'] == 'rule') {
 				$par = array('eid' => $bind['eid']);
@@ -115,7 +118,10 @@ function module_entries($name, $types = array(), $rid = 0, $args = null) {
 			if($bind['entry'] == 'shortcut') {
 				$url = murl("entry", array('eid' => $bind['eid']));
 			}
-			$entries[$bind['entry']][] = array('eid' => $bind['eid'], 'title' => $bind['title'], 'url' => $url, 'from' => 'define');
+			if(empty($bind['icon'])) {
+				$bind['icon'] = 'fa fa-puzzle-piece';
+			}
+			$entries[$bind['entry']][] = array('eid' => $bind['eid'], 'title' => $bind['title'], 'do' => $bind['do'], 'url' => $url, 'from' => 'define', 'icon' => $bind['icon'], 'displayorder' => $bind['displayorder'], 'direct' => $bind['direct']);
 		}
 	}
 	return $entries;
@@ -188,54 +194,56 @@ function module_fetch($name) {
 
 
 function module_build_privileges() {
-	$uniacid_arr = pdo_fetchall('SELECT uniacid, groupid FROM ' . tablename('uni_account'));
-	foreach($uniacid_arr as $uniacid){
-		if (empty($uniacid['groupid'])) {
-			$modules = pdo_fetchall("SELECT name FROM ".tablename('modules') . " WHERE issystem = 1 ORDER BY issystem DESC, mid ASC", array(), 'name');
-		} elseif ($uniacid['groupid'] == '-1') {
-			$modules = pdo_fetchall("SELECT name FROM ".tablename('modules') . " ORDER BY issystem DESC, mid ASC", array(), 'name');
+	$uniacid_arr = pdo_fetchall('SELECT uniacid FROM ' . tablename('uni_account'));
+	foreach($uniacid_arr as $row){
+		$owneruid = pdo_fetchcolumn("SELECT uid FROM ".tablename('uni_account_users')." WHERE uniacid = :uniacid AND role = 'owner'", array(':uniacid' => $row['uniacid']));
+		load()->model('user');
+		$owner = user_single(array('uid' => $owneruid));
+				if (empty($owner)) {
+			$groupid = '-1';
 		} else {
-			$wechatgroup = pdo_fetch("SELECT `modules` FROM ".tablename('uni_group')." WHERE id = '{$uniacid['groupid']}'");
-			$ms = '';
-			if (!empty($wechatgroup['modules'])) {
-				$wechatgroup['modules'] = iunserializer($wechatgroup['modules']);
-				if(!empty($wechatgroup['modules'])) {
-					$ms = implode("','", array_keys($wechatgroup['modules']));
-					$ms = " OR `name` IN ('{$ms}')";
+			$groupid = $owner['groupid'];
+		}
+		$modules = array();
+		if (empty($groupid)) {
+			return true;
+		} elseif ($groupid == '-1') {
+			$modules = pdo_fetchall("SELECT name FROM " . tablename('modules') . ' WHERE issystem = 0', array(), 'name');
+		} else {
+			$group = pdo_fetch("SELECT id, name, package FROM ".tablename('users_group')." WHERE id = :id", array(':id' => $groupid));
+			$packageids = iunserializer($group['package']);
+			if(empty($packageids)) {
+				return true;
+			}
+			if (in_array('-1', $packageids)) {
+				$modules = pdo_fetchall("SELECT name FROM " . tablename('modules') . ' WHERE issystem = 0', array(), 'name');
+			} else {
+				$wechatgroup = pdo_fetchall("SELECT `modules` FROM " . tablename('uni_group') . " WHERE id IN ('".implode("','", $packageids)."') OR uniacid = '{$row['uniacid']}'");
+				if (!empty($wechatgroup)) {
+					foreach ($wechatgroup as $li) {
+						$li['modules'] = iunserializer($li['modules']);
+						if (!empty($li['modules'])) {
+							foreach ($li['modules'] as $modulename) {
+								$modules[$modulename] = $modulename;
+							}
+						}
+					}
 				}
 			}
-			$modules = pdo_fetchall("SELECT name FROM ".tablename('modules') . " WHERE issystem = 1{$ms} ORDER BY issystem DESC, mid ASC", array(), 'name');
 		}
 		$modules = array_keys($modules);
-		
-				$mymodules = pdo_fetchall("SELECT `module` FROM ".tablename('uni_account_modules')." WHERE uniacid = '{$uniacid['uniacid']}' ORDER BY enabled DESC ", array(), 'module');
+				$mymodules = pdo_fetchall("SELECT `module` FROM ".tablename('uni_account_modules')." WHERE uniacid = '{$row['uniacid']}' ORDER BY enabled DESC ", array(), 'module');
 		$mymodules = array_keys($mymodules);
-				foreach($modules as $module){
+		foreach($modules as $module){
 			if(!in_array($module, $mymodules)) {
 				$data = array();
-				$data['uniacid'] = $uniacid['uniacid'];
+				$data['uniacid'] = $row['uniacid'];
 				$data['module'] = $module;
 				$data['enabled'] = 1;
 				$data['settings'] = '';
 				pdo_insert('uni_account_modules', $data);
 			}
 		}
-	}
-	return true;
-}
-
-
-function module_solution_check($name){
-	global $_W;
-	$module = module_fetch($name);
-	if(empty($module)) {
-		return error(-1, '您访问的模块不存在');
-	}
-	if($module['issolution'] <> 1) {
-		return error(-1, '您访问的模块不是行业解决方案');
-	}
-	if($module['target'] != $_W['uniacid']) {
-		return error(-1, '当前公众号没有使用该行业模块的权限');
 	}
 	return true;
 }

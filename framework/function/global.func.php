@@ -81,7 +81,7 @@ function token($specialadd = '') {
 		if(!empty($_SESSION['token'])) {
 			foreach($_SESSION['token'] as $k => $v) {
 				if(TIMESTAMP - $v > 300) {
-					unset($k);
+					unset($_SESSION['token'][$k]);
 				}
 			}
 		}
@@ -120,7 +120,7 @@ function checksubmit($var = 'submit', $allowget = false) {
 		}
 	} else {
 		if(empty($_W['isajax']) && empty($_SESSION['token'][$_GPC['token']])) {
-			message('抱歉，页面已经失效请您重新进入提交数据', referer(), 'error');
+			message('抱歉，表单已经失效请您重新进入提交数据', referer(), 'error');
 		} else {
 			unset($_SESSION['token'][$_GPC['token']]);
 		}
@@ -143,31 +143,16 @@ function checkcaptcha($code) {
 	return $return;
 }
 
-
-function checkpermission($type, $target) {
-	global $_W;
-	if (!empty($_W['isfounder']) || empty($target)) {
-		return true;
-	}
-	if ($type == 'wechats') {
-		if (is_array($target)) {
-			$weid = $target['weid'];
-		} else {
-			$weid = $target;
-		}
-		if (pdo_fetchcolumn("SELECT id FROM " . tablename('uni_account_users') . " WHERE uniacid = :uniacid AND memberid = :memberid", array(':uniacid' => $weid, ':memberid' => $_W['uid']))) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	return true;
-}
-
-
-
 function tablename($table) {
-	return "`{$GLOBALS['_W']['config']['db']['tablepre']}{$table}`";
+	if(empty($GLOBALS['_W']['config']['db']['master'])) {
+		$GLOBALS['_W']['config']['db']['master'] = $GLOBALS['_W']['config']['db'];
+	}
+	$db = &$GLOBALS['_W']['config']['db'];
+	$db['slave_except'] = false;
+	if($db['slave_status'] == true && !empty($db['common']['slave_except_table']) && in_array($table, $db['common']['slave_except_table'])) {
+		$db['slave_except'] = true;
+	}
+	return "`{$db['master']['tablepre']}{$table}`";
 }
 
 
@@ -318,7 +303,11 @@ function murl($segment, $params = array(), $noredirect = true, $addhost = false)
 	} else {
 		$url = './';
 	}
-	$url .= 'index.php?i=' . $_W['uniacid'] . '&';
+	$str = '';
+	if(uni_is_multi_acid()) {
+		$str = "&j={$_W['acid']}";
+	}
+	$url .= "index.php?i={$_W['uniacid']}{$str}&";
 	if (!empty($controller)) {
 		$url .= "c={$controller}&";
 	}
@@ -373,10 +362,10 @@ function pagination($total, $pageIndex, $pageSize = 15, $url = '', $context = ar
 		if (!$url) {
 			$url = $_W['script_name'] . '?' . http_build_query($_GET);
 		}
-		$pdata['faa'] = 'href="javascript:;" onclick="p(\'' . $_W['script_name'] . $url . '\', \'' . $pdata['findex'] . '\', ' . $context['ajaxcallback'] . ')"';
-		$pdata['paa'] = 'href="javascript:;" onclick="p(\'' . $_W['script_name'] . $url . '\', \'' . $pdata['pindex'] . '\', ' . $context['ajaxcallback'] . ')"';
-		$pdata['naa'] = 'href="javascript:;" onclick="p(\'' . $_W['script_name'] . $url . '\', \'' . $pdata['nindex'] . '\', ' . $context['ajaxcallback'] . ')"';
-		$pdata['laa'] = 'href="javascript:;" onclick="p(\'' . $_W['script_name'] . $url . '\', \'' . $pdata['lindex'] . '\', ' . $context['ajaxcallback'] . ')"';
+		$pdata['faa'] = 'href="javascript:;" page="' . $pdata['findex'] . '" '. ($callbackfunc ? 'onclick="'.$callbackfunc.'(\'' . $_W['script_name'] . $url . '\', \'' . $pdata['findex'] . '\', this);return false;"' : '');
+		$pdata['paa'] = 'href="javascript:;" page="' . $pdata['pindex'] . '" '. ($callbackfunc ? 'onclick="'.$callbackfunc.'(\'' . $_W['script_name'] . $url . '\', \'' . $pdata['pindex'] . '\', this);return false;"' : '');
+		$pdata['naa'] = 'href="javascript:;" page="' . $pdata['nindex'] . '" '. ($callbackfunc ? 'onclick="'.$callbackfunc.'(\'' . $_W['script_name'] . $url . '\', \'' . $pdata['nindex'] . '\', this);return false;"' : '');
+		$pdata['laa'] = 'href="javascript:;" page="' . $pdata['lindex'] . '" '. ($callbackfunc ? 'onclick="'.$callbackfunc.'(\'' . $_W['script_name'] . $url . '\', \'' . $pdata['lindex'] . '\', this);return false;"' : '');
 	} else {
 		if ($url) {
 			$pdata['faa'] = 'href="?' . str_replace('*', $pdata['findex'], $url) . '"';
@@ -417,7 +406,7 @@ function pagination($total, $pageIndex, $pageSize = 15, $url = '', $context = ar
 		}
 		for ($i = $range['start']; $i <= $range['end']; $i++) {
 			if ($context['isajax']) {
-				$aa = 'href="javascript:;" onclick="p(\'' . $_W['script_name'] . $url . '\', \'' . $i . '\', ' . $context['ajaxcallback'] . ')"';
+				$aa = 'href="javascript:;" page="' . $i . '" '. ($callbackfunc ? 'onclick="'.$callbackfunc.'(\'' . $_W['script_name'] . $url . '\', \'' . $i . '\', this);return false;"' : '');
 			} else {
 				if ($url) {
 					$aa = 'href="?' . str_replace('*', $i, $url) . '"';
@@ -814,7 +803,7 @@ function media2local($media_id, $all = false){
 	}
 	$data = pdo_fetch('SELECT * FROM ' . tablename('core_wechats_attachment') . ' WHERE uniacid = :uniacid AND media_id = :id', array(':uniacid' => $_W['uniacid'], ':id' => $media_id));
 	if (!empty($data)) {
-		$data['attachment'] = tomedia($data['attachment']);
+		$data['attachment'] = tomedia($data['attachment'], true);
 		if (!$all) {
 			return $data['attachment'];
 		}

@@ -6,8 +6,9 @@
 </ol>
 <ul class="nav nav-tabs">
 	<li><a href="{php echo url('user/registerset');}">注册选项</a></li>
-	<li {if empty($id)}class="active"{/if}><a href="{url 'user/fields'}">字段管理</a></li>
-	{if !empty($id)}<li class="active"><a href="{url 'user/fields'}">编辑字段</a></li>{/if}
+	<li {if $do == 'display'}class="active"{/if}><a href="{url 'user/fields'}">字段管理</a></li>
+	<li {if empty($id) && $do == 'post'}class="active"{/if}><a href="{url 'user/fields/post'}">添加字段</a></li>
+	{if !empty($id) && $do == 'post'}<li class="active"><a href="{php echo url('user/fields/post', array('id' => $id));}">编辑字段</a></li>{/if}
 </ul>
 {if $do == 'display'}
 <form action="" method="post">
@@ -18,19 +19,21 @@
 	<table class="table table-hover">
 		<thead class="navbar-inner">
 			<tr>
-				<th style="width:80px;">排序</th>
-				<th style="width:100px;">字段名</th>
-				<th style="width:150px;">标题</th>
-				<th style="width:80px;">是否启用</th>
-				<th style="width:100px;">注册页显示</th>
-				<th style="width:80px;">是否必填</th>
+				<th>排序</th>
+				<th>字段名</th>
+				<th>标题</th>
+				<th>是否启用</th>
+				<th>注册页显示</th>
+				<th>是否必填</th>
 				<th>操作</th>
 			</tr>
 		</thead>
 		<tbody>
 			{loop $fields $field}
 			<tr>
-				<td><input type="text" class="form-control"  style="width:50px;" placeholder="" name="displayorder[{$field['id']}]" value="{$field['displayorder']}"></td>
+				<td>
+					<input type="text" class="form-control" style="width:50%;" name="displayorder[{$field['id']}]" value="{$field['displayorder']}">
+				</td>
 				<td style="vertical-align:middle;"><div>{$field['field']}</div></td>
 				<td style="vertical-align:middle;">{$field['title']}</td>
 				<td style="vertical-align:middle;"><input type="checkbox" name="available[{$field['id']}]" value="1" {if $field['available']}checked{/if}/></td>
@@ -44,7 +47,7 @@
 	</div>
 	</div>
 	<div>
-		<button type="submit" class="btn btn-primary" name="submit" value="提交">提交</button>
+		<button type="submit" class="btn btn-primary col-lg-1" name="submit" value="提交">提交</button>
 		<input type="hidden" name="token" value="{$_W['token']}" />
 	</div>
 </div>
@@ -58,13 +61,13 @@
 		<div class="form-group">
 			<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">字段</label>
 			<div class="col-sm-10 col-xs-12">
-				<input type="text" class="form-control" value="{$item['field']}" disabled>		
+				<input type="text" class="form-control" name="field"  value="{$item['field']}" {if !empty($item['field'])}disabled{/if}>
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">排序</label>
 			<div class="col-sm-10 col-xs-12">
-					<input type="text" class="form-control" placeholder="" name="displayorder" value="{$item['displayorder']}">
+				<input type="text" class="form-control" placeholder="" name="displayorder" value="{$item['displayorder']}">
 			</div>
 		</div>
 		<div class="form-group">

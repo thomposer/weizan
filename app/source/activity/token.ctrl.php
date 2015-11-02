@@ -35,6 +35,11 @@ if($do == 'post') {
 		message($ret, '', 'ajax');
 	}
 		mc_credit_update($_W['member']['uid'], $token['credittype'], -1 * $token['credit'], array($_W['member']['uid'], '礼品兑换:' . $token['title'] . ' 消耗 ' . $creditnames[$token['credittype']] . ':' . $token['credit']));
+		if($token['credittype'] == 'credit1') {
+		mc_notice_credit1($_W['openid'], $_W['member']['uid'], -1 * $token['credit'], '兑换代金券消耗积分');
+	} else {
+		mc_notice_credit2($_W['openid'], $_W['member']['uid'], -1 * $token['credit'], 0, '线上消费，兑换代金券');
+	}
 	message(error(0, "兑换成功,您消费了 {$token['credit']} {$creditnames[$token['credittype']]}"), '', 'ajax');
 }
 if($do == 'mine') {
@@ -63,7 +68,7 @@ if($do == 'use') {
 		$sql = 'SELECT * FROM ' . tablename('activity_coupon_password') . " WHERE `uniacid` = :uniacid AND `password` = :password";
 		$clerk = pdo_fetch($sql, array(':uniacid' => $_W['uniacid'], ':password' => $password));
 		if(!empty($clerk)) {
-			$status = activity_token_use($_W['member']['uid'], $id, $clerk['name']);
+			$status = activity_token_use($_W['member']['uid'], $id, $clerk['name'], $clerk['id']);
 			if (!is_error($status)) {
 				message('代金券使用成功！', url('activity/token/mine', array('type' => $_GPC['type'])), 'success');
 			} else {

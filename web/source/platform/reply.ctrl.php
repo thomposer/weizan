@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 load()->model('reply');
@@ -12,19 +12,15 @@ $m = $_GPC['m'];
 if(empty($m)) {
 	message('错误访问.');
 }
+uni_user_permission_check('platform_reply_' . $m, true, 'reply');
 $module = module_fetch($m);
 if(empty($module) || empty($module['isrulefields'])) {
 	message('访问无权限.');
 }
 if(!in_array($m, $sysmods)) {
-		if($module['issolution']) {
-		$solution = $module;
-		define('FRAME', 'solution');
-	} else {
 		define('FRAME', 'ext');
-		$types = module_types();
-		define('ACTIVE_FRAME_URL', url('home/welcome/ext', array('m' => $m)));
-	}
+	$types = module_types();
+	define('ACTIVE_FRAME_URL', url('home/welcome/ext', array('m' => $m)));
 	$frames = buildframes(array(FRAME), $m);
 	$frames = $frames[FRAME];
 	}
@@ -117,7 +113,6 @@ if($do == 'post') {
 			'status' => intval($_GPC['status']),
 			'displayorder' => intval($_GPC['displayorder_rule']),
 		);
-
 		if(!empty($_GPC['istop'])) {
 			$rule['displayorder'] = 255;
 		} else {

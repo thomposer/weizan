@@ -6,22 +6,46 @@
 defined('IN_IA') or exit('Access Denied');
 
 
-function tpl_form_field_audio($name, $value = '', $options = array()) {
-	
-	$val = $default;
-	if(!empty($value)) {
-		$val = tomedia($value);
+function _tpl_form_field_date($name, $value = '', $withtime = false) {
+	$s = '';
+	if (!defined('TPL_INIT_DATA')) {
+		$s = '
+			<script type="text/javascript">
+				require(["datetimepicker"], function(){
+					$(function(){
+						$(".datetimepicker").each(function(){
+							var option = {
+								lang : "zh",
+								step : "10",
+								timepicker : ' . (!empty($withtime) ? "true" : "false") .
+			',closeOnDateSelect : true,
+			format : "Y-m-d' . (!empty($withtime) ? ' H:i:s"' : '"') .
+			'};
+			$(this).datetimepicker(option);
+		});
+	});
+});
+</script>';
+		define('TPL_INIT_DATA', true);
 	}
-	if(!is_array($options)){
+	$withtime = empty($withtime) ? false : true;
+	if (!empty($value)) {
+		$value = strexists($value, '-') ? strtotime($value) : $value;
+	} else {
+		$value = TIMESTAMP;
+	}
+	$value = ($withtime ? date('Y-m-d H:i:s', $value) : date('Y-m-d', $value));
+	$s .= '<input type="text" name="' . $name . '" ng-model="' . $name . '" value="'.$value.'" placeholder="请选择日期时间" readonly="readonly" class="datetimepicker form-control" style="padding-left:12px;" />';
+	return $s;
+}
+
+
+function tpl_form_field_audio($name, $value = '', $options = array()) {
+	if (!is_array($options)) {
 		$options = array();
 	}
-	if(empty($options['tabs'])){
-		$options['tabs'] = array('browser'=>'active', 'upload'=>'');
-	}
-	$options = array_elements(array('extras','tabs','global','dest_dir'), $options);
 	$options['direct'] = true;
-	$options['multi'] = false;
-	
+	$options['multiple'] = false;
 	$s = '';
 	if (!defined('TPL_INIT_AUDIO')) {
 		$s = '
@@ -32,19 +56,17 @@ function tpl_form_field_audio($name, $value = '', $options = array()) {
 			var ipt = btn.parent().prev();
 			var val = ipt.val();
 			util.audio(val, function(url){
-				if(url && url.filename && url.url){
+				if(url && url.attachment && url.url){
 					btn.prev().show();
-					
-					ipt.val(url.filename);
+					ipt.val(url.attachment);
 					ipt.attr("filename",url.filename);
 					ipt.attr("url",url.url);
-					
 					setAudioPlayer();
 				}
 				if(url && url.media_id){
 					ipt.val(url.media_id);
 				}
-			}, "" , '.json_encode($options).');
+			}, "" , ' . json_encode($options) . ');
 		});
 	}
 
@@ -80,38 +102,29 @@ function tpl_form_field_audio($name, $value = '', $options = array()) {
 			});
 		});
 	}
-
 	setAudioPlayer();
 </script>';
 		echo $s;
 		define('TPL_INIT_AUDIO', true);
 	}
-
 	$s .= '
 	<div class="input-group">
-		<input type="text" value="'.$value.'" name="'.$name.'" class="form-control audio-player-media" autocomplete="off" '.($options['extras']['text'] ? $options['extras']['text'] : '').'>
+		<input type="text" value="' . $value . '" name="' . $name . '" class="form-control audio-player-media" autocomplete="off" ' . ($options['extras']['text'] ? $options['extras']['text'] : '') . '>
 		<span class="input-group-btn">
 			<button class="btn btn-default audio-player-play" type="button" style="display:none;"><i class="fa fa-play"></i></button>
-			<button class="btn btn-default" type="button" onclick="showAudioDialog(this, \''.base64_encode(iserializer($options)).'\','.str_replace('"','\'', json_encode($options)).');">选择媒体文件</button>
+			<button class="btn btn-default" type="button" onclick="showAudioDialog(this, \'' . base64_encode(iserializer($options)) . '\',' . str_replace('"', '\'', json_encode($options)) . ');">选择媒体文件</button>
 		</span>
 	</div>
-	<div class="input-group audio-player">
-	</div>';
+	<div class="input-group audio-player"></div>';
 	return $s;
 }
 
 
 function tpl_form_field_multi_audio($name, $value = array(), $options = array()) {
-	global $_W;
-	
 	$s = '';
-	
-	if(empty($options['tabs'])){
-		$options['tabs'] = array('browser'=>'active', 'upload'=>'');
-	}
 	$options['direct'] = false;
-	$options['multi'] = true;
-	
+	$options['multiple'] = true;
+
 	if (!defined('TPL_INIT_MULTI_AUDIO')) {
 		$s .= '
 <script type="text/javascript">
@@ -123,11 +136,11 @@ function tpl_form_field_multi_audio($name, $value = array(), $options = array())
 
 			util.audio(val, function(urls){
 				$.each(urls, function(idx, url){
-					var obj = $(\'<div class="multi-audio-item" style="height: 40px; position:relative; float: left; margin-right: 18px;"><div class="multi-audio-player"></div><div class="input-group"><input type="text" class="form-control" readonly value="\' + url.filename + \'" /><div class="input-group-btn"><button class="btn btn-default" type="button"><i class="fa fa-play"></i></button><button class="btn btn-default" onclick="deleteMultiAudio(this)" type="button"><i class="fa fa-remove"></i></button></div></div><input type="hidden" name="\'+name+\'[]" value="\'+url.filename+\'"></div>\');
+					var obj = $(\'<div class="multi-audio-item" style="height: 40px; position:relative; float: left; margin-right: 18px;"><div class="multi-audio-player"></div><div class="input-group"><input type="text" class="form-control" readonly value="\' + url.attachment + \'" /><div class="input-group-btn"><button class="btn btn-default" type="button"><i class="fa fa-play"></i></button><button class="btn btn-default" onclick="deleteMultiAudio(this)" type="button"><i class="fa fa-remove"></i></button></div></div><input type="hidden" name="\'+name+\'[]" value="\'+url.attachment+\'"></div>\');
 					$(elm).parent().parent().next().append(obj);
 					setMultiAudioPlayer(obj);
 				});
-			}, "" , '.json_encode($options).');
+			}, "" , ' . json_encode($options) . ');
 		});
 	}
 	function deleteMultiAudio(elm){
@@ -167,30 +180,30 @@ function tpl_form_field_multi_audio($name, $value = array(), $options = array())
 <div class="input-group">
 	<input type="text" class="form-control" readonly="readonly" value="" placeholder="批量上传音乐" autocomplete="off">
 	<span class="input-group-btn">
-		<button class="btn btn-default" type="button" onclick="showMultiAudioDialog(this,\''.$name.'\');">选择音乐</button>
+		<button class="btn btn-default" type="button" onclick="showMultiAudioDialog(this,\'' . $name . '\');">选择音乐</button>
 	</span>
 </div>
 <div class="input-group multi-audio-details clear-fix" style="margin-top:.5em;">';
-	if(!empty($value) && !is_array($value)){
+	if (!empty($value) && !is_array($value)) {
 		$value = array($value);
 	}
-	if (is_array($value) && count($value)>0) {
+	if (is_array($value) && count($value) > 0) {
 		$n = 0;
 		foreach ($value as $row) {
 			$m = random(8);
 			$s .= '
-	<div class="multi-audio-item multi-audio-item-'.$n.'-'.$m.'" style="height: 40px; position:relative; float: left; margin-right: 18px;">
+	<div class="multi-audio-item multi-audio-item-' . $n . '-' . $m . '" style="height: 40px; position:relative; float: left; margin-right: 18px;">
 		<div class="multi-audio-player"></div>
 		<div class="input-group">
-			<input type="text" class="form-control" value="'. $row .'" readonly/>
+			<input type="text" class="form-control" value="' . $row . '" readonly/>
 			<div class="input-group-btn">
 				<button class="btn btn-default" type="button"><i class="fa fa-play"></i></button>
 				<button class="btn btn-default" onclick="deleteMultiAudio(this)" type="button"><i class="fa fa-remove"></i></button>
 			</div>
 		</div>
-		<input type="hidden" name="'.$name.'[]" value="'.$row.'">
+		<input type="hidden" name="' . $name . '[]" value="' . $row . '">
 	</div>
-	<script language="javascript">setMultiAudioPlayer($(".multi-audio-item-'.$n.'-'.$m.'"));</script>';
+	<script language="javascript">setMultiAudioPlayer($(".multi-audio-item-' . $n . '-' . $m . '"));</script>';
 			$n++;
 		}
 	}
@@ -229,13 +242,13 @@ function tpl_form_field_link($name, $value = '', $options = array()) {
 }
 
 
-function tpl_form_field_emoji($name, $value='') {
+function tpl_form_field_emoji($name, $value = '') {
 	$s = '';
 	if (!defined('TPL_INIT_EMOJI')) {
 		$s = '
 		<script type="text/javascript">
 			function showEmojiDialog(elm) {
-				require(["util","jquery"], function(u, $){
+				require(["util", "jquery"], function(u, $){
 					var btn = $(elm);
 					var spview = btn.parent().prev();
 					var ipt = spview.prev();
@@ -254,7 +267,7 @@ function tpl_form_field_emoji($name, $value='') {
 	}
 	$s .= '
 	<div class="input-group" style="width: 500px;">
-		<input type="text" value="'.$value.'" name="'.$name.'" class="form-control" autocomplete="off">
+		<input type="text" value="' . $value . '" name="' . $name . '" class="form-control" autocomplete="off">
 		<span class="input-group-addon" style="display:none"><span></span></span>
 		<span class="input-group-btn">
 			<button class="btn btn-default" type="button" onclick="showEmojiDialog(this);">选择表情</button>
@@ -352,38 +365,31 @@ function tpl_form_field_icon($name, $value='') {
 
 function tpl_form_field_image($name, $value = '', $default = '', $options = array()) {
 	global $_W;
-
-	if(empty($default)) {
+	if (empty($default)) {
 		$default = './resource/images/nopic.jpg';
 	}
 	$val = $default;
-	if(!empty($value)) {
+	if (!empty($value)) {
 		$val = tomedia($value);
 	}
-	if(empty($options['tabs'])){
-		$options['tabs'] = array('upload'=>'active', 'browser'=>'', 'crawler'=>'');
-	}
-	if(!empty($options['global'])){
+	if (!empty($options['global'])) {
 		$options['global'] = true;
 	} else {
 		$options['global'] = false;
 	}
-	if(empty($options['class_extra'])) {
+	if (empty($options['class_extra'])) {
 		$options['class_extra'] = '';
 	}
 	if (isset($options['dest_dir']) && !empty($options['dest_dir'])) {
 		if (!preg_match('/^\w+([\/]\w+)?$/i', $options['dest_dir'])) {
-			exit('图片上传目录错误,只能指定最多两级目录,如: "weizan_store","weizan_store/d1"');
+			exit('图片上传目录错误,只能指定最多两级目录,如: "we7_store","we7_store/d1"');
 		}
 	}
-	
 	$options['direct'] = true;
-	$options['multi'] = false;
-	
-	if(isset($options['thumb'])){
+	$options['multiple'] = false;
+	if (isset($options['thumb'])) {
 		$options['thumb'] = !empty($options['thumb']);
 	}
-	
 	$s = '';
 	if (!defined('TPL_INIT_IMAGE')) {
 		$s = '
@@ -394,13 +400,13 @@ function tpl_form_field_image($name, $value = '', $default = '', $options = arra
 					var ipt = btn.parent().prev();
 					var val = ipt.val();
 					var img = ipt.parent().next().children();
-				
+					options = '.str_replace('"', '\'', json_encode($options)).';
 					util.image(val, function(url){
 						if(url.url){
 							if(img.length > 0){
 								img.get(0).src = url.url;
 							}
-							ipt.val(url.filename);
+							ipt.val(url.attachment);
 							ipt.attr("filename",url.filename);
 							ipt.attr("url",url.url);
 						}
@@ -410,7 +416,7 @@ function tpl_form_field_image($name, $value = '', $default = '', $options = arra
 							}
 							ipt.val(url.media_id);
 						}
-					}, opts, options);
+					}, null, options);
 				});
 			}
 			function deleteImage(elm){
@@ -424,45 +430,35 @@ function tpl_form_field_image($name, $value = '', $default = '', $options = arra
 	}
 
 	$s .= '
-<div class="input-group '. $options['class_extra'] .'">
-	<input type="text" name="'.$name.'" value="'.$value.'"'.($options['extras']['text'] ? $options['extras']['text'] : '').' class="form-control" autocomplete="off">
-	<span class="input-group-btn">
-		<button class="btn btn-default" type="button" onclick="showImageDialog(this, \'' . base64_encode(iserializer($options)) . '\', '. str_replace('"','\'', json_encode($options)).');">选择图片</button>
-	</span>
-</div>';
-	if(!empty($options['tabs']['browser']) || !empty($options['tabs']['upload'])){
-		$s .=
-			'<div class="input-group '. $options['class_extra'] .'" style="margin-top:.5em;">
-				<img src="' . $val . '" onerror="this.src=\''.$default.'\'; this.title=\'图片未找到.\'" class="img-responsive img-thumbnail" '.($options['extras']['image'] ? $options['extras']['image'] : '').' width="150" />
-				<em class="close" style="position:absolute; top: 0px; right: -14px;" title="删除这张图片" onclick="deleteImage(this)">×</em>
-			</div>';
-	}
+		<div class="input-group ' . $options['class_extra'] . '">
+			<input type="text" name="' . $name . '" value="' . $value . '"' . ($options['extras']['text'] ? $options['extras']['text'] : '') . ' class="form-control" autocomplete="off">
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="button" onclick="showImageDialog(this);">选择图片</button>
+			</span>
+		</div>
+		<div class="input-group ' . $options['class_extra'] . '" style="margin-top:.5em;">
+			<img src="' . $val . '" onerror="this.src=\'' . $default . '\'; this.title=\'图片未找到.\'" class="img-responsive img-thumbnail" ' . ($options['extras']['image'] ? $options['extras']['image'] : '') . ' width="150" />
+			<em class="close" style="position:absolute; top: 0px; right: -14px;" title="删除这张图片" onclick="deleteImage(this)">×</em>
+		</div>';
 	return $s;
 }
 
 
 function tpl_form_field_multi_image($name, $value = array(), $options = array()) {
 	global $_W;
-	
-	if(empty($options['tabs'])){
-		$options['tabs'] = array('upload'=>'active', 'browser'=>'', 'crawler'=>'');
-	}
-	$options['multi'] = true;
+	$options['multiple'] = true;
 	$options['direct'] = false;
-	
 	$s = '';
 	if (!defined('TPL_INIT_MULTI_IMAGE')) {
 		$s = '
 <script type="text/javascript">
 	function uploadMultiImage(elm) {
-		require(["jquery","util"], function($, util){
-			var name = $(elm).next().val();
-			util.image( "", function(urls){
-				$.each(urls, function(idx, url){
-					$(elm).parent().parent().next().append(\'<div class="multi-item"><img onerror="this.src=\\\'./resource/images/nopic.jpg\\\'; this.title=\\\'图片未找到.\\\'" src="\'+url.url+\'" class="img-responsive img-thumbnail"><input type="hidden" name="\'+name+\'[]" value="\'+url.filename+\'"><em class="close" title="删除这张图片" onclick="deleteMultiImage(this)">×</em></div>\');
-				});
-			}, "", '.json_encode($options).');
-		});
+		var name = $(elm).next().val();
+		util.image( "", function(urls){
+			$.each(urls, function(idx, url){
+				$(elm).parent().parent().next().append(\'<div class="multi-item"><img onerror="this.src=\\\'./resource/images/nopic.jpg\\\'; this.title=\\\'图片未找到.\\\'" src="\'+url.url+\'" class="img-responsive img-thumbnail"><input type="hidden" name="\'+name+\'[]" value="\'+url.attachment+\'"><em class="close" title="删除这张图片" onclick="deleteMultiImage(this)">×</em></div>\');
+			});
+		}, "", ' . json_encode($options) . ');
 	}
 	function deleteMultiImage(elm){
 		require(["jquery"], function($){
@@ -483,12 +479,12 @@ function tpl_form_field_multi_image($name, $value = array(), $options = array())
 </div>
 <div class="input-group multi-img-details">
 EOF;
-	if (is_array($value) && count($value)>0) {
+	if (is_array($value) && count($value) > 0) {
 		foreach ($value as $row) {
-			$s .='
+			$s .= '
 <div class="multi-item">
-	<img src="'.tomedia($row).'" onerror="this.src=\'./resource/images/nopic.jpg\'; this.title=\'图片未找到.\'" class="img-responsive img-thumbnail">
-	<input type="hidden" name="'.$name.'[]" value="'.$row.'" >
+	<img src="' . tomedia($row) . '" onerror="this.src=\'./resource/images/nopic.jpg\'; this.title=\'图片未找到.\'" class="img-responsive img-thumbnail">
+	<input type="hidden" name="' . $name . '[]" value="' . $row . '" >
 	<em class="close" title="删除这张图片" onclick="deleteMultiImage(this)">×</em>
 </div>';
 		}
@@ -500,40 +496,24 @@ EOF;
 
 function tpl_form_field_wechat_image($name, $value = '', $default = '', $options = array()) {
 	global $_W;
-	$account = uni_accounts();
-	$data = array();
-	if(!empty($account)) {
-		foreach($account as $li) {
-			if($li['level'] < 3) continue;
-			$data['item'][] = $li;
-		}
-		$data['total'] = count($data['item']);
-		unset($account);
-	}
-
-	if(empty($options['acid']) && $data['total'] == 1) {
-		$options['acid'] = $data['item'][0]['acid'];
-	}
-	if(empty($data['total'])) {
-		$options['error'] = 1;
+	if(!$_W['acid'] || $_W['account']['level'] < 3) {
+		$options['account_error'] = 1;
+	} else {
+		$options['acid'] = $_W['acid'];
 	}
 	if(empty($default)) {
 		$default = './resource/images/nopic.jpg';
 	}
 	$val = $default;
-	if(!empty($value)) {
+	if (!empty($value)) {
 		$media_data = (array)media2local($value, true);
 		$val = $media_data['attachment'];
 	}
-	if(empty($options['tabs'])){
-		$options['tabs'] = array('upload'=>'active', 'browser'=>'');
-	}
-	if(empty($options['class_extra'])) {
+	if (empty($options['class_extra'])) {
 		$options['class_extra'] = '';
 	}
-
 	$options['direct'] = true;
-	$options['multi'] = false;
+	$options['multiple'] = false;
 	$options['type'] = empty($options['type']) ? 'image' : $options['type'];
 	$s = '';
 	if (!defined('TPL_INIT_WECHAT_IMAGE')) {
@@ -566,20 +546,18 @@ function tpl_form_field_wechat_image($name, $value = '', $default = '', $options
 	}
 
 	$s .= '
-<div class="input-group '. $options['class_extra'] .'">
-	<input type="text" name="'.$name.'" value="'.$value.'"'.($options['extras']['text'] ? $options['extras']['text'] : '').' class="form-control" autocomplete="off">
+<div class="input-group ' . $options['class_extra'] . '">
+	<input type="text" name="' . $name . '" value="' . $value . '"' . ($options['extras']['text'] ? $options['extras']['text'] : '') . ' class="form-control" autocomplete="off">
 	<span class="input-group-btn">
-		<button class="btn btn-default" type="button" onclick="showWechatImageDialog(this, '. str_replace('"','\'', json_encode($options)).');">选择图片</button>
+		<button class="btn btn-default" type="button" onclick="showWechatImageDialog(this, ' . str_replace('"', '\'', json_encode($options)) . ');">选择图片</button>
 	</span>
 </div>';
-	if(!empty($options['tabs']['browser']) || !empty($options['tabs']['upload'])){
-		$s .=
-			'<div class="input-group '. $options['class_extra'] .'" style="margin-top:.5em;">
-				<img src="' . $val . '" onerror="this.src=\''.$default.'\'; this.title=\'图片未找到.\'" class="img-responsive img-thumbnail" '.($options['extras']['image'] ? $options['extras']['image'] : '').' width="150" />
-				<em class="close" style="position:absolute; top: 0px; right: -14px;" title="删除这张图片" onclick="deleteImage(this)">×</em>
-			</div>';
-	}
-	if(!empty($media_data) && $media_data['model'] == 'temp' && (time() - $media_data['createtime'] > 259200)){
+	$s .=
+		'<div class="input-group ' . $options['class_extra'] . '" style="margin-top:.5em;">
+			<img src="' . $val . '" onerror="this.src=\'' . $default . '\'; this.title=\'图片未找到.\'" class="img-responsive img-thumbnail" ' . ($options['extras']['image'] ? $options['extras']['image'] : '') . ' width="150" />
+			<em class="close" style="position:absolute; top: 0px; right: -14px;" title="删除这张图片" onclick="deleteImage(this)">×</em>
+		</div>';
+	if (!empty($media_data) && $media_data['model'] == 'temp' && (time() - $media_data['createtime'] > 259200)) {
 		$s .= '<span class="help-block"><b class="text-danger">该素材已过期 [有效期为3天]，请及时更新素材</b></span>';
 	}
 	return $s;
@@ -587,35 +565,20 @@ function tpl_form_field_wechat_image($name, $value = '', $default = '', $options
 
 function tpl_form_field_wechat_multi_image($name, $value = '', $default = '', $options = array()) {
 	global $_W;
-	$account = uni_accounts();
-	$data = array();
-	if(!empty($account)) {
-		foreach($account as $li) {
-			if($li['level'] < 3) continue;
-			$data['item'][] = $li;
-		}
-		$data['total'] = count($data['item']);
-		unset($account);
+	if(!$_W['acid'] || $_W['account']['level'] < 3) {
+		$options['account_error'] = 1;
+	} else {
+		$options['acid'] = $_W['acid'];
 	}
-	if(empty($options['acid']) && $data['total'] == 1) {
-		$options['acid'] = $data['item'][0]['acid'];
-	}
-	if(empty($data['total'])) {
-		$options['error'] = 1;
-	}
-
 	if(empty($default)) {
 		$default = './resource/images/nopic.jpg';
-	}
-	if(empty($options['tabs'])){
-		$options['tabs'] = array('upload'=>'active', 'browser'=>'');
 	}
 	if(empty($options['class_extra'])) {
 		$options['class_extra'] = '';
 	}
 
 	$options['direct'] = false;
-	$options['multi'] = true;
+	$options['multiple'] = true;
 	$options['type'] = empty($options['type']) ? 'image' : $options['type'];
 	$s = '';
 	if (!defined('TPL_INIT_WECHAT_MULTI_IMAGE')) {
@@ -624,7 +587,7 @@ function tpl_form_field_wechat_multi_image($name, $value = '', $default = '', $o
 	function uploadWechatMultiImage(elm) {
 		require(["jquery","util"], function($, util){
 			var name = $(elm).next().val();
-			util.wechat_image( "", function(urls){
+			util.wechat_image("", function(urls){
 				$.each(urls, function(idx, url){
 					$(elm).parent().parent().next().append(\'<div class="multi-item"><img onerror="this.src=\\\'./resource/images/nopic.jpg\\\'; this.title=\\\'图片未找到.\\\'" src="\'+url.url+\'" class="img-responsive img-thumbnail"><input type="hidden" name="\'+name+\'[]" value="\'+url.media_id+\'"><em class="close" title="删除这张图片" onclick="deleteWechatMultiImage(this)">×</em></div>\');
 				});
@@ -666,23 +629,11 @@ EOF;
 
 function tpl_form_field_wechat_voice($name, $value = '', $options = array()) {
 	global $_W;
-	$account = uni_accounts();
-	$data = array();
-	if(!empty($account)) {
-		foreach($account as $li) {
-			if($li['level'] < 3) continue;
-			$data['item'][] = $li;
-		}
-		$data['total'] = count($data['item']);
-		unset($account);
+	if(!$_W['acid'] || $_W['account']['level'] < 3) {
+		$options['account_error'] = 1;
+	} else {
+		$options['acid'] = $_W['acid'];
 	}
-	if(empty($options['acid']) && $data['total'] == 1) {
-		$options['acid'] = $data['item'][0]['acid'];
-	}
-	if(empty($data['total'])) {
-		$options['error'] = 1;
-	}
-
 	if(!empty($value)) {
 		$media_data = (array)media2local($value, true);
 		$val = $media_data['attachment'];
@@ -690,12 +641,8 @@ function tpl_form_field_wechat_voice($name, $value = '', $options = array()) {
 	if(!is_array($options)){
 		$options = array();
 	}
-	if(empty($options['tabs'])){
-		$options['tabs'] = array('upload'=>'active', 'browser'=>'');
-	}
-	$options = array_elements(array('tabs','global','dest_dir','acid','error'), $options);
 	$options['direct'] = true;
-	$options['multi'] = false;
+	$options['multiple'] = false;
 	$options['type'] = 'voice';
 
 	$s = '';
@@ -779,23 +726,11 @@ function tpl_form_field_wechat_voice($name, $value = '', $options = array()) {
 
 function tpl_form_field_wechat_video($name, $value = '', $options = array()) {
 	global $_W;
-	$account = uni_accounts();
-	$data = array();
-	if(!empty($account)) {
-		foreach($account as $li) {
-			if($li['level'] < 3) continue;
-			$data['item'][] = $li;
-		}
-		$data['total'] = count($data['item']);
-		unset($account);
+	if(!$_W['acid'] || $_W['account']['level'] < 3) {
+		$options['account_error'] = 1;
+	} else {
+		$options['acid'] = $_W['acid'];
 	}
-	if(empty($options['acid']) && $data['total'] == 1) {
-		$options['acid'] = $data['item'][0]['acid'];
-	}
-	if(empty($data['total'])) {
-		$options['error'] = 1;
-	}
-
 	if(!empty($value)) {
 		$media_data = (array)media2local($value, true);
 		$val = $media_data['attachment'];
@@ -916,103 +851,35 @@ function tpl_form_field_location_category($name, $values = array(), $del = false
 }
 
 
-function tpl_ueditor($id, $value = '') {
+function tpl_wappage_editor($editorparams = '', $editormodules = array()) {
+	global $_GPC;
+	$content = '';
+	load()->func('file');
+	$filetree = file_tree(IA_ROOT . '/web/themes/default/wapeditor');
+	if (!empty($filetree)) {
+		foreach ($filetree as $file) {
+			if (strexists($file, 'widget-')) {
+				$fileinfo = pathinfo($file);
+				$_GPC['iseditor'] = false;
+				$display = template('wapeditor/'.$fileinfo['filename'], TEMPLATE_FETCH);
+				$_GPC['iseditor'] = true;
+				$editor = template('wapeditor/'.$fileinfo['filename'], TEMPLATE_FETCH);
+				$content .= "<script type=\"text/ng-template\" id=\"{$fileinfo['filename']}-display.html\">".str_replace(array("\r\n", "\n", "\t"), '', $display)."</script>";
+				$content .= "<script type=\"text/ng-template\" id=\"{$fileinfo['filename']}-editor.html\">".str_replace(array("\r\n", "\n", "\t"), '', $editor)."</script>";
+			}
+		}
+	}
+	return $content;
+}
+
+
+function tpl_ueditor($id, $value = '', $options = array()) {
 	$s = '';
 	if (!defined('TPL_INIT_UEDITOR')) {
-		$s .= '<script type="text/javascript" src="./resource/components/ueditor/ueditor.config.js"></script>
-			<script type="text/javascript" src="./resource/components/ueditor/ueditor.all.min.js"></script>
-			<script type="text/javascript" src="./resource/components/ueditor/lang/zh-cn/zh-cn.js"></script>';
+		$s .= '<script type="text/javascript" src="./resource/components/ueditor/ueditor.config.js"></script><script type="text/javascript" src="./resource/components/ueditor/ueditor.all.min.js"></script><script type="text/javascript" src="./resource/components/ueditor/lang/zh-cn/zh-cn.js"></script>';
 	}
-	$s .= !empty($id) ? "<textarea id=\"{$id}\" name=\"{$id}\" type=\"text/plain\" style=\"height:300px;\">{$value}</textarea>" : '';
-	$s .= "
-	<script type=\"text/javascript\">
-			var ueditoroption = {
-				'autoClearinitialContent' : false,
-				'toolbars' : [['fullscreen', 'source', 'preview', '|', 'bold', 'italic', 'underline', 'strikethrough', 'forecolor', 'backcolor', '|',
-					'justifyleft', 'justifycenter', 'justifyright', '|', 'insertorderedlist', 'insertunorderedlist', 'blockquote', 'emotion', 'insertvideo',
-					'link', 'removeformat', '|', 'rowspacingtop', 'rowspacingbottom', 'lineheight','indent', 'paragraph', 'fontsize', '|',
-					'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol',
-					'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', '|', 'anchor', 'map', 'print', 'drafts']],
-				'elementPathEnabled' : false,
-				'initialFrameHeight': 500,
-				'focus' : false,
-				'maximumWords' : 9999999999999
-			};
-			var opts = {
-				type :'image',
-				direct : false,
-				multi : true,
-				tabs : {
-					'upload' : 'active',
-					'browser' : '',
-					'crawler' : ''
-				},
-				path : '',
-				dest_dir : '',
-				global : false,
-				thumb : false,
-				width : 0
-			};
-			UE.registerUI('myinsertimage',function(editor,uiName){
-				editor.registerCommand(uiName, {
-					execCommand:function(){
-						require(['fileUploader'], function(uploader){
-							uploader.show(function(imgs){
-								if (imgs.length == 0) {
-									return;
-								} else if (imgs.length == 1) {
-									editor.execCommand('insertimage', {
-										'src' : imgs[0]['url'],
-										'_src' : imgs[0]['attachment'],
-										'width' : '100%',
-										'alt' : imgs[0].filename
-									});
-								} else {
-									var imglist = [];
-									for (i in imgs) {
-										imglist.push({
-											'src' : imgs[i]['url'],
-											'_src' : imgs[i]['attachment'],
-											'width' : '100%',
-											'alt' : imgs[i].filename
-										});
-									}
-									editor.execCommand('insertimage', imglist);
-								}
-							}, opts);
-						});
-					}
-				});
-				var btn = new UE.ui.Button({
-					name: '插入图片',
-					title: '插入图片',
-					cssRules :'background-position: -726px -77px',
-					onclick:function () {
-						editor.execCommand(uiName);
-					}
-				});
-				editor.addListener('selectionchange', function () {
-					var state = editor.queryCommandState(uiName);
-					if (state == -1) {
-						btn.setDisabled(true);
-						btn.setChecked(false);
-					} else {
-						btn.setDisabled(false);
-						btn.setChecked(state);
-					}
-				});
-				return btn;
-			}, 19);
-			".(!empty($id) ? "
-				$(function(){
-					var ue = UE.getEditor('{$id}', ueditoroption);
-					$('#{$id}').data('editor', ue);
-					$('#{$id}').parents('form').submit(function() {
-						if (ue.queryCommandState('source')) {
-							ue.execCommand('source');
-						}
-					});
-				});" : '')."
-	</script>";
+	$options['height'] = empty($options['height']) ? 200 : $options['height'];
+	$s .= !empty($id) ? "<textarea id=\"{$id}\" name=\"{$id}\" type=\"text/plain\" style=\"height:{$options['height']}px;\">{$value}</textarea>" : '';
+	$s .= '<script type="text/javascript">var ueditoroption={autoClearinitialContent:!1,toolbars:[["fullscreen","source","preview","|","bold","italic","underline","strikethrough","forecolor","backcolor","|","justifyleft","justifycenter","justifyright","|","insertorderedlist","insertunorderedlist","blockquote","emotion","insertvideo","link","removeformat","|","rowspacingtop","rowspacingbottom","lineheight","indent","paragraph","fontsize","|","inserttable","deletetable","insertparagraphbeforetable","insertrow","deleterow","insertcol","deletecol","mergecells","mergeright","mergedown","splittocells","splittorows","splittocols","|","anchor","map","print","drafts"]],elementPathEnabled:!1,initialFrameHeight:"'.$options['height'].'",focus:!1,maximumWords:9999999999999,autoFloatEnabled:!1,imageScaleEnabled:!1};UE.registerUI("myinsertimage",function(a,b){a.registerCommand(b,{execCommand:function(){require(["fileUploader"],function(b){b.show(function(b){if(0!=b.length)if(b.url)a.execCommand("insertimage",{src:b.url,_src:b.url,width:"100%",alt:b.filename});else{var c=[];for(i in b)c.push({src:b[i].url,_src:b[i].url,width:"100%",alt:b[i].filename});a.execCommand("insertimage",c)}})})}});var c=new UE.ui.Button({name:"插入图片",title:"插入图片",cssRules:"background-position: -726px -77px",onclick:function(){a.execCommand(b)}});return a.addListener("selectionchange",function(){var d=a.queryCommandState(b);-1==d?(c.setDisabled(!0),c.setChecked(!1)):(c.setDisabled(!1),c.setChecked(d))}),c},19)'.(!empty($id) ? ',$(function(){var a=UE.getEditor("'.$id.'",ueditoroption);$("#'.$id.'").data("editor",a),$("#'.$id.'").parents("form").submit(function(){a.queryCommandState("source")&&a.execCommand("source")})});' : ';')."</script>";
 	return $s;
 }

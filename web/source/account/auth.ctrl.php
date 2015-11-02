@@ -29,6 +29,19 @@ if ($do == 'forward') {
 		echo "此为测试平台接入返回结果：<br/> 公众号名称：{$account_info['authorizer_info']['nick_name']} <br/> 接入状态：成功";
 		exit;
 	}
+	$account_found = pdo_get('account_wechats', array('account' => $account_info['authorizer_info']['alias']));
+	if (!empty($account_found)) {
+		if (empty($account_found['auth_refresh_token'])) {
+			pdo_update('account_wechats', array(
+			'auth_refresh_token' => $auth_refresh_token,
+			'encodingaeskey' => $account_platform->encodingaeskey,
+			'token' => $account_platform->token,
+			'level' => $level,
+			'key' => $auth_appid,
+			), array('acid' => $account_found['acid']));
+		}
+		message('授权登录成功', url('account/display'), 'success');
+	}
 	if ($account_info['authorizer_info']['service_type_info'] = '0' || $account_info['authorizer_info']['service_type_info'] == '1') {
 		if ($account_info['authorizer_info']['verify_type_info'] > -1) {
 			$level = '3';

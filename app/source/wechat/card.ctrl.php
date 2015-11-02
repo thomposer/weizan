@@ -4,8 +4,7 @@
  * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-load()->model('app');
-$dos = array('display', 'detail');
+$dos = array('display', 'detail', 'use', 'qr');
 $do = in_array($do, $dos) ? $do : 'display';
 $logo = pdo_fetchcolumn('SELECT logourl FROM  ' . tablename('coupon_setting') . ' WHERE uniacid = :aid AND acid = :cid', array(':aid' => $_W['uniacid'], ':cid' => $_W['acid']));
 $colors = array(
@@ -36,6 +35,7 @@ if($do == 'display') {
 	}
 	$pager = pagination($total, $pindex, $psize);
 }
+
 if($do == 'detail') {
 	$id = intval($_GPC['id']);
 	load()->classs('coupon');
@@ -51,4 +51,61 @@ if($do == 'detail') {
 	$out['error'] = $status;
 	exit(json_encode($out));
 }
+
+if($do == 'use') {
+		$card_id = trim($_GPC['card_id']);
+	$encrypt_code = trim($_GPC['encrypt_code']);
+	$signature = trim($_GPC['signature']);
+	$openid = trim($_GPC['openid']);
+	if(empty($card_id) || empty($encrypt_code) || empty($signature)) {
+		message('卡券签名参数错误');
+	}
+	$card = pdo_get('coupon', array('acid' => $_W['acid'], 'card_id' => $card_id));
+	if(empty($card)) {
+		message('卡券不存在或已删除');
+	}
+	$card['date_info'] = iunserializer($card['date_info']);
+	$error_signature = $error_code = 0;
+		$coupon = new coupon($_W['acid']);
+	if(is_null($coupon)) {
+		message('系统错误');
+	}
+	$code = $coupon->DecryptCode(array('encrypt_code' => $encrypt_code));
+	if(is_error($code)) {
+		$error_code = 1;
+	} else {
+				$data = array($card_id, $code['code'], $_W['account']['secret']);
+		sort($data, SORT_STRING);
+		$signature_tmp = sha1(implode($data));
+		if($signature_tmp != $signature) {
+			$error_signature = 1;
+		}
+		$record = pdo_get('coupon_record',  array('acid' => $_W['acid'], 'card_id' => $card_id, 'code' => $code));
+	}
+	if(checksubmit()) {
+		$password = trim($_GPC['password']);
+		$clerk = pdo_get('activity_coupon_password', array('uniacid' => $_W['uniacid'], 'password' => $password));
+		if(empty($clerk)) {
+			message('店员密码错误');
+		}
+				$status = $coupon->ConsumeCode(array('code' => $code['code']));
+		if(is_error($status)) {
+			message($status['message']);
+		}
+		pdo_update('coupon_record', array('status' => 3, 'clerk_id' => $clerk['id'], 'clerk_name' => $clerk['name']), array('acid' => $_W['acid'], 'card_id' => $card_id, 'openid' => $openid, 'code' => $code));
+		message('核销微信卡券成功', url('mc/home'), 'success');
+	}
+}
+
+if($do == 'qr') {
+		require_once('../framework/library/qrcode/phpqrcode.php');
+	$errorCorrectionLevel = "L";
+	$matrixPointSize = "5";
+	$id = intval($_GPC['id']);
+	$code = intval($_GPC['code']);
+	$url = murl('clerk/wechat', array('uid' => $_W['member']['uid'], 'id' => $id, 'code' => $code), false, true);
+	QRcode::png($url, false, $errorCorrectionLevel, $matrixPointSize);
+	exit();
+}
+
 template('wechat/card');

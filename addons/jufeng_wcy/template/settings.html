@@ -1,4 +1,4 @@
-{template 'common/header'}
+{template 'header'}
 
 <ul class="nav nav-tabs">
 	<li {if $_GPC['op'] != 'transfer'}class="active"{/if}><a href="{php echo $this->createWebUrl('settings', array('op' => 'sms'))}">基本设置</a></li>
@@ -100,5 +100,5 @@
 
 </div>
 {/if}
-{template 'common/footer'}
+{template 'footer'}
 

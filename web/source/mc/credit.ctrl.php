@@ -1,9 +1,10 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
+uni_user_permission_check('mc_credit');
 $dos = array('display', 'strategy');
 $do = in_array($do, $dos) ? $do : 'display';
 
@@ -39,10 +40,12 @@ if($do == 'display') {
 		);
 		$row = pdo_fetch("SELECT uniacid FROM ".tablename('uni_settings') . " WHERE uniacid = :uniacid", array(':uniacid' => $_W['uniacid']));
 		if(empty($row)) {
-			pdo_insert('uni_settings', $data);	
+			pdo_insert('uni_settings', $data);
+			cache_delete("unisetting:{$_W['uniacid']}");
 			message('积分列表更新成功！', referer(), 'success');
 		} else {
-			pdo_update('uni_settings', $data, array('uniacid' => $_W['uniacid']));	
+			pdo_update('uni_settings', $data, array('uniacid' => $_W['uniacid']));
+			cache_delete("unisetting:{$_W['uniacid']}");
 			message('积分列表更新成功！', referer(), 'success');
 		}
 	}
@@ -92,9 +95,11 @@ if($do == 'strategy') {
 		$row = pdo_fetch("SELECT uniacid FROM ".tablename('uni_settings') . " WHERE uniacid = :uniacid", array(':uniacid' => $_W['uniacid']));
 		if(empty($row)) {
 			pdo_insert('uni_settings', $data);
+			cache_delete("unisetting:{$_W['uniacid']}");
 			message('积分列表更新成功！', referer(), 'success');
 		} else {
 			pdo_update('uni_settings', $data, array('uniacid' => $_W['uniacid']));
+			cache_delete("unisetting:{$_W['uniacid']}");
 			message('积分列表更新成功！', referer(), 'success');
 		}
 	}

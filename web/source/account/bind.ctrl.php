@@ -92,6 +92,8 @@ if ($do == 'post') {
 			$account['key'] = $_GPC['key'];
 			$account['secret'] = $_GPC['secret'];
 			$account['type'] = intval($_GPC['type']);
+			$account['topad'] = $_GPC['topad'];
+			$account['footad'] = $_GPC['footad'];
 		}
 		if (empty($acid)) {
 			$acid = account_create($uniacid, $account);
@@ -122,12 +124,13 @@ if ($do == 'post') {
 		} 
 		
 		if ($_GPC['model'] == 2) {
-						if (!empty($basicinfo['headimg'])) {
+			if (!empty($basicinfo['headimg'])) {
 				file_write('headimg_'.$acid.'.jpg', $basicinfo['headimg']);
 			}
 			if (!empty($basicinfo['qrcode'])) {
 				file_write('qrcode_'.$acid.'.jpg', $basicinfo['qrcode']);
 			}
+		
 			if (!empty($loginstatus)) {
 								if ($type == 'wechat') {
 					$account['id'] = $acid;
@@ -155,6 +158,7 @@ if ($do == 'post') {
 				$_W['uploadsetting']['image']['limit'] = $_W['config']['upload']['image']['limit'];
 				$upload = file_upload($_FILES['headimg'], 'image', "headimg_{$acid}");
 			}
+			
 		}
 		
 		message('更新子公众号成功！', url('account/bind/post', array('acid' => $acid, 'uniacid' => $uniacid)), 'success');

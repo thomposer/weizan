@@ -10,20 +10,11 @@ $reply = pdo_fetch("select * from ".tablename($this->table_reply)." where rid = 
         if (empty($reply)) {
             $this->webmessage('抱歉，要修改的活动不存在或是已经被删除！');
         }
-		
-		
         foreach ($_GPC['idArr'] as $k => $id) {
-			
-			
             $id = intval($id);
-			
-			
             if ($id == 0)
                 continue;
-			 
 			$fans = pdo_fetch("select from_user from ".tablename($this->table_bbsreply)." where id = :id", array(':id' => $id));
-            
-			
 			if (empty($fans)) {
                 $this->webmessage('抱歉，选中的评论数据不存在！');
             }

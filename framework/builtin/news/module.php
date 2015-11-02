@@ -15,45 +15,37 @@ class NewsModule extends WeModule {
 		$replies = pdo_fetchall("SELECT * FROM ".tablename($this->tablename)." WHERE rid = :rid ORDER BY `displayorder` DESC", array(':rid' => $rid));
 		foreach($replies as &$reply) {
 			if(!empty($reply['thumb'])) {
-				$reply['src'] = tomedia($reply['thumb']);
+				$reply['thumb'] = tomedia($reply['thumb']);
 			}
 		}
 		include $this->template('display');
 	}
 	
 	public function fieldsFormValidate($rid = 0) {
-		global $_GPC;
-		if(empty($_GPC['titles'])) {
-			return '必须填写有效的回复内容.';
-		}
-		foreach($_GPC['titles'] as $k => $v) {
-			$row = array();
-			if(empty($v)) {
-				continue;
-			}
-			$row['title'] = $v;
-			$row['id'] = $_GPC['id'][$k];
-			$row['author'] = $_GPC['authors'][$k];
-			$row['displayorder'] = $_GPC['displayorder'][$k];
-			$row['thumb'] = $_GPC['thumbs'][$k];
-			$row['description'] = $_GPC['descriptions'][$k];
-			$row['content'] = $_GPC['contents'][$k];
-			$row['url'] = $_GPC['urls'][$k];
-			$row['incontent'] = intval($_GPC['incontent-flag'][$k]);
-			$row['createtime'] = time();
-			$this->replies[] = $row;
-		}
+		global $_GPC, $_W;
+		$this->replies = @json_decode(htmlspecialchars_decode($_GPC['replies']), true);
 		if(empty($this->replies)) {
 			return '必须填写有效的回复内容.';
 		}
-		foreach($this->replies as &$r) {
-			if (trim($r['title']) == '') {
+		$column = array('id', 'title', 'author', 'displayorder', 'thumb', 'description', 'content', 'url', 'incontent', 'createtime');
+		foreach($this->replies as $k => &$v) {
+			if(empty($v)) {
+				unset($this->replies[$k]);
+				continue;
+			}
+			if (trim($v['title']) == '') {
 				return '必须填写有效的标题.';
 			}
-			if (trim($r['thumb']) == '') {
+			if (trim($v['thumb']) == '') {
 				return '必须填写有效的封面链接地址.';
 			}
-			$r['content'] = htmlspecialchars_decode($r['content']);
+			$v['thumb'] = str_replace($_W['attachurl'], '', $v['thumb']);
+			$v['content'] = htmlspecialchars_decode($v['content']);
+			$v['createtime'] = TIMESTAMP;
+			$v = array_elements($column, $v);
+		}
+		if(empty($this->replies)) {
+			return '必须填写有效的回复内容.';
 		}
 		return '';
 	}

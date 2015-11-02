@@ -1,7 +1,7 @@
 <?php
 /**
  * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -12,12 +12,7 @@ class RechargeModuleSite extends WeModuleSite {
 		if (empty($_W['member']['uid'])) {
 			checkauth();
 		}
-		$username = $_W['member']['uid'];
-		if($_W['member']['email'] && (substr($_W['member']['email'], -6) != '012wz.com' && strlen($_W['member']['email']) != 39)) {
-			$username = $_W['member']['email'];
-		} elseif(!empty($_W['member']['mobile'])) {
-			$username = $_W['member']['mobile'];
-		}
+		$username = $_W['member']['email'] ? $_W['member']['email'] : $_W['member']['mobile'];
 		if(empty($username)) {
 			message('您的用户信息不完整,请完善用户信息后再充值', '', 'error');
 		}

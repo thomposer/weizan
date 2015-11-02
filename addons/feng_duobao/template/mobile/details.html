@@ -48,53 +48,6 @@
 </section>
 </body>
 <script type="text/javascript">
-<?php
-/*require_once IA_ROOT."jssdk.class.php";//注意这里要填写绝对路径*/
-$weixin = new jssdk($url='');//借用传入0或1,url是地址默认不借用,当前地址
-$wx = $weixin->get_sign();
-?>   
-wx.config({
-    appId: "{$wx['appId']}",
-    timestamp: {$wx['timestamp']},
-    nonceStr: "{$wx['nonceStr']}",
-    signature: "{$wx['signature']}",
-    jsApiList: [
-      'checkJsApi',
-      'onMenuShareTimeline',
-      'onMenuShareAppMessage',
-      'onMenuShareQQ',
-      'onMenuShareWeibo',
-      'hideMenuItems',
-      'showMenuItems',
-      'hideAllNonBaseMenuItem',
-      'showAllNonBaseMenuItem',
-      'translateVoice',
-      'startRecord',
-      'stopRecord',
-      'onRecordEnd',
-      'playVoice',
-      'pauseVoice',
-      'stopVoice',
-      'uploadVoice',
-      'downloadVoice',
-      'chooseImage',
-      'previewImage',
-      'uploadImage',
-      'downloadImage',
-      'getNetworkType',
-      'openLocation',
-      'getLocation',
-      'hideOptionMenu',
-      'showOptionMenu',
-      'closeWindow',
-      'scanQRCode',
-      'chooseWXPay',
-      'openProductSpecificView',
-      'addCard',
-      'chooseCard',
-      'openCard'
-    ]
-});
 wx.ready(function () {
   var shareData = {
     title: "{$share_data['share_title']}",

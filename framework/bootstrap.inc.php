@@ -15,10 +15,9 @@ $configfile = IA_ROOT . "/data/config.php";
 if(!file_exists($configfile)) {
 	if(file_exists(IA_ROOT . '/install.php')) {
 		header('Content-Type: text/html; charset=utf-8');
-		require IA_ROOT . '/framework/version.inc.php';
 		echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 		echo "·如果你还没安装本程序，请运行<a href='".(strpos($_SERVER['SCRIPT_NAME'], 'web') === false ? './install.php' : '../install.php')."'> install.php 进入安装&gt;&gt; </a><br/><br/>";
-		echo "&nbsp;&nbsp;<a href='http://www.012wz.com' style='font-size:12px' target='_blank'>Power by WEIZAN " . IMS_VERSION . " &nbsp;微赞公众平台自助开源引擎</a>";
+		echo "&nbsp;&nbsp;<a href='http://www.012wz.com' style='font-size:12px' target='_blank'>Power by WEIZAN &nbsp;V8 &nbsp;微赞公众平台自助开源引擎</a> &nbsp; &nbsp;<a href='http://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDA4MzA3NV8zMDk2MDdfODAwMDgzMDc1XzJf' style='font-size:12px' target='_blank'>正版购买咨询</a>";
 		exit();
 	} else {
 		header('Content-Type: text/html; charset=utf-8');
@@ -33,7 +32,6 @@ require IA_ROOT . '/framework/class/loader.class.php';
 load()->func('global');
 load()->func('compat');
 load()->func('pdo');
-load()->classs('db');
 load()->classs('account');
 load()->classs('agent');
 load()->model('cache');
@@ -43,13 +41,14 @@ load()->model('setting');
 define('CLIENT_IP', getip());
 
 $_W['config'] = $config;
+$_W['config']['db']['tablepre'] = !empty($_W['config']['db']['master']['tablepre']) ? $_W['config']['db']['master']['tablepre'] : $_W['config']['db']['tablepre'];
 $_W['timestamp'] = TIMESTAMP;
 $_W['charset'] = $_W['config']['setting']['charset'];
 $_W['clientip'] = CLIENT_IP;
 
 unset($configfile, $config);
 
-define('ATTACHMENT_ROOT', IA_ROOT .'/'. $_W['config']['upload']['attachdir']);
+define('ATTACHMENT_ROOT', IA_ROOT .'/attachment/');
 
 define('DEVELOPMENT', $_W['config']['setting']['development'] == 1);
 if(DEVELOPMENT) {
@@ -116,13 +115,15 @@ if(!$_W['isajax']) {
 	unset($input, $__input);
 }
 
-setting_load('upload');
+setting_load();
 if (empty($_W['setting']['upload'])) {
 	$_W['setting']['upload'] = array_merge($_W['config']['upload']);
 }
 
-$_W['attachurl'] = empty($_W['config']['upload']['attachurl']) ? $_W['siteroot'] . $_W['config']['upload']['attachdir'] . '/' : $_W['config']['upload']['attachurl'] . '/';
-
+$_W['attachurl'] = $_W['attachurl_local'] = $_W['siteroot'] . $_W['config']['upload']['attachdir'] . '/';
+if (!empty($_W['setting']['remote']['type'])) {
+	$_W['attachurl'] = ($_W['setting']['remote']['type'] == 1) ? $_W['setting']['remote']['ftp']['url'] . '/' : "http://{$_W['setting']['remote']['alioss']['url']}.aliyuncs.com/{$_W['setting']['remote']['alioss']['bucket']}/";
+}
 $_W['os'] = Agent::deviceType();
 if($_W['os'] == Agent::DEVICE_MOBILE) {
 	$_W['os'] = 'mobile';
@@ -146,6 +147,18 @@ if(Agent::isMicroMessage() == Agent::MICRO_MESSAGE_YES) {
 } else {
 	$_W['container'] = 'unknown';
 }
+//新增应用商城切换
+
+if(empty($_W['setting']['addons']['addons_url'])){
+	$_W['setting']['addons']['addons_url'] = "http://addons.012wz.com";
+}
+if(empty($_W['setting']['addons']['c_url'])){
+	$_W['setting']['addons']['c_url'] = "http://www.012wz.com";
+}
+$rc_url ="\""+$_W['setting']['addons']['c_url']+"\"";
+define('ADDONS_URL', $_W['setting']['addons']['addons_url']);
+define('C_URL', $_W['setting']['addons']['c_url']);
+define('RC_URL', $rc_url);
 
 $controller = $_GPC['c'];
 $action = $_GPC['a'];

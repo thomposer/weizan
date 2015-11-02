@@ -69,8 +69,14 @@
     </div>
 </body>
 <script>
+{if !empty($share_data['url'])}
 function guanzhu(){
     window.location.href = "{php echo $share_data['url']}";
   }
+{else}
+function guanzhu(){
+    window.location.href = "{php echo $this->createMobileUrl('index')}";
+  }
+{/if}
 </script>
 </html>

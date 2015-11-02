@@ -3,5 +3,7 @@
 	if (!$people) {
 		message('请先填写您的资料！', $this->createMobileUrl('prodata'), 'warning');
 	}
+	load()->model('mc');
+	$result = mc_credit_fetch($_W['member']['uid']);
 	include $this->template('profile');
 ?>

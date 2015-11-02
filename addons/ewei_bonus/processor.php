@@ -3,7 +3,6 @@
 /**
  * 合体红包
  *
- * @author ewei QQ：22185157
  * @url 
  */
 defined('IN_IA') or exit('Access Denied');

@@ -27,7 +27,8 @@ class usercontrol extends base {
 		$this->app = $this->cache['apps'][UC_APPID];
 	}
 
-		function onsynlogin() {
+	// -1 Î´¿ªÆô
+	function onsynlogin() {
 		$this->init_input();
 		$uid = $this->input('uid');
 		if($this->app['synlogin']) {

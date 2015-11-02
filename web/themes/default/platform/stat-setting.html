@@ -1,17 +1,15 @@
 {template 'common/header'}
 <script type="text/javascript">
-	require(['jquery'], function($){
-		$(':radio[name="msg_history"]').click(function(){
-			if($(':radio[name=msg_history]:checked').val() == '1') {
-				$('.msgd').show();
-			} else {
-				$('.msgd').hide();
-			}
-		});
-		{if $settings['msg_history'] == '0'} 
-			$(".msgd").hide();
-		{/if}
+	$(':radio[name="msg_history"]').click(function(){
+		if($(':radio[name=msg_history]:checked').val() == '1') {
+			$('.msgd').show();
+		} else {
+			$('.msgd').hide();
+		}
 	});
+	{if $settings['msg_history'] == '0'} 
+		$(".msgd").hide();
+	{/if}
 </script>
 	<div class="clearfix">
 		<form action="" method="post" class="form-horizontal form">

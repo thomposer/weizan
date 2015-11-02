@@ -1,32 +1,14 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-$dos = array('display', 'location_post', 'logo', 'location_list','location_view', 'location_del', 'whitelist', 'location_edit', 'export');
+uni_user_permission_check('wechat_manage');
+$dos = array('display', 'location_post', 'logo', 'location_list','location_view', 'location_del', 'whitelist', 'location_edit', 'export', 'location_sync');
 $do = in_array($do, $dos) ? $do : 'logo';
-$accounts = uni_accounts();
-if(!empty($accounts)) {
-	foreach($accounts as $key => $li) {
-		if($li['level'] < 3) {
-			unset($accounts[$key]);
-		}
-	}
-}
-
-$acid = intval($_GET['__acid']);
-if(empty($acid)) {
-	$acid = intval($_GPC['__acid']);
-}
-if(!$acid || empty($accounts[$acid])) {
-	message('公众号不存在', url('wechat/account'), 'error');
-} else {
-	isetcookie('__acid', $acid, 86400 * 3);
-}
-
+$acid = $_W['acid'];
 if($do == 'logo') {
-	load()->func('tpl');
 	$coupon_setting = pdo_fetch('SELECT * FROM ' . tablename('coupon_setting') . ' WHERE uniacid = :aid AND acid = :acid', array(':aid' => $_W['uniacid'], ':acid' => $acid));
 	if(checksubmit('submit')) {
 		$_GPC['logo'] = trim($_GPC['logo']);
@@ -46,7 +28,6 @@ if($do == 'logo') {
 }
 
 if($do == 'location_post') {
-	load()->func('tpl');
 	if(checksubmit('submit')) {
 		$data['business_name'] = trim($_GPC['business_name']) ? urlencode(trim($_GPC['business_name'])) : message('门店名称不能为空');
 		$data['branch_name'] = urlencode(trim($_GPC['branch_name']));
@@ -90,8 +71,7 @@ if($do == 'location_post') {
 		$data['special'] = trim($_GPC['special']) ? urlencode(trim($_GPC['special'])) : message('特色服务不能为空');
 		$data['introduction'] = urlencode(trim($_GPC['introduction']));
 		$data['offset_type'] = 1;
-		$maxid = pdo_fetchcolumn('SELECT MAX(id) FROM ' . tablename('coupon_location'));
-		$data['sid'] = $maxid + 1;
+		$data['sid'] = TIMESTAMP;
 		load()->classs('coupon');
 		$acc = new coupon($acid);
 		$status = $acc->LocationAdd($data);
@@ -101,6 +81,7 @@ if($do == 'location_post') {
 		}
 		$insert['uniacid'] = $_W['uniacid'];
 		$insert['acid'] = $acid;
+		$insert['sid'] = $data['sid'];
 		$insert['business_name'] = trim($_GPC['business_name']);
 		$insert['branch_name'] = trim($_GPC['branch_name']);
 		$insert['category'] = iserializer($in_cate);
@@ -112,7 +93,7 @@ if($do == 'location_post') {
 		$insert['latitude'] = trim($_GPC['baidumap']['lat']);
 		$insert['telephone'] = trim($_GPC['telephone']);
 		$insert['location_id'] = $status['location_id_list'][0];
-		$insert['photo_list'] = iserializer($_GPC['photo_list']);
+		$insert['photo_list'] = iserializer($data['photo_list']);
 		$insert['avg_price'] = intval($_GPC['avg_price']);
 		$insert['open_time'] = $_GPC['open_time_start'] . '-' . $_GPC['open_time_end'];
 		$insert['recommend'] = trim($_GPC['recommend']);
@@ -127,25 +108,25 @@ if($do == 'location_post') {
 }
 
 if($do == 'location_edit') {
-	load()->func('tpl');
 	$id = intval($_GPC['id']);
 	$location = pdo_fetch('SELECT * FROM ' . tablename('coupon_location') . ' WHERE uniacid = :aid AND id = :id', array(':aid' => $_W['uniacid'], ':id' => $id));
 	if(empty($location)) {
 		message('门店不存在或已删除', referer(), 'error');
 	}
-	$location['open_time_start'] = '8:00';
-	$location['open_time_end'] = '24:00';
-	$open_time = explode('-', $location['open_time']);
-	if(!empty($open_time)) {
-		$location['open_time_start'] = $open_time[0];
-		$location['open_time_end'] = $open_time[1];
+	load()->classs('coupon');
+	$acc = new coupon($acid);
+	$location = $acc->LocationGet($location['location_id']);
+	if(is_error($location)) {
+		message("从微信获取门店信息失败,错误详情:{$location['message']}", referer(), 'error');
 	}
-	$location['category'] = iunserializer($location['category']);
-	$location['baidumap'] = array('lng' => $location['longitude'], 'lat' => $location['latitude']);
-	$location['photo_list'] = iunserializer($location['photo_list']);
+	$update_status = $location['business']['base_info']['update_status'];
+
 	if(checksubmit('submit')) {
-		if(empty($location['location_id']) && 0) {
+		if(empty($location['location_id'])) {
 			message('门店正在审核中或审核未通过，不能更新门店信息', referer(), 'error');
+		}
+		if($update_status == 1) {
+			message('服务信息正在更新中，尚未生效，不允许再次更新', referer(), 'error');
 		}
 		$data['telephone'] = trim($_GPC['telephone']) ? trim($_GPC['telephone']) : message('门店电话不能为空');
 		if(empty($_GPC['photo_list'])) {
@@ -172,26 +153,39 @@ if($do == 'location_edit') {
 		if(is_error($status)) {
 			message($status['message'], '', 'error');
 		}
-
-				$data['photo_list'] = iserializer($_GPC['photo_list']);
-		unset($data['poi_id']);
-		pdo_update('coupon_location', $data, array('uniacid' => $_W['uniacid'], 'id' => $id));
-		message('更新门店信息成功,微信官方审核通过后,将会生效', referer(), 'success');
 	}
-}
+	$location = $location['business']['base_info'];
+	$status2local = array('', 3, 2, 1, 3);
+	$location['status'] = $status2local[$location['available_state']];
+	$location['location_id'] = $location['poi_id'];
+	$category_temp = explode(',', $location['categories'][0]);
+	$location['category'] = iserializer(array('cate' => $category_temp[0], 'sub' => $category_temp[1], 'clas' => $category_temp[2]));
+	$location['photo_list'] = iserializer($location['photo_list']);
+	unset($location['sid'], $location['categories'], $location['poi_id'], $location['update_status'], $location['available_state']);
+	pdo_update('coupon_location', $location, array('acid' => $acid, 'id' => $id));
 
-if($do == 'location_view') {
-	load()->func('tpl');
-	$id = intval($_GPC['id']);
+	$location = array();
 	$location = pdo_fetch('SELECT * FROM ' . tablename('coupon_location') . ' WHERE uniacid = :aid AND id = :id', array(':aid' => $_W['uniacid'], ':id' => $id));
-	if(empty($location)) {
-		message('门店不存在或已删除', referer(), 'error');
+	$location['open_time_start'] = '8:00';
+	$location['open_time_end'] = '24:00';
+	$open_time = explode('-', $location['open_time']);
+	if(!empty($open_time)) {
+		$location['open_time_start'] = $open_time[0];
+		$location['open_time_end'] = $open_time[1];
 	}
 	$location['category'] = iunserializer($location['category']);
 	$location['category'] = implode('-', $location['category']);
 	$location['address'] = $location['provice'].$location['city'].$location['district'].$location['address'];
 	$location['baidumap'] = array('lng' => $location['longitude'], 'lat' => $location['latitude']);
-	$location['photo_list'] = iunserializer($location['photo_list']);
+	$photo_lists = iunserializer($location['photo_list']);
+	$location['photo_list'] = array();
+	if(!empty($photo_lists)) {
+		foreach($photo_lists as $li) {
+			if(!empty($li['photo_url'])) {
+				$location['photo_list'][] = $li['photo_url'];
+			}
+		}
+	}
 }
 
 if($do == 'location_list') {
@@ -224,11 +218,11 @@ if($do == 'location_del') {
 		load()->classs('coupon');
 		$acc = new coupon($acid);
 		$status = $acc->LocationDel($location['location_id']);
-		if(is_error($status)) {
-			message($status['message'], '', 'error');
-		}
 	}
 	pdo_delete('coupon_location', array('uniacid' => $_W['uniacid'], 'acid' => $acid, 'id' => $id));
+	if(is_error($status)) {
+		message("删除本地门店数据成功<br>通过微信接口删除微信门店数据失败,请登陆微信公众平台手动删除门店<br>错误原因：{$status['message']}", '', 'error');
+	}
 	message('删除门店成功', url('wechat/manage/location_list'), 'success');
 }
 
@@ -239,7 +233,6 @@ if($do == 'export') {
 	if(is_error($location)) {
 		message($location['message'], referer(), 'error');
 	}
-
 	$location = $location['business_list'];
 	$status2local = array('', 3, 2, 1, 3);
 	if(!empty($location)) {
@@ -259,7 +252,7 @@ if($do == 'export') {
 					pdo_insert('coupon_location', $li);
 				}
 			} else {
-				$isexist = pdo_fetchcolumn('SELECT id FROM ' . tablename('coupon_location') . ' WHERE uniacid = :uniacid AND acid = :acid AND id = :sid', array(':uniacid' => $_W['uniacid'], ':acid' => $acid, ':sid' => $li['sid']));
+				$isexist = pdo_fetch('SELECT * FROM ' . tablename('coupon_location') . ' WHERE uniacid = :uniacid AND acid = :acid AND (sid = :sid OR id = :sid)', array(':uniacid' => $_W['uniacid'], ':acid' => $acid, ':sid' => $li['sid']));
 				$li['uniacid'] = $_W['uniacid'];
 				$li['acid'] = $acid;
 				$li['status'] = $status2local[$li['available_state']];
@@ -267,25 +260,42 @@ if($do == 'export') {
 				$category_temp = explode(',', $li['categories'][0]);
 				$li['category'] = iserializer(array('cate' => $category_temp[0], 'sub' => $category_temp[1], 'clas' => $category_temp[2]));
 				$li['photo_list'] = iserializer($li['photo_list']);
-				$li['id'] = $li['sid'];
+				$li['sid'] = $li['sid'];
 				unset($li['sid'], $li['categories'], $li['poi_id'], $li['update_status'], $li['available_state']);
 				if(empty($isexist)) {
 					pdo_insert('coupon_location', $li);
 				} else {
-					pdo_update('coupon_location', $li, array('acid' => $acid, 'id' => $sid));
+					pdo_update('coupon_location', $li, array('acid' => $acid, 'sid' => $sid));
 				}
 			}
-
-
-
-
-
-
-
-
 		}
 	}
 	message('导入门店成功', referer(), 'success');
+}
+
+if($do == 'location_sync') {
+	$id = intval($_GPC['id']);
+	$location = pdo_fetch('SELECT * FROM ' . tablename('coupon_location') . ' WHERE uniacid = :aid AND id = :id', array(':aid' => $_W['uniacid'], ':id' => $id));
+	if(empty($location)) {
+		message('门店不存在或已删除', referer(), 'error');
+	}
+	load()->classs('coupon');
+	$acc = new coupon($acid);
+	$location = $acc->LocationGet($location['location_id']);
+	if(is_error($location)) {
+		message("获取门店信息失败,错误详情:{$location['message']}", referer(), 'error');
+	}
+	$location = $location['business']['base_info'];
+
+	$status2local = array('', 3, 2, 1, 3);
+	$location['status'] = $status2local[$location['available_state']];
+	$location['location_id'] = $location['poi_id'];
+	$category_temp = explode(',', $location['categories'][0]);
+	$location['category'] = iserializer(array('cate' => $category_temp[0], 'sub' => $category_temp[1], 'clas' => $category_temp[2]));
+	$location['photo_list'] = iserializer($location['photo_list']);
+	unset($location['sid'], $location['categories'], $location['poi_id'], $location['update_status'], $location['available_state']);
+	pdo_update('coupon_location', $location, array('acid' => $acid, 'id' => $id));
+	message('更新门店信息成功', referer(), 'success');
 }
 
 if($do == 'whitelist') {

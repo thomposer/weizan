@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $eid = intval($_GPC['eid']);
@@ -19,14 +19,6 @@ if(!empty($eid)) {
 if(empty($entry) || empty($entry['do'])) {
 	message('非法访问.');
 }
-
-load()->model('module');
-$sql = 'SELECT `issolution` FROM ' . tablename('modules') . ' WHERE `name`=:module';
-$module = pdo_fetch($sql, array(':module' => $entry['module']));
-if(empty($module)) {
-	message('你访问的功能不存在.');
-}
-
 if(!$entry['direct']) {
 	checklogin();
 	load()->model('module');
@@ -34,41 +26,14 @@ if(!$entry['direct']) {
 	if(empty($module)) {
 		message("访问非法, 没有操作权限. (module: {$entry['module']})");
 	}
-
-	if($module['issolution']) {
-		$error = module_solution_check($entry['module']);
-		if(is_error($error)) {
-			message($error['message']);
-		} else {
-			$solution = $module;
-			define('IN_SOLUTION', true);
-			define('FRAME', 'solution');
-
-			$solutions = array();
-			$modules = uni_modules();
-			foreach($modules as $modulename => $module) {
-				if(!is_error(module_solution_check($modulename))) {
-					if($_W['role'] == 'operator') {
-						$sql = 'SELECT COUNT(*) FROM ' . tablename('solution_acl') . ' WHERE `uid`=:uid AND `module`=:module';
-						$pars = array();
-						$pars[':uid'] = $_W['uid'];
-						$pars[':module'] = $modulename;
-						if(pdo_fetchcolumn($sql, $pars) > 0) {
-							$solutions[] = $module;
-						}
-					} else {
-						$solutions[] = $module;
-					}
-				}
-			}
-		}
-	} else {
-		define('FRAME', 'ext');
-		define('CRUMBS_NAV', 1);
-		$ptr_title = $entry['title'];
-		$module_types = module_types();
-		define('ACTIVE_FRAME_URL', url('home/welcome/ext', array('m' => $entry['module'])));
+	if(!uni_user_module_permission_check($entry['module'] . '_menu_' . $entry['do'], $entry['module'])) {
+		message('您没有权限进行该操作');
 	}
+	define('FRAME', 'ext');
+	define('CRUMBS_NAV', 1);
+	$ptr_title = $entry['title'];
+	$module_types = module_types();
+	define('ACTIVE_FRAME_URL', url('home/welcome/ext', array('m' => $entry['module'])));
 	$frames = buildframes(array(FRAME), $entry['module']);
 	$frames = $frames[FRAME];
 }

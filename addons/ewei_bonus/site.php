@@ -3,7 +3,6 @@
 /**
  * 合体红包
  *
- * @author ewei QQ：22185157
  * @url 
  */
 defined('IN_IA') or exit('Access Denied');
@@ -344,7 +343,7 @@ class Ewei_bonusModuleSite extends WeModuleSite {
                  }
                  else{
                     //如果没有借用，判断是否认证服务号
-                    message('请使用认证服务号进行活动，或借用其他认证服务号权限!');
+                    message('请使用认证服务号进行活动，并在后台设置填写APPID，或借用其他认证服务号权限!');
                  }
             }
         if (empty($appId) || empty($appSecret)) {

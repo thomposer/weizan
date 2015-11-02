@@ -17,7 +17,7 @@ class coupon extends WeiXinAccount{
 		$cache = cache_load($cachekey);
 		if (!empty($cache) && !empty($cache['ticket']) && $cache['expire'] > TIMESTAMP) {
 			$this->account['card_ticket'] = $cache;
-			return $cache['token'];
+			return $cache['ticket'];
 		}
 		load()->func('communication');
 		$access_token = $this->getAccessToken();
@@ -53,7 +53,7 @@ class coupon extends WeiXinAccount{
 			return error(-1, '商户LOGO只能上传本地图片');
 		}
 
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
@@ -81,7 +81,7 @@ class coupon extends WeiXinAccount{
 		if(empty($data['openid']) && empty($data['username'])) {
 			return error(-1, '没有有效的白名单用户');
 		}
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
@@ -109,7 +109,7 @@ class coupon extends WeiXinAccount{
 				'base_info' => $data
 			),
 		);
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
@@ -137,7 +137,7 @@ class coupon extends WeiXinAccount{
 				'base_info' => $data
 			),
 		);
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
@@ -163,8 +163,7 @@ class coupon extends WeiXinAccount{
 		$post = array(
 			'poi_id' => $id
 		);
-		echo json_encode($post);
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
@@ -190,7 +189,7 @@ class coupon extends WeiXinAccount{
 		if(empty($data['limit'])) {
 			$data['limit'] = 50;
 		}
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
@@ -209,8 +208,31 @@ class coupon extends WeiXinAccount{
 		return $result;
 	}
 
+	public function LocationGet($id) {
+		$token = $this->getAccessToken();
+		if (is_error($token)) {
+			return $token;
+		}
+		$data = array(
+			'poi_id' => $id
+		);
+		$url = "http://api.weixin.qq.com/cgi-bin/poi/getpoi?access_token={$token}";
+		load()->func('communication');
+		$response = ihttp_request($url, json_encode($data));
+		if(is_error($response)) {
+			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
+		}
+		$result = @json_decode($response['content'], true);
+		if(empty($result)) {
+			return error(-1, "接口调用失败, 元数据: {$response['meta']}");
+		} elseif(!empty($result['errcode'])) {
+			return error(-1, "访问微信接口错误, 错误代码: {$result['errcode']}, 错误信息: {$result['errmsg']},错误详情：{$this->error_code($result['errcode'])}");
+		}
+		return $result;
+	}
+
 		public function GetColors() {
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
@@ -230,7 +252,7 @@ class coupon extends WeiXinAccount{
 	}
 
 		public function CreateCard($card) {
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
@@ -250,7 +272,7 @@ class coupon extends WeiXinAccount{
 	}
 
 		public function DeleteCard($card_id) {
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
@@ -278,7 +300,7 @@ class coupon extends WeiXinAccount{
 		$num = intval($num);
 		($num > 0) && ($data['increase_stock_value'] = $num);
 		($num < 0) && ($data['reduce_stock_value'] = abs($num));
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
@@ -298,7 +320,7 @@ class coupon extends WeiXinAccount{
 	}
 
 		public function QrCard($data) {
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
@@ -318,7 +340,7 @@ class coupon extends WeiXinAccount{
 	}
 
 		public function UnavailableCode($data) {
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
@@ -338,7 +360,7 @@ class coupon extends WeiXinAccount{
 	}
 
 		public function ConsumeCode($data) {
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
@@ -358,11 +380,57 @@ class coupon extends WeiXinAccount{
 	}
 
 		public function DecryptCode($data) {
-		$token = $this->fetch_token();
+		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
 		}
 		$url = "https://api.weixin.qq.com/card/code/decrypt?access_token={$token}";
+		load()->func('communication');
+		$response = ihttp_request($url, json_encode($data));
+		if(is_error($response)) {
+			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
+		}
+		$result = @json_decode($response['content'], true);
+		if(empty($result)) {
+			return error(-1, "接口调用失败, 元数据: {$response['meta']}");
+		} elseif(!empty($result['errcode'])) {
+			return error(-1, "访问微信接口错误, 错误代码: {$result['errcode']}, 错误信息: {$result['errmsg']},错误详情：{$this->error_code($result['errcode'])}");
+		}
+		return $result;
+	}
+
+		public function fetchCard($card_id) {
+		$token = $this->getAccessToken();
+		if (is_error($token)) {
+			return $token;
+		}
+		$data = array(
+			'card_id' => $card_id,
+		);
+		$url = "https://api.weixin.qq.com/card/get?access_token={$token}";
+		load()->func('communication');
+		$response = ihttp_request($url, json_encode($data));
+		if(is_error($response)) {
+			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
+		}
+		$result = @json_decode($response['content'], true);
+		if(empty($result)) {
+			return error(-1, "接口调用失败, 元数据: {$response['meta']}");
+		} elseif(!empty($result['errcode'])) {
+			return error(-1, "访问微信接口错误, 错误代码: {$result['errcode']}, 错误信息: {$result['errmsg']},错误详情：{$this->error_code($result['errcode'])}");
+		}
+		return $result['card'];
+	}
+
+	public function updateCard($card_id) {
+		$token = $this->getAccessToken();
+		if (is_error($token)) {
+			return $token;
+		}
+		$data = array(
+			'card_id' => $card_id,
+		);
+		$url = "https://api.weixin.qq.com/card/membercard/activate?access_token={$token}";
 		load()->func('communication');
 		$response = ihttp_request($url, json_encode($data));
 		if(is_error($response)) {
@@ -402,7 +470,7 @@ class coupon extends WeiXinAccount{
 
 
 		public function SignatureCard($data) {
-		$ticket = $this->fetch_card_ticket();
+		$ticket = $this->getCardTicket();
 		if (is_error($ticket)) {
 			return $ticket;
 		}
@@ -414,9 +482,8 @@ class coupon extends WeiXinAccount{
 	public function AddCard($id) {
 		$acid = $this->account['acid'];
 		$card_id = pdo_fetchcolumn('SELECT card_id FROM ' . tablename('coupon') . ' WHERE acid = :acid AND id = :id', array(':acid' => $acid, ':id' => $id));
-
 		if(empty($card_id)) {
-			return error(-1, var_dump($acid));
+			return error(-1, '卡券id不合法');
 		}
 		$time = TIMESTAMP;
 		$sign = array($card_id, $time);
@@ -634,10 +701,13 @@ class BaseInfo{
 				$this->base_info['location_id_list'] = $baseinfo['location'];
 			}
 		}
-		if(trim($baseinfo['source']) && trim($baseinfo['url_name_type']) && trim($baseinfo['custom_url'])) {
-			$this->base_info['source'] = urlencode(trim($baseinfo['source']));
-			$this->base_info['url_name_type'] = urlencode(trim($baseinfo['url_name_type']));
-			$this->base_info['custom_url'] = urlencode(trim($baseinfo['custom_url']));
+		$this->base_info['custom_url_name'] = urlencode('立即使用');
+		$this->base_info['custom_url'] = urlencode(murl('wechat/card/use', array(), true, true));
+		$this->base_info['custom_url_sub_title'] = '';
+		if(!empty($baseinfo['promotion_url_name']) && !empty($baseinfo['promotion_url'])) {
+			$this->base_info['promotion_url_name'] = urlencode($baseinfo['promotion_url_name']);
+			$this->base_info['promotion_url'] = urlencode($baseinfo['promotion_url']);
+			$this->base_info['promotion_url_sub_title'] = urlencode($baseinfo['promotion_url_sub_title']);
 		}
 		return $this->base_info;
 	}

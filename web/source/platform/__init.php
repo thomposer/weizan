@@ -1,20 +1,20 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 if(!empty($_GPC['multiid'])) {
 	define('ACTIVE_FRAME_URL', url('site/multi/display'));
 }
 $sysmods = system_modules();
 if($action == 'cover') {
-	$dos = array('site', 'mc', 'card','module');
+	$dos = array('site', 'mc', 'card', 'module', 'clerk');
 	$do = in_array($do, $dos) ? $do : 'module';
-	if($do != 'module' && $do != 'card') {
-		define('FRAME', $do);
-	}
-	if($do == 'card') {
+	if(in_array($do, array('mc', 'card', 'clerk'))) {
 		define('FRAME', 'mc');
+	}
+	if($do == 'site') {
+		define('FRAME', 'site');
 	}
 } elseif($action == 'reply') {
 	$m = $_GPC['m'];

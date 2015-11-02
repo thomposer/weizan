@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 if(!empty($_GPC['f']) && $_GPC['f'] == 'multi') {
 	define('ACTIVE_FRAME_URL', url('site/multi/display'));
@@ -19,9 +19,14 @@ if($controller == 'site') {
 		define('ACTIVE_FRAME_URL', url('platform/reply/', array('m' => $m)));
 	}
 }
-
 if($action != 'entry' && $action != 'nav') {
 	define('FRAME', 'site');
+}
+if ($action == 'editor' && $_GPC['type'] == '4') {
+	define('ACTIVE_FRAME_URL', url('site/editor/uc'));
+}
+if (!empty($_GPC['multiid'])) {
+	define('ACTIVE_FRAME_URL', url('site/multi/display'));
 }
 $frames = buildframes(array(FRAME));
 $frames = $frames[FRAME];

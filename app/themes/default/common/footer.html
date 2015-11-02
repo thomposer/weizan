@@ -8,9 +8,7 @@
 				&nbsp;&nbsp;{$_W['setting']['copyright']['statcode']}
 			</div>
 		{/if}
-		{if !empty($_W['quickmenu']['menus']) && empty($_W['quickmenu']['disabled'])}
-			<?php include_once template($_W['quickmenu']['template'], TEMPLATE_INCLUDEPATH);?>
-		{/if}
+		{data func="site_quickmenu"}{/data}
 		<script>require(['bootstrap']);</script>
 	</div>
 	<style>
@@ -29,7 +27,6 @@
 		$_share['link'] = '';
 		$query_string = $_SERVER['QUERY_STRING'];
 		if(!empty($query_string)) {
-			//加上分享人的uid
 			parse_str($query_string, $query_arr);
 			$query_arr['u'] = $_W['member']['uid'];
 			$query_string = http_build_query($query_arr);
@@ -107,15 +104,13 @@
 	{/if}
 	</script>
 	<script>
-		require(['jquery'],function(){
-			$(function(){
-				if($('.quick')!=null && $('.quick')!=''){
-					var h = $('.quick').height()+'px';
-					$('body').css("padding-bottom",h);
-				}else{
-					$('body').css("padding-bottom", "0");
-				}
-			})
+		$(function(){
+			if($('.js-quickmenu')!=null && $('.js-quickmenu')!=''){
+				var h = $('.js-quickmenu').height()+'px';
+				$('body').css("padding-bottom",h);
+			}else{
+				$('body').css("padding-bottom", "0");
+			}
 		});
 	</script>
 </body>

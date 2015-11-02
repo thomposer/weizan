@@ -1,7 +1,7 @@
 <?php
 /**
  * [WeiZan System] Copyright (c) 2014 012WZ.COM
- * WeEngine is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 error_reporting(E_ALL ^ E_NOTICE);
 @set_time_limit(0);

@@ -103,7 +103,7 @@
 							{/if}
 						</td>
 						<td>
-							<a href="{php echo url('system/tools/scan/', array('op' => 'view', 'file' => authcode($k, 'ENCODE')));}" class="btn btn-sm btn-default" title="查看"><i class="fa fa-eye"></i></a>
+							<a href="{php echo url('system/tools/scan/', array('op' => 'view', 'file' => authcode($k, 'ENCODE')));}" title="查看">查看</a>
 						</td>
 					</tr>
 				{/loop}
@@ -145,13 +145,4 @@
 	</form>
 </div>
 {/if}
-<script>
-	require(['bootstrap'],function($){
-		$('.btn').hover(function(){
-			$(this).tooltip('show');
-		},function(){
-			$(this).tooltip('hide');
-		});
-	});
-</script>
 {template 'common/footer-gw'}

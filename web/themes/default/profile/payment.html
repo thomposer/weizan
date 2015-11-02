@@ -30,18 +30,14 @@
 			$scope.baifubao = {
 				switch: {if $pay['baifubao']['switch']}'true'{else}'false'{/if}
 			};
+			$scope.line = {
+				switch: {if $pay['line']['switch']}'true'{else}'false'{/if}
+			};
 			{if !empty($accounts)}
 			$scope.wechat = {
 				switch: {if $pay['wechat']['switch']}'true'{else}'false'{/if},
-				accounts: {php echo json_encode($accounts)}
+				account: '{$pay['wechat']['account']}'
 			};
-			$scope.wechat.account = $scope.wechat.accounts['{$pay['wechat']['account']}'];
-			if(!$scope.wechat.account) {
-				$.each($scope.wechat.accounts, function(){
-					$scope.wechat.account = this;
-					return false;
-				});
-			}
 			{/if}
 		});
 		angular.bootstrap(document, ['app']);
@@ -118,6 +114,35 @@
 				}
 			}
 		});
+
+		$('#recharge-add').click(function(){
+			var html ='<div class="form-group item">' +
+						'<label class="col-xs-12 col-sm-3 col-md-2 control-label">充值返现</label>' +
+						'<div class="col-sm-4">' +
+							'<div class="input-group">' +
+								'<span class="input-group-addon">充</span>' +
+								'<input type="text" name="recharge[]" value="" class="form-control">' +
+								'<span class="input-group-addon">元</span>' +
+								'<span class="input-group-addon">返</span>' +
+								'<input type="text" name="back[]" value="" class="form-control">' +
+								'<span class="input-group-addon">元</span>' +
+							'</div>' +
+						'</div>' +
+						'<div class="col-sm-1" style="margin-top:5px">' +
+							'<a href="javascript:;" class="recharge-del"><i class="fa fa-times-circle"></i> </a>' +
+						'</div>' +
+					'</div>';
+			if($('#recharge .item').size() >= 4) {
+				util.message('最多可添加4个充值返余额', '', 'error');
+				return false;
+			}
+			$('#recharge').append(html);
+		});
+
+		$('.recharge-del').click(function(){
+			$(this).parent().parent().remove();
+			return false;
+		});
 	});
 </script>
 <div class="main">
@@ -160,6 +185,34 @@
 							关闭
 						</label>
 						<span class="help-block">是否使用粉丝中心的余额直接支付</span>
+					</div>
+				</div>
+				<div id="recharge">
+					{if !empty($recharge)}
+						{loop $recharge $item}
+							<div class="form-group item">
+								<label class="col-xs-12 col-sm-3 col-md-2 control-label">充值返现</label>
+								<div class="col-sm-4">
+									<div class="input-group">
+										<span class="input-group-addon">充</span>
+										<input type="text" name="recharge[]" value="{$item['recharge']}" class="form-control">
+										<span class="input-group-addon">元</span>
+										<span class="input-group-addon">返</span>
+										<input type="text" name="back[]" value="{$item['back']}" class="form-control">
+										<span class="input-group-addon">元</span>
+									</div>
+								</div>
+								<div class="col-sm-1" style="margin-top:5px">
+									<a href="javascript:;" class="recharge-del"><i class="fa fa-times-circle"></i> </a>
+								</div>
+							</div>
+						{/loop}
+					{/if}
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-sm-9 col-xs-12">
+						<a href="javascript:;" id="recharge-add"><i class="fa fa-plus-circle"></i> 添加充值返余额</a> 最多可添加4个
 					</div>
 				</div>
 			</div>
@@ -224,7 +277,7 @@
 						<label class="col-xs-12 col-sm-3 col-md-2 control-label">合作者身份</label>
 						<div class="col-sm-9 col-xs-12">
 							<input type="text" name="alipay[partner]" class="form-control" value="{$pay['alipay']['partner']}" autocomplete="off"/>
-							<span class="help-block">支付宝签约用户请在此处填写支付宝分配给您的合作者身份，签约用户的手续费按照您与支付宝官方的签约协议为准。<br>如果您还未签约，<a href="https://memberprod.alipay.com/account/reg/enterpriseIndex.htm" target="_blank">请点击这里签约</a>；如果已签约,<a href="https://b.alipay.com/order/pidKey.htm?pid=2088501719138773&amp;product=fastpay" target="_blank">请点击这里获取PID、Key</a>;如果在签约时出现合同模板冲突，请咨询0755-61910103</span>
+							<span class="help-block">支付宝签约用户请在此处填写支付宝分配给您的合作者身份，签约用户的手续费按照您与支付宝官方的签约协议为准。<br>如果您还未签约，<a href="https://memberprod.alipay.com/account/reg/enterpriseIndex.htm" target="_blank">请点击这里签约</a>；如果已签约,<a href="https://b.alipay.com/order/pidKey.htm?pid=2088501719138773&amp;product=fastpay" target="_blank">请点击这里获取PID、Key</a>;如果在签约时出现合同模板冲突，请咨询0571-88158090</span>
 						</div>
 					</div>
 					<div class="form-group">
@@ -253,14 +306,14 @@
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">微信支付</label>
 					<div class="col-sm-9 col-xs-12">
-						<div class="alert alert-danger">
+						<div class="alert alert-danger hide">
 							因微信公众平台对部分认证订阅号开放申请微信支付的能力,系统在设置支付公众号时,认证的订阅号会出现在下拉选择框,请您根据自己的公众号类型进行选择。 <a href="https://mp.weixin.qq.com/cgi-bin/announce?action=getannouncement&key=1430372687&version=4&lang=zh_CN" target="_blank">详情请查看这里（登陆公众号后可查看）</a>.
 						</div>
 						<div class="alert alert-warning">
 							你必须向微信公众平台提交企业信息以及银行账户资料，审核通过并签约后才能使用微信支付功能 <a href="https://mp.weixin.qq.com/paymch/readtemplate?t=mp/business/faq_tmpl" target="_blank">申请及详情请查看这里</a>.
 						</div>
 						<div class="alert alert-warning">
-							<p>微赞9.0支持微信支付接口，注意你的微赞访问地址一定不要写错了，这里我们用访问地址代替下面说明中出现的链接，申请微信支付的接口说明如下：</p>
+							<p>微赞0.6支持微信支付接口，注意你的微赞访问地址一定不要写错了，这里我们用访问地址代替下面说明中出现的链接，申请微信支付的接口说明如下：</p>
 							<br>
 							<h4>JS API网页支付参数</h4>
 							<p>支付授权目录: {$_W['siteroot']}payment/wechat/</p>
@@ -304,24 +357,25 @@
 					<div class="form-group">
 						<label class="col-xs-12 col-sm-3 col-md-2 control-label">支付账号</label>
 						<div class="col-sm-9 col-xs-12">
-							<select ng-model="wechat.account" ng-options="acc.name for (acid, acc) in wechat.accounts" class="form-control">
-							</select>
-							<span class="help-block">您有多个微信公众账号, 请选择其中支持微信支付的账号并填写支付参数</span>
-							<input type="hidden" name="wechat[account]" value="{{wechat.account.acid}}"/>
+							<p class="form-control-static">{$_W['account']['name']}</p>
+							{if $_W['account']['level'] < 4}
+								<span class="help-block"><strong class="text-danger">微信支付要求公众号为“认证服务号”，该公众号没有微信支付的权限</strong></span>
+							{/if}
+							<input type="hidden" name="wechat[account]" value="{$_W['account']['acid']}"/>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-xs-12 col-sm-3 col-md-2 control-label">身份标识<br />(appId)</label>
 						<div class="col-sm-9 col-xs-12">
-							<input type="text" class="form-control" ng-model="wechat.account.key" readonly="readonly" autocomplete="off">
-							<span class="help-block">公众号身份标识 <a href="{php echo url('account/bind/post', array('uniacid' => $_W['uniacid']))}&acid={{wechat.account.acid}}">请通过修改公众号信息来保存</a></span>
+							<input type="text" class="form-control" value="{$_W['account']['key']}" readonly="readonly" autocomplete="off">
+							<span class="help-block">公众号身份标识 <a href="{php echo url('account/post', array('uniacid' => $_W['uniacid']))}">请通过修改公众号信息来保存</a></span>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-xs-12 col-sm-3 col-md-2 control-label">身份密钥<br />(appSecret)</label>
 						<div class="col-sm-9 col-xs-12">
-							<input type="text" class="form-control" ng-model="wechat.account.secret" readonly="readonly" autocomplete="off"/>
-							<span class="help-block">公众平台API(参考文档API 接口部分)的权限获取所需密钥Key <a href="{php echo url('account/bind/post', array('uniacid' => $_W['uniacid']))}&acid={{wechat.account.acid}}">请通过修改公众号信息来保存</a></span>
+							<input type="text" class="form-control" value="{$_W['account']['secret']}" readonly="readonly" autocomplete="off"/>
+							<span class="help-block">公众平台API(参考文档API 接口部分)的权限获取所需密钥Key <a href="{php echo url('account/post', array('uniacid' => $_W['uniacid']))}">请通过修改公众号信息来保存</a></span>
 						</div>
 					</div>
 					<div class="form-group s" {if $pay['wechat']['version'] == 2} style="display:none;" {/if}>
@@ -360,7 +414,7 @@
 								<input type="text" name="wechat[apikey]" id="apikey" class="form-control" maxlength="32" value="{if empty($pay['wechat']['signkey'])}{php echo random(32);}{else}{php echo substr($pay['wechat']['signkey'], 0 , 32)}{/if}" autocomplete="off"/>
 								<span onclick="tokenGen();" style="cursor:pointer" class="input-group-addon">生成新的</span>
 							</div>
-							<span class="help-block">此值需要手动在腾讯商户后台API密钥保持一致，<a href="http://www.012wz.com/wiki/" target="_blank">查看设置教程</a></span>
+							<span class="help-block">此值需要手动在腾讯商户后台API密钥保持一致，<a href="http://bbs.012wz.com/thread-5788-1-1.html" target="_blank">查看设置教程</a></span>
 						</div>
 					</div>
 				</div>
@@ -369,7 +423,7 @@
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">微信支付</label>
 					<div class="col-sm-9 col-xs-12">
 						<div class="alert alert-warning">
-							你必须向微信公众平台提交企业信息以及银行账户资料，审核通过并签约后才能使用微信支付功能 <a href="http://www.012wz.com/wiki/" target="_blank">申请及详情请查看这里</a>.
+							你必须向微信公众平台提交企业信息以及银行账户资料，审核通过并签约后才能使用微信支付功能 <a href="http://bbs.012wz.com/thread-1354-1-1.html" target="_blank">申请及详情请查看这里</a>.
 						</div>
 						<span class="help-block">你还没有支持微信支付的账号, <a href="{php echo url('account/post/list', array('uniacid' => $_W['uniacid']))}">请添加或修改你的微信账号为认证服务号</a></span>
 					</div>
@@ -461,10 +515,50 @@
 				</div>
 			</div>
 		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				设置线下汇款支付开关
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">汇款支付</label>
+					<div class="col-sm-8 col-xs-12">
+						<label class="radio-inline">
+							<input type="radio" name="line[switch]" ng-model="line.switch" value="true"/>
+							开启
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="line[switch]" ng-model="line.switch" value="false"/>
+							关闭
+						</label>
+						<span class="help-block">是否支持线下汇款方式支付</span>
+					</div>
+				</div>
+			</div>
+			<div class="js-offline-info" ng-show="line.switch == 'true'">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">账户信息</label>
+					<div class="col-sm-9 col-xs-12">
+						{php echo tpl_ueditor('line[message]',$pay['line']['message'])}
+						<span class="help-block"></a></span>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="form-group col-sm-12">
 			<input name="do-submit" type="submit" value="提交" class="btn btn-primary col-lg-1" />
 			<input type="hidden" name="token" value="{$_W['token']}" />
 		</div>
 	</form>
 </div>
+<script type="text/javascript">
+<!--
+	var editor = UE.getEditor("line[message]")
+	editor.ready(function() {
+		{if empty($pay['line']['switch'])}
+			$('.js-offline-info').addClass('ng-hide');
+		{/if}
+	});
+//-->
+</script>
 {template 'common/footer'}

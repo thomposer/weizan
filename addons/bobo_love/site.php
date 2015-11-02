@@ -1,10 +1,6 @@
 <?php
 /**
- * 七夕我爱你
  *
- * 作者:bobo
- *
- * qq:717321528
  */
 defined('IN_IA') or exit('Access Denied');
 define('RES', '../addons/bobo_love/template/');

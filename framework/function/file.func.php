@@ -128,10 +128,52 @@ function file_upload($file, $type = 'image', $name = '', $is_wechat = false) {
 	if (!file_move($file['tmp_name'], ATTACHMENT_ROOT . '/' . $result['path'])) {
 		return error(-1, '保存上传文件失败');
 	}
-
 	$result['success'] = true;
-	
-	return $result; 
+	return $result;
+}
+
+
+function file_remote_upload($filename) {
+	global $_W;
+	if (empty($_W['setting']['remote']['type'])) {
+		return false;
+	}
+	if ($_W['setting']['remote']['type'] == '1') {
+		require(IA_ROOT . '/framework/library/ftp/ftp.php');
+		$ftp_config = array(
+			'hostname' => $_W['setting']['remote']['ftp']['host'],
+			'username' => $_W['setting']['remote']['ftp']['username'],
+			'password' => $_W['setting']['remote']['ftp']['password'],
+			'port' => $_W['setting']['remote']['ftp']['port'],
+			'ssl' => $_W['setting']['remote']['ftp']['ssl'],
+			'passive' => $_W['setting']['remote']['ftp']['pasv'],
+			'timeout' => $_W['setting']['remote']['ftp']['timeout'],
+			'rootdir' => $_W['setting']['remote']['ftp']['dir'],
+		);
+		$ftp = new Ftp($ftp_config);
+		if (true === $ftp->connect()) {
+			if ($ftp->upload(ATTACHMENT_ROOT . '/' . $filename, $filename)) {
+				return true;
+			} else {
+				return error(1, '远程附件上传失败，请检查配置并重新上传');
+			}
+		} else {
+			return error(1, '远程附件上传失败，请检查配置并重新上传');
+		}
+	} elseif ($_W['setting']['remote']['type'] == '2') {
+		require(IA_ROOT . '/framework/library/alioss/sdk.class.php');
+		$oss = new ALIOSS($_W['setting']['remote']['alioss']['key'], $_W['setting']['remote']['alioss']['secret'], $_W['setting']['remote']['alioss']['url'].'.aliyuncs.com');
+		$options = array(
+			ALIOSS::OSS_FILE_UPLOAD => ATTACHMENT_ROOT . '/' . $filename,
+			ALIOSS::OSS_PART_SIZE => 5242880,
+		);
+		$response = $oss->create_mpu_object($_W['setting']['remote']['alioss']['bucket'], $filename, $options);
+		if ($response->status == 200) {
+			return true;
+		} else {
+			return error(1, '远程附件上传失败，请检查配置并重新上传');
+		}
+	}
 }
 
 
@@ -145,9 +187,11 @@ function file_random_name($dir, $ext){
 
 
 function file_delete($file) {
-	global $_W;
 	if (empty($file)) {
 		return FALSE;
+	}
+	if (file_exists($file)) {
+		@unlink($file);
 	}
 	if (file_exists(ATTACHMENT_ROOT . '/' . $file)) {
 		@unlink(ATTACHMENT_ROOT . '/' . $file);
@@ -370,4 +414,57 @@ function file_lists($filepath, $subdir = 1, $ex = '', $isdir = 0, $md5 = 0, $enf
 		}
 	}
 	return $file_list;
+}
+
+
+function file_fetch($url, $limit = 0, $path = '') {
+	global $_W;
+	$url = trim($url);
+	if(empty($url)) {
+		return error(-1, '文件地址不存在');
+	}
+	if(!$limit) {
+		$limit = $_W['setting']['upload']['image']['limit'] * 1024;
+	}
+	if(empty($path)) {
+		$path =  "images/{$_W['uniacid']}/" . date('Y/m/');
+		if(!file_exists(ATTACHMENT_ROOT . $path)) {
+			mkdirs(ATTACHMENT_ROOT . $path);
+		}
+	}
+	load()->func('communication');
+	$resp = ihttp_get($url);
+	if (is_error($resp)) {
+		return error(-1, '提取文件失败, 错误信息: '.$resp['message']);
+	}
+	if (intval($resp['code']) != 200) {
+		return error(-1, '提取文件失败: 未找到该资源文件.');
+	}
+	$ext = '';
+	switch ($resp['headers']['Content-Type']){
+		case 'application/x-jpg':
+		case 'image/jpeg':
+			$ext = 'jpg';
+			break;
+		case 'image/png':
+			$ext = 'png';
+			break;
+		case 'image/gif':
+			$ext = 'gif';
+			break;
+		default:
+			return error(-1, '提取资源失败, 资源文件类型错误.');
+			break;
+	}
+	
+	if (intval($resp['headers']['Content-Length']) > $limit) {
+		return error(-1, '上传的媒体文件过大('.sizecount($resp['headers']['Content-Length']).' > '.sizecount($limit));
+	}
+	$filename = file_random_name(ATTACHMENT_ROOT . $path, $ext);
+	$pathname = $path . $filename;
+	$fullname = ATTACHMENT_ROOT . $pathname;
+	if (file_put_contents($fullname, $resp['content']) == false) {
+		return error(-1, '提取失败.');
+	}
+	return $pathname;
 }

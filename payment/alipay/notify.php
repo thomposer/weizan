@@ -37,7 +37,7 @@ if(!empty($_POST)) {
 						$codearr['card_id'] = $log['card_id'];
 						$acc->PayConsumeCode($codearr);
 					}
-											if($log['is_usecard'] == 1 && $log['card_type'] == 2) {
+					if($log['is_usecard'] == 1 && $log['card_type'] == 2) {
 						$now = time();
 						$log['card_id'] = intval($log['card_id']);
 						$iscard = pdo_fetchcolumn('SELECT iscard FROM ' . tablename('modules') . ' WHERE name = :name', array(':name' => $log['module']));

@@ -1,279 +1,300 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2015 012WZ.COM
+ * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-$dos = array('default', 'groupdata', 'post', 'send', 'ajax');
+uni_user_permission_check('mc_mass');
+$dos = array('default', 'post', 'send', 'ajax', 'news', 'fans');
 $do = in_array($do, $dos) ? $do : 'default';
 if($do == 'default') {
-	$accounts = uni_accounts($_W['uniacid']);
-	if(!empty($accounts)) {
-		$accdata = array();
-		foreach($accounts as $account) {
-			if($account['type'] == 1 && $account['type'] > 0) {
-				$accdata[] = array('acid' => $account['acid'], 'name' => $account['name']);
-			}
+	if($_W['account']['level'] > 2) {
+		$groups_data = pdo_fetch('SELECT * FROM ' . tablename('mc_fans_groups') . ' WHERE uniacid = :uniacid AND acid = :acid', array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid']));
+		if(!empty($groups_data)) {
+			$groups = iunserializer($groups_data['groups']);
+		} else {
+			message('未获取到粉丝分组信息,现在去拉取粉丝分组', url('mc/fangroup'), 'info');
 		}
 	}
-
-
-	$groups_data = pdo_fetchall('SELECT * FROM ' . tablename('mc_fans_groups') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
-	if(!empty($groups_data)) {
-		$groups = array();
-		foreach($groups_data as $gr) {
-			$groups[$gr['acid']] = iunserializer($gr['groups']);
-		}
-	}
-
-	load()->func('tpl');
 	template('mc/mass');
 }
 
-if($do == 'groupdata') {
-	if($_W['isajax']) {
-		$acid = intval($_GPC['acid']);
-		$groups = pdo_fetch('SELECT * FROM ' . tablename('mc_fans_groups') . ' WHERE uniacid = :uniacid AND acid = :acid', array(':uniacid' => $_W['uniacid'], ':acid' => $acid));
-		$groups = unserialize($groups['groups']) ? unserialize($groups['groups']) : array();
-		if(empty($groups)) {
-			exit(json_encode(array('status' => 'empty', 'message' => '该公众号还没有从公众平台获取粉丝分组')));
-		} else {
-			$html = '<option name="groupid" value="0">请选择粉丝分组</option><option value="-2" name="groupid">全部用户</option>';
-			foreach($groups as $group) {
-				if( $group['id'] == 0) {
-					$group['id'] = -1;
+if($do == 'news') {
+	$condition = ' WHERE uniacid = :uniacid AND status = 1 AND module = :module';
+	$param = array(':uniacid' => $_W['uniacid'], ':module' => 'news');
+	if(!empty($_GPC['keyword'])) {
+		$condition .= ' AND name LIKE :keyword';
+		$param[':keyword'] = "%{$_GPC['keyword']}%";
+	}
+	$psize = 8;
+	$pindex = max(1, intval($_GPC['page']));
+	$limit = ' ORDER BY id DESC LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('rule') . $condition, $param);
+	$data = pdo_fetchall('SELECT id, name FROM ' . tablename('rule') . $condition . $limit, $param, 'id');
+	if(!empty($data)) {
+		foreach($data as &$da) {
+			$da['replies'] = pdo_fetchall('SELECT id,title,thumb FROM ' . tablename('news_reply') . ' WHERE rid = :rid ORDER BY `displayorder` DESC', array(':rid' => $da['id']));
+			if(!empty($da['replies'])) {
+				foreach($da['replies'] as &$li) {
+					if(!empty($li['thumb'])) $li['thumb'] = tomedia($li['thumb']);
 				}
-				$html .= '<option name="groupid" data-num = "'. $group['count'] .'" value="' . $group['id'] . '">' .  $group['name'] . '</option>';
 			}
-			exit(json_encode(array('status' => 'success', 'message' => $html)));
 		}
 	}
+	$result = array(
+		'list' => $data,
+		'pager' => pagination($total, $pindex, $psize, '', array('before' => '2', 'after' => '3', 'ajaxcallback'=>'null')),
+	);
+	message($result, '', 'ajax');
+}
+
+if($do == 'fans') {
+	$condition = " WHERE uniacid = :uniacid AND acid = :acid AND follow = 1 AND openid != ''";
+	$param = array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid']);
+	if(!empty($_GPC['keyword'])) {
+		$condition .= ' AND nickname LIKE :keyword';
+		$param[':keyword'] = "%{$_GPC['keyword']}%";
+	}
+	$psize = 10;
+	$pindex = max(1, intval($_GPC['page']));
+	$limit = ' ORDER BY followtime DESC LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . $condition, $param);
+	$data = pdo_fetchall('SELECT fanid,openid,nickname,followtime,tag FROM ' . tablename('mc_mapping_fans') . $condition . $limit, $param, 'fanid');
+	if(!empty($data)) {
+		foreach($data as &$da) {
+			$da['selected'] = 0;
+			if(empty($da['nickname'])) {
+				$da['nickname'] = $da['openid'];
+			}
+			$da['avatar'] = './resource/images/noavatar_middle.gif';
+			if (!empty($da['tag']) && is_string($da['tag'])) {
+				if (is_base64($da['tag'])){
+					$da['tag'] = base64_decode($da['tag']);
+				}
+				if (is_serialized($da['tag'])) {
+					$da['tag'] = @iunserializer($da['tag']);
+				}
+				if(!empty($da['tag']['headimgurl'])) {
+					$da['avatar'] = tomedia($da['tag']['headimgurl']);
+				}
+				unset($da['tag']);
+			}
+			$da['followtime'] = date('Y-m-d H:i', $da['followtime']);
+		}
+	}
+	$result = array(
+		'list' => $data,
+		'pager' => pagination($total, $pindex, $psize, '', array('before' => '2', 'after' => '3', 'ajaxcallback'=>'null')),
+	);
+	message($result, '', 'ajax');
 }
 
 if($do == 'post') {
-	if($_W['isajax']) {
-		$acid = intval($_GPC['acid']);
-		$groupid = intval($_GPC['groupid']);
-		$msgtype = intval($_GPC['msgtype']);
-		if($groupid == -1) {
-			$groupid = 0;
+	set_time_limit(0);
+	error_reporting(E_ERROR);
+	$post = $_GPC['__input'];
+	$acc = WeAccount::create($_W['acid']);
+	if($post['msg_type'] == 'mpnews') {
+		$rid = intval($post['data']);
+		$rule = pdo_fetch('SELECT * FROM ' . tablename('rule') . ' WHERE uniacid = :uniacid AND id = :id', array(':uniacid' => $_W['uniacid'], ':id' => $rid));
+		if(empty($rule)) {
+			message(error(-1, '规则不存在'), '', 'ajax');
 		}
-
-		if($msgtype != 6) {
-			$formdata_tmp = explode('&', urldecode($_GPC['formdata']));
-			if(!empty($formdata_tmp)) {
-				$formdata = array();
-				foreach($formdata_tmp as $formda) {
-					$li = explode('=', $formda);
-					$formdata[$li[0]] = $li[1];
+		$replies = pdo_fetchall('SELECT * FROM ' . tablename('news_reply') . ' WHERE rid = :rid ORDER BY `displayorder` DESC', array(':rid' => $rid));
+				$thumb_message = '';
+		foreach($replies as &$reply) {
+			$flag = 1;
+			if(empty($reply['content'])) {
+				$thumb_message .= "标题为 '{$reply['title']}' 回复项的内容为空<br>";
+			}
+			if(!empty($_W['setting']['remote']['type'])) {
+				load()->func('file');
+				$reply['thumb'] = file_fetch(tomedia($reply['thumb']));
+				if(is_error($reply['thumb'])) {
+					$flag = 0;
+					$thumb_message .= "标题为 '{$reply['title']}' 回复项的封面图片获取失败,请重新上传，错误详情：{$reply['thumb']['message']}<br>";
 				}
 			}
-		} else {
-			if(!empty($_GPC['formdata'])) {
-				foreach($_GPC['formdata'] as $key => $li_tmp) {
-					$content = $_GPC['content'][$key];
-					if(empty($content)) {
-						continue;
-					} else {
-						$str_find = array('../attachment/images', 'resource/components/tinymce/plugins/emoticons/img');
-						$str_replace = array($_W['siteroot'] . 'attachment/images', $_W['siteroot'] . 'web/resource/components/tinymce/plugins/emoticons/img');
-						$content =  str_replace($str_find, $str_replace, $content);
+			if($flag) {
+				$path = ATTACHMENT_ROOT . ltrim($reply['thumb'], '/');
+				if(!file_exists($path)) {
+					$thumb_message .= "标题为 '{$reply['title']}' 回复项的封面图片不存在<br>";
+				} else {
+					$extension = ltrim(strrchr($reply['thumb'], '.'), '.');
+					if(!in_array($extension, array('jpg', 'png'))) {
+						$thumb_message .= "标题为 '{$reply['title']}' 回复项的封面图片格式不对，仅支持jpg,png格式。<br>";
 					}
-					$formdata_tmp = explode('&', urldecode($li_tmp));
-					if(!empty($formdata_tmp)) {
-						foreach($formdata_tmp as $formda) {
-							$li = explode('=', $formda);
-							if(($li[0] == 'title' && $li[1] == '') || ($li[0] == 'thumb_media_id' && $li[1] == '')) {
-								break;
-							}
-							if($li[0] == 'content_source_url' && !empty($li[1])) {
-								$li[1] = str_replace(array('*', '$'), array('&', '='), $li[1]);
-								if(!strexists($li[1], 'http://') && !strexists($li[1], 'https://')) {
-									$li[1] = $_W['siteroot'] . 'app' . ltrim($li[1], '.');
-								}
-							}
-							$formdata_tmp1[$li[0]] = urlencode($li[1]);
-						}
-						if(!empty($formdata_tmp1)) {
-							$formdata_tmp1['content'] = urlencode(addslashes(htmlspecialchars_decode($content)));
-							if(!isset($formdata_tmp1['show_cover_pic'])) {
-								$formdata_tmp1['show_cover_pic'] = 0;
-							}
-							$formdata[] = $formdata_tmp1;
-							unset($_GPC['formdata'][$key], $formdata_tmp, $formda, $li, $formdata_tmp1);
-						}
+					if(filesize($path) > 64 * 1024) {
+						$thumb_message .= "标题为 '{$reply['title']}' 回复项的封面图片大于64K。<br>";
 					}
 				}
 			}
 		}
-
-		$send['filter']['is_to_all'] = false;
-		$send['filter']['group_id'] = $groupid;
-		if($groupid == -2) {
-			$send['filter']['is_to_all'] = true;
-			$send['filter']['group_id'] = 0;
+		if(!empty($thumb_message)) {
+			message(error(-1, $thumb_message), '', 'ajax');
 		}
-		if($msgtype == '7') {
-			$send['msgtype'] = 'text';
-			$send['text'] = array('content' => urlencode($formdata['content']));
-			$insert['content'] = $formdata['content'];
-			$insert['msgtype'] = 'text';
-		} elseif($msgtype == '2') {
-			$send['msgtype'] = 'image';
-			$send['image'] = array('media_id' => $formdata['media_id']);
-			$insert['content'] = $formdata['media_id'];
-			$insert['msgtype'] = 'image';
-		} elseif($msgtype == '3') {
-			$send['msgtype'] = 'voice';
-			$send['voice'] = array('media_id' => $formdata['media_id']);
-			$insert['content'] = $formdata['media_id'];
-			$insert['msgtype'] = 'voice';
-		} elseif($msgtype == '4'){
-						$data['media_id'] =  $formdata['media_id'];
-			$data['title'] =  urlencode($formdata['title']);
-			$data['description'] =  urlencode($formdata['description']);
-			$acc = WeAccount::create($acid);
-			$status = $acc->uploadVideo($data);
-			if(is_error($status)) {
-				exit(json_encode($status));
+		$articles = array(
+			'articles' => array()
+		);
+		foreach($replies as &$reply) {
+			$media = $acc->uploadMedia($reply['thumb']);
+			if(is_error($media)) {
+				message($media, '', 'ajax');
 			}
-
-			$send['msgtype'] = 'mpvideo';
-			$send['mpvideo'] = array('media_id' => $status['media_id']);
-			$insert['msgtype'] = 'video';
-			$insert['content'] = $formdata['media_id'];
-		} elseif($msgtype == '6') {
-						if(!empty($formdata)) {
-				$data['articles'] = $formdata;
-				$acc = WeAccount::create($acid);
-				$status = $acc->uploadNews($data);
-				if(is_error($status)) {
-					exit(json_encode($status));
-				}
-			} else {
-				exit(json_encode(error(-1, '没有有效的消息内容')));
+			if(!strexists($reply['url'], 'http://') && !strexists($reply['url'], 'https://')) {
+				$reply['url'] = $_W['siteroot'] . 'app' . ltrim($reply['url'], '.');
 			}
-			$send['msgtype'] = 'mpnews';
-			$send['mpnews'] = array('media_id' => $status['media_id']);
-			$insert['msgtype'] = 'news';
-			$insert['content'] = iserializer($formdata);
+			$str_find = array('../attachment/images');
+			$str_replace = array($_W['siteroot'] . 'attachment/images');
+			$reply['content'] =  str_replace($str_find, $str_replace, $reply['content']);
+			$row = array(
+				'title' => urlencode($reply['title']),
+				'author' => urlencode($reply['author']),
+				'digest' => urlencode($reply['description']),
+				'content' => urlencode(addslashes(htmlspecialchars_decode($reply['content']))),
+				'show_cover_pic' => intval($reply['incontent']),
+				'content_source_url' => urlencode($reply['url']),
+				'thumb_media_id' => $media['media_id'],
+			);
+			$articles['articles'][] = $row;
 		}
-		$acc = WeAccount::create($acid);
-		$status = $acc->fansSendAll($send);
+		$status = $acc->uploadNews($articles);
 		if(is_error($status)) {
-			exit(json_encode($status));
-		} else {
-						$insert['createtime'] = TIMESTAMP;
-			$insert['fansnum'] = intval($_GPC['fansnum']);
-			$insert['groupname'] = trim($_GPC['groupname']);
-			$insert['uniacid'] = $_W['uniacid'];
-			$insert['acid'] = $acid;
-			pdo_insert('mc_mass_record', $insert);
-			exit('success');
+			message($status, '', 'ajax');
 		}
+		$data['mpnews'] = array(
+			'media_id' => $status['media_id'],
+		);
+		$data['msgtype'] = 'mpnews';
+	}
+
+	if($post['msg_type'] == 'text') {
+		$data['text'] = array(
+			'content' => urlencode(trim($post['data'])),
+		);
+		$data['msgtype'] = 'text';
+	}
+
+	if($post['msg_type'] == 'image') {
+		$data['image'] = array(
+			'media_id' => urlencode(trim($post['data'])),
+		);
+		$data['msgtype'] = 'image';
+	}
+
+	if($post['msg_type'] == 'voice') {
+		$data['voice'] = array(
+			'media_id' => urlencode(trim($post['data'])),
+		);
+		$data['msgtype'] = 'voice';
+	}
+
+	if($post['msg_type'] == 'video') {
+		$video = array(
+			'media_id' => $post['data']['media'],
+			'title' => urlencode($post['data']['title']),
+			'description' => urlencode($post['data']['description']),
+		);
+		$status = $acc->uploadVideo($video);
+		if(is_error($status)) {
+			message($status, '', 'ajax');
+		}
+				if($post['send_type'] == '3') {
+			$data['video'] = array(
+				'media_id' => $status['media_id'],
+			);
+			$data['msgtype'] = 'video';
+		}
+		if($post['send_type'] == '2') {
+			$data['mpvideo'] = array(
+				'media_id' => $status['media_id'],
+			);
+			$data['msgtype'] = 'mpvideo';
+		}
+	}
+
+	if($post['send_type'] == 1) {
+		$data['filter'] = array(
+			'is_to_all' => true,
+			'group_id' => 0,
+		);
+	} elseif($post['send_type'] == 2) {
+		$data['filter'] = array(
+			'is_to_all' => false,
+			'group_id' => intval($post['send_group']),
+		);
+	} elseif($post['send_type'] == 3) {
+		$data['touser'] = $post['openids'];
+	}
+
+	$status = $acc->fansSendAll($data);
+	if(is_error($status)) {
+		message($status, '', 'ajax');
+	} else {
+				if($post['msg_type'] == 'mpnews') {
+			$post['msg_type'] = 'news';
+		}
+		$insert = array(
+			'uniacid' => $_W['uniacid'],
+			'acid' => $_W['acid'],
+			'msgtype' => $post['msg_type'],
+			'createtime' => TIMESTAMP,
+		);
+		if($post['send_type'] == 1) {
+			$insert['groupname'] = '全部用户';
+			$insert['fansnum'] = '';
+		} elseif($post['send_type'] == 2) {
+			$groups_data = pdo_fetch('SELECT * FROM ' . tablename('mc_fans_groups') . ' WHERE uniacid = :uniacid AND acid = :acid', array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid']));
+			$groups = iunserializer($groups_data['groups']);
+			$insert['groupname'] = $groups[$post['send_group']]['name'];
+			$insert['fansnum'] = $groups[$post['send_group']]['count'];
+		} elseif($post['send_type'] == 3) {
+						$insert['groupname'] = '根据粉丝openid群发';
+			$insert['fansnum'] = count($post['openids']);
+		}
+
+		if(in_array($post['msg_type'], array('text', 'image', 'voice'))) {
+			$insert['content'] = $post['data'];
+		} elseif($post['msg_type'] == 'video') {
+			$insert['content'] = $post['data']['media_id'];
+		} elseif($post['msg_type'] == 'news') {
+			$insert['content'] = intval($post['data']);
+		}
+		pdo_insert('mc_mass_record', $insert);
+		message(error(1, ''), '', 'ajax');
 	}
 }
 
 if($do == 'send') {
-	$accounts = uni_accounts();
-	if(!isset($_GPC['acid'])) {
-		$account = current($accounts);
-		if($account !== false){
-			$_GPC['acid'] = intval($account['acid']);
-		}
-	}
-	$acid = intval($_GPC['acid']);
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 20;
-	$condition = ' WHERE `uniacid`=:uniacid';
+	$condition = ' WHERE `uniacid` = :uniacid AND `acid` = :acid';
 	$pars = array();
 	$pars[':uniacid'] = $_W['uniacid'];
-	if(!empty($acid)) {
-		$condition .= ' AND `acid`=:acid';
-		$pars[':acid'] = $acid;
-	}
+	$pars[':acid'] = $_W['acid'];
 	$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('mc_mass_record').$condition, $pars);
 	$list = pdo_fetchall("SELECT * FROM ".tablename('mc_mass_record') . $condition ." ORDER BY `id` DESC LIMIT ".($pindex - 1) * $psize.','.$psize, $pars);
-	$types = array('text' => '文本消息', 'images' => '图片消息', 'voice' => '语音消息', 'video' => '视频消息', 'news' => '图文消息');
+	$types = array('text' => '文本消息', 'image' => '图片消息', 'voice' => '语音消息', 'video' => '视频消息', 'news' => '图文消息');
 	if(!empty($list)) {
 		foreach($list as &$li) {
-			if($li['msgtype'] == 'image') {
-				$images = media2local($li['content']);
-				$li['content'] = '<a href="javascript:;" class="ajax-show" id="'.$li['id'].'"><i class="fa fa-file-image-o"></i> 图片消息</a>';
-			} elseif($li['msgtype'] == 'voice') {
-				$li['content'] = '<a href="'.media2local($li['content']).'" target="_blank"><i class="fa fa-bullhorn"></i> 语音消息</a>';
-			} elseif($li['msgtype'] == 'video') {
-				$li['content'] = '<a href="'.media2local($li['content']).'" target="_blank"><i class="fa fa-video-camera"></i> 视频消息</a>';
-			} elseif($li['msgtype'] == 'news') {
-				$li['content'] = '<a href="javascript:;" class="ajax-show" id="'.$li['id'].'"><i class="fa fa-file-image-o"></i> 图文消息</a>';
-			} elseif($li['msgtype'] == 'text') {
-				$li['content'] = '<a href="javascript:;" class="ajax-show" id="'.$li['id'].'""><i class="fa fa-file-text-o"></i> 文本消息</a>';
+			if($li['msgtype'] == 'news') {
+								$rid = intval($li['content']);
+				if($rid > 0) {
+					$li['rid'] = $rid;
+					$li['rule_name'] = pdo_fetchcolumn('SELECT name FROM ' . tablename('rule') . ' WHERE id = :id', array(':id' => $rid));
+				} else {
+					$li['content'] = iunserializer($li['content']);
+					$li['content'] = iurldecode($li['content']);
+				}
+			} elseif(in_array($li['msgtype'], array('image', 'voice', 'video'))) {
+				$li['content'] = media2local($li['content']);
 			}
-			$li['msgtype'] = $types[$li['msgtype']];
 		}
 	}
 	$pager = pagination($total, $pindex, $psize);
 	template('mc/send');
 }
-if($do == 'ajax') {
-	if($_W['ispost']) {
-		$id = intval($_GPC['id']);
-		$data = pdo_fetch('SELECT * FROM ' . tablename('mc_mass_record') . ' WHERE id = :id AND uniacid = :uniacid', array(':id' => $id, ':uniacid' => $_W['uniacid']));
-		if(empty($data)) {
-			exit('err');
-		} else {
-			if($data['msgtype'] == 'news') {
-				$data['content'] = iunserializer($data['content']);
-				$content = iurldecode($data['content']);
-				$i = 1;
-				$flag = count($content);
-				foreach($content as &$con) {
-					$con['thumb_media_id'] = media2local($con['thumb_media_id']);
-					if($i == 1) {
-						$html = '<div style="width:400px">
-								<div class="panel panel-default" style="margin-bottom:0">
-									<div class="panel-heading">
-										<h4 class="form-control-static">'.$con['title'].'</h4>
-										<img class="img-rounded" ng-show="entry.src" src="'.$con['thumb_media_id'].'" style="width:100%;height:200px;" />';
 
-					}
-					if($flag == 1) {
-						$html .= '      <span class="help-block">'.cutstr($con['digest'], 20).'</span>
-									</div>
-								</div>
-							</div>';
-					} else {
-						if($i != 1) {
-							$html .= '</div><div class="panel-footer" style="border-top:0;padding:10px 20px;">';
-							$html .= '<div class="li-block" style="padding:0px;height:50px;margin:0;line-height:50px;">
-											<a href="" target="_blank;">
-												<div class="left" style="width:250px;float:left;">'.$con['title'].'</div>
-												<div class="right" style="width:60px;float:right;">
-													<img src="'.$con['thumb_media_id'].'" style="width:60px;height:50px"alt=""/>
-												</div>
-											</a>
-									  </div>
-								  </div>
-								</div>
-							</div>';
-						}
-					}
-					$i++;
-				}
-			} elseif($data['msgtype'] == 'text') {
-				$html = '<div class="panel panel-default" style="margin-bottom:0">
-							<div class="panel panel-body">'.emotion($data['content']).'</div>
-						</div>';
-			} elseif($data['msgtype'] == 'image') {
-				$data['content'] = media2local($data['content']);
-				$html = '<div class="panel panel-default" style="margin-bottom:0">
-							<div class="panel panel-body"><img src="'.$data['content'].'" style="width:365px;"></div>
-						</div>';
-			}
-			exit($html);
-		}
-	}
-}
 function iurldecode($str) {
 	if(!is_array($str)) {
 		return urldecode($str);

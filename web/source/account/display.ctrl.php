@@ -3,44 +3,45 @@
  * [Weizan System] Copyright (c) 2014 012WZ.COM
  * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
-
-if (empty($_W['isfounder'])) {
-	$group = pdo_fetch("SELECT * FROM ".tablename('users_group')." WHERE id = '{$_W['user']['groupid']}'");
-	$group_account = uni_groups((array)iunserializer($group['package']));
-} else {
-	$group_account = uni_groups();
-	$group_account[-1] = array('id' => -1, 'name' => '所有服务');
-}
-
-$allow_group = array_keys($group_account);
-$allow_group[] = 0;
-
-if($_W['ispost']) {
-		$uniacid = intval($_GPC['uniacid']);
-	$groupid = intval($_GPC['groupid']);
-	
-	$state = uni_permission($_W['uid'], $uniacid);
-	if($state != 'founder' && $state != 'manager') {
-		exit('illegal-uniacid');
-	}
-	
-	if(!in_array($groupid, $allow_group)) {
-		exit('illegal-group');
-	} else {
-		pdo_update('uni_account', array('groupid' => $groupid), array('uniacid' => $uniacid));
-		if($groupid == 0) {
-			exit('基础服务');
-		} elseif($groupid == -1) {
-			exit('所有服务');
-		} else {
-			exit($group_account[$groupid]['name']);
-		}
-	}
-	exit();
-}
-
 $_W['page']['title'] = '公众号列表 - 公众号';
-$tables = array(1 => 'account_wechats', 2 => 'account_yixin');
+if($_W['isajax']){
+	$uid = intval($_GPC['uid']);
+	$groupid = trim($_GPC['groupid']);
+	$groupname = array();
+	$package = iunserializer(pdo_fetchcolumn('SELECT package FROM '. tablename('users_group') .' WHERE id = :groupid', array(':groupid' => $groupid)));
+	if(!empty($package)) {
+		$package_str = implode(',', $package);
+		$groupname = pdo_fetchall('SELECT name FROM '. tablename('uni_group'). " WHERE id IN ({$package_str})");
+	}
+
+	if(!in_array(-1, $package)) {
+		$uniacid = pdo_fetchcolumn('SELECT uniacid FROM '.tablename('uni_account_users')." WHERE uid = :uid AND role = 'owner'",array(':uid' => $uid));
+		$append = pdo_fetch('SELECT modules, templates  FROM '. tablename('uni_group') .' WHERE uniacid = :uniacid', array(':uniacid' => $uniacid));
+		$modules = array();
+		$templates = array();
+		if(!empty($append)) {
+			$modules = iunserializer($append['modules']);
+			if(!empty($modules)) {
+				$str = "'" . implode("', '", $modules) . "'";
+				$modules = pdo_fetchall('SELECT title FROM '. tablename('modules'). " WHERE name IN ($str)");
+			}
+			$templates = iunserializer($append['templates']);
+			if(!empty($templates)) {
+				$condition = implode(',',$templates);
+				$templates = pdo_fetchall('SELECT title FROM '. tablename('site_templates')." WHERE id IN ($condition)");
+			}
+		}
+	} else {
+		$groupname = array(array('name' => '所有服务'));
+	}
+	$data = array(
+		'groupname' => $groupname,
+		'modules' => $modules,
+		'templates' => $templates
+	);
+	message(error(0,$data),'','ajax');
+}
+
 $pindex = max(1, intval($_GPC['page']));
 $psize = 15;
 $start = ($pindex - 1) * $psize;
@@ -56,28 +57,28 @@ if(!empty($s_uniacid)) {
 	$condition =" AND `uniacid` = :uniacid";
 	$pars[':uniacid'] = $s_uniacid;
 }
-
-$uid = $_W['uid'];
 if(empty($_W['isfounder'])) {
 	$condition .= " AND `uniacid` IN (SELECT `uniacid` FROM " . tablename('uni_account_users') . " WHERE `uid`=:uid)";
-	$pars[':uid'] = $uid;
+	$pars[':uid'] = $_W['uid'];
 }
 $tsql = "SELECT COUNT(*) FROM " . tablename('uni_account') . " WHERE 1 = 1{$condition}";
 $total = pdo_fetchcolumn($tsql, $pars);
 $sql = "SELECT * FROM " . tablename('uni_account') . " WHERE 1 = 1{$condition} ORDER BY `uniacid` DESC LIMIT {$start}, {$psize}";
 $pager = pagination($total, $pindex, $psize);
 $list = pdo_fetchall($sql, $pars);
-$groups = pdo_fetchall("SELECT * FROM ".tablename('uni_group'), array(), 'id');
-$groups[0] = array('id' => 0, 'name' => '基础服务');
-$groups[-1] = array('id' => -1, 'name' => '所有服务');
 
 if(!empty($list)) {
 	foreach($list as &$account) {
 		$account['details'] = uni_accounts($account['uniacid']);
-		$account['group'] = $groups[$account['groupid']];
 		$account['role'] = uni_permission($_W['uid'], $account['uniacid']);
+		$account['setmeal'] = uni_setmeal($account['uniacid']);
 	}
 }
+if(!$_W['isfounder']) {
+	$stat = user_account_permission();
+}
+load()->classs('weixin.platform');
+$account_platform = new WeiXinPlatform();
+$authurl = $account_platform->getAuthLoginUrl();
 
-$types = account_types();
 template('account/display');

@@ -4,6 +4,7 @@
  * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
+uni_user_permission_check('activity_goods');
 $dos = array('display', 'post', 'del', 'record', 'deliver', 'receiver', 'record-del');
 $do = in_array($do, $dos) ? $do : 'display';
 
@@ -16,7 +17,6 @@ foreach ($unisettings['creditnames'] as $key=>$credit) {
 	}
 }
 if($do == 'post') {
-	load()->func('tpl');
 	$id = intval($_GPC['id']);
 	if(!empty($id)){
 		$item = pdo_fetch('SELECT * FROM '.tablename('activity_exchange').' WHERE id=:id AND uniacid=:uniacid',array(':id'=>$id, ':uniacid'=>$_W['uniacid']));
@@ -92,7 +92,6 @@ if($do == 'del') {
 	message('删除成功.', referer(),'success');
 }
 if($do == 'record') {
-	load()->func('tpl');
 	$exchanges = pdo_fetchall('SELECT id, title FROM ' . tablename('activity_exchange') . ' WHERE uniacid = :uniacid ORDER BY id DESC', array(':uniacid' => $_W['uniacid']));
 	$starttime = empty($_GPC['time']['start']) ? strtotime('-1 month') : strtotime($_GPC['time']['start']);
 	$endtime = empty($_GPC['time']['end']) ? TIMESTAMP : strtotime($_GPC['time']['end']) + 86399;
@@ -133,7 +132,6 @@ if($do == 'record') {
 	}
 }
 if($do == 'deliver') {
-	load()->func('tpl');
 	$exchanges = pdo_fetchall('SELECT id, title FROM ' . tablename('activity_exchange') . ' WHERE uniacid = :uniacid ORDER BY id DESC', array(':uniacid' => $_W['uniacid']));
 	$starttime = empty($_GPC['time']['start']) ? strtotime('-1 month') : strtotime($_GPC['time']['start']);
 	$endtime = empty($_GPC['time']['end']) ? TIMESTAMP : strtotime($_GPC['time']['end']) + 86399;
@@ -175,7 +173,6 @@ if($do == 'deliver') {
 	$pager = pagination($total, $pindex, $psize);
 } 
 if($do == 'receiver') {
-	load()->func('tpl');
 	$id = intval($_GPC['id']);
 	$shipping = pdo_fetch('SELECT * FROM ' . tablename('activity_exchange_trades_shipping') . ' WHERE uniacid = :uniacid AND tid = :tid', array(':uniacid' => $_W['uniacid'], ':tid' => $id) );
 	if(checksubmit('submit')) {

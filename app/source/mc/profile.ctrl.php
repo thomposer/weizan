@@ -33,7 +33,8 @@ if(!empty($_W['openid'])) {
 		}
 	}
 }
-$profile = mc_fetch($_W['member']['uid']);
+
+$profile = pdo_get('mc_members', array('uniacid' => $_W['uniacid'], 'uid' => $_W['member']['uid']));
 if(!empty($profile)) {
 	if(empty($profile['email']) || (!empty($profile['email']) && substr($profile['email'], -6) == '012wz.com' && strlen($profile['email']) == 39)) {
 		$profile['email'] = '';

@@ -35,6 +35,11 @@ if($do == 'post') {
 		message($ret, '', 'ajax');
 	}
 	mc_credit_update($_W['member']['uid'], $goods['credittype'], -1 * $goods['credit'], array($_W['member']['uid'], '礼品兑换:' . $goods['title'] . ' 消耗 ' . $creditnames[$goods['credittype']] . ':' . $goods['credit']));
+		if($goods['credittype'] == 'credit1') {
+		mc_notice_credit1($_W['openid'], $_W['member']['uid'], -1 * $goods['credit'], '兑换礼品消耗积分');
+	} else {
+		mc_notice_credit2($_W['openid'], $_W['member']['uid'], -1 * $goods['credit'], 0, '线上消费，兑换礼品');
+	}
 	message(error($ret, "兑换成功,您消费了 {$goods['credit']} {$creditnames[$goods['credittype']]},现在去完善订单信息"), '', 'ajax');
 }
 if($do == 'deliver') {

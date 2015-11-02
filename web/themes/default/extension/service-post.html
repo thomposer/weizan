@@ -143,21 +143,6 @@ require(['angular.sanitize', 'bootstrap', 'underscore', 'util'], function(angula
 		return function(text) {
 			return text ? $sce.trustAsHtml(text.replace(/\n/g, '<br/>')) : '';
 		};
-	}).directive('ngEditor', function($document){
-		return function (scope, element, attr) {
-			var content = scope.$eval(attr.ngEditor);
-			var elm = element[0];
-			if(!elm.editor) {
-				require(['util'], function(util){
-					util.editor(elm, function(e, editor){
-						e.editor = editor;
-						e.editor.on('init', function(){
-							e.editor.setContent(content);
-						});
-					});
-				});
-			}
-		};
 	}).directive('ngInvoker', function($parse){
 		return function (scope, element, attr) {
 			scope.$eval(attr.ngInvoker);

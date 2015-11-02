@@ -50,27 +50,25 @@
 			</div>
 		{/loop}
 		<script type="text/javascript">
-			require(['jquery'], function($){
-				var upgrade = [];
-				$.post('{php echo url('extension/theme/check');}', {foo: 'upgrade'},function(dat){
-					try {
-						var ret = $.parseJSON(dat);
-						$('.upgrade-label').each(function(){
-							var n = $(this).attr('theme');
-							var v = $(this).attr('version');
-							if(ret[n]) {
-								$('.hide-form[id="' + n + '"]').html('<span class="label label-warning template-form">来自云平台安装</span>').show();
-								if(ret[n].version > v) {
-									upgrade.push(n);
-									$(this).html('<div class="img-rounded update-bg"></div><div class="update-div"><a href="{php echo url('extension/theme/upgrade')}&templateid=' + n + '" class="btn-danger img-circle update-btn" title="来自微赞云服务更新">更新</a></div>');
-								}
+			var upgrade = [];
+			$.post('{php echo url('extension/theme/check');}', {foo: 'upgrade'},function(dat){
+				try {
+					var ret = $.parseJSON(dat);
+					$('.upgrade-label').each(function(){
+						var n = $(this).attr('theme');
+						var v = $(this).attr('version');
+						if(ret[n]) {
+							$('.hide-form[id="' + n + '"]').html('<span class="label label-warning template-form">来自云平台安装</span>').show();
+							if(ret[n].version > v) {
+								upgrade.push(n);
+								$(this).html('<div class="img-rounded update-bg"></div><div class="update-div"><a href="{php echo url('extension/theme/upgrade')}&templateid=' + n + '" class="btn-danger img-circle update-btn" title="来自微赞云服务更新">更新</a></div>');
 							}
-						});
-						if(upgrade.length > 0) {
-							$('#batch-contain').show();
 						}
-					} catch(err) {}
-				});
+					});
+					if(upgrade.length > 0) {
+						$('#batch-contain').show();
+					}
+				} catch(err) {}
 			});
 		</script>
 	{/if}
@@ -80,7 +78,7 @@
 			<div class="item" id="templates-{{m.name}}" ng-repeat="m in templates">
 				<div class="title">
 					<div class="theme-title">{{m.title}} ({{m.name}})</div>
-					<img src="http://addons.012wz.com/resource/attachment/{{m.logo}}" class="img-rounded" />
+					<img src="{ADDONS_URL}/resource/attachment/{{m.logo}}" class="img-rounded" />
 				</div>
 				<div class="btn-group  btn-group-justified">
 					<a  href="{php echo url('extension/theme/install')}templateid={{m.name.toLowerCase()}}" class="btn btn-default btn-xs">安装</a>
@@ -130,7 +128,7 @@
 			</div>
 		{/if}
 		<script type="text/javascript">
-			require(['angular', 'jquery', 'util'], function(angular, $, u){
+			require(['angular'], function(angular){
 				angular.module('app', []).controller('listInstallThemes', function($scope, $http) {
 					$.post('{php echo url('extension/theme/check');}', {foo: 'install'},function(dat){
 						try {
@@ -160,7 +158,7 @@
 				var insta = function(){
 					var m_name = templates.pop();
 					if(!m_name) {
-						u.message('本次成功安装' + success.length + '个模板.<br>安装失败' + fail.length + '个模板', "{php echo url('extension/theme/installed')}", 'info');
+						util.message('本次成功安装' + success.length + '个模板.<br>安装失败' + fail.length + '个模板', "{php echo url('extension/theme/installed')}", 'info');
 						return;
 					}
 					var pragress = i + '/' + total;

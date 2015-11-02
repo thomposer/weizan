@@ -75,20 +75,69 @@ function checkaccount() {
 	}
 }
 
-function buildframes($types = array('platform'), $modulename = '') {
-	global $_W;
-	$ms = include IA_ROOT . '/web/common/frames.inc.php';
-
+function buildframes($frame = array('platform')){
+	global $_W, $_GPC;
+	$GLOBALS['top_nav'] = pdo_fetchall('SELECT name, title, append_title FROM ' . tablename('core_menu') . ' WHERE pid = 0 AND is_display = 1 ORDER BY displayorder DESC');
+	$ms = cache_load('system_frame');
+	if(empty($ms)) {
+		cache_build_frame_menu();
+		$ms = cache_load('system_frame');
+	}
 	load()->model('module');
 	$frames = array();
-	$modules = uni_modules();
+	$modules = uni_modules(false);
+	$modules_temp = array_keys($modules);
+	$status = uni_user_permission_exist();
+	if(is_error($status)) {
+		$modules_temp = pdo_fetchall('SELECT type FROM ' . tablename('users_permission') . ' WHERE uniacid = :uniacid AND uid = :uid AND type != :type', array(':uniacid' => $_W['uniacid'], ':uid' => $_W['uid'], ':type' => 'system'), 'type');
+		if(!empty($modules_temp)) {
+			$modules_temp = array_keys($modules_temp);
+		} else {
+			$modules = array();
+		}
+	}
 	if(!empty($modules)) {
 		$sysmods = system_modules();
 		foreach($modules as $m) {
 			if(in_array($m['name'], $sysmods)) {
+				$_W['setting']['permurls']['modules'][] = $m['name'];
 				continue;
 			}
-			$frames[$m['type']][] = $m;
+			if(in_array($m['name'], $modules_temp)) {
+				if($m['enabled']) {
+					$frames[$m['type']][] = $m;
+				}
+				$_W['setting']['permurls']['modules'][] = $m['name'];
+			}
+		}
+	}
+	if(is_error($status)) {
+		$system = array();
+		$system = uni_user_permission('system');
+		if (!empty($system) || !empty($modules_temp)) {
+						foreach ($ms as $name => $section) {
+				$hassection = false;
+				foreach ($section as $i => $menus) {
+					$hasitems = false;
+					if(empty($menus['items'])) continue;
+					foreach ($menus['items'] as $j => $menu) {
+						if (!in_array($menu['permission_name'], $system)) {
+							unset($ms[$name][$i]['items'][$j]);
+						} else {
+							$hasitems = true;
+							$hassection = true;
+						}
+					}
+					if (!$hasitems) {
+						unset($ms[$name][$i]);
+					}
+				}
+				if (!$hassection) {
+					unset($ms[$name]);
+				} else {
+					$_W['setting']['permurls']['sections'][] = $name;
+				}
+			}
 		}
 	}
 	$types = module_types();
@@ -108,73 +157,135 @@ function buildframes($types = array('platform'), $modulename = '') {
 				'items' => $items
 			);
 		}
+		if(is_error($status)) {
+			$_W['setting']['permurls']['sections'][] = 'ext';
+		}
 	}
-	if(in_array('solution', $types)) {
-		load()->model('module');
-		$error = module_solution_check($modulename);
-		if(is_error($error)) {
-		} else {
-			$module = module_fetch($modulename);
-			$entries = module_entries($modulename, array('menu'));
-						if($_W['role'] == 'operator') {
-				foreach($entries as &$entry1) {
-					foreach($entry1 as $index2 => &$entry2) {
-						$url_arr = parse_url($entry2['url']);
-						$url_query = $url_arr['query'];
-						parse_str($url_query, $query_arr);
-						$eid = intval($query_arr['eid']);
-						$data = pdo_fetch('SELECT * FROM ' . tablename('modules_bindings') . ' WHERE eid = :eid', array(':eid' => $eid));
-						$ixes = pdo_fetchcolumn('SELECT id FROM ' . tablename('solution_acl') . ' WHERE uid = :uid AND module = :module AND do = :do AND state = :state', array('uid' => $_W['uid'], ':module' => $modulename, ':do' => $data['do'], 'state' => $data['state']));
-						if(empty($ixes)) {
-							unset($entry1[$index2]);
+	$GLOBALS['ext_type'] = 0;
+	$m = trim($_GPC['m']);
+	$eid = intval($_GPC['eid']);
+	if(FRAME == 'ext' && (!empty($m) || !empty($eid)) && $GLOBALS['ext_type'] != 2) {
+		$GLOBALS['ext_type'] = $_COOKIE['ext_type'] ? $_COOKIE['ext_type'] : 1;
+		if(empty($m)) {
+			$m = pdo_fetchcolumn('SELECT module FROM ' . tablename('modules_bindings') . ' WHERE eid = :eid', array(':eid' => $eid));
+		}
+		$module = module_fetch($m);
+		$entries = module_entries($m);
+		if(is_error($status)) {
+			$permission = uni_user_permission($m);
+			if($permission[0] != 'all') {
+				if(!in_array($m.'_rule', $permission)) {
+					unset($module['isrulefields']);
+				}
+				if(!in_array($m.'_settings', $permission)) {
+					unset($module['settings']);
+				}
+				if(!in_array($m.'_home', $permission)) {
+					unset($entries['home']);
+				}
+				if(!in_array($m.'_profile', $permission)) {
+					unset($entries['profile']);
+				}
+				if(!in_array($m.'_shortcut', $permission)) {
+					unset($entries['shortcut']);
+				}
+				if(!empty($entries['cover'])) {
+					foreach($entries['cover'] as $k => $row) {
+						if(!in_array($m.'_cover_'.$row['do'], $permission)) {
+							unset($entries['cover'][$k]);
+						}
+					}
+				}
+				if(!empty($entries['menu'])) {
+					foreach($entries['menu'] as $k => $row) {
+						if(!in_array($m.'_menu_'.$row['do'], $permission)) {
+							unset($entries['menu'][$k]);
 						}
 					}
 				}
 			}
-			if($entries['menu']) {
-				$menus = array('title' => '业务功能菜单');
-				foreach($entries['menu'] as $menu) {
-					$menus['items'][] =  array('title' => $menu['title'], 'url' => $menu['url']);
-				}
-				$ms['solution'][] = $menus;
+		}
+		$entries_filter = array_elements(array('cover', 'menu', 'mine'), $entries);
+		$navs = array(
+			array(
+				'title' => "模块列表",
+				'items' => array(
+					array(
+						'title' => "<i class='fa fa-reply-all'></i> &nbsp;&nbsp;返回模块列表",
+						'url' => url('home/welcome/ext', array('a' => 0)),
+					),
+					array(
+						'title' => "<i class='fa fa-reply-all'></i> &nbsp;&nbsp;返回{$module['title']}",
+						'url' => url('home/welcome/ext', array('m' => $m, 't' => 1)),
+					),
+				),
+			),
+		);
+		if($module['isrulefields'] || $module['settings']) {
+			$navs['rule'] = array(
+				'title' => "{$module['title']}回复规则",
+			);
+			if($module['isrulefields']) {
+				$navs['rule']['items'][] = array(
+					'title' => "<i class='fa fa-comments'></i> &nbsp;&nbsp;回复规则列表",
+					'url' => url('platform/reply', array('m' => $m)),
+				);
+			}
+			if($module['settings']) {
+				$navs['rule']['items'][] = array(
+					'title' => "<i class='fa fa-cog'></i> &nbsp;&nbsp;参数设置",
+					'url' => url('profile/module/setting', array('m' => $m)),
+				);
+			}
+		}
+		if($entries['home'] || $entries['profile'] || $entries['shortcut']) {
+			$navs['nav'] = array(
+				'title' => "{$module['title']}导航菜单",
+			);
+			if($entries['home']) {
+				$navs['nav']['items'][] = array(
+					'title' => "<i class='fa fa-home'></i> &nbsp;&nbsp;微站首页导航",
+					'url' => url('site/nav/home', array('m' => $m)),
+				);
+			}
+			if($entries['profile']) {
+				$navs['nav']['items'][] = array(
+					'title' => "<i class='fa fa-user'></i> &nbsp;&nbsp;个人中心导航",
+					'url' => url('site/nav/profile', array('m' => $m)),
+				);
+			}
+			if($entries['shortcut']) {
+				$navs['nav']['items'][] = array(
+					'title' => "<i class='fa fa-plane'></i> &nbsp;&nbsp;快捷菜单",
+					'url' => url('site/nav/shortcut', array('m' => $m)),
+				);
+			}
+		}
+		$menus = array(
+			'menu' => "{$module['title']}业务菜单",
+			'cover' => "{$module['title']}封面入口",
+			'mine' => "{$module['title']}自定义菜单",
+		);
+		foreach($entries_filter as $key => $row) {
+			if(empty($row)) continue;
+			if(!isset($navs[$key])) {
+				$navs[$key] = array(
+					'title' => $menus[$key],
+				);
+			}
+			foreach($row as $li) {
+				$navs[$key]['items'][] = array(
+					'title' => "<i class='{$li["icon"]}'></i> &nbsp;&nbsp;{$li['title']}",
+					'url' => $li['url']
+				);
 			}
 		}
 	}
-	if (empty($_W['isfounder'])) {
-		$urls = array();
-		$permurls = pdo_fetchall("SELECT url FROM ".tablename('users_permission')." WHERE uid = :uid AND uniacid = :uniacid", array(':uid' => $_W['uid'], ':uniacid' => $_W['uniacid']));
-		if (!empty($permurls)) {
-			foreach ($permurls as $row) {
-				$urls[] = $row['url'];
-			}
-		}
-		if (!empty($urls)) {
-			foreach ($ms as $name => $section) {
-				$hassection = false;
-				foreach ($section as $i => $menus) {
-					$hasitems = false;
-					foreach ($menus['items'] as $j => $menu) {
-						$_W['setting']['permurls']['menus'][] = ltrim($menu['url'], './index.php?');
-						if (!in_array(rtrim(ltrim($menu['url'], './index.php?'), '&'), $urls)) {
-							unset($ms[$name][$i]['items'][$j]);
-						} else {
-							$hasitems = true;
-							$hassection = true;
-						}
-					}
-					if (!$hasitems) {
-						unset($ms[$name][$i]);
-					}
-				}
-				if (!$hassection) {
-					unset($ms[$name]);
-				} else {
-					$_W['setting']['permurls']['sections'][] = $name;
-				}
-			}
-		}
+	if($GLOBALS['ext_type'] == 1) {
+		$ms['ext'] = $navs;
+	} elseif($GLOBALS['ext_type'] == 3) {
+		$ms['ext'] = array_merge($navs, $ms['ext']);;
 	}
-	$_W['setting']['permurls']['urls'] = $urls;
 	return $ms;
 }
 
@@ -184,3 +295,28 @@ function system_modules() {
 		'custom', 'images', 'video', 'voice', 'chats'
 	);
 }
+
+
+function filter_url($params) {
+	global $_W;
+	if(empty($params)) {
+		return '';
+	}
+	$query_arr = array();
+	$parse = parse_url($_W['siteurl']);
+	if(!empty($parse['query'])) {
+		$query = $parse['query'];
+		parse_str($query, $query_arr);
+	}
+	$params = explode(',', $params);
+	foreach($params as $val) {
+		if(!empty($val)) {
+			$data = explode(':', $val);
+			$query_arr[$data[0]] = trim($data[1]);
+		}
+	}
+	$query_arr['page'] = 1;
+	$query = http_build_query($query_arr);
+	return './index.php?' . $query;
+}
+
