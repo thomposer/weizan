@@ -19,5 +19,6 @@ load()->model('article');
 $notices = article_notice_home();
 $news = article_news_home();
 $case = article_case_home();
+$links = article_link_home();
 template('account/welcome');
 

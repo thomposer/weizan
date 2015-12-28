@@ -47,6 +47,16 @@ function article_case_info($id) {
 	}
 	return $case;
 }
+
+function article_link_info($id) {
+	$id = intval($id);
+	$link = pdo_fetch('SELECT * FROM ' . tablename('article_link') . ' WHERE id = :id', array(':id' => $id));
+	if(empty($link)) {
+		return error(-1, '链接不存在或已经删除');
+	}
+	return $link;
+}
+
 function article_news_home($limit = 10) {
 	$limit = intval($limit);
 	$news = pdo_fetchall('SELECT * FROM ' . tablename('article_news') . ' WHERE is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
@@ -62,6 +72,11 @@ function article_case_home($limit = 10) {
 	$limit = intval($limit);
 	$case = pdo_fetchall('SELECT * FROM ' . tablename('article_case') . ' WHERE is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
 	return $case;
+}
+function article_link_home($limit = 30) {
+	$limit = intval($limit);
+	$links = pdo_fetchall('SELECT * FROM ' . tablename('article_link') . ' WHERE is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
+	return $links;
 }
 function article_news_all($filter = array(), $pindex = 1, $psize = 10) {
 	$condition = ' WHERE is_display = 1';
@@ -111,6 +126,22 @@ function article_case_all($filter = array(), $pindex = 1, $psize = 10) {
 	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('article_case') . $condition, $params);
 	$case = pdo_fetchall('SELECT * FROM ' . tablename('article_case') . $condition . ' ORDER BY displayorder DESC ' . $limit, $params, 'id');
 	return array('total' => $total, 'case' => $case);
+}
+function article_link_all($filter = array(), $pindex = 1, $psize = 10) {
+	$condition = ' WHERE is_display = 1';
+	$params = array();
+	if(!empty($filter['title'])) {
+		$condition .= ' AND titie LIKE :title';
+		$params[':title'] = "%{$filter['title']}%";
+	}
+	if($filter['cateid'] > 0) {
+		$condition .= ' AND cateid = :cateid';
+		$params[':cateid'] = $filter['cateid'];
+	}
+	$limit = ' LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('article_link') . $condition, $params);
+	$link = pdo_fetchall('SELECT * FROM ' . tablename('article_link') . $condition . ' ORDER BY displayorder DESC ' . $limit, $params, 'id');
+	return array('total' => $total, 'link' => $link);
 }
 function cutstr_html($string, $sublen){
   $string = strip_tags($string);

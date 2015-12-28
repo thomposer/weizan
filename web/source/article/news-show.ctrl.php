@@ -7,7 +7,7 @@ defined('IN_IA') or exit('Access Denied');
 $dos = array( 'detail', 'list');
 $do = in_array($do, $dos) ? $do : 'list';
 load()->model('article');
-
+$links = article_link_home();
 if($do == 'detail') {
 	$id = intval($_GPC['id']);
 	$news = article_news_info($id);

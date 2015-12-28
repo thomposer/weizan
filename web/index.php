@@ -98,12 +98,16 @@ $acl = array(
 		'direct' => array(
 			'notice-show',
 			'news-show',
-			'case-show'
+			'case-show',
+			'plug-show',
+			'link-show'
 		),
 		'founder' => array(
 			'news',
 			'notice',
-			'case'
+			'case',
+			'plug',
+			'link'
 		)
 	),
 	'cron' => array(

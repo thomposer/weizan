@@ -8,7 +8,7 @@ $dos = array( 'detail');
 $do = in_array($do, $dos) ? $do : 'list';
 load()->model('article');
 load()->model('user');
-
+$links = article_link_home();
 if($do == 'detail') {
 	$id = intval($_GPC['id']);
 	$notice = article_notice_info($id);

@@ -216,6 +216,7 @@
             if (mb > stock && stock != -1) {
                 mb = stock;
             }
+            mb = mb == 0? s1tock : mb;
             var num = parseInt(total.val());
             if (num > mb && mb > 0) {
                 tip("您最多可购买 " + mb + " 件!", true);
