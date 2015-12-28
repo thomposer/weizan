@@ -1,34 +1,47 @@
 <?php 
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 $_W['page']['title'] = '工具 - 系统管理';
 $dos = array('bom', 'scan');
 $do = in_array($do, $dos) ? $do : 'bom';
 
 if($do == 'bom') {
-	if(checksubmit()) {
+	if(checksubmit('submit')) {
 		set_time_limit(0);
 		load()->func('file');
 		$path = IA_ROOT;
-		$tree = file_tree($path);
-		$ds = array();
-		foreach($tree as $t) {
-			$t = str_replace($path, '', $t);
-			$t = str_replace('\\', '/', $t);
-			if(preg_match('/^.*\.php$/', $t)) {
-				$fname = $path . $t;
+		$trees = file_tree($path);
+		$bomtree = array();
+		foreach($trees as $tree) {
+			$tree = str_replace($path, '', $tree);
+			$tree = str_replace('\\', '/', $tree);
+			if(strexists($tree, '.php')) {
+				$fname = $path . $tree;
 				$fp = fopen($fname, 'r');
 				if(!empty($fp)) {
 					$bom = fread($fp, 3);
 					fclose($fp);
 					if($bom == "\xEF\xBB\xBF") {
-						$ds[] = $t;
+						$bomtree[] = $tree;
 					}
 				}
 			}
 		}
+		cache_write('bomtree', $bomtree);
+	}
+	if (checksubmit('dispose')) {
+		$trees = cache_load('bomtree');
+		$path = IA_ROOT;
+		foreach($trees as $tree) {
+			$fname = $path . $tree;
+			$string = file_get_contents($fname);
+			$string = substr($string, 3);
+			file_put_contents($fname, $string);
+			fclose($fp);
+		}
+		cache_delete('bomtree');
 	}
 	template('system/bom');
 }
@@ -47,7 +60,7 @@ if($do == 'scan') {
 
 		$safe = array (
 			'file_type' => 'php|js',
-			'code' => 'weidongli|sinaapp|safedog',
+			'code' => 'sinaapp|safedog',
 			'func' => 'com|system|exec|eval|escapeshell|cmd|passthru|base64_decode|gzuncompress',
 			'dir' => '',
 		);
@@ -63,7 +76,7 @@ if($do == 'scan') {
 			}
 						$info['file_type'] = 'php|js';
 			$info['func'] = trim($_GPC['func']) ? trim($_GPC['func']) : 'com|system|exec|eval|escapeshell|cmd|passthru|base64_decode|gzuncompress';
-			$info['code'] = trim($_GPC['code']) ? trim($_GPC['code']) : 'weidongli|sinaapp';
+			$info['code'] = trim($_GPC['code']) ? trim($_GPC['code']) : 'sinaapp';
 			$info['md5_file'] = trim($_GPC['md5_file']);
 			$info['dir'] = $_GPC['dir'];
 			cache_delete('scan:config');
@@ -77,7 +90,6 @@ if($do == 'scan') {
 	if($op == 'count') {
 		load()->func('file');
 		set_time_limit(0);
-
 		$files = array();
 		$config = iunserializer(cache_read('scan:config'));
 		if(empty($config)) {

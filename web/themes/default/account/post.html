@@ -103,6 +103,18 @@
 				<span class="help-block">注意：即使公众平台显示为“未认证”, 但只要【公众号设置】/【账号详情】下【认证情况】显示资质审核通过, 即可认定为认证号.</span>
 			</div>
 		</div>
+		{if ($_W['setting']['platform']['authstate'] && !empty($authurl)) || $account['type'] == 3}
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">公众号接入方式</label>
+			<div class="col-sm-9 col-xs-12">
+				<label  class="radio-inline"><input  type="radio" name="type"  value="1" {if $account['type'] == 1 || $account['type'] == 2} checked{/if} onclick="$('#auth').show();" /> 普通接入</label>
+
+				<label  class="radio-inline"><input  type="radio" name="type"  value="3" {if $account['type'] == 3} checked {/if} />登录授权</label>
+
+			</div>
+		</div>
+		{/if}
+		<div id="auth" {if $account['type'] == 3}style="display:none;"{/if}>
 		<div class="form-group">
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label">AppId</label>
 			<div class="col-sm-9 col-xs-12">
@@ -150,6 +162,7 @@
 					</div>
 					<div class="help-block">与公众平台接入设置值一致，必须为英文或者数字，长度为43个字符. 请妥善保管, EncodingAESKey 泄露将可能被窃取或篡改平台的操作数据.</div>
 				</div>
+				</div>
 			</div>
 		{/if}
 		<div class="form-group">
@@ -159,16 +172,14 @@
 				<span class="help-block">只支持JPG图片</span>
 			</div>
 		</div>
-		{if file_exists(IA_ROOT . '/attachment/qrcode_'.$account['acid'].'.jpg')}
-			<div class="form-group">
-				<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
-				<div class="col-sm-9 col-xs-12">
-					<div class="input-group">
-						<img src="{$qrcodesrc}?time={php echo time()}" class="img-responsive img-thumbnail" width="150" />
-					</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<img src="{php echo tomedia('qrcode_'.$account['acid'].'.jpg');}?time={php echo time()}" class="img-responsive img-thumbnail" width="150" />
 				</div>
 			</div>
-		{/if}
+		</div>
 		<div class="form-group">
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label">头像</label>
 			<div class="col-sm-9 col-xs-12">
@@ -176,16 +187,14 @@
 				<span class="help-block">只支持JPG图片</span>
 			</div>
 		</div>
-		{if file_exists(IA_ROOT . '/attachment/headimg_'.$account['acid'].'.jpg')}
-			<div class="form-group">
-				<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
-				<div class="col-sm-9 col-xs-12">
-					<div class="input-group">
-						<img src="{$headimgsrc}?time={php echo time()}" class="img-responsive img-thumbnail" width="150" />
-					</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<img src="{php echo tomedia('headimg_'.$account['acid'].'.jpg')}?time={php echo time()}" class="img-responsive img-thumbnail" width="150" />
 				</div>
 			</div>
-		{/if}
+		</div>
 	{if $_W['isfounder']}
 		<h5 class="page-header">短信参数</h5>
 		<div class="form-group">
@@ -250,5 +259,15 @@
 		}
 		$(':text[name="encodingaeskey"]').val(token);
 	}
+	{if $account['type'] != 3}
+		$(':radio[name="type"][value="3"]').click(function() {
+			$(':radio[value="1"]').prop('checked',true);
+			if (confirm('必须通过公众号授权登录页面进行授权接入，是否跳转至授权页面...')) {
+				location.href="{$authurl}";
+			} else {
+				return false;
+			}
+		});
+	{/if}
 </script>
 {template 'common/footer-gw'}

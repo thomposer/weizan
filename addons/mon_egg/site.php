@@ -551,7 +551,7 @@ class Mon_EggModuleSite extends WeModuleSite
 		}
 
 
-		$prizes = pdo_fetchall("select * from " . tablename(DBUtil::$TABLE_EGG_PRIZE) . " where egid=:egid  ", array(":egid" => $egid));
+		$prizes = pdo_fetchall("select * from " . tablename(DBUtil::$TABLE_EGG_PRIZE) . " where egid=:egid  order by pb asc ", array(":egid" => $egid));
 		$arrayRand = array();
 		$totalRand = 0;
 		for ($index = 0; $index < count($prizes); $index++) {

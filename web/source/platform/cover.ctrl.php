@@ -65,8 +65,14 @@ if($do != 'module') {
 	$cover['title'] = $entry['title'];
 		define('FRAME', 'ext');
 	$types = module_types();
-	define('ACTIVE_FRAME_URL', url('home/welcome/ext', array('m' => $entry['module'])));
-	$frames = buildframes(array(FRAME), $entry['module']);
+
+	if(!$GLOBALS['ext_type']) {
+		define('ACTIVE_FRAME_URL', url('platform/cover', array('eid' => $entry['eid'])));
+	} else {
+		echo 8;
+		define('ACTIVE_FRAME_URL', url('home/welcome/ext', array('m' => $entry['module'])));
+	}
+	$frames = buildframes(array(FRAME));
 	$frames = $frames[FRAME];
 	}
 

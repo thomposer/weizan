@@ -1,4 +1,3 @@
-
 <?php
 define('IN_MOBILE', true);
 $user_agent  = $_SERVER['HTTP_USER_AGENT'];
@@ -43,28 +42,4 @@ for($i=0;$i<count($topics);$i++){
 	$topics[$i]['mycom']=pdo_fetchcolumn("select count(*) from ".tablename('enjoy_circle_comment')." where uniacid=".$uniacid." and tid=".$topics[$i]['tid']." and cuid=".$ulist[uid]." ");
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 include $this->template('choice');

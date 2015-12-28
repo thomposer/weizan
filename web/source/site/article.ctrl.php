@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('site_article');
@@ -88,7 +88,7 @@ if($do == 'display') {
 			'template' => $_GPC['template'],
 			'title' => $_GPC['title'],
 			'description' => $_GPC['description'],
-			'content' => htmlspecialchars_decode($_GPC['content']),
+			'content' => htmlspecialchars_decode($_GPC['content'], ENT_QUOTES),
 			'incontent' => intval($_GPC['incontent']),
 			'source' => $_GPC['source'],
 			'author' => $_GPC['author'],

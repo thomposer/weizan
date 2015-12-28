@@ -78,38 +78,4 @@ $countblack=pdo_fetchcolumn("select count(*) from ".tablename('enjoy_circle_fans
 //被猜走的钱
 //$countbingo=pdo_fetchcolumn("select sum(fee) from ".tablename('enjoy_circle_log')." where uniacid=".$uniacid." and status=2");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 include $this->template('fans');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

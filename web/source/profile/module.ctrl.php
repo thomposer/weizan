@@ -5,10 +5,11 @@
  */
 
 defined('IN_IA') or exit('Access Denied');
-uni_user_permission_check('profile_module');
 $dos = array('display', 'setting', 'shortcut', 'enable', 'form');
 $do = !empty($_GPC['do']) ? $_GPC['do'] : 'display';
-
+if($do != 'setting') {
+	uni_user_permission_check('profile_module');
+}
 $modulelist = uni_modules(false);
 if(empty($modulelist)) {
 	message('没有可用功能.');
@@ -24,7 +25,7 @@ if($do == 'display') {
 				continue;
 			}
 			$module['shortcut'] = !empty($shortcuts[$module['name']]);
-			$module['official'] = empty($module['issystem']) && (strexists($module['author'], 'WeiZan Team') || strexists($module['author'], '微赞团队'));
+			$module['official'] = empty($module['issystem']) && (strexists($module['author'], 'Weizan Team') || strexists($module['author'], '微赞团队'));
 						if($module['issystem']) {
 				$path = '../framework/builtin/' . $module['name'];
 			} else {
@@ -54,7 +55,6 @@ if($do == 'setting') {
 	define('CRUMBS_NAV', 1);
 	$ptr_title = '参数设置';
 	$module_types = module_types();
-	define('ACTIVE_FRAME_URL', url('home/welcome/ext', array('m' => $_GPC['m'])));
 	
 	$config = $module['config'];
 	$obj = WeUtility::createModule($module['name']);
@@ -104,39 +104,4 @@ if($do == 'enable') {
 	));
 	cache_build_account_modules();
 	message('模块操作成功！', referer(), 'success');
-}
-
-if($do == 'form') {
-	load()->model('rule');
-	if(empty($_GPC['name'])) {
-		message('抱歉，模块不存在或是已经被删除！');
-	}
-	$modulename = !empty($_GPC['name']) ? $_GPC['name'] : 'basic';
-	$exist = false;
-	foreach($modulelist as $m) {
-		if(strtolower($m['name']) == $modulename && $m['enabled']) {
-			$exist = true;
-			break;
-		}
-	}
-	if(!$exist) {
-		message('抱歉，你操作的模块不能被访问！');
-	}
-	$m = $_W['modules'][$modulename];
-	if($m['isrulesingle']) {
-		$sql = 'SELECT `id` FROM ' . tablename('rule') . ' WHERE `weid`=:weid AND `module`=:module';
-		$pars = array();
-		$pars[':weid'] = $_W['weid'];
-		$pars[':module'] = $modulename;
-		$r = pdo_fetch($sql, $pars);
-		if($r) {
-			exit('already:' . $r['id']);
-		}
-	}
-	$module = WeUtility::createModule($modulename);
-	if(is_error($module)) {
-		exit($module['message']);
-	}
-	$rid = intval($_GPC['id']);
-	exit($module->fieldsFormDisplay($rid));
 }

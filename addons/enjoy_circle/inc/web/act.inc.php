@@ -23,6 +23,7 @@ if(checksubmit('submit')){
 	$data=array(
 			'uniacid'=>$uniacid,
 			'title'=>$_GPC['title'],
+			'subscribe'=>$_GPC['subscribe'],
 			'sucai'=>$_GPC['sucai'],
 			'exurl'=>$_GPC['exurl'],
 			'expic'=>$_GPC['expic'],
@@ -55,10 +56,5 @@ if(checksubmit('submit')){
 		
 		
 }
-
-
-
-
-
 
 include $this->template('act');

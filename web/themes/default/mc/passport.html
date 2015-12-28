@@ -90,12 +90,12 @@
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">选择公众号</label>
 					<div class="col-sm-9 col-xs-12">
 						<select name="oauth" class="form-control">
-							<option value="0">请选择公众号</option>
+							<option value="0">不借用任何权限</option>
 							{loop $accounts $acid $name}
 							<option value="{$acid}" {if $oauth['account'] == $acid}selected{/if}>{$name}</option>
 							{/loop}
 						</select>
-						<span class="help-block">在微信公众号请求用户网页授权之前，开发者需要先到公众平台网站的【开发者中心】<b>网页服务</b>中配置授权回调域名。<a href="http://www.012wz.com/manual/dev:v0.6:qa:mobile_redirect_url_error" target="_black">查看详情</a></span>
+						<span class="help-block">在微信公众号请求用户网页授权之前，开发者需要先到公众平台网站的【开发者中心】<b>网页服务</b>中配置授权回调域名。<a href="http://www.012wz.com/" target="_black">查看详情</a></span>
 					</div>
 				</div>
 			</div>
@@ -104,7 +104,7 @@
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">oAuth独立域名</label>
 					<div class="col-sm-9 col-xs-12">
 						<input type="text" name="host" value="{$oauth['host']}" class="form-control" />
-						<span class="help-block">适用于您的微站或是活动有多个域名的情况下，由此域名做统一的oauth授权用</span>
+						<span class="help-block">适用于您的微站或是活动有多个域名的情况下，由此域名做统一的oauth授权用。例如：http://www.baidu.com 注意：结尾没有 / </span>
 					</div>
 				</div>
 			</div>

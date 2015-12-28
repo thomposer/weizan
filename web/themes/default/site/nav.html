@@ -11,13 +11,13 @@
 {/if}
 <ul class="nav nav-tabs">
 	<li><a href="{php echo url('site/multi/display');}">返回微站管理</a></li>
-	{if $type['name'] == 'home'}<li{if $do == 'display'} class="active"{/if}><a href="{php echo url('site/nav/home', array('m' => $m, 'mtid' => $_GPC['mtid'], 'f' => $_GPC['f']));}">微站首页导航图标</a></li>{/if}
-	{if $type['name'] == 'profile'}<li{if $do == 'display'} class="active"{/if}><a href="{php echo url('site/nav/profile', array('m' => $m, 'mtid' => $_GPC['mtid'], 'f' => $_GPC['f']));}">个人中心功能条目</a></li>{/if}
+	{if $type['name'] == 'home'}<li{if $do == 'display'} class="active"{/if}><a href="{php echo url('site/nav/home', array('m' => $m, 'multiid' => $_GPC['multiid'], 'f' => $_GPC['f']));}">微站首页导航图标</a></li>{/if}
+	{if $type['name'] == 'profile'}<li{if $do == 'display'} class="active"{/if}><a href="{php echo url('site/nav/profile', array('m' => $m, 'multiid' => $_GPC['multiid'], 'f' => $_GPC['f']));}">个人中心功能条目</a></li>{/if}
 	{if empty($module)}
-	<li{if $do == 'post' && empty($id)} class="active"{/if}><a href="{php echo url('site/nav/' . $type['name'], array('foo' => 'post', 'mtid' => $_GPC['mtid'], 'f' => $_GPC['f']));}"><i class="fa fa-plus"></i> 添加条目</a></li>
+	<li{if $do == 'post' && empty($id)} class="active"{/if}><a href="{php echo url('site/nav/' . $type['name'], array('foo' => 'post', 'multiid' => $_GPC['multiid'], 'f' => $_GPC['f']));}"><i class="fa fa-plus"></i> 添加条目</a></li>
 	{/if}
 	{if $do == 'post' && !empty($id)}
-	<li class="active"><a href="{php echo url('site/nav/' . $type['name'], array('id' => $id, 'foo' => 'post', 'mtid' => $_GPC['mtid'], 'f' => $_GPC['f']));}"><i class="fa fa-edit"></i> 编辑条目</a></li>
+	<li class="active"><a href="{php echo url('site/nav/' . $type['name'], array('id' => $id, 'foo' => 'post', 'multiid' => $_GPC['multiid'], 'f' => $_GPC['f']));}"><i class="fa fa-edit"></i> 编辑条目</a></li>
 	{/if}
 </ul>
 {if $do == 'post'}
@@ -38,7 +38,7 @@
 				<div class="col-sm-9 col-xs-12">
 					<select class="form-control" name="multid">
 						{loop $multis $multi}
-							<option value="{$multi['id']}" {if $item['multiid'] == $multi['id'] || $_GPC['mtid'] == $multi['id']}selected{/if}>{$multi['title']}{if $multi['id'] == $default_site}[默认微站]{/if}</option>
+							<option value="{$multi['id']}" {if $item['multiid'] == $multi['id'] || $_GPC['multiid'] == $multi['id']}selected{/if}>{$multi['title']}{if $multi['id'] == $default_site}[默认微站]{/if}</option>
 						{/loop}
 					</select>
 					<span class="help-block">每个导航链接只能在一个微站上使用。</span>
@@ -131,6 +131,13 @@
 				<div class="col-sm-9 col-xs-12">
 					{php echo tpl_form_field_color('icon[color]', $item['css']['icon']['color']);}
 					<span class="help-block">图标颜色，上传图标时此设置项无效</span>
+				</div>
+			</div>
+			<div class="form-group system-icon">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">栏目颜色</label>
+				<div class="col-sm-9 col-xs-12">
+					{php echo tpl_form_field_color('name[color]', $item['css']['name']['color']);}
+					<span class="help-block">栏目颜色</span>
 				</div>
 			</div>
 			<div class="form-group system-icon">
@@ -397,7 +404,7 @@
 						</td>
 						<td class="text-center" style="width:100px;">
 							<div class="text-center" >
-								<a href="{php echo url('site/nav/'.$_GPC['do'], array('id' => $item['id'],'foo' =>'post', 'mtid' => $_GPC['mtid'], 'f' => $_GPC['f']));}" class="btn btn-default btn-sm">编辑</a>
+								<a href="{php echo url('site/nav/'.$_GPC['do'], array('id' => $item['id'],'foo' =>'post', 'multiid' => $_GPC['multiid'], 'f' => $_GPC['f']));}" class="btn btn-default btn-sm">编辑</a>
 								<a href="{php echo url('site/nav/'.$_GPC['do'], array('id' => $item['id'],'foo'=>'delete', 'name' => $modulename));}" class="btn btn-default btn-sm">删除</a>
 							</div>
 						</td>

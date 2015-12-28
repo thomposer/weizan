@@ -1,7 +1,7 @@
 <?php
 /**
- * [WeiZan System] Copyright (c) 2014 WeiZan.Com
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $dos = array('installed', 'prepared', 'install', 'refresh', 'uninstall', 'web', 'batch-install', 'designer', 'check', 'upgrade');
@@ -218,9 +218,25 @@ if($do == 'upgrade') {
 	if(is_error($r)) {
 		message($r['message'], url('cloud/profile'), 'error');
 	}
+
 	$info = cloud_t_info($id);
-	if(!is_error($info)) {
-		if(empty($_GPC['flag'])) {
+
+	$upgrade_info = cloud_t_upgradeinfo($id);
+
+	if (is_error($upgrade_info)) {
+		message($upgrade_info['message'], referer(), 'error');
+	}
+	if ($_W['isajax']) {
+		message($upgrade_info, '', 'ajax');
+	}
+
+	if (!is_error($info)) {
+		if (empty($_GPC['flag'])) {
+			if (intval($_GPC['branch']) > $upgrade_info['version']['branch_id']) {
+				header('location: ' . url('cloud/redirect/buybranch', array('m' => $id, 'branch' => intval($_GPC['branch']), 'type' => 'theme', 'is_upgrade' => 1)));
+				exit;
+			}
+
 						load()->func('file');
 			rmdirs(IA_ROOT . '/app/themes/' . $id, true);
 			header('Location: ' . url('cloud/process', array('t' => $id, 'is_upgrade' => 1)));
@@ -396,7 +412,12 @@ if($do == 'check') {
 			$ret = cloud_t_query();
 			if(!is_error($ret)) {
 				foreach($ret as $k => $v) {
-					$mods[$k] = array('from' => 'cloud', 'version' => $v['version']);
+					$mods[$k] = array(
+						'from' => 'cloud',
+						'version' => $v['version'],
+						'branches' => $v['branches'],
+						'site_branch' => $v['branches'][$v['branch']],
+					);
 				}
 			}
 			if(!empty($mods)) {

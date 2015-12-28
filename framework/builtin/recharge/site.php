@@ -104,8 +104,8 @@ class RechargeModuleSite extends WeModuleSite {
 				}
 				$mine = array(
 					array(
-							'name' => "充{$fee}返{$setting['nums'][$fee]['num']}次",
-							'value' => "返{$setting['nums'][$fee]['num']}次"
+						'name' => "充{$fee}返{$setting['nums'][$fee]['num']}次",
+						'value' => "返{$setting['nums'][$fee]['num']}次"
 					),
 				);
 				$tag = $setting['nums'][$fee]['num'];
@@ -267,9 +267,9 @@ class RechargeModuleSite extends WeModuleSite {
 		}
 				if ($params['from'] == 'return') {
 			if ($params['result'] == 'success') {
-				message('支付成功！', '../../app/' . $url, 'success');
+				message('支付成功！', $_W['siteroot'] . '../../app/' . $url, 'success');
 			} else {
-				message('支付失败！', '../../app/' . $url, 'error');
+				message('支付失败！', $_W['siteroot'] . '../../app/' . $url, 'error');
 			}
 		}
 	}

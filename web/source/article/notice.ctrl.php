@@ -1,13 +1,14 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $dos = array('category_post', 'category', 'category_del', 'list', 'post', 'batch_post', 'del');
 $do = in_array($do, $dos) ? $do : 'list';
 load()->model('article');
 if($do == 'category_post') {
+	$_W['page']['title'] = '编辑分类-公告分类';
 	if(checksubmit('submit')) {
 		$i = 0;
 		if(!empty($_GPC['title'])) {
@@ -31,6 +32,7 @@ if($do == 'category_post') {
 }
 
 if($do == 'category') {
+	$_W['page']['title'] = '分类列表-公告分类';
 	if(checksubmit('submit')) {
 		if(!empty($_GPC['ids'])) {
 			foreach($_GPC['ids'] as $k => $v) {
@@ -55,6 +57,7 @@ if($do == 'category_del') {
 }
 
 if($do == 'post') {
+	$_W['page']['title'] = '编辑公告-公告列表';
 	$id = intval($_GPC['id']);
 	$notice = pdo_fetch('SELECT * FROM ' . tablename('article_notice') . ' WHERE id = :id', array(':id' => $id));
 	if(empty($notice)) {
@@ -90,6 +93,7 @@ if($do == 'post') {
 }
 
 if($do == 'list') {
+	$_W['page']['title'] = '所有公告-公告列表';
 	$condition = ' WHERE 1';
 	$cateid = intval($_GPC['cateid']);
 	$createtime = intval($_GPC['createtime']);

@@ -102,16 +102,16 @@
 			$.post(url, function(dat){});
 		}
 	{/if}
-	</script>
-	<script>
-		$(function(){
-			if($('.js-quickmenu')!=null && $('.js-quickmenu')!=''){
-				var h = $('.js-quickmenu').height()+'px';
-				$('body').css("padding-bottom",h);
-			}else{
-				$('body').css("padding-bottom", "0");
-			}
-		});
+	$(function(){
+		if($('.js-quickmenu')!=null && $('.js-quickmenu')!=''){
+			var h = $('.js-quickmenu').height()+'px';
+			$('body').css("padding-bottom",h);
+		}else{
+			$('body').css("padding-bottom", "0");
+		}
+	});
+
+
 	</script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 error_reporting(0);
@@ -19,7 +19,7 @@ $result = array(
 $type = $_COOKIE['__fileupload_type'];;
 $type = in_array($type, array('image','audio')) ? $type : 'image';
 $option = array();
-$option = array_elements(array('uploadtype', 'global', 'dest_dir', 'width', 'thumb'), $_POST);
+$option = array_elements(array('uploadtype', 'global', 'dest_dir'), $_POST);
 $option['width'] = intval($option['width']);
 $option['global'] = !empty($_COOKIE['__fileupload_global']);
 if (!empty($option['global']) && empty($_W['isfounder'])) {
@@ -131,7 +131,7 @@ if ($do == 'upload') {
 
 if ($do == 'fetch' || $do == 'upload') {
 		if($type == 'image'){
-		$thumb = empty($setting['thumb']) ? 0 : 1; 		$width = intval($setting['width']); 	
+		$thumb = empty($setting['thumb']) ? 0 : 1; 		$width = intval($setting['width']); 
 		if(isset($option['thumb'])){
 			$thumb = empty($option['thumb']) ? 0 : 1;
 		}
@@ -157,7 +157,7 @@ if ($do == 'fetch' || $do == 'upload') {
 		'ext' => $ext,
 		'filename' => $pathname,
 		'attachment' => $pathname,
-		'url' => $_W['attachurl'] . $pathname,
+		'url' => tomedia($pathname),
 		'is_image' => $type == 'image' ? 1 : 0,
 		'filesize' => filesize($fullname),
 	);
@@ -177,6 +177,7 @@ if ($do == 'fetch' || $do == 'upload') {
 			die(json_encode($result));
 		} else {
 			file_delete($pathname);
+			$info['url'] = tomedia($pathname);
 		}
 	}
 	pdo_insert('core_attachment', array(
@@ -191,64 +192,52 @@ if ($do == 'fetch' || $do == 'upload') {
 }
 
 if ($do == 'delete') {
-	$attachment = $_GPC['file'];
-	if (preg_match('/[\.]{2}/', $attachment, $out)) {
-		exit('failure');
+	$id = intval($_GPC['id']);
+	$media = pdo_get('core_attachment', array('uniacid' => $_W['uniacid'], 'id' => $id));
+	if(empty($media)) {
+		exit('文件不存在或已经删除');
 	}
-	if (empty($_W['role'])) {
-		exit('failure');
+	if(empty($_W['isfounder']) && $_W['role'] != 'manager') {
+		exit('您没有权限删除该文件');
 	}
-	if (empty($attachment) || !is_string($attachment)) {
-		exit('请选择要删除的图片！');
-	}
-	if (preg_match('/[\.]{2}/', $attachment, $out)) {
-		exit('非法的删除路径.！');
-	}
-	if (empty($_W['isfounder'])) {
-		if(strexists($attachment, 'images/global')
-		|| strexists($attachment, 'audios/global')){
-			exit('没有删除 global 文件夹中图片的权限.');
-		}
-	}
-	if (!file_exists(ATTACHMENT_ROOT . '/' . $attachment)) {
-		exit('删除失败: 文件不存在.！');
-	}
-	if (empty($_W['isfounder'])) {
-		$pieces = explode('/', $attachment);
-		if (count($pieces) == 1) {
-			if ($_W['role'] != 'manager') {
-				exit('failure');
-			}
-		}
-		if (count($pieces) < 4 || strval($pieces[1]) == 'global') {
-			exit('failure');
-		}
-		if (is_numeric($pieces[1])) {
-			if (intval($_W['uniacid']) != intval($pieces[1])) {
-				exit('failure');
-			}
-		} else {
-			exit('failure');
-		}
-	}
-	
 	load()->func('file');
-	if (file_delete($attachment)) {
-		if(empty($option['global'])){
-			pdo_delete('core_attachment', array('uniacid'=>$uniacid, 'attachment'=>$attachment));
-		}else{
-			pdo_delete('core_attachment', array('attachment'=>$attachment));
-		}
-		exit('success');
+	if (!empty($_W['setting']['remote']['type'])) {
+		$status = file_remote_delete($media['attachment']);
 	} else {
-		exit('failure');
+		$status = file_delete($media['attachment']);
 	}
+	if(is_error($status)) {
+		exit($status['message']);
+	}
+	pdo_delete('core_attachment', array('uniacid' => $uniacid, 'id' => $id));
+	exit('success');
 }
 
 if ($do == 'local') {
 	$types = array('image', 'audio');
 	$type = in_array($_GPC['type'], $types) ? $_GPC['type'] : 'image';
 	$typeindex = array('image' => 1, 'audio' => 2);
+	$condition = ' WHERE uniacid = :uniacid AND type = :type';
+	$params = array(':uniacid' => $_W['uniacid'], ':type' => $typeindex[$type]);
+	$year = intval($_GPC['year']);
+	$month = intval($_GPC['month']);
+	if($year > 0 || $month > 0) {
+		if($month > 0 && !$year) {
+			$year = date('Y');
+			$starttime = strtotime("{$year}-{$month}-01");
+			$endtime = strtotime("+1 month", $starttime);
+		} elseif($year > 0 && !$month) {
+			$starttime = strtotime("{$year}-01-01");
+			$endtime = strtotime("+1 year", $starttime);
+		} elseif($year > 0 && $month > 0) {
+			$year = date('Y');
+			$starttime = strtotime("{$year}-{$month}-01");
+			$endtime = strtotime("+1 month", $starttime);
+		}
+		$condition .= ' AND createtime >= :starttime AND createtime <= :endtime';
+		$params[':starttime'] = $starttime;
+		$params[':endtime'] = $endtime;
+	}
 
 	$page = intval($_GPC['page']);
 	$page = max(1, $page);
@@ -256,14 +245,14 @@ if ($do == 'local') {
 
 	$remote = $_W['setting']['remote'];
 
-	$sql = 'SELECT * FROM '.tablename('core_attachment')." WHERE type = '{$typeindex[$type]}' AND uniacid = '{$_W['uniacid']}' ORDER BY id DESC LIMIT ".(($page-1)*$size).','.$size;
-	$list = pdo_fetchall($sql, array(), 'id');
+	$sql = 'SELECT * FROM '.tablename('core_attachment')." {$condition} ORDER BY id DESC LIMIT ".(($page-1)*$size).','.$size;
+	$list = pdo_fetchall($sql, $params, 'id');
 
 	foreach ($list as &$item) {
 		$item['url'] = tomedia($item['attachment']);
 		$item['createtime'] = date('Y-m-d', $item['createtime']);
 		unset($item['uid']);
 	}
-	$total = pdo_fetchcolumn('SELECT count(*) FROM '.tablename('core_attachment') ." WHERE type = '{$typeindex[$type]}' AND uniacid = '{$_W['uniacid']}'");
+	$total = pdo_fetchcolumn('SELECT count(*) FROM '.tablename('core_attachment') ." {$condition}", $params);
 	message(array('page'=> pagination($total, $page, $size, '', array('before' => '2', 'after' => '2', 'ajaxcallback'=>'null')), 'items' => $list), '', 'ajax');
 }

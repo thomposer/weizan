@@ -16,8 +16,8 @@ function pdo() {
 		} else {
 			load()->classs('db');
 			if(empty($_W['config']['db']['master'])) {
-				$db = new DB($_W['config']['db']);
 				$_W['config']['db']['master'] = $GLOBALS['_W']['config']['db'];
+				$db = new DB($_W['config']['db']);
 			} else {
 				$db = new DB('master');
 			}

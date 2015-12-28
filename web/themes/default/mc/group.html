@@ -5,8 +5,9 @@
 	{if $do == 'post' && !empty($groupid)}<li class="active"><a href="{php echo url('mc/group/post', array('id' => $groupid));}">编辑会员组</a></li>{/if}
 </ul>
 <div class="alert alert-info">
+	<strong class="text-danger"><i class="fa fa-info-circle"></i> 会员组的总积分是根据(积分+贡献)的值算出来的,管理员不能直接修改会员所在的会员组. 如果需要修改会员组,请通过设置积分或者贡献的值来影响总积分,系统会根据影响后的总积分自动算出对应的会员组</strong><br>
 	<i class="fa fa-info-circle"></i> 默认会员组的积分需设置为 0 <br>
-	<i class="fa fa-info-circle"></i> 系统会根据会员的积分多少自动对会员的分组进行调整 <br>
+	<i class="fa fa-info-circle"></i> 系统会根据会员的总积分(积分+贡献)多少自动对会员的分组进行调整 <br>
 </div>
 {if $do == 'display'}
 <form action="" method="post" id="form1"  class="form-horizontal">
@@ -17,13 +18,13 @@
 				<label class="col-xs-12 col-sm-3 col-md-2 control-label">会员组变更设置</label>
 				<div class="col-sm-9 col-xs-12">
 					<label class="radio-inline">
-						<input type="radio" name="grouplevel" value="1" {if $setting['grouplevel'] == 1 || !$setting['grouplevel']}checked{/if}/>根据积分多少自动升降
+						<input type="radio" name="grouplevel" value="1" {if $setting['grouplevel'] == 1 || !$setting['grouplevel']}checked{/if}/>根据总积分多少自动升降
 					</label>
 					<label class="radio-inline">
-						<input type="radio" name="grouplevel" value="2" {if $setting['grouplevel'] == 2}checked{/if}/>根据积分多少只升不降
+						<input type="radio" name="grouplevel" value="2" {if $setting['grouplevel'] == 2}checked{/if}/>根据总积分多少只升不降
 					</label>
-					<span class="help-block">根据积分多少自动升降：<strong class="text-danger">系统根据当前会员的积分，按照每个会员组所需积分的设置进行变更。可自动升降会员组</strong></span>
-					<span class="help-block">根据积分多少只升不降：<strong class="text-danger">系统根据当前会员的积分，如果会员的积分达到更高一级的会员组，则变更会员组，如果积分少于当前所在会员组所需积分，保持当前会员组不变，不会降级。</strong></span>
+					<span class="help-block">根据积分多少自动升降：<strong class="text-danger">系统根据当前会员的总积分，按照每个会员组所需总积分的设置进行变更。可自动升降会员组</strong></span>
+					<span class="help-block">根据积分多少只升不降：<strong class="text-danger">系统根据当前会员的总积分，如果会员的总积分达到更高一级的会员组，则变更会员组，如果积分少于当前所在会员组所需总积分，保持当前会员组不变，不会降级。</strong></span>
 				</div>
 			</div>
 		</div>
@@ -35,7 +36,7 @@
 					<tr>
 						<th style="width:250px">会员组名称</th>
 						<th style="width:200px"></th>
-						<th style="width:100px">所需积分</th>
+						<th style="width:200px">所需总积分(积分+贡献)</th>
 						<th style="width:200px;text-align: right">会员数</th>
 						<th style="text-align:right">操作</th>
 					</tr>

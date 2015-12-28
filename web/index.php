@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 define('IN_SYS', true);
 require '../framework/bootstrap.inc.php';
@@ -43,6 +43,9 @@ $acl = array(
 		)
 	),
 	'extension' => array(
+		'direct' => array(
+			'subscribe',
+		),
 		'founder' => array(
 			'module',
 			'service',
@@ -94,15 +97,22 @@ $acl = array(
 	'article' => array(
 		'direct' => array(
 			'notice-show',
-			'news-show'
+			'news-show',
+			'case-show'
 		),
 		'founder' => array(
 			'news',
-			'notice'
+			'notice',
+			'case'
 		)
 	),
+	'cron' => array(
+		'direct' => array(
+			'entry',
+		)
+	)
 );
-if (($_W['setting']['copyright']['status'] == 1) && empty($_W['isfounder']) && $controller != 'cloud') {
+if (($_W['setting']['copyright']['status'] == 1) && empty($_W['isfounder']) && $controller != 'cloud' && $controller != 'utility') {
 	$_W['siteclose'] = true;
 	if ($controller == 'account' && $action == 'welcome') {
 		template('account/welcome');

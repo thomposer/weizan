@@ -100,13 +100,17 @@ if($do == 'del') {
 	$id = intval($_GPC['id']);
 	$card_id = pdo_fetchcolumn('SELECT card_id FROM ' . tablename('coupon') . ' WHERE acid = :acid AND id = :id', array(':acid' => $acid, ':id' => $id));
 	$status = coupon_delete($id);
-	if(!is_error($status)) {
+	if(!is_error($status) || $_GPC['force'] == 1) {
+		pdo_delete('coupon', array('id' => $id, 'uniacid' => $_W['uniacid']));
 				pdo_delete('qrcode', array('acid' => $acid, 'type' => 'card', 'extra' => $id));
 				pdo_delete('coupon_record', array('acid' => $acid, 'card_id' => $card_id));
 		pdo_delete('coupon_modules', array('acid' => $acid, 'id' => $id));
 		message('删除卡券成功', url('wechat/card/display'), 'success');
 	} else{
-		message($status['message'], url('wechat/card/display'), 'error');
+		$url_1 = url('wechat/card/display');
+		$url_2 = url('wechat/card/del', array('id' => $id, 'force' => 1));
+		$message = "<a href='{$url_1}' class='btn btn-default'>否</a> <a href='{$url_2}' class='btn btn-primary'>是</a> ";
+		message($status['message']."<br>是否强制删除本地数据 {$message}", '', 'error');
 	}
 }
 

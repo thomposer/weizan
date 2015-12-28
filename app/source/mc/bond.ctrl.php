@@ -1,11 +1,11 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 WEIZAN.CC
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 load()->model('app');
-$dos = array('display', 'credits', 'address', 'card', 'mycard', 'record', 'mobile', 'email', 'barcode', 'qrcode', 'consume', 'card_qrcode');
+$dos = array('display', 'credits', 'address', 'card', 'mycard', 'record', 'mobile', 'email', 'barcode', 'qrcode', 'consume', 'card_qrcode', 'addressadd');
 $do = in_array($do, $dos) ? $do : 'display';
 load()->func('tpl');
 load()->model('user');
@@ -83,16 +83,6 @@ if ($do == 'credits') {
 
 
 if ($do == 'address') {
-
-	if (checksubmit('submit')) {
-		$address = $_GPC['address'];
-		if (pdo_update('mc_member_address', $address, array('id' => intval($_GPC['addid']), 'uid' => $_W['fans']['uid']))) {
-			message('修改收货地址成功', url('mc/bond/address'), 'success');
-		} else {
-			message('修改收货地址失败，请稍后重试', url('mc/bond/address'), 'error');
-		}
-	}
-
 	$where = ' WHERE 1';
 	$params = array(':uniacid' => $_W['uniacid'], ':uid' => $_W['fans']['uid']);
 	if (!empty($_GPC['addid'])) {
@@ -111,6 +101,48 @@ if ($do == 'address') {
 		$pager = pagination($total, $pindex, $psize);
 	} else {
 		$address = pdo_fetch($sql, $params);
+	}
+}
+
+if ($do == 'addressadd') {
+	
+	if (checksubmit('submit')) {
+		$address = $_GPC['address'];
+		if (empty($address['username'])) {
+			message('请输入您的姓名', referer(), 'error');
+		}
+		if (empty($address['mobile'])) {
+			message('请输入您的手机号', referer(), 'error');
+		}
+		if (empty($address['zipcode'])) {
+			message('请输入您的邮政编码', referer(), 'error');
+		}
+		if (empty($address['province'])) {
+			message('请输入您的所在省', referer(), 'error');
+		}
+		if (empty($address['city'])) {
+			message('请输入您的所在市', referer(), 'error');
+		}
+		if (empty($address['district'])) {
+			message('请输入您的所在区', referer(), 'error');
+		}
+		if (empty($address['address'])) {
+			message('请输入您的详细地址', referer(), 'error');
+		}
+		$address['uniacid'] = $_W['uniacid'];
+		$address['uid'] = $_W['fans']['uid'];
+		
+		if (!empty($_GPC['addid'])) {
+			if (pdo_update('mc_member_address', $address, array('id' => intval($_GPC['addid']), 'uid' => $_W['fans']['uid']))) {
+				message('修改收货地址成功', url('mc/bond/address'), 'success');
+			} else {
+				message('修改收货地址失败，请稍后重试', url('mc/bond/address'), 'error');
+			}
+		}
+		
+		if (pdo_insert('mc_member_address', $address)) {
+			message('地址添加成功', url('mc/bond/address'), 'success');
+		}
 	}
 }
 
@@ -138,7 +170,7 @@ if ($do == 'card') {
 	}
 
 	if(!empty($setting['fields'])) {
-		$fields = array();
+		$fields = array('email');
 		foreach($setting['fields'] as $li) {
 			if($li['bind'] == 'birth') {
 				$fields[] = 'birthyear';
@@ -153,8 +185,10 @@ if ($do == 'card') {
 			}
 		}
 		$member_info = mc_fetch($_W['member']['uid'], $fields);
+		$reregister = 0;
 		if(strlen($member_info['email']) == 39 && strexists($member_info['email'], '@012wz.com')) {
 			$member_info['email'] = '';
+			$reregister = 1;
 		}
 	}
 	if (checksubmit('submit')) {
@@ -163,6 +197,9 @@ if ($do == 'card') {
 			foreach ($setting['fields'] as $row) {
 				if (!empty($row['require']) && empty($_GPC[$row['bind']])) {
 					message('请输入'.$row['title'].'！', referer(), 'info');
+				}
+				if($row['bind'] == 'mobile' && !preg_match(REGULAR_MOBILE, $_GPC['mobile'])) {
+					message('手机号有误,请重新输入', referer(), 'info');
 				}
 				if(!empty($row['require']) && $row['bind'] == 'birth') {
 					if (empty($_GPC['birth']['year']) || empty($_GPC['birth']['month']) || empty($_GPC['birth']['day'])) {
@@ -177,26 +214,34 @@ if ($do == 'card') {
 				$data[$row['bind']] = $_GPC[$row['bind']];
 			}
 		}
+		$check = mc_check($data);
+		if(is_error($check)) {
+			message($check['message'], '', 'error');
+		}
 		
 		$sql = 'SELECT COUNT(*)  FROM ' . tablename('mc_card_members') . " WHERE `uid` = :uid AND `cid` = :cid AND uniacid = :uniacid";
 		$count = pdo_fetchcolumn($sql, array(':uid' => $_W['member']['uid'], ':cid' => $_GPC['cardid'], ':uniacid' => $_W['uniacid']));
 		if ($count >= 1) {
 			message('抱歉,您已经领取过该会员卡.', referer(), 'error');
 		}
-		
- 		$cardsn = $_GPC['format'];
-		preg_match_all('/(\*+)/', $_GPC['format'], $matchs);
-		if (!empty($matchs)) {
-			foreach ($matchs[1] as $row) {
-				$cardsn = str_replace($row, random(strlen($row), 1), $cardsn);
+		if($setting['format_type'] == 1 && !empty($data['mobile'])) {
+			$cardsn = $data['mobile'];
+		} else {
+			
+			$cardsn = $_GPC['format'];
+			preg_match_all('/(\*+)/', $_GPC['format'], $matchs);
+			if (!empty($matchs)) {
+				foreach ($matchs[1] as $row) {
+					$cardsn = str_replace($row, random(strlen($row), 1), $cardsn);
+				}
 			}
+			preg_match('/(\#+)/', $_GPC['format'], $matchs);
+			$length = strlen($matchs[1]);
+			$pos = strpos($_GPC['format'], '#');
+			$cardsn = str_replace($matchs[1], str_pad($_GPC['snpos']++, $length - strlen($number), '0', STR_PAD_LEFT), $cardsn);
+			pdo_update('mc_card', array('snpos' => $_GPC['snpos']), array('uniacid' => $_W['uniacid'], 'id' => $_GPC['cardid']));
 		}
-		preg_match('/(\#+)/', $_GPC['format'], $matchs);
-		$length = strlen($matchs[1]);
-		$pos = strpos($_GPC['format'], '#');
-		$cardsn = str_replace($matchs[1], str_pad($_GPC['snpos']++, $length - strlen($number), '0', STR_PAD_LEFT), $cardsn);
-		pdo_update('mc_card', array('snpos' => $_GPC['snpos']), array('uniacid' => $_W['uniacid'], 'id' => $_GPC['cardid']));
-		
+
 		$record = array(
 			'uniacid' => $_W['uniacid'],
 			'openid' => $_W['openid'],
@@ -207,10 +252,6 @@ if ($do == 'card') {
 			'createtime' => TIMESTAMP,
 			'endtime' => TIMESTAMP
 		);
-		$check = mc_check($data);
-		if(is_error($check)) {
-			message($check['message'], '', 'error');
-		}
 		if(pdo_insert('mc_card_members', $record)) {
 			if(!empty($data)){
 				mc_update($_W['member']['uid'], $data);
@@ -270,7 +311,6 @@ if ($do == 'mycard') {
 		if(!empty($setting)) {
 			$setting['color'] = iunserializer($setting['color']);
 			$setting['background'] = iunserializer($setting['background']);
-			$setting['business'] = iunserializer($setting['business']) ? iunserializer($setting['business']) : array();
 			if(!empty($setting['discount']) && $setting['discount_type'] > 0) {
 				$setting['discount'] = iunserializer($setting['discount']);
 			}
@@ -307,7 +347,7 @@ if($do == 'consume') {
 					$discount_credit = $credit - $discount['discount'];
 					$discount_str = "，该会员属于【{$_W['member']['groupname']}】，可享受【满{$discount['condition']}元减{$discount['discount']}元】，最终支付【{$discount_credit}】元";
 				} else {
-					$rate = $discount['discount'];
+					$rate = $discount['discount'] * 10;
 					$discount_credit = $credit * $rate;
 					$discount_str = "，该会员属于【{$_W['member']['groupname']}】，可享受【满{$discount['condition']}元打{$rate}折】，最终支付【{$discount_credit}】元";
 				}
@@ -331,7 +371,10 @@ if($do == 'consume') {
 		}
 		$log_credit2 = array(
 			$_W['member']['uid'],
-			"使用会员卡消费【{$credit}】元 {$discount_str},消费门店：{$store_str}"
+			"使用会员卡消费【{$credit}】元 {$discount_str},消费门店：{$store_str}",
+			'card',
+			0,
+			$store_id
 		);
 		mc_credit_update($_W['member']['uid'], 'credit2', -$discount_credit, $log_credit2);
 		mc_notice_credit2($_W['openid'], $_W['member']['uid'], -$discount_credit, $credit1, $store_str);
@@ -456,11 +499,21 @@ if($do == 'mobile') {
 			if(!preg_match(REGULAR_MOBILE, $mobile)) {
 				message('手机号格式有误', '', 'error');
 			}
+			$password = trim($_GPC['password']);
+			if(empty($password) || strlen($password) < 6) {
+				message('密码不能少于6位');
+			}
+			$repassword = trim($_GPC['repassword']);
+			if($password != $repassword) {
+				message('两次输入密码不一致');
+			}
 			$is_exist = pdo_fetch('SELECT uid FROM ' . tablename('mc_members') . ' WHERE uniacid = :uniacid AND mobile = :mobile AND uid != :uid', array(':uniacid' => $_W['uniacid'], ':mobile' => $mobile, ':uid' => $_W['member']['uid']));
 			if(!empty($is_exist)) {
 				message('该手机号已被绑定,换个手机号试试', '', 'error');
 			}
-			pdo_update('mc_members', array('mobile' => $mobile), array('uniacid' => $_W['uniacid'], 'uid' => $_W['member']['uid']));
+			$salt = random(8);
+			$password = md5($password . $salt . $_W['config']['setting']['authkey']);
+			pdo_update('mc_members', array('mobile' => $mobile, 'salt' => $salt, 'password' => $password), array('uniacid' => $_W['uniacid'], 'uid' => $_W['member']['uid']));
 			message('修改手机号成功', url('mc/home'), 'success');
 		}
 	}
@@ -543,6 +596,7 @@ if($do == 'email') {
 				pdo_update('activity_exchange_trades', array('uid' => $member['uid']), array('uid' => $_W['member']['uid'], 'uniacid' => $_W['uniacid']));
 				pdo_update('activity_exchange_trades_shipping', array('uid' => $member['uid']), array('uid' => $_W['member']['uid'], 'uniacid' => $_W['uniacid']));
 								pdo_update('mc_credits_record', array('uid' => $member['uid']), array('uid' => $_W['member']['uid'], 'uniacid' => $_W['uniacid']));
+				pdo_update('mc_card_members', array('uid' => $member['uid']), array('uid' => $_W['member']['uid'], 'uniacid' => $_W['uniacid']));
 			}
 			message('重新绑定帐号成功！', url('mc/home'), 'success');
 		}

@@ -24,7 +24,10 @@
 					<div class="dropdown-menu" aria-labelledby="dLabel">
 						<div class="topbar-notice-panel">
 							<div class="topbar-notice-arrow"></div>
-							<div class="topbar-notice-head">系统公告</div>
+							<div class="topbar-notice-head">
+								<span>系统公告</span>
+								<a href="{php echo url('article/notice-show/list');}" class="pull-right">更多公告>></a>
+							</div>
 							<div class="topbar-notice-body">
 								<ul id="notice-container"></ul>
 							</div>
@@ -146,7 +149,7 @@
 							$('.ext-type').click(function(){
 								var id = $(this).data('id');
 								util.cookie.del('ext_type');
-								util.cookie.set('ext_type', id, 7*86400);
+								util.cookie.set('ext_type', id, 8640000);
 								location.reload();
 								return false;
 							});

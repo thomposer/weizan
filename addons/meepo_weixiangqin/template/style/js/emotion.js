@@ -50,7 +50,7 @@ var form_smiley = (function () {
                     //}
                     //else {
                         $("#btnsend").addClass("on");
-                        sendMessage(AId, sWeimobId, type, val);
+                       sendMessage(sender, geter, type, val);
                    // }
 
                 }

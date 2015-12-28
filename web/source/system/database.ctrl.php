@@ -208,6 +208,9 @@ if($do == 'optimize') {
 	$totalsize = 0;
 	$ds = array();
 	foreach($tables as $ss) {
+		if ($ss['Engine'] == 'InnoDB') {
+			continue;
+		}
 		if(!empty($ss) && !empty($ss['Data_free'])) {
 			$row = array();
 			$row['title'] = $ss['Name'];

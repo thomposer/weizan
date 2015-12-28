@@ -52,15 +52,10 @@ zoom: 1;
 <ul >
 				<li class="active" onClick="navmove('#index','0')"><a href="javascript:void(0);" title="网站首页">网站首页</a></li>
 				<li onClick="navmove('#services','1')"><a href="javascript:void(0);" title="功能介绍">功能介绍</a></li>
-				<li onClick="navmove('#project','2')"><a href="javascript:void(0);" title="客户案例">客户案例</a></li>
-				<li onClick="navmove('#about','3')"><a href="http://bbs.012wz.com/plugin.php?id=qmx8_buy_usergroup:vip" title="价格体系">程序购买</a></li>
-                <li onClick="navmove('#news','4')"><a href="http://bbs.012wz.com/forum.php" title="程序下载">程序下载</a></li>
-            
+				<li onClick="navmove('#about','3')"><a href="{php echo url('article/news-show/list');}">新闻动态</a></li>
+				<li onClick="navmove('#services','2')"><a href="{php echo url('article/case-show/list');}">客户案例</a></li>
                 <li onClick="navmove('#login','4')"><a href="{url 'user/login'}" title="登陆">会员登陆</a></li>
-
-				<li onClick="navmove('#login','4')"><a href="{url 'user/register'}" title="注册">会员注册</a></li>
-
-             
+				<li onClick="navmove('#login','4')"><a href="{url 'user/register'}" title="注册">会员注册</a></li>            
 			</ul>
 		</div>
 
@@ -866,129 +861,34 @@ $(function(){
 	<div class="news clearbox">
 <div class="news_box fl">
 <div class="news_title">
-<a href="/" title="">微信开发 <span>News</span></a>
+<a href="/" title="">公司动态 <span>News</span></a>
 </div>
 <ul class="news_list" id="news_list">
-
-<div id="newslist1" class="area"><div id="frameMWNjKD" class="cl_frame_bm frame move-span cl frame-1"><div id="frameMWNjKD_left" class="column frame-1-c"><div id="frameMWNjKD_left_temp" class="move-span temp"></div><div id="portal_block_3" class="block move-span"><div id="portal_block_3_content" class="dxb_bc"><li>
-<span> 2014-01-20</span>
-
-<a href="/index.php?g=Home&m=Index&a=fc#site" target="_blank">【微官网】5分钟轻松建站打造酷炫微官网</a>
-</li><li>
-<span> 2014-01-20</span>
-
-<a href="/index.php?g=Home&m=Index&a=fc#member" target="_blank">【会员卡】方便携带&nbsp;永不挂失</a>
-</li><li>
-<span> 2014-01-20</span>
-
-<a href="/index.php?g=Home&m=Index&a=fc#activities" target="_blank">【微活动】吸引用户参与增强用户沉淀</a>
-</li><li>
-<span> 2014-01-20</span>
-
-<a href="/index.php?g=Home&m=Index&a=fc#push" target="_blank">【微推送】无线周边推广提高品牌知名度</a>
-</li><li>
-<span> 2014-01-20</span>
-
-<a href="/index.php?g=Home&m=Index&a=fc#services" target="_blank">【微服务】提供生活服务增加用户粘性</a>
-</li><li>
-<span> 2014-01-20</span>
-
-<a href="/index.php?g=Home&m=Index&a=fc#message" target="_blank">【微留言】意见？需求？疑问？一键留言&nbsp;&nbsp;一键回复</a>
-</li><li>
-<span> 2014-01-20</span>
-
-<a href="/index.php?g=Home&m=Index&a=fc#photo" target="_blank">【微相册】各行各业照片展现轻松搞定</a>
-</li><li>
-<span> 2014-01-20</span>
-
-<a href="/index.php?g=Home&m=Index&a=fc#menu" target="_blank">【自定义菜单】无需定制 完全自定义无需触发 完全可视化</a>
-</li><li>
-<span> 2014-01-20</span>
-
-<a href="/index.php?g=Home&m=Index&a=fc#research" target="_blank">【微调研】无需人力&nbsp;电子调研为市场调研加一份有力数据</a>
-</li><li>
-<span> 2014-01-20</span>
-
-<a href="/index.php?g=Home&m=Index&a=fc#addup" target="_blank">【微统计】折线图清晰查询数据助力企业营销</a>
-</li></div></div></div></div></div>		
+{loop $news $new}
+<li><a href="{php echo url('article/news-show/detail', array('id' => $new['id']));}" title="{$new['title']}" target="_blank">{$new['title']}</a></li>
+{/loop}		
 </ul>
 </div>
 <div class="news_line"></div>
 <div class="news_box fl">
 <div class="news_title">
-<a href="/" title="">微信营销 <span>Course</span></a>
+<a href="/" title="">客户案例 <span>Case</span></a>
 </div>
 <ul class="news_list" id="news_list">
-<div id="newslist2" class="area"><div id="frameWaH7YS" class="cl_frame_bm frame move-span cl frame-1"><div id="frameWaH7YS_left" class="column frame-1-c"><div id="frameWaH7YS_left_temp" class="move-span temp"></div><div id="portal_block_4" class="block move-span"><div id="portal_block_4_content" class="dxb_bc"><li>
-<span> 2014-01-20</span>
-<a title=" " href="/index.php?g=Home&m=Index&a=fc#estate"> [房产]行业有力的解决方案360度看房更给力</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" " href="/index.php?g=Home&m=Index&a=fc#car"> 预约试驾或保养 车主关怀360度看车应有尽有</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" " href="/index.php?g=Home&m=Index&a=fc#wedd"> 电子喜帖&nbsp;微信来袭提供用户特别服务</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" " href="/index.php?g=Home&m=Index&a=fc#medical"> 在线挂号或咨询了解病情 微信都可以</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" " href="/index.php?g=Home&m=Index&a=fc#hotels"> 在线订房融入微信酒店营销多一条有力途径</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" " href="/index.php?g=Home&m=Index&a=fc#reser"> 各种预约 一键即可短信邮件会立即通知商户</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" " href="/index.php?g=Home&m=Index&a=fc#vshop"> 小微信也有大商城电商轻松就能走入微信</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" " href=" /index.php?g=Home&m=Index&a=fc#cate"> 扫一扫微信也能够实时点餐</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" " href=" /"> 微信公众号建立商圈吃喝玩乐应有尽有</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" " href=" /"> 团购搬进微信公众平台同微信分享6亿用户</a>
-</li></div></div></div></div></div><!--[/diy]-->	
+{loop $case $case}
+<li><a href="{php echo url('article/case-show/detail', array('id' => $case['id']));}" title="{$case['title']}" target="_blank">[客户案例]-微信公众号:{$case['title']}</a></li>
+{/loop}	
 </ul>
 </div>
 <div class="news_line"></div>
 <div class="news_box fr">
 <div class="news_title">
-<a href="/" title="">微信资讯 <span>SEO</span></a>
+<a href="/" title="">公告资讯 <span>SEO</span></a>
 </div>
 <ul class="news_list" id="news_list">
-<div id="newslist3" class="area"><div id="frameOO7K4z" class="cl_frame_bm frame move-span cl frame-1"><div id="frameOO7K4z_left" class="column frame-1-c"><div id="frameOO7K4z_left_temp" class="move-span temp"></div><div id="portal_block_5" class="block move-span"><div id="portal_block_5_content" class="dxb_bc"><li>
-<span> 2014-01-20</span>
-<a title=" 一场盒子引发的血战" href="/"> 一场盒子引发的血战</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" 难挡刷票：新版12306网站图片验证码被破解" href="/"> 难挡刷票：新版12306网站图片验证码被破解</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" 跟上支付宝，财付通很快推出微信版余额宝" href="/"> 跟上支付宝，财付通很快推出微信版余额宝</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" 努力也没用，日专家称游戏时间越长成绩越差" href="/"> 努力也没用，日专家称游戏时间越长成绩越差</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" 最后倒计时，谷歌/微软比比谁找到圣诞老人" href="/"> 最后倒计时，谷歌/微软比比谁找到圣诞老人</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" LG电视促销好礼来袭 极致影音全家欢庆" href="/"> LG电视促销好礼来袭 极致影音全家欢庆</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" LG 4K超高清电视技术沟通会 诠释“至真4K”" href="/"> LG 4K超高清电视技术沟通会 诠释“至真4K”</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" “围剿”小米" href="/"> “围剿”小米</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" 技术宅的浪漫：五个月做这款游戏向女友求婚" href=" /"> 技术宅的浪漫：五个月做这款游戏向女友求婚</a>
-</li><li>
-<span> 2014-01-20</span>
-<a title=" iOS7完美越狱惹是非，黑锅不该由越狱来背" href=" /"> iOS7完美越狱惹是非，黑锅不该由越狱来背</a>
-</li></div></div></div></div></div>	
+{loop $notices $notice}
+<li><a href="{php echo url('article/case-show/detail', array('id' => $case['id']));}" title="{$case['title']}" target="_blank">[客户案例]-微信公众号:{$case['title']}</a></li>
+{/loop}	
 </ul>
 </div>
 </div>
@@ -1002,71 +902,5 @@ $(function(){
 		</div>
 	</div>
 </div>
-
-
 </div>
-<div class="foot_linksbg">
-<div class="foot_links">
-<div class="links">
-<h3>LINK</h3>
-<div class="links_con">
-<a href="/" target="_blank" title="邯郸微站建设">邯郸微站建设</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" target="_blank" title="包头微站建设">包头微站建设</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" target="_blank" title="南京微站建设">南京微站建设</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" target="_blank" title="长沙微站建设">长沙微站建设</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" target="_blank" title="邯郸微站建设">邯郸微站建设</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" target="_blank" title="长春微站建设">长春微站建设</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" target="_blank" title="深圳微站建设">深圳微站建设</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" target="_blank" title="成都微站建设">成都微站建设</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" target="_blank" title="上海网站设计公司">上海网站设计公司</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" target="_blank" title="微站建设">微站建设</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" target="_blank" title="深圳微站建设">深圳微站建设</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" target="_blank" title="北京微站建设">北京微站建设</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" target="_blank" title="南京微站建设">南京网建设</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" target="_blank" title="微博推广">微博推广</a>
-</div>
-</div>
-<div class="keyword">
-<h3>KEYWORD</h3>
-<div class="links_con">
-<a href="/" title="">微信营销</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" title="">微信公众号开发</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" title="">微机器人接口</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" title="">网站经营策划</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" title="">网站教程</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="/" title="">网页设计</a>
-</div>
-
-</div>
-<div class="address">
-<p><a href="/" title="">{$_W['setting']['copyright']['sitename']}团队</a></p>
-</div>
-<div class="link_btn">
-<ul >
-<li><a href="http://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDA4MzA3NV8yMTc1MThfODAwMDgzMDc1XzJf" target="_blank"title="" class="link_qq"></a></li>
-<li><a href="http://e.weibo.com/" title="" class="link_sina"></a></li>
-<li class="link_weixin_li"><a href="javasctipt:void(0);" title="" class="link_weixin"></a>
-<div class="link_weixin_ewm">
-<img src="./resource/weidongli/images/ewm.jpg" width="129" height="129" alt="">
-</div>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="footbg">
-<div class="foot">
-<p class="fl">Powered by <strong><a href="/" target="_blank">012wz.com</a></strong> <em>WEIZAN</em>&nbsp--&copy; 2001-2014 <a href="/" target="_blank"><a href="/" target="_blank">微赞</a></p>
-<p class="fr"><a href="/" title="">网站首页</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://www.012wz.com/wiki/" >WIKI</a>
-&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://bbs.012wz.com/plugin.php?id=qmx8_buy_usergroup:vip" >申请入住</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://www.012wz.com/" >微赞官网</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="http://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDA4MzA3NV8yMTc1MThfODAwMDgzMDc1XzJf" target="_blank">接口定制</a>&nbsp;|&nbsp;
-				<a href="http://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDA4MzA3NV8yMTc1MThfODAwMDgzMDc1XzJf" target="_blank">微信托管</a>&nbsp;|&nbsp;
-				<a href="http://bbs.012wz.com" target="_blank">微赞论坛</a>
-( <a href="http://www.miitbeian.gov.cn/" target="_blank">粤ICP备12011035号-12</a> )&nbsp;
-</p>
-</div>
-</div>
-</div>
-<div class="qqico">
- <a href="http://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDA4MzA3NV8yMTc1MThfODAwMDgzMDc1XzJf" title="点击立即咨询" target="_blank"><img src="./resource/weidongli/images/qqico.png" width="67" HEIGHT="65" class="png" ALT="点击立刻咨询"></a></div></div></div>
-
+{template 'common/footer-cms'}

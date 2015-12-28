@@ -1,10 +1,6 @@
 <?php
-
-/**
- * @url
- */
 defined('IN_IA') or exit('Access Denied');
-define("AMOUSE_HOUSE_RES", "../addons/amouse_house/style");
+define("AMOUSE_HOUSE_RES", "../addons/amouse_house/ui/");
 class Amouse_HouseModuleSite extends WeModuleSite {
 
     //首页
@@ -15,7 +11,7 @@ class Amouse_HouseModuleSite extends WeModuleSite {
         $weid=$_W['uniacid'];
         $openid=$_W['fans']['from_user'] ;
         $setting= $this->get_sysset($weid);
-        $followed = !empty($_W['openid']);
+        /*$followed = !empty($_W['openid']);
         if ($followed) {
             $mf = pdo_fetch("select follow from " . tablename('mc_mapping_fans') . " where openid=:openid limit 1", array(":openid" => $_W['openid']));
             $followed = $mf['follow'] == 1;
@@ -23,9 +19,13 @@ class Amouse_HouseModuleSite extends WeModuleSite {
         if(!$followed){
             $followurl = $setting['guanzhuUrl'];
             header("location:$followurl");
-        }
+        }*/
         $location_c= trim($setting['defcity']) ? trim($setting['defcity']) :'中国';
-        $condition= " WHERE weid='{$weid}' AND status='1' ";
+        $condition= " WHERE weid='{$weid}'";
+
+        if($setting && $setting['isadjuest']==0){
+            $condition .= " AND status='1' ";
+        }
         $type = $_GPC['type'];
         if ($type!='') {
             $condition .= " AND type = '".$type."'";
@@ -52,8 +52,10 @@ class Amouse_HouseModuleSite extends WeModuleSite {
         $a= !empty($_GPC['a']) ? $_GPC['a'] : 'rent';
         load()->func('file');
         load()->func('tpl');
-
+        $setting= $this->get_sysset($weid);
         $wxid= !empty($_GPC['wxid']) ? $_GPC['wxid'] : $_W['fans']['from_user'];
+
+
         $data = array(
             'weid'=> $_W['uniacid'],
             'title'=> trim($_GPC['title']),
@@ -65,7 +67,6 @@ class Amouse_HouseModuleSite extends WeModuleSite {
             'orientation'=> $_GPC['orientation'],
             'createtime'=> TIMESTAMP,
             'type'=> trim($_GPC['type']),
-            'status'=> 0,
             'recommed'=>0,
             'contacts'=> trim($_GPC['contacts']),
             'phone'=> trim($_GPC['phone']),
@@ -75,6 +76,7 @@ class Amouse_HouseModuleSite extends WeModuleSite {
             'thumb2' => $_GPC['thumb2'],
             'thumb3' => $_GPC['thumb3'],
             'thumb4' => $_GPC['thumb4'],
+            'brokerage'=>$_GPC['brokerage'],
             'location_p' => trim($_GPC['location_p']),
             'location_c' => trim($_GPC['location_c']),
             'location_a' => trim($_GPC['location_a']),
@@ -82,20 +84,56 @@ class Amouse_HouseModuleSite extends WeModuleSite {
             'lng' => trim($_GPC['lng']),
             'lat' => trim($_GPC['lat']),
         );
+        if($setting && $setting['isadjuest']==0){
+            $data['status'] =1;
+        }else{
+            $data['status'] =0;
+        }
         if($a == 'rent') {
+            load()->classs('weixin.account');
+            $accObj= WeixinAccount::create($_W['acid']);
             if ($_W['ispost']) {
                 pdo_insert('amouse_house',$data);
-                message('提交房产信息成功，请等待审核!',$this->createMobileUrl('index',array('type'=>$_GPC['type'])),'success');
+
+                if($setting && !empty($setting['openid'])) {
+                    $orderinfo .= '--------------------\n';
+                    $orderinfo .= "您有一条新的租售房产提交信息\n";
+                    $orderinfo .= "房产名称：{$data['title']}\n";
+                    $orderinfo .= "房产地址：{$data['place']}\n";
+                    $orderinfo .= "联系电话：{$data['phone']}\n";
+                    $send['msgtype'] = 'text';
+                    $send['text'] = array('content' => urlencode($orderinfo));
+
+                    $send['touser'] = trim($setting['openid']);
+                    $accObj->sendCustomNotice($send);
+                }
+
+                message('提交房产信息成功!',$this->createMobileUrl('index',array('type'=>$_GPC['type'])),'success');
             }
             include $this->template('house/rent_new');
         }elseif($a='house'){
             if ($_W['ispost']) {
                 pdo_insert('amouse_house',$data);
-                message('提交房产信息成功，请等待审核!',$this->createMobileUrl('index',array('type'=>$_GPC['type'])),'success');
+
+                if($setting && !empty($setting['openid'])) {
+                    $orderinfo .= '--------------------\n';
+                    $orderinfo .= "您有一条新的出售，求购房产提交信息\n";
+                    $orderinfo .= "房产名称：{$data['title']}\n";
+                    $orderinfo .= "房产地址：{$data['place']}\n";
+                    $orderinfo .= "联系电话：{$data['phone']}\n";
+                    $send['msgtype'] = 'text';
+                    $send['text'] = array('content' => urlencode($orderinfo));
+
+                    $send['touser'] = trim($setting['openid']);
+                    $accObj->sendCustomNotice($send);
+                }
+
+                message('提交房产信息成功!',$this->createMobileUrl('index',array('type'=>$_GPC['type'])),'success');
             }
             include $this->template('house/house_new');
         }
     }
+
 
     public function doMobileDetail(){
         global $_W,$_GPC;
@@ -244,110 +282,9 @@ class Amouse_HouseModuleSite extends WeModuleSite {
         }
     }
 
-    private function checkCookie() {
-        global $_W,$_GPC;
-        $weid=$_W['uniacid'];
-        $setting= $this->get_sysset($weid);
-        $oauth_openid= "amouse_house_zombie_".$weid;
-        if(empty($_COOKIE[$oauth_openid])) {
-            if(!empty($setting) && $setting['isoauth'] == '0') {
-                if(!empty($setting) && !empty($setting['appid']) && !empty($setting['appsecret'])) { // 判断是否是借用设置
-                    $appid= $setting['appid'];
-                    $secret= $setting['appsecret'];
-                }
-            }
-            $url =  $_W['siteroot']."app/".substr($this->createMobileUrl('userinfo',array(),true),2);
-            $oauth2_code = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$appid."&redirect_uri=".urlencode($url)."&response_type=code&scope=snsapi_userinfo&state=0#wechat_redirect";
-            header("location:$oauth2_code");
-            exit;
-        }
-    }
 
 
-    public function doMobileUserinfo() {
-        global $_GPC, $_W;
-        $weid= $_W['uniacid']; //当前公众号ID
-        load()->func('communication');
-        //用户不授权返回提示说明
-        if($_GPC['code'] == "authdeny") {
-            $url = $this->createMobileUrl('index', array(),true);
-            $url2 =  $_W['siteroot']."app/".substr($url,2);
-            header("location:$url2");
-            exit('authdeny');
-        }
-        //高级接口取未关注用户Openid
-        if(isset($_GPC['code'])) {
-            //第二步：获得到了OpenID
-            $serverapp= $_W['account']['level'];
-            $setting= $this->get_sysset($weid);
-            if(!empty($setting) && !empty($setting['appid']) && !empty($setting['appsecret'])) { // 判断是否是借用设置
-                $appid= $setting['appid'];
-                $secret= $setting['appsecret'];
-            }
-            $state= $_GPC['state'];
-            //1为关注用户, 0为未关注用户
-            $rid= $_GPC['id'];
-            //查询活动时间
-            $code= $_GPC['code'];
-            $oauth2_code= "https://api.weixin.qq.com/sns/oauth2/access_token?appid=".$appid."&secret=".$secret."&code=".$code."&grant_type=authorization_code";
-            $content= ihttp_get($oauth2_code);
-            $token= @ json_decode($content['content'], true);
-            if(empty($token) || !is_array($token)
-                || empty($token['access_token']) || empty($token['openid'])) {
-                echo '<h1>获取微信公众号授权'.$code.'失败[无法取得token以及openid], 请稍后重试！ 公众平台返回原始数据为: <br />'.$content['meta'].'<h1>';
-                exit;
-            }
-            $from_user= $token['openid'];
-            //未关注用户和关注用户取全局access_token值的方式不一样
-            if($state == 1) {
-                $oauth2_url= "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".$appid."&secret=".$secret."";
-                $content= ihttp_get($oauth2_url);
-                $token_all= @ json_decode($content['content'], true);
-                if(empty($token_all) || !is_array($token_all) || empty($token_all['access_token'])) {
-                    echo '<h1>获取微信公众号授权失败[无法取得access_token], 请稍后重试！ 公众平台返回原始数据为: <br />'.$content['meta'].'<h1>';
-                    exit;
-                }
-                $access_token= $token_all['access_token'];
-                $oauth2_url= "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$access_token."&openid=".$from_user."&lang=zh_CN";
-            } else {
-                $access_token= $token['access_token'];
-                $oauth2_url= "https://api.weixin.qq.com/sns/userinfo?access_token=".$access_token."&openid=".$from_user."&lang=zh_CN";
-            }
-
-            //使用全局ACCESS_TOKEN获取OpenID的详细信息
-            $content= ihttp_get($oauth2_url);
-            $info= @ json_decode($content['content'], true);
-            if(empty($info) || !is_array($info) || empty($info['openid']) || empty($info['nickname'])) {
-                echo '<h1>获取微信公众号授权失败[无法取得info], 请稍后重试！<h1>';
-                exit;
-            }
-
-            $row= array('nickname' => $info["nickname"], 'realname' => $info["nickname"], 'gender' => $info['sex']);
-            if(!empty($info["country"])) {
-                $row['nationality']= $info["country"];
-            }
-            if(!empty($info["province"])) {
-                $row['resideprovince']= $info["province"];
-            }
-            if(!empty($info["city"])) {
-                $row['residecity']= $info["city"];
-            }
-            if(!empty($info["headimgurl"])) {
-                $row['avatar']= $info["headimgurl"];
-            }
-            fans_update($info['openid'], $row);
-            $oauth_openid= "amouse_house_zombie_".$_W['uniacid'];
-            setcookie($oauth_openid, $info['openid'], time() + 3600 * 240);
-            $url =   $_W['siteroot']."app/".substr($this->createMobileUrl('index',array()),2);
-            header("location:$url");
-            exit;
-        } else {
-            echo '<h1>网页授权域名设置出错!</h1>';
-            exit;
-        }
-    }
-
-    //房产管理 //shizhongying qq:214983937
+    //房产管理 
     public function doWebHouse() {
         global $_GPC, $_W;
         load()->func('tpl');
@@ -364,7 +301,7 @@ class Amouse_HouseModuleSite extends WeModuleSite {
             $condition=" WHERE weid=:weid AND createtime>=:starttime AND createtime<=:endtime";
             $paras= array(':weid'=>$weid,':starttime' => $starttime, ':endtime' => $endtime);
             $status=$_GPC['status'];
-            $type = $_GPC['type'];  //类型 出租 ---
+            $type = $_GPC['type'];  //类型 出售新房 ---
             if ($status!='') {
                 $condition .= " AND status='".$status. "'";
             }
@@ -374,7 +311,9 @@ class Amouse_HouseModuleSite extends WeModuleSite {
             if(!empty($_GPC['title'])) {
                 $condition .= " AND title LIKE '%".$_GPC['title']."%'";
             }
+            
             $list= pdo_fetchall('SELECT * FROM '.tablename('amouse_house')." $condition ORDER BY createtime desc  LIMIT ".($pindex -1) * $psize.','.$psize, $paras);
+             
             $total= pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename('amouse_house').$condition, $paras);
             $pager= pagination($total, $pindex, $psize);
 
@@ -386,13 +325,13 @@ class Amouse_HouseModuleSite extends WeModuleSite {
                 }
                 message('审核成功！', $this->createWebUrl('house', array('op' => 'display', 'name' => 'amouse_house')), 'success');
             }
-        }elseif($op == 'recommed'){//推荐
+        }elseif($op == 'recommed'){//认证
             $id= intval($_GPC['id']);
             $recommed= intval($_GPC['recommed']);
             if($recommed==1){
-                $msg='推荐';
+                $msg='认证';
             }elseif($recommed==0){
-                $msg='取消推荐';
+                $msg='取消认证';
             }
             if($id > 0) {
                 pdo_update('amouse_house',array('recommed' =>$recommed), array('id' => $id)) ;
@@ -422,6 +361,8 @@ class Amouse_HouseModuleSite extends WeModuleSite {
                     'square_price'=> trim($_GPC['square_price']),
                     'area'=>trim($_GPC['area']),
                     'house_type'=> $_GPC['house_type'],
+                    'status'=> 1,
+                    'recommed'=>0,
                     'floor'=> trim($_GPC['floor']),
                     'orientation'=> $_GPC['orientation'],
                     'contacts'=> trim($_GPC['contacts']),
@@ -432,8 +373,11 @@ class Amouse_HouseModuleSite extends WeModuleSite {
                     'lng' => $_GPC['baidumap']['lng'],
                     'lat' => $_GPC['baidumap']['lat'],
                     'thumb1'=>trim($_GPC['thumb1']),
+                    'weid'=>$weid,
+                    'brokerage'=>$_GPC['brokerage'],
                     'thumb3'=>trim($_GPC['thumb3']),
                     'thumb2'=>trim($_GPC['thumb2']),
+                    'createtime'=> TIMESTAMP,
                     'introduction'=> trim($_GPC['introduction'])  );
 
                 if(empty($id)) {
@@ -604,17 +548,20 @@ class Amouse_HouseModuleSite extends WeModuleSite {
         load()->func('tpl');
         if(checksubmit('submit')) {
             $data= array(
-            'weid' => $weid,
-            'guanzhuUrl'=>trim($_GPC['guanzhuUrl']),
-            'copyright'=>trim($_GPC['copyright']),
-            'broker'=>trim($_GPC['broker']),
-            'jjrmobile'=>trim($_GPC['jjrmobile']),
-            'newflat_images'=>trim($_GPC['newflat_images']),
-            'appid_share'=>trim($_GPC['appid_share']),
-            'appsecret_share'=>trim($_GPC['appsecret_share']),
-            'isoauth' => trim($_GPC['isoauth']),
-            'defcity' => trim($_GPC['defcity']),
-            'isshow' => trim($_GPC['isshow'])
+                'weid' => $weid,
+                'guanzhuUrl'=>trim($_GPC['guanzhuUrl']),
+                'copyright'=>trim($_GPC['copyright']),
+                'broker'=>trim($_GPC['broker']),
+                'jjrmobile'=>trim($_GPC['jjrmobile']),
+                'newflat_images'=>trim($_GPC['newflat_images']),
+                'appid_share'=>trim($_GPC['appid_share']),
+                'appsecret_share'=>trim($_GPC['appsecret_share']),
+                'isoauth' => trim($_GPC['isoauth']),
+                'defcity' => trim($_GPC['defcity']),
+                'nickname'=>trim($_GPC['nickname']),
+                'openid' => trim($_GPC['openid']),
+                'isshow' => trim($_GPC['isshow']),
+                'isadjuest' => trim($_GPC['isadjuest'])
             );
             if($_GPC['isoauth']==0){
                 $data['appid']=trim($_GPC['appid']) ;
@@ -630,6 +577,7 @@ class Amouse_HouseModuleSite extends WeModuleSite {
             }
             message('更新参数设置成功！', 'refresh');
         }
+
         if(!isset($set['isoauth'])) {
             $set['isoauth']= 1;
             $set['isshow']= 1;

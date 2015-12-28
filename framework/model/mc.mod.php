@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 
@@ -207,31 +207,36 @@ function mc_fansinfo($openidOruid, $acid = 0, $uniacid = 0){
 }
 
 
-function mc_oauth_fans($openid, $acid){
-	$sql = 'SELECT `openid`, `uid` FROM '.tablename('mc_oauth_fans').' WHERE oauth_openid=:openid';
-	$params = array(':openid' => $openid);
-	$fan = pdo_fetch($sql, $params);
+function mc_oauth_fans($openid, $acid = 0){
+	$condition = array();
+	$condition['oauth_openid'] = $openid;
+	if (!empty($acid)) {
+		$condition['acid'] = $acid;
+	}
+	$fan = pdo_get('mc_oauth_fans', $condition, array('openid', 'uid'));
 	return $fan;
 }
 
 
 function mc_oauth_userinfo($acid = 0) {
 	global $_W;
-
 	if (isset($_SESSION['userinfo'])) {
 		$userinfo = unserialize(base64_decode($_SESSION['userinfo']));
-		return $userinfo;
+		if (!empty($userinfo['subscribe']) || !empty($userinfo['nickname'])) {
+			return $userinfo;
+		}
 	}
-
 	if ($_W['container'] != 'wechat') {
 		return array();
 	}
-
 		if (!empty($_SESSION['openid']) && intval($_W['account']['level']) >= 3) {
 		$oauth_account = WeAccount::create($_W['account']['oauth']);
 		$userinfo = $oauth_account->fansQueryInfo($_SESSION['openid']);
 		if (!is_error($userinfo) && !empty($userinfo) && is_array($userinfo) && !empty($userinfo['nickname'])) {
 			$userinfo['nickname'] = stripcslashes($userinfo['nickname']);
+			if (!empty($userinfo['headimgurl'])) {
+				$userinfo['headimgurl'] = rtrim($userinfo['headimgurl'], '0') . 132;
+			}
 			$userinfo['avatar'] = $userinfo['headimgurl'];
 			$_SESSION['userinfo'] = base64_encode(iserializer($userinfo));
 
@@ -278,8 +283,8 @@ function mc_oauth_userinfo($acid = 0) {
 				if (empty($member['nationality']) && !empty($userinfo['country'])) {
 					$record['nationality'] = $userinfo['country'];
 				}
-				if (empty($member['avatar']) && !empty($userinfo['avatar'])) {
-					$record['avatar'] = rtrim($userinfo['avatar'], '0') . 132;
+				if (empty($member['avatar']) && !empty($userinfo['headimgurl'])) {
+					$record['avatar'] = $userinfo['headimgurl'];
 				}
 				if (!empty($record)) {
 					pdo_update('mc_members', $record, array('uid' => intval($uid)));
@@ -458,7 +463,7 @@ function mc_credit_update($uid, $credittype, $creditval = 0, $log = array()) {
 		return true;
 	}
 	$value = pdo_fetchcolumn("SELECT $credittype FROM " . tablename('mc_members') . " WHERE `uid` = :uid", array(':uid' => $uid));
-	if ($creditval > 0 || ($value + $creditval >= 0)) {
+	if ($creditval > 0 || ($value + $creditval >= 0) || $credittype == 'credit6') {
 		pdo_update('mc_members', array($credittype => $value + $creditval), array('uid' => $uid));
 	} else {
 		return error('-1', "积分类型为“{$credittype}”的积分不够，无法操作。");
@@ -486,7 +491,7 @@ function mc_credit_update($uid, $credittype, $creditval = 0, $log = array()) {
 
 function mc_credit_fetch($uid, $types = array()) {
 	if (empty($types) || $types == '*') {
-		$select = 'credit1,credit2,credit3,credit4,credit5';
+		$select = 'credit1,credit2,credit3,credit4,credit5,credit6';
 	} else {
 		$struct = mc_credit_types();
 		foreach ($types as $key => $type) {
@@ -501,7 +506,7 @@ function mc_credit_fetch($uid, $types = array()) {
 
 
 function mc_credit_types(){
-	static $struct = array('credit1','credit2','credit3','credit4','credit5');
+	static $struct = array('credit1','credit2','credit3','credit4','credit5','credit6');
 	return $struct;
 }
 
@@ -521,7 +526,7 @@ function _mc_login($member) {
 	global $_W;
 
 	if (!empty($member) && !empty($member['uid'])) {
-		$sql = 'SELECT `uid`,`mobile`,`email`,`groupid`,`credit1`,`credit2` FROM ' . tablename('mc_members') . ' WHERE `uid`=:uid AND `uniacid`=:uniacid';
+		$sql = 'SELECT `uid`,`mobile`,`email`,`groupid`,`credit1`,`credit2`,`credit6` FROM ' . tablename('mc_members') . ' WHERE `uid`=:uid AND `uniacid`=:uniacid';
 		$member = pdo_fetch($sql, array(':uid' => $member['uid'], ':uniacid' => $_W['uniacid']));
 		if (!empty($member) && (!empty($member['mobile']) || !empty($member['email']))) {
 			$_W['member'] = $member;
@@ -708,15 +713,21 @@ function mc_openid2uid($openid) {
 }
 
 
-function mc_group_update() {
+function mc_group_update($uid = 0) {
 	global $_W;
-	if(empty($_W['member']['uid'])) {
+	$uid = intval($uid);
+	if($uid <= 0) {
+		$uid = $_W['member']['uid'];
+		$user = $_W['member'];
+		$user['openid'] = $_W['openid'];
+	} else {
+		$user = pdo_fetch('SELECT uid, realname, credit1, credit6, groupid FROM ' . tablename('mc_members') . ' WHERE uniacid = :uniacid AND uid = :uid', array(':uniacid' => $_W['uniacid'], ':uid' => $uid));
+		$user['openid'] = pdo_fetchcolumn('SELECT openid FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND uid = :uid', array(':acid' => $_W['acid'], ':uid' => $uid));
+	}
+	if(empty($user)) {
 		return false;
 	}
-	$credit = intval($_W['member']['credit1']);
-	if(!$credit) {
-		$credit = pdo_fetchcolumn('SELECT credit1 FROM ' . tablename('mc_members') . ' WHERE uniacid = :uniacid AND uid = :uid', array(':uniacid' => $_W['uniacid'], ':uid' => $_W['member']['uid']));
-	}
+	$credit = $user['credit1'] + $user['credit6'];
 	$groups = $_W['uniaccount']['groups'];
 	if(empty($groups)) {
 		return false;
@@ -733,7 +744,7 @@ function mc_group_update() {
 			}
 		}
 	} else {
-				$now_group_credit = $data[$_W['member']['groupid']];
+				$now_group_credit = $data[$user['groupid']];
 		if($now_group_credit < $credit) {
 			foreach($data as $k => $da) {
 				if($credit >= $da) {
@@ -742,13 +753,14 @@ function mc_group_update() {
 			}
 		}
 	}
-	if($groupid > 0 && $groupid != $_W['member']['groupid']) {
-		pdo_update('mc_members', array('groupid' => $groupid), array('uniacid' => $_W['uniacid'], 'uid' => $_W['member']['uid']));
-		mc_notice_group($_W['fans']['from_user'], $_W['member']['uid'], $_W['uniaccount']['groups'][$_W['member']['groupid']]['title'], $_W['uniaccount']['groups'][$groupid]['title']);
+	if($groupid > 0 && $groupid != $user['groupid']) {
+		pdo_update('mc_members', array('groupid' => $groupid), array('uniacid' => $_W['uniacid'], 'uid' => $uid));
+		mc_notice_group($user['openid'], $_W['uniaccount']['groups'][$user['groupid']]['title'], $_W['uniaccount']['groups'][$groupid]['title']);
 	}
+	$user['groupid'] = $groupid;
 	$_W['member']['groupid'] = $groupid;
 	$_W['member']['groupname'] = $_W['uniaccount']['groups'][$groupid]['title'];
-	return true;
+	return $user['groupid'];
 }
 
 function mc_notice_init() {
@@ -987,11 +999,8 @@ function mc_notice_credit1($openid, $uid, $credit1_num, $tip, $url = '', $remark
 	return $status;
 }
 
-function mc_notice_group($openid, $uid, $old_group, $now_group, $url = '', $remark = '点击查看详情') {
+function mc_notice_group($openid, $old_group, $now_group, $url = '', $remark = '点击查看详情') {
 	global $_W;
-	if(!$uid || empty($old_group) || empty($now_group)) {
-		return error(-1, '参数错误');
-	}
 	$acc = mc_notice_init();
 	if(is_error($acc)) {
 		return error(-1, $acc['message']);

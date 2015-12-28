@@ -30,7 +30,7 @@
 			<tbody>
 			{loop $permission $row}
 				<tr {if !empty($_GPC['fromuid']) && $_GPC['fromuid']== $row['uid']}style="background:#dddddd;"{/if}>
-					<td class="row-first">{if !in_array($member[$row['uid']]['uid'], $founders) && $row['role'] != 'owner'}<input class="member" type="checkbox" value="{$row['id']}" />{/if}</td>
+					<td class="row-first">{if !in_array($member[$row['uid']]['uid'], $founders) && $row['role'] != 'owner'}<input class="member" autocomplete="off" type="checkbox" value="{$row['id']}" />{/if}</td>
 					<td>{$row['uid']}</td>
 					<td>{$member[$row['uid']]['username']}</td>
 					<td>

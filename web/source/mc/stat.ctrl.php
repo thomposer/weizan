@@ -1,7 +1,7 @@
 <?php
 /**
- * [WeiZan System] Copyright (c) 2014 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('mc_member');
@@ -9,8 +9,7 @@ $dos = array('list', 'chart');
 $do = in_array($do, $dos) ? $do : 'chart';
 load()->model('mc');
 
-$now = strtotime(date('Y-m-d'));
-$starttime = empty($_GPC['time']['start']) ? $now - 30*86400 : strtotime($_GPC['time']['start']);
+$starttime = empty($_GPC['time']['start']) ? mktime(0, 0, 0, date('m') , 1, date('Y')) : strtotime($_GPC['time']['start']);
 $endtime = empty($_GPC['time']['end']) ? TIMESTAMP : strtotime($_GPC['time']['end']) + 86399;
 $num = ($endtime + 1 - $starttime) / 86400;
 
@@ -75,7 +74,7 @@ if($do == 'list') {
 	if($type != 'cash') {
 		$tablename = 'mc_credits_record';
 		$condition = ' WHERE uniacid = :uniacid AND credittype = :credittype AND createtime >= :starttime AND createtime <= :endtime';
-		$params = array('uniacid' => $_W['uniacid'], ':credittype' => $type, ':starttime' => $starttime, 'endtime' => $endtime);
+		$params = array(':uniacid' => $_W['uniacid'], ':credittype' => $type, ':starttime' => $starttime, ':endtime' => $endtime);
 		$num = intval($_GPC['num']);
 		if($num > 0) {
 			if($num == 1) {
@@ -98,7 +97,7 @@ if($do == 'list') {
 	} else {
 		$tablename = 'mc_cash_record';
 		$condition = ' WHERE uniacid = :uniacid AND createtime >= :starttime AND createtime <= :endtime';
-		$params = array('uniacid' => $_W['uniacid'], ':starttime' => $starttime, 'endtime' => $endtime);
+		$params = array(':uniacid' => $_W['uniacid'], ':starttime' => $starttime, ':endtime' => $endtime);
 		$min = intval($_GPC['min']);
 		if($min > 0 ) {
 			$condition .= ' AND abs(final_fee) >= :minnum';

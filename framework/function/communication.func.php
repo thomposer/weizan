@@ -36,11 +36,12 @@ function ihttp_request($url, $post = '', $extra = array(), $timeout = 60) {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		@curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt($ch, CURLOPT_HEADER, 1);
+		@curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
 		if ($post) {
 			if (is_array($post)) {
 				$filepost = false;
 				foreach ($post as $name => $value) {
-					if (substr($value, 0, 1) == '@' || (class_exists('CURLFile') && $value instanceof CURLFile)) {
+					if ((is_string($value) && substr($value, 0, 1) == '@') || (class_exists('CURLFile') && $value instanceof CURLFile)) {
 						$filepost = true;
 						break;
 					}

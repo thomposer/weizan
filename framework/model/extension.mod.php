@@ -35,122 +35,108 @@ function ext_module_convert($manifest) {
 
 
 function ext_module_manifest_parse($xml) {
+	if (!strexists($xml, '<manifest')) {
+		$xml = base64_decode($xml);
+	}
+	if (empty($xml)) {
+		return array();
+	}
 	$dom = new DOMDocument();
 	$dom->loadXML($xml);
-	if ($dom->schemaValidateSource(ext_module_manifest_validate())) {
-				$root = $dom->getElementsByTagName('manifest')->item(0);
-		$vcode = explode(',', $root->getAttribute('versionCode'));
-		$manifest['versions'] = array();
-		if (is_array($vcode)) {
-			foreach ($vcode as $v) {
-				$v = trim($v);
-				if (!empty($v)) {
-					$manifest['versions'][] = $v;
-				}
+		$root = $dom->getElementsByTagName('manifest')->item(0);
+	if (empty($root)) {
+		return array();
+	}
+	$vcode = explode(',', $root->getAttribute('versionCode'));
+	$manifest['versions'] = array();
+	if (is_array($vcode)) {
+		foreach ($vcode as $v) {
+			$v = trim($v);
+			if (!empty($v)) {
+				$manifest['versions'][] = $v;
 			}
-			$manifest['versions'][] = '0.52';
-			$manifest['versions'][] = '0.6';
-			$manifest['versions'] = array_unique($manifest['versions']);
 		}
-		$manifest['install'] = $root->getElementsByTagName('install')->item(0)->textContent;
-		$manifest['uninstall'] = $root->getElementsByTagName('uninstall')->item(0)->textContent;
-		$manifest['upgrade'] = $root->getElementsByTagName('upgrade')->item(0)->textContent;
-		$application = $root->getElementsByTagName('application')->item(0);
-		$manifest['application'] = array(
-			'name' => trim($application->getElementsByTagName('name')->item(0)->textContent),
-			'identifie' => trim($application->getElementsByTagName('identifie')->item(0)->textContent),
-			'version' => trim($application->getElementsByTagName('version')->item(0)->textContent),
-			'type' => trim($application->getElementsByTagName('type')->item(0)->textContent),
-			'ability' => trim($application->getElementsByTagName('ability')->item(0)->textContent),
-			'description' => trim($application->getElementsByTagName('description')->item(0)->textContent),
-			'author' => trim($application->getElementsByTagName('author')->item(0)->textContent),
-			'url' => trim($application->getElementsByTagName('url')->item(0)->textContent),
-			'setting' => trim($application->getAttribute('setting')) == 'true',
+		$manifest['versions'][] = '0.52';
+		$manifest['versions'][] = '0.6';
+		$manifest['versions'] = array_unique($manifest['versions']);
+	}
+	$manifest['install'] = $root->getElementsByTagName('install')->item(0)->textContent;
+	$manifest['uninstall'] = $root->getElementsByTagName('uninstall')->item(0)->textContent;
+	$manifest['upgrade'] = $root->getElementsByTagName('upgrade')->item(0)->textContent;
+	$application = $root->getElementsByTagName('application')->item(0);
+	$manifest['application'] = array(
+		'name' => trim($application->getElementsByTagName('name')->item(0)->textContent),
+		'identifie' => trim($application->getElementsByTagName('identifie')->item(0)->textContent),
+		'version' => trim($application->getElementsByTagName('version')->item(0)->textContent),
+		'type' => trim($application->getElementsByTagName('type')->item(0)->textContent),
+		'ability' => trim($application->getElementsByTagName('ability')->item(0)->textContent),
+		'description' => trim($application->getElementsByTagName('description')->item(0)->textContent),
+		'author' => trim($application->getElementsByTagName('author')->item(0)->textContent),
+		'url' => trim($application->getElementsByTagName('url')->item(0)->textContent),
+		'setting' => trim($application->getAttribute('setting')) == 'true',
+	);
+	$platform = $root->getElementsByTagName('platform')->item(0);
+	if (!empty($platform)) {
+		$manifest['platform'] = array(
+			'subscribes' => array(),
+			'handles' => array(),
+			'isrulefields' => false,
+			'iscard' => false,
 		);
-		$platform = $root->getElementsByTagName('platform')->item(0);
-		if (!empty($platform)) {
-			$manifest['platform'] = array(
-				'subscribes' => array(),
-				'handles' => array(),
-				'isrulefields' => false,
-				'iscard' => false,
+		$subscribes = $platform->getElementsByTagName('subscribes')->item(0);
+		if (!empty($subscribes)) {
+			$messages = $subscribes->getElementsByTagName('message');
+			for ($i = 0; $i < $messages->length; $i++) {
+				$t = $messages->item($i)->getAttribute('type');
+				if (!empty($t)) {
+					$manifest['platform']['subscribes'][] = $t;
+				}
+			}
+		}
+		$handles = $platform->getElementsByTagName('handles')->item(0);
+		if (!empty($handles)) {
+			$messages = $handles->getElementsByTagName('message');
+			for ($i = 0; $i < $messages->length; $i++) {
+				$t = $messages->item($i)->getAttribute('type');
+				if (!empty($t)) {
+					$manifest['platform']['handles'][] = $t;
+				}
+			}
+		}
+		$rule = $platform->getElementsByTagName('rule')->item(0);
+		if (!empty($rule) && $rule->getAttribute('embed') == 'true') {
+			$manifest['platform']['isrulefields'] = true;
+		}
+		$card = $platform->getElementsByTagName('card')->item(0);
+		if (!empty($card) && $card->getAttribute('embed') == 'true') {
+			$manifest['platform']['iscard'] = true;
+		}
+	}
+	$bindings = $root->getElementsByTagName('bindings')->item(0);
+	if (!empty($bindings)) {
+		global $points;
+		if (!empty($points)) {
+			$ps = array_keys($points);
+			$manifest['bindings'] = array();
+			foreach ($ps as $p) {
+				$define = $bindings->getElementsByTagName($p)->item(0);
+				$manifest['bindings'][$p] = _ext_module_manifest_entries($define);
+			}
+		}
+	}
+		$permissions = $root->getElementsByTagName('permissions')->item(0);
+	if (!empty($permissions)) {
+		$manifest['permissions'] = array();
+		$items = $permissions->getElementsByTagName('entry');
+		for ($i = 0; $i < $items->length; $i++) {
+			$item = $items->item($i);
+			$row = array(
+				'title' => $item->getAttribute('title'),
+				'permission' => $item->getAttribute('do'),
 			);
-			$subscribes = $platform->getElementsByTagName('subscribes')->item(0);
-			if (!empty($subscribes)) {
-				$messages = $subscribes->getElementsByTagName('message');
-				for ($i = 0; $i < $messages->length; $i++) {
-					$t = $messages->item($i)->getAttribute('type');
-					if (!empty($t)) {
-						$manifest['platform']['subscribes'][] = $t;
-					}
-				}
+			if (!empty($row['title']) && !empty($row['permission'])) {
+				$manifest['permissions'][] = $row;
 			}
-			$handles = $platform->getElementsByTagName('handles')->item(0);
-			if (!empty($handles)) {
-				$messages = $handles->getElementsByTagName('message');
-				for ($i = 0; $i < $messages->length; $i++) {
-					$t = $messages->item($i)->getAttribute('type');
-					if (!empty($t)) {
-						$manifest['platform']['handles'][] = $t;
-					}
-				}
-			}
-			$rule = $platform->getElementsByTagName('rule')->item(0);
-			if (!empty($rule) && $rule->getAttribute('embed') == 'true') {
-				$manifest['platform']['isrulefields'] = true;
-			}
-			$card = $platform->getElementsByTagName('card')->item(0);
-			if (!empty($card) && $card->getAttribute('embed') == 'true') {
-				$manifest['platform']['iscard'] = true;
-			}
-		}
-		$bindings = $root->getElementsByTagName('bindings')->item(0);
-		if (!empty($bindings)) {
-			global $points;
-			if (!empty($points)) {
-				$ps = array_keys($points);
-				$manifest['bindings'] = array();
-				foreach ($ps as $p) {
-					$define = $bindings->getElementsByTagName($p)->item(0);
-					$manifest['bindings'][$p] = _ext_module_manifest_entries($define);
-				}
-			}
-		}
-				$permissions = $root->getElementsByTagName('permissions')->item(0);
-		if (!empty($permissions)) {
-			$manifest['permissions'] = array();
-			$items = $permissions->getElementsByTagName('entry');
-			for ($i = 0; $i < $items->length; $i++) {
-				$item = $items->item($i);
-				$row = array(
-					'title' => $item->getAttribute('title'),
-					'permission' => $item->getAttribute('do'),
-				);
-				if (!empty($row['title']) && !empty($row['permission'])) {
-					$manifest['permissions'][] = $row;
-				}
-			}
-		}
-		$crons = $root->getElementsByTagName('crons')->item(0);
-		if (!empty($crons)) {
-			$manifest['crons'] = array();
-			$items = $crons->getElementsByTagName('item');
-			for ($i = 0; $i < $items->length; $i++) {
-				$item = $items->item($i);
-				$dls = $item->getElementsByTagName('dl');
-				for ($j = 0; $j < $dls->length; $j++) {
-					$dl = $dls->item($j);
-					$row_c[$dl->getAttribute('name')] = $dl->getAttribute('value');
-				}
-				if (!empty($row_c['name']) && !empty($row_c['filename'])) {
-					$manifest['crons'][] = $row_c;
-				}
-			}
-		}
-	} else {
-		$err = error_get_last();
-		if ($err['type'] == 2) {
-			return $err['message'];
 		}
 	}
 	return $manifest;
@@ -909,4 +895,45 @@ function ext_module_script_clean($modulename, $manifest) {
 			unlink($moduleDir . $manifest['upgrade']);
 		}
 	}
+}
+
+
+function ext_module_msg_types() {
+	$mtypes = array();
+	$mtypes['text'] = '文本消息(重要)';
+	$mtypes['image'] = '图片消息';
+	$mtypes['voice'] = '语音消息';
+	$mtypes['video'] = '视频消息';
+	$mtypes['shortvideo'] = '小视频消息';
+	$mtypes['location'] = '位置消息';
+	$mtypes['link'] = '链接消息';
+	$mtypes['subscribe'] = '粉丝开始关注';
+	$mtypes['unsubscribe'] = '粉丝取消关注';
+	$mtypes['qr'] = '扫描二维码';
+	$mtypes['trace'] = '追踪地理位置';
+	$mtypes['click'] = '点击菜单(模拟关键字)';
+	$mtypes['view'] = '点击菜单(链接)';
+	$mtypes['merchant_order'] = '微小店消息';
+	return $mtypes;
+}
+
+function ext_check_module_subscribe($modulename) {
+	global $_W;
+	if (empty($modulename)) {
+		return true;
+	}
+	if (!is_array($_W['setting']['module_receive_ban'])) {
+		$_W['setting']['module_receive_ban'] = array();
+	}
+	
+	$response = ihttp_request($_W['siteroot'] . url('extension/subscribe/check', array('modulename' => $modulename)));
+	if (strexists($response['content'], 'success')) {
+		unset($_W['setting']['module_receive_ban'][$modulename]);
+		$module_subscribe_success = true;
+	} else {
+		$_W['setting']['module_receive_ban'][$modulename] = $modulename;
+		$module_subscribe_success = false;
+	}
+	setting_save($_W['setting']['module_receive_ban'], 'module_receive_ban');
+	return $module_subscribe_success;
 }

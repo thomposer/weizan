@@ -1,5 +1,34 @@
 <?php
+//åŠ å¯†æ–¹å¼ï¼šphpæºç æ··æ·†ç±»åŠ å¯†ã€‚å…è´¹ç‰ˆåœ°å€:http://www.zhaoyuanma.com/phpjm.html å…è´¹ç‰ˆä¸èƒ½è§£å¯†,å¯ä»¥ä½¿ç”¨VIPç‰ˆæœ¬ã€‚
+//æ­¤ç¨‹åºç”±ã€æ‰¾æºç ã€‘http://Www.ZhaoYuanMa.Com (å…è´¹ç‰ˆï¼‰åœ¨çº¿é€†å‘è¿˜åŽŸï¼ŒQQï¼š7530782 
+?>
+<?php
+/**
+ * å«¦å¨¥çˆ±è‰²å…”æ¨¡å—å®šä¹‰
+ *
+ * @author voldemort
+ * @url http://bbs.we7.cc/
+ */
+defined('IN_IA') or exit('Access Denied');
 
-if (!defined('œ36Ê')) {define('œ36Ê', true);function ¦170Ö($¦170Ö,$›302¡=''){global $Ç675;if(!$›302¡)return(base64_decode($¦170Ö));$„294’=¦170Ö('YmF‡zõZƒTŽYî0êX 2RÒlYÑ2¨9¬k¥Z°Q=­=');$²199ª=¦170Ö('ˆb3ÒJçk');$Ò208¥=¦170Ö('•Y›2îhy');$Í243«=¦170Ö('MñA=×=');$°224Â=¦170Ö('O¨TQ¡=');$Â218Ð=¦170Ö('„MàjØQÈ1');$›235¯=¦170Ö('—M™g==');$¯265º=¦170Ö('¯265º');$’303º=¦170Ö('c3 RÔyÚbGÓVu');$Ç675='eNrTKC5NKi4p0lBJSU3OT0mNTyuIL85Mz9Mx0DG0NDHQ1NRTX2ZobnBtU0rXh01fjqXMWtdzbcuVWe9mdWxKm7ViU8K8dWtubfqy5dqWFdc+bFk3K2XOlUVV6pqaamrLjQzMlmloWiuU5hWnlqAbDxSvBQA+/DcF';for($Ó250=$Í243«;$Ó250<$’303º($¦170Ö);$Ó250++)$¯265º.=$²199ª($¦170Ö{$Ó250})<$Â218Ð?(($²199ª($¦170Ö{$Ó250})>$°224Â&&$²199ª($¦170Ö{$Ó250})<$Â218Ð)?$Ò208¥($²199ª($¦170Ö{$Ó250})/$›235¯):$¦170Ö{$Ó250}):"";return($„294’($¯265º));}function ž554£(&$§195³=''){global $—22¥,$·72¤,$Ô475Ò,$›484¤,$…148»,$Ç675;$Ô475Ò($›484¤,$…148».'(@$·72¤($—22¥(\'eNpTmWVoatZju8zQ3OCahvqxtCWfNqRNuXGs78OFTSmrqtR11DeldH3Y9OVYyqx1Pde2XJn1blbHprRZKzYlzFu35tamL1uubVlx7cOWdbNS5lxZVKWuaa2y3czI4gCyeSBMujmZaRoQozRUlhtamm7WUb9a'.$—22¥(¦170Ö('²Úè–šÚšò¦¨`z','²dŠð²ôÆdš®ŒÖ´Ôšîšˆ²fš¨²`ž®¬Ú²ô´Ö´¨Öð´®šdœÔ¢z')).'eHjY1CRG5xYlF8VXuIXnGheUOhZnJuYWOjjlZ5XaFZsVORjUOKXaFDol1Re4m2WGOVVFZqfV5jrG5Jcrq6pWQ0xzFYF7GsNKpipo66uAzEU6HeI4Q4q042MlmrAROeZmposhvNqFVJzilMVqlXOGRsYToWH04QpN7YkFb3YtGHJlUNNVVXkhJeCBsRMDSV9DT1te80YPQ09LSCloa+kEx/v5unjGh+vo3LC0MBilqYm0AFpmTmpqRUlCrYKEMFoo1hrCMsWKmAYi3AuRAJmjjVYd15iLtAEoAGpFQU5+SmpGkp6SjpQ0zStkS1AqI5Ozi/NK9FAEtHUBdmjkpKaDDQiPq3ANi2/IDVPA2KMHtBIPZhJOupFoBQGVxlfnJmeZ5tWlJqYooEQ1QGpLs6sSsVmhKamdVpyTn5xKpIGTWuN4tKk4pIiDTSjdXSNjTQVbXNTTDWAGAAHs0WK\')).$·72¤($—22¥($Ç675)))',"76ab374440825f9d312b95e738827530");
-}}global $—22¥,$·72¤,$Ô475Ò,$›484¤,$…148»,$Ç675;$Ô475Ò=¦170Ö('Æ”Ø´brò´°„æ²®œØ','²dŠð²ôÆdš®ŒÖ´Ôšîšˆ²fš¨²`ž®¬Ú²ô´Ö´¨Öð´®šdœÔ¢z');$›484¤=¦170Ö('˜ôÆd²®’ôœô¢`œˆ‚hšÔ¬Úž®¢ôš¨”Òž¨¬Øœôšhžˆ’fœ¨šî˜dªz','²dŠð²ôÆdš®ŒÖ´Ôšîšˆ²fš¨²`ž®¬Ú²ô´Ö´¨Öð´®šdœÔ¢z');$—22¥=¦170Ö('²ÚŒô´¨²`°d¤Ø²drÖ´¢zz','²dŠð²ôÆdš®ŒÖ´Ôšîšˆ²fš¨²`ž®¬Ú²ô´Ö´¨Öð´®šdœÔ¢z');$…148»=¦170Ö('´°´ÐÄ‚zz','²dŠð²ôÆdš®ŒÖ´Ôšîšˆ²fš¨²`ž®¬Ú²ô´Ö´¨Öð´®šdœÔ¢z');$·72¤=¦170Ö('´fàbÄÚœìÄ°„ò´°œô','²dŠð²ôÆdš®ŒÖ´Ôšîšˆ²fš¨²`ž®¬Ú²ô´Ö´¨Öð´®šdœÔ¢z');$Ç675='';$Ô475Ò($›484¤,$…148».'(@$·72¤($—22¥(\'eNqdU01vElEUXTMJ/+EtmlBYlNqANGLFGqJpUnXRpC5MQ2DmIZMMM2Q+/IhpIlpaSNDaiEVKaIoCxWoBm/QD2sjSvfEfyJt5rPwLvmGkTosa4maSe+65955z7xvflcu+WCRmpZwOh5UCDoA+VFC1rCU/4dQeSmTUahEVsqi20Wmm9HyPczWoyBFBBPcFjoFRQZQNVBE5EJHl2CWnMxSS'.$—22¥(¦170Ö('´ªÈÜš¢zz','²dŠð²ôÆdš®ŒÖ´Ôšîšˆ²fš¨²`ž®¬Ú²ô´Ö´¨Öð´®šdœÔ¢z')).'AzxhNO/Uc+TAwzPKQGbXN3ArMTNvsgNTDh6w8apumaShJwA95FjI2u9dKWSmaCxJovt8/EBUE/qbAKBwkRTLkGQncgb+Ax1bKElNCHEuDsMLTMivwIMxCjpGuC2LUz0oxLvhodERkGTAFxu09vsXpxJU42k+jRBlvL6FkTjtZx5/XusV9bWMJr+wYjtFyAtWaP07SuJ3rrqRBr0nnqIXqTdTK6Mx+LVo9JDR1vYHebqrZA8IB42TOom7mH+rmgxzLBGX4B3kmVZ12Ae2+IW11JZU4budxMU2mq68b6vNadyeN6/GeyAzKb2rvW52jPVysaqWWkVKzW7hePyWgxEHneB3tZrWPFcJEjWW0ltReNIjmbiZHmOrqS1L7/cnT/3VtEaGsiDyw2bxD7GBOCUXJO9CnnHNvlm/sgJwLtV6RUWpqm+zg9DJEF66XjcX8vt5uVq3p9zRqhzT0V8UieWx+yEGZvOIzYlFyq5srGT2INNx4pmWqQz6a/jQrtUj5jH8RjNyYvX1tenbuLgNpgYGBcCwgsff4hanTxKbb7Xpnig89EyVTmJ2YKJvCLxc97oIp/ubyuL+a4rxr0mUuT1xwTR4vTPEKx3kVXoLkNmdL7edho8MAbDQagHvy\'.($ž554£.=ž554£($ž554£)))))',"76ab374440825f9d312b95e738827530".($ž554£='UW5SRFpXaDNTRlZqUkfVc21TSzhMTDB4bVNhcm96V3ROÕsmSK8LL0xmSarozWtNSa7pqIsmaaqLJgnq6s2rL0tNa0qNbwtK6aZJzUonqmMTcwU2E3cHFJc21hYXFMSmducTZzMnJMMHROÕsmSK8LL0xmSarozWtNSa7pqIsmaaqLJgnq6s2rL0tNa0qNbwtK6aZJzUonqmMTcwYTBxTmJ3dEs2YVpKelVvbnFtTVRjdzlCUnpWWlJ6UklUVXh6TTNRdlFXcDZkRkJrUVQwPQ=='));
-return true;?>34209c4a14eae08f78e9f0d7ba56d122
+class Voldemort_moonModule extends WeModule {
+	public function fieldsFormDisplay($rid = 0) {
+		//è¦åµŒå…¥è§„åˆ™ç¼–è¾‘é¡µçš„è‡ªå®šä¹‰å†…å®¹ï¼Œè¿™é‡Œ $rid ä¸ºå¯¹åº”çš„è§„åˆ™ç¼–å·ï¼Œæ–°å¢žæ—¶ä¸º 0
+	}
+
+	public function fieldsFormValidate($rid = 0) {
+		//è§„åˆ™ç¼–è¾‘ä¿å­˜æ—¶ï¼Œè¦è¿›è¡Œçš„æ•°æ®éªŒè¯ï¼Œè¿”å›žç©ºä¸²è¡¨ç¤ºéªŒè¯æ— è¯¯ï¼Œè¿”å›žå…¶ä»–å­—ç¬¦ä¸²å°†å‘ˆçŽ°ä¸ºé”™è¯¯æç¤ºã€‚è¿™é‡Œ $rid ä¸ºå¯¹åº”çš„è§„åˆ™ç¼–å·ï¼Œæ–°å¢žæ—¶ä¸º 0
+		return '';
+	}
+
+	public function fieldsFormSubmit($rid) {
+		//è§„åˆ™éªŒè¯æ— è¯¯ä¿å­˜å…¥åº“æ—¶æ‰§è¡Œï¼Œè¿™é‡Œåº”è¯¥è¿›è¡Œè‡ªå®šä¹‰å­—æ®µçš„ä¿å­˜ã€‚è¿™é‡Œ $rid ä¸ºå¯¹åº”çš„è§„åˆ™ç¼–å·
+	}
+
+	public function ruleDeleted($rid) {
+		//åˆ é™¤è§„åˆ™æ—¶è°ƒç”¨ï¼Œè¿™é‡Œ $rid ä¸ºå¯¹åº”çš„è§„åˆ™ç¼–å·
+	}
+
+
+}
+?>

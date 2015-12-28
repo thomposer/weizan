@@ -1,7 +1,7 @@
 <?php
 /**
- * [WeiZan System] Copyright (c) 2014 WeiZan.Com
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $uniacid = intval($_GPC['uniacid']);
@@ -24,6 +24,7 @@ if (!empty($acid)) {
 	pdo_delete('account', array('acid' => $acid));
 	pdo_delete('account_wechats', array('acid' => $acid, 'uniacid' => $uniacid));
 	cache_delete("unicount:{$uniacid}");
+	cache_delete('account:auth:refreshtoken:'.$acid);
 	$oauth = uni_setting($uniacid, array('oauth'));
 	if($oauth['oauth']['account'] == $acid) {
 		$acid = pdo_fetchcolumn('SELECT acid FROM ' . tablename('account_wechats') . " WHERE uniacid = :id AND level = 4 AND secret != '' AND `key` != ''", array(':id' => $uniacid));
@@ -86,7 +87,7 @@ if (!empty($uniacid)) {
 		'activity_coupon_allocation','activity_coupon_modules','activity_coupon_password',
 		'activity_coupon_record','activity_exchange','activity_exchange_trades','activity_exchange_trades_shipping',
 		'activity_modules', 'core_attachment','core_paylog','core_queue','core_resource',
-		'core_wechats_attachment','coupon','coupon_location','coupon_modules',
+		'wechat_attachment','coupon','coupon_location','coupon_modules',
 		'coupon_record','coupon_setting','cover_reply', 'mc_card','mc_card_members','mc_chats_record','mc_credits_recharge','mc_credits_record',
 		'mc_fans_groups','mc_groups','mc_handsel','mc_mapping_fans','mc_mapping_ucenter','mc_mass_record',
 		'mc_member_address','mc_member_fields','mc_members','menu_event',

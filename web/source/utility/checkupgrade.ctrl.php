@@ -1,7 +1,7 @@
 <?php 
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 set_time_limit(0);
@@ -34,13 +34,17 @@ if ($do == 'system') {
 	$module = pdo_fetch("SELECT mid, name, version, title FROM " . tablename('modules') . " WHERE name = :name", array(':name' => $modulename));
 	if (!empty($module)) {
 		$info = cloud_m_info($modulename);
+		$manifest = ext_module_manifest($modulename);
+
+		if (is_error($info) && empty($manifest)) {
+			message($info, '', 'ajax');
+		}
 		if (!empty($info) && !empty($info['version']['version'])) {
 			if (ver_compare($module['version'], $info['version']['version'])) {
 				$upgrade = array('name' => $module['title'], 'version' => $info['version']['version'], 'upgrade' => 1, 'lastupdate' => TIMESTAMP);
 				message($upgrade, '', 'ajax');
 			}
 		} else {
-			$manifest = ext_module_manifest($modulename);
 			if (!empty($manifest)) {
 				if (ver_compare($module['version'], $manifest['application']['version'])) {
 					$upgrade = array('name' => $module['title'], 'version' => $manifest['application']['version'], 'upgrade' => 1, 'lastupdate' => TIMESTAMP);

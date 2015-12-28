@@ -76,11 +76,9 @@ if (empty($_W['openid']) && !empty($_SESSION['oauth_openid'])) {
 	);
 }
 $unisetting = uni_setting($_W['uniacid']);
-if ($_W['account']['level'] != 4) {
-	if (!empty($unisetting['oauth']['account'])) {
-		$oauth = account_fetch($unisetting['oauth']['account']);
-	}
-	if(!empty($oauth) && intval($oauth['level']) == 4) {
+if (!empty($unisetting['oauth']['account'])) {
+	$oauth = account_fetch($unisetting['oauth']['account']);
+	if (!empty($oauth) && $_W['account']['level'] <= $oauth['level']) {
 		$_W['oauth_account'] = $_W['account']['oauth'] = array(
 			'key' => $oauth['key'],
 			'secret' => $oauth['secret'],
@@ -88,8 +86,16 @@ if ($_W['account']['level'] != 4) {
 			'type' => $oauth['type'],
 			'level' => $oauth['level'],
 		);
+		unset($oauth);
+	} else {
+		$_W['oauth_account'] = $_W['account']['oauth'] = array(
+			'key' => $_W['account']['key'],
+			'secret' => $_W['account']['secret'],
+			'acid' => $_W['account']['acid'],
+			'type' => $_W['account']['type'],
+			'level' => $_W['account']['level'],
+		);
 	}
-	unset($oauth);
 } else {
 	$_W['oauth_account'] = $_W['account']['oauth'] = array(
 		'key' => $_W['account']['key'],
@@ -100,28 +106,28 @@ if ($_W['account']['level'] != 4) {
 	);
 }
 $_W['token'] = token();
-if (($_W['container'] == 'wechat' && !empty($_W['account']['oauth']) && !$_GPC['logout'] && empty($_W['openid']) && ($controller != 'auth' || ($controller == 'auth' && !in_array($action, array('forward', 'oauth'))))) ||
-	($_W['container'] == 'wechat' && !empty($_W['account']['oauth']) && !$_GPC['logout'] && empty($_SESSION['oauth_openid']) && ($controller != 'auth'))) {
-	$state = 'we7sid-'.$_W['session_id'];
-	if (empty($_SESSION['dest_url'])) {
-		$_SESSION['dest_url'] = urlencode($_W['siteurl']);
+if (!empty($_W['account']['oauth']) && $_W['account']['oauth']['level'] == '4') {
+	if (($_W['container'] == 'wechat' && !$_GPC['logout'] && empty($_W['openid']) && ($controller != 'auth' || ($controller == 'auth' && !in_array($action, array('forward', 'oauth'))))) ||
+		($_W['container'] == 'wechat' && !$_GPC['logout'] && empty($_SESSION['oauth_openid']) && ($controller != 'auth'))) {
+		$state = 'we7sid-'.$_W['session_id'];
+		if (empty($_SESSION['dest_url'])) {
+			$_SESSION['dest_url'] = urlencode($_W['siteurl']);
+		}
+		$str = '';
+		if(uni_is_multi_acid()) {
+			$str = "&j={$_W['acid']}";
+		}
+		$url = (!empty($unisetting['oauth']['host']) ? ($unisetting['oauth']['host'] . $sitepath . '/') : $_W['siteroot'] . 'app/') . "index.php?i={$_W['uniacid']}{$str}&c=auth&a=oauth&scope=snsapi_base";
+		$callback = urlencode($url);
+		$oauth_account = WeAccount::create($_W['account']['oauth']);
+		$forward = $oauth_account->getOauthCodeUrl($callback, $state);
+		header('Location: ' . $forward);
+		exit();
 	}
-	$str = '';
-	if(uni_is_multi_acid()) {
-		$str = "&j={$_W['acid']}";
-	}
-	$url = (!empty($unisetting['oauth']['host']) ? ($unisetting['oauth']['host'] . $sitepath . '/') : $_W['siteroot'] . 'app/') . "index.php?i={$_W['uniacid']}{$str}&c=auth&a=oauth&scope=snsapi_base";
-	$callback = urlencode($url);
-	$oauth_account = WeAccount::create($_W['account']['oauth']);
-	$forward = $oauth_account->getOauthCodeUrl($callback, $state);
-	header('Location: ' . $forward);
-	exit();
 }
-
 $_W['account']['groupid'] = $_W['uniaccount']['groupid'];
-$_W['account']['qrcode'] = "{$_W['attachurl_local']}qrcode_{$_W['acid']}.jpg?time={$_W['timestamp']}";
-$_W['account']['avatar'] = "{$_W['attachurl_local']}headimg_{$_W['acid']}.jpg?time={$_W['timestamp']}";
-
+$_W['account']['qrcode'] = tomedia('qrcode_'.$_W['acid'].'.jpg').'?time='.$_W['timestamp'];
+$_W['account']['avatar'] = tomedia('headimg_'.$_W['acid'].'.jpg').'?time='.$_W['timestamp'];
 if ($_W['container'] == 'wechat') {
 	if ($_W['account']['level'] < 3) {
 		if (!empty($unisetting['jsauth_acid'])) {

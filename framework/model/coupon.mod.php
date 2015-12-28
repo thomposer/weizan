@@ -160,20 +160,20 @@ function coupon_qr($data) {
 		return error(-1, '卡券id出错');
 	}
 	$coupon = new coupon($item['acid']);
-	$data = array(
+	$qrcode = array(
 		'action_name' => 'QR_CARD',
+		'expire_seconds' => "{$data['expire_seconds']}",
 		'action_info' => array(
 			'card' => array(
 				'card_id' => $item['card_id'],
 				'code' => '',
 				'openid' => '',
-				'expire_seconds' => "{$data['expire_seconds']}",
 				'is_unique_code' => false,
 				'outer_id' => $data['outer_id']
 			)
 		)
 	);
-	$return = $coupon->QrCard($data);
+	$return = $coupon->QrCard($qrcode);
 	return $return;
 }
 

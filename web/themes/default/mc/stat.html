@@ -21,15 +21,15 @@
 			<div class="account-stat-num row">
 				<div>今日充值总额<span>{$today_recharge}</span></div>
 				<div>今日消费总额<span>{php echo abs($today_consume);}</span></div>
-				<div>{php echo date('Y-m-d', $starttime);}~{php echo date('Y-m-d', $starttime);}<br>充值总额<span>{$total_recharge}</span></div>
-				<div>{php echo date('Y-m-d', $starttime);}~{php echo date('Y-m-d', $starttime);}<br>消费总额<span>{php echo abs($total_consume)}</span></div>
+				<div>{php echo date('Y-m-d', $starttime);}~{php echo date('Y-m-d', $endtime);}<br>充值总额<span>{$total_recharge}</span></div>
+				<div>{php echo date('Y-m-d', $starttime);}~{php echo date('Y-m-d', $endtime);}<br>消费总额<span>{php echo abs($total_consume)}</span></div>
 			</div>
 		</div>
 	{else}
 		<div class="panel-body">
 			<div class="account-stat-num row">
 				<div style="width:50%">今日消费总额<span>{php echo abs($today_consume);}</span></div>
-				<div style="width:50%">{php echo date('Y-m-d', $starttime);}~{php echo date('Y-m-d', $starttime);}<br>消费总额<span>{php echo abs($total_consume)}</span></div>
+				<div style="width:50%">{php echo date('Y-m-d', $starttime);}~{php echo date('Y-m-d', $endtime);}<br>消费总额<span>{php echo abs($total_consume)}</span></div>
 			</div>
 		</div>
 	{/if}
@@ -167,7 +167,7 @@
 			<div class="form-group">
 				<label class="col-xs-12 col-sm-3 col-md-2 control-label">消费时间</label>
 				<div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
-					{php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+					{php echo tpl_form_field_daterange('time', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
 				</div>
 			</div>
 			<div class="form-group">
@@ -208,7 +208,7 @@
 					<th>手机</th>
 					<th>类型</th>
 					<th>金额</th>
-					<th>消费门店</th>
+					<th width="200">消费门店</th>
 					<th>操作人</th>
 					<th>操作时间</th>
 					<th width="400">备注</th>
@@ -313,8 +313,6 @@
 	require(['bootstrap'],function($){
 		$('[data-toggle="popover"]').popover()
 	});
-
-
 </script>
 {/if}
 {template 'common/footer'}

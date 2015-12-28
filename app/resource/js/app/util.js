@@ -325,17 +325,14 @@ define(['bootstrap', 'webuploader' ], function($, WebUploader){
 			swf: './resource/componets/webuploader/Uploader.swf',
 			server: './index.php?i='+i+'&j='+j+'&c=utility&a=file&do=upload&type=image',
 			chunked: false,
-			compress: {
-				quality: 80,
-				preserveHeaders: true,
-				noCompressIfLarger: true,
-				compressSize: 1 * 1024 * 1024
-			},
+			compress: false,
 			fileNumLimit: 1,
 			fileSizeLimit: 4 * 1024 * 1024,
 			fileSingleSizeLimit: 4 * 1024 * 1024
 		};
-		
+		if (module.agent() == 'android') {
+			defaultOptions.sendAsBinary = true;
+		}
 		options = $.extend({}, defaultOptions, options);
 		
 		var uploader = WebUploader.create(options);
@@ -439,6 +436,19 @@ define(['bootstrap', 'webuploader' ], function($, WebUploader){
 			return this.prefix + name;
 		}
 	};//end cookie
+
+	module.agent = function() {
+		var agent = navigator.userAgent;
+		var isAndroid = agent.indexOf('Android') > -1 || agent.indexOf('Linux') > -1;
+		var isIOS = !!agent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+		if (isAndroid) {
+			return 'android';
+		} else if (isIOS) {
+			return 'ios';
+		} else {
+			return 'unknown'
+		}
+	};
 	return module;
 });
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -116,13 +116,26 @@ function uni_modules($enabledOnly = true) {
 	} else {
 		$groupid = $owner['groupid'];
 	}
+	$extend = pdo_getall('uni_account_group', array('uniacid' => $_W['uniacid']), array(), 'groupid');
+	if (!empty($extend)) {
+		$groupid = '-2';
+	}
 	if (empty($groupid)) {
 		$modules = pdo_fetchall("SELECT * FROM " . tablename('modules') . " WHERE issystem = 1 ORDER BY issystem DESC, mid ASC", array(), 'name');
 	} elseif ($groupid == '-1') {
 		$modules = pdo_fetchall("SELECT * FROM " . tablename('modules') . " ORDER BY issystem DESC, mid ASC", array(), 'name');
 	} else {
 		$group = pdo_fetch("SELECT id, name, package FROM ".tablename('users_group')." WHERE id = :id", array(':id' => $groupid));
-		$packageids = iunserializer($group['package']);
+		if (!empty($group)) {
+			$packageids = iunserializer($group['package']);
+		} else {
+			$packageids = array();
+		}
+		if (!empty($extend)) {
+			foreach ($extend as $extend_packageid => $row) {
+				$packageids[] = $extend_packageid;
+			}
+		}
 		if (in_array('-1', $packageids)) {
 			$modules = pdo_fetchall("SELECT * FROM " . tablename('modules') . " ORDER BY issystem DESC, mid ASC", array(), 'name');
 		} else {
@@ -240,6 +253,12 @@ function uni_templates() {
 	} else {
 		$group = pdo_fetch("SELECT id, name, package FROM ".tablename('users_group')." WHERE id = :id", array(':id' => $groupid));
 		$packageids = iunserializer($group['package']);
+		$extend = pdo_getall('uni_account_group', array('uniacid' => $_W['uniacid']), array(), 'groupid');
+		if (!empty($extend)) {
+			foreach ($extend as $extend_packageid => $row) {
+				$packageids[] = $extend_packageid;
+			}
+		}
 		if(!is_array($packageids)) {
 			return array();
 		}
@@ -260,7 +279,7 @@ function uni_templates() {
 				}
 				$mssql = " `id` IN ('".implode("','", $ms)."')";
 			}
-			$templates = pdo_fetchall("SELECT * FROM " . tablename('site_templates') . " WHERE {$mssql} ORDER BY id DESC", array(), 'id');
+			$templates = pdo_fetchall("SELECT * FROM " . tablename('site_templates') .(!empty($mssql) ? " WHERE $mssql" : '')." ORDER BY id DESC", array(), 'id');
 		}
 	}
 	if (empty($templates)) {
@@ -278,7 +297,6 @@ function uni_setting($uniacid = 0, $fields = '*', $force_update = false) {
 	if(!$force_update) {
 		$unisetting = cache_load($cachekey);
 	}
-
 	if (empty($unisetting)) {
 		$unisetting = pdo_fetch("SELECT * FROM " . tablename('uni_settings') . " WHERE uniacid = :uniacid", array(':uniacid' => $uniacid));
 		if (!empty($unisetting)) {
@@ -360,7 +378,7 @@ function uni_user_permission_check($permission_name, $is_html = true, $action = 
 	} elseif($action == 'cover' && $eid > 0) {
 		$entry = pdo_fetch('SELECT * FROM ' . tablename('modules_bindings') . ' WHERE `eid`=:eid', array(':eid' => $eid));
 		if(!empty($entry)) {
-			$permission_name = $m . '_cover_' . trim($entry['do']);
+			$permission_name = $entry['module'] . '_cover_' . trim($entry['do']);
 			$users_permission = uni_user_permission($entry['module']);
 		}
 	} elseif($action == 'nav') {

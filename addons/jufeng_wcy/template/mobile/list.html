@@ -11,15 +11,11 @@
 
 <div class="navbar3">
             <div class="nav2">
-            <a class="btn btn2 btn-default" href="{php echo $this->createMobileUrl('dianjia')}"><i class="glyphicon glyphicon-chevron-left"></i>店铺</a>
-            {if $pricetotal >= $category['sendprice']}
-            <a class="btn btn-warning check" href="{php echo $this->createMobileUrl('mycart',array('pcate'=>$_GPC['pcate'],'ccate'=>$_GPC['ccate']))}">
-            {else}
-            <a class="btn btn-success check" href="#">
-            {/if}
+            <a class="btn btn2 btn-default" href="{php echo $this->createMobileUrl('dianjia')}"><i class="glyphicon glyphicon-chevron-left"></i>店铺</a>            
+            <span  class="btn btn-warning check"  onclick="sucess();">
             <b class="between">{if $pricetotal >= $category['sendprice']}去结算
             {else}差￥{$between}起送{/if}</b>
-            </a>
+            </span>
              <span class=""><i class="icon-shopping-cart"></i><b class="img-circle pcateimg"></b><b class="centerimg">{if $pcatetotal > 0}份￥{/if}</b><b class="priceimg"></b></span>
             </div>
 </div>
@@ -126,6 +122,15 @@
     </script>
     {/loop}
 <script>
+function sucess(){
+	var price1=($(".priceimg").html());
+	var price2= <?php echo $category['sendprice'] ?>;
+	if(price1>=price2){
+		self.location= "<?php echo $this->createMobileUrl('mycart',array('pcate'=>$_GPC['pcate'],'ccate'=>$_GPC['ccate'])) ?>";
+		}else{
+			self.location= "#";
+			}
+	}
 function menuData(a) {
 	var a = $(a);
 	var e = 0;
@@ -186,6 +191,7 @@ var order = {
 						$('.pcateimg').html(s.message.pcatetotal);
 						$('.priceimg').html(s.message.pricetotal);
 						$('.centerimg').html("份¥");
+						
 				}
 				else{
 					$('.pcateimg').html("");

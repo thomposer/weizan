@@ -6,7 +6,6 @@
 	<li class="active"><a href="{php echo url('system/tools/scan');}">木马查杀</a></li>
 </ol>
 <ul class="nav nav-tabs">
-	<li><a href="{php echo url('system/tools');}">检测系统 BOM</a></li>
 	<li {if $op != 'display' && $op != 'view'}class="active"{/if}><a href="{php echo url('system/tools/scan');}">木马查杀</a></li>
 	<li {if $op == 'display'}class="active"{/if}><a href="{php echo url('system/tools/scan', array('op' => 'display'));}">查杀报告</a></li>
 	{if $op == 'view'}<li class="active"><a href="javascript:;">查看文件</a></li>{/if}

@@ -118,7 +118,7 @@ if($do == 'import') {
 				}
 				$reply = array(
 					'rid' => $rid,
-					'description' => $v['description'],
+					'description' => htmlspecialchars($v['description']),
 					'apiurl' => $key,
 					'token' => '',
 					'default_text' => '',

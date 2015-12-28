@@ -36,7 +36,7 @@
   <ul class="imgList">
   {if empty($result)}<li style="height:100px;width:100%"><span style="font-size:20px;color:red;height:60px">太遗憾了，你不喜欢任何人！<br><font style="color:#000;font-size:15px;background-color:#ffded5">你也太矫情了吧!</font></span></li>{else}
   {loop $result $row}  
-  <li><a class="linka" href="{php echo $this->createMobileUrl('others',array('openid'=>$row['from_user']))}" target="_blank"><img src="{if preg_match('/http:(.*)/',$row['avatar'])}{$row['avatar']} {else if preg_match('/images(.*)/',$row['avatar'])} ./resource/attachment/{$row['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" alt="头像"><span>{$row['nickname']}</span></a></li>
+  <li><a class="linka" href="{php echo $this->createMobileUrl('others',array('openid'=>$row['from_user']))}" target="_blank"><img src="{if preg_match('/http:(.*)/',$row['avatar'])}{$row['avatar']} {else if preg_match('/images(.*)/',$row['avatar'])} {$_W['attachurl']}{$row['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" alt="头像"><span>{$row['nickname']}</span></a></li>
   {/loop}
   {/if}
   </ul>

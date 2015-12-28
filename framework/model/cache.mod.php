@@ -99,6 +99,7 @@ function cache_build_frame_menu() {
 }
 
 function cache_build_module_subscribe_type() {
+	global $_W;
 	$modules = pdo_fetchall("SELECT name, subscribes FROM ".tablename('modules')." WHERE subscribes <> ''");
 	$subscribe = array();
 	if (!empty($modules)) {
@@ -114,7 +115,17 @@ function cache_build_module_subscribe_type() {
 			}
 		}
 	}
-	cache_write('modulesubscribes', $subscribe);
+	$module_ban = $_W['setting']['module_receive_ban'];
+	foreach ($subscribe as $event => $module_group) {
+		if (!empty($module_group)) {
+			foreach ($module_group as $index => $module) {
+				if (!empty($module_ban[$module])) {
+					unset($subscribe[$event][$index]);
+				}
+			}
+		}
+	}
+	cache_write('module_receive_enable', $subscribe);
 }
 
 function cache_build_platform() {

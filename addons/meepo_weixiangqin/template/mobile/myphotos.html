@@ -35,7 +35,7 @@
            {if !empty($photos)}
    
 	  {loop $photos $row}
-     <li class="father"><a id="del"  onclick="return confirm('确认删除吗？');return false;" href="{php echo $this->createMobileUrl('deletephotos',array('id'=>$row['id']))}">删除</a><img src="{$_W['siteroot']}attachment/{$row['url']}" id="btn">{if $row['status']!=1}<div class="loading" style="font-size:16px">待审核</div>{/if}</li>
+     <li class="father"><a id="del"  onclick="return confirm('确认删除吗？');return false;" href="{php echo $this->createMobileUrl('deletephotos',array('id'=>$row['id']))}">删除</a><img src="{$_W['siteroot']}attachment/{$row['url']}" id="btn"><input type="hidden" id="check{$row['id']}" value="{$_W['attachurl']}{$row['url']}" />{if $row['status']!=1}<div class="loading" style="font-size:16px">待审核</div>{/if}</li>
 	  {/loop}
    {/if}
                 
@@ -46,7 +46,7 @@
         <ul class="quick_pass">
             <li>1.单张照片不能超过1M且必须为JPG格式的图片</li>
             <li>2.上传过程中请不要离开当前页面</li>
-            <li>3.完善资料能够更多的通过审核哦！<span><a href="{php echo  $this->createMobileUrl('userinfo')}" class="bule">点我完善资料</a></span></li>
+            <li>3.完善资料能够更快的通过审核哦！<span><a href="{php echo  $this->createMobileUrl('userinfo')}" class="bule">点我完善资料</a></span></li>
         </ul>
     </section>
 </div>
@@ -115,47 +115,28 @@ top: 0;
     localId: [],
     serverId: []
   };
-  
-  document.querySelector('#add_photo').onclick = function () {
+  $("#add_photo").click(function(){
     wx.chooseImage({
-      success: function (res) {
-        images.localId = res.localIds;
-        alert('已选择 ' + res.localIds.length + ' 张图片');
-		if (images.localId.length == 0) {
-      alert('请先点击上传图片选择图片');
-      return;
-    }
-    var i = 0, length = images.localId.length;
-    images.serverId = [];
-    function upload() {
-      wx.uploadImage({
-        localId: images.localId[i],
         success: function (res) {
-          i++;
-          alert('已上传：' + i + '/' + length);
-          images.serverId.push(res.serverId);
-          if (i < length) {
-			  //alert(i);
-			downphotos(res.serverId);
-          
-			upload();
-          }else{
-			  //alert(res.serverId);
-		     downphotos(res.serverId);
-		  }
-		  
-        },
-        fail: function (res) {
-          alert(JSON.stringify(res));
+            var localIds = res.localIds;
+            syncUpload(localIds);
         }
-      });
-    }
-	
-    upload();
-      }
     });
-  };
-
+});
+var syncUpload = function(localIds){
+    var localId = localIds.pop();
+    wx.uploadImage({
+        localId: localId,
+        isShowProgressTips: 1,
+        success: function (res) {
+            var serverId = res.serverId; // 返回图片的服务器端ID
+            downphotos(serverId);
+            if(localIds.length > 0){
+                syncUpload(localIds);
+            }
+        }
+    });
+};
 function downphotos(id){
 	var cr = '';
    $.ajax({
@@ -166,7 +147,7 @@ function downphotos(id){
 			success:function(data){
 			   //alert(data);
                if(data != '0'){
-			         cr += '<li class="father"><img src="{$_W['attachurl']}' + data + '" id="btn"><div class="loading" style="font-size:16px">{if $cfg['isstatus']==0}sucess{else}待审核{/if}</div></li>';
+			         cr += '<li class="father"><img src="{$_W['attachurl']}' + data + '" id="btn"><input type="hidden" id="check{$row['id']}" value="{$_W['attachurl']}' + data + '" /><div class="loading" style="font-size:16px">{if $cfg['isstatus']==0}sucess{else}待审核{/if}</div></li>';
 					 $('#add_photo').after(cr);
 			   }else{
 			     alert('上传失败');
@@ -195,20 +176,26 @@ function send_intergal(){
 			}
 		});
 }
-document.querySelector('#btn').onclick = function () {
-    wx.previewImage({
-     
-      current: $(this).attr("src"),
-      urls: [
-		{loop $photoss $row}
-	        "{$_W['attachurl']}{$row['url']}",
-	    {/loop}
-	 ]
+$("#btn").live("click",function (event) {
+	var alli = new Array();
+	var newall = new Array();
+	var b = $(this).attr('src');
+	//var b = $('#check'+id).val();
+	var allp = $(".add_photo").children("li.father");
+	for(var j=0;j<allp.length;j++){
+			alli[j]=allp.eq(j).find("input").val();
+			
+			
+			newall.push(alli[j]);
+	}
+	
+	wx.previewImage({
+       
+      current:b,
+      urls: newall
 	
     });
-	 //alert(urls);
-  };
-
+});
         </script>
 
 

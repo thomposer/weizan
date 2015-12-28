@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * FTP基本操作：
  * 1) 登陆; 			connect
@@ -17,11 +17,12 @@ class Ftp {
 	private $username	= '';
 	private $password	= '';
 	private $port 		= 21;
-	private $passive 	= TRUE;
+	private $passive 	= 1;
 	private $debug		= TRUE;
 	private $conn_id 	= FALSE;
-	private $ssl 		= FALSE;
+	private $ssl 		= 0;
 	private $timeout	= 0;
+	private $rootdir 	= '';
 	
 	/**
 	 * 构造函数
@@ -65,8 +66,12 @@ class Ftp {
 			return FALSE;
 		}
 		
-		if($this->passive === TRUE) {
+		if(!empty($this->passive)) {
 			ftp_pasv($this->conn_id, TRUE);
+		}
+		
+		if (!empty($this->rootdir)) {
+			$this->chgdir($this->rootdir);
 		}
 		
 		return TRUE;
@@ -127,6 +132,17 @@ class Ftp {
 		return TRUE;
 	}
 	
+	public function mkdirs($path = '', $permissions = NULL) {
+		$targetpaths = explode('/', $path);
+		$dir = ''; $comma = '';
+		foreach($targetpaths as $pathitem) {
+			$dir .= $comma.$pathitem;
+			$comma = '/';
+			$return = $this->mkdir($dir);
+		}
+		return $return;
+	}
+	
 	/**
 	 * 上传
 	 *
@@ -141,23 +157,37 @@ class Ftp {
 		if( ! $this->_isconn()) {
 			return FALSE;
 		}
-		
 		if( ! file_exists($localpath)) {
 			if($this->debug === TRUE) {
 				$this->_error("ftp_no_source_file:".$localpath);
 			}
 			return FALSE;
 		}
-		
 		if($mode == 'auto') {
 			$ext = $this->_getext($localpath);
 			$mode = $this->_settype($ext);
 		}
-		
 		$mode = ($mode == 'ascii') ? FTP_ASCII : FTP_BINARY;
 		
-		$result = @ftp_put($this->conn_id, $remotepath, $localpath, $mode);
-		
+		$old_dir = $this->ftp_pwd();
+		$dirname = dirname($remotepath);
+		$filename = basename($remotepath);
+		if(!$this->chgdir($dirname)) {
+			if($this->mkdirs($dirname)) {
+				if(!$this->chgdir($dirname)) {
+					$this->_error("ftp_error_change_dir");
+				}
+			} else {
+				$this->_error("ftp_error_make_dir");
+				$this->set_error(FTP_ERR_MKDIR);
+			}
+		}
+		if($fp = @fopen($localpath, 'rb')) {
+			$result = ftp_fput($this->conn_id, $filename, $fp, $mode);
+			@fclose($fp);
+		} else {
+			$this->_error("ftp_error_read_file");
+		}
 		if($result === FALSE) {
 			if($this->debug === TRUE) {
 				$this->_error("ftp_unable_to_upload:localpath[".$localpath."]/remotepath[".$remotepath."]");
@@ -168,7 +198,7 @@ class Ftp {
 		if( ! is_null($permissions)) {
 			$this->chmod($remotepath,(int)$permissions);
 		}
-		
+		$this->chgdir($old_dir);
 		return TRUE;
 	}
 	
@@ -343,6 +373,13 @@ class Ftp {
 		return ftp_nlist($this->conn_id, $path);
 	}
 	
+	public function ftp_pwd() {
+		if( ! $this->_isconn()) {
+			return FALSE;
+		}
+		return @ftp_pwd($this->conn_id);
+	}
+	
 	/**
 	 * 关闭FTP
 	 *
@@ -461,6 +498,3 @@ class Ftp {
 	}
 
 }
-
-
-

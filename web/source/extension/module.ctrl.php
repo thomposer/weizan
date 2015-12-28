@@ -1,12 +1,13 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
 load()->model('extension');
 load()->model('cloud');
+load()->model('cache');
 load()->func('file');
 $dos = array('installed', 'check', 'prepared', 'install', 'upgrade', 'uninstall', 'designer', 'permission', 'batch-install', 'info');
 $do = in_array($do, $dos) ? $do : 'installed';
@@ -161,7 +162,7 @@ if($do == 'check') {
 					$mods[$k] = array('from' => 'cloud', 'version' => $v['version'], 'name' => $v['name']);
 				}
 			}
-			if(!empty($mods)) {
+			if (!empty($mods)) {
 				exit(json_encode($mods));
 			} else {
 				exit(json_encode(array('')));
@@ -261,7 +262,7 @@ if($do == 'permission') {
 	}
 	$module['isinstall'] = $isinstall;
 	$module['from'] = $from;
-	$mtypes = m_msg_types();
+	$mtypes = ext_module_msg_types();
 	$modtypes = module_types();
 	$issystem = $module['issystem'];
 	if($issystem) {
@@ -318,7 +319,7 @@ if($do == 'install') {
 	}
 
 	if (empty($manifest)) {
-		message('模块安装配置文件不存在或是格式不正确！', '', 'error');
+		message('模块安装配置文件不存在或是格式不正确，请刷新重试！', '', 'error');
 	}
 
 	manifest_check($modulename, $manifest);
@@ -348,6 +349,13 @@ if($do == 'install') {
 	$module['permissions'] = iserializer($module['permissions']);
 	
 
+	$module_subscribe_success = true;
+	if (!empty($module['subscribes'])) {
+		$subscribes = iunserializer($module['subscribes']);
+		if (!empty($subscribes)) {
+			$module_subscribe_success = ext_check_module_subscribe($module['name']);
+		}
+	}
 	if (pdo_insert('modules', $module)) {
 		if (strexists($manifest['install'], '.php')) {
 			if (file_exists($modulepath . $manifest['install'])) {
@@ -379,8 +387,13 @@ if($do == 'install') {
 		}
 		load()->model('module');
 		module_build_privileges();
+		cache_build_module_subscribe_type();
 		cache_build_account_modules();
-		message('模块安装成功, 请按照【公众号服务套餐】【用户组】来分配权限！', url('extension/module'), 'success');
+		if (empty($module_subscribe_success)) {
+			message('模块安装成功, 请按照【公众号服务套餐】【用户组】来分配权限！模块订阅消息有错误，系统已禁用该模块的订阅消息，详细信息请查看 <div><a class="btn btn-primary" style="width:80px;" href="' . url('extension/subscribe/subscribe') . '">订阅管理</a> &nbsp;&nbsp;<a class="btn btn-default" href="' . url('extension/module') . '">返回模块列表</a></div>', '', 'tips');
+		} else {
+			message('模块安装成功, 请按照【公众号服务套餐】【用户组】来分配权限！', url('extension/module'), 'success');
+		}
 	} else {
 		message('模块安装失败, 请联系模块开发者！');
 	}
@@ -416,7 +429,7 @@ if($do == 'uninstall') {
 					pdo_run($packet['uninstall']);
 				} elseif ($packet['scripts']) {
 					$uninstallFile = $modulepath . TIMESTAMP . '.php';
-					file_put_contents($uninstallFile, $packet['scripts']);
+					file_put_contents($uninstallFile, base64_decode($packet['scripts']));
 					include_once $uninstallFile;
 					unlink($uninstallFile);
 				}
@@ -433,6 +446,7 @@ if($do == 'uninstall') {
 				pdo_run($manifest['uninstall']);
 			}
 		}
+		cache_build_module_subscribe_type();
 		message('模块卸载成功！', url('extension/module'), 'success');
 	}
 }
@@ -446,21 +460,22 @@ if($do == 'upgrade') {
 
 	$type = $_GPC['type'];
 	$modulepath = IA_ROOT . '/addons/' . $id . '/';
-	$manifest = ext_module_manifest($module['name']);
+
+		if ($type == 'getinfo') {
+		$manifest = '';
+	} else {
+		$manifest = ext_module_manifest($module['name']);
+	}
+
 	if (empty($manifest)) {
 		$r = cloud_prepare();
 		if (is_error($r)) {
 			message($r['message'], url('cloud/profile'), 'error');
 		}
+
+		$info = cloud_m_upgradeinfo($id);
 	
-		if (is_file($modulepath . 'icon.jpg')) {
-			$module_token_file = file_get_contents($modulepath . 'icon.jpg');
-		} else {
-			$module_token_file = '';
-		}
-		$info = cloud_m_upgradeinfo($id, $module_token_file);
-	
-		if ($type == 'getinfo') {
+		if ($_W['isajax'] && $type == 'getinfo') {
 			message($info, '', 'ajax');
 		}
 		if (is_error($info)) {
@@ -565,6 +580,9 @@ if($do == 'upgrade') {
 	$module['permissions'] = iserializer($module['permissions']);
 	pdo_update('modules', $module, array('name' => $id));
 	cache_build_account_modules();
+	if (!empty($module['subscribes'])) {
+		$module_subscribe_success = ext_check_module_subscribe($module['name']);
+	}
 	if ($_GPC['flag'] == 1) {
 		message('模块更新成功！ <br> 由于数据库更新, 可能会产生多余的字段. 你可以按照需要删除.<div><a class="btn btn-primary" href="' . url('system/database/trim') . '">现在去删除</a>&nbsp;&nbsp;&nbsp;<a class="btn btn-default" href="' . url('extension/module/') . '">返回模块列表</a></div>', '', 'success');
 	} else {
@@ -583,7 +601,7 @@ if($do == 'designer') {
 	$available['download'] = class_exists('ZipArchive');
 	$available['create'] = @is_writable(IA_ROOT . '/addons');
 
-	$mtypes = m_msg_types();
+	$mtypes = ext_module_msg_types();
 	$modtypes = module_types();
 	$versions = array();
 	$versions[] = '0.6';
@@ -818,25 +836,6 @@ function manifest_check($id, $m) {
 	}
 }
 
-function m_msg_types() {
-	$mtypes = array();
-	$mtypes['text'] = '文本消息(重要)';
-	$mtypes['image'] = '图片消息';
-	$mtypes['voice'] = '语音消息';
-	$mtypes['video'] = '视频消息';
-	$mtypes['shortvideo'] = '小视频消息';
-	$mtypes['location'] = '位置消息';
-	$mtypes['link'] = '链接消息';
-	$mtypes['subscribe'] = '粉丝开始关注';
-	$mtypes['unsubscribe'] = '粉丝取消关注';
-	$mtypes['qr'] = '扫描二维码';
-	$mtypes['trace'] = '追踪地理位置';
-	$mtypes['click'] = '点击菜单(模拟关键字)';
-	$mtypes['view'] = '点击菜单(链接)';
-	$mtypes['merchant_order'] = '微小店消息';
-	return $mtypes;
-}
-
 function manifest($m) {
 	$versions = implode(',', $m['versions']);
 	$setting = $m['application']['setting'] ? 'true' : 'false';
@@ -872,7 +871,7 @@ function manifest($m) {
 	}
 	$tpl = <<<TPL
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns="{C_URL}" versionCode="{$versions}">
+<manifest xmlns="www.012wz.com" versionCode="{$versions}">
 	<application setting="{$setting}">
 		<name><![CDATA[{$m['application']['name']}]]></name>
 		<identifie><![CDATA[{$m['application']['identifie']}]]></identifie>
@@ -895,6 +894,8 @@ function manifest($m) {
 	</bindings>
 	<permissions>{$permissions}
 	</permissions>
+	<crons>{$crons}
+	</crons>
 	<install><![CDATA[{$m['install']}]]></install>
 	<uninstall><![CDATA[{$m['uninstall']}]]></uninstall>
 	<upgrade><![CDATA[{$m['upgrade']}]]></upgrade>

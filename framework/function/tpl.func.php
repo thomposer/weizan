@@ -15,6 +15,37 @@ function tpl_form_field_date($name, $value = '', $withtime = false) {
 	return _tpl_form_field_date($name, $value, $withtime);
 }
 
+function tpl_form_field_clock($name, $value = '') {
+	$s = '';
+	if(!defined('TPL_INIT_CLOCK_TIME')) {
+		$s .= '
+		<script type="text/javascript">
+			require(["clockpicker"], function($){
+				$(function(){
+					$(".clockpicker").clockpicker({
+						autoclose: true
+					});
+				});
+			});
+		</script>
+		';
+		define('TPL_INIT_CLOCK_TIME', 1);
+	}
+	$time = date('H:i');
+	if(!empty($value)) {
+		if(!strexists($value, ':')) {
+			$time = date('H:i', $value);
+		} else {
+			$time = $value;
+		}
+	}
+	$s .= '	<div class="input-group clockpicker">
+				<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+				<input type="text" name="'.$name.'" value="'.$time.'" class="form-control">
+			</div>';
+	return $s;
+}
+
 
 function tpl_form_field_daterange($name, $value = array(), $time = false) {
 	$s = '';

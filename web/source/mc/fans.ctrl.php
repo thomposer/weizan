@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('mc_fans');
@@ -184,7 +184,6 @@ if($do == 'display') {
 				}
 				if(!empty($v['tag']['headimgurl'])) {
 					$v['tag']['avatar'] = tomedia($v['tag']['headimgurl']);
-					unset($v['tag']['headimgurl']);
 				}
 			}
 			if(empty($v['tag'])) {

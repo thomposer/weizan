@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -134,7 +134,7 @@ if($do == 'module') {
 		}
 		unset($entries);
 		if(!empty($module['permissions'])) {
-			$module['permissions'] = iunserializer($module['permissions']);
+			$module['permissions'] = (array)iunserializer($module['permissions']);
 			$data = array_merge($data, $module['permissions']);
 		}
 		foreach($data as &$da) {

@@ -4,8 +4,6 @@
  */
 defined('IN_IA') or exit('Access Denied');
 class jufeng_wcyModuleSite extends WeModuleSite {
-
-	//----------------------------------------------------------------------------------------------------------------------------------------------
 public function sendmail($_title='',$_content='',$_tomail="",$_Host="",$_Username="",$_Password=""){
 		global $_W, $_GPC;
 		if(trim($_Host)=="smtp.qq.com"){
@@ -64,13 +62,22 @@ public function sendSelfFormatOrderInfo($device_no,$key,$times,$orderInfo){
 			return $this->sendSelfFormatMessage($selfMessage);
 }
 public function sendSelfFormatMessage($msgInfo){
+	/* 这里改了
 	$client = new HttpClient(FEIE_HOST,FEIE_PORT);
 	if(!$client->post('/FeieServer/printSelfFormatOrder',$msgInfo)){ //提交失败
 		return 'faild';
 	}
 	else{
 		return $client->getContent();
-	}
+	}*/
+	$client = new SoapClient("http://114.215.142.59:8080/kdtprint/services/printcenter?wsdl");
+	$client->soap_defencoding = 'UTF-8';  
+	$client->decode_utf8 = false;   
+	$client->xml_encoding = 'UTF-8'; 
+	$aryPara = array('deviceno'=> $msgInfo['clientCode'],'devicekey'=> $msgInfo['key'],'printid'=> strtotime("now"),'message'=> "^N".$msgInfo['printTimes']."\n".$msgInfo['printInfo']); 
+	$result = $client->addorder($aryPara);	
+	//var_dump($result); exit();
+	return $result;
 }
 public function queryOrderNumbersByTime($device_no,$date){
 		$msgInfo = array(
@@ -86,7 +93,8 @@ public function queryOrderNumbersByTime($device_no,$date){
 		return $result;
 	}
 }
-public function queryPrinterStatus($device_no){
+public function queryPrinterStatus($device_no,$device_key){
+	/*  这里改了
 	$client = new HttpClient(FEIE_HOST,FEIE_PORT);
 	if(!$client->get('/FeieServer/queryprinterstatus?clientCode='.$device_no)){ //请求失败
 		return 'faild';
@@ -94,7 +102,16 @@ public function queryPrinterStatus($device_no){
 	else{
 		$result = $client->getContent();
 		return $result;
-	}
+	} 
+	*/
+	$client = new SoapClient("http://114.215.142.59:8080/kdtprint/services/printcenter?wsdl");
+	$client->soap_defencoding = 'UTF-8';  
+	$client->decode_utf8 = false;   
+	$client->xml_encoding = 'UTF-8'; 
+	$aryPara = array('deviceno'=> $device_no,'devicekey'=> $device_key);  
+	$result = $client->getdevicestatus($aryPara);
+	$result = json_decode(json_encode( $result),true);
+	return $result;	
 }
 public function sendSMS($uid,$pwd,$mobile,$content,$time='',$mid='')
 {

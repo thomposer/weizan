@@ -19,6 +19,9 @@ function cache_memcache() {
 		} else {
 			$connect = $memcacheobj->connect($config['server'], $config['port']);
 		}
+		if(!$connect) {
+			return error(-1, 'Memcache is not in work');
+		}
 	}
 	return $memcacheobj;
 }

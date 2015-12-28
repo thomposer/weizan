@@ -26,7 +26,9 @@ require.config({
 		'json2' : '../lib/json2',
 		'wapeditor' : './wapeditor',
 		'jquery.wookmark': '../lib/jquery.wookmark.min',
-		'validator': '../lib/bootstrapValidator.min'
+		'validator': '../lib/bootstrapValidator.min',
+		'select2' : '../../components/select2/zh-CN',
+		'clockpicker': '../../components/clockpicker/clockpicker.min'
 	},
 	shim:{
 		'jquery.ui': {
@@ -102,7 +104,13 @@ require.config({
 		'validator': {
 			exports: "$",
 			deps: ['bootstrap']
+		},
+		'select2': {
+			deps: ['css!../../components/select2/select2.min.css', './resource/components/select2/select2.min.js']
+		},
+		'clockpicker': {
+			exports: "$",
+			deps: ['css!../../components/clockpicker/clockpicker.min.css', 'bootstrap']
 		}
-
 	}
 });

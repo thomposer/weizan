@@ -55,9 +55,8 @@ if($do == 'detail') {
 if($do == 'use') {
 		$card_id = trim($_GPC['card_id']);
 	$encrypt_code = trim($_GPC['encrypt_code']);
-	$signature = trim($_GPC['signature']);
 	$openid = trim($_GPC['openid']);
-	if(empty($card_id) || empty($encrypt_code) || empty($signature)) {
+	if(empty($card_id) || empty($encrypt_code)) {
 		message('卡券签名参数错误');
 	}
 	$card = pdo_get('coupon', array('acid' => $_W['acid'], 'card_id' => $card_id));
@@ -65,7 +64,7 @@ if($do == 'use') {
 		message('卡券不存在或已删除');
 	}
 	$card['date_info'] = iunserializer($card['date_info']);
-	$error_signature = $error_code = 0;
+	$error_code = 0;
 		$coupon = new coupon($_W['acid']);
 	if(is_null($coupon)) {
 		message('系统错误');
@@ -74,25 +73,24 @@ if($do == 'use') {
 	if(is_error($code)) {
 		$error_code = 1;
 	} else {
-				$data = array($card_id, $code['code'], $_W['account']['secret']);
-		sort($data, SORT_STRING);
-		$signature_tmp = sha1(implode($data));
-		if($signature_tmp != $signature) {
-			$error_signature = 1;
-		}
-		$record = pdo_get('coupon_record',  array('acid' => $_W['acid'], 'card_id' => $card_id, 'code' => $code));
+		$record = pdo_get('coupon_record',  array('acid' => $_W['acid'], 'card_id' => $card_id, 'code' => $code['code']));
 	}
+
 	if(checksubmit()) {
 		$password = trim($_GPC['password']);
 		$clerk = pdo_get('activity_coupon_password', array('uniacid' => $_W['uniacid'], 'password' => $password));
 		if(empty($clerk)) {
-			message('店员密码错误');
+			message('店员密码错误', referer(), 'error');
 		}
-				$status = $coupon->ConsumeCode(array('code' => $code['code']));
+		$code = $code['code'];
+		if(!$code) {
+			message('code码错误', referer(), 'error');
+		}
+				$status = $coupon->ConsumeCode(array('code' => $code));
 		if(is_error($status)) {
-			message($status['message']);
+			message($status['message'], referer(), 'error');
 		}
-		pdo_update('coupon_record', array('status' => 3, 'clerk_id' => $clerk['id'], 'clerk_name' => $clerk['name']), array('acid' => $_W['acid'], 'card_id' => $card_id, 'openid' => $openid, 'code' => $code));
+		pdo_update('coupon_record', array('status' => 3, 'clerk_id' => $clerk['id'], 'clerk_name' => $clerk['name'], 'usetime' => TIMESTAMP), array('acid' => $_W['acid'], 'card_id' => $card_id, 'openid' => $openid, 'code' => $code));
 		message('核销微信卡券成功', url('mc/home'), 'success');
 	}
 }
@@ -102,7 +100,7 @@ if($do == 'qr') {
 	$errorCorrectionLevel = "L";
 	$matrixPointSize = "5";
 	$id = intval($_GPC['id']);
-	$code = intval($_GPC['code']);
+	$code = trim($_GPC['code']);
 	$url = murl('clerk/wechat', array('uid' => $_W['member']['uid'], 'id' => $id, 'code' => $code), false, true);
 	QRcode::png($url, false, $errorCorrectionLevel, $matrixPointSize);
 	exit();

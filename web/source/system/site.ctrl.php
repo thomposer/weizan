@@ -1,18 +1,16 @@
 <?php 
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $dos = array('copyright');
 $do = in_array($do, $dos) ? $do : 'copyright';
-
-load()->model('setting');
-load()->func('tpl');
-$settings = setting_load('copyright');
-$settings = $settings['copyright'];
+$settings = $_W['setting']['copyright'];
 if(empty($settings) || !is_array($settings)) {
 	$settings = array();
+} else {
+	$settings['slides'] = iunserializer($settings['slides']);
 }
 
 if ($do == 'copyright') {
@@ -21,13 +19,18 @@ if ($do == 'copyright') {
 		$data = array(
 			'status' => $_GPC['status'],
 			'reason' => $_GPC['reason'],
+			'smname' => $_GPC['smname'],
 			'sitename' => $_GPC['sitename'],
 			'url' => strexists($_GPC['url'], 'http://') ? $_GPC['url'] : "http://{$_GPC['url']}",
+			'sitehost' => $_GPC['sitehost'],
 			'statcode' => htmlspecialchars_decode($_GPC['statcode']),
 			'footerleft' => htmlspecialchars_decode($_GPC['footerleft']),
 			'footerright' => htmlspecialchars_decode($_GPC['footerright']),
 			'icon' => $_GPC['icon'],
+			'ewm' => $_GPC['ewm'],
 			'flogo' => $_GPC['flogo'],
+			'slides' => iserializer($_GPC['slides']),
+			'notice' => $_GPC['notice'],
 			'blogo' => $_GPC['blogo'],
 			'baidumap' => $_GPC['baidumap'],
 			'company' => $_GPC['company'],

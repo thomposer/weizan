@@ -786,7 +786,7 @@
 				</div>
 			</div>
 			<div class="app-side">
-				<div ng-init="editorPanel = ('widget-'+(activeItem['id'].toLowerCase())+'-editor.html'.toLowerCase())" ng-show="activeItem.id == editorid" ng-repeat="editorid in editors" ng-include="editorPanel" id="editor{{editorid}}" class="editor"></div>
+				<div ng-init="editorPanel = ('widget-'+(editorid.toLowerCase())+'-editor.html'.toLowerCase())" ng-show="activeItem.id == editorid" ng-repeat="editorid in editors" ng-include="editorPanel" id="editor{{editorid}}" class="editor"></div>
 			</div>
 			<div class="shop-preview col-xs-12 col-sm-9 col-lg-10">
 				<div class="text-center alert alert-warning">

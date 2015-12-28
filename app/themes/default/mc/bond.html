@@ -47,10 +47,12 @@
 	.consume .record-box .pay-detail > div .state{font-size:13px; margin-top:5px; color:#999;}
 	.consume .list-group-item{background-color:#e1ecee;}
 	/*收货地址*/
-	.address,.address-edit{background:#FFF; padding:10px 15px;}
-	.address > a{text-decoration:none; margin-bottom:5px; border-bottom:1px #DDD solid; padding-bottom:5px; display:block;}
-	.address > a:last-child{border-bottom:0; margin-bottom:0;}
-	.address div{padding:0px; margin:0px;}
+	.address,.address-edit{padding:10px 15px; background:transparent url('resource/images/home-bg.jpg') no-repeat; background-size:100% 100%;}
+	.address > a{text-decoration:none; border-bottom:1px #DDD solid; padding:8px 0; display:block; color:#333;}
+	.address > a:last-child{border-bottom:0; color:#428bca;}
+	.address div{padding:0; margin:0;}
+	.address .info b{margin-right:15px;}
+	.address .address-details{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:12px; margin-top:5px;}
 	@media screen and (max-width: 767px) {.tpl-calendar div,.tpl-district-container div{margin-bottom:10px;}}
 </style>
 <script>
@@ -187,27 +189,26 @@
 {if $do == 'address' && empty($_GPC['addid'])}
 <div class="address">
 	{loop $addresses $address}
-	<a href="{php echo url('mc/bond/address', array('addid' => $address['id'], 'uid' => $address['openid']));}" class="list-item clearfix">
-		<div class="pull-left">
-			<div class="info" style="margin-bottom:5px;">
-				<b class="name">{$data['realname']}</b>&nbsp;&nbsp;&nbsp;&nbsp;{$data['mobile']}
+	<a href="{php echo url('mc/bond/addressadd', array('addid' => $address['id'], 'uid' => $address['openid']));}" class="list-item clearfix">
+		<div class="">
+			<div class="info">
+				<b class="name">{$address['username']}</b>{$address['mobile']}
 			</div>
-			<div class="address-details">
-				<div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-					{$address['province']} {$address['city']} {$address['district']} {$address['address']}
-					{if $address['isdefault'] > 0}
-					(默认收货地址)
-					{/if}
-				</div>
+			<div class="address-details text-muted">
+				{$address['province']} {$address['city']} {$address['district']} {$address['address']}
+				{if $address['isdefault'] > 0}
+				(默认收货地址)
+				{/if}
 			</div>
 		</div>
 	</a>
 	{/loop}
+	<a class="js-add text-center" href="{php echo url('mc/bond/addressadd')}" target="_blank"><i class="fa fa-plus-circle"></i> 添加收货地址</a>
 	{$pager}
 </div>
 {/if}
 <!--  编辑收货地址 -->
-{if $do == 'address' && !empty($_GPC['addid'])}
+{if $do == 'addressadd'}
 <div class="address-edit">
 	<div class="info">
 	<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
@@ -269,7 +270,9 @@
 		<div class="form-group" style="margin-bottom:0px;">
 			<div class="col-xs-12 card-img text-center">
 				<div class="card img-rounded">
+					{if !$setting['format_type']}
 					<div class="cardsn" style="color:{if !empty($setting['color']['number'])}{$setting['color']['number']}{/if}">卡号：{$setting['format']}</div>
+					{/if}
 					<div class="cardtitle" style="color:{if !empty($setting['color']['title'])}{$setting['color']['title']}{/if}">{if !empty($setting['title'])}{$setting['title']}{/if}</div>
 					<div class="cardlogo"><img src="{if !empty($setting['logo'])}{php echo tomedia($setting['logo'])}{else}../attachment/images/global/card/logo.png{/if}"></div>
 					<img class="cardbg"
@@ -331,6 +334,9 @@
 					<input type="hidden" name="format" value="{$setting['format']}" />
 					<input type="hidden" name="snpos"  value="{$setting['snpos']}" />
 					<button type="submit" class="btn btn-primary btn-block use" name="submit" value="领取会员卡">领取会员卡</button>
+					{if $reregister}
+						<a href="{php echo url('mc/bond/email');}" class="btn btn-danger btn-block" style="margin-top:15px">绑定已有会员</a>
+					{/if}
 					<input type="hidden" name="token" value="{$_W['token']}" />
 				</div>
 			</div>
@@ -397,9 +403,9 @@
 					<img class="cardbg"
 						 src="
 								 {if empty($setting['background']['image'])}
-									../attachment/images/global/card/1.png
+						{php echo tomedia('images/global/card/1.png')}
 								 {elseif $setting['background']['background'] == 'system'}
-								    ../attachment/images/global/card/{$setting['background']['image']}.png
+						{php echo tomedia('images/global/card/' . $setting['background']['image'] . '.png')}
 								 {else}
 								    {php echo tomedia($setting['background']['image']);}
 								 {/if}
@@ -826,6 +832,13 @@
 						<div class="form-group">
 							<input type="text" name="mobile" class="form-control" placeholder="手机号">
 						</div>
+						<div class="form-group">
+							<input type="password" name="password" class="form-control" placeholder="设置密码">
+							<span class="help-block">密码不能小于6位</span>
+						</div>
+						<div class="form-group">
+							<input type="password" name="repassword" class="form-control" placeholder="重复密码">
+						</div>
 					</div>
 				{/if}
 			</div>
@@ -857,6 +870,14 @@
 			{else}
 				if($.trim($('input[name="mobile"]').val()) == '' || !re.test($.trim($('input[name="mobile"]').val()))) {
 					u.message('原手机号格式有误');
+					return false;
+				}
+				if($.trim($('input[name="password"]').val()) == '' || $.trim($('input[name="mobile"]').val()).length < 6) {
+					u.message('密码不能少于6位');
+					return false;
+				}
+				if($.trim($('input[name="repassword"]').val()) != $.trim($('input[name="password"]').val())) {
+					u.message('两次密码输入不一致');
 					return false;
 				}
 				return true;

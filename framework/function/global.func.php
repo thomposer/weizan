@@ -79,13 +79,16 @@ function token($specialadd = '') {
 		return substr(md5($_W['config']['setting']['authkey'] . $specialadd), 8, 8);
 	} else {
 		if(!empty($_SESSION['token'])) {
+			$count  = count($_SESSION['token']) - 5;
+			asort($_SESSION['token']);
 			foreach($_SESSION['token'] as $k => $v) {
-				if(TIMESTAMP - $v > 300) {
+				if(TIMESTAMP - $v > 300 || $count > 0) {
 					unset($_SESSION['token'][$k]);
+					$count--;
 				}
 			}
 		}
-		$key = substr(random(20), 0, 8);
+		$key = substr(random(20), 0, 4);
 		$_SESSION['token'][$key] = TIMESTAMP;
 		return $key;
 	}
@@ -145,14 +148,9 @@ function checkcaptcha($code) {
 
 function tablename($table) {
 	if(empty($GLOBALS['_W']['config']['db']['master'])) {
-		$GLOBALS['_W']['config']['db']['master'] = $GLOBALS['_W']['config']['db'];
+		return "`{$GLOBALS['_W']['config']['db']['tablepre']}{$table}`";
 	}
-	$db = &$GLOBALS['_W']['config']['db'];
-	$db['slave_except'] = false;
-	if($db['slave_status'] == true && !empty($db['common']['slave_except_table']) && in_array($table, $db['common']['slave_except_table'])) {
-		$db['slave_except'] = true;
-	}
-	return "`{$db['master']['tablepre']}{$table}`";
+	return "`{$GLOBALS['_W']['config']['db']['master']['tablepre']}{$table}`";
 }
 
 
@@ -436,13 +434,18 @@ function tomedia($src, $local_path = false){
 	if (strpos($src, './addons') === 0) {
 		return $_W['siteroot'] . str_replace('./', '', $src);
 	}
+	if (strexists($src, $_W['siteroot']) && !strexists($src, '/addons/')) {
+		$urls = parse_url($src);
+		$src = $t = substr($urls['path'], strpos($urls['path'], 'images'));
+	}
 	$t = strtolower($src);
-	if (!strexists($t, 'http://') && !strexists($t, 'https://')) {
-		if(!$local_path) {
-			$src = $_W['attachurl'] . $src;
-		} else {
-			$src = $_W['siteroot'] . $_W['config']['upload']['attachdir'] . '/' . $src;
-		}
+	if (strexists($t, 'http://') || strexists($t, 'https://')) {
+		return $src;
+	}
+	if ($local_path || empty($_W['setting']['remote']['type']) || file_exists(IA_ROOT . '/' . $_W['config']['upload']['attachdir'] . '/' . $src)) {
+		$src = $_W['siteroot'] . $_W['config']['upload']['attachdir'] . '/' . $src;
+	} else {
+		$src = $_W['attachurl_remote'] . $src;
 	}
 	return $src;
 }
@@ -801,7 +804,7 @@ function media2local($media_id, $all = false){
 	if (empty($media_id)) {
 		return '';
 	}
-	$data = pdo_fetch('SELECT * FROM ' . tablename('core_wechats_attachment') . ' WHERE uniacid = :uniacid AND media_id = :id', array(':uniacid' => $_W['uniacid'], ':id' => $media_id));
+	$data = pdo_fetch('SELECT * FROM ' . tablename('wechat_attachment') . ' WHERE uniacid = :uniacid AND media_id = :id', array(':uniacid' => $_W['uniacid'], ':id' => $media_id));
 	if (!empty($data)) {
 		$data['attachment'] = tomedia($data['attachment'], true);
 		if (!$all) {

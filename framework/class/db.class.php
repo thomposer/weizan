@@ -1,7 +1,7 @@
 <?php
 /**
- * [WeiZan System] Copyright (c) 2014 WeiZan.Com
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 define('PDO_DEBUG', true);
@@ -9,6 +9,7 @@ define('PDO_DEBUG', true);
 class DB {
 	protected $pdo;
 	protected $cfg;
+	protected $tablepre;
 	protected $result;
 	protected $statement;
 	protected $errors = array();
@@ -30,6 +31,7 @@ class DB {
 		} else {
 			$cfg = $this->cfg[$name];
 		}
+		$this->tablepre = $cfg['tablepre'];
 		if(empty($cfg)) {
 			exit("The master database is not found, Please checking 'data/config.php'");
 		}
@@ -54,7 +56,9 @@ class DB {
 		$sql = "SET NAMES '{$cfg['charset']}';";
 		$this->pdo->exec($sql);
 		$this->pdo->exec("SET sql_mode='';");
-		$this->link[$name] = $this->pdo;
+		if(is_string($name)) {
+			$this->link[$name] = $this->pdo;
+		}
 		if(PDO_DEBUG) {
 			$info = array();
 			$info['sql'] = $sql;
@@ -187,7 +191,7 @@ class DB {
 			}
 		}
 		$condition = $this->implode($params, 'AND');
-		$sql = "SELECT {$select} FROM " . tablename($tablename) . (!empty($condition['fields']) ? " WHERE {$condition['fields']}" : '') . " LIMIT 1";
+		$sql = "SELECT {$select} FROM " . $this->tablename($tablename) . (!empty($condition['fields']) ? " WHERE {$condition['fields']}" : '') . " LIMIT 1";
 		return $this->fetch($sql, $condition['params']);
 	}
 	
@@ -201,7 +205,7 @@ class DB {
 			}
 		}
 		$condition = $this->implode($params, 'AND');
-		$sql = "SELECT {$select} FROM " . tablename($tablename) . (!empty($condition['fields']) ? " WHERE {$condition['fields']}" : '') . $limitsql;
+		$sql = "SELECT {$select} FROM " .$this->tablename($tablename) . (!empty($condition['fields']) ? " WHERE {$condition['fields']}" : '') . $limitsql;
 		return $this->fetchall($sql, $condition['params'], $keyfield);
 	}
 	
@@ -222,7 +226,8 @@ class DB {
 				$limitsql = strexists(strtoupper($limit), 'LIMIT') ? " $limit " : " LIMIT $limit";
 			}
 		}
-		$sql = "SELECT {$select} FROM " . tablename($tablename) . (!empty($condition['fields']) ? " WHERE {$condition['fields']}" : '') . $limitsql;
+		
+		$sql = "SELECT {$select} FROM " . $this->tablename($tablename) . (!empty($condition['fields']) ? " WHERE {$condition['fields']}" : '') . $limitsql;
 		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename($tablename) . (!empty($condition['fields']) ? " WHERE {$condition['fields']}" : ''));
 		return $this->fetchall($sql, $condition['params'], $keyfield);
 	}
@@ -303,8 +308,8 @@ class DB {
 	public function run($sql, $stuff = 'ims_') {
 		if(!isset($sql) || empty($sql)) return;
 
-		$sql = str_replace("\r", "\n", str_replace(' ' . $stuff, ' ' . $this->cfg['master']['tablepre'], $sql));
-		$sql = str_replace("\r", "\n", str_replace(' `' . $stuff, ' `' . $this->cfg['master']['tablepre'], $sql));
+		$sql = str_replace("\r", "\n", str_replace(' ' . $stuff, ' ' . $this->tablepre, $sql));
+		$sql = str_replace("\r", "\n", str_replace(' `' . $stuff, ' `' . $this->tablepre, $sql));
 		$ret = array();
 		$num = 0;
 		$sql = preg_replace("/\;[ \f\t\v]+/", ';', $sql);
@@ -348,7 +353,7 @@ class DB {
 	
 	
 	public function tablename($table) {
-		return "`{$this->cfg['master']['tablepre']}{$table}`";
+		return "`{$this->tablepre}{$table}`";
 	}
 
 	
@@ -382,10 +387,10 @@ class DB {
 	
 	public function tableexists($table) {
 		if(!empty($table)) {
-			$data = $this->fetch("SHOW TABLES LIKE '{$this->cfg['master']['tablepre']}{$table}'", array());
+			$data = $this->fetch("SHOW TABLES LIKE '{$this->tablepre}{$table}'", array());
 			if(!empty($data)) {
 				$data = array_values($data);
-				$tablename = $this->cfg['master']['tablepre'] . $table;
+				$tablename = $this->tablepre . $table;
 				if(in_array($tablename, $data)) {
 					return true;
 				} else {

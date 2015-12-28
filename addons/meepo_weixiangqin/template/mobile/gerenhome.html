@@ -11,7 +11,8 @@
 	<script type="text/javascript" src="{MEEPORES}/static/friend/js/jquery_min.js"></script>
 
     <script type="text/javascript" src="{MEEPORES}/static/friend/js/uploadyouheader.js"></script>
-
+    <script type="text/javascript" src="{MODULE_URL}template/mobile/sweetalert.min.js"></script>
+	<link rel="stylesheet" href="{MODULE_URL}template/mobile/sweetalert.css" />
     <style>
         html,body,div,span,iframe,h1,h2,h3,h4,h5,h6,p,pre,a,em,img,small,strong,b,i,dl,dt,dd,ol,ul,li,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,footer,header,menu,nav,section{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}aside,footer,header,menu,nav,section{display:block}ol,ul{list-style:none}table{border-collapse:collapse;border-spacing:0}a{display:inline-block;text-decoration:none;cursor:default}
         body{background:#f0f0f0;color:#999;font-size:16px;height:100%}html{height:100%}a,a:link,a:visited,a:hover,a:active{display:inline-block;text-decoration:none;color:#75b9c6;background-color:rgba(0,0,0,0)}img{background:#f0f0f0 url(/resources/v20/images/loading.gif) center center no-repeat;background-size:16px}.hidden{display:none}.pink{color:#ee3869}.yellow{color:#fff17e}.blue{color:#75b9c6}.waiting{width:104px;height:82px;line-height:120px;background:rgba(0,0,0,0.5) url(/resources/v20/images/loading.gif) center 14px no-repeat;background-size:20px;position:fixed;left:50%;top:150px;margin:-41px 0 0 -52px;border-radius:10px;color:#fff;text-align:center;display:none;z-index:1000}.tips{width:80%;height:50px;overflow:hidden;line-height:50px;background:rgba(0,0,0,0.5);border-radius:10px;color:#fff;text-align:center;display:none;position:fixed;top:20%;left:10%;z-index:1000;border:1px solid #fff}.loading{display:none;width:100%;height:50px;line-height:50px;text-align:center}.loading i{display:inline-block;height:20px;width:30px;margin-bottom:-4px;background:url(/resources/v20/images/loading.gif) 10% center no-repeat;background-size:20px}.nav{width:100%;height:50px;line-height:50px;border-bottom:2px solid #f78aa9;background:rgba(249,249,249,1);text-align:center;position:fixed;left:0;top:0;right:0;z-index:100;box-shadow:1px 1px 2px rgba(0,0,0,0.1)}.nav h2{color:#555;font-size:16px;font-weight:bold}.nav .left,.nav .right{display:block;font-size:16px;position:absolute;top:0;height:50px;color:#555;padding:0 10px}.nav .left{left:0}.nav .right{right:0}.nav .le_trg{margin:18px 0 0 0}.le_trg{display:inline-block;width:9px;height:9px;border-right:2px solid #555;border-bottom:2px solid #555;transform:rotate(135deg);-webkit-transform:rotate(135deg);-moz-transform:rotate(135deg);-o-transform:rotate(135deg);-ms-transform:rotate(135deg)}.re_trg{display:inline-block;width:9px;height:9px;border-right:2px solid #ccc;border-bottom:2px solid #ccc;transform:rotate(-45deg);-webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg);-o-transform:rotate(-45deg);-ms-transform:rotate(-45deg)}.bot_trg{display:inline-block;width:9px;height:9px;border-right:2px solid #ccc;border-bottom:2px solid #ccc;transform:rotate(45deg);-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);-ms-transform:rotate(45deg);margin-top:-10px}.top_trg{display:inline-block;width:9px;height:9px;border-right:2px solid #ccc;border-bottom:2px solid #ccc;transform:rotate(-135deg);-webkit-transform:rotate(-135deg);-moz-transform:rotate(-135deg);-o-transform:rotate(-135deg);-ms-transform:rotate(-135deg)}.top_blank{margin-top:52px}.content{padding:10px}.see_more{font-size:16px;display:block;height:42px;line-height:42px;background:#fff;color:#72bac6;text-align:center;margin:10px 0;box-shadow:1px 1px 2px rgba(0,0,0,0.1);font-weight:bold}.box-shadow{box-shadow:1px 1px 2px rgba(0,0,0,0.1)}.phone,.identity,.vip{display:inline-block;height:22px;line-height:22px;padding:0 5px 0 20px;border-radius:2px;margin-right:3px;color:#fff;font:12px/24px "寰蒋闆呴粦","Microsoft YaHei";font-style:normal}.phone{background:#00c5c4 url(/resources/v20/images/icon_phone.png) no-repeat 4px center;background-size:14px 14px}.identity{background:#2acb64 url(/resources/v20/images/icon_write.png) no-repeat 4px center;background-size:14px 14px}.vip{background:#f1668f;padding:0 7px}.noCheck{background-color:#d5d5d5}.icon-loading{background-image:url(/resources/v20/images/loading.gif);background-size:contain;display:inline-block;width:16px;height:16px;margin:0 5px;vertical-align:middle}.loadApp{padding:8px 10px;background:#fff;position:relative;overflow:hidden}.loadApp dt{float:left;height:42px}.loadApp dt img{display:block;width:40px;height:40px}.loadApp dd{float:left;margin:0 0 0 8px}.loadApp dd b{display:block;color:#555;font-size:16px}.loadApp dd p{padding:7px 0 0;font-size:14px;color:#717171}.loadApp .upload_btn{position:absolute;right:10px;top:15px;display:block;width:72px;height:26px;line-height:26px;text-align:center;color:#ee356e;border:1px solid #f3c4d4}.attention{width:100%;height:54px;background:rgba(0,0,0,.7);position:fixed;left:0;bottom:0;padding:0 10px;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;-o-box-sizing:border-box;-ms-box-sizing:border-box;color:#fff;display:none}.attention dt{float:left}.attention dd{float:left;margin:8px 0 0}.attention dd>p{font-size:12px;margin:2px 0 0}.attention dt>img{display:block;width:38px;background:rgba(0,0,0,.0);margin:8px 10px 0 0}.attention .atte_btn{position:absolute;right:10px;top:12px;display:block;width:74px;height:30px;line-height:30px;color:#fff;background:#ec2e90;font-size:12px;text-align:center;border-radius:3px}.min_nav{width:100%;height:50px;line-height:50px;background:#fafafa;position:fixed;left:0;top:0;right:0;z-index:100;box-shadow:1px 1px 2px rgba(0,0,0,0.1);text-align:center}.min_nav .title{color:#555;font-weight:bold}.min_nav .title .vip{display:inline-block;width:24px;height:14px;line-height:14px;background:#ef678f;text-align:center;border-radius:2px;color:#fff;font-size:10px;margin:0 0 0 4px}.min_nav .reture{position:absolute;left:0;top:0}.min_nav .reture .le_trg{float:left;margin:20px 0 0 10px}.min_nav .reture .but,.min_nav .next{display:inline;float:left;color:#555;font-size:.9em}.min_nav .next,.min_nav .repair{position:absolute;right:10px;top:0;color:#555;font-size:.9em}.min_nav .repair .house_icon{display:block;width:20px;height:50px;background:url(../images/house.png) center center no-repeat;background-size:16px}.min_nav .seach_sure{display:block;width:50px;height:26px;line-height:26px;background:#ed376a;position:absolute;right:10px;top:7px;text-align:center;color:#fff;border-radius:3px;font-size:.9em}.min_nav .give_up{position:absolute;left:10px;top:0}.personIcon{width:22px;height:22px;display:inline-block;position:relative;bottom:-4px;margin-left:5px;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;display:none;background:url('/resources/v20/images/personIcon.png') no-repeat center center,-webkit-radial-gradient(#fff7d7,#ffd739);background:url('/resources/v20/images/personIcon.png') no-repeat center center,-moz-radial-gradient(#fff7d7,#ffd739);background:url('/resources/v20/images/personIcon.png') no-repeat center center,radial-gradient(#fff7d7,#ffd739);background-size:100%}
@@ -40,37 +41,8 @@ $(function(){
      });
 });
 </script>
-</head>
-<body>
-<input type="hidden" name="fromChannel" id="fromChannel" value="5599">
-<div class="top_blank"></div>
-<header class="head">
-    <ul class="main_nav disbox-hor" id="nav_menu" style="width:100%">
-        <li class="disbox-flex disbox-center" style="width:50%"><a href="{php echo $this->createMobileUrl('alllist')}">返回首页</a></li>
-        
-        <li class="disbox-flex disbox-center active" style="width:50%"><a href="###">个人中心</a></li>
-    </ul>
-</header>
-
-<div>
-    <div class="loading"><i></i>加载中...</div>
-    <div>
-        <section class="content" id="myspace_section">
-            <section class="my_space">
-                <div class="user_box">
-                    <dl class="user">
-                        <span id="upload_header">
-							
-															
-						</span>
-                                <dt id="change_icon"><img src="{if preg_match('/http:(.*)/',$res['avatar'])}{$res['avatar']} {else if preg_match('/images(.*)/',$res['avatar'])} {$_W['siteroot']}attachment/{$res['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" />
-												<input type="file" accept="image/jpeg, image/jpg, image/png" onchange="my.changeImg(this, event, {form_action:'{php echo $this->createMobileUrl('UploadImage')}',base_url:''});" />
-                                <div class="checking">点击上传</div>
-                                </dt>
-                            
-                        <dd>
-						<style>
-						 #change_icon input {
+<style type="text/css">
+#change_icon input {
 position: absolute;
 top: 0;
 left: 0;
@@ -127,25 +99,82 @@ opacity: 0;
 	pointer-events:none;
 }
 .group_radio input[type="radio"]:checked{
-	background:-webkit-gradient(linear, 0 0, 0 100%, from(#0fa442), to(#1ebe5f));
+	background:-webkit-gradient(linear, 0 0, 0 100%, from(#ff5858), to(#ff5858));
 }
 .group_radio input[type="radio"]:checked+label{
 	color:#fff;
 }
+.phone {
+background: #00c5c4 url('{MEEPORES}/static/friend/images/icon_phone.png') no-repeat 4px center;
+background-size: 14px 14px;
+}
+.phone, .identity, .vip {
+display: inline-block;
+height: 22px;
+line-height: 22px;
+padding: 0 5px 0 20px;
+border-radius: 2px;
+margin-right: 3px;
+color: #fff;
+font: 12px/24px "寰蒋闆呴粦","Microsoft YaHei";
+font-style: normal;
+}
+#active_rule_box{
+	position: fixed;
+	top:20%;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius:6px;
+	overflow: hidden;
+	z-index: 999999;
+  }
+ .descinfo-box{color: #3d3d3d; line-height: 1.6rem; font-size: 12px; padding: 5%; margin: 0 5%; background: #fff; border-radius: 3px; position: absolute; bottom: 5%; display: none; opacity: 0;}
+ .descinfo-box span{color: #00c177;}
+ .descinfo-box .link{color: #00c177; text-decoration: underline;}
+ .descinfo-box:after{content: "\200B"; height: 0; position: absolute; bottom: -10px; right: 7%; border-width:5px; border-style: solid; border-color: rgba(255,255,255,0.85) transparent transparent transparent;}
+ .descinfo-box-in{ bottom: 35%; opacity: 1; -webkit-transition: all 0.5s ease-in-out; z-index:10;}
+ .descinfo-box-out{ bottom: 5%; opacity: 0; -webkit-transition: all 0.5s ease-in-out; z-index:0;}
+ .descinfo-close{position: absolute; right: 0; top: 0; width: 3rem; height: 3rem; text-align: center; line-height: 3rem; font-size: 2rem; color:#666;}
+</style>
+</head>
+<body>
+<input type="hidden" name="fromChannel" id="fromChannel" value="5599">
+<div class="top_blank"></div>
+<header class="head">
+    <ul class="main_nav disbox-hor" id="nav_menu" style="width:100%">
+        <li class="disbox-flex disbox-center" style="width:50%"><a href="{php echo $this->createMobileUrl('alllist')}">返回首页</a></li>
+        
+        <li class="disbox-flex disbox-center active" style="width:50%"><a href="###">个人中心</a></li>
+    </ul>
+</header>
 
-						</style>
+<div>
+    <div class="loading"><i></i>加载中...</div>
+    <div>
+        <section class="content" id="myspace_section">
+            <section class="my_space">
+                <div class="user_box">
+                    <dl class="user">
+                        <span id="upload_header">
+							
+															
+						</span>
+                                <dt id="change_icon"><img src="{if preg_match('/http:(.*)/',$res['avatar'])}{$res['avatar']} {else if preg_match('/images(.*)/',$res['avatar'])} {$_W['siteroot']}attachment/{$res['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" />
+												<input type="file" accept="image/jpeg, image/jpg, image/png" onchange="my.changeImg(this, event, {form_action:'{php echo $this->createMobileUrl('UploadImage')}',base_url:''});" />
+                                <div class="checking">点击上传</div>
+                                </dt>
+                            
+                        <dd>
+
                             <b class="name">{$res['nickname']}{if $res['isshow']==0}(审核中){/if}
                             </b>
 
 
-                            <p>{$res['age']}岁·{$res['resideprovincecity']}</p>
+                            <p>{$res['age']}岁·{$res['resideprovincecity']}&nbsp;&nbsp;<span data-value="phone" class="phone" {if $res['telephoneconfirm']=='0'}style="background-color: #d5d5d5;"{/if}>手机认证</span></p>
                             <p>积分余额: <font style="color:red">{$member['credit1']}</font>
-							    &nbsp;<span id="gl" style="border:1px solid #dedede;background:#1ebe5f;color:#fff">积分攻略</span>
-                             
-							</p>
-                            <p>
-                             {$res['Descrip']}
-                            </p>
+							    &nbsp;<span  style="width:80px;border:1px solid #ff5858;background:#ff5858;color:#fff;display: inline-block;height:50px;text-align:center;" onclick="show2()">积分攻略</span>
+							</p> 
+                            <p>推荐自己到首页:&nbsp;&nbsp;&nbsp;<span  style="width:80px;border:1px solid #ff5858;background:#ff5858;color:#fff;display: inline-block;height:50px;text-align:center;" onclick="tuijian()">点击推荐</span></p>
 							<p>是否公开个人资料:</p>
 							   <div class="group_radio">
                                  <span >
@@ -165,114 +194,137 @@ opacity: 0;
                     <span  class="disbox-center" href="{php echo $this->createMobileUrl('mylike')}">我喜欢的</span>
                     <span  class="disbox-center" href="{php echo $this->createMobileUrl('likeme')}">喜欢我的</span>
                 </div>
-                <div class="section_1">
-                    <ul  class="disbox-hor user-list">
-                        <li class="disbox-flex" href="{php echo $this->createMobileUrl('Payjifen')}">积分充值</li>
-                        <li class="disbox-center">
-                            
-                                
-                            
-                            <div class="re_trg"></div>
-                        </li>
-                    </ul>
-                    
+				<div class="btn">
+                    <span  class="disbox-center" href="{php echo  $this->createMobileUrl('myphotos')}">我的相册</span>
+                    <span style="background-color:#ff5858; color:#FFF;" class="disbox-center" href="{php echo  $this->createMobileUrl('userinfo')}">我的资料</span>
                 </div>
-				<div class="section_1">
-                    <ul  class="disbox-hor user-list">
-                        <li class="disbox-flex" href="{php echo $this->createMobileUrl('Payres')}">充值记录</li>
-                        <li class="disbox-center">
-                            
-                                
-                            
-                            <div class="re_trg"></div>
-                        </li>
-                    </ul>
-                    
+                
+                <div class="btn">
+                    <span  class="disbox-center"  href="{php echo  $this->createMobileUrl('mynews')}">我的消息</span>
+                    <span  class="disbox-center" href="{php echo  $this->createMobileUrl('blacklist')}">黑名单</span>
                 </div>
-                <div class="section_1">
-                    <ul  class="disbox-hor user-list">
-                        <li class="disbox-flex" href="{php echo  $this->createMobileUrl('myphotos')}">我的相册</li>
-                        <li class="disbox-center">
-                            
-                               
-                            
-                            <div class="re_trg"></div>
-                        </li>
-                    </ul>
-                    
+                
+                <div class="btn">
+                    <span  class="disbox-center" href="{php echo $this->createMobileUrl('baoyue')}">开通包月</span>
+                    <span  class="disbox-center" href="{php echo $this->createMobileUrl('baoyueres')}">包月记录</span>
                 </div>
-                <div class="section_1">
-                    <ul  class="disbox-hor user-list">
-                        <li class="disbox-flex" href="{php echo  $this->createMobileUrl('userinfo')}">我的资料</li>
-                        <li class="disbox-center">
-                            
-                                
-                            
-                            <div class="re_trg"></div>
-                        </li>
-                    </ul>
-                   
+                
+                <div class="btn">
+                    <span  class="disbox-center" href="{php echo $this->createMobileUrl('Payjifen')}">积分充值</span>
+                    <span  class="disbox-center" href="{php echo $this->createMobileUrl('Payres')}">充值记录</span>
                 </div>
-				 <div class="section_1">
+                
+                
+				<div class="section_1" style="display:none;">
                     <ul  class="disbox-hor user-list">
-                        <li class="disbox-flex" href="{php echo  $this->createMobileUrl('mynews')}">我的消息</li>
-                        <li class="disbox-center">
-                            
-                               
-                            
-                            <div class="re_trg"></div>
-                        </li>
-                    </ul>
-                    
-                </div>
-				<div class="section_1">
-                    <ul  class="disbox-hor user-list">
-                        <li class="disbox-flex" href="{php echo  $this->createMobileUrl('blacklist')}">黑名单</li>
+                        <li class="disbox-flex" href="{php echo  $this->createMobileUrl('sms')}">手机验证</li>
                         <li class="disbox-center">
                             <div class="re_trg"></div>
                         </li>
                     </ul>
                     
                 </div>
-				<!--div class="section_1">
-                    <ul  class="disbox-hor user-list">
-                        <li class="disbox-flex" href="{php echo  $this->createMobileUrl('ceshi')}">更新中。。。</li>
-                        <li class="disbox-center">
-                            <div class="re_trg"></div>
-                        </li>
-                    </ul>
-                    
-                </div-->
             </section>
 
         </section>
     </div>
 </div>
+ <section class="descinfo-box descinfo-box-in" style="display:none;" id="active_rule_box">
+            <div>{php echo html_entity_decode($cfg['guize']);}</div>
+            <a href="javascript:void(0);" class="descinfo-close" id="J_descinfo-close" onclick="close2();" style="color:#ff5858">×</a>
+ </section>
 </body>
 <script>
   $(document).ready(function () { 
-$(".disbox-center").click(function () { 
+   $(".disbox-center").click(function () { 
    
 	var url = $(this).attr('href');
 	if (url) {
         location.href = url;
     }
 
- });
+    });
   });
   $(document).ready(function () { 
-$(".disbox-flex").click(function () { 
+     $(".disbox-flex").click(function () { 
    
-	var url = $(this).attr('href');
-	if (url) {
+	   var url = $(this).attr('href');
+	   if (url) {
         location.href = url;
-    }
+       }
 
- });
- $("#gl").click(function () { 
+     });
+     $("#gl").click(function () { 
         window.location.href = "{$cfg['jifenurl']}";
- });
+     });
+ 
   });
+  function show2(){
+		$('#active_rule_box').show();
+	     
+	}
+  function close2(){
+	    $('#active_rule_box').hide();
+	}
+  function tuijian(){
+	   swal({
+			title: "推荐到首页",
+			text: "需要消耗{$cfg['tjjifen']}个积分！",
+			showCancelButton: true,
+			confirmButtonColor: "#ff5858",   
+			confirmButtonText: "确定", 
+			cancelButtonText: "取消", 
+			closeOnConfirm: true,  
+			closeOnCancel: true },
+			function(isConfirm){ 
+				if (isConfirm) { 
+					$.ajax({
+										type:"POST",
+										url:"{php echo $this->createMobileUrl('tjself')}",
+										data:{payment:"{$cfg['tjjifen']}"},
+										cache:false,
+										success:function(data){
+											
+											 if(data=="low"){
+												swal({
+													title: "温馨提示",
+													text: '积分不足',
+													type:'info',
+													showCancelButton: true,
+													confirmButtonColor: "#ff5858",   
+													confirmButtonText: "充值积分", 
+													cancelButtonText: "知道了", 
+													closeOnConfirm: true,  
+													closeOnCancel: true },
+													function(isConfirm){ 
+														if (isConfirm) { 
+															{if empty($cfg['lowurl'])}
+																	  window.location='{php echo  $this->createMobileUrl('payjifen')}';
+															{else}
+																  window.location='{$cfg['lowurl']}';}
+															{/if}
+														} else {
+															swal.close();
+														} 
+												});
+											} 
+											else {
+											     swal({
+													title: "温馨提示",
+													text: data,  
+													confirmButtonText: "知道了",   closeOnConfirm: false }, function(){ 
+														swal.close();
+													});
+											  
+											}
+											
+										}
+									});
+				} else {
+					swal.close();
+				} 
+		});
+	}
 </script>
 <script>
 function loading(type){

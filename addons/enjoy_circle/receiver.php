@@ -15,12 +15,12 @@ class Enjoy_circleModuleReceiver extends WeModuleReceiver {
 			pdo_update('enjoy_circle_fans', array(
 			'subscribe' => 0,
 			'subscribe_time' => '',
-			), array('openid' => $this->message['fromusername'],'uniacid' => $GLOBALS['_W']['uniacid']));
+			), array('wopenid' => $this->message['fromusername'],'uniacid' => $GLOBALS['_W']['uniacid']));
 		}elseif($this->message['event'] == 'subscribe') {
 			pdo_update('enjoy_circle_fans', array(
 			'subscribe' => 1,
 			'subscribe_time' => time(),
-			), array('openid' => $this->message['fromusername'],'uniacid' => $GLOBALS['_W']['uniacid']));
+			), array('wopenid' => $this->message['fromusername'],'uniacid' => $GLOBALS['_W']['uniacid']));
 		
 		}
 	}

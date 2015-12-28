@@ -1,7 +1,7 @@
 <?php
 /**
  * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -45,7 +45,7 @@ class WeiXinPlatform extends WeiXinAccount {
 		if (empty($accesstoken) || empty($accesstoken['value']) || $accesstoken['expire'] < TIMESTAMP) {
 			$ticket = cache_load('account:ticket');
 			if (empty($ticket)) {
-				return error(1, '缺少接入平台关键数据，等待微信开放平台推送数据，请十分钟后再试');
+				return error(1, '缺少接入平台关键数据，等待微信开放平台推送数据，请十分钟后再试或是检查“授权事件接收URL”是否写错（index.php?c=account&amp;a=auth&amp;do=ticket地址中的&amp;符号容易被替换成&amp;amp;）');
 			}
 			$data = array(
 				'component_appid' => $this->appid,
@@ -54,7 +54,8 @@ class WeiXinPlatform extends WeiXinAccount {
 			);
 			$response = $this->request(ACCOUNT_PLATFORM_API_ACCESSTOKEN, $data);
 			if (is_error($response)) {
-				return $response;
+				$errormsg = $this->error_code($response['errno']);
+				return error($response['errno'], $errormsg);
 			}
 			$accesstoken = array(
 				'value' => $response['component_access_token'],
@@ -159,7 +160,7 @@ class WeiXinPlatform extends WeiXinAccount {
 	public function getAuthLoginUrl() {
 		$preauthcode = $this->getPreauthCode();
 		if (is_error($preauthcode)) {
-			$authurl = "javascript:alert('确保您已经成功接入微信开放平台或是缺少接入平台关键数据，等待微信开放平台推送数据，请十分钟后再试');";
+			$authurl = "javascript:alert('{$preauthcode['message']}');";
 		} else {
 			$authurl = sprintf(ACCOUNT_PLATFORM_API_LOGIN, $this->appid, $preauthcode, urlencode($GLOBALS['_W']['siteroot'] . 'index.php?c=account&a=auth&do=forward'));
 		}
@@ -288,16 +289,16 @@ class WeiXinPlatform extends WeiXinAccount {
 	}
 
 	private function getAuthRefreshToken() {
-		$auth_refresh_token = cache_load('account:auth:refreshtoken:'.$this->account['key']);
+		$auth_refresh_token = cache_load('account:auth:refreshtoken:'.$this->account['acid']);
 		if (empty($auth_refresh_token)) {
 			$auth_refresh_token = $this->account['auth_refresh_token'];
-			cache_write('account:auth:refreshtoken:'.$this->account['key'], $auth_refresh_token);
+			cache_write('account:auth:refreshtoken:'.$this->account['acid'], $auth_refresh_token);
 		}
 		return $auth_refresh_token;
 	}
 
 	private function setAuthRefreshToken($token) {
 		pdo_update('account_wechats', array('auth_refresh_token' => $token), array('acid' => $this->account['acid']));
-		cache_write('account:auth:refreshtoken:'.$this->account['key'], $token);
+		cache_write('account:auth:refreshtoken:'.$this->account['acid'], $token);
 	}
 }

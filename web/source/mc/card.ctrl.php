@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('mc_card');
@@ -11,7 +11,6 @@ $dos = array('display', 'manage', 'delete', 'coupon', 'submit', 'modal', 'record
 $do = in_array($do, $dos) ? $do : 'display';
 load()->model('mc');
 $setting = pdo_fetch("SELECT * FROM ".tablename('mc_card')." WHERE uniacid = '{$_W['uniacid']}'");
-
 if ($do == 'display') {
 	if ($_W['ispost'] && $_W['isajax']) {
 		$sql = 'SELECT `uniacid` FROM ' . tablename('mc_card') . " WHERE `uniacid` = :uniacid";
@@ -34,7 +33,7 @@ if ($do == 'display') {
 		} else {
 			$setting['color'] = array();
 		}
-		$setting['background'] = iunserializer($setting['background']);
+		$setting['background'] = (array)iunserializer($setting['background']);
 		$setting['fields'] = iunserializer($setting['fields']);
 		if(!empty($setting['fields'])) {
 			foreach($setting['fields'] as $field) {
@@ -251,14 +250,15 @@ if ($do == 'manage') {
 			$value['is_birth'] = 1;
 		}
 	}
-
 	$has_members = pdo_get('mc_card_members', array('uniacid' => $_W['uniacid']));
 	if($has_members) {
 		for($i = 0; $i < 3; $i++) {
 			$time = strtotime(date('Y-m-d')) + $i * 86400;
 			$month = date('m', $time);
 			$day = date('d', $time);
-			$sql = 'SELECT COUNT(*) FROM ' . tablename('mc_members') . " WHERE uniacid = :uniacid AND uid IN (SELECT uid FROM " . tablename('mc_card_members') . " WHERE uniacid = :uniacid) AND birthmonth = :month AND birthday = :day";
+			$uids = pdo_getall('mc_card_members', array('uniacid' => $_W['uniacid']), array('uid'));
+			$uids = implode(', ', array_keys($uids));
+			$sql = 'SELECT COUNT(*) FROM ' . tablename('mc_members') . " WHERE uniacid = :uniacid AND uid IN ({$uids})AND birthmonth = :month AND birthday = :day";
 			$param = array(':uniacid' => $_W['uniacid'], ':month' => $month, ':day' => $day);
 			$total[$i] = intval(pdo_fetchcolumn($sql, $param));
 		}

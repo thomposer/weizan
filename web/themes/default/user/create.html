@@ -24,7 +24,7 @@
 				util.message('两次输入的密码不一致.', '', 'error');
 				return false;
 			}
-			if($('#groupid option:selected').val() == 0) {
+			if($('#groupid option:selected').val() == '') {
 				util.message('请选择所属用户组.', '', 'error');
 				return false;
 			}

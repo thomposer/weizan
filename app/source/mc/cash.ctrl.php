@@ -1,7 +1,7 @@
 <?php 
 /**
- * [WEIZAN System] Copyright (c) 2014 012wz.com
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $moduels = uni_modules();
@@ -46,8 +46,7 @@ if(!empty($type)) {
 		message('这个订单已经支付成功, 不需要重复支付.');
 	}
 	if(!empty($log) && $log['status'] == '0') {
-		pdo_delete('core_paylog', array('plid' => $log['plid']));
-		$log = null;
+						$log = null;
 	}
 	if(empty($log)) {
 		$moduleid = pdo_fetchcolumn("SELECT mid FROM ".tablename('modules')." WHERE name = :name", array(':name' => $params['module']));
@@ -149,6 +148,7 @@ if(!empty($type)) {
 		if(!empty($plid)) {
 			$tag = array();
 			$tag['acid'] = $_W['acid'];
+			$tag['uid'] = $_W['member']['uid'];
 			pdo_update('core_paylog', array('openid' => $_W['openid'], 'tag' => iserializer($tag)), array('plid' => $plid));
 		}
 		load()->model('payment');
@@ -206,16 +206,21 @@ if(!empty($type)) {
 					$ret = array();
 					$ret['result'] = 'success';
 					$ret['type'] = $log['type'];
-					$ret['from'] = 'return';
+					$ret['from'] = 'notify';
 					$ret['tid'] = $log['tid'];
 					$ret['user'] = $log['openid'];
 					$ret['fee'] = $log['fee'];
 					$ret['weid'] = $log['weid'];
 					$ret['uniacid'] = $log['uniacid'];
+					$ret['acid'] = $log['acid'];
 										$ret['is_usecard'] = $log['is_usecard'];
 					$ret['card_type'] = $log['card_type']; 					$ret['card_fee'] = $log['card_fee'];
 					$ret['card_id'] = $log['card_id'];
+					$site->$method($ret);
+					
+					$ret['from'] = 'return';
 					exit($site->$method($ret));
+					
 				}
 			}
 		}

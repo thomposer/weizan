@@ -1,7 +1,7 @@
 <?php
 /**
  * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 load()->func('communication');
@@ -14,7 +14,7 @@ class WeiXinAccount extends WeAccount {
 	public $types = array(
 		'view', 'click', 'scancode_push',
 		'scancode_waitmsg', 'pic_sysphoto', 'pic_photo_or_album',
-		'pic_weixin', 'location_select'
+		'pic_weixin', 'location_select', 'media_id', 'view_limited'
 	);
 	
 	public function __construct($account = array()) {
@@ -311,11 +311,15 @@ class WeiXinAccount extends WeAccount {
 					} else {
 						$e['type'] = 'click';
 					}
-						$e['name'] = urlencode($s['title']);
-						if($e['type'] == 'view') {
-							$e['url'] = urlencode($s['url']);
-						} else {
-							$e['key'] = urlencode($s['forward']);
+					$e['name'] = urlencode($s['title']);
+					if($e['type'] == 'view') {
+						$e['url'] = urlencode($s['url']);
+					} elseif ($e['type'] == 'media_id') {
+						$e['media_id'] = urlencode($s['media_id']);
+					} elseif ($e['type'] == 'view_limited') {
+						$e['media_id'] = urlencode($s['media_id']);
+					} else {
+						$e['key'] = urlencode($s['forward']);
 					}
 					$entry['sub_button'][] = $e;
 				}
@@ -329,6 +333,10 @@ class WeiXinAccount extends WeAccount {
 				}
 				if($entry['type'] == 'view') {
 					$entry['url'] = urlencode($m['url']);
+				} elseif ($entry['type'] == 'media_id') {
+					$entry['media_id'] = urlencode($m['media_id']);
+				} elseif ($entry['type'] == 'view_limited') {
+					$entry['media_id'] = urlencode($m['media_id']);
 				} else {
 					$entry['key'] = urlencode($m['forward']);
 				}
@@ -350,7 +358,7 @@ class WeiXinAccount extends WeAccount {
 		$content = ihttp_post($url, $dat);
 		return $this->menuResponseParse($content);
 	}
-
+	
 	public function menuDelete() {
 		$token = $this->getAccessToken();
 		if(is_error($token)){
@@ -360,11 +368,11 @@ class WeiXinAccount extends WeAccount {
 		$content = ihttp_get($url);
 		return $this->menuResponseParse($content);
 	}
-
+	
 	public function menuModify($menu) {
 		return $this->menuCreate($menu);
 	}
-
+	
 	public function menuQuery() {
 		$token = $this->getAccessToken();
 		if(is_error($token)){
@@ -383,11 +391,15 @@ class WeiXinAccount extends WeAccount {
 				$m = array();
 				$m['type'] = in_array($val['type'], $this->types) ? $val['type'] : 'url';
 				$m['title'] = $val['name'];
-				if($m['type'] != 'view') {
-					$m['forward'] = $val['key'];
-				} else {
+				if ($m['type'] == 'view') {
 					$m['type'] = 'url';
 					$m['url'] = $val['url'];
+				} elseif ($m['type'] == 'media_id') {
+					$m['media_id'] = $val['media_id'];
+				} elseif ($m['type'] == 'view_limited') {
+					$m['media_id'] = $val['media_id'];
+				} else {
+					$m['forward'] = $val['key'];
 				}
 				$m['subMenus'] = array();
 				if(!empty($val['sub_button'])) {
@@ -395,11 +407,15 @@ class WeiXinAccount extends WeAccount {
 						$s = array();
 						$s['type'] = in_array($v['type'], $this->types) ? $v['type'] : 'url';
 						$s['title'] = $v['name'];
-						if($s['type'] != 'view') {
-							$s['forward'] = $v['key'];
-						} else {
+						if ($s['type'] == 'view') {
 							$s['type'] = 'url';
 							$s['url'] = $v['url'];
+						} elseif ($s['type'] == 'media_id') {
+							$s['media_id'] = $v['media_id'];
+						} elseif ($s['type'] == 'view_limited') {
+							$s['media_id'] = $v['media_id'];
+						} else {
+							$s['forward'] = $v['key'];
 						}
 						$m['subMenus'][] = $s;
 					}
@@ -506,7 +522,7 @@ class WeiXinAccount extends WeAccount {
 	}
 
 	public function barCodeCreateDisposable($barcode) {
-		$barcode['expire_seconds'] = empty($barcode['expire_seconds']) ? 604800 : $barcode['expire_seconds'];
+		$barcode['expire_seconds'] = empty($barcode['expire_seconds']) ? 2592000 : $barcode['expire_seconds'];
 		if (empty($barcode['action_info']['scene']['scene_id']) || empty($barcode['action_name'])) {
 			return error('1', 'Invalid params');
 		}
@@ -527,7 +543,6 @@ class WeiXinAccount extends WeAccount {
 	}
 	
 	public function barCodeCreateFixed($barcode) {
-		unset($barcode['expire_seconds']);
 		if($barcode['action_name'] == 'QR_LIMIT_SCENE' && empty($barcode['action_info']['scene']['scene_id'])) {
 			return error('1', '场景值错误');
 		}
@@ -667,7 +682,8 @@ class WeiXinAccount extends WeAccount {
 			'40097' => '基本信息base_info中填写的url_name_type或promotion_url_name_type不合法。',
 			'49004' => '签名错误。',
 			'43012' => '无自定义cell跳转外链权限，请参考开发者必读中的申请流程开通权限。',
-			'40099' => '该code已被核销。'
+			'40099' => '该code已被核销。',
+			'61005' => '缺少接入平台关键数据，等待微信开放平台推送数据，请十分钟后再试或是检查“授权事件接收URL”是否写错（index.php?c=account&amp;a=auth&amp;do=ticket地址中的&amp;符号容易被替换成&amp;amp;）',
 		);
 		$code = strval($code);
 		if($code == '40001' || $code == '42001') {
@@ -1137,18 +1153,34 @@ class WeiXinAccount extends WeAccount {
 	}
 
 	
-	public function fansSendAll($data) {
-		if(empty($data)) {
-			return error(-1, '参数错误');
+	public function fansSendAll($group, $msgtype, $media_id) {
+		$types = array('text' => 'text', 'image' => 'image', 'news' => 'mpnews', 'voice' => 'voice', 'video' => 'mpvideo', 'wxcard' => 'wxcard');
+		if(empty($types[$msgtype])) {
+			return error(-1, '消息类型不合法');
+		}
+		$is_to_all = false;
+		if($group == - 1) {
+			$is_to_all = true;
+		}
+		$data = array(
+			'filter' => array(
+				'is_to_all' => $is_to_all,
+				'group_id' => $group
+			),
+			'msgtype' => $types[$msgtype],
+			$types[$msgtype] => array(
+				'media_id' => $media_id
+			)
+		);
+		if($msgtype == 'wxcard') {
+			unset($data['wxcard']['media_id']);
+			$data['wxcard']['card_id'] = $media_id;
 		}
 		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
 		}
 		$url = "https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token={$token}";
-		if(!empty($data['touser'])) {
-			$url = "https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token={$token}";
-		}
 		$data = urldecode(json_encode($data));
 		$response = ihttp_request($url, $data);
 		if(is_error($response)) {
@@ -1257,12 +1289,6 @@ class WeiXinAccount extends WeAccount {
 
 	
 	public function getMaterial($media_id, $type = 'image') {
-		global $_GPC;
-		$attachment = pdo_fetch('SELECT attachment,tag FROM ' . tablename('core_wechats_attachment') . ' WHERE acid = :acid AND media_id = :media_id', array(':acid' => $_W['acid'], ':media_id' => $li['thumb_media_id']));
-		if(!empty($thumb_cover)) {
-			$cover = empty($attachment['attachment']) ? $attachment['tag'] : $attachment['attachment'];
-			return $cover;
-		}
 		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
@@ -1273,19 +1299,20 @@ class WeiXinAccount extends WeAccount {
 		);
 		$response = ihttp_request($url, json_encode($data));
 		if(is_error($response)) {
-			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
+			return error(-1, "访问公平台接口失败, 错误: {$response['message']}");
 		}
 		$result = @json_decode($response['content'], true);
-		if(empty($result)) {
-		} elseif(!empty($result['errcode'])) {
+		if(!empty($result['errcode'])) {
 			return error(-1, "访问公众平台接口失败, 错误: {$result['errmsg']},错误详情：{$this->error_code($result['errcode'])}");
+		}
+		if($type == 'image' || $type == 'voice') {
+			$result = $response['content'];
 		}
 		return $result;
 	}
 
 	
 	public function getMaterialCount() {
-		global $_GPC;
 		$token = $this->getAccessToken();
 		if(is_error($token)){
 			return $token;
@@ -1305,7 +1332,6 @@ class WeiXinAccount extends WeAccount {
 	}
 
 	public function delMaterial($media_id) {
-		global $_GPC;
 		$media_id = trim($media_id);
 		if(empty($media_id)) {
 			return error(-1, '素材media_id错误');
@@ -1329,7 +1355,49 @@ class WeiXinAccount extends WeAccount {
 		}
 		return $result;
 	}
+
 	
+	public function fansSendPreview($wxname, $content, $msgtype) {
+		$types = array('text' => 'text', 'image' => 'image', 'news' => 'mpnews', 'voice' => 'voice', 'video' => 'mpvideo', 'wxcard' => 'wxcard');
+		if(empty($types[$msgtype])) {
+			return error(-1, '群发类型不合法');
+		}
+		$msgtype = $types[$msgtype];
+		$token = $this->getAccessToken();
+		if(is_error($token)){
+			return $token;
+		}
+		$url = 'https://api.weixin.qq.com/cgi-bin/message/mass/preview?access_token=' . $token;
+		$send = array(
+			'towxname' => $wxname,
+			'msgtype' => $msgtype,
+		);
+		if($msgtype == 'text') {
+			$send[$msgtype] = array(
+				'content' => $content
+			);
+		} elseif($msgtype == 'wxcard') {
+			$send[$msgtype] = array(
+				'card_id' => $content
+			);
+		} else {
+			$send[$msgtype] = array(
+				'media_id' => $content
+			);
+		}
+
+		$response = ihttp_request($url, json_encode($send));
+		if(is_error($response)) {
+			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
+		}
+		$result = @json_decode($response['content'], true);
+		if(empty($result)) {
+		} elseif(!empty($result['errcode'])) {
+			return error(-1, "访问公众平台接口失败, 错误: {$result['errmsg']},错误详情：{$this->error_code($result['errcode'])}");
+		}
+		return $result;
+	}
+
 	public function getOauthUserInfo($accesstoken, $openid) {
 		$apiurl = "https://api.weixin.qq.com/sns/userinfo?access_token={$accesstoken}&openid={$openid}&lang=zh_CN";
 		$response = ihttp_get($apiurl);

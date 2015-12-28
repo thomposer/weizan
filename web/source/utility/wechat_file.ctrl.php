@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 defined('IN_IA') or exit('Access Denied');
@@ -84,7 +84,7 @@ $apis['perm'] = array(
 );
 
 $apis['file_upload'] = array(
-	'add' => 'https://file.api.weixin.qq.com/cgi-bin/media/uploadimg',
+	'add' => 'https://api.weixin.qq.com/cgi-bin/media/uploadimg',
 	'post_key' => 'buffer',
 );
 
@@ -110,7 +110,7 @@ if ($do == 'upload') {
 	$mode = trim($_GPC['mode']);
 	$acid = $_W['acid'];
 	if($mode == 'perm') {
-		$now_count = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('core_wechats_attachment') . ' WHERE uniacid = :aid AND acid = :acid AND model = :model AND type = :type', array(':aid' => $_W['uniacid'], ':acid' => $acid, ':model' => $mode, ':type' => $type));
+		$now_count = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('wechat_attachment') . ' WHERE uniacid = :aid AND acid = :acid AND model = :model AND type = :type', array(':aid' => $_W['uniacid'], ':acid' => $acid, ':model' => $mode, ':type' => $type));
 		if($now_count >= $limit['perm'][$type]['max']) {
 			$result['message'] = '文件数量超过限制,请先删除部分文件再上传';
 			die(json_encode($result));
@@ -141,7 +141,7 @@ if ($do == 'upload') {
 	}
 
 	$filename = file_random_name(ATTACHMENT_ROOT .'/'. $setting['folder'], $ext);
-	$file = file_upload($_FILES['file'], $type, $setting['folder'] . $filename, true);
+	$file = file_wechat_upload($_FILES['file'], $type, $setting['folder'] . $filename);
 	if (is_error($file)) {
 		$result['message'] = $file['message'];
 		die(json_encode($result));
@@ -208,7 +208,6 @@ if ($do == 'upload') {
 	if ($type == 'image' || $type == 'thumb' ) {
 				$file['path'] = file_image_thumb($fullname, '', 300);
 	}
-
 	$insert = array(
 		'uniacid' => $_W['uniacid'],
 		'acid' => $acid,
@@ -227,13 +226,16 @@ if ($do == 'upload') {
 		if($mode == 'perm') {
 						$insert['tag'] = $content['url'];
 		}
+		if(!empty($insert['tag'])) {
+			$insert['attachment'] = $content['url'];
+		}
 		$result['width'] = $size[0];
 		$result['hieght'] = $size[1];
 	}
 	if($type == 'video') {
 		$insert['tag'] = iserializer($description);
 	}
-	pdo_insert('core_wechats_attachment', $insert);
+	pdo_insert('wechat_attachment', $insert);
 	$result['type'] = $type;
 	$result['url'] = tomedia($file['path'], true);
 
@@ -266,7 +268,7 @@ if ($do == 'browser') {
 	$page = intval($_GPC['page']);
 	$page = max(1, $page);
 	$size = intval($_GPC['psize']) ? intval($_GPC['psize']) : 32;
-	$sql = 'SELECT * FROM '.tablename('core_wechats_attachment')."{$condition} ORDER BY id DESC LIMIT ".(($page-1) * $size).','.$size;
+	$sql = 'SELECT * FROM '.tablename('wechat_attachment')."{$condition} ORDER BY id DESC LIMIT ".(($page-1) * $size).','.$size;
 	$list = pdo_fetchall($sql, $param, 'id');
 	foreach ($list as &$item) {
 		$item['url'] = tomedia($item['attachment'], true);
@@ -276,14 +278,14 @@ if ($do == 'browser') {
 		}
 		unset($item['uid']);
 	}
-	$total = pdo_fetchcolumn('SELECT count(*) FROM '.tablename('core_wechats_attachment') . $condition, $param);
+	$total = pdo_fetchcolumn('SELECT count(*) FROM '.tablename('wechat_attachment') . $condition, $param);
 	message(array('page'=> pagination($total, $page, $size, '', array('before' => '2', 'after' => '3', 'ajaxcallback'=>'null')), 'items' => $list), '', 'ajax');
 }
 
 if ($do == 'delete') {
 	$id = intval($_GPC['id']);
 	$acid = $_W['acid'];
-	$data = pdo_fetch('SELECT * FROM ' . tablename('core_wechats_attachment') . ' WHERE acid = :acid AND id = :id', array(':acid' => $acid, ':id' => $id));
+	$data = pdo_fetch('SELECT * FROM ' . tablename('wechat_attachment') . ' WHERE acid = :acid AND id = :id', array(':acid' => $acid, ':id' => $id));
 	if(empty($data)) {
 		$result['error'] = 0;
 		$result['message'] = '素材不存在';
@@ -319,10 +321,10 @@ if ($do == 'delete') {
 		$result['message'] = "访问微信接口错误, 错误代码: {$content['errcode']}, 错误信息: {$content['errmsg']},错误详情：{$acc->error_code($content['errcode'])}";
 		die(json_encode($result));
 	}
-	pdo_delete('core_wechats_attachment', array('acid' => $acid, 'id' => $id));
+	pdo_delete('wechat_attachment', array('acid' => $acid, 'id' => $id));
 	die(json_encode($result));
 }
 
 function delete_temp(){
-	pdo_query('DELETE FROM ' . tablename('core_wechats_attachment') . ' WHERE createtime + 259200 < :time', array(':time' => time()));
+	pdo_query('DELETE FROM ' . tablename('wechat_attachment') . ' WHERE createtime + 259200 < :time', array(':time' => time()));
 }

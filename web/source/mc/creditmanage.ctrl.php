@@ -27,6 +27,11 @@ if($do == 'display') {
 	$where = ' WHERE uniacid = :uniacid ';
 	$params = array(':uniacid' => $_W['uniacid']);
 	$type = intval($_GPC['type']);
+	if(!$type) {
+		$type = intval($_GPC['cookietype']);
+	} else {
+		isetcookie('cookietype', $type, 86400 * 7);
+	}
 	$keyword = trim($_GPC['keyword']);
 	if($type == 1 || $type == '') {
 		$keyword = intval($_GPC['keyword']);

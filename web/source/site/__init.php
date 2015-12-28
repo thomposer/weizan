@@ -13,10 +13,17 @@ if(!empty($_GPC['styleid'])) {
 
 if($controller == 'site') {
 	$m = $_GPC['m'];
-	if(in_array($m, $sysmodules)) {
-		define('FRAME', 'platform');
-		define('CRUMBS_NAV', 2);
-		define('ACTIVE_FRAME_URL', url('platform/reply/', array('m' => $m)));
+	if(!empty($m)) {
+		if(in_array($m, $sysmodules)) {
+			define('FRAME', 'platform');
+			define('CRUMBS_NAV', 2);
+			define('ACTIVE_FRAME_URL', url('platform/reply/', array('m' => $m)));
+		} else {
+			if($action == 'nav' && $_COOKIE['ext_type'] == 1) {
+				$do = trim($_GPC['do']);
+				define('ACTIVE_FRAME_URL', url("site/nav/{$do}", array('m' => $m)));
+			}
+		}
 	}
 }
 if($action != 'entry' && $action != 'nav') {

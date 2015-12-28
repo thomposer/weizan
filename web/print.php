@@ -1,27 +1,24 @@
 <?php
 /**
- * 微站管理
- * [WDL] Copyright (c) 2013 B2CTUI.COM
+ * 打印机配置
  */
 define('IN_SYS', true);
-require '../framework/bootstrap.inc.php';
-require IA_ROOT . '/web/common/bootstrap.sys.inc.php';
-load()->web('common');
-load()->web('template');
- 
+define('IA_ROOT', str_replace("\\", '/', dirname(dirname(__FILE__))));
+
+require IA_ROOT . '/framework/bootstrap.inc.php';
 header('Content-Type: text/html; charset=GBK');
 
-$modulename ='weisrc_dish';
-
-$site = WeUtility::createModuleSite($modulename);
+$site = WeUtility::createModuleSite('weisrc_dish');
 if(!is_error($site)) {
- 	$method = 'doWebPrint';
- 	//$site->module = array_merge($_W['modules'][$modulename], $_W['account']['modules'][$_W['modules'][$modulename]['mid']]);
-	$site->weid = $_W['uniacid'];
+ 	$method = 'dowebprint';
+	$site->uniacid = $_W['uniacid'];
 	$site->inMobile = false;
+
 	if (method_exists($site, $method)) {
 		exit($site->$method());
 	}
+} else {
+    echo 'page is error';
 }
 
 exit("访问的方法 {$method} 不存在.");

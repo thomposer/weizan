@@ -1,7 +1,7 @@
 <?php
 /**
  * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 $_W['page']['title'] = '公众号列表 - 公众号';
 if($_W['isajax']){
@@ -70,6 +70,9 @@ $list = pdo_fetchall($sql, $pars);
 if(!empty($list)) {
 	foreach($list as &$account) {
 		$account['details'] = uni_accounts($account['uniacid']);
+		if ($account['default_acid'] == $_W['account']['acid']) {
+			$isconnect  = $account['details'][$account['default_acid']]['isconnect'];
+		}
 		$account['role'] = uni_permission($_W['uid'], $account['uniacid']);
 		$account['setmeal'] = uni_setmeal($account['uniacid']);
 	}
@@ -77,8 +80,9 @@ if(!empty($list)) {
 if(!$_W['isfounder']) {
 	$stat = user_account_permission();
 }
-load()->classs('weixin.platform');
-$account_platform = new WeiXinPlatform();
-$authurl = $account_platform->getAuthLoginUrl();
-
+if (!empty($_W['setting']['platform']['authstate'])) {
+	load()->classs('weixin.platform');
+	$account_platform = new WeiXinPlatform();
+	$authurl = $account_platform->getAuthLoginUrl();
+}
 template('account/display');

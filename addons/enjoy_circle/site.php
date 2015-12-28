@@ -30,6 +30,7 @@ public function th($str,$u,$a)//删除空格
 	return str_replace($qian,$hou,$str);
 }
 	public function auth($uniacid,$openid){
+		global $_W;
 		$userinfo = mc_oauth_userinfo();
 		$userlist=pdo_fetch("select * from ".tablename('enjoy_circle_fans')." where uniacid=".$uniacid." and openid='".$userinfo['openid']."'");
 		if(empty($userlist)){
@@ -45,6 +46,7 @@ public function th($str,$u,$a)//删除空格
 					'country'=>$userinfo['country'],
 					'subscribe_time'=>$userinfo['subscribe_time'],
 					'avatar'=>$userinfo['avatar'],
+					'wopenid'=>$_W['openid'],
 					'ip'=>CLIENT_IP
 			);
 			pdo_insert('enjoy_circle_fans',$data);

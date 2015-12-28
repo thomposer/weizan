@@ -16,6 +16,7 @@
 					type: 'url',
 					url: '',
 					forward: '',
+					media_id : '',
 					subMenus: []
 				});
 				$('.designer').sortable({handle: '.fa-arrows'});
@@ -29,6 +30,7 @@
 					title: '',
 					type: 'url',
 					url: '',
+					media_id : '',
 					forward: ''
 				});
 				$('.designer').sortable({handle: '.fa-arrows'});
@@ -251,8 +253,27 @@
 					});
 					$('#key-result').show();
 				});
-			}
-			
+			};
+
+			$scope.select_mediaid = function(){
+				var option = {
+						'ignore' : {
+							'wxcard' : true
+						}
+					};
+				if($scope.activeMenu.type == 'view_limited') {
+					option.ignore = {
+						'image' : true,
+						'voice' : true,
+						'video' : true,
+						'wxcard' : true
+					};
+				}
+				util.material(function(material){
+					$scope.activeMenu.media_id = material.media_id;
+					$scope.$digest();
+				}, option);
+			};
 		});
 		angular.bootstrap($('#menuDesigner')[0], ['app']);
 		
@@ -372,11 +393,7 @@
 					<div class="col-sm-9 col-xs-12">
 						<div class="checkbox">
 							<label>
-								{if $acc['level'] > 1}
 								<i class="fa fa-check-square-o"> &nbsp; {$acc['name']}</i>
-								{else}
-								<i class="fa fa-square-o"> &nbsp; {$acc['name']} (权限不足)</i>
-								{/if}
 							</label>
 						</div>
 					</div>
@@ -402,31 +419,39 @@
 							<h3>选择菜单 【{{activeMenu.title || '未命名菜单'}}】 要执行的操作</h3>
 						</div>
 						<div class="modal-body">
+							<span {if $_W['account']['level'] == '1'}style="display:none;"{/if}>
+								<label class="radio-inline">
+									<input type="radio" name="ipt" ng-model="activeMenu.type" value="url"> 链接
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="ipt" ng-model="activeMenu.type" value="click"> 触发关键字
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="ipt" ng-model="activeMenu.type" value="scancode_push"> 扫码
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="ipt" ng-model="activeMenu.type" value="scancode_waitmsg"> 扫码（等待信息）
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="ipt" ng-model="activeMenu.type" value="pic_sysphoto"> 系统拍照发图
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="ipt" ng-model="activeMenu.type" value="pic_photo_or_album"> 拍照或者相册发图
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="ipt" ng-model="activeMenu.type" value="pic_weixin"> 微信相册发图
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="ipt" ng-model="activeMenu.type" value="location_select"> 地理位置
+								</label>
+							</span>
 							<label class="radio-inline">
-								<input type="radio" name="ipt" ng-model="activeMenu.type" value="url"> 链接
+								<input type="radio" name="ipt" ng-model="activeMenu.type" value="media_id"> 回复素材
 							</label>
 							<label class="radio-inline">
-								<input type="radio" name="ipt" ng-model="activeMenu.type" value="click"> 触发关键字
+								<input type="radio" name="ipt" ng-model="activeMenu.type" value="view_limited"> 跳转图文
 							</label>
-							<label class="radio-inline">
-								<input type="radio" name="ipt" ng-model="activeMenu.type" value="scancode_push"> 扫码
-							</label>
-							<label class="radio-inline">
-								<input type="radio" name="ipt" ng-model="activeMenu.type" value="scancode_waitmsg"> 扫码（等待信息）
-							</label>
-							<label class="radio-inline">
-								<input type="radio" name="ipt" ng-model="activeMenu.type" value="pic_sysphoto"> 系统拍照发图
-							</label>
-							<label class="radio-inline">
-								<input type="radio" name="ipt" ng-model="activeMenu.type" value="pic_photo_or_album"> 拍照或者相册发图
-							</label>
-							<label class="radio-inline">
-								<input type="radio" name="ipt" ng-model="activeMenu.type" value="pic_weixin"> 微信相册发图
-							</label>
-							<label class="radio-inline">
-								<input type="radio" name="ipt" ng-model="activeMenu.type" value="location_select"> 地理位置
-							</label>
-							<div ng-show="activeMenu.type == 'url';">
+							<div {if $_W['account']['level'] == '1'}style="display:none;"{/if}ng-show="activeMenu.type == 'url';">
 								<hr />
 								<div class="input-group">
 									<input class="form-control" id="ipt-url" type="text" ng-model="activeMenu.url" />
@@ -437,7 +462,17 @@
 								<span class="help-block">指定点击此菜单时要跳转的链接（注：链接需加http://）</span>
 								<span class="help-block"><strong>注意: 由于接口限制. 如果你没有网页oAuth接口权限, 这里输入链接直接进入微站个人中心时将会有缺陷(有可能获得不到当前访问用户的身份信息. 如果没有oAuth接口权限, 建议你使用图文回复的形式来访问个人中心)</strong></span>
 							</div>
-							<div ng-show="activeMenu.type != 'url';" style="position:relative">
+							<div {if $_W['account']['level'] != '1'}ng-show="activeMenu.type == 'media_id' || activeMenu.type == 'view_limited';"{/if}>
+								<hr />
+								<div class="input-group">
+									<input class="form-control" id="ipt-url" type="text" ng-model="activeMenu.media_id" />
+									<div class="input-group-btn">
+										<button class="btn btn-primary" id="media_id" ng-click="select_mediaid()"><i class="fa fa-external-link"></i> 选择素材</button>
+									</div>
+								</div>
+								<span class="help-block">公众平台的素材id</span>
+							</div>
+							<div ng-show="activeMenu.type != 'url' && activeMenu.type != 'media_id' && activeMenu.type != 'view_limited'" style="position:relative">
 								<hr />
 								<div class="input-group">
 									<input class="form-control" id="ipt-forward" type="text" ng-model="activeMenu.forward"/>

@@ -19,7 +19,7 @@ function cloud_client_define() {
 
 function cloud_prepare() {
 	global $_W;
-	setting_load('site');
+	setting_load();
 	if(empty($_W['setting']['site']['key']) || empty($_W['setting']['site']['token'])) {
 		return error('-1', "您的程序需要在微赞云服务平台注册你的站点资料, 来接入云平台服务后才能使用相应功能.");
 	}
@@ -206,6 +206,22 @@ function cloud_t_build($name) {
 	}
 	return $ret;
 }
+
+
+function cloud_t_upgradeinfo($name) {
+	$sql = 'SELECT `name`, `version` FROM ' . tablename('site_templates') . ' WHERE `name` = :name';
+	$theme = pdo_fetch($sql, array(':name' => $name));
+	$pars = _cloud_build_params();
+	$pars['method'] = 'theme.upgrade';
+	$pars['theme'] = $theme['name'];
+	$pars['version'] = $theme['version'];
+	$pars['isupgrade'] = 1;
+	$dat = cloud_request(ADDONS_URL.'/gateway.php', $pars);
+	$file = IA_ROOT . '/data/module.info';
+	$ret = _cloud_shipping_parse($dat, $file);
+	return $ret;
+}
+
 function cloud_sms_send($mobile, $content) {
 	global $_W;
 	$row = pdo_fetch("SELECT `notify` FROM ".tablename('uni_settings') . " WHERE uniacid = :uniacid", array(':uniacid' => $_W['uniacid']));
@@ -392,7 +408,7 @@ function _cloud_shipping_parse($dat, $file) {
 		}
 	}
 	if(!is_error($ret) && is_array($ret) && !empty($ret)) {
-		if($ret['state'] == 'fatal') {
+		if ($ret['state'] == 'fatal') {
 			return error($ret['errorno'], '发生错误: ' . $ret['message']);
 		}
 		return $ret;
@@ -403,11 +419,8 @@ function _cloud_shipping_parse($dat, $file) {
 
 function cloud_request($url, $post = '', $extra = array(), $timeout = 60) {
 	load()->func('communication');
-	load()->model('setting');
-	$setting = setting_load('cloudip');
-	
-	if (!empty($setting['cloudip'])) {
-		$extra['ip'] = $setting['cloudip'];
+	if (!empty($_W['setting']['cloudip'])) {
+		$extra['ip'] = $_W['setting']['cloudip'];
 	}
 	return ihttp_request($url, $post, $extra, $timeout);
 }
@@ -416,4 +429,65 @@ function cloud_extra_data() {
 	$data = array();
 	$data['accounts'] = pdo_fetchall("SELECT name, account, original FROM ".tablename('account_wechats') . " GROUP BY account");
 	return serialize($data);
+}
+
+function cloud_cron_create($cron) {
+	$pars = _cloud_build_params();
+	$pars['method'] = 'cron.create';
+	$pars['cron'] = base64_encode(iserializer($cron));
+	$result = cloud_request(ADDONS_URL.'/gateway.php', $pars);
+	return _cloud_cron_parse($result);
+}
+
+
+function cloud_cron_update($cron) {
+	$pars = _cloud_build_params();
+	$pars['method'] = 'cron.update';
+	$pars['cron'] = base64_encode(iserializer($cron));
+	$result = cloud_request(ADDONS_URL.'/gateway.php', $pars);
+	return _cloud_cron_parse($result);
+}
+
+
+function cloud_cron_get($cron_id) {
+	$pars = _cloud_build_params();
+	$pars['method'] = 'cron.get';
+	$pars['cron_id'] = $cron_id;
+	$result = cloud_request(ADDONS_URL.'/gateway.php', $pars);
+	return _cloud_cron_parse($result);
+}
+
+
+function cloud_cron_change_status($cron_id, $status) {
+	$pars = _cloud_build_params();
+	$pars['method'] = 'cron.status';
+	$pars['cron_id'] = $cron_id;
+	$pars['status'] = $status;
+	$result = cloud_request(ADDONS_URL.'/gateway.php', $pars);
+	return _cloud_cron_parse($result);
+}
+
+
+function cloud_cron_remove($cron_id) {
+	$pars = _cloud_build_params();
+	$pars['method'] = 'cron.remove';
+	$pars['cron_id'] = $cron_id;
+	$result = cloud_request(ADDONS_URL.'/gateway.php', $pars);
+	return _cloud_cron_parse($result);
+}
+
+
+function _cloud_cron_parse($result) {
+	if (empty($result)) {
+		return error(-1, '没有接收到服务器的传输的数据');
+	}
+	$result = json_decode($result['content'], true);
+	if (null === $result) {
+		return error(-1, '云服务通讯发生错误，请稍后重新尝试！');
+	}
+	$result = $result['message'];
+	if (is_error($result)) {
+		return error(-1, $result['message']);
+	}
+	return $result;
 }

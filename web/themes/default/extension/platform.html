@@ -7,10 +7,24 @@
 		<h5 class="page-header">微信开放平台开发信息</h5>
 		<div class="alert alert-info">开发信息需开放平台审核通过后才可以看到，填写完后才可以使用授权登录功能</div>
 		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require"> </span>是否启用微信公众号登录授权</label>
+			<div class="col-sm-9 col-xs-12">
+				<label class="radio-inline"><input  type="radio" name="authstate"  value="1" {if $_W['setting']['platform']['authstate']} checked{/if} > 是</label>
+				<label class="radio-inline"><input  type="radio" name="authstate"  value="0" {if !$_W['setting']['platform']['authstate']} checked{/if} > 否</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require"> </span>测试登陆授权</label>
+			<div class="col-sm-9 col-xs-12">
+				<a id="auth" href="{$authurl}"><img src="https://open.weixin.qq.com/zh_CN/htmledition/res/assets/res-design-download/icon_button3_2.png" /></a>
+			</div>
+		</div>
+		<div class="form-group">
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require"> </span>AppID</label>
 			<div class="col-sm-9 col-xs-12">
 				<input type="text"  name="appid" value="{$_W['setting']['platform']['appid']}" class="form-control">
 				<div class="help-block">在微信开放平台注册且审核通过后可以获取到AppId</div>
+			</div>
 			</div>
 		<div class="form-group">
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="require"> </span>AppSecret</label>

@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 load()->model('site');
@@ -18,7 +18,8 @@ if ($do == 'design') {
 		if (empty($params)) {
 			message('请您先设计手机端页面.', referer(), 'error');
 		}
-		$params = json_decode(html_entity_decode(urldecode($params)), true);
+				$params = str_replace('&nbsp;', '#nbsp;', $params);
+		$params = json_decode(str_replace('#nbsp;', '&nbsp;', html_entity_decode(urldecode($params))), true);
 		if (empty($params)) {
 			message('请您先设计手机端页面.', referer(), 'error');
 		}
@@ -119,8 +120,8 @@ if ($do == 'design') {
 			site_cover($cover);
 		}
 				$nav = json_decode(html_entity_decode(urldecode($_GPC['wapeditor']['nav'])), true);
+		$ids = array(0);
 		if (!empty($nav)) {
-			$ids = array(0);
 			foreach ($nav as $row) {
 				$data = array(
 					'uniacid' => $_W['uniacid'],
@@ -140,12 +141,12 @@ if ($do == 'design') {
 				}
 				$ids[] = $row['id'];
 			}
-			$ids_str = implode(',', $ids);
-			pdo_query('DELETE FROM ' . tablename('site_nav') . " WHERE uniacid = :uniacid AND id NOT IN ($ids_str)", array(':uniacid' => $_W['uniacid']));
 		}
+		$ids_str = implode(',', $ids);
+		pdo_query('DELETE FROM ' . tablename('site_nav') . " WHERE uniacid = :uniacid AND position = '2' AND id NOT IN ($ids_str)", array(':uniacid' => $_W['uniacid']));
 		message('个人中心保存成功.', url('site/editor/uc'), 'success');
 	}
-	$navs = pdo_fetchall("SELECT id, icon, css, name, url FROM ".tablename('site_nav')." WHERE uniacid = :uniacid AND position = '2' ORDER BY `displayorder`", array(':uniacid' => $_W['uniacid']));
+	$navs = pdo_fetchall("SELECT id, icon, css, name, url FROM ".tablename('site_nav')." WHERE uniacid = :uniacid AND position = '2' ORDER BY displayorder DESC, id ASC", array(':uniacid' => $_W['uniacid']));
 	if(!empty($navs)) {
 		foreach($navs as &$nav) {
 			

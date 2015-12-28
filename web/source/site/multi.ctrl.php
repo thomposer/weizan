@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $_W['page']['title'] = '站点管理 - 微站功能';
@@ -44,6 +44,9 @@ if($do == 'post') {
 			if (empty($data['title'])) {
 				message('请填写站点名称', referer(), 'error');
 			}
+			if (!strcasecmp($_GPC['bindhost'],$_W['page']['copyright']['sitehost'])) {
+			message('请填写其他域名，不要填本平台域名（或者后台-站点设置域名项没填）！', referer(), 'error');
+			}
 			if(!empty($id)) {
 				pdo_update('site_multi', $data, array('id' => $id));
 			} else {
@@ -75,7 +78,7 @@ if($do == 'display') {
 	foreach($multis as &$li) {
 		$li['style'] = pdo_fetch('SELECT * FROM ' .tablename('site_styles') . ' WHERE uniacid = :uniacid AND id = :id', array(':uniacid' => $_W['uniacid'], ':id' => $li['styleid']));
 		$li['template'] = pdo_fetch("SELECT * FROM ".tablename('site_templates')." WHERE id = :id", array(':id' => $li['style']['templateid']));
-		$li['site_info'] = iunserializer($li['site_info']);
+		$li['site_info'] = (array)iunserializer($li['site_info']);
 	}
 	template('site/multi');
 }

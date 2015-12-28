@@ -1,12 +1,12 @@
 <?php
 /**
- * [WeiZan System] Copyright (c) 2014 WeiZan.Com
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 load()->func('communication');
 set_time_limit(0);
-$dos = array('ticket', 'forward', 'test');
+$dos = array('ticket', 'forward', 'test', 'confirm');
 $do = in_array($do, $dos) ? $do : 'forward';
 
 load()->classs('weixin.platform');
@@ -20,7 +20,7 @@ if ($do == 'forward') {
 	$auth_info = $account_platform->getAuthInfo($_GPC['auth_code']);
 	$auth_refresh_token = $auth_info['authorization_info']['authorizer_refresh_token'];
 	$auth_appid = $auth_info['authorization_info']['authorizer_appid'];
-	
+
 	$account_info = $account_platform->getAccountInfo($auth_appid);
 	if (is_error($account_info)) {
 		message('授权登录新建公众号失败，请重试', url('account/display'), 'error');
@@ -28,19 +28,6 @@ if ($do == 'forward') {
 	if (!empty($_GPC['test'])) {
 		echo "此为测试平台接入返回结果：<br/> 公众号名称：{$account_info['authorizer_info']['nick_name']} <br/> 接入状态：成功";
 		exit;
-	}
-	$account_found = pdo_get('account_wechats', array('account' => $account_info['authorizer_info']['alias']));
-	if (!empty($account_found)) {
-		if (empty($account_found['auth_refresh_token'])) {
-			pdo_update('account_wechats', array(
-			'auth_refresh_token' => $auth_refresh_token,
-			'encodingaeskey' => $account_platform->encodingaeskey,
-			'token' => $account_platform->token,
-			'level' => $level,
-			'key' => $auth_appid,
-			), array('acid' => $account_found['acid']));
-		}
-		message('授权登录成功', url('account/display'), 'success');
 	}
 	if ($account_info['authorizer_info']['service_type_info'] = '0' || $account_info['authorizer_info']['service_type_info'] == '1') {
 		if ($account_info['authorizer_info']['verify_type_info'] > -1) {
@@ -55,10 +42,14 @@ if ($do == 'forward') {
 			$level = '2';
 		}
 	}
-		$account_insert = array(
-		'name' => $account_info['authorizer_info']['nick_name'],
-		'description' => '',
-		'groupid' => 0,
+	$account_found = pdo_get('account_wechats', array('account' => $account_info['authorizer_info']['alias']));
+	if (!empty($account_found)) {
+		message('公众号已经在系统中接入，是否要更改为授权接入方式？ <div><a class="btn btn-primary" href="' . url('account/auth/confirm', array('level' => $level, 'auth_refresh_token' => $auth_refresh_token, 'auth_appid' => $auth_appid, 'acid' => $account_found['acid'], 'uniacid' => $account_found['uniacid'])) . '">是</a> &nbsp;&nbsp;<a class="btn btn-default" href="index.php">否</a></div>', '', 'tips');
+	}
+	$account_insert = array(
+			'name' => $account_info['authorizer_info']['nick_name'],
+			'description' => '',
+			'groupid' => 0,
 	);
 	if(!pdo_insert('uni_account', $account_insert)) {
 		message('授权登录新建公众号失败，请重试', url('account/display'), 'error');
@@ -83,7 +74,7 @@ if ($do == 'forward') {
 
 	$unisetting_insert = array(
 		'creditnames' => iserializer(array(
-			'credit1' => array('title' => '积分', 'enabled' => 1), 
+			'credit1' => array('title' => '积分', 'enabled' => 1),
 			'credit2' => array('title' => '余额', 'enabled' => 1)
 		)),
 		'creditbehaviors' => iserializer(array(
@@ -101,24 +92,25 @@ if ($do == 'forward') {
 	module_build_privileges();
 
 	$account_index_insert = array(
-		'uniacid' => $uniacid, 
-		'type' => 3, 
-		'hash' => random(8)
+		'uniacid' => $uniacid,
+		'type' => 3,
+		'hash' => random(8),
+		'isconnect' => 1
 	);
 	pdo_insert('account', $account_index_insert);
 	$acid = pdo_insertid();
-	
+
 	$subaccount_insert = array(
-		'acid' => $acid,
-		'uniacid' => $uniacid,
-		'name' => $account_insert['name'],
-		'account' => $account_info['authorizer_info']['alias'],
-		'original' => $account_info['authorizer_info']['user_name'],
-		'level' => $level,
-		'key' => $auth_appid,
-		'auth_refresh_token' => $auth_refresh_token,
-		'encodingaeskey' => $account_platform->encodingaeskey,
-		'token' => $account_platform->token,
+			'acid' => $acid,
+			'uniacid' => $uniacid,
+			'name' => $account_insert['name'],
+			'account' => $account_info['authorizer_info']['alias'],
+			'original' => $account_info['authorizer_info']['user_name'],
+			'level' => $level,
+			'key' => $auth_appid,
+			'auth_refresh_token' => $auth_refresh_token,
+			'encodingaeskey' => $account_platform->encodingaeskey,
+			'token' => $account_platform->token,
 	);
 	pdo_insert('account_wechats', $subaccount_insert);
 	if(is_error($acid)) {
@@ -128,12 +120,32 @@ if ($do == 'forward') {
 		pdo_insert('uni_account_users', array('uniacid' => $uniacid, 'uid' => $_W['uid'], 'role' => 'owner'));
 	}
 	pdo_update('uni_account', array('default_acid' => $acid), array('uniacid' => $uniacid));
-	
 	$headimg = ihttp_request($account_info['authorizer_info']['head_img']);
 	$qrcode = ihttp_request($account_info['authorizer_info']['qrcode_url']);
 	file_put_contents(IA_ROOT . '/attachment/headimg_'.$acid.'.jpg', $headimg['content']);
 	file_put_contents(IA_ROOT . '/attachment/qrcode_'.$acid.'.jpg', $qrcode['content']);
 	message('授权登录成功', url('account/display'), 'success');
+} elseif ($do == 'confirm') {
+	$auth_refresh_token = $_GPC['auth_refresh_token'];
+	$auth_appid = $_GPC['auth_appid'];
+	$level = intval($_GPC['level']);
+	$acid = intval($_GPC['acid']);
+	$uniacid = intval($_GPC['uniacid']);
+	
+	pdo_update('account_wechats', array(
+		'auth_refresh_token' => $auth_refresh_token,
+		'encodingaeskey' => $account_platform->encodingaeskey,
+		'token' => $account_platform->token,
+		'level' => $level,
+		'key' => $auth_appid,
+	), array('acid' => $acid));
+	pdo_update('account', array('isconnect' => '1', 'type' => '3'), array('acid' => $acid));
+	cache_delete("uniaccount:{$uniacid}");
+	cache_delete("unisetting:{$uniacid}");
+	cache_delete("accesstoken:{$acid}");
+	cache_delete("jsticket:{$acid}");
+	cache_delete("cardticket:{$acid}");
+	message('更改公众号授权接入成功', url('account/display'), 'success');
 } elseif ($do == 'ticket') {
 	$post = file_get_contents('php://input');
 	WeUtility::logging('debug', 'account-ticket' . $post);

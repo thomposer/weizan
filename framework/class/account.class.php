@@ -1,7 +1,7 @@
 <?php
 /**
  * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -570,6 +570,41 @@ class WeUtility {
 	}
 
 	
+	public static function createModuleCron($name) {
+		global $_W;
+		static $file;
+		$classname = "{$name}ModuleCron";
+		if(!class_exists($classname)) {
+			$file = IA_ROOT . "/addons/{$name}/cron.php";
+			if(!is_file($file)) {
+				$file = IA_ROOT . "/framework/builtin/{$name}/cron.php";
+			}
+			if(!is_file($file)) {
+				trigger_error('ModuleCron Definition File Not Found '.$file, E_USER_WARNING);
+				return error(-1006, 'ModuleCron Definition File Not Found');
+			}
+			require $file;
+		}
+		if(!class_exists($classname)) {
+			trigger_error('ModuleCron Definition Class Not Found', E_USER_WARNING);
+			return error(-1007, 'ModuleCron Definition Class Not Found');
+		}
+		$o = new $classname();
+		$o->uniacid = $o->weid = $_W['uniacid'];
+		$o->modulename = $name;
+		load()->model('module');
+		$o->module = module_fetch($name);
+		$o->__define = $file;
+		self::defineConst($o);
+		if($o instanceof WeModuleCron) {
+			return $o;
+		} else {
+			trigger_error('ModuleCron Class Definition Error', E_USER_WARNING);
+			return error(-1008, 'ModuleCron Class Definition Error');
+		}
+	}
+
+	
 	public static function logging($level = 'info', $message = '') {
 		$filename = IA_ROOT . '/data/logs/' . date('Ymd') . '.log';
 		load()->func('file');
@@ -907,22 +942,19 @@ abstract class WeModuleProcessor extends WeBase {
 	
 	protected function buildSiteUrl($url) {
 		global $_W;
+		$mapping = array(
+			'[from]' => $this->message['from'],
+			'[to]' => $this->message['to'],
+			'[rule]' => $this->rule,
+			'[uniacid]' => $_W['uniacid'],
+		);
+		$url = str_replace(array_keys($mapping), array_values($mapping), $url);
 		if(strexists($url, 'http://') || strexists($url, 'https://')) {
 			return $url;
 		}
-		$mapping = array(
-				'[from]' => $this->message['from'],
-				'[to]' => $this->message['to'],
-				'[rule]' => $this->rule,
-				'[uniacid]' => $_W['uniacid'],
-		);
-		
-		$url = str_replace(array_keys($mapping), array_values($mapping), $url);
-		
 		if (uni_is_multi_acid() && strexists($url, './index.php?i=') && !strexists($url, '&j=') && !empty($_W['acid'])) {
 			$url = str_replace("?i={$_W['uniacid']}&", "?i={$_W['uniacid']}&j={$_W['acid']}&", $url);
 		}
-		
 		static $auth;
 		if(empty($auth)){
 			$pass = array();
@@ -969,8 +1001,8 @@ abstract class WeModuleProcessor extends WeBase {
 			}
 			if (empty($_W['account'])) {
 				$_W['account'] = account_fetch($_W['acid']);
-				$_W['account']['qrcode'] = "{$_W['attachurl_local']}qrcode_{$_W['acid']}.jpg?time={$_W['timestamp']}";
-				$_W['account']['avatar'] = "{$_W['attachurl_local']}headimg_{$_W['acid']}.jpg?time={$_W['timestamp']}";
+				$_W['account']['qrcode'] = tomedia('qrcode_'.$_W['acid'].'.jpg').'?time='.$_W['timestamp'];
+				$_W['account']['avatar'] = tomedia('headimg_'.$_W['acid'].'.jpg').'?time='.$_W['timestamp'];
 				$_W['account']['groupid'] = $_W['uniaccount']['groupid'];
 			}
 		}
@@ -1030,10 +1062,10 @@ abstract class WeModuleSite extends WeBase {
 		$pars[':uniacid'] = $_W['uniacid'];
 		$pars[':module'] = $params['module'];
 		$pars[':tid'] = $params['tid'];
-				if($params['fee'] <= 0) {
+		if($params['fee'] <= 0) {
 			$pars['from'] = 'return';
 			$pars['result'] = 'success';
-			$pars['type'] = 'alipay';
+			$pars['type'] = '';
 			$pars['tid'] = $params['tid'];
 			$site = WeUtility::createModuleSite($pars[':module']);
 			$method = 'payResult';
@@ -1294,4 +1326,41 @@ EOF;
 EOF;
 	}
 
+}
+
+
+abstract class WeModuleCron extends WeBase {
+	public function __call($name, $arguments) {
+		if($this->modulename == 'task') {
+			$dir = IA_ROOT . '/framework/builtin/task/cron/';
+		} else {
+			$dir = IA_ROOT . '/addons/' . $this->modulename . '/cron/';
+		}
+		$fun = strtolower(substr($name, 6));
+		$file = $dir . $fun . '.inc.php';
+		if(file_exists($file)) {
+			require $file;
+			exit;
+		}
+		trigger_error("访问的方法 {$name} 不存在.", E_USER_WARNING);
+		return error(-1009, "访问的方法 {$name} 不存在.");
+	}
+
+		public function addCronLog($tid, $errno, $note, $tag = array()) {
+		global $_W;
+		if(!$tid) {
+			message(error(-1, 'tid参数错误'), '', 'ajax');
+		}
+		$data = array(
+			'uniacid' => $_W['uniacid'],
+			'module' => $this->modulename,
+			'type' => $_W['cron']['filename'],
+			'tid' => $tid,
+			'note' => $note,
+			'tag' => iserializer($tag),
+			'createtime' => TIMESTAMP
+		);
+		pdo_insert('core_cron_record', $data);
+		message(error($errno, $note), '', 'ajax');
+	}
 }

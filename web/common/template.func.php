@@ -1,6 +1,6 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012wz.com
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
  * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
@@ -73,10 +73,14 @@ function template_parse($str, $inmodule = false) {
 	$str = preg_replace('/{(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff\[\]\'\"\$]*)}/', '<?php echo $1;?>', $str);
 	$str = preg_replace('/{url\s+(\S+)}/', '<?php echo url($1);?>', $str);
 	$str = preg_replace('/{url\s+(\S+)\s+(array\(.+?\))}/', '<?php echo url($1, $2);?>', $str);
+	$str = preg_replace('/{media\s+(\S+)}/', '<?php echo tomedia($1);?>', $str);
 	$str = preg_replace_callback('/<\?php([^\?]+)\?>/s', "template_addquote", $str);
 	$str = preg_replace('/{([A-Z_\x7f-\xff][A-Z0-9_\x7f-\xff]*)}/s', '<?php echo $1;?>', $str);
 	$str = str_replace('{##', '{', $str);
 	$str = str_replace('##}', '}', $str);
+	if (!empty($GLOBALS['_W']['setting']['remote']['type'])) {
+		$str = str_replace('</body>', "<script>$(function(){\$('img').attr('onerror', '').on('error', function(){if (!\$(this).data('check-src') && (this.src.indexOf('http://') > -1 || this.src.indexOf('https://') > -1)) {this.src = this.src.indexOf('{$GLOBALS['_W']['attachurl']}') == -1 ? this.src.replace('{$GLOBALS['_W']['attachurl_remote']}', '{$GLOBALS['_W']['attachurl']}') : this.src.replace('{$GLOBALS['_W']['attachurl']}', '{$GLOBALS['_W']['attachurl_remote']}');\$(this).data('check-src', true);}});});</script></body>", $str);
+	}
 	$str = "<?php defined('IN_IA') or exit('Access Denied');?>" . $str;
 	return $str;
 }

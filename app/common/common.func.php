@@ -1,7 +1,7 @@
 <?php
 /**
- * [WeiZan System] Copyright (c) 2014 WeiZan.Com
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -40,6 +40,9 @@ function message($msg, $redirect = '', $type = '') {
 	}
 	if($type == 'ajax' || $type == 'sql') {
 		$label = 'warning';
+	}
+	if (defined('IN_API')) {
+		exit($msg);
 	}
 	include template('common/message', TEMPLATE_INCLUDEPATH);
 	exit();

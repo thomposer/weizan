@@ -1,7 +1,7 @@
 <?php
 /**
- * [WeiZan System] Copyright (c) 2014 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $dos = array('sign_display', 'sign', 'sign_record', 'recommend', 'notice', 'sign_strategy', 'share');
@@ -9,7 +9,7 @@ $do = in_array($do, $dos) ? $do : 'sign_display';
 load()->model('user');
 load()->model('card');
 $notice_count = card_notice_stat();
-
+$setting = pdo_get('mc_card', array('uniacid' => $_W['uniacid']));
 if($do == 'sign_display') {
 	$title = '签到-会员卡';
 	$credits = mc_credit_fetch($_W['member']['uid']);
@@ -25,7 +25,7 @@ if($do == 'sign_display') {
 	$flags = array();
 	if(!empty($month_record)) {
 		foreach($month_record as $li) {
-			$flags[] = date('d', $li['addtime']);
+			$flags[] = date('j', $li['addtime']);
 		}
 	}
 	$flags = json_encode($flags);
@@ -66,6 +66,7 @@ if($do == 'sign') {
 			}
 		}
 		mc_credit_update($_W['member']['uid'], 'credit1', $credit, array(0, $log, 'sign'));
+		$status = mc_notice_credit1($_W['openid'], $_W['member']['uid'], $credit, $log);
 		exit(json_encode(array('error' => 0, 'message' => "签到成功，赠送{$credit}积分")));
 	}
 }
@@ -113,7 +114,7 @@ if($do == 'share') {
 			if($set['share']['num'] > 0) {
 				$log = "用户分享会员卡的每日推荐页面，赠送【{$set['share']['num']}】积分";
 				mc_credit_update($_W['member']['uid'], 'credit1', $set['share']['num'], array(0, $log, 'card'));
-				$status = mc_notice_credit2($_W['openid'], $_W['member']['uid'], $set['share']['num'], $log);
+				$status = mc_notice_credit1($_W['openid'], $_W['member']['uid'], $set['share']['num'], $log);
 				if(is_error($status)) {
 					exit($log);
 				}

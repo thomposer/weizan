@@ -5,37 +5,76 @@
  */
 defined('IN_IA') or exit('Access Denied');
 
-function cron_run($cronid = 0) {
-	if(empty($cronid)) {
-		$cron = pdo_fetch('SELECT * FROM ' . tablename('cron') . ' WHERE available > 0 AND nextrun <= ' . TIMESTAMP . ' ORDER BY nextrun ASC');
-	} else {
-		$cron = pdo_fetch('SELECT * FROM ' . tablename('cron') . ' WHERE cronid = :id', array(':id' => intval($cronid)));
+function cron_check($cronid = 0) {
+	global $_W;
+	$cron = pdo_get('core_cron', array('cloudid' => $cronid));
+	$_W['uniacid'] = $cron['uniacid'];
+	if(empty($cron)) {
+		return error(-1000, '任务不存在或已删除');
 	}
+	if(!$cron['status']) {
+		return error(-1001, '任务已关闭');
+	}
+	if(!$cron['uniacid']) {
+		return error(-1002, '任务uniacid错误');
+	}
+	if(empty($cron['module'])) {
+		return error(-1003, '任务所属模块为空');
+	} else {
+		if($cron['module'] != 'task') {
+			$modules = array_keys(uni_modules());
+			if(!in_array($cron['module'], $modules)) {
+				return error(-1004, "公众号没有操作模块{$cron['module']}的权限");
+			}
+		}
+	}
+	if(empty($cron['filename'])) {
+		return error(-1005, '任务脚本名称为空');
+	}
+	return $cron;
+}
+
+
+function cron_run($id) {
+	global $_W;
+	$cron = pdo_get('core_cron', array('uniacid' => $_W['uniacid'], 'id' => $id));
 	if(empty($cron)) {
 		return false;
 	}
-	if($cron['type'] == 'system') {
-		//定义系统内置的计划任务文件放在哪个路径
-		$cronfile = IA_ROOT . '/cron/' . $cron['filename'];
-	} elseif($cron['type'] == 'module') {
-		//定义模块的计划任务文件放在哪个路径
-		$cronfile = IA_ROOT . '/cron/' . $cron['filename'];
-	}
-
-	if(is_file($cronfile)) {
-		$cron['minute'] = explode("\t", $cron['minute']);
-		//设置下次执行时间
+	$extra = array();
+	$extra['Host'] = $_SERVER['HTTP_HOST'];
+	load()->func('communication');
+	$urlset = parse_url($_W['siteurl']);
+	$urlset = pathinfo($urlset['path']);
+	$response = ihttp_request('http://127.0.0.1/'. $urlset['dirname'] . '/' . url('cron/entry', array('id' => $cron['cloudid'])), array(), $extra);
+	$response = json_decode($response['content'], true);
+	if (is_error($response['message'])) {
+		return $response['message'];
+	} else {
 		cron_setnexttime($cron);
-		@set_time_limit(1000);
-		//@ignore_user_abort(TRUE);
-		if(!@include $cronfile) {
-			return false;
+		$cron_new = pdo_get('core_cron', array('uniacid' => $_W['uniacid'], 'id' => $id));
+		if(empty($cron_new)) return true;
+		if($cron_new['status'] != $cron['status'] || $cron_new['lastruntime'] !=  $cron['lastruntime'] || $cron_new['nextruntime'] !=  $cron['nextruntime']) {
+			load()->model('cloud');
+			$cron_new['id'] = $cron_new['cloudid'];
+			$status = cloud_cron_update($cron_new);
+			if(is_error($status)) {
+				return $status;
+			}
 		}
 	}
+	return true;
 }
 
 function cron_setnexttime($cron) {
 	if(empty($cron)) return FALSE;
+	if($cron['type'] == 1) {
+		pdo_update('core_cron', array('status' => 0, 'lastruntime' => TIMESTAMP, 'nextruntime' => TIMESTAMP), array('id' => $cron['id']));
+		return true;
+	}
+	if(!empty($cron['minute'])) {
+		$cron['minute'] = explode("\t", $cron['minute']);
+	}
 	list($yearnow, $monthnow, $daynow, $weekdaynow, $hournow, $minutenow) = explode('-', date('Y-m-d-w-H-i', TIMESTAMP));
 
 	if($cron['weekday'] == -1) {
@@ -74,11 +113,11 @@ function cron_setnexttime($cron) {
 		$cron['minute'] = $nexttime['minute'];
 	}
 	$nextrun = mktime($cron['hour'], $cron['minute'] > 0 ? $cron['minute'] : 0, 0, $monthnow, $cron['day'], $yearnow);
-	$data = array('lastrun' => TIMESTAMP, 'nextrun' => $nextrun);
-	if(!($nextrun > TIMESTAMP)) {
-		$data['available'] = '0';
+	$data = array('lastruntime' => TIMESTAMP, 'nextruntime' => $nextrun);
+	if($nextrun <= TIMESTAMP) {
+		$data['status'] = 0;
 	}
-	pdo_update('cron', $data, array('cronid' => $cron['cronid']));
+	pdo_update('core_cron', $data, array('id' => $cron['id']));
 	return true;
 }
 
@@ -88,8 +127,8 @@ function cron_todaynextrun($cron, $hour = -2, $minute = -2) {
 
 	$nexttime = array();
 	if($cron['hour'] == -1 && !$cron['minute']) {
-		$nexttime['hour'] = $hour;
-		$nexttime['minute'] = $minute + 1;
+		$nexttime['hour'] = $hour + 1;
+		$nexttime['minute'] = 0;
 	} elseif($cron['hour'] == -1 && $cron['minute'] != '') {
 		$nexttime['hour'] = $hour;
 		if(($nextminute = cron_nextminute($cron['minute'], $minute)) === false) {
@@ -97,12 +136,9 @@ function cron_todaynextrun($cron, $hour = -2, $minute = -2) {
 			$nextminute = $cron['minute'][0];
 		}
 		$nexttime['minute'] = $nextminute;
-	} elseif($cron['hour'] != -1 && $cron['minute'] == '') {
-		if($cron['hour'] < $hour) {
+	} elseif($cron['hour'] != -1 && !$cron['minute']) {
+		if($cron['hour'] <= $hour) {
 			$nexttime['hour'] = $nexttime['minute'] = -1;
-		} elseif($cron['hour'] == $hour) {
-			$nexttime['hour'] = $cron['hour'];
-			$nexttime['minute'] = $minute + 1;
 		} else {
 			$nexttime['hour'] = $cron['hour'];
 			$nexttime['minute'] = 0;
@@ -129,3 +165,78 @@ function cron_nextminute($nextminutes, $minutenow) {
 	}
 	return false;
 }
+
+function cron_add($data) {
+	global $_W;
+	load()->model('cloud');
+	if(empty($data['uniacid'])) {
+		$data['uniacid'] = $_W['uniacid'];
+	}
+	if(empty($data['name'])) {
+		return error(-1, '任务名称不能为空');
+	}
+	if(empty($data['filename'])) {
+		return error(-1, '任务脚本不能为空');
+	}
+	if(empty($data['module'])) {
+		return error(-1, '任务所属模块不能为空');
+	}
+	if(empty($data['type']) || !in_array($data['type'], array(1, 2))) {
+		return error(-1, '任务的类型不能为空');
+	}
+	if($data['type'] == 1 && $data['lastruntime'] <= TIMESTAMP) {
+		return error(-1, '定时任务的执行时间不能小于当前时间');
+	} else {
+		$data['nextruntime'] = $data['lastruntime'];
+	}
+		$data['day'] = intval($data['weekday']) == -1 ? intval($data['day']) : -1;
+	$data['weekday'] = intval($data['weekday']);
+	$data['hour'] = intval($data['hour']);
+	$data['module'] = trim($data['module']);
+	$data['minute'] = str_replace('，', ',', $data['minute']);
+	if(strpos($data['minute'], ',') !== FALSE) {
+		$minutenew = explode(',', $data['minute']);
+		foreach($minutenew as $key => $val) {
+			$minutenew[$key] = $val = intval($val);
+			if($val < 0 || $val > 59) {
+				unset($minutenew[$key]);
+			}
+		}
+		$minutenew = array_slice(array_unique($minutenew), 0, 2);
+		$minutenew = implode("\t", $minutenew);
+	} else {
+		$minutenew = intval($data['minute']);
+		$minutenew = $minutenew >= 0 && $minutenew < 60 ? $minutenew : '';
+	}
+	$data['minute'] = $minutenew;
+	$data['createtime'] = TIMESTAMP;
+	$data = array_elements(array('uniacid', 'name', 'filename', 'module', 'type', 'status', 'day','weekday','hour','minute','status', 'lastruntime', 'nextruntime', 'createtime', 'extra'), $data);
+	$status = cloud_cron_create($data);
+	if(is_error($status)) {
+		return $status;
+	}
+	$data['cloudid'] = $status['cron_id'];
+
+	pdo_insert('core_cron', $data);
+	return pdo_insertid();
+}
+
+
+function cron_delete($ids) {
+	global $_W;
+	load()->model('cloud');
+	if(empty($ids)) return true;
+	$ids = implode(', ', $ids);
+	$corns = pdo_fetchall('SELECT id, cloudid FROM ' . tablename('core_cron') . " WHERE uniacid = :uniacid AND id IN ({$ids})", array(':uniacid' => $_W['uniacid']), 'cloudid');
+	$cloudid = array_keys($corns);
+	if(!empty($cloudid)) {
+		$status = cloud_cron_remove($cloudid);
+		if(is_error($status)) {
+			return $status;
+		}
+		pdo_query('DELETE FROM ' . tablename('core_cron') . " WHERE uniacid = :uniacid AND id IN ({$ids})", array(':uniacid' => $_W['uniacid']));
+	}
+	return true;
+}
+
+

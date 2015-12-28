@@ -4,7 +4,7 @@ define(['bootstrap'], function($){
 	var reg_int = /^[0-9]\d*$/i;
 	trade.init = function() {
 		$('.modal-trade').on('click', function(){
-			$('#consume-Modal, #credit-Modal, #card-Modal').remove();
+			$('#consume-Modal, #credit-Modal, #card-Modal, #card-edit-Modal, #group-Modal').remove();
 			var type = $(this).data('type');
 			var uid = parseInt($(this).data('uid'));
 			if(type == 'consume') {
@@ -13,6 +13,8 @@ define(['bootstrap'], function($){
 				trade.credit(type, uid);
 			} else if(type == 'card') {
 				trade.card(uid);
+			} else if(type == 'cardsn') {
+				trade.card_edit(uid);
 			}
 		});
 	};
@@ -254,9 +256,8 @@ define(['bootstrap'], function($){
 					if(uid > 0) {
 						$('#type').val('uid');
 						$('#username').val(uid);
-						$('#username').focus();
-						$('#username').blur();
-						$('#username').attr('disabled', true);
+						$('#username').trigger('blur');
+						$('#username, #type').attr('disabled', true);
 					}
 					this.initmoney();
 					this.initconsume();
@@ -579,7 +580,7 @@ define(['bootstrap'], function($){
 									return false;
 								} else {
 									dialog.modal('hide');
-									util.message('交易成功', '', 'success');
+									util.message('交易成功', 'refresh', 'success');
 									return false;
 								}
 							});
@@ -713,9 +714,8 @@ define(['bootstrap'], function($){
 					if(uid > 0) {
 						$('#type').val('uid');
 						$('#username').val(uid);
-						$('#username').focus();
-						$('#username').blur();
-						$('#username').attr('disabled', true);
+						$('#username').trigger('blur');
+						$('#username, #type').attr('disabled', true);
 					}
 					this.submit();
 				},
@@ -783,7 +783,7 @@ define(['bootstrap'], function($){
 									return false;
 								} else {
 									dialog.modal('hide');
-									util.message('操作成功', '', 'success');
+									util.message('操作成功', 'refresh', 'success');
 									return false;
 								}
 							});
@@ -889,10 +889,9 @@ define(['bootstrap'], function($){
 					if(uid > 0) {
 						$('#type').val('uid');
 						$('#username').val(uid);
-						$('#username').focus();
-						$('#username').blur();
+						$('#username').trigger('blur');
 						if(this.user.uid > 0) {
-							$('#username').attr('disabled', true);
+							$('#username,  #type').attr('disabled', true);
 						}
 					}
 					this.submit();
@@ -943,7 +942,6 @@ define(['bootstrap'], function($){
 				},
 
 				'submit': function() {
-
 					var _this = this;
 					$('#form-card .btn-primary').click(function(){
 						_this.checkuser();
@@ -960,7 +958,7 @@ define(['bootstrap'], function($){
 									return false;
 								} else {
 									dialog.modal('hide');
-									util.message('发放会员卡成功', '', 'success');
+									util.message('发放会员卡成功', 'refresh', 'success');
 									return false;
 								}
 							});
@@ -971,5 +969,209 @@ define(['bootstrap'], function($){
 			card.init(uid);
 		});
 	}
+
+	trade.card_edit = function(uid) {
+		var html = '<div class="modal fade" id="card-edit-Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">'+
+			'	<div class="modal-dialog modal-lg" role="document">'+
+			'		<div class="modal-content">'+
+			'			<form class="table-responsive form-inline" method="post" action="" id="form-card">'+
+			'				<div class="modal-header">'+
+			'					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
+			'					<h4 class="modal-title" id="myModalLabel">更改会员卡号</h4>'+
+			'				</div>'+
+			'				<div class="modal-body">'+
+			'					<table class="table table-hover table-bordered">'+
+			'						<tr>'+
+			'							<th width="150">'+
+			'								<select name="type" id="type" class="form-control">'+
+			'									<option value="mobile">手机号</option>'+
+			'									<option value="uid">会员UID</option>'+
+			'								</select>'+
+			'							</th>'+
+			'							<td>'+
+			'								<div class="form-group">'+
+			'									<input type="text" value="" name="username" id="username" class="form-control"/>'+
+			'								</div>'+
+			'							</td>'+
+			'						</tr>'+
+			'						<tr id="user" style="display: none">'+
+			'							<th>会员信息</th>'+
+			'							<td>'+
+			'								<div class="form-group">'+
+			'									<div class="input-group">'+
+			'										<strong class="form-control-static"></strong>'+
+			'									</div>'+
+			'								</div>'+
+			'							</td>'+
+			'						</tr>'+
+			'						<tr>'+
+			'							<th>原卡号</th>'+
+			'							<td>'+
+			'								<div class="form-group">'+
+			'									<p class="label label-danger" id="old_cardsn"></p>'+
+			'								</div>'+
+			'							</td>'+
+			'						</tr>'+
+			'						<tr>'+
+			'							<th>设置新卡号</th>'+
+			'							<td>'+
+			'								<div class="form-group">'+
+			'									<input type="text" name="cardsn" id="cardsn" value="" class="form-control">'+
+			'								</div>'+
+			'							</td>'+
+			'						</tr>'+
+			'						<tr>'+
+			'							<th>店员密码</th>'+
+			'							<td>'+
+			'								<div class="form-group">'+
+			'									<input type="password" name="password" class="form-control">'+
+			'								</div>'+
+			'							</td>'+
+			'						</tr>'+
+			'					</table>'+
+			'				</div>'+
+			'				<div class="modal-footer">'+
+			'					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>'+
+			'					<input type="submit" class="btn btn-primary" id="submit" name="提交"value="提交">'+
+			'				</div>'+
+			'			</form>'+
+			'		</div>'+
+			'	</div>'+
+			'</div>';
+		require(['validator'], function($){
+			$('#card-edit-Modal').remove();
+			$(document.body).append(html);
+			var dialog = $('#card-edit-Modal');
+			dialog.modal('show');
+
+			$('#form-card').bootstrapValidator({
+				fields: {
+					username: {
+						validators: {
+							notEmpty: {
+								message: '请填写用户手机或UID'
+							}
+						}
+					},
+					cardsn: {
+						validators: {
+							notEmpty: {
+								message: '新卡号不能为空'
+							},
+							remote: {
+								url: "./index.php?c=mc&a=trade&do=cardsn&type=check",
+								data: function(validator) {
+									return {
+										data: validator.getFieldElements('cardsn').val()
+									};
+								},
+								message: '卡号已经被其他用户使用'
+							}
+						}
+					},
+					password: {
+						validators: {
+							notEmpty: {
+								message: '店员密码不能为空'
+							},
+							remote: {
+								url: "./index.php?c=mc&a=trade&do=clerk",
+								data: function(validator) {
+									return {
+										data: validator.getFieldElements('password').val()
+									};
+								},
+								message: '店员密码错误'
+							}
+						}
+					}
+				}
+			});
+			var Validator = $('#form-card').data('bootstrapValidator');
+			var card_edit = {
+				'user': {},
+				'card': {},
+				'init': function(uid) {
+					this.getuser();
+					if(uid > 0) {
+						$('#type').val('uid');
+						$('#username').val(uid);
+						$('#username').trigger('blur');
+						if(this.user.uid > 0) {
+							$('#username, #type').attr('disabled', true);
+						}
+					}
+					this.submit();
+				},
+
+				getuser: function() {
+					var _this = this;
+					$('#username').blur(function(){
+						Validator.validateField('username');
+						var username = $.trim($('#username').val());
+						var type = $('#type').val();
+						if(username) {
+							$.post('./index.php?c=mc&a=trade&do=user&', {'type':type, 'username':username}, function(data){
+								var data = $.parseJSON(data);
+								if(data.error != 'none') {
+									_this.user = {};
+									_this.card = {};
+									$('#user').hide();
+									Validator.updateMessage('username', 'notEmpty', data.message);
+									Validator.updateStatus('username', 'INVALID', 'notEmpty');
+									return false;
+								} else {
+									_this.user = data.user;
+									_this.card = data.card;
+									$('#user strong').html(data.html);
+									$('#old_cardsn').html(data.user.cardsn);
+									$('#user').show();
+								}
+							});
+						}
+					});
+				},
+
+				'checkuser': function() {
+					if(this.user.uid == undefined || !this.user.uid) {
+						this.user = {};
+						this.card = {};
+						$('#username').focus();
+						Validator.updateMessage('username', 'notEmpty', '未找到对应会员');
+						Validator.updateStatus('username', 'INVALID', 'notEmpty');
+						return false;
+					}
+					return true;
+				},
+
+				'submit': function() {
+					var _this = this;
+					$('#form-card .btn-primary').click(function(){
+						_this.checkuser();
+						Validator.validate();
+						if(Validator.isValid()) {
+							var param = {
+								'uid': _this.user.uid,
+								'cardsn': $.trim($('#cardsn').val()),
+								'password': $.trim($(':input[name="password"]').val())
+							}
+							$.post('./index.php?c=mc&a=trade&do=cardsn', param, function(data){
+								if(data != 'success') {
+									util.message(data, '', 'error');
+									return false;
+								} else {
+									dialog.modal('hide');
+									util.message('更改卡号成功', 'refresh', 'success');
+									return false;
+								}
+							});
+						}
+					});
+				}
+			};
+			card_edit.init(uid);
+		});
+	}
+
 	return trade;
 });

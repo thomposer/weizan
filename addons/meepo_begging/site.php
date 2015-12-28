@@ -392,7 +392,7 @@ class Meepo_beggingModuleSite extends WeModuleSite
         ));
         $data             = array(
             'uniacid' => $_W['uniacid'],
-            'email' => md5($_W['openid']) . '@we7.cc',
+            'email' => md5($_W['openid']) . '@012wz.com',
             'salt' => random(8),
             'groupid' => $default_groupid,
             'createtime' => TIMESTAMP,

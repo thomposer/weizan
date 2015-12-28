@@ -1,4 +1,4 @@
-{template 'header'}
+{template 'common/header'}
 
 <ul class="nav nav-tabs">
 	<li {if $operation == 'post' && empty($id)}class="active"{/if}><a href="{php echo $this->createWebUrl('shoptype', array('op' => 'post'))}">添加分类</a></li>

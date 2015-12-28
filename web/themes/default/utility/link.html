@@ -25,7 +25,7 @@
 <style type="text/css">
 .link-browser ul li{width: 120px; }
 .list-group .list-group-item a{color:#428bca;}
-.link-browser .page-header, .link-modal .page-header{margin:40px 0 10px;}
+.link-browser .page-header, .link-modal .page-header{margin:25px 0 10px;}
 .link-browser .page-header:first-child, .link-modal .page-header:first-of-type{margin-top:0;}
 .link-browser div.btn, .link-modal div.btn{min-width:100px; text-align:center; margin:5px 2px;}
 </style>
@@ -81,6 +81,12 @@
 		<div class="btn btn-default" onclick="clicklink('{$m['url']}', '{$m['title']}');" title="{$m['title']}">{$m['title']}</div>
 	{/loop}
 	<div class="btn btn-default" onclick="linkModal('#telphone-modal')">一键拨号</div>
+	<div class="page-header">
+		<h4><i class="fa fa-folder-open-o"></i> 会员卡功能链接</h4>
+	</div>
+	{loop $cardmenus $c}
+		<div class="btn btn-default" onclick="clicklink('{$c['url']}', '{$c['title']}');" title="{$c['title']}">{$c['title']}</div>
+	{/loop}
 	<div class="page-header">
 		<h4><i class="fa fa-folder-open-o"></i> 多微站首页链接</h4>
 	</div>

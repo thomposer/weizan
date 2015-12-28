@@ -8,10 +8,19 @@ defined('IN_IA') or exit('Access Denied');
 class NewsModuleProcessor extends WeModuleProcessor {
 	public function respond() {
 		global $_W;
-		$rid = $this->rule;		
-		$sql = "SELECT * FROM " . tablename('news_reply') . " WHERE rid = :id ORDER BY displayorder DESC, id ASC LIMIT 8";
-		$commends = pdo_fetchall($sql, array(':id'=>$rid));
+		$rid = $this->rule;
+		$sql = "SELECT * FROM " . tablename('news_reply') . " WHERE rid = :id AND parent_id = -1 ORDER BY displayorder DESC, id ASC LIMIT 8";
+		$commends = pdo_fetchall($sql, array(':id' => $rid));
 		if (empty($commends)) {
+						$sql = "SELECT * FROM " . tablename('news_reply') . " WHERE rid = :id AND parent_id = 0 ORDER BY RAND()";
+			$main = pdo_fetch($sql, array(':id' => $rid));
+			if(empty($main['id'])) {
+				return false;
+			}
+			$sql = "SELECT * FROM " . tablename('news_reply') . " WHERE id = :id OR parent_id = :parent_id ORDER BY parent_id ASC, displayorder DESC, id ASC LIMIT 8";
+			$commends = pdo_fetchall($sql, array(':id'=>$main['id'], ':parent_id'=>$main['id']));
+		}
+		if(empty($commends)) {
 			return false;
 		}
 		$news = array();

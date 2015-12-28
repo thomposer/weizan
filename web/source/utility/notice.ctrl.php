@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -23,27 +23,40 @@ if(!empty($notices)) {
 	}
 }
 $total = 0;
+$notreads = array();
 $total = pdo_fetchcolumn('SELECT COUNT(*) FROM' . tablename('article_unread_notice') . ' WHERE uid = :uid AND is_new = 1', array(':uid' => $_W['uid']));
-
+$categorys = pdo_fetchall('SELECT id,title FROM ' . tablename('article_category') . ' WHERE type = :type', array(':type' => 'notice'), 'id');
 if($total > 0) {
-	$notreads = pdo_fetchall('SELECT id,title,createtime,cateid FROM ' . tablename('article_notice') . ' WHERE is_display = 1 AND id IN (SELECT notice_id FROM '. tablename('article_unread_notice') . ' WHERE uid = :uid AND is_new = 1) ORDER BY displayorder DESC LIMIT 5', array(':uid' => $_W['uid']), 'id');
-	if(!empty($notreads)) {
-		$categorys = pdo_fetchall('SELECT id,title FROM ' . tablename('article_category') . ' WHERE type = :type', array(':type' => 'notice'), 'id');
-		foreach($notreads as &$notread) {
-			$notread['catename'] = $categorys[$notread['cateid']]['title'];
-		}
+	$notreads = pdo_fetchall('SELECT id,title,createtime,cateid FROM ' . tablename('article_notice') . ' WHERE is_display = 1 AND id IN (SELECT notice_id FROM '. tablename('article_unread_notice') . ' WHERE uid = :uid AND is_new = 1) ORDER BY displayorder DESC, id DESC LIMIT 5', array(':uid' => $_W['uid']), 'id');
+	foreach($notreads as &$notread) {
+		$notread['catename'] = $categorys[$notread['cateid']]['title'];
+		$notread['is_new'] = 1;
 	}
 }
+if($total < 5) {
+	$limit = 5 - $total;
+	$notices = pdo_fetchall('SELECT id,title,createtime,cateid FROM ' . tablename('article_notice') . ' WHERE is_display = 1 ORDER BY displayorder DESC, id DESC LIMIT ' . $limit, array(), 'id');
+	foreach($notices as &$notice) {
+		$notice['catename'] = $categorys[$notice['cateid']]['title'];
+		$notice['is_new'] = 0;
+	}
+}
+$notices = array_merge($notreads, $notices);
 $html = '';
-if(!empty($notreads)) {
-	foreach($notreads as $row) {
+if(!empty($notices)) {
+	foreach($notices as $row) {
+		$class = 'new';
+		if(!$row['is_new']) {
+			$class = 'old';
+		}
 		$html .= '<li>' .
 					'<a href="'.url('article/notice-show/detail', array('id' => $row['id'])).'" target="_blank" class="clearfix">' .
-						'<div class="pull-left">' .
-							'<h3>' . $row['title'] . '</h3>' .
+						'<div><i class="fa fa-circle ' . $class . '"></i></div>' .
+						'<div>' .
+							'<h3>' .$row['is_new'].  $row['title'] . '</h3>' .
 							'<div class="date">' . date('Y-m-d', $row['createtime']) . '</div>' .
 						'</div>' .
-						'<span class="label label-info pull-right">'. $row['catename'] .'</span>' .
+						'<div><span class="label label-info">'. $row['catename'] .'</span></div>' .
 					'</a>' .
 				'</li>';
 	}

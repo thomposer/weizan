@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 function site_cover($coverparams = array()) {
 	$where = '';
@@ -56,6 +56,7 @@ function site_cover($coverparams = array()) {
 		'do' => '',
 		'module' => $coverparams['module'],
 	);
+
 	if (empty($cover['id'])) {
 		pdo_insert('cover_reply', $entry);
 	} else {

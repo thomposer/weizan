@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -88,7 +88,7 @@ function rmdirs($path, $clean = false) {
 }
 
 
-function file_upload($file, $type = 'image', $name = '', $is_wechat = false) {
+function file_upload($file, $type = 'image', $name = '') {
 	$harmtype = array('asp', 'php', 'jsp', 'js', 'css', 'php3', 'php4', 'php5', 'ashx', 'aspx', 'exe', 'cgi');
 	if (empty($file)) {
 		return error(-1, '没有上传内容');
@@ -100,14 +100,12 @@ function file_upload($file, $type = 'image', $name = '', $is_wechat = false) {
 	global $_W;
 	$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
 	$ext = strtolower($ext);
-		if (!$is_wechat) {
-		$setting = $_W['setting']['upload'][$type];
-		if (!in_array(strtolower($ext), $setting['extentions']) || in_array(strtolower($ext), $harmtype)) {
-			return error(-3, '不允许上传此类文件');
-		}
-		if (!empty($setting['limit']) && $setting['limit'] * 1024 < filesize($file['tmp_name'])) {
-			return error(-4, "上传的文件超过大小限制，请上传小于 {$setting['limit']}k 的文件");
-		}
+	$setting = $_W['setting']['upload'][$type];
+	if (!in_array(strtolower($ext), $setting['extentions']) || in_array(strtolower($ext), $harmtype)) {
+		return error(-3, '不允许上传此类文件');
+	}
+	if (!empty($setting['limit']) && $setting['limit'] * 1024 < filesize($file['tmp_name'])) {
+		return error(-4, "上传的文件超过大小限制，请上传小于 {$setting['limit']}k 的文件");
 	}
 	$result = array();
 	if (empty($name) || $name == 'auto') {
@@ -132,14 +130,52 @@ function file_upload($file, $type = 'image', $name = '', $is_wechat = false) {
 	return $result;
 }
 
+function file_wechat_upload($file, $type = 'image', $name = '') {
+	$harmtype = array('asp', 'php', 'jsp', 'js', 'css', 'php3', 'php4', 'php5', 'ashx', 'aspx', 'exe', 'cgi');
+	if (empty($file)) {
+		return error(-1, '没有上传内容');
+	}
+	if (!in_array($type, array('image', 'thumb', 'voice', 'video', 'audio'))) {
+		return error(-2, '未知的上传类型');
+	}
+	
+	global $_W;
+	$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+	$ext = strtolower($ext);
+	if (in_array(strtolower($ext), $harmtype)) {
+		return error(-3, '不允许上传此类文件');
+	}
 
-function file_remote_upload($filename) {
+	$result = array();
+	if (empty($name) || $name == 'auto') {
+		$uniacid = intval($_W['uniacid']);
+		$path = "{$type}s/{$uniacid}/" . date('Y/m/');
+		mkdirs(ATTACHMENT_ROOT . '/' . $path);
+		$filename = file_random_name(ATTACHMENT_ROOT . '/' . $path, $ext);
+		$result['path'] = $path . $filename;
+	} else {
+		mkdirs(dirname(ATTACHMENT_ROOT . '/' . $name));
+		if (!strexists($name, $ext)) {
+			$name .= '.' . $ext;
+		}
+		$result['path'] = $name;
+	}
+	
+	if (!file_move($file['tmp_name'], ATTACHMENT_ROOT . '/' . $result['path'])) {
+		return error(-1, '保存上传文件失败');
+	}
+	$result['success'] = true;
+	return $result;
+}
+
+
+function file_remote_upload($filename, $auto_delete_local = true) {
 	global $_W;
 	if (empty($_W['setting']['remote']['type'])) {
 		return false;
 	}
 	if ($_W['setting']['remote']['type'] == '1') {
-		require(IA_ROOT . '/framework/library/ftp/ftp.php');
+		require_once(IA_ROOT . '/framework/library/ftp/ftp.php');
 		$ftp_config = array(
 			'hostname' => $_W['setting']['remote']['ftp']['host'],
 			'username' => $_W['setting']['remote']['ftp']['username'],
@@ -152,7 +188,11 @@ function file_remote_upload($filename) {
 		);
 		$ftp = new Ftp($ftp_config);
 		if (true === $ftp->connect()) {
-			if ($ftp->upload(ATTACHMENT_ROOT . '/' . $filename, $filename)) {
+			$response = $ftp->upload(ATTACHMENT_ROOT . '/' . $filename, $filename);
+			if ($auto_delete_local) {
+				file_delete($filename);
+			}
+			if (!empty($response)) {
 				return true;
 			} else {
 				return error(1, '远程附件上传失败，请检查配置并重新上传');
@@ -161,13 +201,16 @@ function file_remote_upload($filename) {
 			return error(1, '远程附件上传失败，请检查配置并重新上传');
 		}
 	} elseif ($_W['setting']['remote']['type'] == '2') {
-		require(IA_ROOT . '/framework/library/alioss/sdk.class.php');
-		$oss = new ALIOSS($_W['setting']['remote']['alioss']['key'], $_W['setting']['remote']['alioss']['secret'], $_W['setting']['remote']['alioss']['url'].'.aliyuncs.com');
+		require_once(IA_ROOT . '/framework/library/alioss/sdk.class.php');
+		$oss = new ALIOSS($_W['setting']['remote']['alioss']['key'], $_W['setting']['remote']['alioss']['secret'], $_W['setting']['remote']['alioss']['ossurl']);
 		$options = array(
-			ALIOSS::OSS_FILE_UPLOAD => ATTACHMENT_ROOT . '/' . $filename,
+			ALIOSS::OSS_FILE_UPLOAD => ATTACHMENT_ROOT. $filename,
 			ALIOSS::OSS_PART_SIZE => 5242880,
 		);
 		$response = $oss->create_mpu_object($_W['setting']['remote']['alioss']['bucket'], $filename, $options);
+		if ($auto_delete_local) {
+			file_delete($filename);
+		}
 		if ($response->status == 200) {
 			return true;
 		} else {
@@ -197,6 +240,46 @@ function file_delete($file) {
 		@unlink(ATTACHMENT_ROOT . '/' . $file);
 	}
 	return TRUE;
+}
+
+function file_remote_delete($file) {
+	global $_W;
+	if(empty($file)) {
+		return true;
+	}
+	if ($_W['setting']['remote']['type'] == '1') {
+		require(IA_ROOT . '/framework/library/ftp/ftp.php');
+		$ftp_config = array(
+			'hostname' => $_W['setting']['remote']['ftp']['host'],
+			'username' => $_W['setting']['remote']['ftp']['username'],
+			'password' => $_W['setting']['remote']['ftp']['password'],
+			'port' => $_W['setting']['remote']['ftp']['port'],
+			'ssl' => $_W['setting']['remote']['ftp']['ssl'],
+			'passive' => $_W['setting']['remote']['ftp']['pasv'],
+			'timeout' => $_W['setting']['remote']['ftp']['timeout'],
+			'rootdir' => $_W['setting']['remote']['ftp']['dir'],
+		);
+		$ftp = new Ftp($ftp_config);
+		if (true === $ftp->connect()) {
+			if ($ftp->delete_file($file)) {
+				return true;
+			} else {
+				return error(1, '删除附件失败，请检查配置并重新删除');
+			}
+		} else {
+			return error(1, '删除附件失败，请检查配置并重新删除');
+		}
+	} elseif ($_W['setting']['remote']['type'] == '2') {
+		require(IA_ROOT . '/framework/library/alioss/sdk.class.php');
+		$oss = new ALIOSS($_W['setting']['remote']['alioss']['key'], $_W['setting']['remote']['alioss']['secret'], $_W['setting']['remote']['alioss']['ossurl']);
+		$response = $oss->delete_object($_W['setting']['remote']['alioss']['bucket'], $file);
+		if ($response->status == 204) {
+			return true;
+		} else {
+			return error(1, '删除oss远程文件失败');
+		}
+	}
+	return true;
 }
 
 

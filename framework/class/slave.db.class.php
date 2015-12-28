@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 load()->classs('db');
@@ -10,11 +10,7 @@ class SlaveDb extends DB {
 	private $weight;
 	private $slavequery = 0;
 	private $slaveid = null;
-
-	public function execute($sql, $params = array()) {
-		$this->init_connect($sql);
-		parent::execute($sql, $params);
-	}
+	
 	public function slave_connect() {
 		$this->slave_choose();
 		if($this->slaveid) {
@@ -53,7 +49,7 @@ class SlaveDb extends DB {
 				$tablename = substr($sql_lower, strpos($sql_lower, 'from ') + 5, strpos($sql_lower, ' where') - strpos($sql_lower, 'from ') - 5);
 			}
 			$tablename = trim($tablename, '`');
-			$tablename = str_replace($this->cfg['master']['tablepre'], '', $tablename);
+			$tablename = str_replace($this->tablepre, '', $tablename);
 			if(!empty($this->cfg['common']['slave_except_table']) && in_array(strtolower($tablename), $this->cfg['common']['slave_except_table'])) {
 				$slave_except = true;
 			}

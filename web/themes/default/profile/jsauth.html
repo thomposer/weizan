@@ -12,12 +12,12 @@
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">选择公众号</label>
 					<div class="col-sm-9 col-xs-12">
 						<select name="jsauth_acid" class="form-control">
-							<option value="0">请选择公众号</option>
+							<option value="0">不借用任何权限</option>
 							{loop $accounts $acid $name}
 							<option value="{$acid}" {if $jsauth_acid == $acid}selected{/if}>{$name}</option>
 							{/loop}
 						</select>
-						<span class="help-block">在系统中使用微信分享接口前，开发者需要先到公众平台网站的【公众号设置】 / 【功能设置】中配置 【JS 接口安全域名】。<a href="http://www.012wz.com/manual/dev:v0.6:qa:jsauth" target="_black">查看详情</a></span>
+						<span class="help-block">在系统中使用微信分享接口前，开发者需要先到公众平台网站的【公众号设置】 / 【功能设置】中配置 【JS 接口安全域名】。<a href="http://www.012wz.com/wiki/" target="_black">查看详情</a></span>
 					</div>
 				</div>
 			</div>

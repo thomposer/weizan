@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $callback = $_GPC['callback'];
@@ -34,6 +34,14 @@ $sysmenus = array(
 	array('title'=>'个人中心','url'=> murl('mc')),
 );
 
+$cardmenus = array(
+	array('title'=>'我的会员卡','url'=> murl('mc/bond/mycard')),
+	array('title'=>'消息','url'=> murl('mc/card/notice')),
+	array('title'=>'签到','url'=> murl('mc/card/sign_display')),
+	array('title'=>'推荐','url'=> murl('mc/card/recommend')),
+	array('title'=>'适用门店','url'=> murl('mc/store')),
+	array('title'=>'完善会员资料','url'=> murl('mc/profile')),
+);
 $multis = pdo_fetchall('SELECT id,title FROM ' . tablename('site_multi') . ' WHERE uniacid = :uniacid AND status != 0', array(':uniacid' => $_W['uniacid']));
 if(!empty($multis)) {
 	foreach($multis as $multi) {

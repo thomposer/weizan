@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -85,7 +85,7 @@ if($do == 'post') {
 						'icon' => empty($_GPC['icon']['icon']) ? 'fa fa-external-link' : $_GPC['icon']['icon'],
 					),
 					'name' => array(
-						'color' => $_GPC['color'],
+						'color' => $_GPC['name']['color'],
 					),
 				)
 			);
@@ -150,7 +150,7 @@ if($do == 'display') {
 		if(empty($entries)) {
 			message('访问错误, 当前模块不提供此功能.');
 		}
-		
+
 		if($module['issolution']) {
 			$solution = $module;
 			define('FRAME', 'solution');
@@ -257,7 +257,7 @@ if($do == 'display') {
 		}
 	}
 
-	$sql = 'SELECT * FROM ' . tablename('site_nav') . ' WHERE `uniacid`=:uniacid AND `position`=' . $type['position'] . $condition . ' ORDER BY `displayorder`';
+	$sql = 'SELECT * FROM ' . tablename('site_nav') . ' WHERE `uniacid`=:uniacid AND `position`=' . $type['position'] . $condition . ' ORDER BY `displayorder` DESC, id ASC';
 	$navs = pdo_fetchall($sql, $pars);
 	$navigations = array();
 	if(!empty($navs)) {

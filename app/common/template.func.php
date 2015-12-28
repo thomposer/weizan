@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -132,12 +132,16 @@ function template_parse($str) {
 	$str = preg_replace('/{(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff\[\]\'\"\$]*)}/', '<?php echo $1;?>', $str);
 	$str = preg_replace('/{url\s+(\S+)}/', '<?php echo url($1);?>', $str);
 	$str = preg_replace('/{url\s+(\S+)\s+(array\(.+?\))}/', '<?php echo url($1, $2);?>', $str);
+	$str = preg_replace('/{media\s+(\S+)}/', '<?php echo tomedia($1);?>', $str);
 	$str = preg_replace_callback('/{data\s+(.+?)}/s', "moduledata", $str);
 	$str = preg_replace('/{\/data}/', '<?php } } ?>', $str);
 	$str = preg_replace_callback('/<\?php([^\?]+)\?>/s', "template_addquote", $str);
 	$str = preg_replace('/{([A-Z_\x7f-\xff][A-Z0-9_\x7f-\xff]*)}/s', '<?php echo $1;?>', $str);
 	$str = str_replace('{##', '{', $str);
 	$str = str_replace('##}', '}', $str);
+	if (!empty($GLOBALS['_W']['setting']['remote']['type'])) {
+		$str = str_replace('</body>', "<script>var imgs = document.getElementsByTagName('img');for(var i=0, len=imgs.length; i < len; i++){imgs[i].onerror = function() {if (!this.getAttribute('check-src') && (this.src.indexOf('http://') > -1 || this.src.indexOf('https://') > -1)) {this.src = this.src.indexOf('{$GLOBALS['_W']['attachurl']}') == -1 ? this.src.replace('{$GLOBALS['_W']['attachurl_remote']}', '{$GLOBALS['_W']['attachurl']}') : this.src.replace('{$GLOBALS['_W']['attachurl']}', '{$GLOBALS['_W']['attachurl_remote']}');this.setAttribute('check-src', true);}}}</script></body>", $str);
+	}
 	$str = "<?php defined('IN_IA') or exit('Access Denied');?>" . $str;
 	return $str;
 }
@@ -257,7 +261,7 @@ function site_navs($params = array()) {
 			$row['css']['icon']['style'] = "color:{$row['css']['icon']['color']};font-size:{$row['css']['icon']['font-size']}px;";
 			$row['css']['name'] = "color:{$row['css']['name']['color']};";
 			$row['html'] = '<a href="'.$row['url'].'" class="box-item">';
-			$row['html'] .= '<i '.(!empty($row['icon']) ? "style=\"background:url({$_W['attachurl']}{$row['icon']}) no-repeat;background-size:cover;\" class=\"icon\"" : "class=\"fa {$row['css']['icon']['icon']} \" style=\"{$row['css']['icon']['style']}\"").'></i>';
+			$row['html'] .= '<i '.(!empty($row['icon']) ? "style=\"background:url('".tomedia($row['icon'])."') no-repeat;background-size:cover;\" class=\"icon\"" : "class=\"fa {$row['css']['icon']['icon']} \" style=\"{$row['css']['icon']['style']}\"").'></i>';
 			$row['html'] .= "<span style=\"{$row['css']['name']}\" title=\"{$row['name']}\">{$row['name']}</span></a>";
 		}
 		unset($row);

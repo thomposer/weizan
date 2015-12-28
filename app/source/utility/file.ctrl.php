@@ -19,7 +19,23 @@ if ($do == 'upload') {
 			'error' => array('code' => 1, 'message'=>''),
 		);
 		load()->func('file');
-		
+		if (empty($_FILES['file']['tmp_name'])) {
+			$binaryfile = file_get_contents('php://input', 'r');
+			if (!empty($binaryfile)) {
+				mkdirs(ATTACHMENT_ROOT . '/temp');
+				$tempfilename = random(5);
+				$tempfile = ATTACHMENT_ROOT . '/temp/' . $tempfilename;
+				if (file_put_contents($tempfile, $binaryfile)) {
+					$imagesize = @getimagesize($tempfile);
+					$imagesize = explode('/', $imagesize['mime']);
+					$_FILES['file'] = array(
+						'name' => $tempfilename . '.' . $imagesize[1],
+						'tmp_name' => $tempfile,
+						'error' => 0,
+					);
+				}
+			}
+		}
 		if (!empty($_FILES['file']['name'])) {
 			if ($_FILES['file']['error'] != 0) {
 				$result['error']['message'] = '上传失败，请重试！';
@@ -55,14 +71,15 @@ if ($do == 'upload') {
 				'ext' => $ext,
 				'filename' => $pathname,
 				'attachment' => $pathname,
-				'url' => $_W['attachurl'] . $pathname,
+				'url' => tomedia($pathname),
 				'is_image' => 1,
 				'filesize' => filesize($fullname),
 			);
 			$size = getimagesize($fullname);
 			$info['width'] = $size[0];
 			$info['height'] = $size[1];
-
+			
+			setting_load('remote');
 			if (!empty($_W['setting']['remote']['type'])) {
 				$remotestatus = file_remote_upload($pathname);
 				if (is_error($remotestatus)) {
@@ -71,8 +88,10 @@ if ($do == 'upload') {
 					die(json_encode($result));
 				} else {
 					file_delete($pathname);
+					$info['url'] = tomedia($pathname);
 				}
 			}
+			
 			pdo_insert('core_attachment', array(
 				'uniacid' => $uniacid,
 				'uid' => $_W['uid'],

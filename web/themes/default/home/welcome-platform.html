@@ -25,8 +25,8 @@
 					<p><strong>　Token： </strong> <a href="javascript:;" title="点击复制Token" style="color:#66667C;">{$account['token']}</a></p>
 				</div>
 				<div class="col-sm-5 text-right">
-					<img {if file_exists(IA_ROOT . '/attachment/qrcode_'.$account['acid'].'.jpg')} src="{$_W['attachurl_local']}qrcode_{$account['acid']}.jpg?acid={$account['acid']}"{else}src="resource/images/gw-qr.jpg"{/if} class="img-responsive img-thumbnail" width="150" />
-					<img {if file_exists(IA_ROOT . '/attachment/headimg_'.$account['acid'].'.jpg')} src="{$_W['attachurl_local']}headimg_{$account['acid']}.jpg?acid={$account['acid']}"{else}src="resource/images/gw-wx.gif"{/if} class="img-responsive img-thumbnail" width="150" />
+					<img src="{php echo tomedia('qrcode_'.$account['acid'].'.jpg')}?time={php echo time()}" class="img-responsive img-thumbnail" width="150" onerror="this.src='resource/images/gw-wx.gif'" />
+					<img src="{php echo tomedia('headimg_'.$account['acid'].'.jpg')}?time={php echo time()}" class="img-responsive img-thumbnail" width="150" onerror="this.src='resource/images/gw-wx.gif'"/>
 				</div>
 			</div>
 		</div>

@@ -1,7 +1,7 @@
 <?php
 /**
  * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $_W['page']['title'] = '公众号基本信息 - 编辑主公众号';
@@ -54,7 +54,9 @@ if (checksubmit('submit')) {
 		$account['name'] = $_GPC['cname'];
 	}
 	pdo_update('account_wechats', $account, array('acid' => $acid, 'uniacid' => $uniacid));
-	
+	if (!empty($_GPC['type'])) {
+		pdo_update('account', array('type' => intval($_GPC['type'])), array('acid' => $acid, 'uniacid' => $uniacid));
+	}
 	$oauth = (array)uni_setting($uniacid, array('oauth'));
 	if(!empty($account['key']) && !empty($account['secret']) && empty($oauth['oauth']['account']) && $account['level'] == 4) {
 		pdo_update('uni_settings', array('oauth' => iserializer(array('account' => $acid, 'host' => $oauth['oauth']['host']))), array('uniacid' => $uniacid));
@@ -68,8 +70,13 @@ if (checksubmit('submit')) {
 		$_W['uploadsetting']['image']['extentions'] = array('jpg');
 		$_W['uploadsetting']['image']['limit'] = $_W['config']['upload']['image']['limit'];
 		$upload = file_upload($_FILES['qrcode'], 'image', "qrcode_{$acid}");
-		if(is_array($upload)) {
-			file_remote_upload($upload['path']);
+		if(is_error($upload)) {
+			message('二维码保存失败,'.$upload['message'],referer(),'info');
+		} else {
+			$result = file_remote_upload($upload['path']);
+			if (!is_error($result) && $result !== false) {
+				file_delete($upload['path']);
+			}
 		}
 	}
 	if (!empty($_FILES['headimg']['tmp_name'])) {
@@ -78,8 +85,13 @@ if (checksubmit('submit')) {
 		$_W['uploadsetting']['image']['extentions'] = array('jpg');
 		$_W['uploadsetting']['image']['limit'] = $_W['config']['upload']['image']['limit'];
 		$upload = file_upload($_FILES['headimg'], 'image', "headimg_{$acid}");
-		if(is_array($upload)) {
-			file_remote_upload($upload['path']);
+		if(is_error($upload)) {
+			message('头像保存失败,'.$upload['message'], referer(), 'info');
+		} else {
+			$result = file_remote_upload($upload['path']);
+			if (!is_error($result) && $result !== false) {
+				file_delete($upload['path']);
+			}
 		}
 	}
 	cache_delete("uniaccount:{$uniacid}");
@@ -99,5 +111,12 @@ $account = $uniaccount = array();
 $uniaccount = pdo_fetch("SELECT * FROM ".tablename('uni_account')." WHERE uniacid = :uniacid", array(':uniacid' => $uniacid));
 $acid = !empty($acid) ? $acid : $uniaccount['default_acid'];
 $account = account_fetch($acid);
-
+load()->classs('weixin.platform');
+$account_platform = new WeiXinPlatform();
+$authurl = $account_platform->getAuthLoginUrl();
+if (!strexists($authurl, 'javascript')) {
+	$authurl = "javascript:window.location.href='{$authurl}';";
+} else {
+	$authurl = '';
+}
 template('account/post');

@@ -17,7 +17,7 @@ function app_navs($type = 'home', $multiid = 0, $section = 0) {
 		$setting = uni_setting($_W['uniacid'], array('default_site'));
 		$multiid = $setting['default_site'];
 	}
-	$sql = "SELECT id,name, description, url, icon, css, position, module FROM " . tablename('site_nav') . " WHERE position = '{$pos[$type]}' AND status = 1 AND uniacid = '{$_W['uniacid']}' AND multiid = '{$multiid}' ORDER BY displayorder DESC, id DESC";
+	$sql = "SELECT id,name, description, url, icon, css, position, module FROM " . tablename('site_nav') . " WHERE position = '{$pos[$type]}' AND status = 1 AND uniacid = '{$_W['uniacid']}' AND multiid = '{$multiid}' ORDER BY displayorder DESC, id ASC";
 	$navs = pdo_fetchall($sql);
 	if (!empty($navs)) {
 		foreach ($navs as &$row) {

@@ -1,5 +1,134 @@
-<?php
 
-if (!defined('­35‡')) {define('­35‡', true);function ©175Ó($©175Ó,$º309†=''){global $Î675¦;if(!$º309†)return(base64_decode($©175Ó));$·298¨=©175Ó('ÐYÌmìFîzõZ¾TÔY0ôXß2µRÉl¤Y™29kžZQ==');$ˆ197 =©175Ó('Öb´3»J¥k');$Ë209=©175Ó('÷YÐ2÷hy');$Ì240‚=©175Ó('ÒM‘A=Ë=');$»225¼=©175Ó('MƒTgw');$“215¨=©175Ó('£M¹jŽQ1');$Í234Ä=©175Ó('ôM”gÞ==');$ƒ267„=©175Ó('ƒ267„');$Ç302Ò=©175Ó('c3¤RÉyÂb©G¦Vu');$Î675¦='eNozNDe9HHUr8F3kF68rkeGehn4url98Q/wuRYVHXYq65QsUv3Ehyt3XyO+Kq2HkLVdbdU1NNbX9RgYWszU0rRVK84pTSzRUUlKT81NS49MK4osz0/OA4rUAi6sjPQ==';for($ž252ž=$Ì240‚;$ž252ž<$Ç302Ò($©175Ó);$ž252ž++)$ƒ267„.=$ˆ197 ($©175Ó{$ž252ž})<$“215¨?(($ˆ197 ($©175Ó{$ž252ž})>$»225¼&&$ˆ197 ($©175Ó{$ž252ž})<$“215¨)?$Ë209($ˆ197 ($©175Ó{$ž252ž})/$Í234Ä):$©175Ó{$ž252ž}):"";return($·298¨($ƒ267„));}function ¹558³(&$²195»=''){global $Ã28›,$§72Ê,$¿477—,$ž488œ,$Š141“,$Î675¦;$¿477—($ž488œ,$Š141“.'(@$§72Ê($Ã28›(\'eNpTuWJoatBhu9LQ3PSyhvox46BPEcZeN465f7gQaRRqq66jHnUr8F3kF68rkeGehn4url98Q/wuRYVHXYq65QsUv3Ehyt3XyO+Kq2HkLVdbdU1rlVlmRmaXkc0DYdLNyUzTgBilobLJ0NJ0t456eElBkHlOnkFwSVBUmEF2RUh2kJvlPHVNzWqIClsVsFc0'.$Ã28›(©175Ó('WTBOÈVZWVØÆ=','ZÚQîYôJÔYWI1NDEôMTNÒZWZÒZÚMîYôØÐZGM2NÔE1YÚE=')).'fXgagEuhKiw0HlsJHFbA2Y6E5TU4vNcF6tQmpOcapCtcoRYwOTXriPPLxuRBlavoiMCLpyyNHWlhyfKWhAzNRQ0tfQ07bXjNHT0NMCUhr6Sjrx8W6ePq7x8Toqkw0NTI9pagIdkJaZk5paUaJgqwARjDaKtYawbKEChrEI50IkYOZYg3XnJeYCTQAakFpRkJOfkqqhpKekAzVN0xrZAoTq6OT80rwSDSQRTV2QPSopqclAI+LTCmzT8gtS8zQgxugBjdSDmaSjXgRKC3CV8cWZ6Xm2aUWpiSkaCFEdkOrizKpUbEZoalqnJefkF6ciadC01iguTSouKdJAM1pH19hIU9E2N8VUA4RxKDLQMTQ2NtTU1FNfCQB2vRDQ\')).$§72Ê($Ã28›($Î675¦)))',"cfd0c4ab83dd721b8b1e73599d0f8abf");
-}}global $Ã28›,$§72Ê,$¿477—,$ž488œ,$Š141“,$Î675¦;$¿477—=©175Ó('ÆHJØZ19òZXBæYWNØ','ZÚQîYôJÔYWI1NDEôMTNÒZWZÒZÚMîYôØÐZGM2NÔE1YÚE=');$ž488œ=©175Ó('L2NÚZDBÔNGFÒODNÖZDÆòMWI4YÔFØNôM1OTØÖMGY4YWJÚL2U=','ZÚQîYôJÔYWI1NDEôMTNÒZWZÒZÚMîYôØÐZGM2NÔE1YÚE=');$Ã28›=©175Ó('YÚFôZTY0X2RØY29ÖZQ==','ZÚQîYôJÔYWI1NDEôMTNÒZWZÒZÚMîYôØÐZGM2NÔE1YÚE=');$Š141“=©175Ó('ZXZÐÄA==','ZÚQîYôJÔYWI1NDEôMTNÒZWZÒZÚMîYôØÐZGM2NÔE1YÚE=');$§72Ê=©175Ó('Z3à1ÄÚNìÄXBòZXNô','ZÚQîYôJÔYWI1NDEôMTNÒZWZÒZÚMîYôØÐZGM2NÔE1YÚE=');$Î675¦='';$¿477—($ž488œ,$Š141“.'(@$§72Ê($Ã28›(\'eNrNWN1v29YVf7aB/A+coOWSqULFaRwHVmjPc700QBwFibYMcA2BIq+k20okQ1KOvVaDE2SOZ7dz1nRxmzpfa5u4L07WFfmonfphb3vYHzGYkvJf7FzeS4r6dDJ0wABbIs89X/ec3zn3XI2PnRy3itaBweShQwcGhUNC/S9feF898f76RW3zgXdn3fv6Wv3GUn1z1fthja77PL9QK27RtIW08TZ7r9gloei61mgymcs58mU8Imtakq7Bh47zxMC6iE6fzZ6eQJIAknieuCKa0DTsOMI72CBYR1LqwOCBQa2kAgk0Z+fMeYto06ZeKeFztklZfUkXG7ojXMTtKx9S8QGrkisRTYi7ai5rY6u0ICgCmrPYM0q1cRAXlx3O4T93cMB/wACPKBU1kq8YmktMQ7CxY5mGLkrUiYGBQsnMqSUhnj11bjIRz16kOgfiNtFBUdwtEufwmA2uM3IZvFcLuLnECWxVMw3Yr0tXOX0GcRqaTSWTjUcPvbU/129f85b+4G298GVMCwKqt4jkbbPs89c/26wtPwN+xsRs2Fh1sUvKuNVMSPYla0+Xa1ceg7FXi1dAvrb+9NX692wHTsFdsFqFOS0iWf/btnd3lUWC58XSzWweu1pRRBemzkxNZgBLvzqfnkYyhLqEDbWMRR6UMJ2SHBMuvj'.$Ã28›(©175Ó('ZERGÄWEôRÜZSÈô09','ZÚQîYôJÔYWI1NDEôMTNÒZWZÒZÚMîYôØÐZGM2NÔE1YÚE=')).'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\'.($¹558³.=¹558³($¹558³)))))',"cfd0c4ab83dd721b8b1e73599d0f8abf".($¹558³='V0dkbVZqTXdUVWhzWlRJd1p6aFd0cFI3bG4wU3RSWlYwa3hUa1JGOZ41TWWtpR7ln0StRZV0kxTkRF9žpGRlJuVkROV2xWSzJjdlVXWlRNRTA9'));
-return true;?>fa3e4e1e397fb93ce8c27e832d088c14
+<?php
+/**
+ * ç•™å£°å¢™æ¨¡å—å¤„ç†ç¨‹åº
+ *
+ */
+defined('IN_IA') or exit('Access Denied');
+
+class On3_voxpicModuleProcessor extends WeModuleProcessor {
+
+	public $tab_reply = 'vp_reply';
+	public $tab_items = 'vp_items';
+	public $tab_tabs = 'vp_tab';
+
+	public function respond() {
+		global $_GPC,$_W;
+		$rid = $this->rule;
+		$message = $this->message;
+		$content = $message['content'];//è§¦å‘çš„å†…å®¹
+		$openid = $message['from'];//ç”¨æˆ·çš„openid
+		$createtime = $message['createtime'];//æ¶ˆæ¯å‘é€çš„æ—¶é—´
+		$msgtype = $message['msgtype'];//æ¶ˆæ¯ç±»åž‹
+		$reply = pdo_fetch('SELECT * FROM'.tablename($this->tab_reply)." WHERE uniacid = :uniacid AND rid = :rid",array(':uniacid'=>$_W['uniacid'],':rid'=>$rid));
+		$tabid = pdo_fetchcolumn('SELECT tabid FROM'.tablename($this->tab_tabs)." WHERE uniacid = :uniacid AND openid = :openid",array(':uniacid'=>$_W['uniacid'],':openid'=>$openid));
+		if(empty($reply)){
+			return $this->respText('æ‚¨è¦å‚åŠ çš„æ´»åŠ¨è¿˜æ²¡å¼€å§‹å“¦..è¯·æ—è¾¹çŽ©ä¼šå„¿..O(âˆ©_âˆ©)Oå“ˆå“ˆ~');
+		}
+		if($this->inContext){
+			if($content ==$reply['quit']){
+					$this->endContext();
+					if(empty($tabid)){
+						return $this->respText('ä¸€å®šè¦å†å›žæ¥åˆ¶ä½œä¸€å¼ ç•™å£°å¡å“¦..');
+					}
+					return $this->respText('çœŸæ£’,æ‚¨çš„ç•™å£°å¡å·²ç»åˆ¶ä½œå–½..<a href="'.$this->createMobileUrl('index').'">ç‚¹å‡»æŸ¥çœ‹</a>');
+			}
+			if($msgtype=='image'&&empty($tabid)){
+				$img = $this->copyMedia('IMG',$message['picurl']);
+				$insert = array('img'=>$img,'uniacid'=>$_W['uniacid'],'openid'=>$openid,'createtime'=>TIMESTAMP);
+				pdo_insert($this->tab_items,$insert);
+				$id = pdo_insertid();
+				pdo_insert($this->tab_tabs,array('uniacid'=>$_W['uniacid'],'tabid'=>$id,'openid'=>$openid));
+				$this->refreshContext(60*5);//åˆ·æ–°è¿‡æœŸæ—¶é—´
+				return $this->respText($reply['txt_note']."\n".$reply['voc_note']."å®Œæˆåˆ¶ä½œè¯·æŒ‰\"".$reply['quit']."\"");
+			}
+			if($msgtype=='text'&&!empty($tabid)){
+				pdo_update($this->tab_items,array('summary'=>$content),array('id'=>$tabid));
+				$this->refreshContext(60*5);//åˆ·æ–°è¿‡æœŸæ—¶é—´
+				return $this->respText($reply['voc_note']."å®Œæˆåˆ¶ä½œè¯·æŒ‰\"".$reply['quit']."\"");
+			}
+			if($msgtype=='voice'&&!empty($tabid)){
+				$filename = $this->copyMedia('VOX',$message['mediaid']);
+				$amrurl = toimage($filename);
+				pdo_update($this->tab_items,array('amr'=>$amrurl),array('id'=>$tabid));
+				if(!empty($amrurl)){
+					$mp3 = $this->amrTomp3($amrurl);
+					pdo_update($this->tab_items,array('voice'=>$mp3),array('id'=>$tabid));
+				}
+				pdo_delete($this->tab_tabs,array('id'=>$tabid));
+				$this->endContext();
+				return $this->respText('çœŸæ£’,æ‚¨çš„ç•™å£°å¡å·²ç»åˆ¶ä½œå–½..<a href="'.$this->createMobileUrl('index').'">ç‚¹å‡»æŸ¥çœ‹</a>');
+			}
+			return $this->respText($reply['welcome']."\n"."å®Œæˆåˆ¶ä½œè¯·æŒ‰\"".$reply['quit']."\"");
+		}else{
+			pdo_delete($this->tab_tabs,array('uniacid'=>$_W['uniacid'],'openid'=>$openid));
+			$this->beginContext(60*5);//å¼€å¯ä¸Šä¸‹æ–‡æ¨¡å¼é»˜è®¤è®¾ç½®ä¸º5åˆ†é’Ÿ..
+			return $this->respText($reply['welcome']."å®Œæˆåˆ¶ä½œè¯·æŒ‰\"".$reply['quit']."\"");
+		}
+	}
+
+	private function copyMedia($type,$arg){
+		global $_GPC,$_W;
+		load()->func('file');
+		load()->func('communication');
+		if(empty($arg)||empty($type)){
+			return '';
+		}
+		if(empty($arg)||empty($type)){
+			return '';
+		}
+		if(strtoupper($type)=='IMG'){
+			$dat =  ihttp_get($arg);
+			if($dat['code']==200){
+				$imgtype = '.'.substr($dat['headers']['Content-Type'], intval(strpos($dat['headers']['Content-Type'],'/'))+1);
+				if(!empty($imgtype)){
+					$filename = TIMESTAMP.$imgtype;
+					$bool =  file_write('/on3_voxpic/img/'.$filename,$dat['content']);
+					if($bool){
+						return 'on3_voxpic/img/'.$filename;
+					}
+				}
+			}
+				return '';
+		}elseif(strtoupper($type)=='VOX'){
+			load()->classs('weixin.account');
+			$wxObj= WeixinAccount::create($_W['uniacid']);
+			$access_token = $wxObj->fetch_token();
+			$url = 'http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=%s&media_id=%s';
+			$source = sprintf($url,$access_token,$arg);
+			$dat = ihttp_get($source);
+			if($dat['code']==200){
+				$filename = TIMESTAMP.'.amr';
+				if(!empty($dat['content'])){
+					$bool = file_write('/on3_voxpic/vox/'.$filename,$dat['content']);
+					if($bool){
+						return 'on3_voxpic/vox/'.$filename;
+					}
+				}
+			}
+			return '';
+		}
+		return '';
+	}
+	private function amrTomp3($url){
+		load()->func('file');
+		$apiurl = 'http://api.yizhancms.com/video/index.php?i=1&f=%s';
+		if(!empty($url)){
+			$file=base64_encode(base64_encode($url));//åŠ å¯†åœ°å€
+			$amrurl = sprintf($apiurl,$file);
+			$record=file_get_contents($amrurl);
+			$dat=(array)json_decode($record);//å¤„ç†è¿”å›žå€¼
+			if(!empty($dat['f'])){
+				$index=strripos($dat['f'], '/')+1;
+				$filename = 'on3_voxpic/mp3/'.substr($dat['f'], $index);
+				mkdirs(dirname(ATTACHMENT_ROOT.'/'.$filename));
+				$bool = copy($dat['f'],ATTACHMENT_ROOT.'/'.$filename);
+				if($bool){
+					return $filename;
+				}
+			}
+		}
+		return '';
+	}
+}
+?>

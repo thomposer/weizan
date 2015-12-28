@@ -64,3 +64,10 @@ if (!function_exists('file_put_contents')) {
 		return $stringlen;
 	}
 }
+
+if (!function_exists('getimagesizefromstring')) {
+	function getimagesizefromstring($string_data) {
+		$uri = 'data://application/octet-stream;base64,'  . base64_encode($string_data);
+		return getimagesize($uri);
+	}
+}

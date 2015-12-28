@@ -1,10 +1,10 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-$dos = array('verifycode',  'image');
+$dos = array('verifycode', 'image');
 $do = in_array($do, $dos) ? $do : 'verifycode';
 
 $_W['uniacid'] = intval($_GPC['uniacid']);

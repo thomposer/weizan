@@ -615,7 +615,8 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 					'0' => array('css' => 'default', 'name' => '未支付'),
 					'1' => array('css' => 'danger','name' => '余额支付'),
 					'2' => array('css' => 'info', 'name' => '在线支付'),
-					'3' => array('css' => 'warning', 'name' => '货到付款')
+					'3' => array('css' => 'warning', 'name' => '货到付款'),
+					'4' => array('css' => 'info', 'name' => '无需支付')
 				);
 				$orderstatus = array (
 					'-1' => array('css' => 'default', 'name' => '已取消'),
@@ -1816,8 +1817,9 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 			$data['paydetail'] = '使用' . $cardType[$params['card_type']] . '支付了' . ($params['fee'] - $params['card_fee']);
 			$data['paydetail'] .= '元，实际支付了' . $params['card_fee'] . '元。';
 		}
-
-		$data['paytype'] = $paytype[$params['type']];
+		if ($paytype[$params['type']] == '') {
+			$data['paytype'] = 4;
+		}
 		if ($params['type'] == 'wechat') {
 			$data['transid'] = $params['tag']['transaction_id'];
 		}
@@ -1840,11 +1842,10 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 		}
 		pdo_update('shopping_order', $data, array('id' => $params['tid']));
 		if ($params['from'] == 'return') {
-
 			//积分变更
 			$this->setOrderCredit($params['tid']);
 
-			if (!empty($this->module['config']['noticeemail']) || !empty($this->module['config']['mobile'])) {
+			if (!empty($this->module['config']['noticeemail']) || !empty($this->module['config']['template'])|| !empty($this->module['config']['mobile'])) {
 				$order = pdo_fetch("SELECT `ordersn`, `price`, `paytype`, `from_user`, `address`, `createtime` FROM " . tablename('shopping_order') . " WHERE id = '{$params['tid']}'");
 				$ordergoods = pdo_fetchall("SELECT goodsid, total FROM " . tablename('shopping_order_goods') . " WHERE orderid = '{$params['tid']}'", array(), 'goodsid');
 				$goods = pdo_fetchall("SELECT id, title, thumb, marketprice, unit, total FROM " . tablename('shopping_goods') . " WHERE id IN ('" . implode("','", array_keys($ordergoods)) . "')");
@@ -1869,6 +1870,27 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 
 					load()->func('communication');
 					ihttp_email($this->module['config']['noticeemail'], '微商城订单提醒', $body);
+				}
+				//模板消息
+				if (!empty($this->module['config']['template'])) {
+					$good = '';
+					$address = explode('|', $order['address']);
+					if (!empty($goods)) {
+						foreach ($goods as $row) {
+							$good .= "\n"."名称：{$row['title']} ，数量：{$ordergoods[$row['id']]['total']} ";
+						}
+					}
+					$paytype = $order['paytype'] == '3' ? '货到付款' : '已付款';
+					$data = array (
+						'first' => array('value' => '购买商品清单'),
+						'keyword1' => array('value' => date('Y-m-d H:i',strtotime('now'))),
+						'keyword2' => array('value' => "\n".$good),
+						'keyword3' => array('value' => $order['price']),
+						'keyword4' => array('value' => "\n".'真实姓名：' . $address[0]."\n".'地区：' . $address[3] . ' - ' . $address[4] . ' - ' . $address[5]."\n".'详细地址：' . $address[6] ."\n".'手机：' . $address[1]),
+						'keyword5' => array('value' => $paytype)
+					);
+					$acc = WeAccount::create($_W['acid']);
+					$acc->sendTplNotice($_W['fans']['from_user'],$this->module['config']['templateid'],$data);
 				}
 				// 短信提醒
 				if (!empty($this->module['config']['mobile'])) {

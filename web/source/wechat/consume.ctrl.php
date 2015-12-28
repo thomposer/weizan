@@ -96,17 +96,20 @@ if($do == 'record') {
 			load()->classs('coupon');
 			$acc = new coupon($acid);
 			$status = $acc->UnavailableCode(array('code' => $record['code']));
-			if(is_error($status)) {
-				message($status['message'], '', 'error');
+			if(is_error($status) && !$_GPC['force']) {
+				$url_1 = url('wechat/consume');
+				$url_2 = url('wechat/consume/record', array('op' => 'unavailable', 'del' => 1, 'id' => $id, 'force' => 1));
+				$message = "<a href='{$url_1}' class='btn btn-default'>否</a> <a href='{$url_2}' class='btn btn-primary'>是</a> ";
+				message($status['message'] . " <br>是否强制删除本地数据 {$message}", '', 'error');
 			} else {
 				pdo_update('coupon_record', array('status' => 2, 'usetime' => TIMESTAMP), array('acid' => $acid, 'code' => $record['code'], 'id' => $id));
 			}
 		}
 		if($del == 1) {
 			pdo_delete('coupon_record', array('acid' => $acid, 'id' => $id));
-			message('删除卡券领取状态成功', referer(), 'success');
+			message('删除卡券领取状态成功', url('wechat/consume'), 'success');
 		}
-		message('更改卡券领取状态成功', referer(), 'success');
+		message('更改卡券领取状态成功', url('wechat/consume'), 'success');
 	}
 
 	if($op == 'consume') {

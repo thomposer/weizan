@@ -5,7 +5,7 @@
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('mc_member');
-$dos = array('display', 'post','del', 'trade', 'add');
+$dos = array('display', 'post','del', 'add', 'group');
 $do = in_array($do, $dos) ? $do : 'display';
 load()->model('mc');
 
@@ -15,12 +15,12 @@ if($do == 'display') {
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 50;
 	$condition = '';
-	$starttime = empty($_GPC['time']['start']) ? strtotime('-90 days') : strtotime($_GPC['time']['start']);
-	$endtime = empty($_GPC['time']['end']) ? TIMESTAMP + 86399 : strtotime($_GPC['time']['end']) + 86399;
+	$starttime = empty($_GPC['createtime']['start']) ? strtotime('-90 days') : strtotime($_GPC['createtime']['start']);
+	$endtime = empty($_GPC['createtime']['end']) ? TIMESTAMP + 86399 : strtotime($_GPC['createtime']['end']) + 86399;
 	$condition .= " AND createtime >= {$starttime} AND createtime <= {$endtime}";
 	$condition .= empty($_GPC['username']) ? '' : " AND (( `realname` LIKE '%".trim($_GPC['username'])."%' ) OR ( `nickname` LIKE '%".trim($_GPC['username'])."%' ) OR ( `mobile` LIKE '%".trim($_GPC['username'])."%' )) ";
 	$condition .= intval($_GPC['groupid']) > 0 ?  " AND `groupid` = '".intval($_GPC['groupid'])."'" : '';
-	$sql = "SELECT uid, uniacid, groupid, realname, nickname, email, mobile, credit1, credit2, createtime  FROM ".tablename('mc_members')." WHERE uniacid = '{$_W['uniacid']}' ".$condition." ORDER BY createtime DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize;
+	$sql = "SELECT uid, uniacid, groupid, realname, nickname, email, mobile, credit1, credit2, credit6, createtime  FROM ".tablename('mc_members')." WHERE uniacid = '{$_W['uniacid']}' ".$condition." ORDER BY createtime DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize;
 	$list = pdo_fetchall($sql);
 	if(checksubmit('export_submit', true)) {
 		$header = array(
@@ -264,7 +264,31 @@ if($do == 'add') {
 	}
 }
 
-if($do == 'trade') {
-	$_W['page']['title'] = '会员交易-会员中心';
+if($do == 'group') {
+	if($_W['isajax']) {
+		$id = intval($_GPC['id']);
+		$group = $_W['account']['groups'][$id];
+		if(empty($group)) {
+			exit('会员组信息不存在');
+		}
+		$uid = intval($_GPC['uid']);
+		$member = mc_fetch($uid);
+		if(empty($member)) {
+			exit('会员信息不存在');
+		}
+		$credit = intval($group['credit']);
+		$credit6 = $credit - $member['credit1'];
+		$status = pdo_update('mc_members', array('credit6' => $credit6, 'groupid' => $id), array('uid' => $uid, 'uniacid' => $_W['uniacid']));
+		if($status !== false) {
+			$openid = pdo_fetchcolumn('SELECT openid FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND uid = :uid', array(':acid' => $_W['acid'], ':uid' => $uid));
+			if(!empty($openid)) {
+				mc_notice_group($openid, $_W['account']['groups'][$member['groupid']]['title'], $_W['account']['groups'][$id]['title']);
+			}
+			exit('success');
+		} else {
+			exit('更新会员信息出错');
+		}
+	}
+	exit('error');
 }
 template('mc/member');

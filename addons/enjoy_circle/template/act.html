@@ -35,6 +35,18 @@
 					<input type="text" name="title" id="title" class="form-control" value="{$item['title']}" />
 				</div>
 			</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否必须关注</label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="radio-inline">
+							<input type="radio" name="subscribe" value="1" {if $item['subscribe']==1}checked{/if}>是
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="subscribe" value="0" {if $item['subscribe']==0}checked{/if}>否
+						</label>
+					</div>
+			
+					</div>	
 						<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">关注二维码</label>
 					<div class="col-sm-9 col-xs-12" id="apic">

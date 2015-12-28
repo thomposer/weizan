@@ -29,7 +29,8 @@
                         <p class="po-name"><span class="data-name">{php echo $this->th($item['nickname'],$user['nickname'],'')}</span></p>
                         <p class="post">{php echo $this->th($item['title'],$user['nickname'],'')}{if !empty($item[pic])}<img src="{php echo tomedia($this->th($item['pic'],'',$user[avatar]))}">{/if}</p>
                         <p class="time">{$item['time']}</p>
-                    {if $item[mycom]<1}<img class="c-icon" id="c-icon{$item[tid]}" src="../addons/enjoy_circle/public/images/c.png"><a class="review">评论</a>{/if}
+                    {if $item[mycom]<1}<img class="c-icon" {if $ulist[subscribe]==0&&$actdetail[subscribe]==1} onclick="sub()"{else}id="c-icon{$item[tid]}"
+                    {/if} src="../addons/enjoy_circle/public/images/c.png"><a class="review">评论</a>{/if}
                    
                     <!--<img class="c-icon" id="c-icon{$item[tid]}" src="../addons/enjoy_circle/public/images/c.png"><a class="review">评论</a> -->
                     </div>
@@ -43,14 +44,14 @@
                         </div>
                        
                     </div>
-                      <p style="margin-top:0.5rem"><a class="ad-link" href="{php echo $this->createMobileUrl('more',array('tid'=>$item['tid'],'uid'=>$user[uid]))}">更多评论</a></p>
+                      <p style="margin-top:0.5rem"><a class="ad-link" {if $ulist[subscribe]==0&&$actdetail[subscribe]==1}onclick="sub()"{else} href="{php echo $this->createMobileUrl('more',array('tid'=>$item['tid'],'uid'=>$user[uid]))}" {/if}>更多评论</a></p>
                 </div>
             </li>
             {/loop}
-            {if $ulist['subscribe']==1}
+          <!--   {if $ulist['subscribe']==1}
             <a href="{php echo $this->createMobileUrl('choice',array('uid'=>$user[uid]))}" style="position: fixed;bottom:50%;right:10px;width:10%;height:auto;border-radius: 5px;background-color: #26337e;color: #ffffff;text-align: center;display: inline-block;line-height:30px;font-size: 14px;">选<br>择<br>话<br>题</a> 
             
-            {/if}
+            {/if}--> 
             <!-- <li>
                 <div class="po-avt-wrap">
                     <img class="po-avt" src="../addons/enjoy_circle/public/images/a1.jpg">
@@ -72,7 +73,7 @@
                     </div>
                 </div>
             </li> -->
-{if $ulist['subscribe']==0}
+
 <!-- <li>
                 
                 <div class="po-cmt">
@@ -103,10 +104,7 @@
                     </div>
                 </div>
             </li>   
-{else}
 
-
-{/if}
 
         </ul>    
     </div>
@@ -123,8 +121,18 @@
         </div>
         <!--/inner-->
     </div>
+    <div id="shareGuideWx1" class="guideBox guideBox-2" style="overflow: hidden; display: none;">
+        <div class="inner">
+           <img style="width:50%;padding-top:20%" src="{php echo tomedia($actdetail[ewm])}"  alt="">
+            <p style="font-size:2rem;color:#d93710;text-align:center;">长按识别二维码关注<br>
+            <a style="text-decoration:underline;" href="{$actdetail[sucai]}">{$_W[account][name]}</a></p>
+        </div>
+        <!--/inner-->
+    </div>
      <div id="share">
-            <a href="{php echo $this->createMobileUrl('entry',array('uid',$ulist['uid']))}">生成朋友圈</a><a id="sharez">惊呆小伙伴</a>
+            <a {if $ulist[subscribe]==0&&$actdetail[subscribe]==1}onclick="sub()"{else}
+            href="{php echo $this->createMobileUrl('entry',array('uid',$ulist['uid']))}" 
+            {/if}>生成朋友圈</a><a id="sharez">惊呆小伙伴</a>
             <p>（此朋友圈纯属虚构）</p>
         </div>
         <div id="guide" class="hide"></div>
@@ -136,6 +144,11 @@
 	</div>
 	
 	<script type="text/javascript" >
+	function sub(){
+		showThiBox('#shareGuideWx1');
+        $('.mask').addClass('close');
+		
+	}
 	$(document).ready(function(){
 		$(document).click(function (e) {
 			var drag = $(".bottom_review"),

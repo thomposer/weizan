@@ -689,6 +689,21 @@ img {
             handleEvent: function (evt) {
                 if ("SPAN" == evt.target.tagName) {
                     shape.removeEventListener("click", hitObj, false);
+
+                    var leftCount = {$leftCount};
+
+                    var tipMsg = "{$shareTip}";
+                    if (leftCount == 0 && tipMsg == "") {
+
+                        dialogMsg("今天机会已没有了，明天再来吧");
+                        return ;
+                    }
+
+                    if (leftCount == 0 && tipMsg != '') {
+                        dialogMsg(tipMsg);
+                        return ;
+                    }
+
                     $.ajax({
                         url: '{php echo $this->createMobileUrl('AjaxSmashing',array(),true)}',
                         dataType: "json",

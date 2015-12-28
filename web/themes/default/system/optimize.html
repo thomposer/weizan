@@ -44,7 +44,7 @@
 						{/if}
 					</td>
 					<td>
-						{if $extension['status'] && $extension['support']}
+						{if $extension['status'] && $extension['support'] && $key == 'memcache'}
 						<a class="btn btn-danger btn-sm" href="{php echo url('system/updatecache');}" target="_blank">更新缓存</a>
 						{/if}
 					</td>
@@ -102,14 +102,14 @@
 				<tr>
 					<th width="200">状态</th>
 					<td>
-						{if !empty($setting['proxy'])}
+						{if !empty($setting['proxy']['host'])}
 							<span class="label label-success">已开启</span>
 						{else}
 							<span class="label label-danger">未开启</span>
 						{/if}
 					</td>
 				</tr>
-				{if !empty($setting['proxy'])}
+				{if !empty($setting['proxy']['host'])}
 				<tr>
 					<th>远程地址</th>
 					<td>{$setting['proxy']['host']} 因安全原因，密码不予显示</td>

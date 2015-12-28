@@ -1,7 +1,7 @@
 <?php
 /**
  * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $openid = $_W['openid'];
@@ -104,7 +104,9 @@ if($do == 'register') {
 				$data['residecity'] = $map_fans['city'] ? $map_fans['city'] . '市' : '';
 				$data['resideprovince'] = $map_fans['province'] ? $map_fans['province'] . '省' : '';
 				$data['nationality'] = $map_fans['country'];
-				$data['avatar'] = rtrim($map_fans['headimgurl'], '0') . 132;
+				if (!empty($map_fans['headimgurl'])) {
+					$data['avatar'] = rtrim($map_fans['headimgurl'], '0') . 132;
+				}
 			}
 			pdo_update('mc_members', $data, array('uid' => $_W['member']['uid']));
 			$user['uid'] = $_W['member']['uid'];

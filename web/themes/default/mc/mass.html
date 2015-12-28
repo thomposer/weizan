@@ -113,7 +113,7 @@
 					</div>
 				</div>
 				<div class="form-group init_hide" ng-show="msg_type == 'mpnews'" style="display:none">
-					<div class="col-sm-12 col-xs-12" ng-show="mpnews.id == ''">
+					<div class="col-sm-12 col-xs-12" ng-show="!mpnews.id">
 						<div class="col-sm-6">
 							<a class="add" ng-click="mpnews.selectNews()"><i class="fa fa-search"></i> 选择混合图文回复</a>
 						</div>
@@ -121,7 +121,7 @@
 							<a class="add" href="{php echo url('platform/reply', array('m'=> 'news'));}" target="_blank"><i class="fa fa-plus"></i> 添加混合图文回复</a>
 						</div>
 					</div>
-					<div id="mpnews" class="init_hide reply" ng-show="mpnews.id != ''" style="display: none">
+					<div id="mpnews" class="init_hide reply" ng-show="mpnews.id > 0" style="display: none">
 						<div class="col-xs-6 col-sm-3 col-md-3 panel-group">
 							<div class="panel panel-default" ng-repeat="item in mpnews.items.replies">
 								<div class="panel-body" ng-if="$index == 0">
@@ -148,6 +148,27 @@
 					</div>
 				</div>
 				<!-- 消息类型表单结束 -->
+			</form>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">设置发送时间</div>
+		<div class="panel-body">
+			<form action=""  class="form-horizontal" role="form">
+				<div class="form-group">
+					<div class="col-sm-9 col-xs-12">
+						<label class="radio-inline"><input type="radio" value="1" ng-model="send_time">立即发送</label>
+						<label class="radio-inline"><input type="radio" value="2" ng-model="send_time">定时发送</label>
+					</div>
+				</div>
+				<div class="form-group init_hide" ng-show="send_time == 2" style="display: none">
+					<div class="col-sm-9 col-xs-12">
+						{php $sendtime = strtotime('+1 days');}
+						{$sendtime}
+						{php echo tpl_form_field_date('time', '', true);}
+						<span class="help-block">设置为定时发送，发送时间不能小于当前时间并且不能超过{php echo date('Y-m-d, H:i', (strtotime('+3 days') - 7200 ));}</span>
+					</div>
+				</div>
 			</form>
 		</div>
 	</div>
@@ -273,6 +294,8 @@
 		angular.module('app', ['ngSanitize']).controller('massNotice', function($scope, $http){
 			$scope.account = {php echo json_encode($_W["account"])};
 			$scope.send_type = 3;
+			$scope.send_time = 1;
+			$scope.time = "{php echo date('Y-m-d H:i:s', time() + 3600 * 5);}";
 			$scope.msg_type = 'mpnews';
 			$scope.send_group = 0;
 			$scope.mpnews = {
@@ -406,8 +429,8 @@
 			$scope.submitForm = function(){
 				var msg_type = $scope.msg_type;
 				var send_type = $scope.send_type;
-				if(send_type == 3 && !$scope.fans.selectedfanids.length) {
-					util.message('请选择粉丝', '', 'info');
+				if(send_type == 3 && (!$scope.fans.selectedfanids.length || $scope.fans.selectedfanids.length < 2)) {
+					util.message('请至少选择两个粉丝', '', 'info');
 					return false;
 				}
 				if(msg_type == 'text' && $.trim($scope.text_content) == '') {
@@ -447,6 +470,8 @@
 				var params = {};
 				params.send_type = send_type;
 				params.msg_type = msg_type;
+				params.send_time = $scope.send_time;
+				params.time = $scope.time;
 				if(send_type == 3) {
 					params.openids = [];
 					_.forEach($scope.fans.selected, function(fans){
@@ -478,18 +503,18 @@
 					params.data = $scope.mpnews.id;
 				}
 				$('#submit').addClass('disabled');
-				$('#submit').html('发送中');
+				$('#submit').html('提交中');
 				$http.post("{php echo url('mc/mass/post');}", params).success(function(dat, status){
 					var data = dat.message;
 					if(data.errno < 0) {
 						util.message(data.message, '', 'info');
 						$('#submit').removeClass('disabled');
-						$('#submit').html('重新发送');
+						$('#submit').html('重新提交');
 						return false;
 					} else {
 						util.message('群发成功', '', 'success');
 						$('#submit').removeClass('disabled');
-						$('#submit').html('立即发送');
+						$('#submit').html('提交');
 						return false;
 					}
 				});

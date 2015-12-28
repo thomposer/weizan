@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 define('IN_API', true);
 require_once './framework/bootstrap.inc.php';
@@ -14,16 +14,8 @@ if(!empty($hash)) {
 }
 if(!empty($_GPC['appid'])) {
 	$appid = ltrim($_GPC['appid'], '/');
-	if ($appid == 'wx570bc396a51b8ff8') {
-		$_W['account'] = array(
-			'type' => '3',
-			'key' => 'wx570bc396a51b8ff8',
-			'level' => 4,
-			'token' => 'platformtestaccount'
-		);
-	} else {
-		$id = pdo_fetchcolumn("SELECT acid FROM " . tablename('account_wechats') . " WHERE `key` = :appid", array(':appid' => $appid));
-	}
+	$id = pdo_fetchcolumn("SELECT acid FROM " . tablename('account_wechats') . " WHERE `key` = :appid", array(':appid' => $appid));
+	
 }
 if(empty($id)) {
 	$id = intval($_GPC['id']);
@@ -42,8 +34,8 @@ $_W['acid'] = $_W['account']['acid'];
 $_W['uniacid'] = $_W['account']['uniacid'];
 $_W['uniaccount'] = uni_fetch($_W['uniacid']);
 $_W['account']['groupid'] = $_W['uniaccount']['groupid'];
-$_W['account']['qrcode'] = "{$_W['attachurl']}qrcode_{$_W['acid']}.jpg?time={$_W['timestamp']}";
-$_W['account']['avatar'] = "{$_W['attachurl']}headimg_{$_W['acid']}.jpg?time={$_W['timestamp']}";
+$_W['account']['qrcode'] = $_W['attachurl'].'qrcode_'.$_W['acid'].'jpg?time='.$_W['timestamp'];
+$_W['account']['avatar'] = $_W['attachurl'].'headimg_'.$_W['acid'].'jpg?time='.$_W['timestamp'];
 $_W['modules'] = uni_modules();
 
 $engine = new WeiZan();
@@ -148,6 +140,7 @@ class WeiZan {
 						if(!empty($_GET['encrypt_type']) && $_GET['encrypt_type'] == 'aes') {
 				$postStr = $this->account->decryptMsg($postStr);
 			}
+			WeUtility::logging('trace', $postStr);
 			$message = $this->account->parse($postStr);
 			
 			$this->message = $message;
@@ -168,8 +161,6 @@ class WeiZan {
 			WeSession::start($_W['uniacid'], $_W['openid']);
 			
 			$_SESSION['openid'] = $_W['openid'];
-			
-			WeUtility::logging('trace', $message);
 			$pars = $this->analyze($message);
 			$pars[] = array(
 				'message' => $message,
@@ -216,6 +207,7 @@ class WeiZan {
 			WeUtility::logging('params', $hitParam);
 			WeUtility::logging('response', $response);
 			$resp = $this->account->response($response);
+			$resp = $this->clip($resp, $hitParam);
 						if(!empty($_GET['encrypt_type']) && $_GET['encrypt_type'] == 'aes') {
 				$resp = $this->account->encryptMsg($resp);
 				$resp = $this->account->xmlDetract($resp);
@@ -352,11 +344,21 @@ class WeiZan {
 		}
 	}
 
+	
+	private function clip($resp, $par) {
+		$mapping = array(
+			'[from]' => $par['message']['from'],
+			'[to]' => $par['message']['to'],
+			'[rule]' => $par['rule']
+		);
+
+		return str_replace(array_keys($mapping), array_values($mapping), $resp);
+	}
+	
 	private function receive($par, $keyword, $response) {
 		global $_W;
-		$subscribe = cache_load('modulesubscribes');
+		$subscribe = cache_load('module_receive_enable');
 		$modules = uni_modules();
-		
 		$obj = WeUtility::createModuleReceiver('core');
 		$obj->message = $this->message;
 		$obj->params = $par;
@@ -403,7 +405,7 @@ class WeiZan {
 					$row = array();
 					$row['uniacid'] = $_W['uniacid'];
 					$row['acid'] = $_W['acid'];
-					$row['dateline'] = $par['message']['time'];
+					$row['dateline'] = $_W['timestamp'];
 					$row['message'] = iserializer($par['message']);
 					$row['keyword'] = iserializer($keyword);
 					unset($par['message']);
@@ -414,6 +416,9 @@ class WeiZan {
 					$row['type'] = 1;
 					pdo_insert('core_queue', $row);
 				}
+			}
+						if (date('N') == '1') {
+				pdo_query("DELETE FROM ".tablename('core_queue')." WHERE dateline < '".($_W['timestamp'] - 2592000)."'");
 			}
 		}
 	}
@@ -461,12 +466,18 @@ class WeiZan {
 	private function analyzeSubscribe(&$message) {
 		global $_W;
 		$params = array();
-		$message['type'] = 'text';
+		$message['type'] = 'text'; 
 		$message['redirection'] = true;
 		if(!empty($message['scene'])) {
 			$message['source'] = 'qr';
 			$sceneid = trim($message['scene']);
-			$qr = pdo_fetch("SELECT `id`, `keyword` FROM " . tablename('qrcode') . " WHERE (`qrcid` = '{$sceneid}' OR `scene_str` = '{$sceneid}') AND `uniacid` = '{$_W['uniacid']}'");
+			$scene_condition = '';
+			if (is_numeric($sceneid)) {
+				$scene_condition = " `qrcid` = '{$sceneid}'";
+			}else{
+				$scene_condition = " `scene_str` = '{$sceneid}'";
+			}
+			$qr = pdo_fetch("SELECT `id`, `keyword` FROM " . tablename('qrcode') . " WHERE {$scene_condition} AND `uniacid` = '{$_W['uniacid']}'");
 			if(!empty($qr)) {
 				$message['content'] = $qr['keyword'];
 				$params += $this->analyzeText($message);
@@ -490,7 +501,13 @@ class WeiZan {
 		if(!empty($message['scene'])) {
 			$message['source'] = 'qr';
 			$sceneid = trim($message['scene']);
-			$qr = pdo_fetch("SELECT `id`, `keyword` FROM " . tablename('qrcode') . " WHERE (`qrcid` = '{$sceneid}' OR `scene_str` = '{$sceneid}') AND `uniacid` = '{$_W['uniacid']}'");
+			$scene_condition = '';
+			if (is_numeric($sceneid)) {
+				$scene_condition = " `qrcid` = '{$sceneid}'";
+			}else{
+				$scene_condition = " `scene_str` = '{$sceneid}'";
+			}
+			$qr = pdo_fetch("SELECT `id`, `keyword` FROM " . tablename('qrcode') . " WHERE {$scene_condition} AND `uniacid` = '{$_W['uniacid']}'");
 			if(!empty($qr)) {
 				$message['content'] = $qr['keyword'];
 				$params += $this->analyzeText($message);
@@ -567,8 +584,20 @@ EOF;
 						'keyword' => $message['eventkey'],
 						'type' => $message['event'],
 						'picmd5' => $item,
+						'openid' => $message['from'],
+						'createtime' => TIMESTAMP,
 					));
 				}
+			} else {
+				pdo_query("DELETE FROM ".tablename('menu_event')." WHERE createtime < '".($_W['timestamp'] - 100)."' OR openid = '{$message['from']}'");
+				pdo_insert('menu_event', array(
+					'uniacid' => $GLOBALS['_W']['uniacid'],
+					'keyword' => $message['eventkey'],
+					'type' => $message['event'],
+					'picmd5' => $item,
+					'openid' => $message['from'],
+					'createtime' => TIMESTAMP,
+				));
 			}
 			return true;
 		}
@@ -602,8 +631,14 @@ EOF;
 				$event = pdo_fetch("SELECT keyword, type FROM ".tablename('menu_event')." WHERE picmd5 = '$md5'");
 				if (!empty($event['keyword'])) {
 					pdo_delete('menu_event', array('picmd5' => $md5));
+				} else {
+					$event = pdo_fetch("SELECT keyword, type FROM ".tablename('menu_event')." WHERE openid = '{$message['from']}'");
+				}
+				if (!empty($event)) {
 					$message['content'] = $event['keyword'];
+					$message['eventkey'] = $event['keyword'];
 					$message['type'] = 'text';
+					$message['event'] = $event['type'];
 					$message['redirection'] = true;
 					$message['source'] = $event['type'];
 					return $this->analyzeText($message);

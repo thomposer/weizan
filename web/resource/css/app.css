@@ -103,6 +103,7 @@ ul{list-style:none;}
 .app .modules .app-title .title-detail h2 span{font-size:12px; color:#999;}
 .app .modules .app-title .title-detail p{padding:0; color:#8c8c8c; font-size:11px; margin:5px 0 0;}
 /*app文本导航*/
+.app .modules .app-textNav .inner .list-group{margin-bottom:0}
 .app .modules .app-textNav .inner .list-group-item{border-radius:0; border:0; border-bottom:1px solid #ddd; margin-bottom:0; height:40px; padding:0;}
 .app .modules .app-textNav .inner .list-group-item a{color:#333; display:block; padding:10px 15px;}
 .app .modules .app-textNav .inner .list-group-item a span{display:block; width:100%; height:100%; padding-right:30px; position:relative; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}

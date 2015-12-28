@@ -165,7 +165,11 @@ function buildframes($frame = array('platform')){
 	$m = trim($_GPC['m']);
 	$eid = intval($_GPC['eid']);
 	if(FRAME == 'ext' && (!empty($m) || !empty($eid)) && $GLOBALS['ext_type'] != 2) {
-		$GLOBALS['ext_type'] = $_COOKIE['ext_type'] ? $_COOKIE['ext_type'] : 1;
+		if(empty($_COOKIE['ext_type'])) {
+			setcookie('ext_type', 1, TIMESTAMP + 8640000, "/");
+			$_COOKIE['ext_type'] = 1;
+		}
+		$GLOBALS['ext_type'] = $_COOKIE['ext_type'];
 		if(empty($m)) {
 			$m = pdo_fetchcolumn('SELECT module FROM ' . tablename('modules_bindings') . ' WHERE eid = :eid', array(':eid' => $eid));
 		}
@@ -292,7 +296,7 @@ function buildframes($frame = array('platform')){
 function system_modules() {
 	return array(
 		'basic', 'news', 'music', 'userapi', 'recharge', 
-		'custom', 'images', 'video', 'voice', 'chats'
+		'custom', 'images', 'video', 'voice', 'chats', 'wxcard'
 	);
 }
 

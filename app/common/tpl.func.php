@@ -17,7 +17,7 @@ function _tpl_form_field_date($name, $value = '', $withtime = false) {
 								language: "zh-CN",
 								minView: 0,
 								autoclose: true,
-								format : "yyyy-mm-dd hh:ii",
+								format : "yyyy-mm-dd",
 								todayBtn: true,
 								minuteStep: 5
 							};

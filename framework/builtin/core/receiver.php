@@ -12,7 +12,10 @@ class CoreModuleReceiver extends WeModuleReceiver {
 			$sceneid = $this->message['scene'];
 			$acid = $this->acid;
 			$uniacid = $this->uniacid;
-			$row = pdo_fetch("SELECT id, name, acid FROM ".tablename('qrcode')." WHERE uniacid = :aid AND acid = :acid AND (qrcid = :qrcid OR scene_str = :scene_str)", array(':aid' => $uniacid, ':acid' => $acid, ':qrcid' => $sceneid, ':scene_str' => $sceneid));
+			$row = pdo_fetch("SELECT id, name, acid FROM ".tablename('qrcode')." WHERE uniacid = :aid AND acid = :acid AND qrcid = :qrcid", array(':aid' => $uniacid, ':acid' => $acid, ':qrcid' => $sceneid));
+			if(empty($row)) {
+				$row = pdo_fetch("SELECT id, name, acid FROM ".tablename('qrcode')." WHERE uniacid = :aid AND acid = :acid AND scene_str = :scene_str", array(':aid' => $uniacid, ':acid' => $acid, ':scene_str' => $sceneid));
+			}
 			$insert = array(
 				'uniacid' => $_W['uniacid'],
 				'acid' => $row['acid'],
@@ -30,6 +33,9 @@ class CoreModuleReceiver extends WeModuleReceiver {
 			$acid = $this->acid;
 			$uniacid = $this->uniacid;
 			$row = pdo_fetch("SELECT id, name, acid FROM ".tablename('qrcode')." WHERE uniacid = :aid AND acid = :acid AND qrcid = :qrcid", array(':aid' => $uniacid, ':acid' => $acid, ':qrcid' => $sceneid));
+			if(empty($row)) {
+				$row = pdo_fetch("SELECT id, name, acid FROM ".tablename('qrcode')." WHERE uniacid = :aid AND acid = :acid AND scene_str = :scene_str", array(':aid' => $uniacid, ':acid' => $acid, ':scene_str' => $sceneid));
+			}
 			$insert = array(
 				'uniacid' => $_W['uniacid'],
 				'acid' => $row['acid'],
@@ -109,8 +115,8 @@ class CoreModuleReceiver extends WeModuleReceiver {
 		}
 				if (!empty($stat_setting['use_ratio'])) {
 			if(!empty($this->params['rule'])) {
-				$updateid = pdo_query("UPDATE ".tablename('stat_rule')." SET hit = hit + 1, lastupdate = '".TIMESTAMP."' WHERE rid = :rid AND createtime = :createtime", array(':rid' => $this->params['rule'], ':createtime' => strtotime(date('Y-m-d'))));
-				if (empty($updateid)) {
+				$rule_stat_found = pdo_get('stat_rule', array('rid' => $this->params['rule'], 'createtime' => strtotime(date('Y-m-d'))));
+				if (empty($rule_stat_found)) {
 					pdo_insert('stat_rule', array(
 						'uniacid' => $_W['uniacid'],
 						'rid' => $this->params['rule'],
@@ -118,11 +124,13 @@ class CoreModuleReceiver extends WeModuleReceiver {
 						'hit' => 1,
 						'lastupdate' => $this->message['time'],
 					));
+				} else {
+					pdo_query("UPDATE ".tablename('stat_rule')." SET hit = hit + 1, lastupdate = '".TIMESTAMP."' WHERE rid = :rid AND createtime = :createtime", array(':rid' => $this->params['rule'], ':createtime' => strtotime(date('Y-m-d'))));
 				}
 			}
 			if (!empty($this->keyword['id'])) {
-				$updateid = pdo_query("UPDATE ".tablename('stat_keyword')." SET hit = hit + 1, lastupdate = '".TIMESTAMP."' WHERE kid = :kid AND createtime = :createtime", array(':kid' => $this->keyword['id'], ':createtime' => strtotime(date('Y-m-d'))));
-				if (empty($updateid)) {
+				$keyword_stat_found = pdo_get('stat_keyword', array('rid' => $this->params['rule'], 'createtime' => strtotime(date('Y-m-d'))));
+				if (empty($keyword_stat_found)) {
 					pdo_insert('stat_keyword', array(
 						'uniacid' => $_W['uniacid'],
 						'rid' => $this->params['rule'],
@@ -131,6 +139,8 @@ class CoreModuleReceiver extends WeModuleReceiver {
 						'hit' => 1,
 						'lastupdate' => $this->message['time'],
 					));
+				} else {
+					pdo_query("UPDATE ".tablename('stat_keyword')." SET hit = hit + 1, lastupdate = '".TIMESTAMP."' WHERE kid = :kid AND createtime = :createtime", array(':kid' => $this->keyword['id'], ':createtime' => strtotime(date('Y-m-d'))));
 				}
 			}
 		}

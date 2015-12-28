@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 define('IN_IA', true);
 define('STARTTIME', microtime());
@@ -57,7 +57,6 @@ if(DEVELOPMENT) {
 } else {
 	error_reporting(0);
 }
-
 if(!in_array($_W['config']['setting']['cache'], array('mysql', 'file', 'memcache'))) {
 	$_W['config']['setting']['cache'] = 'mysql';
 }
@@ -83,7 +82,6 @@ $urls = parse_url($_W['siteroot']);
 $urls['path'] = str_replace(array('/web', '/app', '/payment/wechat', '/payment/alipay', '/api'), '', $urls['path']);
 $_W['siteroot'] = $urls['scheme'].'://'.$urls['host'].((!empty($urls['port']) && $urls['port']!='80') ? ':'.$urls['port'] : '').$urls['path'];
 $_W['siteurl'] = $urls['scheme'].'://'.$urls['host'].((!empty($urls['port']) && $urls['port']!='80') ? ':'.$urls['port'] : '') . $_W['script_name'] . (empty($_SERVER['QUERY_STRING'])?'':'?') . $_SERVER['QUERY_STRING'];
-unset($sitepath);
 
 $_W['isajax'] = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 $_W['ispost'] = $_SERVER['REQUEST_METHOD'] == 'POST';
@@ -105,9 +103,9 @@ $_GPC = array_merge($_GET, $_POST, $_GPC);
 $_GPC = ihtmlspecialchars($_GPC);
 if(!$_W['isajax']) {
 	$input = file_get_contents("php://input");
-	if(!empty($input)) {
+	if (!empty($input)) {
 		$__input = @json_decode($input, true);
-		if(!empty($__input)) {
+		if (!empty($__input)) {
 			$_GPC['__input'] = $__input;
 			$_W['isajax'] = true;
 		}
@@ -119,10 +117,9 @@ setting_load();
 if (empty($_W['setting']['upload'])) {
 	$_W['setting']['upload'] = array_merge($_W['config']['upload']);
 }
-
 $_W['attachurl'] = $_W['attachurl_local'] = $_W['siteroot'] . $_W['config']['upload']['attachdir'] . '/';
 if (!empty($_W['setting']['remote']['type'])) {
-	$_W['attachurl'] = ($_W['setting']['remote']['type'] == 1) ? $_W['setting']['remote']['ftp']['url'] . '/' : "http://{$_W['setting']['remote']['alioss']['url']}.aliyuncs.com/{$_W['setting']['remote']['alioss']['bucket']}/";
+	$_W['attachurl'] = $_W['attachurl_remote'] = ($_W['setting']['remote']['type'] == 1) ? $_W['setting']['remote']['ftp']['url'] . '/' : $_W['setting']['remote']['alioss']['url'].'/';
 }
 $_W['os'] = Agent::deviceType();
 if($_W['os'] == Agent::DEVICE_MOBILE) {
@@ -150,7 +147,7 @@ if(Agent::isMicroMessage() == Agent::MICRO_MESSAGE_YES) {
 //新增应用商城切换
 
 if(empty($_W['setting']['addons']['addons_url'])){
-	$_W['setting']['addons']['addons_url'] = "http://addons.012wz.com";
+	$_W['setting']['addons']['addons_url'] = "http://addons.weizancms.com";
 }
 if(empty($_W['setting']['addons']['c_url'])){
 	$_W['setting']['addons']['c_url'] = "http://www.012wz.com";

@@ -44,12 +44,6 @@ if (!empty($_GPC['m'])) {
 	$type = 'module';
 	$is_upgrade = intval($_GPC['is_upgrade']);
 	$packet = cloud_m_build($_GPC['m']);
-
-		if (is_numeric($packet['upgrade_version'])) {
-		foreach ($packet['files'] as &$packet_file) {
-			$packet_file .= '/' . $packet['upgrade_version'];
-		}
-	}
 } elseif (!empty($_GPC['t'])) {
 	$m = $_GPC['t'];
 	$type = 'theme';

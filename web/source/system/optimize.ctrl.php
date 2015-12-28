@@ -10,8 +10,8 @@ $extensions = array(
 		'status' => ($_W['config']['setting']['cache'] == 'memcache'),
 	),
 	'eAccelerator' => array(
-		'support' => function_exists('eaccelerator_get'),
-		'status' => ''
+		'support' => function_exists('eaccelerator_optimizer'),
+		'status' => function_exists('eaccelerator_optimizer'),
 	)
 );
 

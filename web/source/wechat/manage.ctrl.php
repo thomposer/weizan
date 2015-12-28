@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('wechat_manage');
@@ -221,7 +221,7 @@ if($do == 'location_del') {
 	}
 	pdo_delete('coupon_location', array('uniacid' => $_W['uniacid'], 'acid' => $acid, 'id' => $id));
 	if(is_error($status)) {
-		message("删除本地门店数据成功<br>通过微信接口删除微信门店数据失败,请登陆微信公众平台手动删除门店<br>错误原因：{$status['message']}", '', 'error');
+		message("删除本地门店数据成功<br>通过微信接口删除微信门店数据失败,请登陆微信公众平台手动删除门店<br>错误原因：{$status['message']}", url('wechat/manage/location_list'), 'error');
 	}
 	message('删除门店成功', url('wechat/manage/location_list'), 'success');
 }
@@ -236,8 +236,8 @@ if($do == 'export') {
 	$location = $location['business_list'];
 	$status2local = array('', 3, 2, 1, 3);
 	if(!empty($location)) {
-		foreach($location as $li) {
-			$li = $li['base_info'];
+		foreach($location as $row) {
+			$li = $row['base_info'];
 						if($li['available_state'] == 3 && !empty($li['poi_id']) && empty($li['sid'])) {
 				$isexist = pdo_fetchcolumn('SELECT id FROM ' . tablename('coupon_location') . ' WHERE uniacid = :uniacid AND acid = :acid AND location_id = :location_id', array(':uniacid' => $_W['uniacid'], ':acid' => $acid, ':location_id' => $li['poi_id']));
 				if(empty($isexist)) {
@@ -252,7 +252,7 @@ if($do == 'export') {
 					pdo_insert('coupon_location', $li);
 				}
 			} else {
-				$isexist = pdo_fetch('SELECT * FROM ' . tablename('coupon_location') . ' WHERE uniacid = :uniacid AND acid = :acid AND (sid = :sid OR id = :sid)', array(':uniacid' => $_W['uniacid'], ':acid' => $acid, ':sid' => $li['sid']));
+				$data = pdo_fetch('SELECT id,sid FROM ' . tablename('coupon_location') . ' WHERE uniacid = :uniacid AND acid = :acid AND (sid = :sid OR id = :sid)', array(':uniacid' => $_W['uniacid'], ':acid' => $acid, ':sid' => $li['sid']));
 				$li['uniacid'] = $_W['uniacid'];
 				$li['acid'] = $acid;
 				$li['status'] = $status2local[$li['available_state']];
@@ -260,12 +260,15 @@ if($do == 'export') {
 				$category_temp = explode(',', $li['categories'][0]);
 				$li['category'] = iserializer(array('cate' => $category_temp[0], 'sub' => $category_temp[1], 'clas' => $category_temp[2]));
 				$li['photo_list'] = iserializer($li['photo_list']);
-				$li['sid'] = $li['sid'];
-				unset($li['sid'], $li['categories'], $li['poi_id'], $li['update_status'], $li['available_state']);
+				unset($li['categories'], $li['poi_id'], $li['update_status'], $li['available_state']);
 				if(empty($isexist)) {
 					pdo_insert('coupon_location', $li);
 				} else {
-					pdo_update('coupon_location', $li, array('acid' => $acid, 'sid' => $sid));
+					if($data['id'] == $li['sid']) {
+						pdo_update('coupon_location', $li, array('acid' => $acid, 'id' => $li['sid']));
+					} else {
+						pdo_update('coupon_location', $li, array('acid' => $acid, 'sid' => $li['sid']));
+					}
 				}
 			}
 		}
@@ -330,7 +333,7 @@ if($do == 'whitelist') {
 			pdo_update('coupon_setting', array('whitelist' => $data), array('uniacid' => $_W['uniacid'], 'acid' => $acid));
 		}
 
-		message('设置测试黑名单成功', referer(), 'success');
+		message('设置测试白名单成功', referer(), 'success');
 	}
 }
 template('wechat/manage');

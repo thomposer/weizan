@@ -1,12 +1,11 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $_W['page']['title'] = '编辑用户 - 用户管理 - 用户管理';
 load()->model('setting');
-load()->func('tpl');
 
 $do = $_GPC['do'];
 $dos = array('delete', 'edit');

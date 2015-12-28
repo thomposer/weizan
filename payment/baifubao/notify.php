@@ -1,7 +1,7 @@
 <?php
 /**
  * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 define('IN_MOBILE', true);
 require '../../framework/bootstrap.inc.php';
@@ -59,7 +59,7 @@ if (!empty($_GPC['pay_result']) && $_GPC['pay_result'] == '1') {
 					$ret['uniacid'] = $log['uniacid'];
 					$ret['result'] = 'success';
 					$ret['type'] = $log['type'];
-					$ret['from'] = 'return';
+					$ret['from'] = 'notify';
 					$ret['tid'] = $log['tid'];
 					$ret['uniontid'] = $log['uniontid'];
 					$ret['user'] = $log['openid'];

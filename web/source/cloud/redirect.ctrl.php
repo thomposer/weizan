@@ -7,7 +7,7 @@
 if(empty($_W['isfounder'])) {
 	message('访问非法.');
 }
-$do = in_array($do, array('profile', 'device', 'callback', 'appstore', 'buyversion')) ? $do : 'profile';
+$do = in_array($do, array('profile', 'device', 'callback', 'appstore', 'buyversion', 'buybranch')) ? $do : 'profile';
 $authurl = ADDONS_URL. '/web/index.php?c=auth&a=passwort';
 
 $auth = array();
@@ -79,6 +79,33 @@ if ($do == 'buyversion') {
 		break;
 	}
 	message($response['message']['message']);
+}
+
+if ($do == 'buybranch') {
+	load()->func('communication');
+	$auth['forward'] = 'buybranch';
+	$auth['name'] = $_GPC['m'];
+	$auth['branch'] = intval($_GPC['branch']);
+	$url = __to($auth);
+
+	$response = ihttp_request($url);
+	$response = json_decode($response['content'], true);
+
+	if (is_error($response['message'])) {
+		message($response['message']['message'], url('extension/module'), 'error');
+	}
+
+	$params = array(
+		'is_upgrade' => 1,
+		'is_buy' => 1,
+	);
+	if (trim($_GPC['type']) == 'theme') {
+		$params['t'] = $auth['name'];
+	} else {
+		$params['m'] = $auth['name'];
+	}
+
+	message($response['message']['message'], url('cloud/process', $params), 'success');
 }
 
 if($do == 'callback') {

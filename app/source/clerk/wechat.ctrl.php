@@ -32,7 +32,7 @@ if($do == 'use') {
 		if(is_error($status)) {
 			message($status['message']);
 		}
-		pdo_update('coupon_record', array('status' => 3, 'clerk_id' => $clerk['id'], 'clerk_name' => $clerk['name']), array('acid' => $_W['acid'], 'code' => $record['code']));
+		pdo_update('coupon_record', array('status' => 3, 'clerk_id' => $clerk['id'], 'clerk_name' => $clerk['name'], 'usetime' => TIMESTAMP), array('acid' => $_W['acid'], 'code' => $record['code']));
 		message('核销微信卡券成功', url('clerk/check'), 'success');
 	}
 }

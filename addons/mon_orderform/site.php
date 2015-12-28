@@ -438,7 +438,7 @@ class Mon_OrderformModuleSite extends WeModuleSite
 	 * 具体订单类型
 	 */
 	public function doMobileOrderItem() {
-		global $_W, $_GPC;		
+		global $_W, $_GPC;
 		MonUtil::checkmobile();
 		$iid = $_GPC['iid'];
 		$item = DBUtil::findById(DBUtil::$TABLE_ORDER_ITEM,$iid);
@@ -507,6 +507,12 @@ class Mon_OrderformModuleSite extends WeModuleSite
 		$openid = $_W['fans']['from_user'];
 		//$openid = "o_-Hajq-MxgT-pvJX7gRMswH8_eM";
 
+		if (empty($_W['fans']['follow'])) {
+		    $res['code'] = 5021;
+			$res['msg'] = '请关注公众账号后再进行提交订单哦!';
+			die(json_encode($res));
+		}
+		
 		if (empty($openid)) {
 			$res['code'] = 502;
 			$res['msg'] = '请关注公众账号后再进行提交订单哦!';
@@ -747,7 +753,7 @@ class Mon_OrderformModuleSite extends WeModuleSite
 	 * 总的已定的数量
 	 */
     public  function findTotalOrderNum($iid) {
-		$alreadyCount = pdo_fetchcolumn('SELECT sum(ordernum) FROM ' . tablename(DBUtil::$TABLE_ORDER_ORDER) . " WHERE  id=:iid ", array(":iid" => $iid));
+		$alreadyCount = pdo_fetchcolumn('SELECT sum(ordernum) FROM ' . tablename(DBUtil::$TABLE_ORDER_ORDER) . " WHERE  iid=:iid ", array(":iid" => $iid));
 		return $alreadyCount;
 	}
 

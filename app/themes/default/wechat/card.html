@@ -86,6 +86,7 @@
 {elseif $do == 'use'}
 <form action="" method="post" id="form1">
 	<input type="hidden" name="token" value="{$_W['token']}"/>
+	<input type="hidden" name="code" value="{$code['code']}"/>
 	<div class="wx-card">
 		<div class="card-info">
 			<div class="card-top" style="background: {$colors[$card['color']]}">
@@ -108,7 +109,7 @@
 				{if $error_code == 1}
 				<div class="text-muted">code码错误</div>
 				{else}
-				<img src="{php echo url('wechat/card/qr', array('id' => $record['id'], 'code' => $code['code']));}" alt=""/>
+				<img src="{php echo url('wechat/card/qr', array('id' => $record['id'], 'code' => $record['code']));}" alt=""/>
 				<div class="text-muted">店员可使用微信扫描上面二维码进行核销</div>
 				<div class="text-muted">code码：{$code['code']}</div>
 				{/if}
@@ -118,8 +119,6 @@
 		<div class="operate">
 			{if $error_code == 1}
 			<a class="btn btn-danger btn-block" disabled>code码错误</a>
-			{elseif $error_signature == 1}
-			<a class="btn btn-danger btn-block" disabled>签名错误</a>
 			{else}
 			<input type="password" id="password" name="password" class="form-control" placeholder="请输入店员密码" style="margin-bottom:20px">
 			<input type="submit" class="btn btn-success btn-block" name="submit" value="确定核销"/>

@@ -1,7 +1,7 @@
 <?php
 /**
  * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 load()->classs('weixin.account');
@@ -78,9 +78,6 @@ class coupon extends WeiXinAccount{
 	
 	public function SetTestWhiteList($data){
 		global $_W;
-		if(empty($data['openid']) && empty($data['username'])) {
-			return error(-1, '没有有效的白名单用户');
-		}
 		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
@@ -479,7 +476,8 @@ class coupon extends WeiXinAccount{
 		return sha1(implode($data));
 	}
 
-	public function AddCard($id) {
+	
+	public function BuildCardExt($id, $openid = '') {
 		$acid = $this->account['acid'];
 		$card_id = pdo_fetchcolumn('SELECT card_id FROM ' . tablename('coupon') . ' WHERE acid = :acid AND id = :id', array(':acid' => $acid, ':id' => $id));
 		if(empty($card_id)) {
@@ -493,13 +491,21 @@ class coupon extends WeiXinAccount{
 		}
 		$cardExt =  array('timestamp' => $time, 'signature' => $signature);
 		$cardExt = json_encode($cardExt);
+		return array('card_id' => $card_id, 'card_ext' => $cardExt);
+	}
+
+	public function AddCard($id) {
+		$card = $this->BuildCardExt($id);
+		if(is_error($card)) {
+			return $card;
+		}
 		return <<<EOF
 			wx.ready(function(){
 				wx.addCard({
 					cardList:[
 						{
-							cardId:'{$card_id}',
-							cardExt:'{$cardExt}'
+							cardId:'{$card['card_id']}',
+							cardExt:'{$card['card_ext']}'
 						}
 					]
 				});

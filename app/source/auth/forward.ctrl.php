@@ -1,7 +1,7 @@
 <?php
 /**
- * [WeiZan System] Copyright (c) 2014 WeiZan.Com
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -25,6 +25,42 @@ if($_GPC['__auth']) {
 					$_SESSION['uniacid'] = $_W['uniacid'];
 					$_SESSION['acid'] = $auth['acid'];
 					$_SESSION['openid'] = $auth['openid'];
+										if ($_W['account']['level'] == '3' && empty($fan['nickname'])) {
+						$account_obj = WeAccount::create($_W['account']);
+						$userinfo = $account_obj->fansQueryInfo($auth['openid']);
+						if(!is_error($userinfo) && is_array($userinfo) && !empty($userinfo['nickname'])) {
+							$record = array();
+							$record['updatetime'] = TIMESTAMP;
+							$record['nickname'] = stripslashes($userinfo['nickname']);
+							$record['tag'] = base64_encode(iserializer($userinfo));
+							pdo_update('mc_mapping_fans', $record, array('openid' => $fan['openid']));
+							if(!empty($fan['uid'])) {
+								$user = mc_fetch($fan['uid'], array('nickname', 'gender', 'residecity', 'resideprovince', 'nationality', 'avatar'));
+								$record = array();
+								if(empty($user['nickname']) && !empty($userinfo['nickname'])) {
+									$record['nickname'] = stripslashes($userinfo['nickname']);
+								}
+								if(empty($user['gender']) && !empty($userinfo['sex'])) {
+									$record['gender'] = $userinfo['sex'];
+								}
+								if(empty($user['residecity']) && !empty($userinfo['city'])) {
+									$record['residecity'] = $userinfo['city'] . '市';
+								}
+								if(empty($user['resideprovince']) && !empty($userinfo['province'])) {
+									$record['resideprovince'] = $userinfo['province'] . '省';
+								}
+								if(empty($user['nationality']) && !empty($userinfo['country'])) {
+									$record['nationality'] = $userinfo['country'];
+								}
+								if(empty($user['avatar']) && !empty($userinfo['headimgurl'])) {
+									$record['avatar'] = rtrim($userinfo['headimgurl'], '0') . 132;
+								}
+								if(!empty($record)) {
+									pdo_update('mc_members', $record, array('uid' => intval($user['uid'])));
+								}
+							}
+						}
+					}
 					$member = mc_fetch($fan['uid']);
 					if (!empty($member)) {
 						$_SESSION['uid'] = $fan['uid'];

@@ -35,7 +35,7 @@ function _tpl_form_field_date($name, $value = '', $withtime = false) {
 		$value = TIMESTAMP;
 	}
 	$value = ($withtime ? date('Y-m-d H:i:s', $value) : date('Y-m-d', $value));
-	$s .= '<input type="text" name="' . $name . '" ng-model="' . $name . '" value="'.$value.'" placeholder="请选择日期时间" readonly="readonly" class="datetimepicker form-control" style="padding-left:12px;" />';
+	$s .= '<input type="text" name="' . $name . '"  value="'.$value.'" placeholder="请选择日期时间" readonly="readonly" class="datetimepicker form-control" style="padding-left:12px;" />';
 	return $s;
 }
 
@@ -873,6 +873,7 @@ function tpl_wappage_editor($editorparams = '', $editormodules = array()) {
 }
 
 
+
 function tpl_ueditor($id, $value = '', $options = array()) {
 	$s = '';
 	if (!defined('TPL_INIT_UEDITOR')) {
@@ -880,6 +881,95 @@ function tpl_ueditor($id, $value = '', $options = array()) {
 	}
 	$options['height'] = empty($options['height']) ? 200 : $options['height'];
 	$s .= !empty($id) ? "<textarea id=\"{$id}\" name=\"{$id}\" type=\"text/plain\" style=\"height:{$options['height']}px;\">{$value}</textarea>" : '';
-	$s .= '<script type="text/javascript">var ueditoroption={autoClearinitialContent:!1,toolbars:[["fullscreen","source","preview","|","bold","italic","underline","strikethrough","forecolor","backcolor","|","justifyleft","justifycenter","justifyright","|","insertorderedlist","insertunorderedlist","blockquote","emotion","insertvideo","link","removeformat","|","rowspacingtop","rowspacingbottom","lineheight","indent","paragraph","fontsize","|","inserttable","deletetable","insertparagraphbeforetable","insertrow","deleterow","insertcol","deletecol","mergecells","mergeright","mergedown","splittocells","splittorows","splittocols","|","anchor","map","print","drafts"]],elementPathEnabled:!1,initialFrameHeight:"'.$options['height'].'",focus:!1,maximumWords:9999999999999,autoFloatEnabled:!1,imageScaleEnabled:!1};UE.registerUI("myinsertimage",function(a,b){a.registerCommand(b,{execCommand:function(){require(["fileUploader"],function(b){b.show(function(b){if(0!=b.length)if(b.url)a.execCommand("insertimage",{src:b.url,_src:b.url,width:"100%",alt:b.filename});else{var c=[];for(i in b)c.push({src:b[i].url,_src:b[i].url,width:"100%",alt:b[i].filename});a.execCommand("insertimage",c)}})})}});var c=new UE.ui.Button({name:"插入图片",title:"插入图片",cssRules:"background-position: -726px -77px",onclick:function(){a.execCommand(b)}});return a.addListener("selectionchange",function(){var d=a.queryCommandState(b);-1==d?(c.setDisabled(!0),c.setChecked(!1)):(c.setDisabled(!1),c.setChecked(d))}),c},19)'.(!empty($id) ? ',$(function(){var a=UE.getEditor("'.$id.'",ueditoroption);$("#'.$id.'").data("editor",a),$("#'.$id.'").parents("form").submit(function(){a.queryCommandState("source")&&a.execCommand("source")})});' : ';')."</script>";
+	$s .= "
+	<script type=\"text/javascript\">
+			var ueditoroption = {
+				'autoClearinitialContent' : false,
+				'toolbars' : [['fullscreen', 'source', 'preview', '|', 'bold', 'italic', 'underline', 'strikethrough', 'forecolor', 'backcolor', '|',
+					'justifyleft', 'justifycenter', 'justifyright', '|', 'insertorderedlist', 'insertunorderedlist', 'blockquote', 'emotion', 'insertvideo',
+					'link', 'removeformat', '|', 'rowspacingtop', 'rowspacingbottom', 'lineheight','indent', 'paragraph', 'fontsize', '|',
+					'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol',
+					'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', '|', 'anchor', 'map', 'print', 'drafts']],
+				'elementPathEnabled' : false,
+				'initialFrameHeight': {$options['height']},
+				'focus' : false,
+				'maximumWords' : 9999999999999
+			};
+			var opts = {
+				type :'image',
+				direct : false,
+				multi : true,
+				tabs : {
+					'upload' : 'active',
+					'browser' : '',
+					'crawler' : ''
+				},
+				path : '',
+				dest_dir : '',
+				global : false,
+				thumb : false,
+				width : 0
+			};
+			UE.registerUI('myinsertimage',function(editor,uiName){
+				editor.registerCommand(uiName, {
+					execCommand:function(){
+						require(['fileUploader'], function(uploader){
+							uploader.show(function(imgs){
+								if (imgs.length == 0) {
+									return;
+								} else if (imgs.length == 1) {
+									editor.execCommand('insertimage', {
+										'src' : imgs[0]['url'],
+										'_src' : imgs[0]['attachment'],
+										'width' : '100%',
+										'alt' : imgs[0].filename
+									});
+								} else {
+									var imglist = [];
+									for (i in imgs) {
+										imglist.push({
+											'src' : imgs[i]['url'],
+											'_src' : imgs[i]['attachment'],
+											'width' : '100%',
+											'alt' : imgs[i].filename
+										});
+									}
+									editor.execCommand('insertimage', imglist);
+								}
+							}, opts);
+						});
+					}
+				});
+				var btn = new UE.ui.Button({
+					name: '插入图片',
+					title: '插入图片',
+					cssRules :'background-position: -726px -77px',
+					onclick:function () {
+						editor.execCommand(uiName);
+					}
+				});
+				editor.addListener('selectionchange', function () {
+					var state = editor.queryCommandState(uiName);
+					if (state == -1) {
+						btn.setDisabled(true);
+						btn.setChecked(false);
+					} else {
+						btn.setDisabled(false);
+						btn.setChecked(state);
+					}
+				});
+				return btn;
+			}, 19);
+			".(!empty($id) ? "
+				$(function(){
+					var ue = UE.getEditor('{$id}', ueditoroption);
+					$('#{$id}').data('editor', ue);
+					$('#{$id}').parents('form').submit(function() {
+						if (ue.queryCommandState('source')) {
+							ue.execCommand('source');
+						}
+					});
+				});" : '')."
+	</script>";
 	return $s;
 }

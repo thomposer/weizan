@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -16,6 +16,9 @@ if ($do == 'profile') {
 	$user['groupname'] = pdo_fetchcolumn('SELECT name FROM ' . tablename('users_group') . ' WHERE id = :id', array(':id' => $user['groupid']));
 
 	if (checksubmit('submit')) {
+		if (!strcasecmp($_GPC['name'],'test')) {
+			message('这个是测试账号，不允许修改！', create_url('setting/profile'), 'error');
+		}
 		if (empty($_GPC['name']) || empty($_GPC['pw']) || empty($_GPC['pw2'])) {
 			message('管理账号或者密码不能为空，请重新填写！', url('user/profile'), 'error');
 		}

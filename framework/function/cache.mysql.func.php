@@ -21,7 +21,7 @@ function cache_search($prefix) {
 	$params[':key'] = "{$prefix}%";
 	$rs = pdo_fetchall($sql, $params);
 	$result = array();
-	foreach((array) $rs as $v) {
+	foreach ((array)$rs as $v) {
 		$result[$v['key']] = iunserializer($v['value']);
 	}
 	return $result;
@@ -29,7 +29,7 @@ function cache_search($prefix) {
 
 
 function cache_write($key, $data) {
-	if(empty($key) || !isset($data)) {
+	if (empty($key) || !isset($data)) {
 		return false;
 	}
 	$record = array();
@@ -50,10 +50,10 @@ function cache_delete($key) {
 
 function cache_clean($prefix = '') {
 	global $_W;
-	if(empty($prefix)) {
+	if (empty($prefix)) {
 		$sql = 'DELETE FROM ' . tablename('core_cache');
 		$result = pdo_query($sql);
-		if($result) {
+		if ($result) {
 			unset($_W['cache']);
 		}
 	} else {

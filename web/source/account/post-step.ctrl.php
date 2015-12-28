@@ -1,7 +1,7 @@
 <?php
 /**
  * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 defined('IN_IA') or exit('Access Denied');
@@ -94,6 +94,17 @@ if($step == 1) {
 			pdo_insert('uni_settings', $unisettings);
 
 			pdo_insert('mc_groups', array('uniacid' => $uniacid, 'title' => '默认会员组', 'isdefault' => 1));
+			$fields = pdo_getall('profile_fields');
+			foreach($fields as $field) {
+				$data = array(
+					'uniacid' => $uniacid,
+					'fieldid' => $field['id'],
+					'title' => $field['title'],
+					'available' => $field['available'],
+					'displayorder' => $field['displayorder'],
+				);
+				pdo_insert('mc_member_fields', $data);
+			}
 			load()->model('module');
 			module_build_privileges();
 		}
@@ -130,11 +141,18 @@ if($step == 1) {
 			$_W['uploadsetting']['image']['limit'] = $_W['config']['upload']['image']['limit'];
 			$upload = file_upload($_FILES['qrcode'], 'image', "qrcode_{$acid}");
 			if(is_array($upload)) {
-				file_remote_upload($upload['path']);
+				$result = file_remote_upload($upload['path']);
+				if (!is_error($result) && $result !== false) {
+					file_delete($upload['path']);
+				}
 			}
 		} else {
 			if (file_exists(IA_ROOT . '/attachment/qrcode_'.$update['account'].'.jpg')) {
 				file_move(IA_ROOT . '/attachment/qrcode_'.$update['account'].'.jpg', IA_ROOT . '/attachment/qrcode_'.$acid.'.jpg');
+				$result = file_remote_upload('qrcode_'.$acid.'.jpg');
+				if (!is_error($result) && $result !== false) {
+					file_delete('qrcode_'.$acid.'.jpg');
+				}
 			}
 		}
 		if (!empty($_FILES['headimg']['tmp_name'])) {
@@ -144,11 +162,18 @@ if($step == 1) {
 			$_W['uploadsetting']['image']['limit'] = $_W['config']['upload']['image']['limit'];
 			$upload = file_upload($_FILES['headimg'], 'image', "headimg_{$acid}");
 			if(is_array($upload)) {
-				file_remote_upload($upload['path']);
+				$result = file_remote_upload($upload['path']);
+				if (!is_error($result) && $result !== false) {
+					file_delete($upload['path']);
+				}
 			}
 		} else {
 			if (file_exists(IA_ROOT . '/attachment/headimg_'.$update['account'].'.jpg')) {
 				file_move(IA_ROOT . '/attachment/headimg_'.$update['account'].'.jpg', IA_ROOT . '/attachment/headimg_'.$acid.'.jpg');
+				$result = file_remote_upload('headimg_'.$acid.'.jpg');
+				if (!is_error($result) && $result !== false) {
+					file_delete('headimg_'.$acid.'.jpg');
+				}
 			}
 		}
 		cache_delete("unisetting:{$uniacid}");
@@ -157,8 +182,6 @@ if($step == 1) {
 		} else {
 			header("Location: ".url('account/post-step/', array('uniacid' => $uniacid, 'acid' => $acid, 'step' => 3)));
 		}
-		$headimgsrc = tomedia('headimg_'.$_W['acid'].'.jpg');
-		$qrcodesrc = tomedia('qrcode_'.$_W['acid'].'.jpg');
 		exit;
 	}
 } elseif ($step == 3) {
@@ -179,8 +202,7 @@ if($step == 1) {
 		$result['username'] = $user['username'];
 		$result['uid'] = $user['uid'];
 		$result['group'] = pdo_fetch("SELECT id, name, package FROM ".tablename('users_group')." WHERE id = :id", array(':id' => $user['groupid']));
-		$packageids = iunserializer($result['group']['package']);
-		$result['package'] = uni_groups($packageids);
+		$result['package'] = iunserializer($result['group']['package']);
 		message($result, '', 'ajax');
 	}
 	if (checksubmit('submit')) {
@@ -204,11 +226,26 @@ if($step == 1) {
 		if (!empty($user)) {
 			user_update($user);
 		}
-		if (!empty($_GPC['balance']) || !empty($_GPC['signature'])) {
+		if (!empty($_GPC['signature']) || intval($_GPC['balance']) >= 0) {
 			$notify = array();
 			$notify['sms']['balance'] = intval($_GPC['balance']);
 			$notify['sms']['signature'] = trim($_GPC['signature']);
 			pdo_update('uni_settings', array('notify' => iserializer($notify)) , array('uniacid' => $uniacid));
+		}
+				pdo_delete('uni_account_group', array('uniacid' => $uniacid));
+		if (!empty($_GPC['package'])) {
+			$group = pdo_get('users_group', array('id' => $groupid));
+			$group['package'] = iunserializer($group['package']);
+			if (!is_array($group['package']) || !in_array('-1', $group['package'])) {
+				foreach ($_GPC['package'] as $packageid) {
+					if (!empty($packageid)) {
+						pdo_insert('uni_account_group', array(
+							'uniacid' => $uniacid,
+							'groupid' => $packageid,
+						));
+					}
+				}
+			}
 		}
 				if (!empty($_GPC['extra']['modules']) || !empty($_GPC['extra']['templates'])) {
 			$data = array(
@@ -226,6 +263,7 @@ if($step == 1) {
 		} else {
 			pdo_delete('uni_group', array('uniacid' => $uniacid));
 		}
+		cache_delete("unisetting:{$uniacid}");
 		cache_delete("unimodules:{$uniacid}:1");
 		cache_delete("unimodules:{$uniacid}:");
 		cache_delete("uniaccount:{$uniacid}");
@@ -241,14 +279,14 @@ if($step == 1) {
 			exit;
 		}
 	}
+	$unigroups = uni_groups();
 	$settings = uni_setting($uniacid, array('notify'));
 	$notify = $settings['notify'] ? $settings['notify'] : array();
 	$ownerid = pdo_fetchcolumn("SELECT uid FROM ".tablename('uni_account_users')." WHERE uniacid = :uniacid AND role = 'owner'", array(':uniacid' => $uniacid));
 	if (!empty($ownerid)) {
 		$owner = user_single(array('uid' => $ownerid));
 		$owner['group'] = pdo_fetch("SELECT id, name, package FROM ".tablename('users_group')." WHERE id = :id", array(':id' => $owner['groupid']));
-		$packageids = iunserializer($owner['group']['package']);
-		$owner['package'] = uni_groups($packageids);
+		$owner['group']['package'] = iunserializer($owner['group']['package']);
 	}
 	$extend = pdo_fetch("SELECT * FROM ".tablename('uni_group')." WHERE uniacid = :uniacid", array(':uniacid' => $uniacid));
 	$extend['modules'] = iunserializer($extend['modules']);
@@ -259,7 +297,8 @@ if($step == 1) {
 	if (!empty($extend['templates'])) {
 		$owner['extend']['templates'] = pdo_getall('site_templates', array('id' => $extend['templates']));
 	}
-	$groups = pdo_fetchall("SELECT id, name FROM ".tablename('users_group')." ORDER BY id ASC", array(), 'id');
+	$extend['package'] = pdo_getall('uni_account_group', array('uniacid' => $uniacid), array(), 'groupid');
+	$groups = pdo_fetchall("SELECT id, name, package FROM ".tablename('users_group')." ORDER BY id ASC", array(), 'id');
 	$modules = pdo_fetchall("SELECT mid, name, title FROM " . tablename('modules') . ' WHERE issystem != 1', array(), 'name');
 	$templates  = pdo_fetchall("SELECT * FROM ".tablename('site_templates'));
 } elseif($step == '4') {

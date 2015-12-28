@@ -263,7 +263,7 @@ class Hl_dqqModuleSite extends WeModuleSite {
 				$credit1 = intval($gift['get_jf']);
 				load()->model('mc');
 				mc_credit_update($_W['member']['uid'], "credit1", $credit1, null);
-				$data['description'] = $gift['title'];
+				$data['description'] = $gift['description'];
 				$result['message'] = '' . $data['award'] . '！';
 				$result['status'] = 0;
 				pdo_update('dqq_award', array('total' => --$gift['total']), array('id' => $gift['id']));
@@ -306,7 +306,7 @@ class Hl_dqqModuleSite extends WeModuleSite {
 	public function doMobileGetMyAward() {
 		global $_GPC, $_W;
 		$params = $awards = array();
-		$sql = 'SELECT `award`, `createtime` FROM ' . tablename('dqq_winner') . " WHERE `rid` = :rid AND `from_user` = :fromuser AND `award` <> :award 
+		$sql = 'SELECT `award`, `createtime`, `description` FROM ' . tablename('dqq_winner') . " WHERE `rid` = :rid AND `from_user` = :fromuser AND `award` <> :award
 				ORDER BY `createtime` DESC";
 		$params[':rid'] = intval($_GPC['id']);
 		$params[':fromuser'] = $_W['fans']['from_user'];

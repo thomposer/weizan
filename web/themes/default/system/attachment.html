@@ -195,6 +195,7 @@
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
 			<div class="col-sm-9 col-xs-12">
 				<button name="submit" class="btn btn-primary" value="submit">保存配置</button>
+				<button name="button" type="button" class="btn btn-info js-checkremoteftp" value="check">测试配置（无需保存）</button>
 				<input type="hidden" name="token" value="{$_W['token']}" />
 			</div>
 		</div>
@@ -216,6 +217,17 @@
 
 		</div>
 		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+			<div class="col-sm-9 col-xs-12">
+				<span class="text-danger" id="mistake" style="display: none;">
+					填写的Access Key ID 或 Access Key Secret 错误，请重新填写。
+				</span>
+				<span class="text-danger" id="warning" style="display: none;">
+					请填写完整Access Key ID  Access Key Secret。
+				</span>
+			</div>
+		</div>
+		<div class="form-group">
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label">Access Key ID</label>
 			<div class="col-sm-9 col-xs-12">
 				<input type="text" name="alioss[key]" class="form-control" value="{$remote['alioss']['key']}" placeholder="" />
@@ -229,37 +241,29 @@
 			<div class="col-sm-9 col-xs-12">
 				<input type="text" name="alioss[secret]" class="form-control" value="{$remote['alioss']['secret']}" placeholder="" />
 				<span class="help-block">
-					Access Key Secret是您访问阿里云API的密钥，具有该账户完全的权限，请您妥善保管。
+					Access Key Secret是您访问阿里云API的密钥，具有该账户完全的权限，请您妥善保管。(填写完Access Key ID 和 Access Key Secret 后请选择bucket)
 				</span>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group" id="bucket" {if empty($remote['alioss']['key'])}style="display: none;{/if}">
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label">Bucket选择</label>
 			<div class="col-sm-9 col-xs-12">
-				{if !empty($buckets)}
 				<select name="alioss[bucket]" class="form-control">
 					{loop $buckets $value}
-					<option value="{$value['name']}@@{$value['location']}" {if $value['name'] == $remote['alioss']['bucket']} selected{/if}>{$value['name']}@@{$bucket_datacenter[$value['location']]}</option>
+					<option value="{$value['name']}@@{$value['location']}" {if $value['name'] == $remote['alioss']['bucket'] || $remote['alioss']['bucket'] == $value['name'].'@@'.$value['location']} selected{/if}>{$value['name']}@@{$bucket_datacenter[$value['location']]}</option>
 					{/loop}
 				</select>
-				{else}
-				<input type="text" name="alioss[bucket]" class="form-control" value="{$remote['alioss']['bucket']}" placeholder="" />
-				{/if}
 				<span class="help-block">
-					{if !empty($bucketContainer)}
-					请注意您在阿里云后台设置的访问权限以及防盗链设置等。
-					{else}
-					完善Access Key ID和Access Key Secret资料后可以选择存在的Bucket，否则请手动输入。
-					{/if}
+					完善Access Key ID和Access Key Secret资料后可以选择存在的Bucket(请保证bucket为可公共读取的)，否则请手动输入。
 				</span>
 			</div>
 		</div>
 		<div class="form-group">
 		 <label class="col-xs-12 col-sm-3 col-md-2 control-label">自定义URL</label>
 			<div class="col-sm-9 col-xs-12">
-				<input type="text" name="custom[url]" class="form-control" value="{$remote['alioss']['url']}"placeholder=""/>
+				<input type="text" name="custom[url]" class="form-control" {if !strexists($remote['alioss']['url'],'aliyuncs.com') && $_W['setting']['remote']['type'] == 2}value="{$remote['alioss']['url']}"{/if} placeholder="默认URL不需要填写"/>
 					<span class="help-block">
-						阿里云oss支持用户自定义访问域名，如果自定义了URL则用自定义的URL，如果未自定义，则用系统生成出来的URL。
+						阿里云oss支持用户自定义访问域名，如果自定义了URL则用自定义的URL，如果未自定义，则用系统生成出来的URL。注：自定义url开头加http://或https://结尾不加 ‘/’例：http://abc.com
 					</span>
 			</div>
 		</div>
@@ -267,6 +271,7 @@
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
 			<div class="col-sm-9 col-xs-12">
 				<button name="submit" class="btn btn-primary" value="submit">保存配置</button>
+				<button name="button" type="button" class="btn btn-info js-checkremoteoss" value="check">测试配置（无需保存）</button>
 				<input type="hidden" name="token" value="{$_W['token']}" />
 			</div>
 		</div>
@@ -281,12 +286,93 @@
 		</div>
 	</div>
 </form>
+
 <script type="text/javascript">
-<!--
 	$('.js-checkremoteftp').on('click', function(){
-		$.post('{php echo url('utility/checkattach/ftp')}')
+		var ssl =  parseInt($(':radio[name="ftp[ssl]"]:checked').val());
+		var pasv = parseInt($(':radio[name="ftp[pasv]"]:checked').val());
+		var param = {
+			'ssl' : ssl,
+			'host' : $.trim($(':text[name="ftp[host]"]').val()),
+			'username'  : $.trim($(':text[name="ftp[username]"]').val()),
+			'password' : $.trim($(':text[name="ftp[password]"]').val()),
+			'pasv' : pasv,
+			'dir': $.trim($(':text[name="ftp[dir]"]').val()),
+			'url': $.trim($(':text[name="ftp[url]"]').val()),
+			'port' : parseInt($(':text[name="ftp[port]"]').val()),
+			'overtime' : parseInt($(':text[name="ftp[overtime]"]').val())
+		};
+		$.post("{php echo url('utility/checkattach/ftp')}", param, function(data){
+			var data = $.parseJSON(data);
+			if(data.message.errno == 0) {
+				util.message(data.message.message);
+				return false;
+			}
+			if(data.message.errno < 0) {
+				util.message(data.message.message);
+				return false;
+			}
+		});
 	});
-//-->
+	$('.js-checkremoteoss').on('click', function(){
+		var bucket = $.trim($('select[name="alioss[bucket]"]').val());
+		if (bucket == '') {
+			bucket = $.trim($(':text[name="alioss[bucket]"]').val());
+		}
+		var param = {
+			'key' : $.trim($(':text[name="alioss[key]"]').val()),
+			'secret' : $.trim($(':text[name="alioss[secret]"]').val()),
+			'url'  : $.trim($(':text[name="custom[url]"]').val()),
+			'bucket' : bucket
+		};
+		$.post("{php echo url('utility/checkattach/oss')}",param, function(data) {
+			var data = $.parseJSON(data);
+			if(data.message.errno == 0) {
+				util.message('配置成功');
+				return false;
+			}
+			if(data.message.errno < 0) {
+				util.message(data.message.message);
+				return false;
+			}
+		});
+	});
+	var buck =  function() {
+		var key = $(':text[name="alioss[key]"]').val();
+		var secret = $(':text[name="alioss[secret]"]').val();
+		if (key == '' || secret == '') {
+			$('#warning').show();
+			$('#mistake').hide();
+			$('[name="submit"]').prop('disabled', true);
+			return false;
+		}
+		$.post("{php echo url('system/attachment/buckets')}", {'key' : key, 'secret' : secret}, function(data) {
+			var data = $.parseJSON(data);
+			if (data.message.errno < 0 ) {
+				$('#warning').hide();
+				$('#mistake').show();
+				$('[name="submit"]').prop('disabled', true);
+				return false;
+			} else {
+				$('#bucket').show();
+				$('#warning').hide();
+				$('#mistake').hide();
+				$('[name="submit"]').prop('disabled', false);
+				var bucket = $('select[name="alioss[bucket]"]');
+				bucket.empty();
+				var buckets = eval(data.message.message);
+				for (var i in buckets) {
+					bucket.append('<option value='+buckets[i]['name']+'@@'+buckets[i]['location']+'>'+buckets[i]['loca_name']+'</option>');
+				}
+			}
+		});
+		var mistake_dis = $('#mistake').css('display');
+		var warning_dis = $('#warning').css('display');
+		if (mistake_dis == 'inline' || warning_dis == 'inline') {
+			$(':text[name="alioss[key]"]').blur(buck);
+		}
+	};
+	$(':text[name="alioss[secret]"]').blur(buck);
 </script>
 {/if}
 {template 'common/footer-gw'}

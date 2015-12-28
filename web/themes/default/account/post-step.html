@@ -137,7 +137,7 @@
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">Oauth 2.0</label>
 					<div class="col-sm-9 col-xs-12">
-						<p class="form-control-static">在微信公众号请求用户网页授权之前，开发者需要先到公众平台网站的【开发者中心】<b>网页服务</b>中配置授权回调域名。<a href="http://www.012wz.com/manual/dev:v0.6:qa:mobile_redirect_url_error" target="_black">查看详情</a></p>
+						<p class="form-control-static">在微信公众号请求用户网页授权之前，开发者需要先到公众平台网站的【开发者中心】<b>网页服务</b>中配置授权回调域名。<a href="http://www.012wz.com/wiki" target="_black">查看详情</a></p>
 					</div>
 				</div>
 				{if !empty($acid)}
@@ -181,7 +181,7 @@
 						<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
 						<div class="col-sm-9 col-xs-12">
 							<div class="input-group">
-								<img src="{$qrcodesrc}?time={php echo time()}" class="img-responsive img-thumbnail" width="150" />
+								<img src="{php echo tomedia('qrcode_'.$account['acid'].'.jpg');}?time={php echo time()}" class="img-responsive img-thumbnail" width="150" />
 							</div>
 						</div>
 					</div>
@@ -198,7 +198,7 @@
 						<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
 						<div class="col-sm-9 col-xs-12">
 							<div class="input-group">
-								<img src="{$headimgsrc}?time={php echo time()}" class="img-responsive img-thumbnail" width="150" />
+								<img src="{php echo tomedia('headimg_'.$account['acid'].'.jpg');}?time={php echo time()}" class="img-responsive img-thumbnail" width="150" />
 							</div>
 						</div>
 					</div>
@@ -271,9 +271,10 @@
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">管理员用户组</label>
 					<div class="col-sm-9 col-xs-12">
 						<select name="groupid" class="form-control" id="groupid">
-							<option value="0">使用用户所在的用户组</option>
+							<option value="0" data-package="[]">不设置</option>
 							{loop $groups $row}
-							<option value="{$row['id']}" {if $row['id'] == $owner['groupid']}selected{/if}>{$row['name']}</option>
+							{php $package = $row['package'] ? implode(',', iunserializer($row['package'])) : '';}
+							<option value="{$row['id']}" {if $row['id'] == $owner['groupid']}selected{/if} data-package="[{$package}]">{$row['name']}</option>
 							{/loop}
 						</select>
 						<span class="help-block"></span>
@@ -283,21 +284,32 @@
 		</div>
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				公众号可使用的权限（以下全部）
+				公众号可使用的权限（以下选中套餐）
 			</div>
 			<div class="panel-body table-responsive">
 				<table class="table table-hover">
 					<thead class="navbar-inner">
 						<tr>
+							<th style="width:50px;"></th>
 							<th style="width:120px;">公众服务套餐</th>
 							<th style="width:400px;">模块权限</th>
 							<th style="width:400px;">模板权限</th>
 						</tr>
 					</thead>
 					<tbody id="account-package">
-						{if !empty($owner['package'])}
-						{loop $owner['package'] $package}
 						<tr>
+							<td><input type="checkbox" name="package[]" autocomplete="off" value="-1" {if is_array($owner['group']['package']) && in_array('-1', $owner['group']['package'])}checked disabled{/if}{if is_array($extend['package']) && !empty($extend['package'][-1])}checked {/if} /></td>
+							<td>所有服务</td>
+							<td>
+								<span class="label label-danger">系统所有模块</span></li>
+							</td>
+							<td>
+								<span class="label label-danger">系统所有模板</span></li>
+							</td>
+						</tr>
+						{loop $unigroups $package}
+						<tr>
+							<td><input type="checkbox" name="package[]" autocomplete="off" {if is_array($owner['group']['package']) && in_array($package['id'], $owner['group']['package'])}checked disabled{/if} {if is_array($extend['package']) && !empty($extend['package'][$package['id']])}checked {/if} value="{$package['id']}" /></td>
 							<td>{$package['name']}</td>
 							<td style="line-height:25px; white-space:normal;">
 								<span class="label label-success">系统模块</span>
@@ -313,35 +325,27 @@
 							</td>
 						</tr>
 						{/loop}
-						{else}
-						<tr>
-							<td></td>
-							<td style="line-height:25px; white-space:normal;">
-								<span class="label label-success">所有模块</span>
-							</td>
-							<td style="line-height:25px; white-space:normal;">
-								<span class="label label-success">所有模板</span>
-							</td>
-						</tr>
-						{/if}
 					</tbody>
 					<tbody id="account-package-extra" {if empty($owner['extend'])}style="display:none;"{/if}>
 						<tr>
+							<td></td>
 							<td>专属附加权限</td>
 							<td class="js-extra-modules" style="line-height:25px; white-space:normal;">
 							{loop $owner['extend']['modules'] $module}
 							<span class="label label-info">{$module['title']}</span>
+							<input type="hidden" value="{$module['name']}" name="extra[modules][]">
 							{/loop}
 							</td>
 							<td class="js-extra-templates" style="line-height:25px; white-space:normal;">
 							{loop $owner['extend']['templates'] $template}
 							<span class="label label-info">{$template['title']}</span>
+							<input type="hidden" value="{$template['id']}" name="extra[templates][]">
 							{/loop}
 							</td>
 						</tr>
 					</tbody>
 					<tr>
-						<td colspan="3" class="text-center">
+						<td colspan="4" class="text-center">
 							<a href="javascript:;" class="btn btn-primary" data-toggle="modal" data-target="#modal-account-package-extra">附加权限</a>
 						</td>
 					</tr>
@@ -427,23 +431,6 @@
 			{if $_W['isfounder']}
 			require(['biz', 'underscore'], function(biz, _){
 				var seletedUserIds = [];
-				var groupitem = '<%_.each(package, function(item) {%> \n' +
-								'<tr>'+
-								'	<td><%=item.name%></td>'+
-								'	<td style="line-height:25px; white-space:normal;">'+
-								'		<span class="label label-success">系统模块</span>'+
-								'		<%_.each(item.modules, function(module) {%> \n' +
-								'		<span class="label label-info"><%=module.title%></span>'+
-								'		<%});%>'+
-								'	</td>'+
-								'	<td style="line-height:25px; white-space:normal;">'+
-								'		<span class="label label-success">微站默认模板</span>'+
-								'		<%_.each(item.templates, function(template) {%> \n' +
-								'		<span class="label label-info"><%=template.title%></span>'+
-								'		<%});%>'+
-								'	</td>'+
-								'</tr>'+
-								'<%});%>';
 				$('#btn-add').click(function(){
 					var self = this;
 					biz.user.browser(seletedUserIds, function(user){
@@ -453,8 +440,8 @@
 							}
 							$('#manager').html('<input type="hidden" name="uid" value="'+data.message.uid+'" />' + data.message.username);
 							$('#groupid').val(data.message.group.id);
-							$('#account-package').html(_.template(groupitem)(data.message));
 							$('#account-package-extra').show();
+							update_package_list(data.message.package);
 							$(self).html('修改');
 						});
 					},{mode:'invisible', direct : true});
@@ -466,12 +453,7 @@
 						util.message('请先选择管理员');
 						return false;
 					}
-					$.getJSON('./index.php?c=account&a=post-step&do=userinfo&step=3&uid='+user+'&groupid='+$('#groupid').val(), function(data){
-						if (data.message.errno) {
-							util.message(data.message.message);
-						}
-						$('#account-package').html(_.template(groupitem)(data.message));
-					});
+					update_package_list($(this).find('option:selected').data('package'));
 				});
 				$('#modal-account-package-extra').find('.modal-footer .btn-primary').click(function(){
 					var moduleshtml = '',templatehtml = '';
@@ -490,6 +472,14 @@
 					$('#account-package-extra .js-extra-templates').html(templatehtml);
 					$('#modal-account-package-extra').modal('hide');
 				});
+				function update_package_list(package) {
+					$('input[name="package[]"]').prop('checked', false);
+					$('input[name="package[]"]').prop('disabled', false);
+					for (i in package) {
+						$('input[name="package[]"][value="'+package[i]+'"]').prop('checked', true);
+						$('input[name="package[]"][value="'+package[i]+'"]').prop('disabled', true);
+					}
+				}
 			});
 			{/if}
 		});
@@ -518,19 +508,19 @@
 						<div class="img"><img src="resource/images/guide-02.png"/></div>
 						<p># 将以下链接链接填入对应输入框：</p>
 						<form action="" method="post" class="form-horizontal" role="form">
-							<div class="form-group">
+							<div class="form-group clip">
 								<label class="col-xs-12 col-sm-2 col-md-1 col-lg-1 control-label">URL:</label>
 								<div class="col-sm-9 col-xs-12 input-group ">
 									<p class="form-control-static"><a href="javascript:;" title="点击复制Token">{$_W['siteroot']}api.php?id={$account['acid']}</a></p>
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group clip">
 								<label class="col-xs-12 col-sm-2 col-md-1 col-lg-1 control-label">Token:</label>
 								<div class="col-sm-9 col-xs-12 input-group">
 									<p class="form-control-static"> <a href="javascript:;" title="点击复制Token">{$account['token']}</a></p>
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group clip">
 								<label class="col-xs-12 col-sm-2 col-md-1 col-lg-1 control-label">EncodingAESKey:</label>
 								<div class="col-sm-10 input-group">
 									<p class="form-control-static"> <a href="javascript:;" title="点击复制EncodingAESKey">{$account['encodingaeskey']}</a></p>
@@ -569,6 +559,9 @@
 	{/if}
 </div>
 <script type="text/javascript">
+	$('.clip p a').each(function(){
+		util.clip(this, $(this).text());
+	});
 	require(['biz', 'filestyle'], function(biz){
 		$(function(){
 			$('#username').blur(function(){

@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 defined('IN_IA') or exit('Access Denied');
@@ -75,69 +75,39 @@ if($do == 'post') {
 	load()->func('communication');
 	if(checksubmit('submit')){
 				$barcode = array(
-				'expire_seconds' => '',
-				'action_name' => '',
-				'action_info' => array(
-					'scene' => array(),
-				),
+			'expire_seconds' => '',
+			'action_name' => '',
+			'action_info' => array(
+				'scene' => array(),
+			),
 		);
 		$qrctype = intval($_GPC['qrc-model']);
 		$acid = intval($_W['acid']);
 		$uniacccount = WeAccount::create($acid);
 		$id = intval($_GPC['id']);
 		if (!empty($id)) {
-			$qrcrow = pdo_fetch("SELECT * FROM ".tablename('qrcode')." WHERE uniacid = :uniacid AND id = :id", array(':uniacid' => $_W['uniacid'], ':id' => $id));
 			$update = array(
-					'keyword' => $_GPC['keyword'],
-					'name' => $_GPC['scene-name'],
-					'status' => '1',
+				'keyword' => trim($_GPC['keyword']),
+				'name' => trim($_GPC['scene-name'])
 			);
-			if ($qrcrow['model'] == 1) {
-				$barcode['action_info']['scene']['scene_id'] = $qrcrow['qrcid'];
-				$barcode['expire_seconds'] = intval($_GPC['expire-seconds']);
-				$barcode['action_name'] = 'QR_SCENE';
-				$result = $uniacccount->barCodeCreateDisposable($barcode);
-				$update['ticket'] = $result['ticket'];
-				$update['expire'] = $result['expire_seconds'];
-				$update['url'] = $result['url'];
-				$update['createtime'] = TIMESTAMP;
-			} elseif ($qrcrow['model'] == 2) {
-				$qrcid = intval($qrcrow['qrcid']);
-				if($qrcid > 0) {
-					$barcode['action_info']['scene']['scene_id'] = $qrcrow['qrcid'];
-					$barcode['action_name'] = 'QR_LIMIT_SCENE';
-				} else {
-					$barcode['action_info']['scene']['scene_str'] = $qrcrow['scene_str'];
-					$barcode['action_name'] = 'QR_LIMIT_STR_SCENE';
-				}
-				$result = $uniacccount->barCodeCreateFixed($barcode);
-				$update['ticket'] = $result['ticket'];
-				$update['url'] = $result['url'];
-				$update['createtime'] = TIMESTAMP;
-			}
 			pdo_update('qrcode', $update, array('uniacid' => $_W['uniacid'], 'id' => $id));
 			message('恭喜，更新带参数二维码成功！', url('platform/qr/list'), 'success');
 		}
 	
 		if ($qrctype == 1) {
 			$qrcid = pdo_fetchcolumn("SELECT qrcid FROM ".tablename('qrcode')." WHERE acid = :acid AND model = '1' ORDER BY qrcid DESC LIMIT 1", array(':acid' => $acid));
-			$barcode['action_info']['scene']['scene_id'] = !empty($qrcid) ? ($qrcid+1) : 100001;
+			$barcode['action_info']['scene']['scene_id'] = !empty($qrcid) ? ($qrcid + 1) : 100001;
 			$barcode['expire_seconds'] = intval($_GPC['expire-seconds']);
 			$barcode['action_name'] = 'QR_SCENE';
 			$result = $uniacccount->barCodeCreateDisposable($barcode);
 		} else if ($qrctype == 2) {
-			$scene_str = trim($_GPC['scene_str']);
-			if(!empty($scene_str)) {
-				$barcode['action_info']['scene']['scene_str'] = $scene_str;
-				$barcode['action_name'] = 'QR_LIMIT_STR_SCENE';
-			} else {
-				$qrcid = pdo_fetchcolumn("SELECT qrcid FROM ".tablename('qrcode')." WHERE acid = :acid AND model = '2' ORDER BY qrcid DESC LIMIT 1", array(':acid' => $acid));
-				$barcode['action_info']['scene']['scene_id'] = !empty($qrcid) ? ($qrcid+1) : 1;
-				if ($barcode['action_info']['scene']['scene_id'] > 100000) {
-					message('抱歉，永久二维码已经生成最大数量，请先删除一些。');
-				}
-				$barcode['action_name'] = 'QR_LIMIT_SCENE';
+			$scene_str = trim($_GPC['scene_str']) ? trim($_GPC['scene_str'])  : message('场景值不能为空');
+			$is_exist = pdo_fetchcolumn('SELECT id FROM ' . tablename('qrcode') . ' WHERE uniacid = :uniacid AND acid = :acid AND scene_str = :scene_str AND model = 2', array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid'], ':scene_str' => $scene_str));
+			if(!empty($is_exist)) {
+				message("场景值:{$scene_str}已经存在,请更换场景值");
 			}
+			$barcode['action_info']['scene']['scene_str'] = $scene_str;
+			$barcode['action_name'] = 'QR_LIMIT_STR_SCENE';
 			$result = $uniacccount->barCodeCreateFixed($barcode);
 		} else {
 			message('抱歉，此公众号暂不支持您请求的二维码类型！');
@@ -179,7 +149,7 @@ if($do == 'extend') {
 		if ($qrcrow['model'] == 1) {
 			$uniacccount = WeAccount::create($qrcrow['acid']);
 			$barcode['action_info']['scene']['scene_id'] = $qrcrow['qrcid'];
-			$barcode['expire_seconds'] = 604800;
+			$barcode['expire_seconds'] = 2592000;
 			$barcode['action_name'] = 'QR_SCENE';
 			$result = $uniacccount->barCodeCreateDisposable($barcode);
 			if(is_error($result)) {
@@ -204,6 +174,7 @@ if($do == 'display') {
 	!empty($_GPC['keyword']) && $where .= " AND name LIKE '%{$_GPC['keyword']}%'";
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 10;
+	$count = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('qrcode_stat'). $where, $param);
 	$list = pdo_fetchall("SELECT * FROM ".tablename('qrcode_stat')." $where ORDER BY id DESC LIMIT ".($pindex - 1) * $psize.','. $psize, $param);
 	if (!empty($list)) {
 		$openid = array();

@@ -1,13 +1,14 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 $eid = intval($_GPC['eid']);
 if(!empty($eid)) {
 	$sql = 'SELECT * FROM ' . tablename('modules_bindings') . ' WHERE `eid`=:eid';
 	$entry = pdo_fetch($sql, array(':eid' => $eid));
+	$_GPC['m'] = $entry['module'];
 } else {
 	$entry = array(
 		'module' => $_GPC['m'],

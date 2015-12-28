@@ -5,8 +5,13 @@
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('mc_mass');
-$dos = array('default', 'post', 'send', 'ajax', 'news', 'fans');
+$dos = array('default', 'post', 'send', 'ajax', 'news', 'fans', 'page', 'add', 'material');
+$_W['page']['title'] = '微信群发-粉丝管理';
 $do = in_array($do, $dos) ? $do : 'default';
+if($do == 'page') {
+	template('mc/page');
+}
+
 if($do == 'default') {
 	if($_W['account']['level'] > 2) {
 		$groups_data = pdo_fetch('SELECT * FROM ' . tablename('mc_fans_groups') . ' WHERE uniacid = :uniacid AND acid = :acid', array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid']));
@@ -93,6 +98,14 @@ if($do == 'post') {
 	set_time_limit(0);
 	error_reporting(E_ERROR);
 	$post = $_GPC['__input'];
+	if($_GPC['send_time'] == 2) {
+		$time = strtotime($_GPC['time']);
+		if($time <= TIMESTAMP || $time >= (TIMESTAMP + 86400*3 - 7200)) {
+			$time = date('Y-m-d H:i', TIMESTAMP + 86400*3 - 7200);
+			message(error(-1, "定时发送时间不能小于当前时间并且不能超过{$time}"), '', 'ajax');
+		}
+	}
+
 	$acc = WeAccount::create($_W['acid']);
 	if($post['msg_type'] == 'mpnews') {
 		$rid = intval($post['data']);
@@ -226,43 +239,51 @@ if($do == 'post') {
 	} elseif($post['send_type'] == 3) {
 		$data['touser'] = $post['openids'];
 	}
-
-	$status = $acc->fansSendAll($data);
-	if(is_error($status)) {
-		message($status, '', 'ajax');
-	} else {
-				if($post['msg_type'] == 'mpnews') {
-			$post['msg_type'] = 'news';
+	$record = 0;
+	if($_GPC['send_time'] == 1) {
+				$status = $acc->fansSendAll($data);
+		if(is_error($status)) {
+			message($status, '', 'ajax');
 		}
-		$insert = array(
-			'uniacid' => $_W['uniacid'],
-			'acid' => $_W['acid'],
-			'msgtype' => $post['msg_type'],
-			'createtime' => TIMESTAMP,
-		);
-		if($post['send_type'] == 1) {
-			$insert['groupname'] = '全部用户';
-			$insert['fansnum'] = '';
-		} elseif($post['send_type'] == 2) {
-			$groups_data = pdo_fetch('SELECT * FROM ' . tablename('mc_fans_groups') . ' WHERE uniacid = :uniacid AND acid = :acid', array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid']));
-			$groups = iunserializer($groups_data['groups']);
-			$insert['groupname'] = $groups[$post['send_group']]['name'];
-			$insert['fansnum'] = $groups[$post['send_group']]['count'];
-		} elseif($post['send_type'] == 3) {
-						$insert['groupname'] = '根据粉丝openid群发';
-			$insert['fansnum'] = count($post['openids']);
-		}
-
-		if(in_array($post['msg_type'], array('text', 'image', 'voice'))) {
-			$insert['content'] = $post['data'];
-		} elseif($post['msg_type'] == 'video') {
-			$insert['content'] = $post['data']['media_id'];
-		} elseif($post['msg_type'] == 'news') {
-			$insert['content'] = intval($post['data']);
-		}
-		pdo_insert('mc_mass_record', $insert);
-		message(error(1, ''), '', 'ajax');
 	}
+		if($post['msg_type'] == 'mpnews') {
+		$post['msg_type'] = 'news';
+	}
+	$insert = array(
+		'uniacid' => $_W['uniacid'],
+		'acid' => $_W['acid'],
+		'msgtype' => $post['msg_type'],
+		'createtime' => TIMESTAMP,
+	);
+	if($post['send_time'] == 1) {
+		$insert['status'] = 0;
+	} else {
+		$insert['sendtime'] = $time;
+		$insert['status'] = 1;
+		$insert['data'] = iserializer($data);
+	}
+	if($post['send_type'] == 1) {
+		$insert['groupname'] = '全部用户';
+		$insert['fansnum'] = '';
+	} elseif($post['send_type'] == 2) {
+		$groups_data = pdo_fetch('SELECT * FROM ' . tablename('mc_fans_groups') . ' WHERE uniacid = :uniacid AND acid = :acid', array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid']));
+		$groups = iunserializer($groups_data['groups']);
+		$insert['groupname'] = $groups[$post['send_group']]['name'];
+		$insert['fansnum'] = $groups[$post['send_group']]['count'];
+	} elseif($post['send_type'] == 3) {
+				$insert['groupname'] = '根据粉丝openid群发';
+		$insert['fansnum'] = count($post['openids']);
+	}
+
+	if(in_array($post['msg_type'], array('text', 'image', 'voice'))) {
+		$insert['content'] = $post['data'];
+	} elseif($post['msg_type'] == 'video') {
+		$insert['content'] = $post['data']['media_id'];
+	} elseif($post['msg_type'] == 'news') {
+		$insert['content'] = intval($post['data']);
+	}
+	pdo_insert('mc_mass_record', $insert);
+	message(error(1, ''), '', 'ajax');
 }
 
 if($do == 'send') {

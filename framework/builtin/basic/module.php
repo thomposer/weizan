@@ -37,7 +37,7 @@ class BasicModule extends WeModule {
 		foreach($this->replies as $reply) {
 			pdo_insert($this->tablename, array('rid' => $rid, 'content' => $reply['content']));
 		}
-		return true;	
+		return true;
 	}
 	
 	public function ruleDeleted($rid = 0) {

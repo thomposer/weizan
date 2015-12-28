@@ -1,12 +1,12 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
 $_W['page']['title'] = '全局设置 - 附件设置 - 系统管理';
-$dos = array('attachment', 'remote');
+$dos = array('attachment', 'remote', 'buckets');
 $do = in_array($do, $dos) ? $do : 'global';
 load()->model('setting');
 load()->model('attachment');
@@ -94,12 +94,8 @@ if ($do == 'global') {
 				'key' => $_GPC['alioss']['key'],
 				'secret' => $_GPC['alioss']['secret'],
 				'bucket' => $_GPC['alioss']['bucket'],
-				'url' => $_GPC['alioss']['url'],
 			),
 		);
-		if (strexists($_GPC['alioss']['bucket'], '@@')) {
-			list($remote['alioss']['bucket'], $remote['alioss']['url']) = explode('@@', $_GPC['alioss']['bucket']);
-		}
 		if ($remote['type'] == '2') {
 			if (trim($remote['alioss']['key']) == '') {
 				message('阿里云OSS-Access Key ID不能为空');
@@ -108,21 +104,21 @@ if ($do == 'global') {
 				message('阿里云OSS-Access Key Secret不能为空');
 			}
 			$buckets = attachment_alioss_buctkets($remote['alioss']['key'], $remote['alioss']['secret']);
-			if ((empty($_W['setting']['remote']['alioss']) || $_W['setting']['remote']['alioss']['key'] == $remote['alioss']['key']) && empty($buckets[$remote['alioss']['bucket']])) {
-				message('填写的Bucket不存在或是已经被删除');
+			if (is_error($buckets)) {
+				message('OSS-Access Key ID 或 OSS-Access Key Secret错误，请重新填写');
 			}
-			if ($_W['setting']['remote']['alioss']['key'] != $remote['alioss']['key']) {
-				$first_bucket = array_shift($buckets);
-				$remote['alioss']['url'] = "http://{$first_bucket['location']}.aliyuncs.com/{$_W['setting']['remote']['alioss']['bucket']}/";
-			} else {
-				$remote['alioss']['url'] = "http://{$buckets[$remote['alioss']['bucket']]['location']}.aliyuncs.com/{$_W['setting']['remote']['alioss']['bucket']}/";
+			list($remote['alioss']['bucket'], $remote['alioss']['url']) = explode('@@', $_GPC['alioss']['bucket']);
+			if (empty($buckets[$remote['alioss']['bucket']])) {
+				message('Bucket不存在或是已经被删除');
 			}
+			$remote['alioss']['url'] = 'http://'.$remote['alioss']['bucket'].'.'.$buckets[$remote['alioss']['bucket']]['location'].'.aliyuncs.com';
+			$remote['alioss']['ossurl'] = $buckets[$remote['alioss']['bucket']]['location'].'.aliyuncs.com';
 			if(!empty($_GPC['custom']['url'])) {
 				$url = trim($_GPC['custom']['url'],'/');
-				if(!empty($url) && !preg_match('/^http(s)?:\/\//', $host)) {
-					$host = 'http://'.$host;
+				if (!strexists($url, 'http://') && !strexists($url, 'https://')) {
+					$url = 'http://'.$url;
 				}
-				$remote['alioss']['url'] = "{$url}/{$_W['setting']['remote']['alioss']['bucket']}/";
+				$remote['alioss']['url'] = $url;
 			}
 		} elseif ($remote['type'] == '1') {
 			if (empty($remote['ftp']['host'])) {
@@ -151,5 +147,27 @@ if ($do == 'global') {
 		'oss-cn-shanghai' => '上海数据中心',
 		'oss-us-west-1' => '美国硅谷数据中心',
 	);
+} elseif ($do == 'buckets') {
+		$key = $_GPC['key'];
+		$secret = $_GPC['secret'];
+		$buckets = attachment_alioss_buctkets($key, $secret);
+		if (is_error($buckets)) {
+			message(error(-1), '', 'ajax');
+		}
+		$bucket_datacenter = array(
+			'oss-cn-hangzhou' => '杭州数据中心',
+			'oss-cn-qingdao' => '青岛数据中心',
+			'oss-cn-beijing' => '北京数据中心',
+			'oss-cn-hongkong' => '香港数据中心',
+			'oss-cn-shenzhen' => '深圳数据中心',
+			'oss-cn-shanghai' => '上海数据中心',
+			'oss-us-west-1' => '美国硅谷数据中心',
+		);
+		$bucket = array();
+		foreach ($buckets as $key => $value) {
+			$value['loca_name'] = $key. '@@'. $bucket_datacenter[$value['location']];
+			$bucket[] = $value;
+		}
+		message(error(1, $bucket), '', 'ajax');
 }
 template('system/attachment');

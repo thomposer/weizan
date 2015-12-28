@@ -60,7 +60,7 @@ if ($do == 'display') {
 		}
 	}
 	$category['style'] = $styles[$category['styleid']];
-
+	$category['style']['tname'] = empty($category['style']['tname'])? 'default' : $category['style']['tname'];
 	if (checksubmit('submit')) {
 		if (empty($_GPC['cname'])) {
 			message('抱歉，请输入分类名称！');

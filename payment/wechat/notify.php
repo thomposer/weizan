@@ -24,10 +24,10 @@ if (!empty($input) && empty($_GET['out_trade_no'])) {
 }
 require '../../framework/bootstrap.inc.php';
 $_W['uniacid'] = $_W['weid'] = $get['attach'];
-
 $setting = uni_setting($_W['uniacid'], array('payment'));
 if(is_array($setting['payment'])) {
 	$wechat = $setting['payment']['wechat'];
+	WeUtility::logging('pay', var_export($get, true));
 	if(!empty($wechat)) {
 		ksort($get);
 		$string1 = '';
@@ -46,7 +46,7 @@ if(is_array($setting['payment'])) {
 			if(!empty($log) && $log['status'] == '0') {
 				$log['tag'] = iunserializer($log['tag']);
 				$log['tag']['transaction_id'] = $get['transaction_id'];
-				
+				$log['uid'] = $log['tag']['uid'];
 				$record = array();
 				$record['status'] = '1';
 				$record['tag'] = iserializer($log['tag']);
@@ -59,8 +59,7 @@ if(is_array($setting['payment'])) {
 					$codearr['card_id'] = $log['card_id'];
 					$acc->PayConsumeCode($codearr);
 				}
-				load()->model('mc');
-				$log['uid'] = mc_openid2uid($log['openid']);
+
 				if($log['is_usecard'] == 1 && $log['card_type'] == 2) {
 					$now = time();
 					$log['card_id'] = intval($log['card_id']);
@@ -79,12 +78,13 @@ if(is_array($setting['payment'])) {
 						$ret = array();
 						$ret['weid'] = $log['weid'];
 						$ret['uniacid'] = $log['uniacid'];
+						$ret['acid'] = $log['acid'];
 						$ret['result'] = 'success';
 						$ret['type'] = $log['type'];
 						$ret['from'] = 'notify';
 						$ret['tid'] = $log['tid'];
 						$ret['uniontid'] = $log['uniontid'];
-						$ret['user'] = $log['openid'];
+						$ret['user'] = empty($get['openid']) ? $log['openid'] : $get['openid'];
 						$ret['fee'] = $log['fee'];
 						$ret['tag'] = $log['tag'];
 						$ret['is_usecard'] = $log['is_usecard'];

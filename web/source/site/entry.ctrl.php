@@ -9,12 +9,16 @@ if(!empty($eid)) {
 	$sql = 'SELECT * FROM ' . tablename('modules_bindings') . ' WHERE `eid`=:eid';
 	$entry = pdo_fetch($sql, array(':eid' => $eid));
 } else {
-	$entry = array(
-		'module' => $_GPC['m'],
-		'do' => $_GPC['do'],
-		'state' => $_GPC['state'],
-		'direct' => $_GPC['direct']
-	);
+	$sql = 'SELECT * FROM ' . tablename('modules_bindings') . ' WHERE module = :module AND do = :do';
+	$entry = pdo_fetch($sql, array(':module' => trim($_GPC['m']), ':do' => trim($_GPC['do'])));
+	if (empty($entry)) {
+		$entry = array(
+			'module' => $_GPC['m'],
+			'do' => $_GPC['do'],
+			'state' => $_GPC['state'],
+			'direct' => $_GPC['direct']
+		);
+	}
 }
 if(empty($entry) || empty($entry['do'])) {
 	message('非法访问.');
@@ -33,8 +37,12 @@ if(!$entry['direct']) {
 	define('CRUMBS_NAV', 1);
 	$ptr_title = $entry['title'];
 	$module_types = module_types();
-	define('ACTIVE_FRAME_URL', url('home/welcome/ext', array('m' => $entry['module'])));
-	$frames = buildframes(array(FRAME), $entry['module']);
+	if($_COOKIE['ext_type'] == 1) {
+		define('ACTIVE_FRAME_URL', url('site/entry/', array('eid' => $entry['eid'])));
+	} else {
+		define('ACTIVE_FRAME_URL', url('home/welcome/ext', array('m' => $entry['module'])));
+	}
+	$frames = buildframes(array(FRAME));
 	$frames = $frames[FRAME];
 }
 
