@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" href="{MON_EGG_RES}css/main.css" media="all">
     <link rel="stylesheet" type="text/css" href="{MON_EGG_RES}css/dialog.css" media="all">
     <link href="{MON_EGG_RES}css/err.css" rel="stylesheet" type="text/css">
-    <link href="{MON_EGG_RES}css/bstyle.css" rel="stylesheet" type="text/css">
+    <link href="{MON_EGG_RES}css/bstyle.css?v=2.1" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css"
           href="{MON_EGG_RES}/css/sweet-alert.css">
     <script type="text/javascript" src="{MON_EGG_RES}/js/sweet-alert.min.js"></script>
@@ -527,7 +527,7 @@ img {
         <div class="inputqy">
             <h2 class="jptp2">恭喜你获得:<span id="jdj"></span>-<span class="jpmc"></span></h2>
             <h2><span id="tipMsg" data-id=""></span></h2>
-            <h2><img src="" id="pimg"></h2>
+            <h2><img src="" id="pimg" height="35px"></h2>
             <input type="text" id="username" value="" placeholder="请填入真实的姓名">
             <input type="text" id="tel" value="" placeholder="请输入手机号，以便领取奖品">
         </div>
@@ -546,7 +546,7 @@ img {
         <div class="inputqy">
             <h2 class="jptp2">恭喜你获得:<span id="jdj1"></span>-<span class="jpmc1"></span></h2>
             <h2><span id="tipMsg1" data-id=""></span></h2>
-            <h2><img src="" id="pimg1"></h2>
+            <h2><img src="" id="pimg1" height="35px"></h2>
 
         </div>
         <div class="but_con">
@@ -643,7 +643,10 @@ img {
                         <li>
                             <span class="time"> {php echo date("Y-m-d H:i", $award['createtime'])} </span><span class="award">{$award['ppname']}</span>
                             {if $award['status'] == self::$STATUS_ZJ}
-                            <button class="button_01 button"  onclick="dh({$award['id']}, '{$award['ppname']}')">兑换</button>
+                                <button class="button_01 button"  onclick="dh({$award['id']}, '{$award['ppname']}')">兑换</button>
+                                {if $egg['exchangeEnable']}
+                                   <button class="button_01 button"  onclick="qrcodeui({$award['id']})">扫码</button>
+                                {/if}
                             {/if}
                             {if $award['status'] == self::$STATUS_DH}
                             <button class="button_02 button" disabled="disabled">已兑</button>
@@ -821,6 +824,10 @@ img {
         $("#pname").val(pname);
         $("#dh").show();
     }
+
+     function qrcodeui(rid) {
+         window.location.href = "{php echo MonUtil::str_murl($this->createMobileUrl('Qrcode',array(), true))}&rid=" + rid;
+     }
 
 </script>
 <script>

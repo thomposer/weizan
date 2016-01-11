@@ -1,7 +1,7 @@
 <?php
 /**
  * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -397,6 +397,16 @@ $ms['ext'][] = array(
 			'title' => '扩展功能管理',
 			'url' => url('profile/module'),
 			'permission_name' => 'profile_module',
+		),
+	)
+);
+$ms['members'][] = array(
+	'title' => '会员续费',
+	'items' => array(
+		array(
+			'title' => '会员续费管理',
+			'url' => url('members/member'),
+			'permission_name' => 'members_member',
 		),
 	)
 );

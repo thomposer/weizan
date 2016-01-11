@@ -82,6 +82,7 @@ class Mon_EggModule extends WeModule
 			'share_times' => $_GPC['share_times'],
 			'share_award_count' =>$_GPC['share_award_count'],
 			'music' => $_GPC['music'],
+			'exchangeEnable' => $_GPC['exchangeEnable'],
 			'updatetime' => TIMESTAMP
 		);
 

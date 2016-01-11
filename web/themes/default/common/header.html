@@ -8,12 +8,8 @@
 					{if !empty($_W['isfounder']) || empty($_W['setting']['permurls']['sections']) || in_array($nav['name'], $_W['setting']['permurls']['sections'])}<li{if FRAME == $nav['name']} class="active"{/if}><a href="{php echo url('home/welcome/' . $nav['name']);}"><i class="{$nav['append_title']}"></i>{$nav['title']}</a></li>{/if}
 				{/loop}
 				<li {if $action == 'emulator'}class="active"{/if}>
-					<a href="{php echo url('utility/emulator');}" target="_blank"><i class="fa fa-mobile"></i> 模拟</a>
+					<a href="{php echo url('utility/emulator');}" target="_blank"><i class="fa fa-mobile"></i> 模拟测试</a>
 				</li>
-				{if IMS_FAMILY != 'x'}
-				<li><a href="http://bbs.012wz.com" target="_blank"><i class="fa fa-comment"></i>论坛</a></li>
-				<li><a href="http://www.012wz.com/wiki/" target="_blank"><i class="fa fa-suitcase"></i>帮助</a></li>
-				{/if}
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown topbar-notice">

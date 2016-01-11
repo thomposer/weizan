@@ -22,7 +22,7 @@ class Mon_EggModuleSite extends WeModuleSite
 	public static $STATUS_UNKNOW = 0;
 	public static $STATUS_ZJ = 1;
 	public static $STATUS_DH = 2;
-
+	public static $GCODE = 1001;
 
 	function __construct()
 	{
@@ -678,6 +678,122 @@ class Mon_EggModuleSite extends WeModuleSite
 		}
 
 	}
+
+
+	public function  doMobileQrcode() {
+		global $_W, $_GPC;
+		$rid = $_GPC['rid'];
+		$record = DBUtil::findById(DBUtil::$TABLE_EGG_RECORD, $rid);
+		$prize = DBUtil::findById(DBUtil::$TABLE_EGG_PRIZE, $record['pid']);
+		$qrcode = $this->getScanCode($rid);
+		if ($record['status'] == $this::$STATUS_ZJ) {
+			$statusText = '未兑换';
+		} else if ($record['status'] == $this::$STATUS_DH) {
+			$statusText = '已兑换';
+		}
+		include $this->template("qrcode");
+	}
+
+	public function getScanCode($rid) {
+		$codeArray = array(
+			'exeUrl' => MonUtil::str_murl($this->createMobileUrl('ExchangeApi', array('rid'=> $rid), true)),
+			'gcode' => $this::$GCODE
+		);
+		return base64_encode(json_encode($codeArray));
+	}
+
+	public function doMobileExchangeApi() {
+		global $_GPC, $_W;
+		$rid = $_GPC['rid'];
+		$record = DBUtil::findById(DBUtil::$TABLE_EGG_RECORD, $rid);
+		$res = array();
+		if (empty($record)) {
+			$res['res'] = 'fail';
+			$res['msg'] = '砸金蛋记录删除或不存在';
+			die(json_encode($res));
+		}
+
+		if ($record['status'] == $this::$STATUS_DH) {
+			$res['res'] = 'fail';
+			$res['msg'] = '奖品已兑换，不能重复兑奖！';
+			die(json_encode($res));
+		}
+
+		$tokenUrl = urldecode($_GPC['tokenUrl']);
+		$token = $_GPC['token'];
+
+		if (empty($tokenUrl) || empty($token)) {
+			$res['res'] = 'fail';
+			$res['msg'] = '核销人员信息信息错误';
+			die(json_encode($res));
+		}
+
+		load()->func('communication');
+		//验证核销人员
+		$result = ihttp_post($tokenUrl, array('token' =>$token));
+		$resultJson = json_decode(substr($result['content'], 3), true);
+
+		if (empty($resultJson)) {
+			$res['res'] = 'fail';
+			$res['msg'] = '验证核销人员返回为空';
+			die(json_encode($res));
+		} else {
+			if ($resultJson['code'] == 200) {
+				//开始执行核销
+				$prize = DBUtil::findById(DBUtil::$TABLE_EGG_PRIZE, $record['pid']);
+				if ($prize['ptype'] == 1) { //实物
+					DBUtil::updateById(DBUtil::$TABLE_EGG_RECORD,array("status"=> self::$STATUS_DH,'dhtime'=>TIMESTAMP), $rid);
+
+					$user = DBUtil::findById(DBUtil::$TABLE_EGG_USER, $record['uid']);
+					$res['res'] = 'success';
+					$res['uname'] = $user['uname'];
+					$res['unickname'] = $user['nickname'];
+					$res['utel'] = $user['tel'];
+					$res['pname'] = $prize['pname'];
+					$res['remark'] = '兑换实物成功';
+					die(json_encode($res));
+				} else if ($prize['ptype'] == 2){
+					//积分
+					$user = DBUtil::findById(DBUtil::$TABLE_EGG_USER, $record['uid']);
+					if (empty($user['openid'])) {
+						$res['res'] = 'fail';
+						$res['msg'] = '用户openid为空';
+						die(json_encode($res));
+					} else {
+						load()->model('mc');
+						$uid = mc_openid2uid($user['openid']);
+						$result = mc_credit_update($uid, 'credit1', $prize['jf'], array($uid,'二维码核销砸金蛋手机端兑换积分'));
+						if ($result) {
+							DBUtil::updateById(DBUtil::$TABLE_EGG_RECORD,array("status"=> self::$STATUS_DH,'dhtime'=>TIMESTAMP), $rid);
+							$res['res'] = 'success';
+							$res['uname'] = $user['uname'];
+							$res['unickname'] = $user['nickname'];
+							$res['utel'] = $user['tel'];
+							$res['pname'] = $prize['pname'];
+							$res['remark'] = '兑换积分成功';
+							die(json_encode($res));
+						} else {
+							DBUtil::updateById(DBUtil::$TABLE_EGG_RECORD,array("status"=> self::$STATUS_DH,'dhtime'=>TIMESTAMP), $rid);
+							$res['res'] = 'success';
+							$res['uname'] = $user['uname'];
+							$res['unickname'] = $user['nickname'];
+							$res['utel'] = $user['tel'];
+							$res['pname'] = $prize['pname'];
+							$res['remark'] = '兑换积分成功';
+							die(json_encode($res));
+
+							//message($result, referer(), 'success');
+						}
+					}
+				}
+			} else {
+				$res['res'] = 'fail';
+				$res['msg'] = '核销人员删除或不存在!';
+				die(json_encode($res));
+			}
+		}
+	}
+
 
 	public function  getOpenId() {
 		global $_W;

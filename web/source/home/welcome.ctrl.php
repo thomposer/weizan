@@ -4,9 +4,9 @@
  * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-$dos = array('platform', 'site', 'mc', 'setting', 'ext', 'solution');
+$dos = array('platform', 'site', 'mc', 'setting', 'ext', 'solution', 'members');
 $do = in_array($do, $dos) ? $do : 'platform';
-$title = array('platform'=>'公众平台','site'=>'微站功能','mc'=>'会员及会员营销','setting'=>'功能选项','ext'=>'扩展功能','solution'=>'行业功能');
+$title = array('platform'=>'公众平台','site'=>'微站功能','mc'=>'会员及会员营销','setting'=>'功能选项','ext'=>'扩展功能','solution'=>'行业功能','members'=>'会员续费');
 $_W['page']['title'] = $title[$do];
 
 define('FRAME', $do);
@@ -199,7 +199,11 @@ if($do == 'setting') {
 	
 	
 }
-
+if($do == 'members') {
+	$title = '会员续费';
+	
+	
+}
 if($do == 'ext') {
 	$title = '扩展功能概况';
 	$installedmodulelist = uni_modules(false);
