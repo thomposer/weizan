@@ -9,28 +9,50 @@ $_W['page']['title'] = '永久素材-微信素材';
 $dos = array('image', 'del', 'export', 'news', 'down', 'list', 'purview', 'modal', 'send');
 $do = in_array($do, $dos) ? $do : 'list';
 if($do == 'down') {
-	load()->func('file');
 	set_time_limit(0);
+	load()->func('file');
 	$acc = WeAccount::create();
 	if(is_error($acc)) {
 		message($acc, '', 'ajax');
 	}
 	$post = $_GPC['__input'];
 	$type = $types = $post['type'];
+	$count = $acc->getMaterialCount();
+	if(is_error($count)) {
+		message($result, '', 'ajax');
+	}
+	$cache_key = "media_sync:{$_W['uniacid']}";
+	$has = cache_read($cache_key);
+	if(!is_array($has)) {
+		$has = array(0);
+	}
+
+	$key = $type . '_count';
+	$total = $count[$key];
 	$pindex = max(1, intval($post['page']));
 	$psize = 15;
 	$offset = ($pindex - 1) * $psize;
+	if($total == 0 || ($pindex > ceil($total / $psize))) {
+		$has_str = implode(',', $has);
+		pdo_query('DELETE FROM ' . tablename('wechat_attachment') . "  WHERE uniacid = :uniacid AND type = :type AND id NOT IN ({$has_str})", array('uniacid' => $_W['uniacid'], ':type' => $type));
+		if($type == 'news') {
+			pdo_query('DELETE FROM ' . tablename('wechat_news') . "  WHERE uniacid = :uniacid AND attach_id NOT IN ({$has_str})", array('uniacid' => $_W['uniacid']));
+		}
+		cache_delete($cache_key);
+		message(error(-2, $total), '', 'ajax');
+	}
+	if($pindex == ceil($total / $psize)) {
+		$psize = $total % $psize == 0 ? 15 : ($total % $psize);
+	}
 	$result = $acc->batchGetMaterial($type, $offset, $psize);
 	if(is_error($result)) {
 		message($result, '', 'ajax');
-	}
-	if($result['item_count'] == 0 || count($result['data']) == 0) {
-		message(error(-2, $result['total_count']), '', 'ajax');
 	}
 	$fail = array();
 	if($type == 'voice') {
 		$type = 'audio';
 	}
+
 	foreach($result['data'] as $data) {
 		if($type != 'news') {
 			$media = pdo_get('wechat_attachment', array('uniacid' => $_W['uniacid'], 'media_id' => $data['media_id']));
@@ -39,6 +61,7 @@ if($do == 'down') {
 			if($type == 'image') {
 				if(!empty($media) && !empty($media['attachment'])) {
 					if(strexists($media['attachment'], 'https://mmbiz.qlogo.cn') || (file_exists(ATTACHMENT_ROOT . $media['attachment']))) {
+						$has[] = $media['id'];
 						continue;
 					}
 				}
@@ -49,6 +72,7 @@ if($do == 'down') {
 			} elseif($types == 'voice') {
 				if(!empty($media) && !empty($media['attachment'])) {
 					if(file_exists(ATTACHMENT_ROOT . $media['attachment'])) {
+						$has[] = $media['id'];
 						continue;
 					}
 				}
@@ -96,9 +120,12 @@ if($do == 'down') {
 			);
 			if(empty($media)) {
 				pdo_insert('wechat_attachment', $insert);
+				$media['id'] = pdo_insertid();
 			} else {
 				pdo_update('wechat_attachment', $insert, array('uniacid' => $_W['uniacid'], 'media_id' => $data['media_id']));
+				$media_id = $media['id'];
 			}
+			$has[] = $media['id'];
 		} else {
 			$media = pdo_get('wechat_attachment', array('uniacid' => $_W['uniacid'], 'media_id' => $data['media_id']));
 			if(empty($media)) {
@@ -126,8 +153,10 @@ if($do == 'down') {
 					pdo_insert('wechat_news', $item);
 				}
 			}
+			$has[] = $insert_id;
 		}
 	}
+	cache_write($cache_key, $has);
 	message(error($result['total_count'], array('fail' => $fail, 'item_count' => $result['item_count'])), '', 'ajax');
 }
 
@@ -170,9 +199,13 @@ if($do == 'purview') {
 		exit('微信号不能为空');
 	}
 	$type = trim($_GPC['type']);
-	$media_id = trim($_GPC['media_id']);
+	$id = trim($_GPC['id']);
+	$media = pdo_get('wechat_attachment', array('uniacid' => $_W['uniacid'], 'id' => $id));
+	if(empty($media)) {
+		exit('素材不存在');
+	}
 	$acc = WeAccount::create();
-	$data = $acc->fansSendPreview($wxname, $media_id, $type);
+	$data = $acc->fansSendPreview($wxname, $media['media_id'], $type);
 	if(is_error($data)) {
 		exit($data['message']);
 	}

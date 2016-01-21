@@ -53,7 +53,7 @@ if(!empty($notices)) {
 					'<a href="'.url('article/notice-show/detail', array('id' => $row['id'])).'" target="_blank" class="clearfix">' .
 						'<div><i class="fa fa-circle ' . $class . '"></i></div>' .
 						'<div>' .
-							'<h3>' .$row['is_new'].  $row['title'] . '</h3>' .
+							'<h3>' . $row['title'] . '</h3>' .
 							'<div class="date">' . date('Y-m-d', $row['createtime']) . '</div>' .
 						'</div>' .
 						'<div><span class="label label-info">'. $row['catename'] .'</span></div>' .

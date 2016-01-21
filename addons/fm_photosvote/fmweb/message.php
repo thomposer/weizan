@@ -10,6 +10,7 @@ $afrom_user = $_GPC['afrom_user'];
 		$tfrom_user = $_GPC['tfrom_user'];
 		
 		$keyword = $_GPC['keyword'];
+		$zan = $_GPC['zan'];
 		
 		$Where = "";
 		if (!empty($keyword)){
@@ -29,6 +30,9 @@ $afrom_user = $_GPC['afrom_user'];
 		}
 		if (!empty($rid)){
 			$Where .= " AND `rid` = $rid";		
+		}
+		if ($zan == 1){
+			$Where .= " AND `zan` = 1";		
 		}
 
 		$pindex = max(1, intval($_GPC['page']));

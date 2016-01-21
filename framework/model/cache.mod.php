@@ -23,11 +23,11 @@ function cache_build_setting() {
 
 
 function cache_build_account_modules() {
-	global $_W;
 	$uniacid_arr = pdo_fetchall('SELECT uniacid FROM ' . tablename('uni_account'));
 	foreach($uniacid_arr as $account){
 		cache_delete("unimodules:{$account['uniacid']}:1");
 		cache_delete("unimodules:{$account['uniacid']}:");
+		cache_delete("unimodulesappbinding:{$account['uniacid']}");
 	}
 }
 

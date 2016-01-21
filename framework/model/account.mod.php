@@ -5,8 +5,6 @@
  */
 defined('IN_IA') or exit('Access Denied');
 
-define('WEIXIN_ROOT', 'https://mp.weixin.qq.com');
-
 
 function uni_create_permission($uid, $type = 1) {
 	$groupid = pdo_fetchcolumn('SELECT groupid FROM ' . tablename('users') . ' WHERE uid = :uid', array(':uid' => $uid));
@@ -196,6 +194,47 @@ function uni_modules($enabledOnly = true) {
 	return $modules;
 }
 
+function uni_modules_app_binding() {
+	global $_W;
+	$cachekey = "unimodulesappbinding:{$_W['uniacid']}";
+	$cache = cache_load($cachekey);
+	if (!empty($cache)) {
+		return $cache;
+	}
+	load()->model('module');
+	$result = array();
+	$modules = uni_modules();
+	if(!empty($modules)) {
+		foreach($modules as $module) {
+			if($module['type'] == 'system') {
+				continue;
+			}
+			$entries = module_app_entries($module['name'], array('home', 'profile', 'shortcut', 'function', 'cover'));
+			if(empty($entries)) {
+				continue;
+			}
+			if($module['type'] == '') {
+				$module['type'] = 'other';
+			}
+			$result[$module['name']] = array(
+				'name' => $module['name'],
+				'type' => $module['type'],
+				'title' => $module['title'],
+				'entries' => array(
+					'cover' => $entries['cover'],
+					'home' => $entries['home'],
+					'profile' => $entries['profile'],
+					'shortcut' => $entries['shortcut'],
+					'function' => $entries['function']
+				)
+			);
+			unset($module);
+		}
+	}
+	cache_write($cachekey, $result);
+	return $result;
+}
+
 
 function uni_groups($groupids = array()) {
 	$condition = ' WHERE uniacid = 0';
@@ -246,6 +285,10 @@ function uni_templates() {
 	} else {
 		$groupid = $owner['groupid'];
 	}
+	$extend = pdo_getall('uni_account_group', array('uniacid' => $_W['uniacid']), array(), 'groupid');
+	if (!empty($extend)) {
+		$groupid = '-2';
+	}
 	if (empty($groupid)) {
 		$templates = pdo_fetchall("SELECT * FROM " . tablename('site_templates') . " WHERE name = 'default'", array(), 'id');
 	} elseif ($groupid == '-1') {
@@ -253,33 +296,32 @@ function uni_templates() {
 	} else {
 		$group = pdo_fetch("SELECT id, name, package FROM ".tablename('users_group')." WHERE id = :id", array(':id' => $groupid));
 		$packageids = iunserializer($group['package']);
-		$extend = pdo_getall('uni_account_group', array('uniacid' => $_W['uniacid']), array(), 'groupid');
 		if (!empty($extend)) {
 			foreach ($extend as $extend_packageid => $row) {
 				$packageids[] = $extend_packageid;
 			}
 		}
-		if(!is_array($packageids)) {
-			return array();
-		}
-		if (in_array('-1', $packageids)) {
-			$templates = pdo_fetchall("SELECT * FROM " . tablename('site_templates') . " ORDER BY id ASC", array(), 'id');
-		} else {
-			$wechatgroup = pdo_fetchall("SELECT `templates` FROM " . tablename('uni_group') . " WHERE id IN ('".implode("','", $packageids)."') OR uniacid = '{$_W['uniacid']}'");
-			$ms = array();
-			$mssql = '';
-			if (!empty($wechatgroup)) {
-				foreach ($wechatgroup as $row) {
-					$row['templates'] = iunserializer($row['templates']);
-					if (!empty($row['templates'])) {
-						foreach ($row['templates'] as $templateid) {
-							$ms[$templateid] = $templateid;
+		if(is_array($packageids)) {
+			if (in_array('-1', $packageids)) {
+				$templates = pdo_fetchall("SELECT * FROM " . tablename('site_templates') . " ORDER BY id ASC", array(), 'id');
+			} else {
+				$wechatgroup = pdo_fetchall("SELECT `templates` FROM " . tablename('uni_group') . " WHERE id IN ('".implode("','", $packageids)."') OR uniacid = '{$_W['uniacid']}'");
+				$ms = array();
+				$mssql = '';
+				if (!empty($wechatgroup)) {
+					foreach ($wechatgroup as $row) {
+						$row['templates'] = iunserializer($row['templates']);
+						if (!empty($row['templates'])) {
+							foreach ($row['templates'] as $templateid) {
+								$ms[$templateid] = $templateid;
+							}
 						}
 					}
+					$ms[] = 1;
+					$mssql = " `id` IN ('".implode("','", $ms)."')";
 				}
-				$mssql = " `id` IN ('".implode("','", $ms)."')";
+				$templates = pdo_fetchall("SELECT * FROM " . tablename('site_templates') .(!empty($mssql) ? " WHERE $mssql" : '')." ORDER BY id DESC", array(), 'id');
 			}
-			$templates = pdo_fetchall("SELECT * FROM " . tablename('site_templates') .(!empty($mssql) ? " WHERE $mssql" : '')." ORDER BY id DESC", array(), 'id');
 		}
 	}
 	if (empty($templates)) {
@@ -429,6 +471,44 @@ function uni_user_module_permission_check($action = '', $module_name = '') {
 	return true;
 }
 
+function uni_update_yesterday_stat() {
+	global $_W;
+	$cachekey = "stat:todaylock:{$_W['uniacid']}";
+	$cache = cache_load($cachekey);
+	if (!empty($cache) && $cache['expire'] > TIMESTAMP) {
+		return true;
+	}
+	
+	$yesterday = date('Ymd', strtotime('-1 days'));
+	$yesterday_stat = pdo_get('stat_fans', array('date' => $yesterday, 'uniacid' => $_W['uniacid']));
+	if ($_W['account']['level'] == ACCOUNT_SUBSCRIPTION_VERIFY || $_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
+		$account_obj = WeAccount::create();
+		$weixin_stat = $account_obj->getFansStat();
+		if (!is_error($weixin_stat) && !empty($weixin_stat)) {
+			$yesterday_weixin_stat = $weixin_stat[$yesterday];
+			$update_stat = array(
+				'uniacid' => $_W['uniacid'],
+				'new' => $yesterday_weixin_stat['new'],
+				'cancel' => $yesterday_weixin_stat['cancel'],
+				'cumulate' => $yesterday_weixin_stat['cumulate'],
+				'date' => $yesterday,
+			);
+		}
+	} else {
+		$update_stat = array();
+		$update_stat['cumulate'] = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND uniacid = :uniacid AND follow = :follow AND followtime < :endtime', array(':acid' => $_W['acid'], ':uniacid' => $_W['uniacid'], ':endtime' => strtotime(date('Y-m-d')), ':follow' => 1));
+		$update_stat['date'] = $yesterday;
+		$update_stat['uniacid'] = $_W['uniacid'];
+	}
+	if (empty($yesterday_stat)) {
+		pdo_insert('stat_fans', $update_stat);
+	} else {
+		pdo_update('stat_fans', $update_stat, array('id' => $yesterday_stat['id']));
+	}
+	cache_write($cachekey, array('expire' => strtotime(date('Y-m-d')) + 86399));
+	return true;
+}
+
 
 function account_types() {
 	static $types;
@@ -482,19 +562,7 @@ function account_weixin_login($username = '', $password = '', $imgcode = '') {
 		$password = $_W['account']['password'];
 	}
 	$auth['token'] = cache_load('wxauth:' . $username . ':token');
-	$auth['cookie'] = cache_load('wxauth:' . $username . ':cookie');
 	load()->func('communication');
-	if (!empty($auth['token']) && !empty($auth['cookie']) && 0) {
-		$response = ihttp_request(WEIXIN_ROOT . '/home?t=home/index&lang=zh_CN&token=' . $auth['token'], '', array('CURLOPT_REFERER' => 'https://mp.weixin.qq.com/', 'CURLOPT_COOKIE' => $auth['cookie']));
-		if (is_error($response)) {
-			return false;
-		}
-		if (strexists($response['content'], '登录超时')) {
-			cache_delete('wxauth:' . $username . ':token');
-			cache_delete('wxauth:' . $username . ':cookie');
-		}
-		return true;
-	}
 	$loginurl = WEIXIN_ROOT . '/cgi-bin/login?lang=zh_CN';
 	$post = array(
 		'username' => $username,
@@ -515,63 +583,23 @@ function account_weixin_login($username = '', $password = '', $imgcode = '') {
 		cache_write('wxauth:' . $username . ':cookie', implode('; ', $response['headers']['Set-Cookie']));
 		isetcookie('code_cookie', '', -1000);
 	} else {
-		$data['ErrCode'] = $data['base_resp']['ret'];
-		switch ($data['ErrCode']) {
-			case "-1":
-				$msg = "系统错误，请稍候再试。";
-				break;
-			case "-23":
-				$msg = "微信公众帐号或密码错误。";
-				break;
-			case "-3":
-				$msg = "微信公众帐号密码错误，请重新输入。";
-				break;
-			case "-4":
-				$msg = "不存在该微信公众帐户。";
-				break;
-			case "-5":
-				$msg = "您的微信公众号目前处于访问受限状态。";
-				break;
-			case "-6":
-				$msg = "登录受限制，需要输入验证码，稍后再试！";
-				break;
-			case "-7":
-				$msg = "此微信公众号已绑定私人微信号，不可用于公众平台登录。";
-				break;
-			case "-8":
-				$msg = "微信公众帐号登录邮箱已存在。";
-				break;
-			case "-200":
-				$msg = "因您的微信公众号频繁提交虚假资料，该帐号被拒绝登录。";
-				break;
-			case "-94":
-				$msg = "请使用微信公众帐号邮箱登陆。";
-				break;
-			case "10":
-				$msg = "该公众会议号已经过期，无法再登录使用。";
-				break;
-			case "-27":
-				$msg = "验证码输入错误。";
-				break;
-			default:
-				$data['ErrCode'] = -2;
-				$msg = "未知的返回。";
-		}
-		return error($data['ErrCode'], $msg);
+		return error(-1, $data['base_resp']['err_msg']);
 	}
 	return true;
 }
 
 
 function account_weixin_basic($username) {
-	global $wechat;
-	$response = account_weixin_http($username, WEIXIN_ROOT . '/cgi-bin/settingpage?t=setting/index&action=index&lang=zh_CN');
-	if (is_error($response)) {
-		return array();
+	$response = account_weixin_http($username, WEIXIN_ROOT . '/cgi-bin/settingpage?t=setting/index&action=index&lang=zh_CN&f=json');
+	if(is_error($response)) {
+		return $response;
 	}
-	$info = array();
-	preg_match('/fakeid=([0-9]+)/', $response['content'], $match);
-	$fakeid = $match[1];
+	$result =  json_decode($response['content'], true);
+	if ($result['base_resp']['ret'] != 0) {
+		return error(-1, $result['base_resp']['err_msg']);
+	}
+
+	$fakeid = $result['user_info']['fake_id'];
 	$image = account_weixin_http($username, WEIXIN_ROOT . '/misc/getheadimg?fakeid=' . $fakeid);
 	if (!is_error($image) && !empty($image['content'])) {
 		$info['headimg'] = $image['content'];
@@ -580,42 +608,28 @@ function account_weixin_basic($username) {
 	if (!is_error($image) && !empty($image['content'])) {
 		$info['qrcode'] = $image['content'];
 	}
-	preg_match('/(gh_[a-z0-9A-Z]+)/', $response['meta'], $match);
-	$info['original'] = $match[1];
-	preg_match('/名称([\s\S]+?)<\/li>/', $response['content'], $match);
-	$info['name'] = trim(strip_tags($match[1]));
-	preg_match('/微信号([\s\S]+?)<\/li>/', $response['content'], $match);
-	$info['account'] = trim(strip_tags($match[1]));
-	preg_match('/介绍([\s\S]+?)meta_content\">([\s\S]+?)<\/li>/', $response['content'], $match);
-	$info['signature'] = trim(strip_tags($match[2]));
-	preg_match('/认证情况([\s\S]+?)meta_content\">([\s\S]+?)<\/li>/', $response['content'], $match);
-	$temp['level'] = trim(strip_tags($match[2]));
-	preg_match('/类型([\s\S]+?)meta_content\">([\s\S]+?)<\/li>/', $response['content'], $match);
-	$temp['type'] = trim(strip_tags($match[2]));
-
+	$info['original'] = $result['setting_info']['original_username'];
+	$info['name'] = $result['user_info']['nick_name'];
+	$info['account'] = $result['user_info']['user_name'];
+	$info['signature'] = $result['setting_info']['intro']['signature'];
+	$info['level'] = 1;
+	if($result['user_info']['service_type'] == 1) {
 		$info['level'] = 1;
-	$is_key_secret = 1;
-	if (strexists($temp['type'], '订阅号')) {
-		if (strexists($temp['level'], '微信认证')) {
+		if($result['user_info']['is_wx_verify'] == 1) {
 			$info['level'] = 3;
 		}
-	} elseif (strexists($temp['type'], '服务号')) {
+	} elseif($result['user_info']['service_type'] == 2) {
 		$info['level'] = 2;
-		if (strexists($temp['level'], '微信认证')) {
+		if($result['user_info']['is_wx_verify'] == 1) {
 			$info['level'] = 4;
 		}
 	}
-	if ($is_key_secret == 1) {
-		$authcontent = account_weixin_http($username, WEIXIN_ROOT . '/advanced/advanced?action=dev&t=advanced/dev&lang=zh_CN');
-		preg_match_all("/value\:\"(.*?)\"/", $authcontent['content'], $match);
-		$info['key'] = $match[1][2];
-		$info['secret'] = $match[1][3];
-		unset($match);
+	$response = account_weixin_http($username, WEIXIN_ROOT . '/advanced/advanced?action=dev&t=advanced/dev&lang=zh_CN&f=json');
+	if(!is_error($response)) {
+		$result =  json_decode($response['content'], true);
+		$info['key'] = $result['advanced_info']['dev_info']['app_id'];
+		$info['secret'] = '';
 	}
-	preg_match_all("/(?:country|province|city): '(.*?)'/", $response['content'], $match);
-	$info['country'] = trim($match[1][0]);
-	$info['province'] = trim($match[1][1]);
-	$info['city'] = trim($match[1][2]);
 	return $info;
 }
 

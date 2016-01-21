@@ -181,15 +181,9 @@ body{background:#000 no-repeat;  max-width: 640px;  margin: 0 auto;}
 <div class="container">
     <div class="loading-img">
     	<div id="circular">
-            <div id="circular_1" class="circular"></div>
-			
-			<?php for ($i = 1; $i <= $reply['tpxz']; $i++) {
-			$n = $i -1;
-			if (!empty($picarr[$n])) {?>
-				<div id="circular_{php echo $i+1}" class="circular"></div>
-			<?php }} ?>
-			
-			
+			{loop $picarrs $mid $row}
+				<div id="circular_{$mid}" class="circular"></div>
+			{/loop}
             <div class="clearfix"></div>
         </div>
     </div>
@@ -202,17 +196,9 @@ body{background:#000 no-repeat;  max-width: 640px;  margin: 0 auto;}
         </div>
        
         <ul>
-			
-				<li {if empty($_GPC['ti'])}class="cur"{/if}><div style="background-image: url({php echo toimage($user['photo'])})"></div></li>
-				
-				<?php for ($i = 1; $i <= $reply['tpxz']; $i++) {
-				$n = $i -1;
-				if (!empty($picarr[$n])) {
-				?>        	
-					<li {if !empty($_GPC['ti']) && $i == $_GPC['ti']}class="cur"{/if}><div style="background-image: url({php echo toimage($picarr[$n])})"></div></li>				
-				<?php }} ?>	
-			
-			 	
+			{loop $picarrs $mid $row}
+				<li {if !empty($_GPC['ti']) && $mid == $_GPC['ti']}class="cur"{/if}><div style="background-image: url({php echo toimage($row['photos'])})"></div></li>	
+			{/loop}
         </ul>
     </div>
     <div id="arrowV" class="arrow_v f-hide"><p></p></div>
@@ -372,7 +358,7 @@ function tanmuAjax(){
 			if(ary_biz_jump_id.length > 0) {
 
 				
-				var pid = '{$user['id']}';
+				var pid = '{$user['uid']}';
 				var fmoons_id = getFmoonsId();
 				var i = 0;
 				for(i; i<ary_biz_jump_id.length;i++) {
@@ -382,7 +368,7 @@ function tanmuAjax(){
 						break;
 					}
 
-					if(-1 != url.indexOf('BigWeel') && pid == '{$user['id']}') {
+					if(-1 != url.indexOf('BigWeel') && pid == '{$user['uid']}') {
 						var new_url = url.replace('fromUsername', fmoons_id);
 						document.getElementById(ary_biz_jump_id[i]).href = new_url;
 					}

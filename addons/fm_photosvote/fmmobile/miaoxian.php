@@ -10,12 +10,12 @@ defined('IN_IA') or exit('Access Denied');
 $advs = pdo_fetchall("SELECT link, thumb, times FROM " . tablename($this->table_advs) . " WHERE ismiaoxian = 1 AND issuiji = 1 AND uniacid= '{$uniacid}'  AND rid= '{$rid}' ORDER BY displayorder ASC");
 			$advarr = array();
 			foreach ($advs as $mid => $adv) {
-				if (substr($adv['link'], 0, 5) != 'http:' && $adv['link'] != '#' && $adv['link']!='javascript::;' && $adv['link']!='') {
-					$advarr['link'.$mid] .= "http://" . $adv['link'];
-				}
+				
+				$advarr['link'.$mid] .= $adv['link'];
 				if (!$advarr['link'.$mid]) {
-					$advarr['link'.$mid] = $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvoteview', array('rid' => $rid));
+					$advarr['link'.$mid] = $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvote', array('rid' => $rid));
 				}
+					
 					$advarr['thumb'.$mid] .= $adv['thumb'];
 					$advarr['times'.$mid] .= $adv['times'];
 			}

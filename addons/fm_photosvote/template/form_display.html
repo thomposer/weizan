@@ -1,11 +1,11 @@
-	<div class="form-group">
+		<div class="form-group">
             <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否显示最上方导航</label>
             <div class="col-sm-9 col-xs-12">
                	<label class="radio-inline">
-                	<input type="radio" name="istopheader" value="1" {if $istop['istopheader'] == 1} checked="checked"{/if}/>是
+                	<input type="radio" name="istopheader" value="1" {if $reply['istopheader'] == 1} checked="checked"{/if}/>是
                 </label>
                 <label class="radio-inline">
-                	<input type="radio" name="istopheader" value="0" {if $istop['istopheader'] == 0} checked="checked"{/if}/>否
+                	<input type="radio" name="istopheader" value="0" {if $reply['istopheader'] == 0} checked="checked"{/if}/>否
                 </label>
 				<div class="help-block">前端是否显示最上方导航</div>
             </div>
@@ -14,10 +14,10 @@
             <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>前端是否开启公告</label>
             <div class="col-sm-9 col-xs-12">
                	<label class="radio-inline">
-                	<input type="radio" name="ipannounce" value="1" {if $istop['ipannounce'] == 1} checked="checked"{/if}/>是
+                	<input type="radio" name="ipannounce" value="1" {if $reply['ipannounce'] == 1} checked="checked"{/if}/>是
                 </label>
                 <label class="radio-inline">
-                	<input type="radio" name="ipannounce" value="0" {if $istop['ipannounce'] == 0} checked="checked"{/if}/>否
+                	<input type="radio" name="ipannounce" value="0" {if $reply['ipannounce'] == 0} checked="checked"{/if}/>否
                 </label>
 				<div class="help-block">前端是否开启公告</div>
             </div>
@@ -26,10 +26,10 @@
             <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>前端是否开启背景音乐</label>
             <div class="col-sm-9 col-xs-12">
                	<label class="radio-inline">
-                	<input type="radio" name="isbgaudio" value="1" {if $istop['isbgaudio'] == 1} checked="checked"{/if}/>是
+                	<input type="radio" name="isbgaudio" value="1" {if $reply['isbgaudio'] == 1} checked="checked"{/if}/>是
                 </label>
                 <label class="radio-inline">
-                	<input type="radio" name="isbgaudio" value="0" {if $istop['isbgaudio'] == 0} checked="checked"{/if}/>否
+                	<input type="radio" name="isbgaudio" value="0" {if $reply['isbgaudio'] == 0} checked="checked"{/if}/>否
                 </label>
 				<div class="help-block">前端是否开启背景音乐</div>
             </div>
@@ -37,8 +37,8 @@
 
 		<div class="form-group">
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label">音频链接</label>
-			<div class="col-sm-9 col-xs-12" ng-invoker="context.bind($istop, istop);">
-				{php echo tpl_form_field_audio('bgmusic', $istop['bgmusic']);}
+			<div class="col-sm-9 col-xs-12" ng-invoker="context.bind($reply, reply);">
+				{php echo tpl_form_field_audio('bgmusic', $reply['bgmusic']);}
 				<span class="help-block">选择上传的音频文件或直接输入URL地址，支持格式：mp3</span>
 			</div>
 		</div>
@@ -56,6 +56,18 @@
             </div>
         </div>
 		
+		<div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否显示投票用户列表</label>
+            <div class="col-sm-9 col-xs-12">
+               	<label class="radio-inline">
+                	<input type="radio" name="isvoteusers" value="1" {if $reply['isvoteusers'] == 1} checked="checked"{/if}/>是
+                </label>
+                <label class="radio-inline">
+                	<input type="radio" name="isvoteusers" value="0" {if $reply['isvoteusers'] == 0} checked="checked"{/if}/>否
+                </label>				
+				<div class="help-block"></div>
+            </div>
+        </div>
 		<div class="form-group">
             <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>首页显示模式</label>
             <div class="col-sm-9 col-xs-12">
@@ -190,19 +202,41 @@
 			<div class="help-block"></div>
 		</div>
 		<div class="form-group">
-			<label class="col-xs-12 col-sm-2 col-md-2  control-label">报名参数项</label>
+			<label class="col-xs-12 col-sm-2 col-md-2  control-label">报名参数项(可重命名)</label>
 			 <div class="col-sm-9 col-xs-12">
-				<div style="border:1px #eee dashed; padding:10px;background:#F5F5F5;">
-					<label for="isrealname" class="checkbox-inline"><input id="isrealname" type="checkbox" name="isrealname" value="1" {if $reply['isrealname'] == 1}checked="checked"{/if}> 姓名</label>
-				    <label for="ismobile" class="checkbox-inline"><input id="ismobile" type="checkbox" name="ismobile" value="1" {if $reply['ismobile'] == 1}checked="checked"{/if}> 手机</label>
-					<label for="isweixin" class="checkbox-inline"><input id="isweixin" type="checkbox" name="isweixin" value="1" {if $reply['isweixin'] == 1}checked="checked"{/if}> 微信号</label>
-					<label for="isqqhao" class="checkbox-inline"><input id="isqqhao" type="checkbox" name="isqqhao" value="1" {if $reply['isqqhao'] == 1}checked="checked"{/if}> QQ号</label>
-					<label for="isemail" class="checkbox-inline"><input id="isemail" type="checkbox" name="isemail" value="1" {if $reply['isemail'] == 1}checked="checked"{/if}> 邮箱</label>
-					<label for="isjob" class="checkbox-inline"><input id="isjob" type="checkbox" name="isjob" value="1" {if $reply['isjob'] == 1}checked="checked"{/if}> 职业</label>
-					<label for="isxingqu" class="checkbox-inline"><input id="isxingqu" type="checkbox" name="isxingqu" value="1" {if $reply['isxingqu'] == 1}checked="checked"{/if}> 兴趣</label>
-					<label for="isaddress" class="checkbox-inline"><input id="isaddress" type="checkbox" name="isaddress" value="1" {if $reply['isaddress'] == 1}checked="checked"{/if}> 地址</label>
+				 <div class="input-group">
+					
+						<span class="input-group-addon"><input id="isrealname" type="checkbox" name="isrealname" value="1" {if $reply['isrealname'] == 1}checked="checked"{/if}> 姓名: </span>
+						<input id="cmmrealname" type="text" name="cmmrealname" value="{$regtitlearr['cmmrealname']}" class="form-control" placeholder="请输入重命名后的文字">
+						
+					 	<span class="input-group-addon"> <input id="ismobile" type="checkbox" name="ismobile" value="1" {if $reply['ismobile'] == 1}checked="checked"{/if}> 手机: </span>
+					 	<input id="cmmmobile" type="text" name="cmmmobile" value="{$regtitlearr['cmmmobile']}" class="form-control" placeholder="请输入重命名后的文字">
+					</div><p></p>
+					 <div class="input-group">
+						<span class="input-group-addon"><input id="isweixin" type="checkbox" name="isweixin" value="1" {if $reply['isweixin'] == 1}checked="checked"{/if}> 微信: </span>
+						<input id="cmmweixin" type="text" name="cmmweixin" value="{$regtitlearr['cmmweixin']}" class="form-control pull-left" placeholder="请输入重命名后的文字">
+					
+						<span class="input-group-addon"><input id="isqqhao" type="checkbox" name="isqqhao" value="1" {if $reply['isqqhao'] == 1}checked="checked"{/if}> QQ号: </span>
+						<input id="cmmqqhao" type="text" name="cmmqqhao" value="{$regtitlearr['cmmqqhao']}" class="form-control pull-left" placeholder="请输入重命名后的文字">
+					</div><p></p>
+					 <div class="input-group">
+					
+						<span class="input-group-addon"><input id="isemail" type="checkbox" name="isemail" value="1" {if $reply['isemail'] == 1}checked="checked"{/if}> 邮箱: </span>
+						<input id="cmmemail" type="text" name="cmmemail" value="{$regtitlearr['cmmemail']}" class="form-control pull-left" placeholder="请输入重命名后的文字">
+					
+						<span class="input-group-addon"><input id="isjob" type="checkbox" name="isjob" value="1" {if $reply['isjob'] == 1}checked="checked"{/if}> 职业: </span>
+						<input id="cmmjob" type="text" name="cmmjob" value="{$regtitlearr['cmmjob']}" class="form-control pull-left" placeholder="请输入重命名后的文字">
+					</div><p></p>
+					 <div class="input-group">
+					
+						<span class="input-group-addon"><input id="isxingqu" type="checkbox" name="isxingqu" value="1" {if $reply['isxingqu'] == 1}checked="checked"{/if}> 兴趣: </span>
+						<input id="cmmxingqu" type="text" name="cmmxingqu" value="{$regtitlearr['cmmxingqu']}" class="form-control pull-left" placeholder="请输入重命名后的文字">
+					
+						<span class="input-group-addon"><input id="isaddress" type="checkbox" name="isaddress" value="1" {if $reply['isaddress'] == 1}checked="checked"{/if}> 地址: </span>
+						<input id="cmmaddress" type="text" name="cmmaddress" value="{$regtitlearr['cmmaddress']}" class="form-control pull-left" placeholder="请输入重命名后的文字">
+						
 				</div>
-			<div class="help-block">必需选择一个参数报名 活动开启后最好不</div>
+			<div class="help-block">必需选择一个参数报名,所有参数的名字都可以自定义，不需要自定义的留空既可以，活动开启后请勿修改</div>
 			</div>
 		</div>
 		<div class="form-group">
@@ -215,7 +249,7 @@
 					<label for="isreg" class="checkbox-inline"><input id="isreg" type="checkbox" name="isreg" value="1" {if $reply['isreg'] == 1}checked="checked"{/if}> 报名页</label>
 					<label for="isdes" class="checkbox-inline"><input id="isdes" type="checkbox" name="isdes" value="1" {if $reply['isdes'] == 1}checked="checked"{/if}> 介绍页</label>
 				</div>
-			<div class="help-block">必需选择一个参数报名 活动开启后最好不要更改</div>
+			<div class="help-block">设置赞助商显示位置</div>
 			</div>
 		</div>
 		
@@ -298,11 +332,3 @@
 				<div class="help-block">需要输入完整的链接如：http://www.qq.com/</div>
 			</div>
 		</div>
-		<!--
-		<div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label">站长统计代码</label>
-            <div class="col-sm-9 col-xs-12">
-               	<textarea style=" height:200px;" id='tj' name="tj" class="form-control richtextinfo">{$reply['tj']}</textarea>
-				<div class="help-block">填写站长统计代码，不需要就留空</div>
-            </div>
-        </div>-->

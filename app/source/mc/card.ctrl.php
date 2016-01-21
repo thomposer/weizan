@@ -146,5 +146,4 @@ if($do == 'notice') {
 	$pager = pagination($total, $pindex, $psize);
 }
 
-
 template('mc/card');

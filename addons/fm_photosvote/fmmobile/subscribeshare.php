@@ -12,7 +12,7 @@ defined('IN_IA') or exit('Access Denied');
 			$tid = $_GPC['tid'];
 			
 			if (!empty($tid)) {
-				$tuser = pdo_fetch("SELECT * FROM ".tablename($this->table_users)." WHERE uniacid = :uniacid and id = :id and rid = :rid", array(':uniacid' => $uniacid,':id' => $tid,':rid' => $rid));
+				$tuser = pdo_fetch("SELECT * FROM ".tablename($this->table_users)." WHERE uniacid = :uniacid and uid = :uid and rid = :rid", array(':uniacid' => $uniacid,':uid' => $tid,':rid' => $rid));
 				$tfrom_user = $tuser['from_user'];
 			}else {
 				$tfrom_user = $_GPC['tfrom_user'];

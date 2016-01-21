@@ -883,3 +883,8 @@ function isimplexml_load_string($string, $class_name = 'SimpleXMLElement', $opti
 	}
 	return simplexml_load_string($string, $class_name, $options, $ns, $is_prefix);
 }
+
+function ihtml_entity_decode($str) {
+	$str = str_replace('&nbsp;', '#nbsp;', $str);
+	return str_replace('#nbsp;', '&nbsp;', html_entity_decode(urldecode($str)));
+}

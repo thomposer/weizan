@@ -131,7 +131,7 @@
 						</select>
 						{/if}
 						{if $row['type'] == 'calendar'}
-						{php echo tpl_form_field_date('field_' . $row['refid'] . '_' . $row['bind']);}
+						{php echo tpl_form_field_date('field_' . $row['refid'] . '_' . $row['bind'], $row['default']);}
 						{/if}
 						{if $row['type'] == 'email'}
 						<input type="text" name="field_{$row['refid']}_{$row['bind']}" value="{if $row['default']}{$row['default']}{else}@{/if}"  class="form-control"/>

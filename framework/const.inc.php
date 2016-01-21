@@ -13,3 +13,10 @@ define('REGULAR_USERNAME', '/^[\x{4e00}-\x{9fa5}a-z\d_\.]{3,15}$/iu');
 define('TEMPLATE_DISPLAY', 0);
 define('TEMPLATE_FETCH', 1);
 define('TEMPLATE_INCLUDEPATH', 2);
+
+define('ACCOUNT_SUBSCRIPTION', 1);
+define('ACCOUNT_SUBSCRIPTION_VERIFY', 3);
+define('ACCOUNT_SERVICE', 2);
+define('ACCOUNT_SERVICE_VERIFY', 4);
+
+define('WEIXIN_ROOT', 'https://mp.weixin.qq.com');

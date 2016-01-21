@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -215,6 +215,7 @@ function tpl_form_field_multi_audio($name, $value = array(), $options = array())
 
 
 function tpl_form_field_link($name, $value = '', $options = array()) {
+	global $_GPC;
 	$s = '';
 	if (!defined('TPL_INIT_LINK')) {
 		$s = '
@@ -223,6 +224,10 @@ function tpl_form_field_link($name, $value = '', $options = array()) {
 				require(["util","jquery"], function(u, $){
 					var ipt = $(elm).parent().prev();
 					u.linkBrowser(function(href){
+						var multiid = "'. $_GPC['multiid'] .'";
+						if (multiid) {
+							href = /(&)?t=/.test(href) ? href : href + "&t=" + multiid;
+						}
 						ipt.val(href);
 					});
 				});
@@ -288,14 +293,13 @@ function tpl_form_field_color($name, $value = '') {
 					$(".colorpicker").each(function(){
 						var elm = this;
 						util.colorpicker(elm, function(color){
-							$(elm).parent().prev().find(":text").val(color.toHexString());
+							$(elm).parent().prev().prev().val(color.toHexString());
+							$(elm).parent().prev().css("background-color", color.toHexString());
 						});
 					});
 					$(".colorclean").click(function(){
-						$(this).parent().prev().val("");
-						var $container = $(this).parent().parent().parent().next();
-						$container.find(".colorpicker").val("");
-						$container.find(".sp-preview-inner").css("background-color","#000000");
+						$(this).parent().prev().prev().val("");
+						$(this).parent().prev().css("background-color", "#FFF");
 					});
 				});
 			});
@@ -304,18 +308,15 @@ function tpl_form_field_color($name, $value = '') {
 	}
 	$s .= '
 		<div class="row row-fix">
-			<div class="col-xs-6 col-sm-4" style="padding-right:0;">
+			<div class="col-xs-8 col-sm-8" style="padding-right:0;">
 				<div class="input-group">
-					<input class="form-control" type="text" placeholder="请选择颜色" value="'.$value.'">
+					<input class="form-control" type="text" name="'.$name.'" placeholder="请选择颜色" value="'.$value.'">
+					<span class="input-group-addon" style="width:35px;border-left:none;background-color:'.$value.'"></span>
 					<span class="input-group-btn">
-						<button class="btn btn-default colorclean" type="button">
-							<span><i class="fa fa-remove"></i></span>
-						</button>
+						<button class="btn btn-default colorpicker" type="button">选择颜色 <i class="fa fa-caret-down"></i></button>
+						<button class="btn btn-default colorclean" type="button"><span><i class="fa fa-remove"></i></span></button>
 					</span>
 				</div>
-			</div>
-			<div class="col-xs-2" style="padding:2px 0;">
-				<input class="colorpicker" type="text" name="'.$name.'" value="'.$value.'" placeholder="">
 			</div>
 		</div>
 		';

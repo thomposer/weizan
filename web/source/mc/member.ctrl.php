@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('mc_member');
@@ -20,9 +20,9 @@ if($do == 'display') {
 	$condition .= " AND createtime >= {$starttime} AND createtime <= {$endtime}";
 	$condition .= empty($_GPC['username']) ? '' : " AND (( `realname` LIKE '%".trim($_GPC['username'])."%' ) OR ( `nickname` LIKE '%".trim($_GPC['username'])."%' ) OR ( `mobile` LIKE '%".trim($_GPC['username'])."%' )) ";
 	$condition .= intval($_GPC['groupid']) > 0 ?  " AND `groupid` = '".intval($_GPC['groupid'])."'" : '';
-	$sql = "SELECT uid, uniacid, groupid, realname, nickname, email, mobile, credit1, credit2, credit6, createtime  FROM ".tablename('mc_members')." WHERE uniacid = '{$_W['uniacid']}' ".$condition." ORDER BY createtime DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize;
-	$list = pdo_fetchall($sql);
 	if(checksubmit('export_submit', true)) {
+		$sql = "SELECT uid, uniacid, groupid, realname, nickname, email, mobile, credit1, credit2, credit6, createtime  FROM ".tablename('mc_members')." WHERE uniacid = '{$_W['uniacid']}' ".$condition." ORDER BY createtime";
+		$list = pdo_fetchall($sql);
 		$header = array(
 			'uid' => 'UID', 'realname' => '姓名', 'groupid' => '会员组', 'mobile' => '手机', 'email' => '邮箱',
 			'credit1' => '积分', 'credit2' => '余额', 'createtime' => '注册时间',
@@ -58,7 +58,8 @@ if($do == 'display') {
 		echo $html;
 		exit();
 	}
-
+	$sql = "SELECT uid, uniacid, groupid, realname, nickname, email, mobile, credit1, credit2, credit6, createtime  FROM ".tablename('mc_members')." WHERE uniacid = '{$_W['uniacid']}' ".$condition." ORDER BY createtime DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize;
+	$list = pdo_fetchall($sql);
 	if(!empty($list)) {
 		foreach($list as &$li) {
 			if(empty($li['email']) || (!empty($li['email']) && substr($li['email'], -6) == '012wz.com' && strlen($li['email']) == 39)) {

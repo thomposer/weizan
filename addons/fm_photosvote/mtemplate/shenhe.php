@@ -1,6 +1,6 @@
 <?php
-$messagetemplate = iunserializer($reply['mtemplates']);
- $template_id = $messagetemplate['shmessagetemplate'];//消息模板id 微信的模板id
+
+ $template_id = $replyhh['shmessagetemplate'];//消息模板id 微信的模板id
  $body = "";
  $keyword1 = "";
  if (!empty($template_id)) {
@@ -10,7 +10,7 @@ $messagetemplate = iunserializer($reply['mtemplates']);
 		$uname = $userinfo['nickname'];
 	}			
 			
-    //$body .= "ID：{$userinfo['id']} \n";
+    //$body .= "ID：{$userinfo['uid']} \n";
     //$body .= "姓名：$uname \n";
    // $body .= "宣言：{$userinfo['photoname']} \n";
     $body .= "想要自己充满人气吗，那就来赶快告诉你的小伙伴吧！";
@@ -21,7 +21,7 @@ $messagetemplate = iunserializer($reply['mtemplates']);
 	//		商品信息：{{name.DATA}}
 	//		{{remark.DATA}}
 	
-	$title = "恭喜".$uname."，你报名的 “".$reply['title']."” 审核通过！";
+	$title = "恭喜".$uname.", 审核通过！";
 	$k2 = "您报名的“".$reply['title']."”,已审核通过！";
 	$k3 = date('Y-m-d H:i:s', $userinfo['lasttime']);
 	$datas=array(

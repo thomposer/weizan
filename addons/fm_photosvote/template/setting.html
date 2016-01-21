@@ -1,8 +1,6 @@
 {template 'common/header'}
 <div class="main">
-	<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" id="form1"> 
-
-		   
+	<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" id="form1"> 	   
 		<div class="panel panel-default">
 			<div class="panel-heading"><strong>应用设置</strong></div>
 			<div class="panel-body">
@@ -69,6 +67,11 @@
 						<label class="radio-inline">
 							<input type="radio" name="oauthtype" value="1" {if $settings['oauthtype'] == 1} checked="checked"{/if}  onchange="oauthtypeone()" />采用微赞WZ本身借用授权方式
 						</label>
+						
+						<label class="radio-inline">
+							<input type="radio" name="oauthtype" value="2" {if $settings['oauthtype'] == 2} checked="checked"{/if}  onchange="oauthtypetwos()" />采用高级借用授权方式（使订阅号可以和服务号有相同的体验，无需回复关键字等，未做相关设置请勿开启！)
+						</label>
+						
 						<div class="help-block">微信授权方式选择，一般默认请选择 女神系统模块授权方式。</div>
 					</div>
 				</div>
@@ -151,8 +154,6 @@
 		        </div>
 			</div>
 	    </div>
-
-
 	</form>	
 </div>
 <script type="text/javascript">

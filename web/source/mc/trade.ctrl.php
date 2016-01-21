@@ -142,6 +142,7 @@ if($do == 'consume') {
 		}
 	}
 	$post_offset_money = intval($_GPC['offset_money']);
+	$offset_money = 0;
 	if($post_credit1 && $card['offset_rate'] > 0 && $card['offset_max'] > 0) {
 		$offset_money = min($card['offset_max'], $post_credit1/$card['offset_rate']);
 		if($offset_money != $post_offset_money) {
@@ -208,16 +209,15 @@ if($do == 'consume') {
 	);
 	pdo_insert('mc_cash_record', $data);
 
+	$tips = "用户消费{$money}元,使用{$data['credit1']}积分,抵现{$data['credit1_fee']}元,使用余额支付{$data['credit2']}元,现金支付{$data['final_cash']}元";
 		if(!empty($card) && $card['grant_rate'] > 0) {
 		$num = $money * $card['grant_rate'];
-		$log .= "会员消费{$money}元，积分赠送比率为:【1：{$card['grant_rate']}】,共赠送【{$num}】积分";
+		$tips .= "，积分赠送比率为:【1：{$card['grant_rate']}】,共赠送【{$num}】积分";
 		mc_credit_update($uid, 'credit1', $num, array(0, $log, 'system', $clerk['id'], $clerk['store_id']));
+	}
 		$openid = pdo_fetchcolumn('SELECT openid FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND uid = :uid', array(':acid' => $_W['acid'], ':uid' => $uid));
-		if(!empty($openid)) {
-			if($index == 'credit1') {
-				mc_notice_credit1($openid, $uid, $num, $log);
-			}
-		}
+	if(!empty($openid)) {
+		mc_notice_consume($openid, '会员消费通知', $tips);
 	}
 	exit('success');
 }

@@ -9,8 +9,6 @@ $do = in_array($do, $dos) ? $do : 'copyright';
 $settings = $_W['setting']['copyright'];
 if(empty($settings) || !is_array($settings)) {
 	$settings = array();
-} else {
-	$settings['slides'] = iunserializer($settings['slides']);
 }
 
 if ($do == 'copyright') {
@@ -18,6 +16,7 @@ if ($do == 'copyright') {
 	if (checksubmit('submit')) {
 		$data = array(
 			'status' => $_GPC['status'],
+			'verifycode' => $_GPC['verifycode'],
 			'reason' => $_GPC['reason'],
 			'smname' => $_GPC['smname'],
 			'sitename' => $_GPC['sitename'],

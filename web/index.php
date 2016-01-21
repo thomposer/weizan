@@ -92,6 +92,7 @@ $acl = array(
 			'emoji',
 			'bindcall',
 			'subscribe',
+			'wxcode',
 		)
 	),
 	'article' => array(

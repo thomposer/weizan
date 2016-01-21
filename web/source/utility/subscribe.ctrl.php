@@ -1,7 +1,7 @@
 <?php 
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -54,29 +54,22 @@ if(!empty($_W['uniacid'])) {
 		
 		load()->model('module');
 		$modules = uni_modules();
-		$core = array();
-		$core['name'] = 'core';
-		$core['subscribes'] = array('core');
-		array_unshift($modules, $core);
-		
 		foreach($messages as $msg) {
-			foreach($modules as $m) {
-				if(!empty($m['subscribes'])) {
-					if ($m['name'] == 'core' 
-					|| (empty($msg['message']['event']) && in_array($msg['message']['type'], $m['subscribes'])) 
-					|| (!empty($msg['message']['event']) && in_array($msg['message']['event'], $m['subscribes']))) {
-						$obj = WeUtility::createModuleReceiver($m['name']);
-						$obj->message = $msg['message'];
-						$obj->params = $msg['params'];
-						$obj->response = $msg['response'];
-						$obj->keyword = $msg['keyword'];
-						$obj->module = $m;
-						$obj->uniacd = $msg['uniacid'];
-						$obj->acid = $msg['acid'];
-						if(method_exists($obj, 'receive')) {
-							@$obj->receive();
-						}
-					}
+			if(empty($msg['module'])) {
+				continue;
+			}
+			$m = $modules[$msg['module']];
+			if(!empty($m['subscribes']) && in_array($msg['message']['type'], $m['subscribes'])) {
+				$obj = WeUtility::createModuleReceiver($m['name']);
+				$obj->message = $msg['message'];
+				$obj->params = $msg['params'];
+				$obj->response = $msg['response'];
+				$obj->keyword = $msg['keyword'];
+				$obj->module = $m;
+				$obj->uniacd = $msg['uniacid'];
+				$obj->acid = $msg['acid'];
+				if(method_exists($obj, 'receive')) {
+					@$obj->receive();
 				}
 			}
 		}

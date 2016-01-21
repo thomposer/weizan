@@ -9947,7 +9947,7 @@ var LocalStorage = UE.LocalStorage = (function () {
 UE.plugins['defaultfilter'] = function () {
     var me = this;
     me.setOpt({
-        'allowDivTransToP':true,
+        'allowDivTransToP':false,
         'disabledTableInTable':true
     });
     //默认的过滤处理
@@ -10082,16 +10082,16 @@ UE.plugins['defaultfilter'] = function () {
                     case 'dd':
                         node.tagName = 'li';
                         break;
-                    case 'li':
-                        var className = node.getAttr('class');
-                        if (!className || !/list\-/.test(className)) {
-                            node.setAttr()
-                        }
-                        var tmpNodes = node.getNodesByTagName('ol ul');
-                        UE.utils.each(tmpNodes, function (n) {
-                            node.parentNode.insertAfter(n, node);
-                        });
-                        break;
+                    //case 'li':
+                    //    var className = node.getAttr('class');
+                    //    if (!className || !/list\-/.test(className)) {
+                    //        node.setAttr()
+                    //    }
+                    //    var tmpNodes = node.getNodesByTagName('ol ul');
+                    //    UE.utils.each(tmpNodes, function (n) {
+                    //        node.parentNode.insertAfter(n, node);
+                    //    });
+                    //    break;
                     case 'td':
                     case 'th':
                     case 'caption':
@@ -15263,9 +15263,9 @@ UE.plugins['list'] = function () {
 
             var style = domUtils.getStyle(node, 'list-style-type');
             style && (node.style.cssText = 'list-style-type:' + style);
-            node.className = utils.trim(node.className.replace(/list-paddingleft-\w+/,'')) + ' list-paddingleft-' + type;
+            //node.className = utils.trim(node.className.replace(/list-paddingleft-\w+/,'')) + ' list-paddingleft-' + type;
             utils.each(domUtils.getElementsByTagName(node,'li'),function(li){
-                li.style.cssText && (li.style.cssText = '');
+                //li.style.cssText && (li.style.cssText = '');
                 if(!li.firstChild){
                     domUtils.remove(li);
                     return;

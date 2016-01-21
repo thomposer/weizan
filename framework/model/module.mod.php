@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012WZ.COM
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -128,6 +128,7 @@ function module_entries($name, $types = array(), $rid = 0, $args = null) {
 }
 
 function module_app_entries($name, $types = array(), $args = null) {
+	global $_W;
 	$ts = array('rule', 'cover', 'menu', 'home', 'profile', 'shortcut', 'function');
 	if(empty($types)) {
 		$types = $ts;
@@ -147,7 +148,7 @@ function module_app_entries($name, $types = array(), $args = null) {
 			load()->func('communication');
 			$urlset = parse_url($_W['siteurl']);
 			$urlset = pathinfo($urlset['path']);
-			$response = ihttp_request('http://127.0.0.1/'. $urlset['dirname'] . '/' . url('utility/bindcall', array('modulename' => $bind['module'], 'callname' => $bind['call'], 'args' => $args, 'uniacid' => $_W['uniacid'])), array('W'=>base64_encode(iserializer($_W))));
+			$response = ihttp_request('http://127.0.0.1/'. $urlset['dirname'] . '/' . url('utility/bindcall', array('modulename' => $bind['module'], 'callname' => $bind['call'], 'args' => $args, 'uniacid' => $_W['uniacid'])), array('W'=>base64_encode(iserializer($_W))), $extra);
 			if (is_error($response)) {
 				continue;
 			}
@@ -172,7 +173,7 @@ function module_app_entries($name, $types = array(), $args = null) {
 			if($bind['entry'] == 'shortcut') {
 				$url = murl("entry", array('eid' => $bind['eid']));
 			}
-			$entries[$bind['entry']][] = array('title' => $bind['title'], 'url' => $url, 'from' => 'define');
+			$entries[$bind['entry']][] = array('title' => $bind['title'], 'do' => $bind['do'], 'url' => $url, 'from' => 'define');
 		}
 	}
 	return $entries;

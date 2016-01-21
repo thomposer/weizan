@@ -29,7 +29,7 @@
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 {/if}
-
+{if ($_GPC['do'] == 'tuser' || $_GPC['do'] == 'tuserphotos' || $_GPC['do'] == 'photosvote')}
  <div class="geetest">
     <div class="bg"></div>
     <div class="wrap">
@@ -110,7 +110,7 @@
     background-image: url('../addons/fm_photosvote/api/validate/img/return_hover.png');
   }
 </style>
-
+{/if}
 <div class="modal fade" id="subsribe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="  margin-top: 60px;">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -158,17 +158,17 @@
 					</div>
 				</div>
 
-				{if $_GPC['do'] == 'photosvoteview' || $_GPC['do'] == 'tuser'|| $_GPC['do'] == 'tuserphotos' }
+				{if $_GPC['do'] == 'photosvote' || $_GPC['do'] == 'tuser'|| $_GPC['do'] == 'tuserphotos' }
 				
-					{if !empty($huodong) && !empty($huodong['huodongname']) && !empty($huodong['hhhdpicture']) && ($huodong['ishuodong'] == 1 && !empty($huodong['huodongurl'])) }
+					{if !empty($reply) && !empty($reply['huodongname']) && !empty($reply['hhhdpicture']) && ($reply['ishuodong'] == 1 && !empty($reply['huodongurl'])) }
 						
 						<div class="form-group huodong"  style="display:none;background:#EC4933;height:50px;line-height:50px;">
-							<a href="{$huodong['huodongurl']}&from=fm_photosvote&oid={$from_user}"  >
+							<a href="{$reply['huodongurl']}&from=fm_photosvote&oid={$from_user}"  >
 							<div style="width:50px;height:50px;overflow:hidden;margin-right:20px;margin-left:10px;float:left;">
-								<img src="{php echo toimage($huodong['hhhdpicture'])}" width="50" style="">
+								<img src="{php echo toimage($reply['hhhdpicture'])}" width="50" style="">
 							</div>						
 							<div style="text-align:left; background-color: transparent;color:#fff;font-size:15px;" class=" text-info">
-								{$huodong['huodongname']}
+								{$reply['huodongname']}
 							</div>
 							</a>
 						</div>
@@ -182,8 +182,22 @@
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<div class="loading" style="display: none;"></div>
+<div class="overlay_container j_overlay_container unmasked beforeFadeIn" style="display: none;"><div class="overlay_content_container j_overlay_content_container"><div class="overlay_content"><div id="toast" class="toast"></div></div></div></div>
+<div id="bodyhidden" style="display: none;"></div>
 <script>
 
+function fmloadding(id, text) {
+	$(id).show();
+	$(id).removeClass("beforeFadeIn");
+
+	setTimeout(function () {
+		$(id).hide();
+		$(id).addClass("beforeFadeIn");
+	},3000)
+	$('#toast').html(text);
+}
 function fminfo(text) {
 	$('#fminfo').modal('toggle');
 	$('#fminfotext').html(text);
@@ -212,33 +226,30 @@ function tvote() {
 	var tend_time = "{$reply['tend_time']}";
 	var ttipstart = "{$reply['ttipstart']}";
 	var ttipend = "{$reply['ttipend']}";
-	var votetime = "{$reply['votetime']}";
-	var ttipvote = "{$reply['ttipvote']}";
-	var ucreatetime = "{$user['createtime']}";
 	var subscribe = "{$reply['subscribe']}";
 	var follow = "{$follow}";
 	var tfrom_user = "{$tfrom_user}";
 	var vfrom = "{$vfrom}";
+
 	var isdaojishi = "{$reply['isdaojishi']}";
-	
+	var votetime = "{$reply['votetime']}";
+	var ttipvote = "{$reply['ttipvote']}";
+	var ucreatetime = "{$user['createtime']}";
+
 	var votetime = votetime*3600*24;
 	var isvtime = now - ucreatetime;
 	if (isdaojishi == 1) {
-
-		if(isvtime >= votetime) {					
-			//u.message(ttipvote, '', 'success');		
+		if(isvtime >= votetime) {
 			fminfo(ttipvote);
 			return false;
 		}
 	}
 
 	if (now <= tstart_time) {
-		//u.message(ttipstart, '', 'success');		
 		fminfo(ttipstart);
 		return false;
 	}
 	if (now >= tend_time) {
-		//u.message(ttipend, '', 'success');	
 		fminfo(ttipend);
 		return false;
 	}
@@ -267,24 +278,23 @@ function tvote() {
 }
 
 function tvotestart(tfrom_user, vfrom, iscode) {
-	
-	{if !empty($reply['iplocallimit']) && ($_GPC['do'] == 'photosvoteview' || $_GPC['do'] == 'tuser'|| $_GPC['do'] == 'tuserphotos') }
-		var tdw = sessionStorage.getItem("dw");
-		if (!tdw) {
-			var userlocal = sessionStorage.getItem("userlocal");
-			var diqu = sessionStorage.getItem("diqu");
-			var stoplocal = '{php echo $this->createMobileUrl('stopip', array('rid'=> $rid, 'iptype' => 'local'))}&nowlocal=' + userlocal + "&diqu=" + diqu;
-			window.location.href = stoplocal;
-			return false;
-		}
+	{if !empty($reply['iplocallimit'])}
+		{if $_GPC['do'] == 'photosvote' || $_GPC['do'] == 'tuser'|| $_GPC['do'] == 'tuserphotos'}
+			var tdw = sessionStorage.getItem("dw");
+			if (!tdw) {
+				var userlocal = sessionStorage.getItem("userlocal");
+				var diqu = sessionStorage.getItem("diqu");
+				var stoplocal = '{php echo $this->createMobileUrl('stopip', array('rid'=> $rid, 'iptype' => 'local'))}&nowlocal=' + userlocal + "&diqu=" + diqu;
+				window.location.href = stoplocal;
+				return false;
+			}
+		{/if}
 	{/if}
 	
 	if (iscode == 1) {
 		var qs = function(e) {
 		  return document.querySelector(e);
 		};
-		//var button = document.getElementById("tvote");
-
 		var geetest = qs(".geetest");
 		//button.onclick = function() {
 		  geetest.style.display = "block";
@@ -305,39 +315,39 @@ function tvotestart(tfrom_user, vfrom, iscode) {
 				};
 				$.post("{php echo $this->createMobileUrl('Tvotestart', array('vote' => '1', 'rid' => $rid))}", submitData, function(data) {	
 					//geetest.style.display = "none";
-
+					console.log(result);
 					qs('#' + id).parentNode.parentNode.style.display = "none";
 					if (data.success == true) {
-						fminfo(data.msg);
-						
-							{if !empty($huodong) && !empty($huodong['huodongname']) && !empty($huodong['hhhdpicture']) && ($huodong['ishuodong'] == 1 && !empty($huodong['huodongurl'])) }
-								$(".huodongt").show();
-								$(".huodong").show();
-							{else}
-								setTimeout(function () {								
-									window.location.reload();
-								},3000)
-							{/if}
+						var photosnum = "#photosnum" + tfrom_user;
+						var photosnumf = "#photosnum_" + tfrom_user;
+						$(photosnumf).html(data.photosnum);
+						$(photosnum).html(data.photosnum);
+						$("#acount").html(data.ljtp);
+						{if !empty($reply) && !empty($reply['huodongname']) && !empty($reply['hhhdpicture']) && ($reply['ishuodong'] == 1 && !empty($reply['huodongurl'])) }
+							fminfo(data.msg);
+							$(".huodongt").show();
+							$(".huodong").show();
+						{else}
+							fmloadding('.overlay_container', data.msg);
+						{/if}
 						return 
 						
 					} else {
 						if (data.success == -1) {
-							fminfo(data.msg);
-							setTimeout(function () {								
+							//fminfo(data.msg);
+							fmloadding('.overlay_container', data.msg);
+							/**setTimeout(function () {								
 								window.location.reload();
-							},3000)
+							},3000)**/
 							return 
 						}
-						if (data.success == 3) {
-							fminfo(data.msg);
-							setTimeout(function () {								
+						if (data.success == -2) {
+							//fminfo(data.msg);
+							fmloadding('.overlay_container', data.msg);
+							setTimeout(function () {
 								window.location.href = data.linkurl;
-							},1000)	
+							},3000)	
 							return
-						}
-						if (data.success == 9) {
-							//windows.location.href = data.msg;
-							 window.location.href = "{$reply['shareurl']}";
 						}
 					}
 				},"json")
@@ -350,37 +360,38 @@ function tvotestart(tfrom_user, vfrom, iscode) {
 		};
 		$.post("{php echo $this->createMobileUrl('Tvotestart', array('vote' => '1', 'rid' => $rid))}", submitData, function(data) {
 			if (data.success == true) {
-				fminfo(data.msg);
 				
-				{if !empty($huodong) && !empty($huodong['huodongname']) && !empty($huodong['hhhdpicture']) && ($huodong['ishuodong'] == 1 && !empty($huodong['huodongurl'])) }
+				var photosnum = "#photosnum" + tfrom_user;
+				var photosnumf = "#photosnum_" + tfrom_user;
+				$(photosnumf).html(data.photosnum);
+				$(photosnum).html(data.photosnum);
+				$("#acount").html(data.ljtp);
+				{if !empty($reply) && !empty($reply['huodongname']) && !empty($reply['hhhdpicture']) && ($reply['ishuodong'] == 1 && !empty($reply['huodongurl'])) }
+					fminfo(data.msg);
 					$(".huodongt").show();
 					$(".huodong").show();
 				{else}
-					setTimeout(function () {								
-					window.location.reload();
-					},3000)
+					fmloadding('.overlay_container', data.msg);
 				{/if}
 				
 				return 
 				
 			} else {
 				if (data.success == -1) {
-					fminfo(data.msg);
-					setTimeout(function () {								
+					//fminfo(data.msg);
+					fmloadding('.overlay_container', data.msg);
+					/**setTimeout(function () {								
 						window.location.reload();
-					},3000)
+					},3000)**/
 					return 
 				}
-				if (data.success == 3) {
-					fminfo(data.msg);
-					setTimeout(function () {								
+				if (data.success == -2) {
+					//fminfo(data.msg);
+					fmloadding('.overlay_container', data.msg);
+					setTimeout(function () {
 						window.location.href = data.linkurl;
-					},1000)	
+					},3000)	
 					return
-				}
-				if (data.success == 9) {
-					//windows.location.href = data.msg;
-					 window.location.href = "{$reply['shareurl']}";
 				}
 			}
 		},"json")
@@ -415,10 +426,9 @@ function bbsreply(content, iscode, bbstype) {
 				$.post("{php echo $this->createMobileUrl('Tbbsreply', array('isbbsreply' => '1', 'tfrom_user' => $tfrom_user, 'rid' => $rid))}", submitData, function(data) {
 					//qs('#' + id).parentNode.parentNode.style.display = "none";
 					geetest.style.display = "none";
-					if (data.success == true) {														
-						//u.message(data.msg, '', 'success');	
+					if (data.success == true) {
 						if (bbstype == 'bbsreply') {
-							fminfo(data.msg);
+							fmloadding('.overlay_container', data.msg);
 							setTimeout(function () {								
 								window.location.reload();
 							},3000)	
@@ -429,15 +439,13 @@ function bbsreply(content, iscode, bbstype) {
 					} else {
 						
 						if (data.success == -1) {
-							//$("#result_info_tip").text(data.msg);	
-							//u.message(data.msg, '', 'error');	
-							fminfo(data.msg);
+							fmloadding('.overlay_container', data.msg);
 							return 
 						}
 						
 						if (data.success == 3) {
 							//windows.location.href = data.linkurl;	
-							fminfo(data.msg);
+							fmloadding('.overlay_container', data.msg);
 							setTimeout(function () {								
 								window.location.href = data.linkurl;
 							},1000)	
@@ -453,9 +461,9 @@ function bbsreply(content, iscode, bbstype) {
 		};
 		$.post("{php echo $this->createMobileUrl('Tbbsreply', array('isbbsreply' => '1', 'tfrom_user' => $tfrom_user, 'rid' => $rid))}", submitData, function(data) {
 			if (data.success == true) {														
-				//u.message(data.msg, '', 'success');	
+				
 				if (bbstype == 'bbsreply') {
-						fminfo(data.msg);
+						fmloadding('.overlay_container', data.msg);
 						setTimeout(function () {								
 							window.location.reload();
 						},3000)	
@@ -464,15 +472,12 @@ function bbsreply(content, iscode, bbstype) {
 			} else {
 				
 				if (data.success == -1) {
-					//$("#result_info_tip").text(data.msg);	
-					//u.message(data.msg, '', 'error');	
-					fminfo(data.msg);
+					fmloadding('.overlay_container', data.msg);
 					return 
 				}
 				
 				if (data.success == 3) {
-					//windows.location.href = data.linkurl;	
-					fminfo(data.msg);
+					fmloadding('.overlay_container', data.msg);
 					setTimeout(function () {								
 						window.location.href = data.linkurl;
 					},1000)	
@@ -499,13 +504,13 @@ function tvotep(tfrom_user,user) {
 	var vfrom = "photosvoteview";
 	var votetime = votetime*3600*24;
 	var isvtime = now - ucreatetime;
-if (isdaojishi == 1) {
-	if(isvtime >= votetime) {					
-		//u.message(ttipvote, '', 'success');		
-		fminfo(ttipvote);
-		return false;
+	if (isdaojishi == 1) {
+		if(isvtime >= votetime) {					
+			//u.message(ttipvote, '', 'success');		
+			fminfo(ttipvote);
+			return false;
+		}
 	}
-}
 	
 
 	if (now <= tstart_time) {
@@ -549,9 +554,8 @@ function getcode() {
 function subsribe() {
 	$('#subsribe').modal('toggle');
 }
-
+{if !empty($reply['iplocallimit'])}
 	function getlocaltion() {
-		
 			wx.getLocation({
 			    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
 			    success: function (res) {
@@ -570,7 +574,6 @@ function subsribe() {
 					      jsonp: "callback",//传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(默认为:callback)
 					      jsonpCallback:"renderReverse",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
 					      success : function(json){
-					      		
 					          if (json.status=="0"){
 					          	sessionStorage.setItem("getLocation", "{$reply["iplocallimit"]}"); 
 					            var address=json.result.addressComponent;
@@ -601,4 +604,5 @@ function subsribe() {
 			});
 		
 	}
+{/if}
 </script>

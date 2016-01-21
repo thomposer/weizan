@@ -10,6 +10,27 @@ class SlaveDb extends DB {
 	private $weight;
 	private $slavequery = 0;
 	private $slaveid = null;
+
+	public function prepare($sql) {
+		$this->init_connect($sql);
+		return parent::prepare($sql);
+	}
+	
+	public function query($sql, $params = array()) {
+		$starttime = microtime();
+		if (!empty($params)) {
+			return parent::query($sql, $params);
+		}
+		$this->init_connect($sql);
+		$result = $this->pdo->exec($sql);
+		if(PDO_DEBUG) {
+			$info = array();
+			$info['sql'] = $sql;
+			$info['error'] = $this->pdo->errorInfo();
+			$this->debug(false, $info);
+		}
+		return $result;
+	}
 	
 	public function slave_connect() {
 		$this->slave_choose();

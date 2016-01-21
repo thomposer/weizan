@@ -197,6 +197,7 @@ abstract class WeAccount {
 					$packet['url'] = strval($obj->Url);
 				}
 				if($packet['event'] == 'subscribe') {
+					$packet['type'] = 'subscribe';
 										$scene = strval($obj->EventKey);
 					if(!empty($scene)) {
 						$packet['scene'] = str_replace('qrscene_', '', $scene);
@@ -208,6 +209,7 @@ abstract class WeAccount {
 					}
 				}
 				if($packet['event'] == 'unsubscribe') {
+					$packet['type'] = 'unsubscribe';
 									}
 				if($packet['event'] == 'SCAN') {
 										$packet['type'] = 'qr';
@@ -713,7 +715,7 @@ abstract class WeBase {
 				$source = IA_ROOT . "/app/themes/{$_W['template']}/{$filename}.html";
 			}
 			if(!is_file($source)) {
-				if (in_array($filename, array('header', 'footer', 'slide', 'toolbar', 'message'))) {
+				if (in_array($filename, array('header', 'footer', 'footer-base', 'slide', 'toolbar', 'message'))) {
 					$source = IA_ROOT . "/app/themes/default/common/{$filename}.html";
 				} else {
 					$source = IA_ROOT . "/app/themes/default/{$filename}.html";
@@ -1090,7 +1092,6 @@ abstract class WeModuleSite extends WeBase {
 		if (!empty($pay['credit']['switch'])) {
 			$credtis = mc_credit_fetch($_W['member']['uid']);
 		}
-		$iscard = pdo_fetchcolumn('SELECT iscard FROM ' . tablename('modules') . ' WHERE name = :name', array(':name' => $params['module']));
 		$you = 0;
 		if($pay['card']['switch'] == 2 && !empty($_W['openid'])) {
 						if($_W['card_permission'] == 1 && !empty($params['module'])) {
@@ -1170,10 +1171,6 @@ abstract class WeModuleSite extends WeBase {
 			if(!empty($params['module'])) {
 				$cards = pdo_fetchall('SELECT a.id,a.couponid,b.type,b.title,b.discount,b.condition,b.starttime,b.endtime FROM ' . tablename('activity_coupon_modules') . ' AS a LEFT JOIN ' . tablename('activity_coupon') . ' AS b ON a.couponid = b.couponid WHERE a.uniacid = :uniacid AND a.module = :modu AND b.condition <= :condition AND b.starttime <= :time AND b.endtime >= :time  ORDER BY a.id DESC', array(':uniacid' => $_W['uniacid'], ':modu' => $params['module'], ':time' => TIMESTAMP, ':condition' => $params['fee']), 'couponid');
 				if(!empty($cards)) {
-					$condition = '';
-					if($iscard == 1) {
-						$condition = " AND grantmodule = '{$params['module']}'";
-					}
 					foreach($cards as $key => &$card) {
 						$has = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('activity_coupon_record') . ' WHERE uid = :uid AND uniacid = :aid AND couponid = :cid AND status = 1' . $condition, array(':uid' => $_W['member']['uid'], ':aid' => $_W['uniacid'], ':cid' => $card['couponid']));
 						if($has > 0){

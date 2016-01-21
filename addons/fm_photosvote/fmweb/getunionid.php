@@ -23,11 +23,30 @@ defined('IN_IA') or exit('Access Denied');
 		if ($_GPC['tbfollow'] == 1) {
 			$condition .= " AND follow = '1'";
 		}
-		$totalu1 = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename(mc_mapping_fans)." WHERE uniacid = '{$_W['uniacid']}' AND unionid = ''");
+		$accounts = uni_accounts();
+		if(!isset($_GPC['acid'])){
+			$account = current($accounts);
+			if($account !== false){
+				$acid = intval($account['acid']);
+				$condition .= " AND acid = '{$acid}'";
+			}
+		} else {
+			$acid = intval($_GPC['acid']);
+			$condition .= " AND acid = '{$acid}'";
+		}
+		reset($accounts);
+		if ($_GPC['asearch']) {
+			//echo $acid;
+			if(empty($acid)){
+				message('请指定公众号');
+			}
+		}
+		
+		$totalu1 = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename(mc_mapping_fans)." WHERE uniacid = '{$_W['uniacid']}' AND acid = '{$acid}' AND unionid = ''");
 		$totalu2 = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename(mc_mapping_fans)." WHERE $condition");
 
-		$totalf1 = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename(mc_mapping_fans)." WHERE uniacid = '{$_W['uniacid']}' AND follow = '1'");
-		$totalf2 = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename(mc_mapping_fans)." WHERE uniacid = '{$_W['uniacid']}' ");
+		$totalf1 = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename(mc_mapping_fans)." WHERE uniacid = '{$_W['uniacid']}' AND acid = '{$acid}' AND follow = '1'");
+		$totalf2 = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename(mc_mapping_fans)." WHERE uniacid = '{$_W['uniacid']}' AND acid = '{$acid}' ");
 	    if (empty($_GPC['tbrs'])) {
 	    	include $this->template('unionid');
 	    	exit;
@@ -39,7 +58,7 @@ defined('IN_IA') or exit('Access Denied');
 		$pager = pagination($total, $pindex, $psize);	
 		
 
-		$sql="SELECT * FROM ".tablename(account_wechats)." WHERE  uniacid = '{$_W['uniacid']}'";
+		$sql="SELECT * FROM ".tablename(account_wechats)." WHERE  uniacid = '{$_W['uniacid']}' AND acid = '{$acid}'";
 		$wechats = pdo_fetch($sql);
 		$token =iunserializer($wechats['access_token']);
 		$access_token=$token['token'];
@@ -53,7 +72,7 @@ defined('IN_IA') or exit('Access Denied');
 			$record['expire'] =time() + 3600;
 			$row = array();
 			$row['access_token'] = iserializer($record);//序列化保存
-			pdo_update('account_wechats', $row, array('uniacid' => $_W['uniacid']));
+			pdo_update('account_wechats', $row, array('uniacid' => $_W['uniacid'], 'acid' => $acid));
 		}
 
 		for ($i=0; $i < count($list); $i++){
@@ -79,7 +98,7 @@ defined('IN_IA') or exit('Access Denied');
 				$msg .= '正在同步中，目前：<strong style="color:#5cb85c">'.$mq.' %</strong>,当前同步人数（<strong style="color:#5cb85c">'.$rtotal.' 人</strong>）,总共粉丝数（<strong style="color:#5cb85c">'.$total.' 人</strong>）';
 				
 				$page = $pindex + 1;
-				$to = $this->createWebUrl('getunionid', array('toi' => $toi, 'tbrs' => $_GPC['tbrs'], 'tbfs' => $_GPC['tbfs'], 'tbfollow' => $_GPC['tbfollow'], 'page' => $page));
+				$to = $this->createWebUrl('getunionid', array('acid' => $acid,'toi' => $toi, 'tbrs' => $_GPC['tbrs'], 'tbfs' => $_GPC['tbfs'], 'tbfollow' => $_GPC['tbfollow'], 'page' => $page));
 				message($msg, $to);
 			}
 		}

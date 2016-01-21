@@ -45,7 +45,7 @@
 			</div>
 		</div>
 		<div class="panel-body">
-			{$news['content']}
+			{php echo html_entity_decode($news['content'], ENT_QUOTES)}
 		</div>
 	</div>
 	{/if}

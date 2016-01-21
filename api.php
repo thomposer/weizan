@@ -34,8 +34,8 @@ $_W['acid'] = $_W['account']['acid'];
 $_W['uniacid'] = $_W['account']['uniacid'];
 $_W['uniaccount'] = uni_fetch($_W['uniacid']);
 $_W['account']['groupid'] = $_W['uniaccount']['groupid'];
-$_W['account']['qrcode'] = $_W['attachurl'].'qrcode_'.$_W['acid'].'jpg?time='.$_W['timestamp'];
-$_W['account']['avatar'] = $_W['attachurl'].'headimg_'.$_W['acid'].'jpg?time='.$_W['timestamp'];
+$_W['account']['qrcode'] = $_W['attachurl'].'qrcode_'.$_W['acid'].'.jpg?time='.$_W['timestamp'];
+$_W['account']['avatar'] = $_W['attachurl'].'headimg_'.$_W['acid'].'.jpg?time='.$_W['timestamp'];
 $_W['modules'] = uni_modules();
 
 $engine = new WeiZan();
@@ -133,7 +133,7 @@ class WeiZan {
 			$row = array();
 			$row['isconnect'] = 1;
 			pdo_update('account', $row, array('acid' => $_W['acid']));
-			exit($_GET['echostr']);
+			exit(htmlspecialchars($_GET['echostr']));
 		}
 		if(strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
 			$postStr = file_get_contents('php://input');
@@ -207,7 +207,6 @@ class WeiZan {
 			WeUtility::logging('params', $hitParam);
 			WeUtility::logging('response', $response);
 			$resp = $this->account->response($response);
-			$resp = $this->clip($resp, $hitParam);
 						if(!empty($_GET['encrypt_type']) && $_GET['encrypt_type'] == 'aes') {
 				$resp = $this->account->encryptMsg($resp);
 				$resp = $this->account->xmlDetract($resp);
@@ -232,9 +231,9 @@ class WeiZan {
 				echo json_encode(array('resp' => $resp, 'process' => $process));
 				exit();
 			}
+			ob_start();
 			echo $resp;
-			ob_flush();
-			flush();
+			ob_start();
 			$this->receive($hitParam, $hitKeyword, $response);
 			ob_end_clean();
 			exit();
@@ -261,8 +260,45 @@ class WeiZan {
 	
 	private function booking($message) {
 		global $_W;
+		if ($message['event'] == 'unsubscribe' || $message['event'] == 'subscribe') {
+			$todaystat = pdo_get('stat_fans', array('date' => date('Ymd'), 'uniacid' => $_W['uniacid']));
+			if ($message['event'] == 'unsubscribe') {
+				if (empty($todaystat)) {
+					$updatestat = array(
+						'new' => 0,
+						'uniacid' => $_W['uniacid'],
+						'cancel' => 1,
+						'cumulate' => 0,
+						'date' => date('Ymd'),
+					);
+					pdo_insert('stat_fans', $updatestat);
+				} else {
+					$updatestat = array(
+						'cancel' => $todaystat['cancel'] + 1,
+					);
+					$updatestat['cumulate'] = intval($todaystat['cumulate']) - 1;
+					pdo_update('stat_fans', $updatestat, array('id' => $todaystat['id']));
+				}
+			} elseif ($message['event'] == 'subscribe') {
+				if (empty($todaystat)) {
+					$updatestat = array(
+						'new' => 1,
+						'uniacid' => $_W['uniacid'],
+						'cancel' => 0,
+						'cumulate' => 1,
+						'date' => date('Ymd'),
+					);
+					pdo_insert('stat_fans', $updatestat);
+				} else {
+					$updatestat = array(
+						'new' => $todaystat['new'] + 1,
+						'cumulate' => $todaystat['cumulate'] + 1,
+					);
+					pdo_update('stat_fans', $updatestat, array('id' => $todaystat['id']));
+				}
+			}
+		}
 		$setting = uni_setting($_W['uniacid'], array('passport'));
-
 		load()->model('mc');
 		$fans = mc_fansinfo($message['from']);
 		$default_groupid = cache_load("defaultgroupid:{$_W['uniacid']}");
@@ -344,17 +380,6 @@ class WeiZan {
 		}
 	}
 
-	
-	private function clip($resp, $par) {
-		$mapping = array(
-			'[from]' => $par['message']['from'],
-			'[to]' => $par['message']['to'],
-			'[rule]' => $par['rule']
-		);
-
-		return str_replace(array_keys($mapping), array_values($mapping), $resp);
-	}
-	
 	private function receive($par, $keyword, $response) {
 		global $_W;
 		$subscribe = cache_load('module_receive_enable');
@@ -399,20 +424,18 @@ class WeiZan {
 				}
 			}
 		} else {
-			$modules = empty($subscribe[$this->message['event']]) ? $subscribe[$this->message['type']] : $subscribe[$this->message['type']];
+			$modules = $subscribe[$this->message['type']];
 			if (!empty($modules)) {
 				foreach ($modules as $modulename) {
 					$row = array();
 					$row['uniacid'] = $_W['uniacid'];
 					$row['acid'] = $_W['acid'];
 					$row['dateline'] = $_W['timestamp'];
-					$row['message'] = iserializer($par['message']);
+					$row['message'] = iserializer($this->message);
 					$row['keyword'] = iserializer($keyword);
-					unset($par['message']);
-					unset($par['keyword']);
 					$row['params'] = iserializer($par);
 					$row['response'] = iserializer($response);
-					$row['module'] = $par['module'];
+					$row['module'] = $modulename;
 					$row['type'] = 1;
 					pdo_insert('core_queue', $row);
 				}
@@ -577,6 +600,7 @@ EOF;
 			return $this->analyzeClick($message);
 		}
 		if (in_array($message['event'], array('pic_photo_or_album', 'pic_weixin', 'pic_sysphoto'))) {
+			pdo_query("DELETE FROM ".tablename('menu_event')." WHERE createtime < '".($GLOBALS['_W']['timestamp'] - 100)."' OR openid = '{$message['from']}'");
 			if (!empty($message['sendpicsinfo']['count'])) {
 				foreach ($message['sendpicsinfo']['piclist'] as $item) {
 					pdo_insert('menu_event', array(
@@ -589,7 +613,6 @@ EOF;
 					));
 				}
 			} else {
-				pdo_query("DELETE FROM ".tablename('menu_event')." WHERE createtime < '".($_W['timestamp'] - 100)."' OR openid = '{$message['from']}'");
 				pdo_insert('menu_event', array(
 					'uniacid' => $GLOBALS['_W']['uniacid'],
 					'keyword' => $message['eventkey'],

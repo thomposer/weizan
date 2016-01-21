@@ -77,7 +77,7 @@ defined('IN_IA') or exit('Access Denied');
 		    if (!empty($user)) {
 			   // pdo_update($this->table_users, array('hits' => $user['hits']+1), array('rid' => $rid, 'from_user' => $tfrom_user));
 		    }else{
-				$url = $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvoteview', array('rid' => $rid));
+				$url = $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvote', array('rid' => $rid));
 				$fmdata = array(
 							"success" => 3,
 							"linkurl" => $url,
@@ -96,9 +96,9 @@ defined('IN_IA') or exit('Access Denied');
 		
 		if ($reply['tmreply'] == 1) {//开启评论				
 			if ($_GPC['tmreply'] == 1) {//开启评论	
-				$tid = $user['id'];
+				$tid = $user['uid'];
 				$content = $_GPC['msgstr'];
-				//$reply_id = $user['id'];
+				//$reply_id = $user['uid'];
 				
 				$rdata = array(
 					'uniacid' => $uniacid,
@@ -121,6 +121,9 @@ defined('IN_IA') or exit('Access Denied');
 				pdo_insert($this->table_bbsreply, $rdata);
 				$reply_id = pdo_insertid();
 				pdo_update($this->table_bbsreply, array('storey' => $reply_id), array('uniacid' => $uniacid, 'rid' => $rid, 'id' => $reply_id ));
+				if ($reply['msgtemplate']) {
+					$this->sendMobileMsgtx($from_user, $rid, $uniacid);
+				}
 			}
 		}
 	
@@ -149,30 +152,9 @@ defined('IN_IA') or exit('Access Denied');
 					exit();	
 				}
 				
-				/**if ($reply['iscode'] == 1) {					
-					$code = $_GPC['code'];
-					if (empty($code)) {
-						$fmdata = array(
-							"success" => -1,
-							"msg" => '请输入验证码！',
-						);
-						echo json_encode($fmdata);
-						exit();	
-					}
-					$hash = md5($code . $_W['config']['setting']['authkey']);
-					if($_GPC['__code'] != $hash) {					
-						$fmdata = array(
-							"success" => -1,
-							"msg" => '你输入的验证码不正确, 请重新输入.',
-						);
-						echo json_encode($fmdata);
-						exit();	
-						//message('你输入的验证码不正确, 请重新输入.');
-					}
-				}**/
-				$tid = $user['id'];
+				$tid = $user['uid'];
 				$content = $_GPC['content'];
-				//$reply_id = $user['id'];
+				//$reply_id = $user['uid'];
 				
 				$rdata = array(
 					'uniacid' => $uniacid,
@@ -185,7 +167,7 @@ defined('IN_IA') or exit('Access Denied');
 					//'reply_id' => $reply_id,//回复评论帖子的ID
 					//'rfrom_user' => $rfrom_user,//被回复的评论的作者的openid
 					//'to_reply_id' => $to_reply_id,//回复评论的id
-					'content' => $content,//评论回复内容
+					'content' => htmlspecialchars_decode($content),//评论回复内容
 					//'storey' => $storey,//绝对楼层
 					'ip' => getip(),
 					'createtime' => time(),
@@ -195,7 +177,9 @@ defined('IN_IA') or exit('Access Denied');
 				pdo_insert($this->table_bbsreply, $rdata);
 				$reply_id = pdo_insertid();
 				pdo_update($this->table_bbsreply, array('storey' => $reply_id), array('uniacid' => $uniacid, 'rid' => $rid, 'id' => $reply_id ));
-				
+				if ($reply['msgtemplate']) {
+					$this->sendMobileMsgtx($from_user, $rid, $uniacid);
+				}
 				$msg = '评论成功！';
 				//message($msg,$turl,'error');
 				$fmdata = array(

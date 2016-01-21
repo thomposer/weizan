@@ -8,7 +8,7 @@ if(empty($_W['isfounder'])) {
 	message('访问非法.');
 }
 $do = in_array($do, array('profile', 'device', 'callback', 'appstore', 'buyversion', 'buybranch')) ? $do : 'profile';
-$authurl = ADDONS_URL. '/web/index.php?c=auth&a=passwort';
+$authurl = 'http://addons2.weizancms.com/web/index.php?c=auth&a=passwort';
 
 $auth = array();
 $auth['key'] = '';

@@ -50,7 +50,7 @@ foreach ($list as $mid => $value) {
 	$fuser = $this->_getuser($value['rid'], $value['tfrom_user']);
 	$auser = $this->_auser($value['rid'], $value['afrom_user']);
 	
-	$html .= $value['id'] . "\t ,";	
+	$html .= $value['uid'] . "\t ,";	
 	$html .= $value['nickname'] . "\t ,";	
 	$html .= date('Y-m-d H:i:s', $value['createtime']) . "\t ,";	
 	$html .= $value['ip'] . "\t ,";	

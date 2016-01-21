@@ -9,7 +9,15 @@
 {if $operation == 'display'}
 
 <div class="panel panel-default">
+	<div class="panel-heading">	
+		<div class="row-fluid">
+			<div class="span8 control-group">
+				<a class="btn {if $operation == 'post'}btn-primary {else}btn-default"{/if} href="{php echo $this->createWebUrl('fmqf', array('rid' => $rid, 'op' => 'post' ))}"><i class="fa fa-edit"></i>添加群发</a> <span class="label label-info"> 适用于认证服务号</span>
+			</div>
+		</div>
+	</div>
 	<div class="table-responsive panel-body">
+		
 		<table class="table">
 			<thead>
 				<tr>
@@ -102,7 +110,14 @@
 <div class="clearfix">
 <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data">
 	<div class="panel panel-default">
-		<div class="panel-heading">群发文章管理</div>
+		<div class="panel-heading">	
+			<div class="row-fluid">
+				<div class="span8 control-group">
+					<a class="btn btn-default" href="{php echo $this->createWebUrl('fmqf', array('rid' => $rid, 'op' => 'display' ))}"><i class="fa fa-search"></i>群发</a>
+					<a class="btn {if $operation == 'post'}btn-primary {else}btn-default"{/if} href="{php echo $this->createWebUrl('fmqf', array('rid' => $rid, 'op' => 'post' ))}"><i class="fa fa-edit"></i>添加群发</a>
+				</div>
+			</div>
+		</div>
 		<div class="panel-body">
 				<input type="hidden" name="id" value="{$item[id]}">
 				{if !empty($item) && empty($item['linkurl'])}

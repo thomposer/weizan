@@ -35,7 +35,7 @@
 			<li><a href="#tab_display">显示设置</a></li>
 			<li><a href="#tab_vote">投票设置</a></li>
 			<li><a href="#tab_body">页面设置</a></li>
-			{if $_W['role']=='founder'}	<li><a href="#tab_savemedia">存储设置</a></li>{/if}
+			{if $_W['role']=='founder' ||  $bgarr['t']['s']==1 }	<li><a href="#tab_savemedia">存储设置</a></li>{/if}
 		</ul>
 	<div class='alert alert-warning' style='font-size:14px'>
         女神投票配置说明： <a href='http://bbs.012wz.com/forum.php?mod=viewthread&tid=1395&page=1&extra=#pid9820' target='_blank'>http://bbs.012wz.com/forum.php?mod=viewthread&tid=1395&page=1&extra=#pid9820</a>
@@ -47,7 +47,7 @@
 			<div class="tab-pane" id="tab_display">{template 'form_display'}</div>
 			<div class="tab-pane" id="tab_vote">{template 'form_vote'}</div>
 			<div class="tab-pane" id="tab_body">{template 'form_body'}</div>
-			{if $_W['role']=='founder'}	<div class="tab-pane" id="tab_savemedia">{template 'form_savemedia'}</div>{/if}
+			{if $_W['role']=='founder' ||  $bgarr['t']['s']==1 }	<div class="tab-pane" id="tab_savemedia">{template 'form_savemedia'}</div>{/if}
 		</div>
 	</div>
 	

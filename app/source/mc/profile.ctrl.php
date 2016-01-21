@@ -4,7 +4,7 @@
  * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-load()->model('app');;
+load()->model('app');
 
 $title = $_W['account']['name'] . '微站';
 
@@ -43,7 +43,7 @@ if(!empty($profile)) {
 }
 
 $sql = 'SELECT `mf`.*, `pf`.`field` FROM ' . tablename('mc_member_fields') . ' AS `mf` JOIN ' . tablename('profile_fields') . " AS `pf`
-		ON `mf`.`fieldid` = `pf`.`id` WHERE `uniacid` = :uniacid AND `mf`.`available` = :available";
+		ON `mf`.`fieldid` = `pf`.`id` WHERE `mf`.`uniacid` = :uniacid AND `mf`.`available` = :available";
 $params = array(':uniacid' => $_W['uniacid'], ':available' => '1');
 $mcFields = pdo_fetchall($sql, $params, 'field');
 

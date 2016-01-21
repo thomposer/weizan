@@ -31,9 +31,34 @@ if ($op == 'display') {
         message('文章排序更新成功！', $this->createWebUrl('paper', array('op' => 'display')), 'success');
     }
 
+    load()->func('file');
+    if (!empty($_GPC['delete'])) {
+        $ids= implode(",", $_GPC['delete']);
+        foreach ($_GPC['delete'] as $id => $delete) {
+            $row = pdo_fetch("SELECT id,rid, thumb FROM ".tablename('fineness_article')." WHERE id = :id", array(':id' => $id));
+            if (empty($row)) {
+                message('抱歉，文章不存在或是已经被删除！');
+            }
+            if (!empty($row['thumb'])) {
+                file_delete($row['thumb']);
+            }
+            if(!empty($row['rid'])) {
+                pdo_delete('rule', array('id' => $row['rid'], 'uniacid' => $_W['uniacid']));
+                pdo_delete('rule_keyword', array('rid' => $row['rid'], 'uniacid' => $_W['uniacid']));
+                pdo_delete('news_reply', array('rid' => $row['rid']));
+            }
+
+            pdo_delete("fineness_comment",array('aid'=>$id));
+
+        }
+        $sqls= "delete from  ".tablename('fineness_article')."  where id in(".$ids.")";
+        pdo_query($sqls);
+        message('删除成功！', referer(), 'success');
+    }
+
     $pindex = max(1, intval($_GPC['page']));
     $psize = 20;
-    $condition = '';
+    $condition = " WHERE weid =$weid ";
     $params = array();
     if (!empty($_GPC['keyword'])) {
         $condition .= " AND title LIKE :keyword";
@@ -47,11 +72,10 @@ if ($op == 'display') {
         $cid = intval($_GPC['category']['parentid']);
         $condition .= " AND pcate = '{$cid}'";
     }
-    $sql ="SELECT * FROM ".tablename('fineness_article')." WHERE weid = '{$weid}' $condition ORDER BY createtime DESC LIMIT ".($pindex - 1) * $psize.','.$psize;
+    $sql ="SELECT * FROM ".tablename('fineness_article')." $condition ORDER BY createtime DESC LIMIT ".($pindex - 1) * $psize.','.$psize;
 
     $list = pdo_fetchall($sql, $params);
-    $total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('fineness_article') . " WHERE weid = '{$weid}'");
-
+    $total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('fineness_article') .$condition );
     $pager = pagination($total, $pindex, $psize);
 
 } elseif ($op == 'post') {
@@ -59,6 +83,7 @@ if ($op == 'display') {
     load()->func('file');
     $pcate = $_GPC['pcate'];
     $ccate = $_GPC['ccate'];
+    $pindex = max(1, intval($_GPC['page']));
     if ($id>0) {
         $item = pdo_fetch("SELECT * FROM ".tablename('fineness_article')." WHERE id = :id" , array(':id' => $id));
         
@@ -76,8 +101,11 @@ if ($op == 'display') {
             $credit_yu = (($item['credit']['limit'] - $credit_num) < 0) ? 0 : $item['credit']['limit'] - $credit_num;
         }
     } else{
-        $item['bg_music_switch'] ='0';
+        $item['bg_music_switch'] ='1';
         $item['credit'] = array();
+        $item['template']==5;
+        $item['iscomment']==0;
+        $item['isadmire']==0;
     }
 
     if (checksubmit('submit')) {
@@ -98,6 +126,8 @@ if ($op == 'display') {
             'clickNum'=> $_GPC['clickNum'],
             'zanNum'=>intval($_GPC['zanNum']),
             'author'=>$_GPC['author'],
+            'isadmire'=>$_GPC['isadmire'],
+            'admiretxt'=>$_GPC['admiretxt'],
             'createtime' => TIMESTAMP,
         );
 
@@ -196,12 +226,12 @@ if ($op == 'display') {
             } 
             pdo_update('fineness_article', $data, array('id' => $id));
         }
-        message('文章更新成功！', $this->createWebUrl('paper', array('foo' => 'display')), 'success');
+        message('文章更新成功！', $this->createWebUrl('paper', array('op' => 'display','page'=>$pindex)), 'success');
     }
 } elseif ($op == 'delete') {
     load()->func('file');
     $id = intval($_GPC['id']);
-    $row = pdo_fetch("SELECT id, thumb FROM ".tablename('fineness_article')." WHERE id = :id", array(':id' => $id));
+    $row = pdo_fetch("SELECT id,rid, thumb FROM ".tablename('fineness_article')." WHERE id = :id", array(':id' => $id));
     if (empty($row)) {
         message('抱歉，文章不存在或是已经被删除！');
     }
@@ -213,8 +243,49 @@ if ($op == 'display') {
         pdo_delete('rule_keyword', array('rid' => $row['rid'], 'uniacid' => $_W['uniacid']));
         pdo_delete('news_reply', array('rid' => $row['rid']));
     }
-
+    pdo_delete("fineness_comment",array('aid'=>$id));
     pdo_delete('fineness_article', array('id' => $id));
+
+    message('删除成功！', referer(), 'success');
+} elseif ($op == 'setstatus') {
+
+    $id   = intval($_GPC['id']);
+    $data = intval($_GPC['data']);
+    $type = $_GPC['type'];
+    $data = ($data == 1 ? '0' : '1');
+    pdo_update('fineness_article', array($type=> $data), array( "id" => $id,"weid" => $_W['uniacid']));
+    die(json_encode(array(
+        'result' => 1,
+        'data' => $data
+    )));
+
+}elseif($op=='setadmire'){//设置赞赏
+    $articleid     = intval($_GPC['articleid']);
+    $item = pdo_fetch("SELECT * FROM ".tablename('fineness_article')." WHERE id = :id" , array(':id' => $articleid));
+    $adsets= pdo_fetchall("SELECT * FROM ".tablename('fineness_admire_set')." WHERE aid = :aid ORDER BY displayorder ASC ",array(':aid'=>$articleid));
+
+    if (checksubmit('submit')) {
+        for ($i = 0; $i < count($_GPC['price']); $i++) {
+            $ids = $_GPC['ids'];
+            $id = trim(implode(',', $ids), ',');
+            $insert = array(
+                'price' => $_GPC['price'][$i],
+                'displayorder'=>$_GPC['displayorder'][$i],
+                'aid'=>$articleid,
+                'weid' => $_W['uniacid'],
+                'createtime' => TIMESTAMP,
+            );
+            if ($ids[$i] != NULL) {
+                pdo_update("fineness_admire_set", $insert, array('id' => $ids[$i]));
+            } else {
+                pdo_insert("fineness_admire_set", $insert);
+            }
+        }
+        message('更新信息成功', referer(), 'success');
+    }
+}elseif ($op == 'deletead') {
+    $id = intval($_GPC['id']);
+    pdo_delete("fineness_admire_set",array('id'=>$id));
     message('删除成功！', referer(), 'success');
 }
 

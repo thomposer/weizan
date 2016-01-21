@@ -6,8 +6,13 @@
 <div class="main">
 	<form action="" method="post" class="form-horizontal form"	enctype="multipart/form-data">
 		<div class="panel panel-default">
-			<div class="panel-heading">
-				赞助商设置
+			<div class="panel-heading">	
+				<div class="row-fluid">
+					<div class="span8 control-group">
+						<a class="btn btn-default" href="{php echo $this->createWebUrl('adv', array('rid' => $rid, 'op' => 'display' ))}"><i class="fa fa-search"></i>赞助商</a>
+						<a class="btn {if $operation == 'post'}btn-primary {else}btn-default"{/if} href="{php echo $this->createWebUrl('adv', array('rid' => $rid, 'op' => 'post' ))}"><i class="fa fa-edit"></i>添加赞助商</a>
+					</div>
+				</div>
 			</div>
 			<div class="panel-body">
 				<div class="form-group">
@@ -90,7 +95,13 @@
 {elseif $operation == 'display'}	
     <div class="main">
 		<div class="panel panel-default">
-			
+			<div class="panel-heading">	
+				<div class="row-fluid">
+					<div class="span8 control-group">
+						<a class="btn {if $operation == 'post'}btn-primary {else}btn-default"{/if} href="{php echo $this->createWebUrl('adv', array('rid' => $rid, 'op' => 'post' ))}"><i class="fa fa-edit"></i>添加赞助商</a>
+					</div>
+				</div>
+			</div>
 			<form method="post" class="form-horizontal" id="formfans">
 			<input type="hidden" name="op" value="del" />
 			<div style="position:relative">

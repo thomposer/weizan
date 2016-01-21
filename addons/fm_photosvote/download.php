@@ -60,7 +60,7 @@ foreach ($list as $mid => $value) {
 		$value['weixin']=$value['weixin'];
 	}
 	$p = $mid + 1;
-	$html .= $value['id'] . "\t ,";	
+	$html .= $value['uid'] . "\t ,";	
 	$html .= $p . "\t ,";	
 	$html .= $value['realname'] . "\t ,";	
 	$html .= $value['mobile'] . "\t ,";	

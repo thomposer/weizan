@@ -5,22 +5,22 @@
  */
 defined('IN_IA') or exit('Access Denied');
 
+define('LOGGING_ERROR', 'error');
+define('LOGGING_TRACE', 'trace');
+define('LOGGING_WARNING', 'warning');
+define('LOGGING_INFO', 'info');
 
-function logging_run($log, $type = 'normal', $filename = 'run', $includePost = true) {
+function logging_run($log, $type = 'trace', $filename = 'run') {
 	global $_W;
-	$filename .= '.log';
-
-	$path = IA_ROOT . '/data/logs/';
-	if (empty($path)) {
-		return error(1, '目录创建失败');
-	}
+	$filename = IA_ROOT . '/data/logs/' . $filename . '_' . date('Ymd') . '.log';
+	
+	load()->func('file');
+	mkdirs(dirname($filename));
 
 	$logFormat = "%date %type %user %url %context";
 
-	if ($includePost) {
-		if (!empty($GLOBALS['_POST'])) {
-			$context[] = logging_implode($GLOBALS['_POST']);
-		}
+	if (!empty($GLOBALS['_POST'])) {
+		$context[] = logging_implode($GLOBALS['_POST']);
 	}
 
 	if (is_array($log)) {
@@ -37,23 +37,8 @@ function logging_run($log, $type = 'normal', $filename = 'run', $includePost = t
 		implode("\n", $context),
 	), $logFormat);
 
-	file_put_contents($path . $filename, $log . "\r\n", FILE_APPEND);
+	file_put_contents($filename, $log . "\r\n", FILE_APPEND);
 	return true;
-}
-
-
-function logging_error() {
-	
-}
-
-function logging_mkdir() {
-	$logRoot = IA_ROOT . '/data/logs/';
-	$logDir = $logRoot . date('Ymd');
-	if (mkdirs($logDir)) {
-		return $logDir . '/';
-	} else {
-		return false;
-	}
 }
 
 function logging_implode($array, $skip = array()) {

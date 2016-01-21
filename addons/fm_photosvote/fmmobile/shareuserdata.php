@@ -7,21 +7,21 @@
  */
 defined('IN_IA') or exit('Access Denied');
 		$isvisits = $_GPC['isvisits'];//是否互访
-		$fromuser =  !empty($_GPC['fromuser']) ? $_GPC['fromuser'] : $_COOKIE["user_fromuser_openid"];
-		$from_user = $_W['openid'];
-			if (empty($from_user)) {
-				$from_user = !empty($_GPC['from_user']) ? $_GPC['from_user'] : $_COOKIE["user_oauth2_openid"];
-			}			
+		//$fromuser =  !empty($_GPC['fromuser']) ? $_GPC['fromuser'] : $_COOKIE["user_fromuser_openid"];
+		//$from_user = $_W['openid'];
+		//	if (empty($from_user)) {
+		//		$from_user = !empty($_GPC['from_user']) ? $_GPC['from_user'] : $_COOKIE["user_oauth2_openid"];
+		//	}			
 		//$tfrom_user = $_GPC['tfrom_user'];
-		$tfrom_user = !empty($_GPC['tfrom_user']) ? $_GPC['tfrom_user'] : $_COOKIE["user_tfrom_user_openid"];
+		//$tfrom_user = !empty($_GPC['tfrom_user']) ? $_GPC['tfrom_user'] : $_COOKIE["user_tfrom_user_openid"];
 		$visitorsip = getip();
-		$rid = $_GPC['rid'];
+		//$rid = $_GPC['rid'];
 		
 		
 		//查询是否参与活动
 		if(!empty($fromuser)) {
 		    $usergift = pdo_fetch("SELECT * FROM ".tablename($this->table_users)." WHERE uniacid = :uniacid and from_user = :from_user and rid = :rid", array(':uniacid' => $uniacid,':from_user' => $fromuser,':rid' => $rid));
-            $user_gift = pdo_fetch("SELECT * FROM ".tablename($this->table_users)." WHERE uniacid = :uniacid and from_user = :from_user and rid = :rid", array(':uniacid' => $uniacid,':from_user' => $from_user,':rid' => $rid));
+            //$user_gift = pdo_fetch("SELECT * FROM ".tablename($this->table_users)." WHERE uniacid = :uniacid and from_user = :from_user and rid = :rid", array(':uniacid' => $uniacid,':from_user' => $from_user,':rid' => $rid));
             if(!empty($usergift)){
 			    //添加分享人气记录
 				if($fromuser!=$from_user){//自己不能给自己加人气
@@ -35,7 +35,7 @@ defined('IN_IA') or exit('Access Denied');
 							'avatar'         => $avatar,                            
 							'nickname'       => $nickname,
 		                    'rid'            => $rid,
- 		                    'uid'            => $usergift['id'],
+ 		                    'uid'            => $usergift['uid'],
 		                    'visitorsip'	 => $visitorsip,
 		                    'visitorstime'   => $now
 		                ); 
@@ -44,48 +44,18 @@ defined('IN_IA') or exit('Access Denied');
 						//给分享人添加人气量
 						$sharenum = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->table_data)." WHERE uniacid = :uniacid and fromuser = :fromuser and rid = :rid", array(':uniacid' => $uniacid,':fromuser' => $fromuser,':rid' => $rid));
 						$updatelist = array(
+							'yaoqingnum' => $usergift['yaoqingnum']+1,
 		                    'sharenum'  => $sharenum,
 		                    'sharetime' => $now
 		                );
-						pdo_update($this->table_users,$updatelist,array('id' => $usergift['id']));					
-					    //是否为互访
-						if($isvisits==1){
-						    if (!empty($user_gift)){
-							    pdo_update($this->table_data,array('isin' => 1),array('id' => $dataid));
-							    if($reply['opensubscribe']<=1){
-								    pdo_update($this->table_users,array('yaoqingnum' => $usergift['yaoqingnum']+1),array('id' => $usergift['id']));
-							    }
-							}else{
-							    pdo_update($this->table_data,array('isin' => -1),array('id' => $dataid));
-							}
-						}else{
-						    //查询是是否为参与活动人并第一次访问好友,如果是第一次为分享人添加邀请量					
-					        if (!empty($user_gift)){
-					            $one_user = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->table_data)." WHERE uniacid = :uniacid and from_user = :from_user and rid = :rid", array(':uniacid' => $uniacid,':from_user' => $from_user,':rid' => $rid));
-						        if ($one_user==1){
-						            pdo_update($this->table_data,array('isin' => 3),array('id' => $dataid));
-							        if($reply['opensubscribe']<=3){
-								        pdo_update($this->table_users,array('yaoqingnum' => $usergift['yaoqingnum']+1),array('id' => $usergift['id']));
-								    }								
-						        }else{
-						            pdo_update($this->table_data,array('isin' => 2),array('id' => $dataid));
-								    if($reply['opensubscribe']<=2){
-								        pdo_update($this->table_users,array('yaoqingnum' => $usergift['yaoqingnum']+1),array('id' => $usergift['id']));
-								    }
-						        }
-					        }else{
-							    if($reply['opensubscribe']<=0){
-								    pdo_update($this->table_users,array('yaoqingnum' => $usergift['yaoqingnum']+1),array('id' => $usergift['id']));
-							    }
-							}
-					        //查询是是否为参与活动人并第一次访问好友,如果是第一次为分享人添加邀请量
-						}
+						pdo_update($this->table_users,$updatelist,array('uid' => $usergift['uid']));	
 					}
 				}
 				
 				
 				
 				//转分享人页
+				
 				if ($_GPC['duli'] == '1') {
 					$gifturl = $_W['siteroot'] .'app/'.$this->createMobileUrl('tuser', array('rid' => $rid,'fromuser' => $fromuser,'tfrom_user' => $tfrom_user));
 				}elseif ($_GPC['duli'] == '2') {
@@ -93,8 +63,9 @@ defined('IN_IA') or exit('Access Denied');
 				}elseif ($_GPC['duli'] == '3') {
 					$gifturl = $_W['siteroot'] .'app/'.$this->createMobileUrl('paihang', array('rid' => $rid,'fromuser' => $fromuser,'tfrom_user' => $tfrom_user));					
 				}else {
-					$gifturl = $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvoteview', array('rid' => $rid,'fromuser' => $fromuser));
+					$gifturl = $_W['siteroot'] .'app/'.$this->createMobileUrl('tuser', array('rid' => $rid,'fromuser' => $fromuser,'tfrom_user' => $tfrom_user));
 				}
+
 				header("location:$gifturl");
 				exit;
 			}else{
@@ -108,7 +79,7 @@ defined('IN_IA') or exit('Access Denied');
 						'avatar'         => $avatar,                            
 						'nickname'       => $nickname,
 						'rid'            => $rid,
-						'uid'            => $usergift['id'],
+						'uid'            => $usergift['uid'],
 						'visitorsip'	 => $visitorsip,
 						'visitorstime'   => $now
 					); 
@@ -120,9 +91,9 @@ defined('IN_IA') or exit('Access Denied');
 				}elseif ($_GPC['duli'] == '2') {
 					$mygifturl = $_W['siteroot'] .'app/'.$this->createMobileUrl('tuserphotos', array('rid' => $rid,'tfrom_user' => $tfrom_user,'fromuser' => $fromuser));	
 				}elseif ($_GPC['duli'] == '3') {
-					$gifturl = $_W['siteroot'] .'app/'.$this->createMobileUrl('paihang', array('rid' => $rid,'fromuser' => $fromuser,'tfrom_user' => $tfrom_user));							
+					$mygifturl = $_W['siteroot'] .'app/'.$this->createMobileUrl('paihang', array('rid' => $rid,'fromuser' => $fromuser,'tfrom_user' => $tfrom_user));							
 				}else {
-					$mygifturl = $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvoteview', array('rid' => $rid));
+					$mygifturl = $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvote', array('rid' => $rid));
 				}
 			    //转自己页
 			    

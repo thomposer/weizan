@@ -10,6 +10,7 @@ function template_compat($filename) {
 		'home/home' => 'index',
 		'header' => 'common/header',
 		'footer' => 'common/footer',
+		'footer-base' => 'common/footer-base',
 		'slide' => 'common/slide',
 	);
 	if(!empty($mapping[$filename])) {
@@ -29,6 +30,7 @@ function template_page($id, $flag = TEMPLATE_DISPLAY) {
 	}
 	$page['params'] = json_decode($page['params'], true);
 	$GLOBALS['title'] = $page['title'];
+	$GLOBALS['_share'] = array('desc' => $page['description'], 'title' => $page['title'], 'imgUrl' => tomedia($page['params']['0']['params']['thumb']));;
 
 	$compile = IA_ROOT . "/data/tpl/app/{$id}.{$_W['template']}.tpl.php";
 	$path = dirname($compile);
@@ -427,6 +429,11 @@ function site_quickmenu() {
 		return false;
 	} else {
 		$multiid = intval($_GPC['t']);
+		if (empty($multiid) && !empty($_GPC['__multiid'])) {
+			$multiid = intval($_GPC['__multiid']);
+		} else {
+			isetcookie('__multiid', '');
+		}
 		if (empty($multiid)) {
 			$setting = uni_setting($_W['uniacid'], array('default_site'));
 			$multiid = $setting['default_site'];

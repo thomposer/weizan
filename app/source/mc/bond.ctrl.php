@@ -216,7 +216,7 @@ if ($do == 'card') {
 		}
 		$check = mc_check($data);
 		if(is_error($check)) {
-			message($check['message'], '', 'error');
+			message($check['message'], referer(), 'error');
 		}
 		
 		$sql = 'SELECT COUNT(*)  FROM ' . tablename('mc_card_members') . " WHERE `uid` = :uid AND `cid` = :cid AND uniacid = :uniacid";
@@ -330,7 +330,7 @@ if ($do == 'mycard') {
 if($do == 'consume') {
 	load()->model('card');
 	$setting = card_setting();
-		$stores = pdo_fetchall('SELECT id,business_name FROM ' . tablename('activity_stores') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']), 'id');
+	$stores = pdo_fetchall('SELECT id,business_name FROM ' . tablename('activity_stores') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']), 'id');
 
 	if(checksubmit()) {
 		$credit = floatval($_GPC['credit']);
@@ -342,13 +342,13 @@ if($do == 'consume') {
 		}
 				if($setting['discount_type'] > 0 && !empty($setting['discount'])) {
 			$discount = $setting['discount'][$_W['member']['groupid']];
-			if(!empty($discount['condition']) && !empty($discount['discount']) && $credit >= $discount['condition']) {
+			if(!empty($discount['discount']) && $credit >= $discount['condition']) {
 				if($setting['discount_type'] == 1) {
 					$discount_credit = $credit - $discount['discount'];
 					$discount_str = "，该会员属于【{$_W['member']['groupname']}】，可享受【满{$discount['condition']}元减{$discount['discount']}元】，最终支付【{$discount_credit}】元";
 				} else {
 					$rate = $discount['discount'] * 10;
-					$discount_credit = $credit * $rate;
+					$discount_credit = $credit * $discount['discount'];
 					$discount_str = "，该会员属于【{$_W['member']['groupname']}】，可享受【满{$discount['condition']}元打{$rate}折】，最终支付【{$discount_credit}】元";
 				}
 				if($discount_credit < 0) {

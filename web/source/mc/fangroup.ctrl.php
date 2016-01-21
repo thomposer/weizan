@@ -1,39 +1,18 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('mc_fangroup');
+load()->model('mc');
 $dos = array('post', 'display', 'del');
 $do = !empty($_GPC['do']) && in_array($do, $dos) ? $do : 'display';
 
 if($do == 'display') {
-	$account = WeAccount::create($_W['acid']);
-	$groups = $account->fetchFansGroups();
-	if(is_error($groups)) {
-		message($groups['message'], url('home/welcome/mc'), 'error');
-	} else {
-		$exist = pdo_fetch('SELECT * FROM ' . tablename('mc_fans_groups') . ' WHERE uniacid = :uniacid AND acid = :acid', array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid']));
-		if(empty($exist)) {
-			if(!empty($groups['groups'])) {
-				$groups_tmp = array();
-				foreach($groups['groups'] as $da) {
-					$groups_tmp[$da['id']] = $da;
-				}
-				$data = array('acid' => $_W['acid'], 'uniacid' => $_W['uniacid'], 'groups' => iserializer($groups_tmp));
-				pdo_insert('mc_fans_groups', $data);
-			}
-		} else {
-			if(!empty($groups['groups'])) {
-				$groups_tmp = array();
-				foreach($groups['groups'] as $da) {
-					$groups_tmp[$da['id']] = $da;
-				}
-				$data = array('groups' => iserializer($groups_tmp));
-				pdo_update('mc_fans_groups', $data, array('uniacid' => $_W['uniacid'], 'acid' => $_W['acid']));
-			}
-		}
+	$groups = mc_fans_groups(true);
+	if(empty($groups)) {
+		message($groups['message'], '', 'error');
 	}
 }
 

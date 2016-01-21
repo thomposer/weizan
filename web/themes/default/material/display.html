@@ -162,7 +162,7 @@
 							<div class="panel-body">
 								<div class="img">
 									<i class="default"></i>
-									<a href="{php echo $item['url']}" target="_blank"><img src="{php echo media2local($item['thumb_media_id'])}"></a>
+									<a href="{php echo $item['url']}" target="_blank"><img src="{php echo url('utility/wxcode/image', array('attach' => $item['thumb_url']))}"></a>
 									<span class="text-left">{$item['title']}</span>
 								</div>
 							</div>
@@ -175,7 +175,7 @@
 										<h4>{$item['title']}</h4>
 									</div>
 									<div class="img">
-										<img src="{php echo media2local($item['thumb_media_id'])}">
+										<img src="{php echo url('utility/wxcode/image', array('attach' => $item['thumb_url']))}">
 										<i class="default">缩略图</i>
 									</div>
 								</a>

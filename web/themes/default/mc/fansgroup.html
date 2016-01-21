@@ -23,8 +23,8 @@
 				</tr>
 			</thead>
 			<tbody>
-				{if !empty($groups['groups'])}
-					{loop $groups['groups'] $item}
+				{if !empty($groups)}
+					{loop $groups $item}
 						<tr>
 							<input type="hidden" name="groupid[]" value="{$item['id']}">
 							<input type="hidden" name="count[]" value="{$item['count']}">

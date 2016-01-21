@@ -58,7 +58,7 @@ defined('IN_IA') or exit('Access Denied');
 			exit;
 		}else{
 			$from_user = $_W['openid'];
-			if($from_user) {
+			if(!empty($from_user)) {
 				//取得openid后查询是否为高级号
 				if ($serverapp==4) {//认证服务号查询是否关注
 					$profile = pdo_fetch("SELECT follow FROM ".tablename('mc_mapping_fans')." WHERE uniacid = :uniacid and openid = :from_user", array(':uniacid' => $uniacid,':from_user' => $from_user));
@@ -77,12 +77,24 @@ defined('IN_IA') or exit('Access Denied');
 							$avatar = $info['headimgurl'];
 							$nickname = $info['nickname'];
 							$sex = $info['sex'];
+							
+
+							if ($cfg['oauthtype'] == 2) {
+								$unionid = $info['unionid'];
+								$realopenid = pdo_fetch("SELECT * FROM ".tablename('mc_mapping_fans') . " WHERE uniacid = '{$uniacid}' AND `unionid` = '{$unionid}'");
+								if (!empty($realopenid)) {
+									$openid = $realopenid['openid'];
+							    	$follow = $realopenid['follow'];
+								}
+								setcookie("user_oauth2_follow", $follow, time()+3600*24*7);
+								setcookie("user_oauth2_unionid", $unionid, time()+3600*24*7);
+							}
+							
 							//设置cookie信息
 							setcookie("user_oauth2_avatar", $avatar, time()+3600*24*7);
 							setcookie("user_oauth2_nickname", $nickname, time()+3600*24*7);
 							setcookie("user_oauth2_sex", $sex, time()+3600*24*7);
 							setcookie("user_oauth2_openid", $from_user, time()+3600*24*7);
-							
 							if(!empty($fromuser) && !isset($_COOKIE["user_fromuser_openid"])){
 								setcookie("user_fromuser_openid", $fromuser, time()+3600*24*7*30);
 							}

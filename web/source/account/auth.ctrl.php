@@ -30,13 +30,13 @@ if ($do == 'forward') {
 		exit;
 	}
 	if ($account_info['authorizer_info']['service_type_info'] = '0' || $account_info['authorizer_info']['service_type_info'] == '1') {
-		if ($account_info['authorizer_info']['verify_type_info'] > -1) {
+		if ($account_info['authorizer_info']['verify_type_info']['id'] > '-1') {
 			$level = '3';
 		} else {
 			$level = '1';
 		}
 	} elseif ($account_info['authorizer_info']['service_type_info'] = '2') {
-		if ($account_info['authorizer_info']['verify_type_info'] > -1) {
+		if ($account_info['authorizer_info']['verify_type_info']['id'] > '-1') {
 			$level = '4';
 		} else {
 			$level = '2';
@@ -101,16 +101,16 @@ if ($do == 'forward') {
 	$acid = pdo_insertid();
 
 	$subaccount_insert = array(
-			'acid' => $acid,
-			'uniacid' => $uniacid,
-			'name' => $account_insert['name'],
-			'account' => $account_info['authorizer_info']['alias'],
-			'original' => $account_info['authorizer_info']['user_name'],
-			'level' => $level,
-			'key' => $auth_appid,
-			'auth_refresh_token' => $auth_refresh_token,
-			'encodingaeskey' => $account_platform->encodingaeskey,
-			'token' => $account_platform->token,
+		'acid' => $acid,
+		'uniacid' => $uniacid,
+		'name' => $account_insert['name'],
+		'account' => $account_info['authorizer_info']['alias'],
+		'original' => $account_info['authorizer_info']['user_name'],
+		'level' => $level,
+		'key' => $auth_appid,
+		'auth_refresh_token' => $auth_refresh_token,
+		'encodingaeskey' => $account_platform->encodingaeskey,
+		'token' => $account_platform->token,
 	);
 	pdo_insert('account_wechats', $subaccount_insert);
 	if(is_error($acid)) {
@@ -145,6 +145,7 @@ if ($do == 'forward') {
 	cache_delete("accesstoken:{$acid}");
 	cache_delete("jsticket:{$acid}");
 	cache_delete("cardticket:{$acid}");
+	cache_delete("account:auth:refreshtoken:{$acid}");
 	message('更改公众号授权接入成功', url('account/display'), 'success');
 } elseif ($do == 'ticket') {
 	$post = file_get_contents('php://input');

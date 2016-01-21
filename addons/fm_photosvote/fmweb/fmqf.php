@@ -8,7 +8,6 @@ defined('IN_IA') or exit('Access Denied');
 
 	$rid = intval($_GPC['rid']);
 if($operation == 'display') {
-	load()->func('tpl');
 	$rid = intval($_GPC['rid']);
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 20;

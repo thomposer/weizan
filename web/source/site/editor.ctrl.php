@@ -18,8 +18,7 @@ if ($do == 'design') {
 		if (empty($params)) {
 			message('请您先设计手机端页面.', referer(), 'error');
 		}
-				$params = str_replace('&nbsp;', '#nbsp;', $params);
-		$params = json_decode(str_replace('#nbsp;', '&nbsp;', html_entity_decode(urldecode($params))), true);
+		$params = json_decode(ihtml_entity_decode($params), true);
 		if (empty($params)) {
 			message('请您先设计手机端页面.', referer(), 'error');
 		}
@@ -83,7 +82,7 @@ if ($do == 'design') {
 		if (empty($params)) {
 			message('请您先设计手机端页面.', '', 'error');
 		}
-		$params = json_decode(html_entity_decode(urldecode($params)), true);
+		$params = json_decode(ihtml_entity_decode($params), true);
 		if (empty($params)) {
 			message('请您先设计手机端页面.', '', 'error');
 		}
@@ -119,7 +118,7 @@ if ($do == 'design') {
 			);
 			site_cover($cover);
 		}
-				$nav = json_decode(html_entity_decode(urldecode($_GPC['wapeditor']['nav'])), true);
+				$nav = json_decode(ihtml_entity_decode($_GPC['wapeditor']['nav']), true);
 		$ids = array(0);
 		if (!empty($nav)) {
 			foreach ($nav as $row) {
@@ -167,7 +166,7 @@ if ($do == 'design') {
 	$_W['page']['title'] = '快捷菜单 - 站点管理 - 微站功能';
 	$multiid = intval($_GPC['multiid']);
 	$type = intval($_GPC['type']) ? intval($_GPC['type']) : 2;
-	
+
 	if ($_GPC['wapeditor']) {
 		$params = $_GPC['wapeditor']['params'];
 		if (empty($params)) {
@@ -181,7 +180,7 @@ if ($do == 'design') {
 		$data = array(
 			'uniacid' => $_W['uniacid'],
 			'multiid' => $multiid,
-			'title' => '快捷菜单',
+			'title' => '底部菜单',
 			'description' => '',
 			'status' => intval($_GPC['status']),
 			'type' => $type,
@@ -189,14 +188,18 @@ if ($do == 'design') {
 			'html' => $html,
 			'createtime' => TIMESTAMP,
 		);
-		$id = pdo_fetchcolumn("SELECT id FROM ".tablename('site_page')." WHERE multiid = :multiid AND type = :type", array(':multiid' => $multiid, ':type' => $type));
+		if ($type == '4') {
+			$id = pdo_fetchcolumn("SELECT id FROM ".tablename('site_page')." WHERE uniacid = :uniacid AND type = :type", array(':uniacid' => $_W['uniacid'], ':type' => $type));
+		} else {
+			$id = pdo_fetchcolumn("SELECT id FROM ".tablename('site_page')." WHERE multiid = :multiid AND type = :type", array(':multiid' => $multiid, ':type' => $type));
+		}
 		if (!empty($id)) {
 			pdo_update('site_page', $data, array('id' => $id));
 		} else {
 			pdo_insert('site_page', $data);
 			$id = pdo_insertid();
 		}
-		message('快捷菜单保存成功.', url('site/editor/quickmenu', array('multiid' => $multiid, 'type' => $type)), 'success');
+		message('底部菜单保存成功.', url('site/editor/quickmenu', array('multiid' => $multiid, 'type' => $type)), 'success');
 	}
 	if ($type == '4') {
 		$page = pdo_fetch("SELECT * FROM ".tablename('site_page')." WHERE type = :type AND uniacid = :uniacid", array(':type' => $type, ':uniacid' => $_W['uniacid']));
@@ -216,7 +219,7 @@ if ($do == 'design') {
 			$v['createtime'] = date('Y-m-d H:i', $v['createtime']);
 			$v['name'] = cutstr($v['name'], 10);
 		}
-		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('site_article'));
+		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('site_article').' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
 		$result['pager'] = pagination($total, $pindex, $psize, '', array('before' => '2', 'after' => '3', 'ajaxcallback'=>'null'));
 	}
 	message($result, '', 'ajax');
@@ -233,14 +236,11 @@ if ($do == 'design') {
 	$result = array();
 	$psize = 10;
 	$pindex = max(1, intval($_GPC['page']));
-	$result['list'] = pdo_fetchall("SELECT id, title, thumb, description, content, author, incontent, url, createtime FROM ".tablename('news_reply')." WHERE uniacid = :uniacid ORDER BY displayorder DESC, id  LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':uniacid' => $_W['uniacid']), 'id');
+	$sql = "SELECT n.id, n.title FROM ". tablename('rule')."AS r,". tablename('news_reply'). " AS n WHERE r.id = n.rid AND r.module = :news AND r.uniacid = :uniacid ORDER BY n.displayorder DESC LIMIT ". ($pindex - 1) * $psize . ',' . $psize;
+	$result['list'] = pdo_fetchall($sql, array(':news' => 'news', ':uniacid' => $_W['uniacid']), 'id');
 	if (!empty($result['list'])) {
-		foreach ($result['list'] as $k => &$v) {
-			$v['thumb_url'] = tomedia($v['thumb']);
-			$v['createtime'] = date('Y-m-d H:i', $v['createtime']);
-			$v['title'] = cutstr($v['title'], 10);
-		}
-		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('news_reply'));
+		$sql = "SELECT COUNT(*) FROM ". tablename('rule')."AS r,". tablename('news_reply'). " AS n WHERE r.id = n.rid AND r.module = :news AND r.uniacid = :uniacid ";
+		$total = pdo_fetchcolumn($sql, array(':news' => 'news', ':uniacid' => $_W['uniacid']));
 		$result['pager'] = pagination($total, $pindex, $psize, '', array('before' => '2', 'after' => '3', 'ajaxcallback'=>'null'));
 	}
 	message($result, '', 'ajax');
@@ -248,12 +248,12 @@ if ($do == 'design') {
 	$result = array();
 	$psize = 10;
 	$pindex = max(1, intval($_GPC['page']));
-	$result['list'] = pdo_fetchall("SELECT * FROM ".tablename('site_page')." WHERE uniacid = :uniacid WHERE type = '2' ORDER BY id DESC  LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':uniacid' => $_W['uniacid']), 'id');
+	$result['list'] = pdo_fetchall("SELECT * FROM ".tablename('site_page')." WHERE uniacid = :uniacid AND type = '2' ORDER BY id DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':uniacid' => $_W['uniacid']), 'id');
 	if (!empty($result['list'])) {
 		foreach ($result['list'] as $k => &$v) {
 			$v['createtime'] = date('Y-m-d H:i', $v['createtime']);
 		}
-		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('site_page'));
+		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('site_page'). ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
 		$result['pager'] = pagination($total, $pindex, $psize, '', array('before' => '2', 'after' => '3', 'ajaxcallback'=>'null'));
 	}
 	message($result, '', 'ajax');

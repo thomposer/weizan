@@ -109,13 +109,19 @@
             <div class="custom-richtext js-view-image-list">
                 {$detail['content']}
             </div>
+            <!--赞赏-->
+            {if $detail['isadmire']==0}
+
+                {template 'include_zanshang'}
+
+            {/if}
 
             <div class="rich_media_tool" id="js_toobar">
                 {if $detail['outLink']}
                 <a class="media_tool_meta meta_primary"  href="{$detail['outLink']}">阅读原文</a>
                 {/if}
                 <div class="media_tool_meta tips_global meta_primary">阅读
-                    <span id="readNum">{$detail['clickNum']}</span>
+                    <span id="readNum">{if $detail['clickNum']>=100000}100000+{else}{$detail['clickNum']}{/if}</span>
                 </div>
 
                <!-- <span class="media_tool_meta meta_primary tips_global meta_praise" id="like">
@@ -138,79 +144,10 @@
                 </section>
             </footer>
 
-            {if $set && $set['iscomment']=='1'}
-            <div class="rich_media_extra" id="js_cmt_area" style="display: block;">
-                <div class="discuss_container" id="js_cmt_main" style="display: block;">
-                    <div class="rich_tips with_line title_tips discuss_title_line">
-                        <span class="tips">精选评论</span>
-                    </div>
-                    <p class="tips_global tc title_bottom_tips" id="js_cmt_nofans1" style="display:none;">关注该公众号可参与评论</p>
-                    <p class="discuss_icon_tips title_bottom_tips tr" id="js_cmt_addbtn1" style="display: block;">
-                        <a href="{php echo $this->createMobileUrl("comment", array("artid" => $detail['id'],'openid'=>$openid))}">写评论
-                        <img class="icon_edit" src="http://res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/icon/appmsg/icon_edit25ded2.png" alt="">
-                        </a>
-                    </p>
-                    <ul class="discuss_list" id="js_cmt_list">
-                        {loop $cList $comment}
+            {if $detail && $detail['iscomment']=='0'}
 
-                        <li class="discuss_item" id="{$comment['id']}">
-                            <div class="discuss_opr">
-                                <span class="media_tool_meta tips_global meta_praise js_comment_praise " data-status="0" data-content-id="{$comment['id']}">
-                                    <i class="icon_praise_gray"></i>
-                                    <span class="praise_num">{$comment['praise_num']} </span>
-                                </span>
-                            </div>
-
-                            <div class="user_info">
-                                <strong class="nickname">{$comment['author']}</strong>
-                                {if $comment['thumb']}<img class="avatar" src="{$comment['thumb']}">{/if}
-                            </div>
-                            <div class="discuss_message"><span class="discuss_status"></span>
-                                <div class="discuss_message_content">
-                                    {$comment['js_cmt_input']}
-                                </div>
-                            </div>
-                            <p class="discuss_extra_info"> {php echo get_timelineauction($comment['createtime'])} </p>
-                            {if $comment['js_cmt_reply']}
-                            <div class="reply_result">
-                                <div class="nickname">作者回复</div>
-                                <div class="discuss_message">
-                                    <div class="discuss_message_content">{$comment['js_cmt_reply']} </div>
-                                </div>
-                                <p class="discuss_extra_info"> {php echo get_timelineauction($comment['updatetime'])}</p>
-                            </div>
-                            {/if}
-                        </li>
-                        {/loop}
-                    </ul>
-                </div>
-
-                <div class="tips_global rich_split_tips tc" id="js_cmt_nofans2" style="display:none;">
-                    关注该公众号可参与评论
-                </div>
-
-                <p class="discuss_icon_tips rich_split_tips tr" id="js_cmt_addbtn2" style="display:none">
-                    <a href="{php echo $this->createMobileUrl("comment", array("artid" => $detail['id'],'openid'=>$openid))}">写评论
-                        <img class="icon_edit" src="http://res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/icon/appmsg/icon_edit25ded2.png" alt="">
-                    </a>
-                </p>
-
-                <p class="rich_split_tips tc tips_global" id="js_cmt_tips" style="display: none;"></p>
-                <div class="rich_tips tips_global loading_tips" id="js_cmt_loading" style="display: none;">
-                    <img src="http://res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/icon/common/icon_loading_white2805ea.gif" class="rich_icon icon_loading_white" alt="">
-                    <span class="tips">加载中</span>
-                </div>
-                <div class="rich_tips with_line tips_global" id="js_cmt_statement" style="display: block;">
-                    <span class="tips">以上评论由公众帐号筛选后显示</span>
-                </div>
-
-                <p class="rich_split_tips tc" id="js_cmt_qa" style="display: block;">
-                    <a href="http://kf.qq.com/touch/sappfaq/150211YfyMVj150313qmMbyi.html?scene_id=kf264">
-                        了解评论功能详情
-                    </a>
-                </p>
-            </div>
-{/if}
+            {template 'include_comment'}
+            {/if}
 
             <!-- 魔方 -->
             <!-- iphone和Android下表格解析不一致，暂时分开处理 -->
@@ -296,9 +233,7 @@
                     if (!window._global.mp_data || $qrcode.length <= 0 || ( window.zenjs.UA.isMobile() && !window.zenjs.UA.isIPad() )) {
                         return false;
                     }
-
                     var followQrcodeSrc = 'http://open.weixin.qq.com/qr/code/?username='+ window._global.mp_data.mp_weixin;
-                    //var imgsrc="{$_W['attachurl']}qrcode_{$_W['acid']}.jpg?time=1428632464";
                     var img = new Image();
                     img.width = 158;
                     img.height = 158;
@@ -320,7 +255,6 @@
     <div class="footer">
         <div class="copyright">
             <div class="ft-links">
-                <!--<a href="http://wap.koudaitong.com/v2/showcase/homepage?kdt_id=54023" target="_blank">店铺主页</a>-->
                 {if $detail['tel']}<a href="tel:{$detail['tel']}" >一键拨号</a>{/if}
                 <a href="javascript:;" class="js-open-follow">关注我们</a>
 

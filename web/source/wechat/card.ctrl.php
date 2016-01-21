@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $dos = array('module', 'coupon', 'location', 'discount', 'display', 'del', 'sync', 'modifystock', 'toggle', 'qr', 'record', 'cash', 'gift', 'groupon', 'general_coupon');
@@ -481,7 +481,7 @@ if($do == 'cash') {
 		$out['errno'] = 1;
 		$out['error'] = '';
 
-		$post['logo_url'] = $setting['logourl'];
+		$post['logo_url'] = empty($post['logo_url']) ? $setting['logourl'] : trim($post['logo_url']);
 		$base = new Card('CASH', $post);
 
 		if(is_error($base->cash->base_info)) {

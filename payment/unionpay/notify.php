@@ -1,7 +1,7 @@
 <?php
 /**
  * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 error_reporting(0);
 define('IN_MOBILE', true);
@@ -39,12 +39,7 @@ if (!empty($_POST) && verify($_POST) && $_POST['respMsg'] == 'success') {
 				if($log['is_usecard'] == 1 && $log['card_type'] == 2) {
 			$now = time();
 			$log['card_id'] = intval($log['card_id']);
-			$iscard = pdo_fetchcolumn('SELECT iscard FROM ' . tablename('modules') . ' WHERE name = :name', array(':name' => $log['module']));
-			$condition = '';
-			if($iscard == 1) {
-				$condition = " AND grantmodule = '{$log['module']}'";
-			}
-			pdo_query('UPDATE ' . tablename('activity_coupon_record') . " SET status = 2, usetime = {$now}, usemodule = '{$log['module']}' WHERE uniacid = :aid AND couponid = :cid AND uid = :uid AND status = 1 {$condition} LIMIT 1", array(':aid' => $_W['uniacid'], ':uid' => $log['openid'], ':cid' => $log['card_id']));
+			pdo_query('UPDATE ' . tablename('activity_coupon_record') . " SET status = 2, usetime = {$now}, usemodule = '{$log['module']}' WHERE uniacid = :aid AND couponid = :cid AND uid = :uid AND status = 1 LIMIT 1", array(':aid' => $_W['uniacid'], ':uid' => $log['openid'], ':cid' => $log['card_id']));
 		}
 
 		$site = WeUtility::createModuleSite($log['module']);

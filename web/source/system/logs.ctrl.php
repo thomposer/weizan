@@ -1,10 +1,10 @@
 <?php 
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-$dos = array('wechat', 'system', 'database');
+$dos = array('wechat', 'system', 'database','sms');
 $do = in_array($do, $dos) ? $do : 'wechat';
 
 $params = array();
@@ -15,7 +15,7 @@ if ($_GPC['time']) {
 	$endtime = strtotime($_GPC['time']['end']);
 	$timewhere = ' AND `createtime` >= :starttime AND `createtime` < :endtime';
 	$params[':starttime'] = $starttime;
-	$params[':endtime'] = $endtime;
+	$params[':endtime'] = $endtime + 86400;
 }
 
 if ($do == 'wechat') {
@@ -64,6 +64,18 @@ if ($do == 'database') {
 		$list[$key]['createtime'] = date('Y-m-d H:i:s', $value['createtime']);
 	}
 		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('core_performance'). $where . $timewhere , $params);
+	$pager = pagination($total, $pindex, $psize);
+}
+if ($do == 'sms') {
+	if (!empty($_GPC['mobile'])) {
+		$timewhere .= ' AND `mobile` LIKE :mobile ';
+		$params[':mobile'] = "%{$_GPC['mobile']}%";
+	}
+	$pindex = max(1, intval($_GPC['page']));
+	$psize = 40;
+	$params[':uniacid'] = $_W['uniacid'];
+	$list = pdo_fetchall("SELECT * FROM". tablename('core_sendsms_log'). " WHERE uniacid = :uniacid ". $timewhere. " ORDER BY id DESC LIMIT ". ($pindex-1)*$psize . ','. $psize, $params);
+	$total = pdo_fetchcolumn("SELECT COUNT(*) FROM". tablename('core_sendsms_log'). " WHERE uniacid = :uniacid". $timewhere, $params);
 	$pager = pagination($total, $pindex, $psize);
 }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $eid = intval($_GPC['eid']);
@@ -46,7 +46,7 @@ if(!$entry['direct']) {
 	$frames = $frames[FRAME];
 }
 
-if(!empty($entry['module'])) {
+if(!empty($entry['module']) && !empty($_W['founder'])) {
 	load()->model('extension');
 	if(ext_module_checkupdate($entry['module'])) {
 		message('系统检测到该模块有更新，请点击“<a href="' . url('extension/module/upgrade', array('m' => $entry['module'])) . '">更新模块</a>”后继续使用！', '', 'error');

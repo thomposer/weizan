@@ -19,12 +19,15 @@ defined('IN_IA') or exit('Access Denied');
 			//	setcookie("user_diqu_".$uniacid, $diqu, time()+3600*2);
 			//	setcookie("user_local_".$uniacid, $nowlocal, time()+3600*2);
 			//}
-			if (!empty($reply['iplocaldes'])) {
+			if (!empty($diqu) || !empty($nowlocal) ) {
+				if (empty($diqu)) {
+					$diqu = '未获取到你的位置信息，请返回或者重新进入，在弹出的获取位置信息处，点击确定。';
+				}
 				$str = array('#限制地区#'=>$diqu,'#用户地区#'=>$nowlocal);
 				$des = strtr($reply['iplocaldes'],$str);
 				
 			}else {
-				$des = "你所在的地区不在本次投票地区。<br />本次投票地区： <br /><span class=\"text-info\">".$diqu."</span><br /> 内";
+				$des = "未获取到你的位置信息，请返回或者重新进入，在弹出的获取位置信息处，点击确定。";
 			}
 
 			

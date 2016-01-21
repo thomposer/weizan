@@ -1,15 +1,13 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('platform_menu');
-$current['designer'] = ' class="current"';
-$acc = account_fetch($_W['acid']);
-$acc = array_elements(array('name', 'acid', 'level'), $acc);
-
-$dos = array('display', 'save', 'remove', 'refresh', 'search_key');
+load()->model('mc');
+$dos = array('display', 'save', 'remove', 'refresh', 'search_key', 'add', 'push');
+$do = in_array($do, $dos) ? $do : 'display';
 if($_W['isajax']) {
 	if($do == 'search_key') {
 		$condition = '';
@@ -33,82 +31,301 @@ if($_W['isajax']) {
 	}
 }
 
-$do = in_array($do, $dos) ? $do : 'display';
-
-if($do == 'remove') {
-	$flag = true;
+if($do == 'display') {
+	$_W['page']['title'] = '菜单设计器 - 自定义菜单 - 高级功能';
+	set_time_limit(0);
 	$account = WeAccount::create($_W['acid']);
-	$update = $account->menuQuery();
-	if($flag && is_array($update)) {
-		$update[] = array('createtime' => time());
-		pdo_update('uni_settings', array('menuset' => base64_encode(iserializer($update))), array('uniacid' => $_W['uniacid']));
-		$flag = false;
+	$result = $account->menuQuery();
+	if(is_error($result)) {
+		message($result['message'], '', 'error');
 	}
-	$ret = $account->menuDelete();
-	if(is_error($ret)) {
-		exit(json_encode($ret));
-	}
-	cache_delete("unisetting:{$_W['uniacid']}");
-	exit('success');
-}
-
-if($do == 'save') {
-	if ($post['type'] == 'history') {
-				$sql = 'SELECT `menuset` FROM ' . tablename('uni_settings'). ' WHERE `uniacid` = :uniacid';
-		$post['menus'] = pdo_fetchcolumn($sql, array(':uniacid' => $_W['uniacid']));
-		$post['menus'] = iunserializer(base64_decode($post['menus']));
-		if(empty($post['menus']) || !is_array($post['menus'])){
-			exit(json_encode(error('-1','菜单数据历史记录错误.')));
-		}
-		unset($post['menus'][count($post['menus']) - 1]);
-	}
-
-	if (!empty($post['menus'])) {
-		foreach ($post['menus'] as &$m) {
-			$m['title'] = preg_replace_callback('/\:\:([0-9a-zA-Z_-]+)\:\:/', create_function('$matches', 'return utf8_bytes(hexdec($matches[1]));'), $m['title']);
-			if (!empty($m['subMenus'])) {
-				foreach ($m['subMenus'] as &$subm) {
-					$subm['title'] = preg_replace_callback('/\:\:([0-9a-zA-Z_-]+)\:\:/', create_function('$matches', 'return utf8_bytes(hexdec($matches[1]));'), $subm['title']);
+	pdo_update('uni_account_menus', array('status' => 0), array('uniacid' => $_W['uniacid']));
+	$default_menu = $result['menu'];
+	if(!empty($default_menu)) {
+		$condition_menu = $result['conditionalmenu'];
+		$condition_menu[] = array(
+			'button' => $default_menu['button'],
+			'type' => 1,
+			'matchrule' => array(),
+		);
+		if(!empty($condition_menu)) {
+			foreach($condition_menu as $menu) {
+				$data = array(
+					'uniacid' => $_W['uniacid'],
+					'type' => empty($menu['matchrule']) ? 1 : 3,
+					'group_id' => isset($menu['matchrule']['group_id']) ? $menu['matchrule']['group_id'] : -1,
+					'sex' => $menu['matchrule']['sex'],
+					'client_platform_type' => $menu['matchrule']['client_platform_type'],
+					'area' => trim($menu['matchrule']['country']) . trim($menu['matchrule']['province']) . trim($menu['matchrule']['city']),
+					'data' => base64_encode(iserializer($menu)),
+					'menuid' => $menu['menuid'],
+					'status' => 1,
+				);
+				if(empty($menu['matchrule'])) {
+					$id = pdo_fetchcolumn('SELECT id FROM ' . tablename('uni_account_menus') . ' WHERE uniacid = :uniacid AND type = 1', array(':uniacid' => $_W['uniacid']));
+				} else {
+					$id = pdo_fetchcolumn('SELECT id FROM ' . tablename('uni_account_menus') . ' WHERE uniacid = :uniacid AND menuid = :menuid', array(':uniacid' => $_W['uniacid'], ':menuid' => $menu['menuid']));
+				}
+				if(!empty($id)) {
+					pdo_update('uni_account_menus', $data, array('uniacid' => $_W['uniacid'], 'id' => $id));
+				} else {
+					pdo_insert('uni_account_menus', $data);
 				}
 			}
 		}
 	}
-	$menuset = $menus = $post['menus'];
-	
-	if ($post['type'] != 'history') {
-		$menuset[] = array('createtime' => time());
-		pdo_update('uni_settings', array('menuset' => base64_encode(iserializer($menuset))), array('uniacid' => $_W['uniacid']));
+
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('uni_account_menus') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
+	$data = pdo_fetchall('SELECT * FROM ' . tablename('uni_account_menus') . ' WHERE uniacid = :uniacid ORDER BY type ASC, id DESC', array(':uniacid' => $_W['uniacid']));
+	$names = array(
+		'sex' => array(
+			0 => '不限',
+			1 => '男',
+			2 => '女',
+		),
+		'client_platform_type' => array(
+			0 => '不限',
+			1 => '苹果',
+			2 => '安卓',
+			3 => '其他'
+		),
+	);
+	$groups = mc_fans_groups(true);
+	if(empty($groups)) {
+		message($groups['message'], '', 'error');
 	}
-	$account = WeAccount::create($_W['acid']);
-	$ret = $account->menuCreate($menus);
-	if(is_error($ret)) {
-		exit(json_encode($ret));
-	}
-	cache_delete("unisetting:{$_W['uniacid']}");
-	exit('success');
+	template('platform/menu');
 }
 
-if($do == 'display') {
-	$_W['page']['title'] = '菜单设计器 - 自定义菜单 - 高级功能';
-	if(empty($menus) || !is_array($menus)) {
-		$account = WeAccount::create($_W['acid']);
-		$menus = $account->menuQuery();
+if($do == 'push') {
+	$id = intval($_GPC['id']);
+	$data = pdo_get('uni_account_menus', array('uniacid' => $_W['uniacid'], 'id' => $id));
+	if(empty($data)) {
+		message('菜单不存在或已删除', referer(), 'error');
 	}
-	if (is_error($menus)) {
-		message($menus['message'], '', 'error');
+
+	$post = iunserializer(base64_decode($data['data']));
+	if(empty($post)) {
+		message('菜单数据错误', referer(), 'error');
 	}
-	$sql = 'SELECT `menuset` FROM ' . tablename('uni_settings'). ' WHERE `uniacid` = :uniacid';
-	$hmenus = array();
-	$hmenu = pdo_fetchcolumn($sql, array(':uniacid' => $_W['uniacid']));
-	if (!empty($hmenu)) {
-		$hmenus = iunserializer(base64_decode($hmenu));
-		$createtime = !empty($hmenus) && is_array($hmenus) ? array_pop($hmenus) : '';
+	$menu = array();
+	if(!empty($post['button'])) {
+		foreach($post['button'] as &$button) {
+			$temp = array();
+			$temp['name'] = preg_replace_callback('/\:\:([0-9a-zA-Z_-]+)\:\:/', create_function('$matches', 'return utf8_bytes(hexdec($matches[1]));'), $button['name']);
+			$temp['name'] = urlencode($temp['name']);
+			if (empty($button['sub_button'])) {
+				$temp['type'] = $button['type'];
+				if($button['type'] == 'view') {
+					$temp['url'] = urlencode($button['url']);
+				} elseif ($button['type'] == 'media_id' || $button['type'] == 'view_limited') {
+					$temp['media_id'] = urlencode($button['media_id']);
+				} else {
+					$temp['key'] = urlencode($button['key']);
+				}
+			} else {
+				foreach($button['sub_button'] as &$subbutton) {
+					$sub_temp = array();
+					$sub_temp['name'] = preg_replace_callback('/\:\:([0-9a-zA-Z_-]+)\:\:/', create_function('$matches', 'return utf8_bytes(hexdec($matches[1]));'), $subbutton['name']);
+					$sub_temp['name'] = urlencode($sub_temp['name']);
+					$sub_temp['type'] = $subbutton['type'];
+					if($subbutton['type'] == 'view') {
+						$sub_temp['url'] = urlencode($subbutton['url']);
+					} elseif ($subbutton['type'] == 'media_id' || $subbutton['type'] == 'view_limited') {
+						$sub_temp['media_id'] = urlencode($subbutton['media_id']);
+					} else {
+						$sub_temp['key'] = urlencode($subbutton['key']);
+					}
+					$temp['sub_button'][] = $sub_temp;
+				}
+			}
+			$menu['button'][] = $temp;
+		}
 	}
-	if (!is_array($hmenus)) {
-		$hmenus = array();
+
+	if(!empty($post['matchrule'])) {
+		if($post['matchrule']['sex'] > 0) {
+			$menu['matchrule']['sex'] = $post['matchrule']['sex'];
+		}
+		if($post['matchrule']['group_id'] != -1) {
+			$menu['matchrule']['group_id'] = $post['matchrule']['group_id'];
+		}
+		if($post['matchrule']['client_platform_type'] > 0) {
+			$menu['matchrule']['client_platform_type'] = $post['matchrule']['client_platform_type'];
+		}
+		if(!empty($post['matchrule']['province'])) {
+			$menu['matchrule']['country'] = urlencode('中国');
+			$menu['matchrule']['province'] = urlencode(rtrim($post['matchrule']['province'], '省'));
+			if(!empty($post['matchrule']['city'])) {
+				$menu['matchrule']['city'] = urlencode(rtrim($post['matchrule']['city'], '市'));
+			}
+		}
 	}
-	if(!is_array($menus)) {
-		$menus = array();
+
+	$account = WeAccount::create($_W['acid']);
+	$ret = $account->menuCreate($menu);
+	if(is_error($ret)) {
+		message($ret['message'], '', 'error');
+	} else {
+		if($data['type'] = 2) {
+			pdo_delete('uni_account_menus', array('uniacid' => $_W['uniacid'], 'type' => 1));
+			pdo_update('uni_account_menus', array('status' => 1, 'type' => 1), array('uniacid' => $_W['uniacid'], 'id' => $data['id']));
+		}
+		pdo_update('uni_account_menus', array('status' => 1, 'menuid' => $ret, 'data' => base64_encode(iserializer($menu))), array('uniacid' => $_W['uniacid'], 'id' => $id));
+		message('推送成功', referer(), 'success');
 	}
 }
-template('platform/menu');
+
+if($do == 'add') {
+	$_W['page']['title'] = '菜单设计器 - 自定义菜单 - 高级功能';
+	$type = intval($_GPC['type']);
+	$id = intval($_GPC['id']);
+	$params = array();
+	if($id > 0) {
+		$menu = pdo_get('uni_account_menus', array('uniacid' => $_W['uniacid'], 'id' => $id));
+		if(!empty($menu)) {
+			$menu['data'] = iunserializer(base64_decode($menu['data']));
+			if(!empty($menu['data'])) {
+				if(!empty($menu['data']['matchrule']['province'])) {
+					$menu['data']['matchrule']['province'] .= '省';
+				}
+				if(!empty($menu['data']['matchrule']['city'])) {
+					$menu['data']['matchrule']['city'] .= '市';
+				}
+				$params = $menu['data'];
+				$params['title'] = $menu['title'];
+				$params['type'] = $menu['type'];
+			}
+		}
+	}
+	$groups = mc_fans_groups();
+	if(empty($groups)) {
+		message($groups['message'], '', 'error');
+	}
+	template('platform/menu');
+}
+
+if($do == 'remove') {
+	$id = intval($_GPC['id']);
+	$data = pdo_get('uni_account_menus', array('uniacid' => $_W['uniacid'], 'id' => $id));
+	if(empty($data)) {
+		message('菜单不存在或已经删除', referer(), 'error');
+	}
+	if($data['type'] != 2) {
+		$account = WeAccount::create($_W['acid']);
+		$ret = $account->menuDelete($data['menuid']);
+		if(is_error($ret)) {
+			message($ret['message'], referer(), 'error');
+		}
+	}
+	if($data['type'] == 1) {
+		pdo_delete('uni_account_menus', array('uniacid' => $_W['uniacid']));
+	} else {
+		pdo_delete('uni_account_menus', array('uniacid' => $_W['uniacid'], 'id' => $id));
+	}
+	message('删除菜单成功', url('platform/menu/display'), 'success');
+}
+
+if($do == 'save') {
+	set_time_limit(0);
+	$post = $post['group'];
+	$menu = array();
+	if(!empty($post['button'])) {
+		foreach($post['button'] as &$button) {
+			$temp = array();
+			$temp['name'] = preg_replace_callback('/\:\:([0-9a-zA-Z_-]+)\:\:/', create_function('$matches', 'return utf8_bytes(hexdec($matches[1]));'), $button['name']);
+			$temp['name'] = urlencode($temp['name']);
+			if (empty($button['sub_button'])) {
+				$temp['type'] = $button['type'];
+				if($button['type'] == 'view') {
+					$temp['url'] = urlencode($button['url']);
+				} elseif ($button['type'] == 'media_id' || $button['type'] == 'view_limited') {
+					$temp['media_id'] = urlencode($button['media_id']);
+				} else {
+					$temp['key'] = urlencode($button['key']);
+				}
+			} else {
+				foreach($button['sub_button'] as &$subbutton) {
+					$sub_temp = array();
+					$sub_temp['name'] = preg_replace_callback('/\:\:([0-9a-zA-Z_-]+)\:\:/', create_function('$matches', 'return utf8_bytes(hexdec($matches[1]));'), $subbutton['name']);
+					$sub_temp['name'] = urlencode($sub_temp['name']);
+					$sub_temp['type'] = $subbutton['type'];
+					if($subbutton['type'] == 'view') {
+						$sub_temp['url'] = urlencode($subbutton['url']);
+					} elseif ($subbutton['type'] == 'media_id' || $subbutton['type'] == 'view_limited') {
+						$sub_temp['media_id'] = urlencode($subbutton['media_id']);
+					} else {
+						$sub_temp['key'] = urlencode($subbutton['key']);
+					}
+					$temp['sub_button'][] = $sub_temp;
+				}
+			}
+			$menu['button'][] = $temp;
+		}
+	}
+
+	if($post['type'] == 3 && !empty($post['matchrule'])) {
+		if($post['matchrule']['sex'] > 0) {
+			$menu['matchrule']['sex'] = $post['matchrule']['sex'];
+		}
+		if($post['matchrule']['group_id'] != -1) {
+			$menu['matchrule']['group_id'] = $post['matchrule']['group_id'];
+		}
+		if($post['matchrule']['client_platform_type'] > 0) {
+			$menu['matchrule']['client_platform_type'] = $post['matchrule']['client_platform_type'];
+		}
+		if(!empty($post['matchrule']['province'])) {
+			$menu['matchrule']['country'] = urlencode('中国');
+			$menu['matchrule']['province'] = urlencode(rtrim($post['matchrule']['province'], '省'));
+			if(!empty($post['matchrule']['city'])) {
+				$menu['matchrule']['city'] = urlencode(rtrim($post['matchrule']['city'], '市'));
+			}
+		}
+	}
+
+	$account = WeAccount::create($_W['acid']);
+	$ret = $account->menuCreate($menu);
+	if(is_error($ret)) {
+		message($ret, '', 'ajax');
+	} else {
+		$menu = json_decode(urldecode(json_encode($menu)), true);
+		if(!isset($menu['matchrule'])) {
+			$menu['matchrule'] = array();
+		}
+		$insert = array(
+			'uniacid' => $_W['uniacid'],
+			'menuid' => $ret,
+			'title' => $post['title'],
+			'type' => $post['type'],
+			'sex' => intval($menu['matchrule']['sex']),
+			'group_id' => isset($menu['matchrule']['group_id']) ? $menu['matchrule']['group_id'] : -1,
+			'client_platform_type' => intval($menu['matchrule']['client_platform_type']),
+			'area' => trim($menus['matchrule']['country']) . trim($menu['matchrule']['province']) . trim($menu['matchrule']['city']),
+			'data' => base64_encode(iserializer($menu)),
+			'status' => 1,
+			'createtime' => TIMESTAMP,
+		);
+		if($post['type'] == 1) {
+			$history = pdo_get('uni_account_menus', array('uniacid' => $_W['uniacid'], 'type' => 2));
+			if(empty($history)) {
+				$data = $insert;
+				$data['type'] = 2;
+				$data['status'] = 0;
+				pdo_insert('uni_account_menus', $data);
+			} else {
+				$data = $insert;
+				$data['type'] = 2;
+				$data['status'] = 0;
+				pdo_update('uni_account_menus', $data, array('uniacid' => $_W['uniacid'], 'type' => 2));
+			}
+			$default = pdo_get('uni_account_menus', array('uniacid' => $_W['uniacid'], 'type' => 1));
+			if(!empty($default)) {
+				pdo_update('uni_account_menus', $insert, array('uniacid' => $_W['uniacid'], 'type' => 1));
+				message(error(0, ''), '', 'ajax');
+			}
+		}
+		pdo_insert('uni_account_menus', $insert);
+		message(error(0, ''), '', 'ajax');
+	}
+}
+

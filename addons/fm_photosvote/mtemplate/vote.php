@@ -1,6 +1,6 @@
 <?php
 //$messagetemplate = iunserializer($reply['mtemplates']);
- $template_id = $mt['messagetemplate'];//消息模板id 微信的模板id
+ //$template_id = $mt;//消息模板id 微信的模板id
  $body = "";
  $keyword1 = "";
  if (!empty($template_id)) {
@@ -12,13 +12,13 @@
 	}	
 	$ttime = date('Y-m-d H:i:s', $tuservote['createtime']);
     $body .= "您的姓名：{$tuservote['nickname']} \n";
-    $body .= "被投票ID：{$u['id']} \n";
+    $body .= "被投票ID：{$u['uid']} \n";
     $body .= "被投票用户：$uname \n";
     $body .= "投票时间：$ttime \n";
     $body .= "恭喜您投票成功，想要让更多的人认识你吗，那就来赶快报名吧！";
       
    
-	$title = $reply['title'] . '之' . $uname;
+	$title = '投票成功!';
 	$datas=array(
 		'name'=>array('value'=>$_W['account']['name'],'color'=>'#173177'),
 		'first'=>array('value'=>'恭喜您投票成功！','color'=>'#173177'),

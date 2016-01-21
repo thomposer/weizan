@@ -283,7 +283,7 @@ class WeiXinPlatform extends WeiXinAccount {
 		$response = ihttp_request($url, json_encode($post));
 		$response = json_decode($response['content'], true);
 		if (empty($response) || !empty($response['errcode'])) {
-			return error($response['errcode'], $response['errmsg']);
+			return error($response['errcode'], $this->error_code($response['errcode']));
 		}
 		return $response;
 	}

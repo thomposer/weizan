@@ -73,7 +73,6 @@ class We7_researchModuleSite extends WeModuleSite {
             $ds[$f['refid']]['refid'] = $f['refid'];
             $fids[] = $f['refid'];
         }
-
         $fids = implode(',', $fids);
         $row['fields'] = array();
         $sql = 'SELECT * FROM ' . tablename('research_data') . " WHERE `reid`=:reid AND `rerid`='{$row['rerid']}' AND `refid` IN ({$fids})";
@@ -447,7 +446,7 @@ class We7_researchModuleSite extends WeModuleSite {
                 $r['options'] = explode(',', $r['value']);
             }
             if ($r['bind']) {
-                $binds[$r['type']] = $r['bind'];
+                $binds[] = $r['bind'];
             }
             if ($r['type'] == 'reside') {
                 $reside = $r;
@@ -479,12 +478,21 @@ class We7_researchModuleSite extends WeModuleSite {
             foreach ($ds as $value) {
                 $fields[$value['refid']] = $value;
             }
-
             foreach ($_GPC as $key => $value) {
                 if (strexists($key, 'field_')) {
                     $bindFiled = substr(strrchr($key, '_'), 1);
                     if (!empty($bindFiled)) {
                         $update[$bindFiled] = $value;
+	                    if ($bindFiled == 'birth') {
+		                    $birth = explode('-', $_GPC[$key]);
+		                    $update['birthyear'] = $birth[0];
+		                    $update['birthmonth'] = $birth[1];
+		                    $update['birthday'] = $birth[2];
+		                    unset($update['birth']);
+	                    }
+	                    if ($bindFiled == 'gender') {
+		                    $update['gender'] = $value == '男'? 1:2;
+	                    }
                     }
                     $refid = intval(str_replace('field_', '', $key));
                     $field = $fields[$refid];
@@ -544,6 +552,7 @@ class We7_researchModuleSite extends WeModuleSite {
                     $datas[] = $resideData;
                 }
             }
+
 
             // 更新关联会员资料
             if (!empty($update)) {
@@ -613,17 +622,31 @@ class We7_researchModuleSite extends WeModuleSite {
             }
         }
 
+        // 兼容会员生日字段
+        foreach ($binds as $key => $value) {
+        	if ($value == 'birth') {
+        		unset($binds[$key]);
+        		$binds[] = 'birthyear';
+        		$binds[] = 'birthmonth';
+        		$binds[] = 'birthday';
+        		break;
+        	}
+        }
 
         if (!empty($_W['fans']['from_user']) && !empty($binds)) {
             $profile = fans_search($_W['fans']['from_user'], $binds);
-            if ($profile['gender']) {
-                if ($profile['gender'] == '0')
-                    $profile['gender'] = '保密';
-                if ($profile['gender'] == '1')
-                    $profile['gender'] = '男';
-                if ($profile['gender'] == '2')
-                    $profile['gender'] = '女';
-            }
+            if ($profile['gender'] == '0')
+                $profile['gender'] = '保密';
+            if ($profile['gender'] == '1')
+                $profile['gender'] = '男';
+            if ($profile['gender'] == '2')
+                $profile['gender'] = '女';
+	        if($profile['birthday']) {
+		        $profile['birth'] = $profile['birthyear'].'-'.$profile['birthmonth'].'-'.$profile['birthday'];
+				unset($profile['birthyear']);
+				unset($profile['birthmonth']);
+				unset($profile['birthday']);
+	        }
             foreach ($ds as &$r) {
                 if ($profile[$r['bind']]) {
                     $r['default'] = $profile[$r['bind']];

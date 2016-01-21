@@ -27,6 +27,7 @@
 ?>
 	<script type="text/javascript">
 	
+	
 	wx.config(jssdkconfig);
 	
 	var $_share = {php echo json_encode($_share);};
@@ -71,15 +72,28 @@
 			sharedata.desc = _share_content.replace($_share['title'], '')
 		}
 	}
-	
+
 	wx.ready(function () {			
 		wx.onMenuShareAppMessage(sharedata);
 		wx.onMenuShareTimeline(sharedata);
 		wx.onMenuShareQQ(sharedata);
 		wx.onMenuShareWeibo(sharedata);
+		wx.hideMenuItems({
+		    menuList: [
+		    	'menuItem:share:qq',
+		    	'menuItem:share:weiboApp',
+		    	'menuItem:share:facebook',
+		    	'menuItem:share:QZone',
+		    	'menuItem:copyUrl',
+		    	'menuItem:originPage',
+		    	'menuItem:readMode',
+		    	'menuItem:openWithQQBrowser',
+		    	'menuItem:openWithSafari',
+		    	'menuItem:share:email'
+		    ]
+		});
 		getlocaltion();
 	});
-	
 	</script>
 </body>
 </html>

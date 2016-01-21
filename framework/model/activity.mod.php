@@ -57,7 +57,7 @@ function activity_coupon_owned($uid, $filter = array(), $pindex = 10, $psize = 0
 	$data = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 1 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid ORDER BY r.couponid DESC' . $limit_sql, array(':uid' => $uid), 'couponid');
 	if(!empty($data)) {
 		$couponids = implode(', ', array_keys($data));
-		$tokens = pdo_fetchall("SELECT couponid,thumb,couponsn,`condition`,title,discount,type,starttime,endtime FROM " . tablename('activity_coupon') . " WHERE couponid IN ({$couponids})", array(), 'couponid');
+		$tokens = pdo_fetchall("SELECT couponid,thumb,couponsn,`condition`,title,discount,type,description,starttime,endtime FROM " . tablename('activity_coupon') . " WHERE couponid IN ({$couponids})", array(), 'couponid');
 		foreach($tokens as &$token) {
 			$token['status'] = $data[$token['couponid']]['status'];
 			$token['cototal'] = $data[$token['couponid']]['cototal'];
@@ -237,7 +237,7 @@ function activity_token_owned($uid, $filter = array(), $pindex = 1, $psize = 10)
 	$data = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 2 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid ORDER BY r.couponid DESC' . $limit_sql, array(':uid' => $uid), 'couponid');
 	if(!empty($data)) {
 		$couponids = implode(', ', array_keys($data));
-		$tokens = pdo_fetchall("SELECT couponid,thumb,couponsn,`condition`,title,discount,type,starttime,endtime FROM " . tablename('activity_coupon') . " WHERE couponid IN ({$couponids})", array(), 'couponid');
+		$tokens = pdo_fetchall("SELECT couponid,thumb,couponsn,`condition`,title,discount,type,description,starttime,endtime FROM " . tablename('activity_coupon') . " WHERE couponid IN ({$couponids})", array(), 'couponid');
 		foreach($tokens as &$token) {
 			$token['status'] = $data[$token['couponid']]['status'];
 			$token['cototal'] = $data[$token['couponid']]['cototal'];

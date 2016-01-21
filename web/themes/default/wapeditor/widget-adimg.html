@@ -88,7 +88,7 @@
 			<!--分开显示-->
 			<div class="show-separate" ng-if="module.params.items.length != 0 && module.params.listStyle == 2">
 				<!--大图 lg-->
-				<div class="ad-list lg" ng-show="module.params.sizeType == 1">
+				<div class="ad-list lg" ng-if="module.params.sizeType == 1">
 					<div class="ad-list-item" ng-repeat="item in module.params.items">
 						<div>
 							<h3 ng-bind="item.title">广告标题</h3>
@@ -97,7 +97,7 @@
 					</div>
 				</div>
 				<!--小图:sm-->
-				<div class="ad-list clearfix sm" ng-show="module.params.sizeType == 2" >
+				<div class="ad-list clearfix sm" ng-if="module.params.sizeType == 2" >
 					<div class="ad-list-item col-xs-6 col-sm-6" ng-repeat="item in module.params.items">
 						<div>
 							<h3 ng-bind="item.title">广告标题</h3>

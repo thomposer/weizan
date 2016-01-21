@@ -122,7 +122,7 @@ body{background:#f5f5f5 no-repeat;background-size:100% auto;}
 </style>
  	
 {template 'hnav'}
-<div class="banner"><img src="{$picture}"></div>
+<div class="banner"{if $reply['ipannounce'] && $reply['istopheader']}  style="margin-top: 90px;"{else} style="    margin-top: -20px;"{/if}><img src="{php echo toimage($reply['picture'])}" style="max-width: 100%;"></div>
 {template 'tongji'}
 
 

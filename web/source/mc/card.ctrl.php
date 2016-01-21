@@ -120,10 +120,10 @@ if ($do == 'display') {
 				$discount = array();
 		foreach($groups as $row) {
 			$discount[$row['groupid']] = array(
-				'condition_1' => intval($_GPC['condition_1'][$row['groupid']]),
-				'discount_1' => intval($_GPC['discount_1'][$row['groupid']]),
-				'condition_2' => intval($_GPC['condition_2'][$row['groupid']]),
-				'discount_2' => intval($_GPC['discount_2'][$row['groupid']]),
+				'condition_1' => trim($_GPC['condition_1'][$row['groupid']]),
+				'discount_1' => trim($_GPC['discount_1'][$row['groupid']]),
+				'condition_2' => trim($_GPC['condition_2'][$row['groupid']]),
+				'discount_2' => trim($_GPC['discount_2'][$row['groupid']]),
 			);
 		}
 		$data['discount'] = iserializer($discount);

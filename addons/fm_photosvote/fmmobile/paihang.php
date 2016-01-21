@@ -7,19 +7,12 @@
  */
 defined('IN_IA') or exit('Access Denied');
 
-		if ($istop['ipannounce'] == 1) {
-			$announce = pdo_fetchall("SELECT * FROM " . tablename($this->table_announce) . " WHERE uniacid= '{$uniacid}' AND rid= '{$rid}' ORDER BY id DESC");
-			
+		if ($reply['ipannounce'] == 1) {
+			$announce = pdo_fetchall("SELECT nickname,content,createtime,url FROM " . tablename($this->table_announce) . " WHERE uniacid= '{$uniacid}' AND rid= '{$rid}' ORDER BY id DESC");
 		}
 		//赞助商
 		if ($reply['ispaihang'] == 1) {
-			$advs = pdo_fetchall("SELECT * FROM " . tablename($this->table_advs) . " WHERE enabled=1  AND ismiaoxian = 0 AND uniacid= '{$uniacid}'  AND rid= '{$rid}' ORDER BY displayorder ASC");
-			foreach ($advs as &$adv) {
-				if (substr($adv['link'], 0, 5) != 'http:') {
-					$adv['link'] = "http://" . $adv['link'];
-				}
-			}
-			unset($adv);
+			$advs = pdo_fetchall("SELECT advname,link,thumb FROM " . tablename($this->table_advs) . " WHERE enabled=1 AND ismiaoxian = 0 AND uniacid= '{$uniacid}'  AND rid= '{$rid}' ORDER BY displayorder ASC");
 		}
 		
 		//统计
@@ -33,7 +26,18 @@ defined('IN_IA') or exit('Access Denied');
 			
 		}
 		
-		
+		$tags = pdo_fetchall("SELECT * FROM ".tablename($this->table_tags)." WHERE uniacid = :uniacid AND rid = :rid ORDER BY id DESC", array(':uniacid' => $uniacid, ':rid' => $rid));
+		$tagsarr = array();
+		foreach ($tags as $key => $value) {
+			$tags[$key]['piaoshu'] = pdo_fetchcolumn("SELECT sum(photosnum) FROM ".tablename($this->table_users)." WHERE tagid= ".$value['id']." AND uniacid= ".$uniacid." AND rid= ".$rid."") + pdo_fetchcolumn("SELECT sum(xnphotosnum) FROM ".tablename($this->table_users)." WHERE tagid= ".$value['id']." AND uniacid= ".$uniacid." AND rid= ".$rid."");//累计投票
+			$tags[$key]['hits'] = pdo_fetchcolumn("SELECT sum(hits) FROM ".tablename($this->table_users)." WHERE tagid= ".$value['id']." AND uniacid= ".$uniacid." AND rid= ".$rid."") + pdo_fetchcolumn("SELECT sum(xnhits) FROM ".tablename($this->table_users)." WHERE tagid= ".$value['id']." AND uniacid= ".$uniacid." AND rid= ".$rid."");//累计投票
+			//$value['title'] = $tags[$key]['piaoshu'];
+			
+			$tagsarr[$value['title']] = $tags[$key]['piaoshu'] + $tags[$key]['hits'];
+			
+		}
+		$midn = 1;
+		arsort($tagsarr);
 		
 		if ($_GPC['votelog'] == 1) {//投票人
 			$tuser = pdo_fetch("SELECT avatar,nickname FROM ".tablename($this->table_users)." WHERE uniacid = :uniacid and from_user = :from_user and rid = :rid", array(':uniacid' => $uniacid,':from_user' => $tfrom_user,':rid' => $rid));
@@ -62,14 +66,22 @@ defined('IN_IA') or exit('Access Denied');
 			$_share['content'] = $tuser['nickname'] . '正在参加'. $reply['title'] .'，快来为'.$tuser['nickname'].'投一票吧！';
 			$_share['imgUrl'] =  !empty($mygift['photo']) ? toimage($mygift['photo']) : toimage($tuser['avatar']);
 		}else {//排行榜用户
+
+			$tags = pdo_fetchall("SELECT * FROM ".tablename($this->table_tags)." WHERE uniacid = :uniacid AND rid = :rid ORDER BY id DESC", array(':uniacid' => $uniacid, ':rid' => $rid));
+			
 			$pindex = max(1, intval($_GPC['page']));
 			$psize =  empty($reply['phbtpxz']) ? 10 : $reply['phbtpxz'];
 			$m = ($pindex-1) * $psize+1;
+			$tagid = $_GPC['tagid'];
+
 			//取得用户列表
 			$where = '';			
 			
 			$where .= " AND status = '1'";
-			
+			if (!empty($tagid)) {
+				$where .= " AND tagid = ".$tagid." ";
+			}
+		
 			if ($reply['indexpx'] == '0') {
 				$where .= " ORDER BY `photosnum` + `xnphotosnum` DESC";
 			}elseif ($reply['indexpx'] == '1') {
@@ -81,12 +93,23 @@ defined('IN_IA') or exit('Access Denied');
 				$where .= " ORDER BY `photosnum` + `xnphotosnum` DESC";
 			}
 			$userlist = pdo_fetchall('SELECT * FROM '.tablename($this->table_users).' WHERE uniacid= :uniacid and rid = :rid '.$where.' LIMIT ' . ($pindex - 1) * $psize . ',' . $psize, array(':uniacid' => $uniacid,':rid' => $rid));
+			
 			$total = pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename($this->table_users).' WHERE uniacid= :uniacid and rid = :rid '.$where.'', array(':uniacid' => $uniacid,':rid' => $rid));
 			$total_pages = ceil($total/$psize);	
 			$pager = paginationm($total, $pindex, $psize, '', array('before' => 0, 'after' => 0, 'ajaxcallback' => ''));
 			
+			$userlistm = pdo_fetchall('SELECT from_user,photosnum,xnphotosnum,hits,xnhits FROM '.tablename($this->table_users).' WHERE uniacid= :uniacid and rid = :rid '.$where.' ', array(':uniacid' => $uniacid,':rid' => $rid));
+			$pmsarr = array();
+			foreach ($userlistm as $key => $value) {
+				
+				$pmsarr[$value['from_user']] = $value['photosnum'] + $value['xnphotosnum'];
+				
+			}
+			arsort($pmsarr);
 			
-			
+			//print_r($pmsarr);
+
+
 			$title = $reply['title'] . ' 排行榜 - ' . $_W['account']['name']; 
 						
 			$_share['title'] = $reply['title'] . ' 排行榜 - ' . $_W['account']['name']; 
@@ -105,11 +128,12 @@ defined('IN_IA') or exit('Access Denied');
 		$shareurl = $_W['siteroot'] .'app/'.$this->createMobileUrl('shareuserview', array('rid' => $rid,'duli' => 3,'fromuser' => $from_user));//分享URL
 		$regurl = $_W['siteroot'] .'app/'.$this->createMobileUrl('reg', array('rid' => $rid));//关注或借用直接注册页
 		$guanzhu = $reply['shareurl'];//没有关注用户跳转引导页
-		$mygifturl = $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvoteview', array('rid' => $rid));//我的页面
+		$mygifturl = $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvote', array('rid' => $rid));//我的页面
 		
 		$_share['link'] = $_W['siteroot'] .'app/'.$this->createMobileUrl('shareuserview', array('rid' => $rid,'duli' => 3,'fromuser' => $from_user));//分享URL		
 		
 				
 		
-		$toye = $this->_stopllq('paihang');
+		$templatename = $reply['templates'];
+		$toye = $this->templatec($templatename,$_GPC['do']);
 		include $this->template($toye);

@@ -12,7 +12,10 @@ $articleid = $_GPC['articleid'];
 if($op == 'list') {
     $pindex= max(1, intval($_GPC['page']));
     $psize= 20; //每页显示
-    $condition = "WHERE weid = $weid and aid=$articleid ";
+    $condition = "WHERE weid = $weid  ";
+    if($articleid){
+        $articleid.=" and aid=$articleid ";
+    }
     $status = $_GPC['status'];
     if(!empty($_GPC['keyword'])) {
         $condition .= " WHERE author LIKE '%".$_GPC['keyword']."%'";
@@ -42,17 +45,17 @@ if($op == 'list') {
     $id= intval($_GPC['id']);
     $temp= pdo_delete("fineness_comment", array('id' => $id));
     message('删除数据成功！', $this->createWebUrl('comment', array('op' => 'list','articleid'=>$articleid)), 'success');
-}elseif($op=='vervify'){
+}elseif($op=='setstatus'){
     $id= intval($_GPC['id']);
-    $recommed=$_GPC['status'];
     $articleid = $_GPC['articleid'];
-    if($recommed==1){
-        $msg='审核';
-    }
-    if($id > 0) {
-        pdo_update('fineness_comment',array('status' =>$recommed), array('id' => $id)) ;
-        message($msg.'成功！', $this->createWebUrl('comment', array('op' => 'list','articleid'=>$articleid)), 'success');
-    }
+
+    $data = intval($_GPC['data']);
+    $data = ($data == 1 ? '0' : '1');
+    pdo_update('fineness_comment', array('status' => $data), array( "id" => $id,"weid" => $_W['uniacid']));
+    die(json_encode(array(
+        'result' => 1,
+        'data' => $data
+    )));
 }elseif ($op == 'post') {
     $id = intval($_GPC['id']);
     $articleid = $_GPC['articleid'];

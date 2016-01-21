@@ -67,7 +67,6 @@ if(!empty($type)) {
 		$record['encrypt_code'] = '';
 		$record['acid'] = $_W['acid'];
 		if($type != 'delivery') {
-			$iscard = pdo_fetchcolumn('SELECT iscard FROM ' . tablename('modules') . ' WHERE name = :name', array(':name' => $params['module']));
 						if($setting['payment']['card']['switch'] == 2 && !empty($_GPC['card_id']) && !empty($_GPC['encrypt_code']) && !empty($_W['acid'])) {
 				$card_id = base64_decode($_GPC['card_id']);
 				$card = pdo_fetch('SELECT id,card_id,type,extra FROM ' . tablename('coupon') . ' WHERE acid = :acid AND card_id = :card_id', array(':acid' => $_W['acid'], ':card_id' => $card_id));
@@ -95,11 +94,7 @@ if(!empty($type)) {
 				$use_modules = array_keys($use_modules);
 				if(!empty($coupon) && ($coupon['starttime'] <= TIMESTAMP  && $coupon['endtime'] >= TIMESTAMP) && in_array($params['module'], $use_modules)) {
 					$coupon['fee'] = $record['card_fee'];
-										$condition = '';
-					if($iscard == 1) {
-						$condition = " AND grantmodule = '{$params['module']}'";
-					}
-					$has = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('activity_coupon_record') . ' WHERE uid = :uid AND uniacid = :aid AND couponid = :cid AND status = 1 ' . $condition, array(':uid' => $_W['member']['uid'], ':aid' => $_W['uniacid'], ':cid' => $coupon_id));
+										$has = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('activity_coupon_record') . ' WHERE uid = :uid AND uniacid = :aid AND couponid = :cid AND status = 1 ', array(':uid' => $_W['member']['uid'], ':aid' => $_W['uniacid'], ':cid' => $coupon_id));
 					if($has > 0) {
 						$record['is_usecard'] = 1;
 						$record['card_type'] = 2;
@@ -189,11 +184,7 @@ if(!empty($type)) {
 						if($log['is_usecard'] == 1 && $log['card_type'] == 2) {
 				$now = time();
 				$log['card_id'] = intval($log['card_id']);
-				$condition = '';
-				if($iscard == 1) {
-					$condition = " AND grantmodule = '{$params['module']}'";
-				}
-				pdo_query('UPDATE ' . tablename('activity_coupon_record') . " SET status = 2, usetime = {$now}, usemodule = '{$log['module']}' WHERE uniacid = :aid AND couponid = :cid AND uid = :uid AND status = 1 {$condition} LIMIT 1", array(':aid' => $_W['uniacid'], ':uid' => $log['openid'], ':cid' => $log['card_id']));
+				pdo_query('UPDATE ' . tablename('activity_coupon_record') . " SET status = 2, usetime = {$now}, usemodule = '{$log['module']}' WHERE uniacid = :aid AND couponid = :cid AND uid = :uid AND status = 1 LIMIT 1", array(':aid' => $_W['uniacid'], ':uid' => $log['openid'], ':cid' => $log['card_id']));
 			}
 
 			$site = WeUtility::createModuleSite($log['module']);

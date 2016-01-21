@@ -120,6 +120,9 @@ function user_update($user) {
 		return false;
 	}
 	$record = array();
+	if (!empty($user['username'])) {
+		$record['username'] = $user['username'];
+	}
 	if (!empty($user['password'])) {
 		$record['password'] = user_hash($user['password'], $user['salt']);
 	}

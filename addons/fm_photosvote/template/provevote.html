@@ -1,6 +1,3 @@
-<script src="../addons/fm_photosvote/template/mobile/newfile/lib/mobileFix.mini.js?v={php echo time()}"></script>
-<script src="../addons/fm_photosvote/template/mobile/newfile/lib/exif.js?v={php echo time()}"></script>
-<script src="../addons/fm_photosvote/template/mobile/newfile/lrz.pc.min.js?v={php echo time()}"></script>
 {template 'common/header'}
 	{if $rid!=''}
 		{template 'nav'}
@@ -43,7 +40,7 @@
 	</div>
 	<div class="panel panel-default">
 	<!--<div class="panel-heading">	
-		<div class="row-fluid">
+		<div class="item-fluid">
 			<div class="span8 control-group">
 				<a class="btn btn-primary" href="{php echo $this->createWebUrl('download',array('rid'=>$rid))}"><i class="fa fa-download"></i> 导出用户信息</a>
 			</div>
@@ -57,38 +54,36 @@
 			<thead class="navbar-inner">
 				<tr>
 					<th style="width:50px;">删？</th>
-					<th style="width:40px;">编号ID</th>
-					<th style="width:120px;">昵称</th>
-					<th style="width:150px;">报名主题宣言</th>
-					<th style="width:100px;">报名照片</th>
-					<th style="width:60px;" class="row-hover">票数</th>
-					<th style="width:60px;" class="row-hover">人气</th>
-					<th style="width:60px;" class="row-hover">分享</th>
-					<th style="width:110px;" class="row-hover">手机</th>
+					<th style="width:40px;">ID</th>
+					<th style="width:120px;">用户</th>
+					<th style="width:180px;">投稿主题宣言</th>
+					<th style="width:60px;" class="item-hover">票数</th>
+					<th style="width:60px;" class="item-hover">人气</th>
+					<th style="width:60px;" class="item-hover">分享</th>
+					<th style="width:60px;" class="item-hover">点赞</th>
+					<th style="width:110px;" class="item-hover">手机</th>
 					<th style="width:150px;">报名时间</th>
 					<th style="width:200px;">操作</th>
 				</tr>
 			</thead>
 			<tbody>
-				{loop $list_praise $mid $row}
-				{php $sm = $this->getsharenum($uniacid,  $row['tfrom_user'], $rid, $row['sharenum'])}
+				{loop $list_praise $mid $item}
+				{php $sm = $this->getsharenum($uniacid,  $item['tfrom_user'], $rid, $item['sharenum'])}
+				{php $tagtitle = $this->gettagtitle($item['tagid'], $rid);$fmimage = $this->getpicarr($uniacid,$rid, $item['from_user'],1);}
 				<tr>
-				
-					<td><input type="checkbox" name="uid[]" value="{$row['id']}" class=""></td>
-					<td>{$row['id']}</td>
-					<td class="info"><img src="{php echo toimage($row['avatar'])}" width="50px;"/>{$row['nickname']}
-									<div>性别： {if $row['sex'] == 1}男{elseif $row['sex'] == 2}女{else}未知{/if}<br/>{if !empty($row['realname'])}姓名：{$row['realname']}<br/>{/if}{if !empty($row['weixin'])}微信号：{$row['weixin']}<br/>{/if}{if !empty($row['qqhao'])}QQ号：{$row['qqhao']}<br/>{/if}{if !empty($row['email'])}邮箱：{$row['email']}<br/>{/if}{if !empty($row['address'])}地址：{$row['address']}<br/>{/if}</div></a></td>				
-									<td>{$row['photoname']}</td>
-					
-					<td><img src="{php echo toimage($row['photo'])}" width="50px;"/></td>
-					<td class="row-hover">{$row['photosnum']}</td>
-					<td class="row-hover">{$row['hits']}</td>
-					<td class="row-hover">{$sharenum[$mid]}</td>
-					<td class="row-hover">{$row['mobile']}</td>
-					<td>{php echo date('Y-m-d H:i', $row['createtime']);}</td>
+					<td><input type="checkbox" name="uid[]" value="{$item['id']}" class=""></td>
+					<td>{$item['uid']}</td>
+					<td class="info" style="text-align:left;"><img src="{php echo $this->getphotos($fmimage['photos'], $item['avatar'], $reply['picture'], 1)}" width="30px;"/><span {if stristr($item['nickname'],$keyword)}class="active"{/if}>{php echo $this->getusernames($item['realname'], $item['nickname'])}<p><span ><a href="javascript::;" class="label label-success" data-toggle="tooltip" data-placement="top" title="性别">{if $item['sex'] == 1}男{elseif $item['sex'] == 2}女{else}未知{/if}</a></span>  <span ><a href="javascript::;" class="label label-info" data-toggle="tooltip" data-placement="top" title="用户参赛组别">{if empty($item['tagid'])}默认{else}{$tagtitle}{/if}</a></span></p></span></a></td>					
+									<td>{$item['photoname']}</td>
+					<td class="item-hover">{$item['photosnum']}</td>
+					<td class="item-hover">{$item['hits']}</td>
+					<td class="item-hover">{$sharenum[$mid]}</td>
+					<td class="item-hover">{php echo intval($item['zans'])}</td>
+					<td class="item-hover">{$item['mobile']}</td>
+					<td>{php echo date('Y-m-d H:i', $item['createtime']);}</td>
 					<td>
-						<a href="{php echo $this->createWebUrl('provevote', array('status' => '1', 'foo' => 'post', 'rid' => $rid, 'from_user' => $row['from_user']))}"  data-toggle="tooltip" data-placement="top"  class="btn btn-default btn-sm manage"><i class="fa fa-search"></i>查看</a>
-						<a href="{php echo $this->createWebUrl('provevote', array('status' => '1', 'sh' => '1', 'rid' => $rid, 'from_user' => $row['from_user'], 'foo' => 'display'))}"  data-toggle="tooltip" data-placement="top"  class="btn btn-default btn-sm manage"><i class="fa fa-edit"></i>通过</a>
+						<a href="{php echo $this->createWebUrl('provevote', array('status' => '1', 'foo' => 'post', 'rid' => $rid, 'from_user' => $item['from_user']))}"  data-toggle="tooltip" data-placement="top"  class="btn btn-default btn-sm manage" title="编辑查看用户信息"><i class="fa fa-search"></i>查看</a>
+						<a href="{php echo $this->createWebUrl('provevote', array('status' => '1', 'sh' => '1', 'rid' => $rid, 'from_user' => $item['from_user'], 'foo' => 'display'))}"  data-toggle="tooltip" data-placement="top"  class="btn btn-default btn-sm manage" title="通过审核"><i class="fa fa-edit"></i>通过</a>
 					</td>
 				</tr>
 				{/loop}
@@ -130,7 +125,18 @@
 		        u.message('没有选择粉丝', '', 'error');
 		        return false;
 		    }		    
-	    });    
+	    });   
+
+	    $('.label').hover(function(){
+			$(this).tooltip('show');
+		},function(){
+			$(this).tooltip('hide');
+		});   
+	    $('.btn').hover(function(){
+			$(this).tooltip('show');
+		},function(){
+			$(this).tooltip('hide');
+		}); 
 		
 	});	
 </script>
@@ -138,6 +144,7 @@
 
 
 	{elseif $foo == 'post'}
+	
 <style>
 #progress,#progress0,#progress1,#progress2,#progress3,#progress4,#progress5,#progress6,#progress7,#progress8,#progressm,#progressv  {
     border:1px solid #ccc;
@@ -175,7 +182,366 @@
   text-align: center;
   margin: 0 auto;
 }
+
+ #upsuccess {position: fixed;width: 100%;height: 30px;line-height: 23px;top: 60px;background: rgba(36, 166, 234, 0.71);font-size: 100%;}
 .uploadimg span{  color:#fff}
+
+
+/****上传图片****/
+.webuploader-element-invisible {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px,1px,1px,1px);
+}
+.fmwebuploader-pick {
+  position: absolute;
+  display: inline-block;
+  cursor: pointer;
+  /*background: #00b7ee;
+   padding: 10px 15px; */
+  color: #fff;
+  text-align: center;
+  border-radius: 3px;
+  overflow: hidden;
+  /* margin-bottom: 10px; */
+  z-index: 1;
+  width: 130px;
+  height: 120px;
+  top: 5px;
+  left: 5px;
+}
+.parentFileBox {
+  width: auto;
+  height: auto;
+  overflow: hidden;
+  position: relative;
+  float: left;
+}
+.parentFileBox>.fileBoxUl {
+  position: relative;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  padding-bottom: 5px;
+    padding-left: 0;
+  margin: 0;
+}
+.parentFileBox>.fileBoxUl>li {
+  float: left;
+  border: 1px solid #999;
+  border-radius: 5px;
+  width: 130px;
+  height: 120px;
+  margin-top: 5px;
+  margin-left: 5px;
+  overflow: hidden;
+  position: relative;
+  /**background-color: #099;**/
+}
+.parentFileBox>.fileBoxUl>li>.viewThumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 130px;
+  height: 120px;
+  overflow: hidden;
+}
+.parentFileBox>.fileBoxUl>li>.viewThumb>img {
+  width: 100%;
+  height: 100%;
+}
+
+.parentFileBox>.fileBoxUl>li>.imagedel>a>.diyCancel, .parentFileBox>.fileBoxUl>li>.setfm>a>.diySuccess, .parentFileBox>.fileBoxUl>li>.videodel>a>.diyCancel, .parentFileBox>.fileBoxUl>li>.videodel>a>.diySuccess, .parentFileBox>.fileBoxUl>li>.musicdel>a>.diyCancel, .parentFileBox>.fileBoxUl>li>.musicdel>a>.diySuccess {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  right: 2px;
+  cursor: pointer;
+  display: none;
+}
+.parentFileBox>.fileBoxUl>li>.imagedel>a>.diyCancel {
+  background: url({FMURL}mobile/templates/stylebase/style/images/x_alt.png) no-repeat;
+  top: 2px;
+}
+.parentFileBox>.fileBoxUl>li>.videodel>a>.diyCancel {
+  background: url({FMURL}mobile/templates/stylebase/style/images/x_alt.png) no-repeat;
+  top: 2px;
+}
+.parentFileBox>.fileBoxUl>li>.musicdel>a>.diyCancel {
+  background: url({FMURL}mobile/templates/stylebase/style/images/x_alt.png) no-repeat;
+  top: 2px;
+}
+.parentFileBox>.fileBoxUl>li>.setfm>a>.diySuccess {
+  /**background: url(../mobile/templates/stylebase/style/images/check_alt.png) no-repeat;**/
+  cursor: default;
+  bottom: 0px;
+  background: rgba(0, 0, 0, 0.66);
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  /* line-height: 19px; */
+  /* padding: 19px; */
+  color: #fff;
+  border-radius: 3px;
+}
+.parentFileBox>.fileBoxUl>li>.setfm>a>.isfm {
+  background: url({FMURL}mobile/templates/stylebase/style/images/check_alt.png) no-repeat;
+}
+.parentFileBox>.fileBoxUl>li>.diyFileName {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+  display: none;
+  background: url({FMURL}mobile/templates/stylebase/style/images/bgblack.png);
+}
+.parentFileBox>.fileBoxUl>li>.diyBar>.diyProgress {
+  position: absolute;
+  left: 0;
+  top: 42%;
+  height: 24px;
+  width: 100%;
+  background-color: #09F;
+  filter: alpha(opacity=70);
+  -moz-opacity: 0.7;
+  opacity: 0.7;
+  z-index: 97;
+  margin-left: -100%;
+}
+.parentFileBox>.fileBoxUl>li>.diyBar>.diyProgressText {
+  font-size: 14px;
+  text-align: center;
+  color: #FFF;
+  position: absolute;
+  z-index: 99;
+  top: 42%;
+}
+
+
+.smile_popo {
+    height: 30px;
+    background: url({FMURL}mobile/templates/stylebase/style/images/popo_2adefed.png) no-repeat 50% 0
+}
+.level {
+    background-image: url({FMURL}mobile/templates/stylebase/style/images/new_sglobal_icon.png);
+    background-repeat: no-repeat;
+    -webkit-background-size: 70px auto;
+    background-size: 70px auto;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    line-height: 16px;
+    text-align: center;
+    font-size: 10px;
+    color: #fff;
+    vertical-align: middle
+}
+
+.level_1,.level_2,.level_3 {
+    background-position: 0 -127px
+}
+
+.level_4,.level_5,.level_6,.level_7,.level_8,.level_9 {
+    background-position: 0 -155px
+}
+
+.level_10,.level_11,.level_12,.level_13,.level_14,.level_15 {
+    background-position: 0 -183px
+}
+
+.level_16,.level_17,.level_18 {
+    background-position: 0 -211px
+}
+
+
+.overlay_container {
+    position: fixed;
+    z-index: 100003;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.15);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-flex-flow: column;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-transition-property: opacity;
+    -webkit-transition-duration: 100ms;
+    -webkit-backface-visibility: hidden
+}
+
+.overlay_container:after,.overlay_container:before {
+    content: '';
+    display: block;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1
+}
+
+.overlay_container.unmasked {
+    background: transparent;
+    pointer-events: none
+}
+
+.overlay_container.beforeFadeIn {
+    opacity: 0
+}
+
+.overlay_container.afterFadeOut {
+    opacity: 0
+}
+
+.overlay_content_container {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizon;
+    -webkit-flex-flow: item;
+    -webkit-flex-direction: item;
+    -ms-flex-direction: item;
+    flex-direction: item
+}
+
+.overlay_content_container:after,.overlay_content_container:before {
+    content: '';
+    display: block;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1
+}
+
+.overlay_content {
+    -webkit-transition-property: -webkit-transform;
+    -webkit-transition-duration: 150ms;
+    -webkit-transform-origin: 50% 50%;
+    pointer-events: auto
+}
+
+.toast {
+  width: 210px;
+  padding: 16px;
+  font-size: 16px;
+  line-height: 20px;
+  background-color: rgba(0,0,0,.9);
+  border-radius: 8px;
+  color: #fff;
+  text-align: center;
+  z-index: 100000;
+}
+.overlay_container {
+    position: fixed;
+    z-index: 100003;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.15);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-flex-flow: column;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-transition-property: opacity;
+    -webkit-transition-duration: 100ms;
+    -webkit-backface-visibility: hidden
+}
+
+.overlay_container:after,.overlay_container:before {
+    content: '';
+    display: block;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1
+}
+
+.overlay_container.unmasked {
+    background: transparent;
+    pointer-events: none
+}
+
+.overlay_container.beforeFadeIn {
+    opacity: 0
+}
+
+.overlay_container.afterFadeOut {
+    opacity: 0
+}
+
+.overlay_content_container {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizon;
+    -webkit-flex-flow: item;
+    -webkit-flex-direction: item;
+    -ms-flex-direction: item;
+    flex-direction: item
+}
+
+.overlay_content_container:after,.overlay_content_container:before {
+    content: '';
+    display: block;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1
+}
+
+.overlay_content {
+    -webkit-transition-property: -webkit-transform;
+    -webkit-transition-duration: 150ms;
+    -webkit-transform-origin: 50% 50%;
+    pointer-events: auto
+}
+
+.toast {
+  width: 210px;
+  padding: 16px;
+  font-size: 16px;
+  line-height: 20px;
+  background-color: rgba(0,0,0,.9);
+  border-radius: 8px;
+  color: #fff;
+  text-align: center;
+  z-index: 100000;
+}
+.mingc {
+	  display: inline-block;
+	  padding: 4px 6px;
+	  border-bottom: 1px solid #E2E2E2;
+	  font-size: 16px;
+	  line-height: 44px;
+	  color: #808080;
+	  font-weight: 100;
+	  width: 95%;
+}
+.ptitle {
+	font-weight: 100;
+	  color: #000;
+}
+.center {
+  padding: 0;
+  }
+
+
 </style>	
 <div class="main">
 	<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" id="form1">
@@ -185,9 +551,24 @@
 			</div>
 			<div class="panel-body">
 				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">唯一识别OPENID</label>
+					<div class="col-sm-9 col-xs-12">						
+						<input type="text" class="form-control" readonly value="{if $item['from_user']}{$item['from_user']}{else}{$from_user}{/if}" />
+						<span class="help-block">请勿修改</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">参赛 ID</label>
+					<div class="col-sm-9 col-xs-12">						
+						<input type="text" name="uid" class="form-control" value="{$item['uid']}" />
+						<span class="help-block">参赛 ID, 一般情况请勿随意修改，修改请慎重！</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">活跃等级</label>
 					<div class="col-sm-9 col-xs-12">
-						<input type="text" name="displayorder" class="form-control" value="{$item['displayorder']}" />
+						<span class="label label-info">{$level} 级</span>
+						<span class="help-block">活跃等级即为用户活跃度，等级由系统自动根据用户的：投票数量、拉票数、人气、点赞、转发等各项参数整合分析，综合评定，人工无需操作。</span>
 					</div>
 				</div>
 				<div class="form-group">
@@ -196,11 +577,23 @@
 						{php echo tpl_fans_form('avatar', $item['avatar']);}
 					</div>
 				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">所属分组</label>
+					<div class="col-sm-9 col-xs-12">
+						<select name="tagid" class="form-control">
+							<option value="" selected="selected">无</option>
+							{loop $tags $tag}
+								<option value="{$tag['id']}"{if $tag['id'] == $item['tagid']} selected="selected"{/if}>{$tag['title']}</option>
+							{/loop}
+						</select>
+					</div>
+				</div>
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">参赛者昵称</label>
 					<div class="col-sm-9 col-xs-12">
 						
-						<input type="text" name="nickname" class="form-control " readonly value="{$item['nickname']}" />
+						<input type="text" name="nickname" class="form-control " value="{$item['nickname']}" />
 						<span class="help-block">参赛照片名字</span>
 					</div>
 				</div>
@@ -292,67 +685,187 @@
 					</div>
 				{/if}
 				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label">参赛图片宣言</label>
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">参赛宣言</label>
 					<div class="col-sm-9 col-xs-12">
 						<input type="text" name="photoname" class="form-control" value="{$item['photoname']}" />
-					<span class="help-block">参赛图片宣言</span>
+					<span class="help-block">参赛宣言</span>
 					</div>
 				</div>
 
+				
+				
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">简介</label>
 					<div class="col-sm-9 col-xs-12">
-						<textarea name="description" class="form-control" cols="70">{$item['description']}</textarea>
+						<textarea name="description" style="height:200px; " class="form-control richtext" cols="70" items="100">{$item['description']}</textarea>	
 					<span class="help-block">参赛照片简介</span>
 					</div>
 				</div>
 				
 				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label">多媒体操作</label>
-					<div class="col-sm-9 col-xs-12">
-						<div class="uploadimg" style="background: #87BDEA url({php echo toimage($item['photo'])}) no-repeat;  background-attachment: inherit;  background-size: cover; box-shadow: inset -5px -5px 15px rgba(5, 110, 165, 0.2);  " onclick="sendpic();"><span class="" style="color:#fff;  background: rgba(0, 0, 0, 0.68);  padding: 10px;  border-radius: 10px;">上传封面</span></div>
-					
-						<div class="uploadimg" style="background: #EC63FC url({php echo toimage($picarr[0])}) no-repeat;  background-attachment: inherit;  background-size: cover;  box-shadow: inset 10px -5px 15px rgba(5, 110, 165, 0.2);  " onclick="sendp();"><span class="" style="color:#fff;  background: rgba(0, 0, 0, 0.68);  padding: 10px;  border-radius: 10px;">上传图片</span></div>
-						<div class="uploadimg" style="background: #87EA9B url({php echo toimage($item['photo'])}) no-repeat;  background-attachment: inherit;  background-size: cover;   box-shadow: inset -5px 5px 15px rgba(5, 110, 165, 0.2);  " onclick="sendmusic();"><span class="" style="color:#fff;  background: rgba(0, 0, 0, 0.68);  padding: 10px;  border-radius: 10px;">上传好声音</span></div>
-						<div class="uploadimg"  style="background: #87EA9B url({php echo toimage($item['photo'])}) no-repeat; background-attachment: inherit;  background-size: cover; " onclick="sendvedio();"><span class="" style="color:#fff;  background: rgba(0, 0, 0, 0.68);  padding: 10px;  border-radius: 10px;">上传视频</span></div>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">参赛相册照片</label>
 					<div class="col-sm-9 col-xs-12">
-						<?php 
-							for ($i = 1; $i <= $reply['tpxz']; $i++) {	
-							$n = $i -1;		
-						?>
-						<a href="{php echo toimage($picarr[$n])}" target="_blank"><img src="{php echo toimage($picarr[$n])}" width="200"></a>		
-						<?php }?>			
+						{if !empty($picarrs)}
+							{loop $picarrs $pitem}
+								<div class="parentFileBox allbox{$pitem['id']}" id="parentFileBox{$pitem['id']}" style="width: 30%;  margin-right: 3%;margin-top:3%;"> 
+									<a href="javascript::;" class="fmwebuploader-pick" id="webuploader{$pitem['id']}" onclick="javascript:$('#photo{$pitem['id']}').click();" style="display:none; width: 100%;height: 180px;" /><img src="{FMURL}images/addimages.png?v=3.0" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 15%;  top: 5%;"/></a>
+								  	<ul class="fileBoxUl" style="  width: 100%;height: 180px;">
+								    	<li id="fileBox_WU_FILE_{$pitem['id']}" class="diyUploadHover" style="  width: 100%; height: 180px;margin-top: 0;margin-left: 0;"> 
+								     		<div class="viewThumb"  style="  width: 100%; height: 180px;">
+								      			<a href="javascript::;" onclick="javascript:$('#photo{$pitem['id']}').click();" ><img src="{php echo toimage($pitem['photos'])}" id="preview{$pitem['id']}" width="100%;" /></a>
+								     		</div> 
+								    	 	<div id="imagedel{$pitem['id']}" class="imagedel"><a href="javascript::;" onclick="imagedel('{$pitem['id']}')"><div class="diyCancel" id="diyCancel{$pitem['id']}" style="display:block;" ></div></a></div>
+                        <div ><a href="{php echo toimage($pitem['photos'])}" target="_blank" ><div class="diySuccess" width="100%;" style="display:block;    cursor: default;bottom: 0px;  background: rgba(0, 0, 0, 0.66); width: 35px; height: 35px; text-align: center; color: #fff; border-radius: 3px; left: 0px;position:absolute;">查看原图</div></a></div>
+								    	 	<div id="setfm{$pitem['id']}" class="setfm"><a href="javascript::;" id="setfm{$pitem['id']}" onclick="setfm('{$pitem['id']}')"><div class="diySuccess {if $pitem['isfm']}isfm{/if}" id="diySuccess{$pitem['id']}" width="100%;" style="display:block;" >{if !$pitem['isfm']}设为封面{/if}</div></a></div>
+								     		<div class="diyFileName" id="diyFileName{$pitem['id']}">preview.png</div> 
+								     		<div class="diyBar" id="diyBar{$pitem['id']}" style="display:none"> 
+								      			<div class="diyProgress" id="diyProgress{$pitem['id']}"></div> 
+								      			<div class="diyProgressText" id="diyProgressText{$pitem['id']}"></div> 
+								    		</div>
+								    	</li>
+								  	</ul> 
+								 </div>
+								 <div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">
+									<input type="file" name="photo{$pitem['id']}" id="photo{$pitem['id']}" class="webuploader-element-invisible" style="display:none;" accept="image/*" capture="camera" onchange="changeone('photo{$pitem['id']}', '{$pitem['id']}')" >
+								</div>
+							{/loop}
+							{if $photosarrnum < $reply['tpxz']}
+								<div class="parentFileBox allbox{$mid}" id="parentFileBox{$mid}" style="width: 30%;  margin-right: 3%;margin-top:3%;"> 
+									<a href="javascript::;" class="fmwebuploader-pick" id="webuploader{$mid}" onclick="javascript:$('#photo{$mid}').click();" style="  width: 100%;height: 180px;"><img src="{FMURL}images/addimages.png?v=3.0" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 15%;  top: 5%;"/></a>
+									
+								  	<ul class="fileBoxUl" style="  width: 100%;height: 180px;">
+								    	<li id="fileBox_WU_FILE_{$mid}" class="diyUploadHover" style="  width: 100%; height: 180px;margin-top: 0;margin-left: 0;"> 
+								     		<div class="viewThumb" style="  width: 100%; height: 180px;">
+								      			<img src="" id="preview{$mid}"/>
+								     		</div> 
+								    	 	<div id="imagedel{$mid}" class="imagedel"><a href="javascript::;" onclick="imagedel('{$mid}')"><div class="diyCancel" id="diyCancel{$mid}" width="100%;"></div></a></div>
+								    	 	<div id="setfm{$mid}" class="setfm"><a href="javascript::;" id="setfm{$mid}" onclick="setfm('{$mid}')"><div class="diySuccess" id="diySuccess{$mid}" width="100%;">设为封面</div></a></div>
+								     		<div class="diyFileName" id="diyFileName{$mid}">preview.png</div> 
+								     		<div class="diyBar" id="diyBar{$mid}" style="display:none"> 
+								      			<div class="diyProgress" id="diyProgress{$mid}"></div> 
+								      			<div class="diyProgressText" id="diyProgressText{$mid}"></div> 
+								    		</div>
+								    	</li>
+								  	</ul> 
+								 </div>
+								 <div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">
+									<input type="file" name="photo{$mid}" id="photo{$mid}" class="webuploader-element-invisible" style="display:none;" accept="image/*" capture="camera" onchange="changeone('photo{$mid}', '{$mid}')" >
+								</div>
+							{/if}
+							<div id="afteradd"></div>
+						{else}
+							
+							<div class="parentFileBox allbox{$mid}" id="parentFileBox{$mid}" style="width: 30%;  margin-right: 3%;margin-top:3%;"> 
+								<a href="javascript::;" class="fmwebuploader-pick" id="webuploader{$mid}" onclick="javascript:$('#photo{$mid}').click();" style="  width: 100%;height: 180px;"><img src="{FMURL}images/addimages.png?v=3.0" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 15%;  top: 5%;"/></a>
+							  	<ul class="fileBoxUl" style="  width: 100%;height: 180px;">
+							    	<li id="fileBox_WU_FILE_{$mid}" class="diyUploadHover" style="  width: 100%; height: 180px;margin-top: 0;margin-left: 0;"> 
+							     		<div class="viewThumb" style="  width: 100%; height: 180px;">
+							      			<img src="" id="preview{$mid}" width="100%;"/>
+							     		</div> 
+							    	 	<div id="imagedel{$mid}" class="imagedel"><a href="javascript::;"  onclick="imagedel('{$mid}')"><div class="diyCancel" id="diyCancel{$mid}" ></div></a></div>
+							    	 	<div id="setfm{$mid}" class="setfm"><a href="javascript::;" id="setfm{$mid}" onclick="setfm('{$mid}')"><div class="diySuccess" id="diySuccess{$mid}" width="100%;">设为封面</div></a></div>
+							     		<div class="diyFileName" id="diyFileName{$mid}">preview.png</div> 
+							     		<div class="diyBar" id="diyBar{$mid}" style="display:none"> 
+							      			<div class="diyProgress" id="diyProgress{$mid}"></div> 
+							      			<div class="diyProgressText" id="diyProgressText{$mid}"></div> 
+							    		</div>
+							    	</li>
+							  	</ul> 
+							 </div>
+							 <div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">
+								<input type="file" name="photo{$mid}" id="photo{$mid}" class="webuploader-element-invisible" style="display:none;" accept="image/*" capture="camera" onchange="changeone('photo{$mid}', '{$mid}')" >
+							</div>
+							<div id="afteraddnew"></div>
+						{/if}
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label">录音间好声音</label>
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">多媒体</label>
 					<div class="col-sm-9 col-xs-12">
-						<a href="{php echo toimage($item['voice'])}" target="_blank" class="btn btn-success">点击试听</a>					
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label">上传好声音</label>
-					<div class="col-sm-9 col-xs-12">
-						<a href="{php echo toimage($item['music'])}"  target="_blank" class="btn btn-success">点击试听</a>					
-						
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label">视频</label>
-					<div class="col-sm-9 col-xs-12">
-						<a href="{php echo toimage($item['vedio'])}"  target="_blank" class="btn btn-success">点击查看</a>										
-												
+					<div class="parentFileBox allboxm" id="parentFileBoxm" style="width: 50%;"> 
+							<a href="javascript::;" class="fmwebuploader-pick" id="webuploaderm" onclick="javascript:$('#music').click();" style="{if !empty($item['music'])}display:none;{/if} width: 90%;height: 200px;  background: #E7E7E7;"><img src="{FMURL}images/music.png?v=3.0" width="30" style="width: 30%;position: absolute; z-index: 11;  text-align: center;  left: 35%;top:15%" /></a>
+							
+						  	<ul class="fileBoxUl">
+						    	<li id="fileBox_WU_FILE_m" class="diyUploadHover" style="  width: 90%;height: 200px;"> 
+						     		<div class="viewThumb" id="musicpreview" style="  width: 100%;height: 200px;background:#E7E7E7 url('{if !empty($item['music'])}{php echo $this->getphotos($fmimage['photos'], $item['avatar'], $reply['picture'])}{/if}') no-repeat;  background-size: 100% 100%;"> 
+						      			{if !empty($item['music'])}
+						      			<link rel="stylesheet" href="../addons/fm_photosvote/template/mobile/audio/style.css?{TIMESTAMP}" media="screen" type="text/css" />
+						      			<style type="text/css">label { text-shadow: 0px 0px 0px #000;}</style>
+										  <div id="players" style="position: absolute;top: 32%;bottom: 0;  text-align: center; left: 42%;  background: rgba(0, 0, 0, 0.5);">
+										    <audio id="audio" controls preload="none">
+										      <source src="{php echo tomedia($item['music'])}" type="audio/mpeg" codecs="mp3"></source>    
+										    </audio>
+										    <div class="coveraudio" style="top: 5%;right: 18px;opacity: 0.8;">
+										      <div class="controls">
+										        <button id="play-pause" title="Play" onclick="togglePlayPause()"><i class="fa fa-play fa-2x"></i></button>
+										      </div><!-- #controls -->
+										    </div><!-- #coveraudio -->
+										  </div><!-- #player -->
+										  <script src="../addons/fm_photosvote/template/mobile/audio/audio.js?{TIMESTAMP}"></script>
+										{/if}
+						     		</div> 
+						    	 	<div id="musicdel" class="musicdel"><a href="javascript::;" onclick="musicdel('{$item['music']}')"><div class="diyCancel" id="diyCancelm" width="100%;" {if !empty($item['music'])}style="display:block;"{/if}></div></a></div>
+						     		<div class="diyFileName" id="diyFileNamev">preview.png</div> 
+						     		<div class="diyBar" id="diyBarm" style="display:none"> 
+						      			<div class="diyProgress" id="diyProgressm" style="top:0;height:200px;"></div> 
+						      			<div class="diyProgressText" id="diyProgressTextm" style="font-size: 25px;"></div> 
+						    		</div>
+						    	</li>
+						  	</ul> 
+						</div>
+						<div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">
+							<input type="file" name="music" id="music" class="webuploader-element-invisible" style="display:none;" accept="audio/*" capture="camcorder" onchange="audios('music', 'm')" >
+						</div>
+						<div id="musicafter"></div>
+
+						<div class="parentFileBox allboxv" id="parentFileBoxv" style="width: 50%;"> 
+							<a href="javascript::;" class="fmwebuploader-pick" id="webuploaderv" onclick="javascript:$('#vedio').click();" style="{if !empty($item['vedio'])}display:none;{/if} width: 90%;height: 200px;  background: #E7E7E7;"><img src="{FMURL}images/video.png?v=3.0" width="30" style="width: 30%;position: absolute; z-index: 11;  text-align: center;  left: 35%;top:15%" /></a>
+							
+						  	<ul class="fileBoxUl">
+						    	<li id="fileBox_WU_FILE_v" class="diyUploadHover" style="  width: 90%;height: 200px;"> 
+						     		<div class="viewThumb" id="vediopreview" style=" background:#E7E7E7; width: 100%;height: 200px;"> 
+						      			
+							      			<video controls preload="auto" width="100%" height="200" id="previewv" poster="{if !empty($item['vedio'])}{php echo $this->getphotos($fmimage['photos'], $item['avatar'], $reply['picture'])}{/if}">
+												<source src="{php echo tomedia($item['vedio'])}" type='video/mp4' />
+												<p class="vjs-no-js">你的浏览器不支持该视频</a></p>
+											</video>
+										
+						     		</div> 
+						    	 	<div id="videodel" class="videodel"><a href="javascript::;" onclick="videodel('{$item['vedio']}')"><div class="diyCancel" id="diyCancelv" width="100%;" {if !empty($item['vedio'])}style="display:block;"{/if}></div></a></div>
+						     		<div class="diyFileName" id="diyFileNamev">preview.png</div> 
+						     		<div class="diyBar" id="diyBarv" style="display:none"> 
+						      			<div class="diyProgress" id="diyProgressv" style="top:0;height:200px;"></div> 
+						      			<div class="diyProgressText" id="diyProgressTextv" style="font-size: 25px;"></div> 
+						    		</div>
+						    	</li>
+						  	</ul> 
+						</div>
+						<div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">
+							<input type="file" name="vedio" id="vedio" class="webuploader-element-invisible" style="display:none;" accept="video/*" capture="camcorder" onchange="audios('vedio', 'v')" >
+						</div>
+						<div id="vedioafter"></div>			
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">网络视频</label>
 					<div class="col-sm-9 col-xs-12">
-						<a href="{if (substr($item['youkuurl'],0,7)=='http://')}{$item['youkuurl']}{else}http://player.youku.com/embed/{$item['youkuurl']}{/if}"  target="_blank" class="btn btn-success">点击查看</a>
-						<input type="text" name="youkuurl" class="form-control" value="{$item['youkuurl']}" />
+						<textarea name="youkuurl" style="width:50%; height:100px;float:left;margin-right:20px; " class="form-control" placeholder="请填写例如： 优酷、土豆、腾讯视频的通用代码。详细方法请点击右侧说明-->" cols="70" items="100">{$item['youkuurl']}</textarea>
+						<a href="http://bbs.012wz.com/forum.php?mod=viewthread&tid=6&extra=page%3D1" target="_blank">填写说明</a>
+						<div style="clear:both;"></div>
+						<br />
+						<div><span>预览：</span></div>
+						{if !empty($item['youkuurl'])}
+							<div class="parentFileBox allboxvw" id="parentFileBoxvw" style="width: 50%;"> 
+							  	<ul class="fileBoxUl">
+							    	<li id="fileBox_WU_FILE_vw" class="diyUploadHover" style="  width: 90%;height: 200px;"> 
+							     		<div class="viewThumb" id="vediopreview" style=" background:#E7E7E7; width: 100%;height: 200px;"> 
+							      			<iframe  src="{if (substr($item['youkuurl'],0,7)=='http://')}{$item['youkuurl']}{else}http://player.youku.com/embed/{$item['youkuurl']}{/if}" frameborder="0" allowfullscreen="" style="width:100%; height: 200px;">
+											</iframe>
+							     		</div>
+							    	</li>
+							  	</ul> 
+							</div>
+						{/if}
 					</div>
 				</div>
 				<div class="form-group">
@@ -394,14 +907,25 @@
 					<span class="help-block">总转发最终由投票者转发加被投票者转发与虚拟转发的总和，此处设置为虚拟转发</span>
 					</div>
 				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style="color:red">*</span>点赞</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="text" name="xnhits" class="form-control" value="{$item['zans']}" />
+					<span class="help-block">用户点赞数</span>
+					</div>
+				</div>
 				 <div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">审核</label>
 					<div class="col-sm-9 col-xs-12">
+            <label class='radio-inline'>
+              <input type='radio' name='status' value='1' {if $item['status']==1}checked{/if} /> 通过
+            </label>
 						<label class='radio-inline'>
-							<input type='radio' name='status' value='1' {if $item['status']==1}checked{/if} /> 通过
+							<input type='radio' name='status' value='2' {if $item['status']==2}checked{/if} /> 审核中
 						</label>
 						<label class='radio-inline'>
-							<input type='radio' name='status' value='0' {if $item['status']==0}checked{/if} /> 不通过
+							<input type='radio' name='status' value='3' {if $item['status']==3}checked{/if} /> 不通过
 						</label>
 					</div>
 				</div>
@@ -426,274 +950,19 @@
       			</div>
     		</div>
   		</div>
-	</div>	
-
-<div class="modal fade" id="Modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="  margin-top: 60px;">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title">上传封面</h4>
-			</div>
-			<form class="form-inline" role="form" id="uploadform" name="uploadform" method="post" action="" enctype="multipart/form-data">					
-					
-					<input type="hidden" name="a" id="a" value="entry" />
-					<input type="hidden" name="m" id="m" value="fm_photosvote" />
-					<input type="hidden" name="do" id="do" value="upimages" />
-					<input type="hidden" name="rid" id="rid" value="{$rid}" />
-					<input type="hidden" name="upphotosone" id="upphotosone" value="start" />
-					<input type="hidden" name="from_user" id="from_user" value="{$from_user}" />
-					<input type="hidden" name="token" id="token" value="{$_W['token']}"/>
-								
-				<div class="modal-body">
-						<div class="form-group">
-							<label>请选择封面照片(选择图片后，系统自动上传)：</label>
-							<input class="form-control" type="file" name="photo" id="photo" accept="image/*" readonly="readonly" capture="camera" onchange="changeone('photo', '0')" >
-						</div>
-						<img src="" id="uploadimg0"  onclick="showpic();" name="uploadimg0" style="display:none" >
-						<img src="{php echo toimage($item['photo'])}" id="preview0" name="pic" style="width:120px;  float: left;"  >
-						<div style="text-align:right; background-color: transparent;">
-							<div id="progressNumber0" style="  text-align:center;color: #000;  font-size: 15px;  margin-top: 0px;"></div>
-							<div style="  margin: 0 90px;   position: relative;  left: 60px;  top: 10px;"><div id="progress0">&nbsp;</div></div>
-						</div>
-				</div>
-				
-				<div class="modal-footer">
-					<!--<input type="submit" name="tijiao" id="tijiao" class="btn btn-success" value="开始上传">-->
-					<button type="button" class="btn btn-danger" data-dismiss="modal">上传完成，自动返回</button>
-				</div>
-			</form>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->			
-
-	<div class="modal fade" id="Modalp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="  margin-top: 60px;">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title">上传参赛图片</h4>
-			</div>
-			<form class="form-inline" role="form" id="uploadforp" name="uploadforp" method="post" action="" enctype="multipart/form-data">					
-					<input type="hidden" name="a" id="a" value="entry" />
-					<input type="hidden" name="m" id="m" value="fm_photosvote" />
-					<input type="hidden" name="do" id="do" value="upimages" />
-					<input type="hidden" name="rid" id="rid" value="{$rid}" />
-					<input type="hidden" name="upphotos" id="upphotos" value="start" />
-					<input type="hidden" name="from_user" id="from_user" value="{$from_user}" />
-					<input type="hidden" name="token" id="token" value="{$_W['token']}"/>
-				<div class="modal-body">
-					<style>
-					.form-group {  margin-bottom: 15px;  clear: both;  margin-top: 15px;}
-					</style>
-					<div class="form-group label label-info" style="padding: 2px 20px;">您还可以上传 {$reply['tpxz']} 张照片</div>
-					<?php for ($i = 1; $i <= $reply['tpxz']; $i++) {
-					$n = $i - 1;
-					?>				
-					
-							
-							<div class="form-group">
-								<label>请选择参赛照片：</label>
-								<input class="form-control" type="file" name="picarr_{$i}" id="picarr{$i}" accept="image/*" readonly="readonly" capture="camera" onchange="changeone('picarr{$i}', '{$i}')" style="  width: 100%;" >
-							<img src="" id="uploadimg{$i}"  onclick="showpic();" name="uploadimg{$i}" style="display:none">
-							<img src="{php echo toimage($item['picarr_'.$i])}" id="preview{$i}" name="pic{$i}" style="width:100px;"  >
-							<div style="text-align:right; background-color: transparent;">
-								<div id="progressNumber{$i}" style="  text-align:center;color: #000;  font-size: 15px;  margin-top: 0px;"></div>
-								<div style="  margin: 0 90px;   position: relative;  left: 60px;  top: 10px;"><div id="progress{$i}">&nbsp;</div></div>
-								
-								<div class="upsuccess"><div id="upsuccess" class="label label-danger" style="display:none;">&nbsp;</div></div>
-							</div>
-							
-							</div>
-							
-					<?php } ?>
-				</div>
-				<div class="modal-footer">
-					<!--<input type="submit" name="tijiaop" id="tijiaop" class="btn btn-success" value="开始上传">-->
-					<button type="button" class="btn btn-danger" data-dismiss="modal">完成</button>
-				</div>
-			</form>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<div class="modal fade" id="Modal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="  margin-top: 60px;">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title">上传好声音</h4>
-			</div>
-			<form class="form-inline" role="form" id="uploadformm" name="uploadformm" method="post" action="" enctype="multipart/form-data">					
-					<input type="hidden" name="a" id="a" value="entry" />
-					<input type="hidden" name="m" id="m" value="fm_photosvote" />
-					<input type="hidden" name="do" id="do" value="upaudios" />
-					<input type="hidden" name="rid" id="rid" value="{$rid}" />
-					<input type="hidden" name="upaudios" id="upaudios" value="start" />
-					<input type="hidden" name="audiotype" id="audiotype" value="music" />
-					<input type="hidden" name="from_user" id="from_user" value="{$from_user}" />
-					<input type="hidden" name="token" id="token" value="{$_W['token']}"/>
-								
-				<div class="modal-body">
-						<div class="form-group">
-							<label>请选择好声音：</label>
-							<input class="form-control" type="file" name="music" id="music"  readonly="readonly" accept="audio/*"> <!--onchange="changeaudios('music', 'm')"-->
-							<div style="text-align:right; background-color: transparent;">
-								<div id="progressNumberm" style="  text-align:center;color: #000;  font-size: 15px;  margin-top: 0px;"></div>
-								<div style="    margin: 0 20px;  position: relative;  /* left: 60px; */  top: 10px;  margin-bottom: 20px;"><div id="progressm">&nbsp;</div></div>
-							</div>
-						
-						</div>
-						<div id="uploadm"  onclick="showmusic();" name="uploadm" ></div>
-						<input value="{$item['music']}"  name="music" id="previewm" type="text"  placeholder="请在此输入远程音频地址" style="width: 100%; "/>																													
-				</div>
-				<div class="modal-footer">
-					<input type="submit" name="tijiaom" id="tijiaom" class="btn btn-success" value="开始上传">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">上传完成，自动返回</button>
-				</div>
-			</form>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+	</div>		
 									
 
-
-<div class="modal fade" id="Modal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="  margin-top: 60px;">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title">上传视频</h4>
-			</div>
-			<form class="form-inline" role="form" id="uploadformv" name="uploadformv" method="post" action="" enctype="multipart/form-data">					
-					<input type="hidden" name="a" id="a" value="entry" />
-					<input type="hidden" name="m" id="m" value="fm_photosvote" />
-					<input type="hidden" name="do" id="do" value="upaudios" />
-					<input type="hidden" name="rid" id="rid" value="{$rid}" />
-					<input type="hidden" name="upaudios" id="upaudios" value="start" />
-					<input type="hidden" name="audiotype" id="audiotype" value="vedio" />
-					<input type="hidden" name="from_user" id="from_user" value="{$from_user}" />
-					<input type="hidden" name="token" id="token" value="{$_W['token']}"/>
-								
-				<div class="modal-body">
-						<div class="form-group">
-							<label>请选择视频(MP4格式)：</label>
-							<input class="form-control" type="file" name="vedio" id="vedio" readonly="readonly" accept="video/*">
-							<div style="text-align:right; background-color: transparent;">
-								<div id="progressNumberv" style="  text-align:center;color: #000;  font-size: 15px;  margin-top: 0px;"></div>
-								<div style="    margin: 0 20px;  position: relative;  /* left: 60px; */  top: 10px;  margin-bottom: 20px;"><div id="progressv">&nbsp;</div></div>
-							</div>
-						</div>
-						<div id="uploadv"  onclick="showvedio();" name="uploadv"></div>
-						<input value="{$item['vedio']}"  name="vedio" id="previewv" type="text" placeholder="请在此输入远程视频地址" style="width: 100%; "/>	
-				</div>
-				<div class="modal-footer">
-					<input type="submit" name="tijiaov" id="tijiaov" class="btn btn-success" value="开始上传">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">上传完成，自动返回</button>
-				</div>
-			</form>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-	
+<div class="loading" style="display: none;"></div>
+<div class="overlay_container j_overlay_container unmasked beforeFadeIn" style="display: none;"><div class="overlay_content_container j_overlay_content_container"><div class="overlay_content"><div id="toast" class="toast"></div></div></div></div>
+<div id="bodyhidden" style="display: none;"></div>
 <script type="text/javascript">
 
-	require(['jquery', 'util'], function($, u){		
-		$("#tijiaom").click(function(e){
-			
-			e.preventDefault();
-			var ismusic = document.getElementById("music");
-			//alert(ismusic);
-			
-			var mid = 'm'; 
-			var audio = 'music'; 		
-			audios(audio, mid);
-			return false;
+	require(['jquery', 'util'], function($, u){	
+		$(function(){
+			u.editor($('.richtext')[0]);
 		});
-		//$("#uploadformv").submit(function(e){
-		$("#tijiaov").click(function(e){
-			e.preventDefault();
-			var mid = 'v'; 
-			var audio = 'vedio'; 		
-			audios(audio, mid);
-			return false;
-		});
-		function changeaudios(audio, mid) {
-			e.preventDefault();	
-			audios(audio, mid);
-		}
 
-		
-		function audios(audio, mid) {
-			var music = "#" + audio;
-			var uploadform = "uploadform" + mid;
-			  //空对象然后添加
-			  
-			var fd = new FormData();
-			 
-			fd.append(audio, $(music).val());
-			  //fd.append("file", $(":file")[0].files[0]); //jQuery 方式
-			
-			fd.append("audiotype", audio);
-			   
-			  //通过表单对象创建 FormData
-			var fd = new FormData(document.getElementById(uploadform));
-			  //var fd = new FormData($("uploadformm:eq(0)")[0]); //jquery 方式
-			setTimeout(function () {
-				var progress = 'progress' + mid;					
-				var oProgress = document.getElementById(progress);
-					oProgress.style.display = 'block';
-					oProgress.style.width = '0px';
-				//XMLHttpRequest 原生方式发送请求
-				var xhr = new XMLHttpRequest();  
-				xhr.upload.addEventListener('progress', function(e, m){ uploadProgress(e,mid); }, false);
-				xhr.addEventListener("load",  function(e, m){ uploadComplete(e,mid); }, false);
-				xhr.addEventListener("error", function(e, m){ uploadFailed(e,mid); }, false);
-				xhr.addEventListener("abort", function(e, m){ uploadCanceled(e,mid); }, false);
-			  
-				xhr.open("POST" ,"{php echo $this->createWebUrl('upaudios', array('from_user' => $from_user, 'upaudios' => 'start', 'rid' => $rid))}" , true);
-				xhr.send(fd);
-				//xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-				xhr.onload = function(e) {
-						if (this.readyState === 4 && this.status  === 200) {
-							var result = JSON.parse(xhr.response);
-							console.log(result);						
-							//uppic();
-							//alert(result.msg);
-							if (result.success == true) {
-								var preview = "#preview" + mid;
-								var upload = "#upload" + mid;
-								$(preview).hide();
-								//u.loaded();
-								$(upload).text(result.imgurl);
-								setTimeout(function () {								
-									window.location.reload();
-								},3000)
-								return 
-							} else {
-								if (result.success == 9) {
-									//windows.location.href = result.linkurl;
-									//alert(result.msg);
-									u.message(result.msg, '', 'error');
-									
-									setTimeout(function () {								
-										window.location.href = result.linkurl;
-									},1000)	
-									return false;
-								}
-								if (result.success == -1) {
-									//alert(result.msg);
-									u.message(result.msg, '', 'error');
-									return false;
-								}
-								return false;
-							}							
-							return false;						
-						}			
-				};
-			});
-			return false;
-		}					
     });
 
 </script>	
@@ -701,7 +970,18 @@
 
 
 
+<script src="../addons/fm_photosvote/template/mobile/newfile/dist/lrz.bundle.js"></script>
 <script type="text/javascript">
+	function fmloadding(id, text) {
+		$(id).show();
+		$(id).removeClass("beforeFadeIn");
+
+		setTimeout(function () {
+			$(id).hide();
+			$(id).addClass("beforeFadeIn");
+		},3000)
+		$('#toast').html(text);
+	}
 	function sendpic(){
 		 $('#Modal1').modal('toggle');
 	}
@@ -725,62 +1005,213 @@
 		 $('#uppic').modal('toggle');
 	}
 	
+	function afteradd(addmid){
+		var html ='<div class="parentFileBox allbox' + addmid + '" id="parentFileBox' + addmid + '"  style="width: 30%;  margin-right: 3%;margin-top:3%;">  ';
+            html +='<a href="javascript::;" class="fmwebuploader-pick" id="webuploader' + addmid + '" onclick="javascript:$(\'#photo' + addmid + '\').click();" style="  width: 100%;height: 180px;"><img src="{FMURL}images/addimages.png?v=3.0" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 15%;  top: 5%;"/></a>';
+            html +='<ul class="fileBoxUl" style="  width: 100%;height: 180px;">';
+			html +='    	<li id="fileBox_WU_FILE_' + addmid + '" class="diyUploadHover" style="  width: 100%; height: 180px;margin-top: 0;margin-left: 0;">  ';
+			html +='     		<div class="viewThumb"  style="  width: 100%; height: 180px;">';
+			html +='      			<img src="" id="preview' + addmid + '"/>';
+			html +='     		</div> ';
+			html +='    	 	<div id="imagedel' + addmid + '" class="imagedel"><a href="javascript::;" onclick="imagedel(\'' + addmid + '\')"><div class="diyCancel" id="diyCancel' + addmid + '" width="100%;"></div></a></div>';
+			html +='     		<div id="setfm' + addmid + '" class="setfm"><a href="javascript::;" id="setfm' + addmid + '" onclick="setfm(\'' + addmid + '\')"><div class="diySuccess" id="diySuccess' + addmid + '" width="100%;">设为封面</div></a></div> ';
+			html +='     		<div class="diyFileName" id="diyFileName' + addmid + '">preview.png</div> ';
+			html +='     		<div class="diyBar" id="diyBar' + addmid + '" style="display:none"> ';
+			html +='      			<div class="diyProgress" id="diyProgress' + addmid + '"></div> ';
+			html +='      			<div class="diyProgressText" id="diyProgressText' + addmid + '"></div> ';
+			html +='    		</div>';
+			html +='    	</li>';
+			html +='  	</ul></div>';
+            html += '<div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">';
+            html +='<input type="file" name="photo' + addmid + '" id="photo' + addmid + '" class="webuploader-element-invisible" style="display:none;" accept="image/*" capture="camera" onchange="changeone(\'photo' + addmid + '\', \'' + addmid + '\');" ></div>';
+        {if !empty($picarrs)}
+         $("#afteradd").parent().append( html );
+        {else}
+         $("#afteraddnew").parent().append( html );
+        {/if}
+		return false;
+        
+    }
+    
+		
+    function vedioafter(mid){
+		var html ='<div class="parentFileBox allboxv" id="parentFileBoxv" style="width: 50%;"> ';
+			html +='			<a href="javascript::;" class="fmwebuploader-pick" id="webuploaderv" onclick="javascript:$(\'#vedio\').click();" style="width: 90%;height: 200px;"><img src="{FMURL}images/addimages.png?v=3.0" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;" /></a>';
+						
+			html +='		  	<ul class="fileBoxUl">';
+			html +='		    	<li id="fileBox_WU_FILE_v" class="diyUploadHover" style="  width: 90%;height: 200px;"> ';
+			html +='		     		<div class="viewThumb" id="vediopreview" style="  width: 100%;height: 200px;"> ';
+			html +='		      			<video controls preload="auto" width="100%" height="200" id="previewv" poster="">';
+			html +='							<source src="" type=\'video/mp4\' />';
+			html +='							<p class="vjs-no-js">你的浏览器不支持该视频</a></p>';
+			html +='						</video>';
+			html +='		     		</div> ';
+			html +='		    	 	<div id="videodel" class="videodel"><a href="javascript::;" ><div class="diyCancel" id="diyCancelv" width="100%;"></div></a></div>';
+			html +='		     		<div class="diyFileName" id="diyFileNamev">preview.png</div> ';
+			html +='		     		<div class="diyBar" id="diyBarv" style="display:none"> ';
+			html +='		      			<div class="diyProgress" id="diyProgressv" style="top:0;height:200px;"></div> ';
+			html +='		      			<div class="diyProgressText" id="diyProgressTextv" style="font-size: 25px;"></div> ';
+			html +='		    		</div>';
+			html +='		    	</li>';
+			html +='		  	</ul> ';
+			html +='	 	</div>';
+			html +='	 	<div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">';
+			html +='			<input type="file" name="vedio" id="vedio" class="webuploader-element-invisible" style="display:none;" accept="video/*" capture="camcorder" onchange="changeaudios(\'vedio\', \'v\')" >';
+			html +='		</div>';
+        $("#vedioafter").parent().append( html );
+		return false;
+        
+    }
+     function musicafter(mid){
+		var html ='<div class="parentFileBox allboxm" id="parentFileBoxm" style="width: 50%;"> ';
+			html +='			<a href="javascript::;" class="fmwebuploader-pick" id="webuploaderm" onclick="javascript:$(\'#music\').click();" style="width: 90%;height: 200px;"><img src="{FMURL}images/addimages.png?v=3.0" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;" /></a>';
+						
+			html +='		  	<ul class="fileBoxUl">';
+			html +='		    	<li id="fileBox_WU_FILE_m" class="diyUploadHover" style="  width: 90%;height: 200px;"> ';
+			html +='		     		<div class="viewThumb" id="musicpreview" style="  width: 100%;height: 200px;"> ';
+			html +='		     		</div> ';
+			html +='		    	 	<div id="musicdel" class="musicdel"><a href="javascript::;" ><div class="diyCancel" id="diyCancelm" width="100%;"></div></a></div>';
+			html +='		     		<div class="diyFileName" id="diyFileNamem">preview.png</div> ';
+			html +='		     		<div class="diyBar" id="diyBarm" style="display:none"> ';
+			html +='		      			<div class="diyProgress" id="diyProgressm" style="top:0;height:200px;"></div> ';
+			html +='		      			<div class="diyProgressText" id="diyProgressTextm" style="font-size: 25px;"></div> ';
+			html +='		    		</div>';
+			html +='		    	</li>';
+			html +='		  	</ul> ';
+			html +='	 	</div>';
+			html +='	 	<div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">';
+			html +='			<input type="file" name="music" id="music" class="webuploader-element-invisible" style="display:none;" accept="audio/*" capture="camcorder" onchange="changeaudios(\'music\', \'m\')" >';
+			html +='		</div>';
+        $("#musicafter").parent().append( html );
+		return false;
+        
+    }
+	function imagedel(mid) {
+		fmloadding('.overlay_container', '正在删除中');
+
+        var url  = "{php echo $this->createWebUrl('provevote', array('foo' => 'post','rid'=>$rid,'from_user'=>$from_user, 'delete' => 1))}&photoid="+mid;
+        $.ajax({
+            url:url,
+            type:"post",
+            dataType:"json",
+            success:function(result){		
+               if(result.flag == '1'){
+
+	             	$(".allbox" + mid).remove();      
+	             	fmloadding('.overlay_container', result.msg);
+	             	var tpxz = "{$reply['tpxz']}";
+					//if (result.photosarrnum < tpxz) {
+					//	afteradd(result.addlastmid);
+					//}
+	            }else{
+	               fmloadding('.overlay_container', result.msg);
+	            }       
+            }
+        });
+		return false;
+	}
+	function videodel(mid) {
+		fmloadding('.overlay_container', '正在删除中');
+
+        var url  = "{php echo $this->createWebUrl('provevote', array('foo' => 'post','rid'=>$rid,'from_user'=>$from_user, 'deletev' => 1))}&vedio="+mid;
+        $.ajax({
+            url:url,
+            type:"post",
+            dataType:"json",
+            success:function(result){		
+               if(result.flag == '1'){
+               		$(".allboxv").remove();  
+               		vedioafter(result.mid);
+	             	fmloadding('.overlay_container', result.msg);
+	            }else{
+	               fmloadding('.overlay_container', result.msg);
+	            }       
+            }
+        });
+		return false;
+	}
+
+	function musicdel(mid) {
+		fmloadding('.overlay_container', '正在删除中');
+
+        var url  = "{php echo $this->createWebUrl('provevote', array('foo' => 'post','rid'=>$rid,'from_user'=>$from_user, 'deletem' => 1))}&music="+mid;
+        $.ajax({
+            url:url,
+            type:"post",
+            dataType:"json",
+            success:function(result){		
+               if(result.flag == '1'){
+               		$(".allboxm").remove();  
+               		musicafter(result.mid);
+	             	fmloadding('.overlay_container', result.msg);
+	            }else{
+	               fmloadding('.overlay_container', result.msg);
+	            }       
+            }
+        });
+		return false;
+	}
+	function setfm(mid) {
+		fmloadding('.overlay_container', '正在设置中');
+        var url  = "{php echo $this->createWebUrl('provevote', array('foo' => 'post','rid'=>$rid,'from_user'=>$from_user, 'setfm' => 1))}&photoid="+mid;
+        $.ajax({
+            url:url,
+            type:"post",
+            dataType:"json",
+            success:function(result){		
+               if(result.flag == '1'){ 
+               		$("#diySuccess" + mid).addClass('isfm');
+               		$("#diySuccess" + mid).html('');
+					$("#diySuccess" + result.delmid).removeClass('isfm');
+           			$("#diySuccess" + result.delmid).html('设为封面');
+	             	fmloadding('.overlay_container', result.msg);
+	            }else{
+	               fmloadding('.overlay_container', result.msg);
+	            }       
+            }
+        });
+		return false;
+	}
+	
+	
 		function upload(filename, posturl, mid) {
-			require(['jquery', 'util'], function($, util){
 				var width = "{$reply['autolitpic']}";
 				var zl = "{php echo $reply['autozl']/100}";
-				// 也可以传入图片路径：lrz('../demo.jpg', ...
-				lrz(filename.files[0], {
-					zwidth: width,
-					quality:zl,
-					before: function() {
-						document.getElementById('progressNumber' + mid).innerHTML = '正在压缩图片...' ;
-						//console.log('压缩开始');
-					},
-					fail: function(err) {
-						document.getElementById('progressNumber' + mid).innerHTML = '压缩失败' ;
-						//console.error(err);
-					},
-					always: function() {
-						document.getElementById('progressNumber' + mid).innerHTML = '压缩成功，开始上传图片...' ;
-						//console.log('压缩结束');
-					},
-					done: function (results) {
-					// 你需要的数据都在这里，可以以字符串的形式传送base64给服务端转存为图片。
+
+			 	lrz(filename.files[0], {
+			        width: width,
+			        quality: zl
+			    })
+				.then(function (rst) {
 					//var MB = 1000*1000;
 					var imgsize = "{$_W['setting']['upload']['image']['limit']}";
-					var imgmsize = imgsize/1024;
-					var ytsize = results.origin.size;
-					if (ytsize > imgsize*1024) {
+					var imgsizem = "{php echo $_W['setting']['upload']['image']['limit']*1024;}";
+					var imgmsize ="{php echo $_W['setting']['upload']['image']['limit']/1024;}";
+					var ytsize = rst.origin.size;
+					if (ytsize > imgsizem) {
 						var amsg = '图片大小不能超过 '+imgmsize+' MB';
-						alert(amsg);
-						//u.message('图片大小不能超过 '+imgmsize+' MB', '', 'error');
+						fmloadding('.overlay_container', amsg);
 						return false;
 					}
 					
 					
-					
-					//	console.log(results.base64.length);
-					//	u.message(results.base64, '', 'error');
-					//	return false;
 					setTimeout(function () {
-						var progress = 'progress' + mid;					
-						var oProgress = document.getElementById(progress);
-						oProgress.style.display = 'block';
-						oProgress.style.width = '0px';
+						document.getElementById('webuploader' + mid).style.display = 'none';
+						document.getElementById('diyBar' + mid).style.display = 'block';
+						
 						// 发送到后端
 						var xhr = new XMLHttpRequest();
 						var data = {
-							base64: results.base64,
-							size: results.base64.length // 校验用，防止未完整接收
+							base64: rst.base64,
+							size: rst.base64.length // 校验用，防止未完整接收
 						};
 					
+						
 					
-					
-					xhr.upload.addEventListener('progress', function(e, m){ uploadProgress(e,mid); }, false);
-					xhr.addEventListener("load",  function(e, m){ uploadComplete(e,mid); }, false);
-					xhr.addEventListener("error", function(e, m){ uploadFailed(e,mid); }, false);
-					xhr.addEventListener("abort", function(e, m){ uploadCanceled(e,mid); }, false);
+						xhr.upload.addEventListener('progress', function(e, m){ uploadProgress(e,mid); }, false);
+						xhr.addEventListener("load",  function(e, m){ uploadComplete(e,mid); }, false);
+						xhr.addEventListener("error", function(e, m){ uploadFailed(e,mid); }, false);
+						xhr.addEventListener("abort", function(e, m){ uploadCanceled(e,mid); }, false);
 						
 
 						xhr.open('POST', posturl);
@@ -791,39 +1222,50 @@
 								//console.log(result);						
 								//uppic();
 								if (result.success == true) {
-									var preview = '#preview' + mid;
-									var uploadimg = 'uploadimg' + mid;
-									$(preview).hide();								
-									var bigimg = document.getElementById(uploadimg);
-									bigimg.src=result.imgurl;									
-									bigimg.style.display = 'block';
-									bigimg.style.width = '120px';
-									bigimg.style.float = 'left';
-									document.getElementById("upsuccess").innerHTML = result.msg;
-									document.getElementById("upsuccess").style.display = 'block';
-									if (mid == 0) {
-										setTimeout(function () {								
-											window.location.reload();
-										},3000)
-										return 
+									fmloadding('.overlay_container', result.msg);
+									document.getElementById('imagedel' + mid).innerHTML = '<a href="javascript::;"  onclick="imagedel('+ result.lastmid +')"><div class="diyCancel" id="diyCancel'+ result.lastmid +'" ></div></a>';
+									document.getElementById('setfm' + mid).innerHTML = '<a href="javascript::;"  onclick="setfm('+ result.lastmid +')"><div class="diySuccess" id="diySuccess'+ result.lastmid +'" >设为封面</div></a>';
+									$("#parentFileBox" + mid).removeClass("allbox" + mid);
+									$("#parentFileBox" + mid).addClass("allbox" + result.lastmid);
+									document.getElementById('diyBar' + mid).style.display = 'none';
+									document.getElementById('preview' + mid).style.display = 'block';						
+									document.getElementById('preview' + mid).src = result.imgurl;
+									document.getElementById('diyCancel' + result.lastmid).style.display = 'block';
+									document.getElementById('diySuccess' + result.lastmid).style.display = 'block';
+									var tpxz = "{$reply['tpxz']}";
+									if (result.photosarrnum < tpxz) {
+										afteradd(result.addlastmid);
 									}
-									
+									//return false;
 									
 								} else {
+									fmloadding('.overlay_container', result.msg);
 									//alert(result.msg);
-									u.message(result.msg, '', 'error');
+									if (result.flag == 3) {
+										setTimeout(function () {								
+											window.location.href = result.linkurl;
+										},1000)	
+									}
+									return false;
 								}
 								return						
 							}
 						};
-						xhr.send(JSON.stringify(data)); // 发送base64	
-						//results.base64 = null;
+						xhr.send(JSON.stringify(data)); // 发送base64
+						//rst.base64 = null;
 						//xhr.Response.End();
 					}, 100);						
 					
-					}	
-				});
-			});	
+				})
+
+		        .catch(function (err) {
+		            // 万一出错了，这里可以捕捉到错误信息
+		            // 而且以上的then都不会执行
+		            console.log(err);
+		            alert(err);
+		        });
+				// 也可以传入图片路径：lrz('../demo.jpg', ...
+				
 		}
 		
 		function uploadProgress(evt,mid) {			
@@ -832,22 +1274,20 @@
 				//iBytesTotal = evt.total;
 				var iPercentComplete = Math.round(evt.loaded * 100 / evt.total);
 				//var iBytesTransfered = bytesToSize(iBytesUploaded);
+
+				
+				document.getElementById('diyProgressText' + mid).innerHTML = iPercentComplete.toString() + '%' ;
+				document.getElementById('diyProgress' + mid).style.left = (iPercentComplete * 1).toString() + '%';
+				document.getElementById('diyProgressText' + mid).style.left = (iPercentComplete * 1 - 15).toString() + '%';
 				
 				
-				document.getElementById('progressNumber' + mid).innerHTML = iPercentComplete.toString() + '%' + '正在上传...' ;
-				document.getElementById('progress' + mid).style.width = (iPercentComplete * 1).toString() + '%';
-				
-				
-				//document.getElementById('b_transfered').innerHTML = iBytesTransfered;
 				if (iPercentComplete == 100) {
-					document.getElementById('progressNumber' + mid).innerHTML = '请稍等，正在上传云端...' ;
-					//oUploadResponse.style.display = 'block';
+					document.getElementById('diyProgressText' + mid).innerHTML = '上传云端中...' ;
+					document.getElementById('diyProgressText' + mid).style.left = '30%';
 				}			
-                //var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-                //document.getElementById('progressNumber').innerHTML = percentComplete.toString() + '%';
             }
             else {
-				document.getElementById('progressNumber' + mid).innerHTML = 'unable to compute';
+				document.getElementById('diyProgressText' + mid).innerHTML = 'unable to compute';
 				
             }
         }
@@ -861,22 +1301,25 @@
             /* This event is raised when the server send back a response */
             //alert(evt.target.responseText);
 			
-			var progressNumber = 'progressNumber' + mid;
+			var progressNumber = 'diyProgressText' + mid;
 			
-			document.getElementById(progressNumber).innerHTML = '100%(上传完成！)';
+			document.getElementById(progressNumber).innerHTML = '上传完成';
+			document.getElementById(progressNumber).style.left = '35%';
         }
  
         function uploadFailed(evt,mid) {
-			var progressNumber = 'progressNumber' + mid;
+			var progressNumber = 'diyProgressText' + mid;
 			document.getElementById(progressNumber).innerHTML = '上传时出错！';
+			document.getElementById(progressNumber).style.left = '31%';
            // alert("There was an error attempting to upload the file.");
         }
  
         function uploadCanceled(evt,mid) {
 		
-			var progressNumber = 'progressNumber' + mid;
-           // alert("The upload has been canceled by the user or the browser dropped the connection.");
-			document.getElementById(progressNumber).innerHTML = '取消上传！';
+			var progressNumber = 'diyProgressText' + mid;
+           // alert("The upload has been canceled by the user or the bitemser dropped the connection.");
+			document.getElementById(progressNumber).innerHTML = '取消上传';
+			document.getElementById(progressNumber).style.left = '35%';
         }
 		
 	function changeone(photo, mid) {
@@ -889,11 +1332,10 @@
 		//alert(ext); 
 		 // gif在IE浏览器暂时无法显示
 		 if(ext!='png'&&ext!='jpg'&&ext!='jpeg'){
-			 alert("图片的格式必须为png或者jpg或者jpeg格式！"); 
+			 fmloadding('.overlay_container', '图片的格式必须为png或者jpg或者jpeg格式！');
 			 return;
 		 }
 		 
-		
 		var posturl = "{php echo $this->createWebUrl('upimages', array('from_user' => $from_user, 'upphotosone' => 'start','rid' => $rid))}&mid=" + mid;
 		//var mid = '0';
 		upload(file, posturl, mid);
@@ -917,29 +1359,67 @@
 		 }else {
 			html5Reader(file,mid);
 		 }
-		 
-		   
 	}
-	
-	
 	function html5Reader(file, mid){
 		 var file = file.files[0];
 		 var reader = new FileReader();
 		 reader.readAsDataURL(file);
 		 reader.onload = function(e){
-		 var preview = 'preview' + mid;
-		 var uploadimg = '#uploadimg' + mid;
-			$(uploadimg).hide();
-			var pic = document.getElementById(preview);
+			$('#uploadimg' + mid).hide();
+			var pic = document.getElementById('preview' + mid);
 			pic.src=this.result;
 			pic.style.display = 'block';
-				pic.style.width = '120px';
-				//pic.style.height = '100px';
-				pic.style.float = 'left';
-				//pic.style.css("margin-bottom","15px");
 		 }
 	 }
-	 
+
+	 function audios(audio, mid) {
+			//var music = "#" + audio;
+			  //空对象然后添加
+			var file = document.getElementById(audio).files[0];
+			
+			var fd = new FormData();
+			 
+			//fd.append(audio, $(music).val());
+			fd.append("audiotype", audio);
+			fd.append("files", file);
+			  
+			setTimeout(function () {
+				document.getElementById('webuploader' + mid).style.display = 'none';
+				document.getElementById('diyBar' + mid).style.display = 'block';
+
+				//XMLHttpRequest 原生方式发送请求
+				var xhr = new XMLHttpRequest();  
+				xhr.upload.addEventListener('progress', function(e, m){ uploadProgress(e,mid); }, false);
+				xhr.addEventListener("load",  function(e, m){ uploadComplete(e,mid); }, false);
+				xhr.addEventListener("error", function(e, m){ uploadFailed(e,mid); }, false);
+				xhr.addEventListener("abort", function(e, m){ uploadCanceled(e,mid); }, false);
+				xhr.open("POST" ,"{php echo $this->createWebUrl('upaudios', array('from_user' => $from_user, 'upaudios' => 'start', 'rid' => $rid))}" , true);
+				xhr.send(fd);
+				//xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+				xhr.onload = function(e) {
+						if (this.readyState === 4 && this.status  === 200) {
+							var result = JSON.parse(xhr.response);
+							console.log(result);
+							//return false;
+							if (result.success == true) {
+								fmloadding('.overlay_container', result.msg);
+								return 
+							} else {
+								fmloadding('.overlay_container', result.msg);
+									//alert(result.msg);
+									if (result.flag == 3) {
+										setTimeout(function () {								
+											window.location.href = result.linkurl;
+										},1000)	
+									}
+									return false;
+							}							
+							return false;						
+						}			
+				};
+			});
+			return false;
+		}
 	
 </script>    
 

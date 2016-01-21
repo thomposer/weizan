@@ -31,28 +31,28 @@
 			
 		</script>
 		
-		<div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>后台是否开启添加报名</label>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>前端是否开启报名</label>
             <div class="col-sm-9 col-xs-12">
-               	<label class="radio-inline">
-                	<input type="radio" name="addpv" value="1" {if $reply['addpv'] == 1} checked="checked"{/if}/>是
+                <label class="radio-inline">
+                    <input type="radio" name="addpvapp" value="1" {if $reply['addpvapp'] == 1} checked="checked"{/if}/>是
                 </label>
                 <label class="radio-inline">
-                	<input type="radio" name="addpv" value="0" {if $reply['addpv'] == 0} checked="checked"{/if}/>否
+                    <input type="radio" name="addpvapp" value="0" {if $reply['addpvapp'] == 0} checked="checked"{/if}/>否
                 </label>
-				<div class="help-block">后台管理员添加报名开关</div>
+                <div class="help-block">前端是否允许用户报名</div>
             </div>
         </div>
 		<div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>前端是否开启报名</label>
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>报名数据是否同步至系统粉丝数据表</label>
             <div class="col-sm-9 col-xs-12">
                	<label class="radio-inline">
-                	<input type="radio" name="addpvapp" value="1" {if $reply['addpvapp'] == 1} checked="checked"{/if}/>是
+                	<input type="radio" name="isfans" value="1" {if $reply['isfans'] == 1} checked="checked"{/if}/>是
                 </label>
                 <label class="radio-inline">
-                	<input type="radio" name="addpvapp" value="0" {if $reply['addpvapp'] == 0} checked="checked"{/if}/>否
+                	<input type="radio" name="isfans" value="0" {if $reply['isfans'] == 0} checked="checked"{/if}/>否
                 </label>
-				<div class="help-block">前端是否允许用户报名</div>
+				<div class="help-block">报名数据是否同步至系统粉丝数据表</div>
             </div>
         </div>
 		
@@ -94,7 +94,7 @@
 			<label class="col-xs-12 col-sm-2 col-md-2  control-label">多媒体上传说明</label>
 			<div class="col-sm-8">
 				<textarea name="webinfo" style="height:200px; " class="form-control richtexti" cols="70" rows="100">{$reply['webinfo']}</textarea>				
-				<div class="help-block">对上传图片、声音、视频、网络视频的详细说明</div>
+				<div class="help-block">对上传图片、声音、视频、网络视频的详细说明（<a href="http://bbs.012wz.com/forum.php?mod=viewthread&tid=6&extra=page%3D1" target="_blank">查看默认说明</a>）</div>
 			</div>
 		</div>
 		
@@ -163,7 +163,7 @@
                 <label class="radio-inline">
                 	<input type="radio" name="isipv" value="0" {if $reply['isipv'] == 0} checked="checked"{/if}/>否
                 </label>				
-				<div class="help-block">是否开启IP作弊限制</div>
+				<div class="help-block">是否开启IP作弊限制,注意：开启IP防作弊，会大大减慢服务器的速度，请谨慎开启。</div>
             </div>
         </div>
 		<div class="form-group">
@@ -200,10 +200,22 @@
         </div>
 
         <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区限制</label>
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区限制提示</label>
             <div class="col-xs-12 col-sm-9">
                 <input type="text" name="iplocaldes" value="{$reply['iplocaldes']}" class="form-control">
                 <span class="help-block">不在活动范围内的用户提示，可以使用的命令有：<br /> #限制地区#  允许的活动范围地区<br />#用户地区#  用户的实际地区</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">投票限速</label>
+            <div class="col-xs-12 col-sm-9">
+                <div class="input-group">
+                    <span class="input-group-addon">全体用户每</span>
+                    <input type="text" name="limitsd" id="limitsd" class="form-control" value="{$reply['limitsd']}" />
+                    <span class="input-group-addon">分钟投</span>
+                    <input type="text" name="limitsdps" id="limitsdps" class="form-control" value="{$reply['limitsdps']}" />
+                    <span class="input-group-addon">票</span>
+                </div>
             </div>
         </div>
 		 <div class="form-group">
@@ -240,36 +252,6 @@
             </div>
         </div>
 		
-		<div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启投票倒计时</label>
-            <div class="col-sm-9 col-xs-12">
-               	<label class="radio-inline">
-                	<input type="radio" name="isdaojishi" value="1" {if $reply['isdaojishi'] == 1} checked="checked"{/if}/>是
-                </label>
-                <label class="radio-inline">
-                	<input type="radio" name="isdaojishi" value="0" {if $reply['isdaojishi'] == 0} checked="checked"{/if}/>否
-                </label>
-            </div>
-            <div class="help-block">不了解熟悉此倒计时系统的请勿开启，此倒计时3.0版本将取消。</div>
-        </div>
-		 <div class="form-group">
- 			<label class="col-xs-12 col-sm-3 col-md-2 control-label">用户倒计时投票时间</label>
-            <div class="col-sm-9 col-xs-6">
-				<div class="input-group">
-					<span class="input-group-addon">每个用户拥有</span>
-					<input type="text" class="form-control" name="votetime" value="{$reply['votetime']}" />
-					<span class="input-group-addon">天的投票时间</span>
-				</div>
-				<div class="help-block">请填写正整数，时间单位为 天</div>
-            </div>
-        </div>
-		<div class="form-group">
-			<label class="col-xs-12 col-sm-2 col-md-2  control-label">用户倒计时，投票时间结束提示语</label>
-			<div class="col-sm-8">
-				<input type="text" class="form-control" name="ttipvote" value="{$reply['ttipvote']}" />
-			<div class="help-block">用户倒计时，投票时间结束提示语</div>
-			</div>
-		</div>
 
 
 		 <div class="form-group">

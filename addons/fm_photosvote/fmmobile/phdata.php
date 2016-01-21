@@ -20,9 +20,12 @@ defined('IN_IA') or exit('Access Denied');
 				
 				
 				if ($_GPC['phdata'] == 'phb') {
+					$tagid = $_GPC['tagid'];
 					$where = '';
 					$where .= " AND status = '1'";
-					
+					if (!empty($tagid)) {
+						$where .= " AND tagid = '".$tagid."'";
+					}
 					if ($reply['indexpx'] == '0') {
 						$where .= " ORDER BY `photosnum` + `xnphotosnum` DESC";
 					}elseif ($reply['indexpx'] == '1') {
@@ -41,11 +44,11 @@ defined('IN_IA') or exit('Access Denied');
 						
 						foreach ($userlist as $mid => $row) {
 							if ($row['realname']){
-								$usernames = cutstr($row['realname'], '5');
+								$usernames = cutstr($row['realname'], '10');
 							}elseif ($row['nickname']){
-								$usernames = cutstr($row['nickname'], '5');
+								$usernames = cutstr($row['nickname'], '10');
 							}else{
-								$usernames = cutstr($row['from_user'], '5');
+								$usernames = cutstr($row['from_user'], '10');
 							}
 							
 								$result = $result.'<li>';
@@ -80,7 +83,7 @@ defined('IN_IA') or exit('Access Denied');
 							
 	
 								$result = $result.'</div><div style="width:35%;  text-align: center;" class="btext"><span style="  text-align: left;">';
-								$result = $result.'<img src="'.toimage($row['avatar']).'" width="30" style="  border-radius: 135px;"/> '.$usernames.'</span></div>';
+								$result = $result.'<img src="'.toimage($row['avatar']).'" width="30" style=" max-height:30px;  border-radius: 135px;"/> '.$usernames.'</span></div>';
 								$pxnum = $row['photosnum'] + $row['xnphotosnum'];
 								$result = $result.'<div style="width:25%;  text-align: center;" class="bnum">'.$pxnum.'</div>';
 								$hxnum = $row['hits'] + $row['xnhits'];
@@ -125,7 +128,7 @@ defined('IN_IA') or exit('Access Denied');
 								
 
 								$result = $result.'</div><div style="width:45%; " class="btext">';
-								$result = $result.'<img src="'.toimage($row['avatar']).'" width="30" style="  border-radius: 135px;"/> '.$usernames.'</div>';
+								$result = $result.'<img src="'.toimage($row['avatar']).'" width="30" style=" max-height:30px;  border-radius: 135px;"/> '.$usernames.'</div>';
 								$ctime = date('Y-m-d H:i:s', $row['createtime']);
 								$result = $result.'<div style="width:35%;  line-height: 20px;" class="bnum">'.$ctime.'</div>';
 								$result = $result.'</a></li>';

@@ -7,19 +7,12 @@
  */
 defined('IN_IA') or exit('Access Denied');
 		$vfrom = $_GPC['do'];
-		if ($istop['ipannounce'] == 1) {
-			$announce = pdo_fetchall("SELECT * FROM " . tablename($this->table_announce) . " WHERE uniacid= '{$uniacid}' AND rid= '{$rid}' ORDER BY id DESC");
-			
+		if ($reply['ipannounce'] == 1) {
+			$announce = pdo_fetchall("SELECT nickname,content,createtime,url FROM " . tablename($this->table_announce) . " WHERE uniacid= '{$uniacid}' AND rid= '{$rid}' ORDER BY id DESC");
 		}
 		//赞助商
 		if ($reply['isvotexq'] == 1) {
-			$advs = pdo_fetchall("SELECT * FROM " . tablename($this->table_advs) . " WHERE enabled=1 AND ismiaoxian = 0  AND uniacid= '{$uniacid}'  AND rid= '{$rid}' ORDER BY displayorder ASC");
-			foreach ($advs as &$adv) {
-				if (substr($adv['link'], 0, 5) != 'http:') {
-					$adv['link'] = "http://" . $adv['link'];
-				}
-			}
-			unset($adv);
+			$advs = pdo_fetchall("SELECT advname,link,thumb FROM " . tablename($this->table_advs) . " WHERE enabled=1 AND ismiaoxian = 0 AND uniacid= '{$uniacid}'  AND rid= '{$rid}' ORDER BY displayorder ASC");
 		}
 	
 		//查询自己是否参与活动
@@ -35,10 +28,10 @@ defined('IN_IA') or exit('Access Denied');
 		if(!empty($tfrom_user)) {
 		    $user = pdo_fetch("SELECT * FROM ".tablename($this->table_users)." WHERE uniacid = :uniacid and from_user = :from_user and rid = :rid", array(':uniacid' => $uniacid,':from_user' => $tfrom_user,':rid' => $rid));
 		  	if ($user['status'] != 1 && $tfrom_user != $from_user) {
-				$urlstatus =  $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvoteview',array('rid'=> $rid));
-				echo "<script>alert('ID:".$user['id']." 号选手正在审核中，请查看其他选手，谢谢！');location.href='".$urlstatus."';</script>";     
+				$urlstatus =  $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvote',array('rid'=> $rid));
+				echo "<script>alert('ID:".$user['uid']." 号选手正在审核中，请查看其他选手，谢谢！');location.href='".$urlstatus."';</script>";     
 				die();
-		  		//message('该选手正在审核中，请查看其他选手，谢谢！',$this->createMobileUrl('photosvoteview',array('rid'=> $rid)),'error');
+		  		//message('该选手正在审核中，请查看其他选手，谢谢！',$this->createMobileUrl('photosvote',array('rid'=> $rid)),'error');
 		  	}
 
 			$str = array('&'=>'%26');
@@ -57,7 +50,7 @@ defined('IN_IA') or exit('Access Denied');
 				}
 				//print_r($tfrom_user);
 		    }else{
-				$url = $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvoteview', array('rid' => $rid));
+				$url = $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvote', array('rid' => $rid));
 				header("location:$url");
 				exit;
 			}
@@ -65,8 +58,10 @@ defined('IN_IA') or exit('Access Denied');
 		}
 		$sharenum = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->table_data)." WHERE uniacid = :uniacid and tfrom_user = :tfrom_user and rid = :rid", array(':uniacid' => $uniacid,':tfrom_user' => $tfrom_user,':rid' => $rid)) + pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->table_data)." WHERE uniacid = :uniacid and fromuser = :fromuser and rid = :rid", array(':uniacid' => $uniacid,':fromuser' => $tfrom_user,':rid' => $rid)) + $user['sharenum'];
 		
-		$picarr = $this->getpicarr($uniacid,$reply['tpxz'],$tfrom_user,$rid);
-		
+		//$picarr = $this->getpicarr($uniacid,$reply['tpxz'],$tfrom_user,$rid);
+		$fmimage = $this->getpicarr($uniacid,$rid, $tfrom_user,1);
+		$picarrs =  pdo_fetchall("SELECT id, photos,from_user FROM ".tablename($this->table_users_picarr)." WHERE uniacid = :uniacid AND from_user = :from_user AND rid = :rid ORDER BY isfm DESC", array(':uniacid' => $uniacid,':from_user' => $user['from_user'],':rid' => $rid));
+		$level = $this->fmvipleavel($rid, $uniacid, $user['from_user']);
 		$starttime=mktime(0,0,0);//当天：00：00：00
 		$endtime = mktime(23,59,59);//当天：23：59：59
 		$times = '';
@@ -77,8 +72,11 @@ defined('IN_IA') or exit('Access Denied');
 		$uallonetp = pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid AND from_user = :from_user AND tfrom_user = :tfrom_user AND rid = :rid  ORDER BY createtime DESC', array(':uniacid' => $uniacid, ':from_user' => $from_user, ':tfrom_user' => $tfrom_user,':rid' => $rid));
 		
 		$udayonetp = pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid AND from_user = :from_user AND tfrom_user = :tfrom_user AND rid = :rid '.$times.' ORDER BY createtime DESC', array(':uniacid' => $uniacid, ':from_user' => $from_user, ':tfrom_user' => $tfrom_user,':rid' => $rid));
+		if ($reply['isvoteusers']) {
+			$voteuserlist = pdo_fetchall('SELECT * FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid AND rid = :rid  AND tfrom_user = :tfrom_user ORDER BY `id` DESC LIMIT 5', array(':uniacid' => $uniacid,':rid' => $rid,':tfrom_user' => $tfrom_user));
+		}
+
 		if ($reply['isbbsreply'] == 1) {//开启评论
-		
 			//评论
 			$pindex = max(1, intval($_GPC['page']));
 			$psize = 10;
@@ -87,7 +85,7 @@ defined('IN_IA') or exit('Access Denied');
 			if (!empty($_GPC['keyword'])) {
 					$keyword = $_GPC['keyword'];
 					if (is_numeric($keyword)) 
-						$where .= " AND id = '".$keyword."'";
+						$where .= " AND uid = '".$keyword."'";
 					else 				
 						$where .= " AND nickname LIKE '%{$keyword}%'";
 				
@@ -100,7 +98,6 @@ defined('IN_IA') or exit('Access Denied');
 						
 			
 		}		
-		
 		$votetime = $reply['votetime']*3600*24;
 		$isvtime = TIMESTAMP - $user['createtime'];
 		$ttime = $votetime - $isvtime;
@@ -110,12 +107,11 @@ defined('IN_IA') or exit('Access Denied');
 		} else {
 			$totaltime = 0;
 		}
-		
 		//每个奖品的位置
 		//虚拟人数据配置
 		$now = time();
 		if($now-$reply['xuninum_time']>$reply['xuninumtime']){
-		    pdo_update($this->table_reply, array('xuninum_time' => $now,'xuninum' => $reply['xuninum']+mt_rand($reply['xuninuminitial'],$reply['xuninumending'])), array('rid' => $rid));
+		    pdo_update($this->table_reply_display, array('xuninum_time' => $now,'xuninum' => $reply['xuninum']+mt_rand($reply['xuninuminitial'],$reply['xuninumending'])), array('rid' => $rid));
 		}
 		//虚拟人数据配置
 		//参与活动人数
@@ -148,5 +144,6 @@ defined('IN_IA') or exit('Access Denied');
 		
 		
 		
-		$toye = $this->_stopllq('tuser');
+		$templatename = $reply['templates'];
+		$toye = $this->templatec($templatename,$_GPC['do']);
 		include $this->template($toye);

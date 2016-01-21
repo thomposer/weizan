@@ -103,11 +103,11 @@
 					<span class="help-block">参赛图片宣言</span>
 					</div>
 				</div>
-
+				
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">简介</label>
 					<div class="col-sm-9 col-xs-12">
-						<textarea name="description" class="form-control" cols="70">{$item['description']}</textarea>
+						<textarea name="description" style="height:200px; " class="form-control richtext" cols="70" rows="100">{$item['description']}</textarea>	
 					<span class="help-block">参赛照片简介</span>
 					</div>
 				</div>
@@ -162,5 +162,13 @@
 		</div>
 	</form>
 </div>
-
+<script type="text/javascript">
+<!--	
+	require(['jquery', 'util'], function($, u){
+		$(function(){
+			u.editor($('.richtext')[0]);
+		});
+	});
+//-->	
+</script>
 {template 'common/footer'}

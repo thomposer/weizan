@@ -7,19 +7,13 @@
  */
 defined('IN_IA') or exit('Access Denied');
 
-		if ($istop['ipannounce'] == 1) {
-			$announce = pdo_fetchall("SELECT * FROM " . tablename($this->table_announce) . " WHERE uniacid= '{$uniacid}' AND rid= '{$rid}' ORDER BY id DESC");
-			
+		if ($reply['ipannounce'] == 1) {
+			$announce = pdo_fetchall("SELECT nickname,content,createtime,url FROM " . tablename($this->table_announce) . " WHERE uniacid= '{$uniacid}' AND rid= '{$rid}' ORDER BY id DESC");
 		}
+
 		//赞助商
 		if ($reply['isdes'] == 1) {
-			$advs = pdo_fetchall("SELECT * FROM " . tablename($this->table_advs) . " WHERE enabled=1 AND ismiaoxian = 0  AND uniacid= '{$uniacid}'  AND rid= '{$rid}' ORDER BY displayorder ASC");
-			foreach ($advs as &$adv) {
-				if (substr($adv['link'], 0, 5) != 'http:') {
-					$adv['link'] = "http://" . $adv['link'];
-				}
-			}
-			unset($adv);
+			$advs = pdo_fetchall("SELECT advname,link,thumb FROM " . tablename($this->table_advs) . " WHERE enabled=1 AND ismiaoxian = 0 AND uniacid= '{$uniacid}'  AND rid= '{$rid}' ORDER BY displayorder ASC");
 		}
 		//统计
 		$csrs = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->table_users)." WHERE rid= ".$rid." AND status = 1");//参赛人数
@@ -29,7 +23,6 @@ defined('IN_IA') or exit('Access Denied');
 		
 		if(!empty($from_user)) {
 		    $mygift = pdo_fetch("SELECT * FROM ".tablename($this->table_users)." WHERE uniacid = :uniacid and from_user = :from_user and rid = :rid", array(':uniacid' => $uniacid,':from_user' => $from_user,':rid' => $rid));
-			//此处更新一下分享量和邀请量
 			
 		}
 
@@ -43,7 +36,7 @@ defined('IN_IA') or exit('Access Denied');
 		$regurl = $_W['siteroot'] .'app/'.$this->createMobileUrl('reg', array('rid' => $rid));//关注或借用直接注册页
 		$guanzhu = $reply['shareurl'];//没有关注用户跳转引导页
 		$lingjiangurl = $_W['siteroot'] .'app/'.$this->createMobileUrl('lingjiang', array('rid' => $rid));//领奖URL
-		$mygifturl = $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvoteview', array('rid' => $rid));//我的页面
+		$mygifturl = $_W['siteroot'] .'app/'.$this->createMobileUrl('photosvote', array('rid' => $rid));//我的页面
 		$title = $reply['title'];
 		
 		
@@ -53,5 +46,6 @@ defined('IN_IA') or exit('Access Denied');
 		$_share['imgUrl'] = toimage($reply['sharephoto']);		
 		
 		
-		$toye = $this->_stopllq('des');
+		$templatename = $reply['templates'];
+		$toye = $this->templatec($templatename,$_GPC['do']);
 		include $this->template($toye);

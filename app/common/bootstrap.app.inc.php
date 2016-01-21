@@ -13,6 +13,10 @@ $_W['uniaccount'] = $_W['account'] = uni_fetch($_W['uniacid']);
 if(empty($_W['uniaccount'])) {
 	exit('指定主公众号不存在。');
 }
+if (!empty($_W['uniaccount']['endtime']) && TIMESTAMP > $_W['uniaccount']['endtime']) {
+	message('抱歉，您的公众号服务已过期，请及时联系管理员', '', 'info');
+}
+
 $_W['acid'] = $_W['uniaccount']['acid'];
 $_W['session_id'] = '';
 if (isset($_GPC['state']) && !empty($_GPC['state']) && strexists($_GPC['state'], 'we7sid-')) {
@@ -105,7 +109,10 @@ if (!empty($unisetting['oauth']['account'])) {
 		'level' => $_W['account']['level'],
 	);
 }
-$_W['token'] = token();
+
+if($controller != 'utility') {
+	$_W['token'] = token();
+}
 if (!empty($_W['account']['oauth']) && $_W['account']['oauth']['level'] == '4') {
 	if (($_W['container'] == 'wechat' && !$_GPC['logout'] && empty($_W['openid']) && ($controller != 'auth' || ($controller == 'auth' && !in_array($action, array('forward', 'oauth'))))) ||
 		($_W['container'] == 'wechat' && !$_GPC['logout'] && empty($_SESSION['oauth_openid']) && ($controller != 'auth'))) {

@@ -6,8 +6,13 @@
 <div class="main">
 	<form action="" method="post" class="form-horizontal form"	enctype="multipart/form-data">
 		<div class="panel panel-default">
-			<div class="panel-heading">
-				幻灯片设置
+			<div class="panel-heading">	
+				<div class="row-fluid">
+					<div class="span8 control-group">
+						<a class="btn btn-default" href="{php echo $this->createWebUrl('banner', array('rid' => $rid, 'op' => 'display' ))}"><i class="fa fa-search"></i>幻灯片</a>
+						<a class="btn {if $operation == 'post'}btn-primary {else}btn-default"{/if} href="{php echo $this->createWebUrl('banner', array('rid' => $rid, 'op' => 'post' ))}"><i class="fa fa-edit"></i>添加幻灯片</a>
+					</div>
+				</div>
 			</div>
 			<div class="panel-body">
 				<div class="form-group">
@@ -27,6 +32,8 @@
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">幻灯片图片</label>
 					<div class="col-sm-9 col-xs-12">
 						{php echo tpl_form_field_image('thumb', $banner['thumb'])}
+
+					<div class="help-block">图片最大高度为600，每张图片宽高请设置为相同的宽高！！！</div>
 					</div>
 				</div>
 				<div class="form-group">
@@ -58,7 +65,13 @@
 <div class="main">
 	
 		<div class="panel panel-default">
-			
+			<div class="panel-heading">	
+				<div class="row-fluid">
+					<div class="span8 control-group">
+						<a class="btn {if $operation == 'post'}btn-primary {else}btn-default"{/if} href="{php echo $this->createWebUrl('banner', array('rid' => $rid, 'op' => 'post' ))}"><i class="fa fa-edit"></i>添加幻灯片</a>
+					</div>
+				</div>
+			</div>
 			<form method="post" class="form-horizontal" id="formfans">
 			<input type="hidden" name="op" value="del" />
 			<div style="position:relative">

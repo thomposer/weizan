@@ -64,7 +64,7 @@
 				{if $_W['account']['endtime'] < TIMESTAMP}
 				目前已到期，请联系管理员续费
 				{else}
-				将在{php echo ($_W['account']['endtime'] - strtotime(date('Y-m-d')))/86400}天后到期，请及时付费
+				将在{php echo floor(($_W['account']['endtime'] - strtotime(date('Y-m-d')))/86400);}天后到期，请及时付费
 				{/if}
 			</a><span class="tips-close" style="background:#d03e14;" onclick="check_setmeal_hide();"><i class="fa fa-times-circle"></i></span>
 		</div>

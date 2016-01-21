@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('mc_tplnotice');
@@ -12,24 +12,74 @@ $do = in_array($do, $dos) ? $do : 'set';
 if($do == 'set') {
 	if(checksubmit()) {
 		$data = array(
-			'type' => trim($_GPC['type']),
-			'recharge' => trim($_GPC['recharge']),
-			'credit1' => trim($_GPC['credit1']),
-			'credit2' => trim($_GPC['credit2']),
-			'group' => trim($_GPC['group']),
-			'nums_plus' => trim($_GPC['nums_plus']),
-			'nums_times' => trim($_GPC['nums_times']),
-			'times_plus' => trim($_GPC['times_plus']),
-			'times_times' => trim($_GPC['times_times']),
+			'public' => $_GPC['system'],
+			'recharge' => $_GPC['recharge'],
+			'credit1' => $_GPC['credit1'],
+			'credit2' => $_GPC['credit2'],
+			'group' => $_GPC['group'],
+			'nums_plus' => $_GPC['nums_plus'],
+			'nums_times' => $_GPC['nums_times'],
+			'times_plus' => $_GPC['times_plus'],
+			'times_times' => $_GPC['times_times'],
 		);
 		$data = iserializer($data);
 		pdo_update('uni_settings', array('tplnotice' => $data), array('uniacid' => $_W['uniacid']));
 		message('设置通知模板成功', referer(), 'success');
 	}
 	$setting = uni_setting($_W['uniacid'], '*', true);
-	$tpl = $setting['tplnotice'];
-	if(!is_array($tpl)) {
-		$tpl = array();
+	$set = $setting['tplnotice'];
+	if(!is_array($set)) {
+		$set = array();
 	}
+	$tpls = array(
+		'recharge' => array(
+			'name' => '会员余额充值',
+			'switch' => 0,
+			'type' => 1,
+			'help' => '请在“微信公众平台”选择行业为：“IT科技 - 互联网|电子商务”，添加标题为：”会员充值通知“，编号为：“TM00009”的模板。',
+		),
+		'credit2' => array(
+			'name' => '会员余额消费',
+			'switch' => 1,
+			'type' => 1,
+			'help' => '请在“微信公众平台”选择行业为：“IT科技 - 互联网|电子商务”，添加标题为：”余额变更通知“，编号为：“OPENTM207266084”的模板。',
+		),
+		'credit1' => array(
+			'name' => '会员积分变更',
+			'switch' => 1,
+			'type' => 1,
+			'help' => '请在“微信公众平台”选择行业为：“IT科技 - 互联网|电子商务”，添加标题为：”积分提醒“，编号为：“TM00335”的模板。',
+		),
+		'group' => array(
+			'name' => '会员等级变更',
+			'switch' => 1,
+			'type' => 1,
+			'help' => '请在“微信公众平台”选择行业为：“IT科技 - 互联网|电子商务”，添加标题为：”会员级别变更提醒“，编号为：“TM00891”的模板',
+		),
+		'nums_plus' => array(
+			'name' => '会员卡计次充值',
+			'switch' => 1,
+			'type' => 1,
+			'help' => '请在“微信公众平台”选择行业为：“IT科技 - 互联网|电子商务”，添加标题为：”计次充值通知“，编号为：“OPENTM207207134”的模板 ',
+		),
+		'nums_times' => array(
+			'name' => '会员卡计次消费',
+			'switch' => 1,
+			'type' => 1,
+			'help' => '请在“微信公众平台”选择行业为：“IT科技 - 互联网|电子商务”，添加标题为：”计次消费通知“，编号为：“OPENTM202322532”的模板',
+		),
+		'times_plus' => array(
+			'name' => '会员卡计时充值',
+			'switch' => 1,
+			'type' => 1,
+			'help' => '请在“微信公众平台”选择行业为：“IT科技 - 互联网|电子商务”，添加标题为：”自动续费成功通知“，编号为：“TM00956”的模板',
+		),
+		'times_times' => array(
+			'name' => '会员卡计时即将到期',
+			'switch' => 1,
+			'type' => 1,
+			'help' => '请在“微信公众平台”选择行业为：“IT科技 - 互联网|电子商务”，添加标题为：”到期提醒通知“，编号为：“TM00003”的模板',
+		),
+	);
 	template('mc/tplnotice');
 }

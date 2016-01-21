@@ -33,11 +33,11 @@ if($step == 1) {
 		if(!empty($username) && !empty($password)) {
 			$loginstatus = account_weixin_login($username, $password, trim($_GPC['verify']));
 			if(is_error($loginstatus)) {
-				message($loginstatus['message'], url('account/post-step', array('uniacid' => $uniacid, 'step' => 1)), 'error');
+				message('模拟登陆微信公众平台出错,错误详情:' . $loginstatus['message'], url('account/post-step', array('uniacid' => $uniacid, 'step' => 1)), 'error');
 			}
 			$basicinfo = account_weixin_basic($username);
 			if (empty($basicinfo['name'])) {
-				message('一键获取信息失败,请手动设置公众号信息！', url('account/post-step/', array('uniacid' => $uniacid, 'step' => 2)), 'error');
+				message('一键获取信息失败,请手动设置公众号信息！错误详情:' . $basicinfo['message'], url('account/post-step/', array('uniacid' => $uniacid, 'step' => 2)), 'error');
 			}
 			$account = array(
 				'name' => $basicinfo['name'],

@@ -92,14 +92,14 @@ text-decoration: none;
   display:block;
   line-height:15px;
   text-align:center;
-  background: -webkit-gradient(linear, 0 0, 0 100%, from({if empty($bgarr['foobg1'])}#943DBE{else}{$bgarr['foobg1']}{/if}), to({if empty($bgarr['foobg1'])}#32014A{else}{$bgarr['foobg1']}{/if}), color-stop(35% ,{if empty($bgarr['foobg1'])}#32014A{else}{$bgarr['foobg1']}{/if}), color-stop(50%, {if empty($bgarr['foobg1'])}#32014A{else}{$bgarr['foobg1']}{/if}) );
+  background: -webkit-gradient(linear, 0 0, 0 100%, from({if empty($reply['foobg1'])}#943DBE{else}{$reply['foobg1']}{/if}), to({if empty($reply['foobg1'])}#32014A{else}{$reply['foobg1']}{/if}), color-stop(35% ,{if empty($reply['foobg1'])}#32014A{else}{$reply['foobg1']}{/if}), color-stop(50%, {if empty($reply['foobg1'])}#32014A{else}{$reply['foobg1']}{/if}) );
 }
 .nav li .a {
   display: block;
-  color: {if empty($bgarr['foobgtextn'])}#fff{else}{$bgarr['foobgtextn']}{/if};
+  color: {if empty($reply['foobgtextn'])}#fff{else}{$reply['foobgtextn']}{/if};
 }
 .nav li.cur .a {
-  color: {if empty($bgarr['foobgtexty'])}#e2216f{else}{$bgarr['foobgtexty']}{/if};
+  color: {if empty($reply['foobgtexty'])}#e2216f{else}{$reply['foobgtexty']}{/if};
 }
 .nav4 li>a:only-child span{
   background:none;
@@ -121,6 +121,34 @@ text-decoration: none;
   margin: 0px auto 0px;
   
 }
+
+
+ .search {
+  height: 80px;
+  width: 100%;
+  background: {if empty($reply['bodytscolor'])}#7A319E{else}{$reply['bodytscolor']}{/if} url({php echo toimage($reply['bodytsbg'])}) center no-repeat;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20000001;
+  display: none;
+}
+.tip {
+  height: 40px;
+  line-height: 40px;
+  color: {if empty($reply['bodytextcolor'])}#fff{else}{$reply['bodytextcolor']}{/if};
+  text-align: center;
+}
+.btns {
+  width: 19%;
+  float: right;
+  height: 30px;
+  line-height: 30px;
+  background-size: 18px auto;
+  border-radius: 3px;
+  color: {if empty($reply['bodytextcolor'])}#fff{else}{$reply['bodytextcolor']}{/if};
+  padding-left: 20px;
+}
 /***********************/
 .nav4 dl{
   display:none;
@@ -135,10 +163,10 @@ text-decoration: none;
   /*border:1px solid #afaeaf;*/
   border-radius:5px;
   -webkit-box-shadow:inset 0 0 3px #fff;
-  {if !empty($bgarr['foobgmorecolor'])}
-	background:{if empty($bgarr['foobgmorecolor'])}#e4e3e2{else}{$bgarr['foobgmorecolor']}{/if};
+  {if !empty($reply['foobgmorecolor'])}
+	background:{if empty($reply['foobgmorecolor'])}#e4e3e2{else}{$reply['foobgmorecolor']}{/if};
   {else}
-	background:url({if empty($bgarr['foobgmore'])}../addons/fm_photosvote/template/mobile/photos/imgs/2.svg{else}{$bgarr['foobgmore']}{/if}#3) no-repeat center center;
+	background:url({if empty($reply['foobgmore'])}../addons/fm_photosvote/template/mobile/photos/imgs/2.svg{else}{$reply['foobgmore']}{/if}#3) no-repeat center center;
   {/if}
   -webkit-background-size:100%;
   background-size:100%;
@@ -185,7 +213,7 @@ text-decoration: none;
 .nav4 dl dd a{
   font-size: 15px;
   display:block;
-  color:{if empty($bgarr['foobgtexty'])}#4f4d4f{else}{$bgarr['foobgtexty']}{/if};
+  color:{if empty($reply['foobgtexty'])}#4f4d4f{else}{$reply['foobgtexty']}{/if};
   
   text-shadow:0px 1px 0px #ffffff;
   white-space: pre;
@@ -204,41 +232,16 @@ text-decoration: none;
 }
 .nav4 .masklayer_div.on{display: block;}
  
- .search {
-  height: 80px;
-  width: 100%;
-  background: {if empty($bgarr['bodytscolor'])}#7A319E{else}{$bgarr['bodytscolor']}{/if} url({php echo toimage($bgarr['bodytsbg'])}) center no-repeat;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 20000001;
-  display: none;
-}
-.tip {
-  height: 40px;
-  line-height: 40px;
-  color: {if empty($bgarr['bodytextcolor'])}#fff{else}{$bgarr['bodytextcolor']}{/if};
-  text-align: center;
-}
-.btns {
-  width: 19%;
-  float: right;
-  height: 30px;
-  line-height: 30px;
-  background-size: 18px auto;
-  border-radius: 3px;
-  color: {if empty($bgarr['bodytextcolor'])}#fff{else}{$bgarr['bodytextcolor']}{/if};
-  padding-left: 20px;
-}
 
 
 </style>
+
 <div class="footer">	
 	<div data-role="widget" data-widget="nav4" class="nav4">
 	<nav>
         <div id="nav4_ul" class="nav_4">
           <ul class="box nav">
-			<li {if $_GPC['do'] == 'photosvoteview'}class="cur"{/if}><a href="{php echo $this->createMobileUrl('photosvoteview', array('rid' => $rid))}" class="a">首页</a></li>
+			<li {if $_GPC['do'] == 'photosvote'}class="cur"{/if}><a href="{php echo $this->createMobileUrl('photosvote', array('rid' => $rid))}" class="a">首页</a></li>
 			<li id="ssuo" onclick="button3()"><a href="javascript:;" class="a">搜索</a></li>
 			<li {if $_GPC['do'] == 'paihang'}class="cur"{/if}><a href="{php echo $this->createMobileUrl('paihang', array('rid' => $rid))}" class="a">排行榜</a></li>
 			{if $reply['addpvapp'] == 1}
@@ -265,7 +268,7 @@ text-decoration: none;
               </dd>
 							<dd><a href="{$reply['huodongurl']}&from=fm_photosvote&oid={$from_user}"><span>{php echo cutstr($reply['huodongname'], '5')}</span></a></dd>
 						 {/if}-->
-						 <dd><a href="{php echo $this->createMobileUrl('des', array('rid' => $rid))}"><span>活动简介</span></a></dd>
+						 <dd><a href="{php echo $this->createMobileUrl('des', array('rid' => $rid))}"><span>活动详情</span></a></dd>
 						
 					 </dl>
 			  </li>
@@ -285,7 +288,7 @@ text-decoration: none;
 				<input type="hidden" name="i" value="{$uniacid}" />
 				<input type="hidden" name="c" value="entry" />
 				<input type="hidden" name="m" value="fm_photosvote" />
-				<input type="hidden" name="do" value="photosvoteview" />
+				<input type="hidden" name="do" value="photosvote" />
 				<input type="hidden" name="rid" value="{$rid}" />
 								
 				<input type="text" name="keyword" placeholder="请输入您要查找的编号或姓名" class="txt" id="txt" />

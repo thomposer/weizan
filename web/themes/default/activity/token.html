@@ -411,11 +411,11 @@
 			<thead class="navbar-inner">
 				<tr>
 					<th style="width:80px; text-align:center;">用户ID</th>
+					<th style="width:150px; text-align:center;">昵称</th>
 					<th style="width:80px; text-align:center;">标题</th>
 					<th style="width:80px; text-align:center;">图标</th>
 					<th style="width:100px; text-align:center;">面额</th>
 					<th style="width:150px; text-align:center;">兑换时间</th>
-					<th style="width:150px; text-align:center;">发放模块</th>
 					<th style="width:150px; text-align:center;">代金券状态</th>
 					<th style="width:100px;">操作者</th>
 					<th style="width:150px; text-align:center;">使用时间</th>
@@ -426,15 +426,11 @@
 				{loop $list $item}
 				<tr>
 					<td class="text-center">{$item['uid']}</td>
+					<td class="text-center">{$item['nickname']}</td>
 					<td class="text-center">{$item['title']}</td>
 					<td class="text-center"><img src="{$item['thumb']}" style="max-width:50px; max-height: 30px;"></td>
 					<td class="text-center">{$item['discount']}</td>
 					<td class="text-center">{php echo date('Y-m-d H:i', $item['granttime'])}</td>
-					<td class="text-center">
-						{if !empty($item['grantmodule'])}
-							<span class="label label-warning">{$modules[$item['grantmodule']]['title']}</span>
-						{/if}
-					</td>
 					<td class="text-center">
 						{if $item['status'] == 1}
 							<span class="label label-success">未使用</span>

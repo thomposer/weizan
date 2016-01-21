@@ -20,6 +20,7 @@ $reply = pdo_fetch("select * from ".tablename($this->table_reply)." where rid = 
             }
 			//删除粉丝参与记录
 			pdo_delete($this->table_users, array('id' => $id));
+			pdo_delete($this->table_users_picarr, array('from_user' => $fans['from_user'], 'rid' => $rid, 'uniacid' => $uniacid));
 			
         }
         $this->webmessage('粉丝记录删除成功！', '', 0);

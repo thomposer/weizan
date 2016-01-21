@@ -1,6 +1,12 @@
 {template 'common/header'}
 <div class="main">
 {if !$_GPC['tbrs']}
+<div class="alert alert-warning">
+		操作步骤：
+		<p>1、先选择你的公众号</p>
+		<p>2、设置同步人数、关注情况、以及选择是否同步过的粉丝</p>
+		<p>3、开始同步</p>
+	</div>
 	<div class="panel panel-info">
 		<div class="panel-heading">同步设置</div>
 		<div class="panel-body">
@@ -9,11 +15,34 @@
 				<input type="hidden" name="a" value="entry" />
 				<input type="hidden" name="m" value="fm_photosvote" />
 				<input type="hidden" name="do" value="getunionid" />
-				<input type="hidden" name="rid" value="{$_GPC['rid']}" />
+				<input type="hidden" name="asearch" value="1" />
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">所属公众号</label>
+					<div class="col-sm-8 col-md-7 col-lg-7 col-xs-10">
+						<select class="form-control" name="acid">
+							<option value="">请先选择你的公众号</option>
+							{loop $accounts $acc}
+							<option value="{$acc['acid']}"{if $acc['acid'] == $acid} selected="selected"{/if}>{$acc['name']}</option>
+							{/loop}
+						</select>
+					</div>
+					<div class="pull-right col-xs-12 col-sm-3 col-md-2 col-lg-2">
+						<button class="btn btn-warning"><i class="fa fa-search"></i> 选择</button>
+					</div>
+				</div>
+
+			</form>
+			<form action="./index.php" method="get" class="form-horizontal" role="form">
+				<input type="hidden" name="c" value="site" />
+				<input type="hidden" name="a" value="entry" />
+				<input type="hidden" name="m" value="fm_photosvote" />
+				<input type="hidden" name="do" value="getunionid" />
+				<input type="hidden" name="acid" value="{$acid}" />
+				
 				<div class="form-group">
 
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>每次同步人数</label>
-					<div class="col-sm-3">
+					<div class="col-sm-7">
 						<div class="input-group">
 							<span class="input-group-addon">每次同步</span>
 							<input type="text" name="tbrs" id="tbrs" class="form-control" value="{if empty($_GPC['tbrs'])}10{else}{$_GPC['tbrs']}{/if}" />
@@ -51,9 +80,17 @@
 						<div class="help-block">默认全部重新同步粉丝</div>
 					</div>
 				</div>
-					<button class="btn btn-default"><i class="fa fa-random"></i> 开始同步</button>
+				<div class="form-group">
+					
+					<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2" style="margin-left:35%">
+						<button class="btn btn-info"><i class="fa fa-random"></i> 开始同步</button>
+					</div>
+				</div>
+					
 			</form>
 		</div>
+	</div>
+		
 	</div>
  {else}
  	<div class="panel panel-info">

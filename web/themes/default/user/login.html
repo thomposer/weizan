@@ -27,7 +27,7 @@
 					<div class="form-group input-group">
 						<div class="input-group-addon"><i class="fa fa-info"></i></div>
 						<input name="verify" type="text" class="form-control input-lg" style="width:200px;" placeholder="请输入验证码">
-						<img id="imgverify" style="height:46px;" /> <a href="javascript:;" id="toggle">看不清？换一张</a>
+						<a href="javascript:;" id="toggle" style="text-decoration: none"><img id="imgverify" src="{php echo url('utility/code')}" style="height:46px;" title="点击图片更换验证码"/> 看不清？换一张</a>
 					</div>
 					{/if}
 					<div class="form-group">
@@ -63,7 +63,6 @@ function formcheck() {
 	return true;
 }
 var h = document.documentElement.clientHeight;
-$('#imgverify').prop('src', '{php echo url('utility/code')}r='+Math.round(new Date().getTime()));
 $(".login").css('min-height',h);
 $('#toggle').click(function() {
 	$('#imgverify').prop('src', '{php echo url('utility/code')}r='+Math.round(new Date().getTime()));

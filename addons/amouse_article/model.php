@@ -15,10 +15,8 @@ function amouse_article_site_article($params = array()){
     }
     $sql = "SELECT * FROM " . tablename('fineness_article') . $condition . ' ORDER BY displayorder ASC';
     $result['list'] = pdo_fetchall($sql);
-
     return $result;
 }
-
 
 function amouse_article_site_category($params = array()){
     global $_GPC, $_W;
@@ -44,7 +42,6 @@ function amouse_article_site_category($params = array()){
     } else {
         $category = $result;
     }
-
     return $category;
 }
 
@@ -62,11 +59,9 @@ function amouse_article_site_pcategory($cid){
 function amouse_article_site_ccategory($params = array()){
     global $_GPC, $_W;
     extract($params);
-
     $condition = " AND parentid = $cid ";
     $category = array();
     $result = pdo_fetchall("SELECT * FROM " . tablename('fineness_article_category') . " WHERE uniacid = '{$_W['uniacid']}' $condition ORDER BY parentid ASC, displayorder ASC, id ASC ");
-
     if (!isset($parentid)) {
         if (!empty($result)) {
             foreach ($result as $row) {
@@ -84,7 +79,6 @@ function amouse_article_site_ccategory($params = array()){
     return $category;
 }
 
-
 function amouse_article_site_list($cid=0){
     global $_GPC, $_W;
     $weid=$_W['uniacid'];
@@ -94,6 +88,14 @@ function amouse_article_site_list($cid=0){
     return $list;
 }
 
+function amouse_article_by_id($id=0){
+    global $_GPC, $_W;
+    $weid=$_W['uniacid'];
+    if($id>0){
+        $article = pdo_fetch("SELECT * FROM ".tablename('fineness_article')." WHERE weid={$weid} AND id={$id}  ORDER BY createtime DESC ") ;
+    }
+    return $article;
+}
 
 function amouse_article_site_get_prev($params = array()) {
     global $_GPC, $_W;
@@ -107,7 +109,6 @@ function amouse_article_site_get_prev($params = array()) {
     }
     $result = pdo_fetch("SELECT * FROM ".tablename('fineness_article')." $condition ORDER BY displayorder DESC LIMIT 1");
     if (!empty($result)) {
-       //$result['url']=$_W['siteroot']."app/".substr($this->createMobileUrl('detail',array('id'=>$result['id'],'uniacid'=>$_W['uniacid'], 'track_id' => $_W['fans']['from_user'], 'track_type' => 'click'),true),2);
         $result['thumb'] = (strpos($result['thumb'], 'http://') === FALSE) ? $_W['attachurl'] . $result['thumb'] : $result['thumb'];
     }
     return $result;

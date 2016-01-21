@@ -1,19 +1,16 @@
 <?php 
-$url = 'http://news.163.com/special/00011K6L/rss_newstop.xml';
-
+$url = 'http://toutiao.com/api/article/recent/?source=2&category=news_hot&max_behot_time=0&_='.TIMESTAMP;
 $resp = ihttp_get($url);
 if ($resp['code'] == 200 && $resp['content']) {
-	$obj = isimplexml_load_string($resp['content'], 'SimpleXMLElement', LIBXML_NOCDATA);
-	$news = array();
-	$news[] = array('title' => '网易头条新闻', 'description' => '网易门户新闻中心', 'url' => 'http://news.163.com', 'picurl' => 'http://cimg.163.com/news/0408/20/netease-logo.gif');
-	$cnt = min(count($obj->channel->item), 8);
+	$obj= json_decode($resp['content'], true);
+	$news[] = array('title' => '今日头条', 'description' => '头条新闻', 'url' => 'http://toutiao.com/', 'picurl' => 'http://a.hiphotos.baidu.com/baike/w%3D268/sign=db923e4310ce36d3a204843602f23a24/7dd98d1001e93901a1184fa77eec54e736d19615.jpg');
+	$cnt = min(count($obj['data']), 8);
 	for($i = 0; $i < $cnt; $i++) {
-		$row = $obj->channel->item[$i];
 		$news[] = array(
-			'title' => strval($row->title),
-			'description' => strval($row->description),
+			'title' => strval($obj['data'][$i]['title']),
+			'description' => strval($obj['data'][$i]['abstract']),
 			'picurl' => '',
-			'url' => strval($row->link)
+			'url' => strval($obj['data'][$i]['article_url'])
 		);
 	}
 	return $this->respNews($news);

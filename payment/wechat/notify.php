@@ -4,25 +4,34 @@
  * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 define('IN_MOBILE', true);
+require '../../framework/bootstrap.inc.php';
 $input = file_get_contents('php://input');
+$isxml = true;
 if (!empty($input) && empty($_GET['out_trade_no'])) {
-	if (preg_match('/(\<\!DOCTYPE|\<\!ENTITY)/i', $input)) {
-		exit('fail');
-	}
-	libxml_disable_entity_loader(true);
-	$obj = simplexml_load_string($input, 'SimpleXMLElement', LIBXML_NOCDATA);
+	$obj = isimplexml_load_string($input, 'SimpleXMLElement', LIBXML_NOCDATA);
 	$data = json_decode(json_encode($obj), true);
 	if (empty($data)) {
-		exit('fail');
+		$result = array(
+			'return_code' => 'FAIL',
+			'return_msg' => ''
+		);
+		echo array2xml($result);
+		exit;
 	}
 	if ($data['result_code'] != 'SUCCESS' || $data['return_code'] != 'SUCCESS') {
-				exit('fail');
+		$result = array(
+			'return_code' => 'FAIL',
+			'return_msg' => empty($data['return_msg']) ? $data['err_code_des'] : $data['return_msg']
+		);
+		echo array2xml($result);
+		exit;
 	}
 	$get = $data;
 } else {
+	$isxml = false;
 	$get = $_GET;
 }
-require '../../framework/bootstrap.inc.php';
+
 $_W['uniacid'] = $_W['weid'] = $get['attach'];
 $setting = uni_setting($_W['uniacid'], array('payment'));
 if(is_array($setting['payment'])) {
@@ -92,11 +101,29 @@ if(is_array($setting['payment'])) {
 						$ret['card_fee'] = $log['card_fee'];
 						$ret['card_id'] = $log['card_id'];
 						$site->$method($ret);
-						exit('success');
+						if($isxml) {
+							$result = array(
+								'return_code' => 'SUCCESS',
+								'return_msg' => 'OK'
+							);
+							echo array2xml($result);
+							exit;
+						} else {
+							exit('success');
+						}
 					}
 				}
 			}
 		}
 	}
 }
-exit('fail');
+if($isxml) {
+	$result = array(
+		'return_code' => 'FAIL',
+		'return_msg' => ''
+	);
+	echo array2xml($result);
+	exit;
+} else {
+	exit('fail');
+}

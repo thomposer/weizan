@@ -1,5 +1,48 @@
 {template 'common/header'}
+	<style type="text/css">
 
+.global_icon,.global_icon_before:before,.global_icon_after:after,.level {
+    background-image: url('{FMURL}mobile/templates/stylebase/style/images/new_sglobal_icon.png');
+    background-repeat: no-repeat;
+    -webkit-background-size: 70px auto;
+    background-size: 70px auto
+}
+
+.level {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    line-height: 16px;
+    text-align: center;
+    font-size: 10px;
+    color: #fff;
+    vertical-align: middle
+}
+
+.level_1,.level_2,.level_3 {
+    background-position: 0 -127px
+}
+
+.level_4,.level_5,.level_6,.level_7,.level_8,.level_9 {
+    background-position: 0 -155px
+}
+
+.level_10,.level_11,.level_12,.level_13,.level_14,.level_15 {
+    background-position: 0 -183px
+}
+
+.level_16,.level_17,.level_18 {
+    background-position: 0 -211px
+}
+
+.female {
+    background-position: 0 -492px
+}
+
+.male {
+    background-position: 0 -510px
+}
+	</style>
     <div class="main">
 	{if $rid!=''}
 		{template 'nav'}
@@ -59,16 +102,17 @@
 							<th style="width:150px;">昵称</th>
 							<th style="width:60px;">总票数</th>
 							<th style="width:60px;">人气值</th>
-							<th style="width:150px;">申报时间</th>
+							<th style="width:150px;">报名时间</th>
 						</tr>
 					</thead>
 					<tbody>
 						{php $i=1;}
 						{loop $list_praise $row}
+						{php $level = intval($this->fmvipleavel($rid, $uniacid, $row['from_user']));}
 						<tr>
 							<td class="row-first row-hover">{php echo $i+(($page-1)*$psize)}</td>
 							<td><img src="{php echo toimage($row['avatar'])}" width="50px;"/></td>
-							<td class="info">{if empty($row['realname'])}{php echo cutstr($row['nickname'], '16')}{else}{php echo cutstr($row['realname'], '16')}{/if}</td>
+							<td class="info">{if empty($row['realname'])}{php echo cutstr($row['nickname'], '16')}{else}{php echo cutstr($row['realname'], '16')}{/if} <span class="level level_{$level}">{$level}</span></td>
 							<td>{php echo $row['photosnum'] + $row['xnphotosnum']}</td>
 							<td>{php echo $row['hits'] + $row['xnhits']}</td>
 							<td>{php echo date('Y-m-d H:i:s', $row['createtime']);}</td>

@@ -19,7 +19,7 @@ $reply = pdo_fetch('SELECT * FROM '.tablename($this->table_reply).' WHERE uniaci
 			if (!empty($_GPC['keyword'])) {
 				$keyword = $_GPC['keyword'];
 				
-				$where .= " AND (id LIKE '%{$keyword}%' OR nickname LIKE '%{$keyword}%' OR mobile LIKE '%{$keyword}%' OR photoname LIKE '%{$keyword}%') ";					
+				$where .= " AND (uid LIKE '%{$keyword}%' OR nickname LIKE '%{$keyword}%' OR mobile LIKE '%{$keyword}%' OR photoname LIKE '%{$keyword}%') ";					
 				//$where .= " OR nickname LIKE '%{$keyword}%'";
 				//$where .= " OR mobile LIKE '%{$keyword}%'";
 				//$where .= " OR photoname LIKE '%{$keyword}%'";
@@ -32,12 +32,12 @@ $reply = pdo_fetch('SELECT * FROM '.tablename($this->table_reply).' WHERE uniaci
 			$psize = 15;
 
 			//取得用户列表
-			$members = pdo_fetchall('SELECT * FROM '.tablename($this->table_users).' WHERE uniacid= :uniacid '.$where.' order by `id` desc LIMIT ' . ($pindex - 1) * $psize . ',' . $psize, array(':uniacid' => $uniacid) );
+			$members = pdo_fetchall('SELECT * FROM '.tablename($this->table_users).' WHERE uniacid= :uniacid '.$where.' order by `uid` desc LIMIT ' . ($pindex - 1) * $psize . ',' . $psize, array(':uniacid' => $uniacid) );
 			$total = pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename($this->table_users).' WHERE uniacid= :uniacid '.$where.' ', array(':uniacid' => $uniacid));
 			$pager = pagination($total, $pindex, $psize);
 			$sharenum = array();
 			foreach ($members as $mid => $m) {
 				$sharenum[$mid] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->table_data)." WHERE uniacid = :uniacid and tfrom_user = :tfrom_user and rid = :rid", array(':uniacid' => $uniacid,':tfrom_user' => $m['from_user'],':rid' => $rid)) + pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename($this->table_data)." WHERE uniacid = :uniacid and fromuser = :fromuser and rid = :rid", array(':uniacid' => $uniacid,':fromuser' =>$m['from_user'], ':rid' => $rid)) + $m['sharenum'];
 			}
-		
+			
 			include $this->template('members');

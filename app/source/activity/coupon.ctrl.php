@@ -1,19 +1,14 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2014 012wz.com
- * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [Weizan System] Copyright (c) 2014 012WZ.COM
+ * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $dos = array('display', 'post', 'mine', 'use');
 $do = in_array($_GPC['do'], $dos) ? $_GPC['do'] : 'display';
+
 if($do == 'display') {
-	$is_card = pdo_fetchall("SELECT name FROM ".tablename('modules')." WHERE issystem = 0 AND iscard = 0", array(), 'name');
-	$condition = ' AND use_module = 0 ';
-	if(!empty($is_card)) {
-		$is_card_str = "'" . implode("','", array_keys($is_card)) . "'";
-		$condition = " AND (use_module = 0 OR (use_module = 1 AND couponid IN (SELECT couponid FROM ".tablename('activity_coupon_modules')." WHERE uniacid = {$_W['uniacid']} AND module IN ({$is_card_str}))))";
-	}
-	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM '. tablename('activity_coupon'). " WHERE uniacid = :uniacid AND type = :type AND endtime > :endtime {$condition}" , array(':uniacid' => $_W['uniacid'], ':type' => 1, ':endtime' => TIMESTAMP));
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM '. tablename('activity_coupon'). " WHERE uniacid = :uniacid AND type = :type AND endtime > :endtime" , array(':uniacid' => $_W['uniacid'], ':type' => 1, ':endtime' => TIMESTAMP));
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 10;
 	$lists = pdo_fetchall('SELECT couponid,title,thumb,type,credittype,credit,endtime,description FROM ' . tablename('activity_coupon') . " WHERE uniacid = :uniacid AND type = :type AND endtime > :endtime {$condition} ORDER BY endtime ASC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':uniacid' => $_W['uniacid'], ':type' => 1, ':endtime' => TIMESTAMP));
@@ -27,7 +22,7 @@ if($do == 'post') {
 	}
 	$credit = mc_credit_fetch($_W['member']['uid'], array($coupon['credittype']));
 	if ($credit[$coupon['credittype']] < $coupon['credit']) {
-		message(error(-1, "您的 {$creditnames[$token['credittype']]} 数量不够,无法兑换."), '', 'ajax');
+		message(error(-1, "您的 {$creditnames[$coupon['credittype']]} 数量不够,无法兑换."), '', 'ajax');
 	}
 	
 	$ret = activity_coupon_grant($_W['member']['uid'], $id, '', '用户使用' . $coupon['credit'] . $creditnames[$coupon['credittype']] . '兑换');
@@ -40,7 +35,7 @@ if($do == 'post') {
 	} else {
 		mc_notice_credit2($_W['openid'], $_W['member']['uid'], -1 * $coupon['credit'], 0, '线上消费，兑换折扣券');
 	}
-	message(error(0, "兑换成功,您消费了 {$token['credit']} {$creditnames[$token['credittype']]}"), '', 'ajax');
+	message(error(0, "兑换成功,您消费了 {$coupon['credit']} {$creditnames[$coupon['credittype']]}"), '', 'ajax');
 }
 if($do == 'mine') {
 	$psize = 10;

@@ -462,6 +462,9 @@
 		$.post(location.href, {uid:uid, password:newpwd}, function(resp){
 			if(resp == 'success') {
 				$('#updatepwd').next().removeClass().addClass('label label-success').text('密码修改成功');
+                $("input[name='newpwd']").val('');
+                $("input[name='rnewpwd']").val('');
+                setTimeout(function() {$('#updatepwd').next().empty();}, 2000);
 			} else if (resp == 'error') {
 				$('#updatepwd').next().removeClass().addClass('label label-danger').text('会员不存在或已删除');
 			} else {
