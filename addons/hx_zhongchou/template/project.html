@@ -468,6 +468,8 @@
 						</a>
 						<a href="{php echo $this->createWebUrl('order', array('project'=>array('parentid' => $item['id']), 'op' => 'display'))}"class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="查看项目订单"> <i class="fa fa-book"></i>
 						</a>
+						<a href="{php echo $this->createWebUrl('wcorder', array('project_id' => $item['id'], 'op' => 'display'))}"class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="查看无偿支持"> <i class="fa fa-heart"></i>
+						</a>
 						<a href="{php echo $this->createWebUrl('project', array('id' => $item['id'], 'op' => 'post'))}"class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="编辑"> <i class="fa fa-pencil"></i>
 						</a>
 						<a href="{php echo $this->createWebUrl('project', array('id' => $item['id'], 'op' => 'delete'))}" onclick="return confirm('此操作不可恢复，确认删除？');return false;" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="删除">

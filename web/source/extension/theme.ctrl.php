@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $dos = array('installed', 'prepared', 'install', 'refresh', 'uninstall', 'web', 'batch-install', 'designer', 'check', 'upgrade');
@@ -93,8 +93,8 @@ if($do == 'install') {
 			message($r['message'], url('cloud/profile'), 'error');
 		}
 		$info = cloud_t_info($id);
-		if(!is_error($info)) {
-			if(empty($_GPC['flag'])) {
+		if (!is_error($info)) {
+			if (empty($_GPC['flag'])) {
 				header('location: ' . url('cloud/process', array('t' => $id)));
 				exit;
 			} else {
@@ -102,6 +102,8 @@ if($do == 'install') {
 				$manifest = ext_template_manifest_parse($packet['manifest']);
 				$manifest['version'] = $packet['version'];
 			}
+		} else {
+			message($info['message'], '', 'error');
 		}
 	}
 	unset($manifest['settings']);
@@ -220,6 +222,9 @@ if($do == 'upgrade') {
 	}
 
 	$info = cloud_t_info($id);
+	if (is_error($info)) {
+		message($info['message'], referer(), 'error');
+	}
 
 	$upgrade_info = cloud_t_upgradeinfo($id);
 
@@ -407,10 +412,12 @@ if($do == 'check') {
 			exit('cloud service is unavailable');
 		}
 
-		if($foo == 'upgrade') {
+		if ($foo == 'upgrade') {
 			$mods = array();
+
 			$ret = cloud_t_query();
-			if(!is_error($ret)) {
+
+			if (!is_error($ret)) {
 				foreach($ret as $k => $v) {
 					$mods[$k] = array(
 						'from' => 'cloud',
@@ -419,7 +426,10 @@ if($do == 'check') {
 						'site_branch' => $v['branches'][$v['branch']],
 					);
 				}
+
+				$mods['pirate_apps'] = array_values($v['pirate_apps']);
 			}
+
 			if(!empty($mods)) {
 				exit(json_encode($mods));
 			}

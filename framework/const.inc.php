@@ -1,7 +1,7 @@
 <?php 
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 defined('IN_IA') or exit('Access Denied');
@@ -20,3 +20,7 @@ define('ACCOUNT_SERVICE', 2);
 define('ACCOUNT_SERVICE_VERIFY', 4);
 
 define('WEIXIN_ROOT', 'https://mp.weixin.qq.com');
+
+define('ACCOUNT_OPERATE_ONLINE', 1);
+define('ACCOUNT_OPERATE_MANAGER', 2);
+define('ACCOUNT_OPERATE_CLERK', 3);

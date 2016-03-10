@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -80,193 +80,73 @@ abstract class WeAccount {
 		return array();
 	}
 
-	public function analyzeCoupon($packet) {
-		global $_W;
-				if($packet['event'] == 'poi_check_notify') {
-			$data['status'] = ($packet['result'] == 'succ') ? 1 : 3;
-			$data['location_id'] = trim($packet['poiid']);
-			$data['message'] = trim($packet['msg']);
-			$id = intval($packet['uniqid']);
-			pdo_update('coupon_location', $data, array('sid' => $id, 'acid' => $_W['acid']));
-			exit();
-		}
-				if(in_array($packet['event'], array('card_pass_check', 'card_not_pass_check'))) {
-			$data['status'] = ($packet['event'] == 'card_pass_check') ? 3 : 2;
-			$card_id = trim($packet['cardid']);
-			$is_ok = pdo_fetchcolumn('SELECT id FROM ' . tablename('coupon') . ' WHERE acid = :acid AND card_id = :card_id', array(':acid' => $_W['acid'], ':card_id' => $card_id));
-			if(empty($is_ok)) {
-				$insert = array(
-					'uniacid' => $_W['uniacid'],
-					'acid' => $_W['acid'],
-					'card_id' => $card_id,
-					'status' => $data['status'],
-				);
-				pdo_insert('coupon', $insert);
-			} else {
-				pdo_update('coupon', $data, array('acid' => $_W['acid'], 'card_id' => $card_id));
-			}
-			exit();
-		}
-				if($packet['event'] == 'user_get_card') {
-						$hash = md5($packet['fromusername'] . $packet['createtime'] . $packet['usercardcode']);
-			$is_exist = pdo_fetchcolumn('SELECT id FROM ' . tablename('coupon_record') . ' WHERE acid = :acid AND hash = :hash', array(':acid' => $_W['acid'], ':hash' => $hash));
-			if(empty($is_exist)) {
-				$data['uniacid'] = $_W['uniacid'];
-				$data['acid'] = $_W['acid'];
-				$data['givebyfriend'] = intval($packet['isgivebyfriend']);
-				$data['card_id'] = trim($packet['cardid']);
-				$data['openid'] = trim($packet['fromusername']);
-				$data['friend_openid'] = trim($packet['friendusername']);
-				$data['outer_id'] = intval($packet['outerid']);
-				$data['code'] = trim($packet['usercardcode']);
-				$data['addtime'] = TIMESTAMP;
-				$data['hash'] = $hash;
-				$data['status'] = 1;
-				$old_code = trim($packet['oldusercardcode']);
-								pdo_insert('coupon_record', $data);
-				if(!empty($data['givebyfriend'])) {
-					pdo_query('DELETE FROM ' . tablename('coupon_record') . ' WHERE acid = :acid AND card_id = :card_id AND openid = :openid AND code = :code', array(':acid' => $_W['acid'], ':card_id' => $data['card_id'], ':openid' => $data['friend_openid'], ':code' => $old_code));
-				} else {
-										pdo_query('UPDATE ' . tablename('coupon') . 'SET quantity = quantity - 1 WHERE acid = :acid AND card_id = :card_id', array(':acid' => $_W['acid'], 'card_id' => $data['card_id']));
-				}
-			}
-			exit();
-		}
-				if($packet['event'] == 'user_del_card') {
-			$card_id = trim($packet['cardid']);
-			$openid = trim($packet['fromusername']);
-			$code = trim($packet['usercardcode']);
-			pdo_update('coupon_record', array('status' => 4), array('acid' => $_W['acid'], 'card_id' => $card_id, 'openid' => $openid, 'code' => $code));
-			exit();
-		}
-				if($packet['event'] == 'user_consume_card') {
-			$card_id = trim($packet['cardid']);
-			$openid = trim($packet['fromusername']);
-			$code = trim($packet['usercardcode']);
-			pdo_update('coupon_record', array('status' => 3), array('acid' => $_W['acid'], 'card_id' => $card_id, 'openid' => $openid, 'code' => $code));
-			exit();
-		}
-	}
-
 	
 	public function parse($message) {
 		global $_W;
-		$packet = array();
 		if (!empty($message)){
-			$obj = isimplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA);
-			if($obj instanceof SimpleXMLElement) {
-				$packet['from'] = strval($obj->FromUserName);
-				$packet['to'] = strval($obj->ToUserName);
-				$packet['time'] = strval($obj->CreateTime);
-				$packet['type'] = strval($obj->MsgType);
-				$packet['event'] = strval($obj->Event);
-				
-				foreach ($obj as $variable => $property) {
-					$packet[strtolower($variable)] = (string)$property;
-				}
-				
-				if($packet['type'] == 'text') {
-					$packet['content'] = strval($obj->Content);
+			$message = xml2array($message);
+			$packet = iarray_change_key_case($message, CASE_LOWER);
+			$packet['from'] = $message['FromUserName'];
+			$packet['to'] = $message['ToUserName'];
+			$packet['time'] = $message['CreateTime'];
+			$packet['type'] = $message['MsgType'];
+			$packet['event'] = $message['Event'];
+			switch ($packet['type']) {
+				case 'text':
 					$packet['redirection'] = false;
 					$packet['source'] = null;
-				}
-				if($packet['type'] == 'image') {
-					$packet['url'] = strval($obj->PicUrl);
-				}
-				if($packet['type'] == 'voice') {
-					$packet['media'] = strval($obj->MediaId);
-					$packet['format'] = strval($obj->Format);
-				}
-				if($packet['type'] == 'video') {
-					$packet['media'] = strval($obj->MediaId);
-					$packet['thumb'] = strval($obj->ThumbMediaId);
-				}
-				if($packet['type'] == 'shortvideo') {
-					$packet['media'] = strval($obj->MediaId);
-					$packet['thumb'] = strval($obj->ThumbMediaId);
-				}
-				if($packet['type'] == 'location') {
-					$packet['location_x'] = strval($obj->Location_X);
-					$packet['location_y'] = strval($obj->Location_Y);
-					$packet['scale'] = strval($obj->Scale);
-					$packet['label'] = strval($obj->Label);
-				}
-				if($packet['type'] == 'link') {
-					$packet['title'] = strval($obj->Title);
-					$packet['description'] = strval($obj->Description);
-					$packet['url'] = strval($obj->Url);
-				}
-				if($packet['event'] == 'subscribe') {
+					break;
+				case 'image':
+					$packet['url'] = $message['PicUrl'];
+					break;
+				case 'video':
+				case 'shortvideo':
+					$packet['thumb'] = $message['ThumbMediaId'];
+					break;
+			}
+	
+			switch ($packet['event']) {
+				case 'SCAN':
+					$packet['type'] = 'qr';
+				case 'subscribe':
 					$packet['type'] = 'subscribe';
-										$scene = strval($obj->EventKey);
-					if(!empty($scene)) {
-						$packet['scene'] = str_replace('qrscene_', '', $scene);
-						if(strexists($packet['scene'], '\\u')) {
-														$packet['scene'] = '"' . str_replace('\\u', '\u', $packet['scene']) . '"';
+				case 'SCAN':
+					if(!empty($packet['eventkey'])) {
+						$packet['scene'] = str_replace('qrscene_', '', $packet['eventkey']);
+						if(strexists($packet['scene'], '\u')) {
+							$packet['scene'] = '"' . str_replace('\\u', '\u', $packet['scene']) . '"';
 							$packet['scene'] = json_decode($packet['scene']);
 						}
-						$packet['ticket'] = strval($obj->Ticket);
+	
 					}
-				}
-				if($packet['event'] == 'unsubscribe') {
+					break;
+				case 'unsubscribe':
 					$packet['type'] = 'unsubscribe';
-									}
-				if($packet['event'] == 'SCAN') {
-										$packet['type'] = 'qr';
-					$packet['scene'] = strval($obj->EventKey);
-					if(strexists($packet['scene'], '\\u')) {
-												$packet['scene'] = '"' . str_replace('\\u', '\u', $packet['scene']) . '"';
-						$packet['scene'] = json_decode($packet['scene']);
-					}
-					$packet['ticket'] = strval($obj->Ticket);
-				}
-				if($packet['event'] == 'LOCATION') {
-										$packet['type'] = 'trace';
-					$packet['location_x'] = strval($obj->Latitude);
-					$packet['location_y'] = strval($obj->Longitude);
-					$packet['precision'] = strval($obj->Precision);
-				}
-								if(in_array($packet['event'], array('card_pass_check', 'card_not_pass_check', 'user_get_card', 'user_del_card', 'user_consume_card', 'poi_check_notify'))) {
-					$this->analyzeCoupon($packet);
-					exit();
-				}
-								if($packet['event'] == 'merchant_order') {
-					$packet['type'] = 'merchant_order';
-					$packet['orderid'] = strval($obj->OrderId);
-					$packet['orderstatus'] = strval($obj->OrderStatus);
-					$packet['productid'] = strval($obj->ProductId);
-					$packet['skuinfo'] = strval($obj->SkuInfo);
-				}
-				if (in_array($packet['event'], array('pic_photo_or_album', 'pic_weixin', 'pic_sysphoto'))) {
-					$packet['sendpicsinfo'] = array();
-					$packet['sendpicsinfo']['count'] = strval($obj->SendPicsInfo->Count);
-					if (!empty($obj->SendPicsInfo->PicList)) {
-						foreach ($obj->SendPicsInfo->PicList->item as $item) {
+					break;
+				case 'LOCATION':
+					$packet['type'] = 'trace';
+					$packet['location_x'] = $message['Latitude'];
+					$packet['location_y'] = $message['Longitude'];
+					break;
+				case 'pic_photo_or_album':
+				case 'pic_weixin':
+				case 'pic_sysphoto':
+					$packet['sendpicsinfo']['count'] = $message['SendPicsInfo']['Count'];
+					if (!empty($message['SendPicsInfo']['PicList'])) {
+						foreach ($message['SendPicsInfo']['PicList']['item'] as $item) {
 							if (!empty($item)) {
-								$packet['sendpicsinfo']['piclist'][] = strval($item->PicMd5Sum);
+								$packet['sendpicsinfo']['piclist'][] = $item['PicMd5Sum'];
 							}
 						}
 					}
-				}
-				if (in_array($packet['event'], array('scancode_push', 'scancode_waitmsg'))) {
-					$packet['scancodeinfo'] = array();
-					$packet['scancodeinfo']['scanresult'] = strval($obj->ScanCodeInfo->ScanResult);
-					$packet['scancodeinfo']['scantype'] = strval($obj->ScanCodeInfo->ScanType);
-					$packet['scancodeinfo']['eventkey'] = strval($obj->ScanCodeInfo->EventKey);
-				}
-				
-				if (in_array($packet['event'], array('location_select'))) {
-					$packet['sendlocationinfo'] = array();
-					$packet['sendlocationinfo']['location_x'] = strval($obj->SendLocationInfo->Location_X);
-					$packet['sendlocationinfo']['location_y'] = strval($obj->SendLocationInfo->Location_Y);
-					$packet['sendlocationinfo']['scale'] = strval($obj->SendLocationInfo->Scale);
-					$packet['sendlocationinfo']['label'] = strval($obj->SendLocationInfo->Label);
-					$packet['sendlocationinfo']['poiname'] = strval($obj->SendLocationInfo->Poiname);
-					$packet['sendlocationinfo']['eventkey'] = strval($obj->SendLocationInfo->EventKey);
-				}
-				if($packet['type'] == 'ENTER') {
-										$packet['type'] = 'enter';
-				}
+				case 'card_pass_check':
+				case 'card_not_pass_check':
+				case 'user_get_card':
+				case 'user_del_card':
+				case 'user_consume_card':
+				case 'poi_check_notify':
+					$packet['type'] = 'coupon';
+					break;
 			}
 		}
 		return $packet;
@@ -933,11 +813,14 @@ abstract class WeModuleProcessor extends WeBase {
 	}
 
 	
-	protected function respCustom() {
+	protected function respCustom(array $message = array()) {
 		$response = array();
 		$response['FromUserName'] = $this->message['to'];
 		$response['ToUserName'] = $this->message['from'];
 		$response['MsgType'] = 'transfer_customer_service';
+		if (!empty($message['TransInfo']['KfAccount'])) {
+			$response['TransInfo']['KfAccount'] = $message['TransInfo']['KfAccount'];
+		}
 		return $response;
 	}
 

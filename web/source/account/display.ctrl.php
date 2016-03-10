@@ -1,10 +1,24 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 $_W['page']['title'] = '公众号列表 - 公众号';
-if($_W['isajax']){
+$dos = array('rank', 'package', 'display');
+$do = in_array($_GPC['do'], $dos)? $do : 'display' ;
+if ($do == 'rank' && $_W['isajax']) {
+	$rank = intval($_GPC['rank']);
+	$id = intval($_GPC['id']);
+	$rank = max(0, $rank);
+	$rank = min(5, $rank);
+	$exist = pdo_get('uni_account', array('uniacid' => $id));
+	if (empty($exist)) {
+		message(error(1, '公众号不存在'), '', 'ajax');
+	}
+	pdo_update('uni_account', array('rank' => $rank), array('uniacid' => $id));
+	message(error(0), '', 'ajax');
+}
+if($do == 'package' && $_W['isajax']){
 	$uid = intval($_GPC['uid']);
 	$groupid = trim($_GPC['groupid']);
 	$groupname = array();
@@ -42,47 +56,56 @@ if($_W['isajax']){
 	message(error(0,$data),'','ajax');
 }
 
-$pindex = max(1, intval($_GPC['page']));
-$psize = 15;
-$start = ($pindex - 1) * $psize;
-$condition = '';
-$pars = array();
-$keyword = trim($_GPC['keyword']);
-$s_uniacid = intval($_GPC['s_uniacid']);
-if(!empty($keyword)) {
-	$condition =" AND `name` LIKE :name";
-	$pars[':name'] = "%{$keyword}%";
-}
-if(!empty($s_uniacid)) {
-	$condition =" AND `uniacid` = :uniacid";
-	$pars[':uniacid'] = $s_uniacid;
-}
-if(empty($_W['isfounder'])) {
-	$condition .= " AND `uniacid` IN (SELECT `uniacid` FROM " . tablename('uni_account_users') . " WHERE `uid`=:uid)";
-	$pars[':uid'] = $_W['uid'];
-}
-$tsql = "SELECT COUNT(*) FROM " . tablename('uni_account') . " WHERE 1 = 1{$condition}";
-$total = pdo_fetchcolumn($tsql, $pars);
-$sql = "SELECT * FROM " . tablename('uni_account') . " WHERE 1 = 1{$condition} ORDER BY `uniacid` DESC LIMIT {$start}, {$psize}";
-$pager = pagination($total, $pindex, $psize);
-$list = pdo_fetchall($sql, $pars);
-
-if(!empty($list)) {
-	foreach($list as &$account) {
-		$account['details'] = uni_accounts($account['uniacid']);
-		if ($account['default_acid'] == $_W['account']['acid']) {
-			$isconnect  = $account['details'][$account['default_acid']]['isconnect'];
-		}
-		$account['role'] = uni_permission($_W['uid'], $account['uniacid']);
-		$account['setmeal'] = uni_setmeal($account['uniacid']);
+if ($do == 'display') {
+	$pindex = max(1, intval($_GPC['page']));
+	$psize = 15;
+	$start = ($pindex - 1) * $psize;
+	$condition = '';
+	$pars = array();
+	$keyword = trim($_GPC['keyword']);
+	$s_uniacid = intval($_GPC['s_uniacid']);
+	if(!empty($keyword)) {
+		$condition =" AND a.`name` LIKE :name";
+		$pars[':name'] = "%{$keyword}%";
 	}
-}
-if(!$_W['isfounder']) {
-	$stat = user_account_permission();
-}
-if (!empty($_W['setting']['platform']['authstate'])) {
-	load()->classs('weixin.platform');
-	$account_platform = new WeiXinPlatform();
-	$authurl = $account_platform->getAuthLoginUrl();
+	if(!empty($s_uniacid)) {
+		$condition =" AND a.`uniacid` = :uniacid";
+		$pars[':uniacid'] = $s_uniacid;
+	}
+	if(empty($_W['isfounder'])) {
+		$condition .= " AND a.`uniacid` IN (SELECT `uniacid` FROM " . tablename('uni_account_users') . " WHERE `uid`=:uid)";
+		$pars[':uid'] = $_W['uid'];
+	}
+	if(!empty($_GPC['expiretime'])) {
+		$expiretime = intval($_GPC['expiretime']);
+		$condition .= " AND a.`uniacid` IN(SELECT uniacid FROM " .tablename('uni_account_users') . " WHERE role = 'owner' AND uid IN (SELECT uid FROM " .tablename('users'). " WHERE endtime > :time AND endtime < :endtime))";
+		$pars[':time'] = time();
+		$pars[':endtime'] = strtotime(date('Y-m-d', time()+86400*($expiretime+2)));
+	}
+	if ($_GPC['type'] == '3') {
+		$condition .= " AND b.type = 3";
+	} elseif($_GPC['type'] == '1') {
+		$condition .= " AND b.type <> 3";
+	}
+	$tsql = "SELECT COUNT(*) FROM " . tablename('uni_account'). " as a LEFT JOIN". tablename('account'). " as b ON a.default_acid = b.acid WHERE a.default_acid <> 0 {$condition}";
+	$total = pdo_fetchcolumn($tsql, $pars);
+	$pager = pagination($total, $pindex, $psize);
+	$sql = "SELECT * FROM ". tablename('uni_account'). " as a LEFT JOIN". tablename('account'). " as b ON a.default_acid = b.acid WHERE a.default_acid <> 0 {$condition} ORDER BY a.`rank` DESC, a.`uniacid` DESC LIMIT {$start}, {$psize}";
+	$list = pdo_fetchall($sql, $pars);
+	if(!empty($list)) {
+		foreach($list as $unia => &$account) {
+			$account['details'] = uni_accounts($account['uniacid']);
+			$account['role'] = uni_permission($_W['uid'], $account['uniacid']);
+			$account['setmeal'] = uni_setmeal($account['uniacid']);
+		}
+	}
+	if(!$_W['isfounder']) {
+		$stat = user_account_permission();
+	}
+	if (!empty($_W['setting']['platform']['authstate'])) {
+		load()->classs('weixin.platform');
+		$account_platform = new WeiXinPlatform();
+		$authurl = $account_platform->getAuthLoginUrl();
+	}
 }
 template('account/display');

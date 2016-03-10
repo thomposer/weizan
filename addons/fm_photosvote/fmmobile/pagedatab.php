@@ -34,9 +34,9 @@ defined('IN_IA') or exit('Access Denied');
 		}elseif ($reply['indexorder'] == '11') {
 			$where .= " ORDER BY `istuijian` DESC, `createtime` ASC";
 		}elseif ($reply['indexorder'] == '2') {
-			$where .= " ORDER BY `istuijian` DESC, `id` DESC";
+			$where .= " ORDER BY `istuijian` DESC, `uid` DESC, `id` DESC";
 		}elseif ($reply['indexorder'] == '22') {
-			$where .= " ORDER BY `istuijian` DESC, `id` ASC";
+			$where .= " ORDER BY `istuijian` DESC, `uid` ASC, `id` ASC";
 		}elseif ($reply['indexorder'] == '3') {
 			$where .= " ORDER BY `istuijian` DESC, `photosnum` + `xnphotosnum` DESC";
 		}elseif ($reply['indexorder'] == '33') {
@@ -50,7 +50,7 @@ defined('IN_IA') or exit('Access Denied');
 		}else {
 			$where .= " ORDER BY `istuijian` DESC, `id` DESC";
 		}
-		$userlist = pdo_fetchall('SELECT * FROM '.tablename($this->table_users).' WHERE uniacid= :uniacid and rid = :rid '.$where.'  LIMIT ' . $position . ',' . $item_per_page, array(':uniacid' => $uniacid,':rid' => $rid) );
+		$userlist = pdo_fetchall('SELECT * FROM '.tablename($this->table_users).' WHERE uniacid= :uniacid and rid = :rid AND istuijian <> 1 '.$where.'  LIMIT ' . $position . ',' . $item_per_page, array(':uniacid' => $uniacid,':rid' => $rid) );
 		
 		$tjlist = pdo_fetchall('SELECT * FROM '.tablename($this->table_users).' WHERE uniacid= :uniacid and rid = :rid AND istuijian = 1 '.$where.'  LIMIT ' . $position . ',' . $item_per_page, array(':uniacid' => $uniacid,':rid' => $rid) );
 		

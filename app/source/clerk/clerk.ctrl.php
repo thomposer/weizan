@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $dos = array('check', 'card', 'token');
@@ -113,7 +113,7 @@ if($do == 'token') {
 	if(checksubmit('submit')) {
 		load()->model('user');
 		$password = $_GPC['password'];
-		$sql = 'SELECT * FROM ' . tablename('activity_coupon_password') . " WHERE `uniacid` = :uniacid AND `password` = :password";
+		$sql = 'SELECT * FROM ' . tablename('activity_clerks') . " WHERE `uniacid` = :uniacid AND `password` = :password";
 		$clerk = pdo_fetch($sql, array(':uniacid' => $_W['uniacid'], ':password' => $password));
 		if(!empty($clerk)) {
 			$status = $use_func($_W['member']['uid'], $id, $clerk['name']);

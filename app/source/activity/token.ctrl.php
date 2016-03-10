@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $dos = array('display', 'post', 'mine', 'use');
@@ -59,10 +59,10 @@ if($do == 'use') {
 	if(checksubmit('submit')) {
 		load()->model('user');
 		$password = $_GPC['password'];
-		$sql = 'SELECT * FROM ' . tablename('activity_coupon_password') . " WHERE `uniacid` = :uniacid AND `password` = :password";
+		$sql = 'SELECT * FROM ' . tablename('activity_clerks') . " WHERE `uniacid` = :uniacid AND `password` = :password";
 		$clerk = pdo_fetch($sql, array(':uniacid' => $_W['uniacid'], ':password' => $password));
 		if(!empty($clerk)) {
-			$status = activity_token_use($_W['member']['uid'], $id, $clerk['name'], $clerk['id']);
+			$status = activity_token_use($_W['member']['uid'], $id, $clerk['name'], $clerk['id'], '', 'system', 3, $clerk['storeid']);
 			if (!is_error($status)) {
 				message('代金券使用成功！', url('activity/token/mine', array('type' => $_GPC['type'])), 'success');
 			} else {

@@ -29,6 +29,7 @@
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 {/if}
+{if $reply['iscode'] == 1}
 {if ($_GPC['do'] == 'tuser' || $_GPC['do'] == 'tuserphotos' || $_GPC['do'] == 'photosvote')}
  <div class="geetest">
     <div class="bg"></div>
@@ -111,6 +112,7 @@
   }
 </style>
 {/if}
+{/if}
 <div class="modal fade" id="subsribe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="  margin-top: 60px;">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -182,9 +184,99 @@
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<style type="text/css">
+	
+	.overlay_container {
+	    position: fixed;
+	    z-index: 100003;
+	    top: 0;
+	    width: 100%;
+	    height: 100%;
+	    background: rgba(0,0,0,.15);
+	    display: -webkit-box;
+	    display: -webkit-flex;
+	    display: -ms-flexbox;
+	    display: flex;
+	    -webkit-box-orient: vertical;
+	    -webkit-flex-flow: column;
+	    -webkit-flex-direction: column;
+	    -ms-flex-direction: column;
+	    flex-direction: column;
+	    -webkit-transition-property: opacity;
+	    -webkit-transition-duration: 100ms;
+	    -webkit-backface-visibility: hidden
+	}
 
+	.overlay_container:after,.overlay_container:before {
+	    content: '';
+	    display: block;
+	    -webkit-box-flex: 1;
+	    -webkit-flex: 1;
+	    -ms-flex: 1;
+	    flex: 1
+	}
+
+	.overlay_container.unmasked {
+	    background: transparent;
+	    pointer-events: none
+	}
+
+	.overlay_container.beforeFadeIn {
+	    opacity: 0
+	}
+
+	.overlay_container.afterFadeOut {
+	    opacity: 0
+	}
+
+	.overlay_content_container {
+	    display: -webkit-box;
+	    display: -webkit-flex;
+	    display: -ms-flexbox;
+	    display: flex;
+	    -webkit-box-orient: horizon;
+	    -webkit-flex-flow: row;
+	    -webkit-flex-direction: row;
+	    -ms-flex-direction: row;
+	    flex-direction: row
+	}
+
+	.overlay_content_container:after,.overlay_content_container:before {
+	    content: '';
+	    display: block;
+	    -webkit-box-flex: 1;
+	    -webkit-flex: 1;
+	    -ms-flex: 1;
+	    flex: 1
+	}
+
+	.overlay_content {
+	    -webkit-transition-property: -webkit-transform;
+	    -webkit-transition-duration: 150ms;
+	    -webkit-transform-origin: 50% 50%;
+	    pointer-events: auto
+	}
+
+	.toast {
+	  width: 210px;
+	  padding: 16px;
+	  font-size: 16px;
+	  line-height: 20px;
+	  background-color: rgba(0,0,0,.9);
+	  border-radius: 8px;
+	  color: #fff;
+	  text-align: center;
+	  z-index: 100000;
+	}
+</style>
 <div class="loading" style="display: none;"></div>
-<div class="overlay_container j_overlay_container unmasked beforeFadeIn" style="display: none;"><div class="overlay_content_container j_overlay_content_container"><div class="overlay_content"><div id="toast" class="toast"></div></div></div></div>
+<div class="overlay_container j_overlay_container unmasked beforeFadeIn" style="display: none;">
+	<div class="overlay_content_container j_overlay_content_container">
+		<div class="overlay_content">
+			<div id="toast" class="toast"></div>
+		</div>
+	</div>
+</div>
 <div id="bodyhidden" style="display: none;"></div>
 <script>
 
@@ -307,6 +399,7 @@ function tvotestart(tfrom_user, vfrom, iscode) {
 		  geetest.style.display = "none";
 		};
 		window.gt_custom_ajax = function(result, id, message) {
+
 			if(result) {										
 				var submitData = {
 					message: message,
@@ -315,11 +408,12 @@ function tvotestart(tfrom_user, vfrom, iscode) {
 				};
 				$.post("{php echo $this->createMobileUrl('Tvotestart', array('vote' => '1', 'rid' => $rid))}", submitData, function(data) {	
 					//geetest.style.display = "none";
-					console.log(result);
+					
 					qs('#' + id).parentNode.parentNode.style.display = "none";
 					if (data.success == true) {
 						var photosnum = "#photosnum" + tfrom_user;
 						var photosnumf = "#photosnum_" + tfrom_user;
+
 						$(photosnumf).html(data.photosnum);
 						$(photosnum).html(data.photosnum);
 						$("#acount").html(data.ljtp);
@@ -335,6 +429,7 @@ function tvotestart(tfrom_user, vfrom, iscode) {
 					} else {
 						if (data.success == -1) {
 							//fminfo(data.msg);
+
 							fmloadding('.overlay_container', data.msg);
 							/**setTimeout(function () {								
 								window.location.reload();
@@ -358,7 +453,7 @@ function tvotestart(tfrom_user, vfrom, iscode) {
 			tfrom_user: tfrom_user,
 			vfrom: vfrom
 		};
-		$.post("{php echo $this->createMobileUrl('Tvotestart', array('vote' => '1', 'rid' => $rid))}", submitData, function(data) {
+		$.post("{php echo $this->createMobileUrl('Tvotestart', array('vote' => '1', 'rid' => $rid))}", submitData, function(data) {			//console.log(data);
 			if (data.success == true) {
 				
 				var photosnum = "#photosnum" + tfrom_user;

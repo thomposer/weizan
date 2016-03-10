@@ -7,9 +7,10 @@
 if(empty($_W['isfounder'])) {
 	message('访问非法.');
 }
-$do = in_array($do, array('profile', 'device', 'callback', 'appstore', 'buyversion', 'buybranch')) ? $do : 'profile';
-$authurl = 'http://addons2.weizancms.com/web/index.php?c=auth&a=passwort';
-
+$do = in_array($do, array('profile', 'device', 'callback', 'appstore', 'appstore2', 'buyversion', 'buybranch')) ? $do : 'profile';
+$authurl2 = 'http://addons2.weizancms.com/web/index.php?c=auth&a=passwort';
+$authurl = 'http://addons2.012wz.com/web/index.php?c=auth&a=passwort';
+$authurl3 = 'http://addons2.012wz.com/web/index.php?c=auth&a=passwort';
 $auth = array();
 $auth['key'] = '';
 $auth['password'] = '';
@@ -23,16 +24,22 @@ if(!empty($_W['setting']['site']['key']) && !empty($_W['setting']['site']['token
 
 if($do == 'profile') {
 	$auth['forward'] = 'profile';
-	$iframe = __to($auth);
+	$iframe = __to3($auth);
 	$title = '注册站点';
+}
+if($do == 'appstore2') {
+	$auth['forward'] = 'appstorenei';
+	$iframe = __to2($auth);
+	$title = '外部商城';
+	header("Location: $iframe");
+	exit;
 }
 
 if($do == 'appstore') {
 	$auth['forward'] = 'appstore';
 	$iframe = __to($auth);
-	$title = '应用商城';
-	header("Location: $iframe");
-	exit;
+	$title = '内部商城';
+
 }
 
 if($do == 'device') {
@@ -132,4 +139,14 @@ function __to($auth) {
 	global $authurl;
 	$query = base64_encode(json_encode($auth));
 	return $authurl . '&__auth=' . $query;
+}
+function __to2($auth) {
+	global $authurl2;
+	$query = base64_encode(json_encode($auth));
+	return $authurl2 . '&__auth=' . $query;
+}
+function __to3($auth) {
+	global $authurl3;
+	$query = base64_encode(json_encode($auth));
+	return $authurl3 . '&__auth=' . $query;
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-<head>
+<head>	<script type="text/javascript">		var useragent = navigator.userAgent;		if (useragent.match(/MicroMessenger/i) != 'MicroMessenger') {		alert('已禁止本次访问：您必须使用微信内置浏览器访问本页面！');		var url = '{php echo $this->createMobileUrl('stopllq',array('rid'=> $rid))}';		var opened = window.open(url, '_self');		}	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<title>{php if(isset($title)) $_W['page']['title'] = $title}{if !empty($_W['page']['title'])}{$_W['page']['title']} - {/if}{if !empty($_W['account']['name'])}{$_W['account']['name']}{/if}{if !empty($_W['page']['sitename'])} - {$_W['page']['sitename']}{else}{if IMS_FAMILY != 'x'} - Powered by 012wz.com{/if}{/if}</title>
@@ -18,7 +18,7 @@
 	<link href="{$_W['siteroot']}app/{php echo str_replace('./', '', url('utility/style'))}" rel="stylesheet">
 	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 	<script src="{$_W['siteroot']}app/resource/js/require.js"></script>
-	<script src="{$_W['siteroot']}app/resource/js/app/config.js"></script>
+	<script src="{$_W['siteroot']}app/resource/js/app/config.js"></script>	
 	
 <link href="../addons/fm_photosvote/template/mobile/photos/main.css?v{php echo time();}" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="../addons/fm_photosvote/template/mobile/photos/dialog1.css">

@@ -339,14 +339,18 @@
 	});
 </script>
 {/if}
-
-<div style="background-color: rgb(244, 244, 244);" class="nav-menu-app has-nav-4">
+{php $nav = $setting['recommend_status'] + $setting['sign_status'] + 3; $nav = "has-nav-" . $nav;}
+<div class="nav-menu-app {$nav} usercard">
 	<ul class="nav-group clearfix">
-		<li class="nav-group-item"><a href="{php echo url('mc/bond/mycard');}"><i style="color: rgb(150, 150, 150);" class="fa fa-credit-card"></i><span style="color: rgb(150, 150, 150);">会员卡</span></a></li>
-		<li class="nav-group-item notice-count"><a href="{php echo url('mc/card/notice');}"><i style="color: rgb(150, 150, 150);" class="fa fa-comments-o"></i><span style="color: rgb(150, 150, 150);">消息</span>{if $notice_count > 0}<em class="maker badge">{$notice_count}</em>{/if}</a></li>
-		<li class="nav-group-item"><a href="{php echo url('mc/card/sign_display');}"><i style="color: rgb(150, 150, 150);" class="fa fa-hand-o-up"></i><span style="color: rgb(150, 150, 150);">签到</span></a></li>
-		<li class="nav-group-item"><a href="{php echo url('mc/card/recommend');}"><i style="color: rgb(150, 150, 150);" class="fa fa-share-square-o"></i><span style="color: rgb(150, 150, 150);">推荐</span></a></li>
-		<li class="nav-group-item"><a href="{php echo url('mc/home');}"><i style="color: rgb(150, 150, 150);" class="fa fa-user"></i><span style="color: rgb(150, 150, 150);">我的</span></a></li>
+		<li class="nav-group-item"><a href="{php echo url('mc/bond/mycard');}"><i class="fa fa-credit-card"></i><span>会员卡</span></a></li>
+		<li class="nav-group-item notice-count"><a href="{php echo url('mc/card/notice');}"><i class="fa fa-comments-o"></i><span>消息</span>{if $notice_count > 0}<em class="maker badge">{$notice_count}</em>{/if}</a></li>
+		{if !empty($setting['sign_status'])}
+		<li class="nav-group-item"><a href="{php echo url('mc/card/sign_display');}"><i class="fa fa-hand-o-up"></i><span>签到</span></a></li>
+		{/if}
+		{if !empty($setting['recommend_status'])}
+		<li class="nav-group-item"><a href="{php echo url('mc/card/recommend');}"><i class="fa fa-share-square-o"></i><span>推荐</span></a></li>
+		{/if}
+		<li class="nav-group-item"><a href="{php echo url('mc/home');}"><i class="fa fa-user"></i><span>我的</span></a></li>
 	</ul>
 </div>
 {template 'common/footer'}

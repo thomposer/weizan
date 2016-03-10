@@ -64,3 +64,14 @@ if (!function_exists('toimage')) {
 		return tomedia($src);
 	}
 }
+
+if (!function_exists('uni_setting')) {
+	function uni_setting($uniacid = 0, $fields = '*', $force_update = false) {
+		global $_W;
+		load()->model('account');
+		if ($fields == '*') {
+			$fields = '';
+		}
+		return uni_setting_load($fields, $uniacid);
+	}
+}

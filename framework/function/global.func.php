@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -47,10 +47,11 @@ function ihtmlspecialchars($var) {
 }
 
 
-function isetcookie($key, $value, $expire = 0) {
+function isetcookie($key, $value, $expire = 0, $httponly = false) {
 	global $_W;
 	$expire = $expire != 0 ? (TIMESTAMP + $expire) : 0;
-	return setcookie($_W['config']['cookie']['pre'] . $key, $value, $expire, $_W['config']['cookie']['path'], $_W['config']['cookie']['domain']);
+	$secure = $_SERVER['SERVER_PORT'] == 443 ? 1 : 0;
+	return setcookie($_W['config']['cookie']['pre'] . $key, $value, $expire, $_W['config']['cookie']['path'], $_W['config']['cookie']['domain'], $secure, $httponly);
 }
 
 
@@ -434,7 +435,7 @@ function tomedia($src, $local_path = false){
 	if (strpos($src, './addons') === 0) {
 		return $_W['siteroot'] . str_replace('./', '', $src);
 	}
-	if (strexists($src, $_W['siteroot']) && !strexists($src, '/addons/')) {
+		if (strexists($src, $_W['siteroot']) && !strexists($src, '/addons/')) {
 		$urls = parse_url($src);
 		$src = $t = substr($urls['path'], strpos($urls['path'], 'images'));
 	}
@@ -753,6 +754,23 @@ function array2xml($arr, $level = 1) {
 	return $level == 1 ? $s . "</xml>" : $s;
 }
 
+function xml2array($xml) {
+	if (empty($xml)) {
+		return array();
+	}
+	$result = array();
+	$xmlobj = isimplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
+	if($xmlobj instanceof SimpleXMLElement) {
+		$result = json_decode(json_encode($xmlobj), true);
+		if (is_array($result)) {
+			return $result;
+		} else {
+			return array();
+		}
+	} else {
+		return $result;
+	}
+}
 function scriptname() {
 	global $_W;
 	$_W['script_name'] = basename($_SERVER['SCRIPT_FILENAME']);
@@ -887,4 +905,17 @@ function isimplexml_load_string($string, $class_name = 'SimpleXMLElement', $opti
 function ihtml_entity_decode($str) {
 	$str = str_replace('&nbsp;', '#nbsp;', $str);
 	return str_replace('#nbsp;', '&nbsp;', html_entity_decode(urldecode($str)));
+}
+
+function iarray_change_key_case($array, $case = CASE_LOWER){
+	if (!is_array($array) || empty($array)){
+		return array();
+	}
+	$array = array_change_key_case($array, $case);
+	foreach ($array as $key => $value){
+		if (is_array($value)) {
+			$array[$key] = iarray_change_key_case($value, $case);
+		}
+	}
+	return $array;
 }

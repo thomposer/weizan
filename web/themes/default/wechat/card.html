@@ -53,14 +53,14 @@
 				<table class="table table-hover">
 					<thead class="navbar-inner">
 					<tr>
-						<th width="100">卡券类型</th>
-						<th width="150">卡券名称</th>
-						<th width="200">卡券有效期</th>
-						<th width="90">状态</th>
-						<th width="90">库存</th>
-						<th width="100">每人领取限制</th>
-						<th width="100">上架状态</th>
-						<th style="width:280px; text-align:right;">操作</th>
+						<th width="80px">卡券类型</th>
+						<th width="120px">卡券名称</th>
+						<th width="150px">卡券有效期</th>
+						<th width="70px">状态</th>
+						<th width="100px">库存</th>
+						<th width="50px">领取限制</th>
+						<th width="80px">上架状态</th>
+						<th style="width:450px; text-align:right;">操作</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -85,10 +85,10 @@
 							{elseif $dca['status'] == '4'}
 							<span class="label label-default">卡券被商户删除</span>
 							{elseif $dca['status'] == '5'}
-							<span class="label label-warning">未知</span>
+							<span class="label label-warning">已在公众平台投放</span>
 							{/if}
 						</td>
-						<td><input type="text" value="{$dca['quantity']}" class="form-control modifystock" data-id="{$dca['id']}" data-old="{$dca['quantity']}" style="width:80px"/></td>
+						<td><input type="text" value="{$dca['quantity']}" class="form-control modifystock" data-id="{$dca['id']}" data-old="{$dca['quantity']}" /></td>
 						<td>{$dca['get_limit']}</td>
 						<td>
 							{if $dca['is_display'] == 1}
@@ -114,7 +114,6 @@
 		{$pager}
 	</form>
 </div>
-
 <script>
 	require(['bootstrap', 'util'],function($, u){
 		$('.modifystock').blur(function(){

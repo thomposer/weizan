@@ -159,7 +159,7 @@ $(document).ready(function() {
 });  
 </script> 
 	<div class="con" style="    padding: 15px 10px 20px;">
-		<p class="tips"><span><i>{$tuser['nickname']} 的投票用户</i></span></p>
+		<p class="tips"><span><i>{php echo $this->getusernames($tuser['realname'], $tuser['nickname'], '6')} 的投票用户</i></span></p>
 		<div class="paihang">
 			<div class="biaotou">
 				<div style="width:25%;  text-align: center;">序号</div>

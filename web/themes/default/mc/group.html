@@ -18,11 +18,16 @@
 				<label class="col-xs-12 col-sm-3 col-md-2 control-label">会员组变更设置</label>
 				<div class="col-sm-9 col-xs-12">
 					<label class="radio-inline">
-						<input type="radio" name="grouplevel" value="1" {if $setting['grouplevel'] == 1 || !$setting['grouplevel']}checked{/if}/>根据总积分多少自动升降
+						<input type="radio" name="grouplevel" value="0" {if !$setting['grouplevel']}checked{/if}/>不自动变更
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="grouplevel" value="1" {if $setting['grouplevel'] == 1}checked{/if}/>根据总积分多少自动升降
 					</label>
 					<label class="radio-inline">
 						<input type="radio" name="grouplevel" value="2" {if $setting['grouplevel'] == 2}checked{/if}/>根据总积分多少只升不降
 					</label>
+					<span class="help-block">设置变更方式后,请谨慎修改</span>
+					<span class="help-block">不自动变更：<strong class="text-danger">会员组的变更只能通过管理员来变更</strong></span>
 					<span class="help-block">根据积分多少自动升降：<strong class="text-danger">系统根据当前会员的总积分，按照每个会员组所需总积分的设置进行变更。可自动升降会员组</strong></span>
 					<span class="help-block">根据积分多少只升不降：<strong class="text-danger">系统根据当前会员的总积分，如果会员的总积分达到更高一级的会员组，则变更会员组，如果积分少于当前所在会员组所需总积分，保持当前会员组不变，不会降级。</strong></span>
 				</div>

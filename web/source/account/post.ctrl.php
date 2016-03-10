@@ -111,12 +111,14 @@ $account = $uniaccount = array();
 $uniaccount = pdo_fetch("SELECT * FROM ".tablename('uni_account')." WHERE uniacid = :uniacid", array(':uniacid' => $uniacid));
 $acid = !empty($acid) ? $acid : $uniaccount['default_acid'];
 $account = account_fetch($acid);
-load()->classs('weixin.platform');
-$account_platform = new WeiXinPlatform();
-$authurl = $account_platform->getAuthLoginUrl();
-if (!strexists($authurl, 'javascript')) {
-	$authurl = "javascript:window.location.href='{$authurl}';";
-} else {
-	$authurl = '';
+if ($_W['setting']['platform']['authstate']) {
+	load()->classs('weixin.platform');
+	$account_platform = new WeiXinPlatform();
+	$preauthcode = $account_platform->getPreauthCode();
+	if (is_error($preauthcode)) {
+		$authurl = "javascript:alert('{$preauthcode['message']}');";
+	} else {
+		$authurl = sprintf(ACCOUNT_PLATFORM_API_LOGIN, $account_platform->appid, $preauthcode, urlencode(urlencode($GLOBALS['_W']['siteroot'] . 'index.php?c=account&a=auth&do=forward')));
+	}
 }
 template('account/post');

@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 
@@ -471,6 +471,7 @@ function mc_credit_update($uid, $credittype, $creditval = 0, $log = array()) {
 		if (empty($log) || !is_array($log)) {
 		$log = array($uid, '未记录', 0, 0);
 	}
+	$clerk_type = intval($log[5]) ? intval($log[5]) : 1;
 	$data = array(
 		'uid' => $uid,
 		'credittype' => $credittype,
@@ -481,6 +482,7 @@ function mc_credit_update($uid, $credittype, $creditval = 0, $log = array()) {
 		'module' => trim($log[2]),
 		'clerk_id' => intval($log[3]),
 		'store_id' => intval($log[4]),
+		'clerk_type' => $clerk_type,
 		'remark' => $log[1],
 	);
 	pdo_insert('mc_credits_record', $data);
@@ -488,6 +490,27 @@ function mc_credit_update($uid, $credittype, $creditval = 0, $log = array()) {
 	return true;
 }
 
+
+function mc_account_change_operator($clerk_type, $store_id, $clerk_id) {
+	global $stores, $clerks, $_W;
+	if(empty($stores) || empty($clerks)) {
+		$clerks = pdo_getall('activity_clerks', array('uniacid' => $_W['uniacid']), array('id', 'name'), 'id');
+		$stores = pdo_getall('activity_stores', array('uniacid' => $_W['uniacid']), array('id', 'business_name', 'branch_name'), 'id');
+	}
+	$data = array(
+		'clerk_cn' => '',
+		'store_cn' => '',
+	);
+	if($clerk_type == 1) {
+		$data['clerk_cn'] = '系统';
+	} elseif($clerk_type == 2) {
+		$data['clerk_cn'] = pdo_fetchcolumn('SELECT username FROM ' . tablename('users') . ' WHERE uid = :uid', array(':uid' => $clerk_id));
+	} elseif($clerk_type == 3) {
+		$data['clerk_cn'] = $clerks[$clerk_id]['name'];
+		$data['store_cn'] = $stores[$store_id]['business_name'] . ' ' . $stores[$store_id]['branch_name'];
+	}
+	return $data;
+}
 
 function mc_credit_fetch($uid, $types = array()) {
 	if (empty($types) || $types == '*') {
@@ -561,6 +584,7 @@ function _mc_login($member) {
 		$member = pdo_fetch($sql, array(':uid' => $member['uid'], ':uniacid' => $_W['uniacid']));
 		if (!empty($member) && (!empty($member['mobile']) || !empty($member['email']))) {
 			$_W['member'] = $member;
+			$_W['member']['groupname'] = $_W['uniaccount']['groups'][$member['groupid']]['title'];
 			$_SESSION['uid'] = $member['uid'];
 			mc_group_update();
 			if (empty($_W['openid'])) {
@@ -624,6 +648,25 @@ function mc_fields() {
 		'bio' => '自我介绍',
 		'interest' => '兴趣爱好'
 	);
+}
+
+
+function mc_acccount_fields($uniacid = 0, $is_available = true) {
+	global $_W;
+	if(!$uniacid) {
+		$uniacid = $_W['uniacid'];
+	}
+	$condition = ' WHERE a.uniacid = :uniacid';
+	$params = array(':uniacid' => $uniacid);
+	if($is_available) {
+		$condition . ' AND a.available = 1';
+	}
+	$data = pdo_fetchall('SELECT a.title, b.field FROM ' . tablename('mc_member_fields') . ' AS a LEFT JOIN ' . tablename('profile_fields') . ' as b ON a.fieldid = b.id' . $condition, $params, 'field');
+	$fields = array();
+	foreach($data as $row) {
+		$fields[$row['field']] = $row['title'];
+	}
+	return $fields;
 }
 
 
@@ -746,6 +789,9 @@ function mc_openid2uid($openid) {
 
 function mc_group_update($uid = 0) {
 	global $_W;
+	if(!$_W['uniaccount']['grouplevel']) {
+		return true;
+	}
 	$uid = intval($uid);
 	if($uid <= 0) {
 		$uid = $_W['member']['uid'];
@@ -970,7 +1016,7 @@ function mc_notice_credit2($openid, $uid, $credit2_num, $credit1_num = 0, $store
 					'color' => '#ff510'
 				),
 			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['credit2'], $data, $url);
+			$status = $acc->sendTplNotice($openid, $acc->noticetpl['credit2']['tpl'], $data, $url);
 		} else {
 			$content = "您在{$time}进行会员余额消费，消费金额【{$credit2_num}】元，获得积分【{$credit1_num}】,消费后余额【{$credit['credit2']}】元，消费后积分【{$credit['credit1']}】。";
 			$status = mc_notice_public($openid, '余额消费通知', $_W['account']['name'], $content, $url);
@@ -1051,7 +1097,7 @@ function mc_notice_credit1($openid, $uid, $credit1_num, $tip, $url = '', $remark
 					'color' => '#ff510'
 				),
 				'creditName' => array(
-					'value' => '账户积分余额',
+					'value' => '账户积分',
 					'color' => '#ff510'
 				),
 				'amount' => array(
@@ -1063,7 +1109,7 @@ function mc_notice_credit1($openid, $uid, $credit1_num, $tip, $url = '', $remark
 					'color' => '#ff510'
 				),
 			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['credit1'], $data, $url);
+			$status = $acc->sendTplNotice($openid, $acc->noticetpl['credit1']['tpl'], $data, $url);
 		} else {
 			$content = "您在{$time}有积分{$type}，{$type}积分【{$credit1_num}】，变更原因：【{$tip}】,消费后账户积分余额【{$credit['credit1']}】。";
 			$status = mc_notice_public($openid, '余额消费通知', $_W['account']['name'], $content, $url);
@@ -1121,7 +1167,7 @@ function mc_notice_group($openid, $old_group, $now_group, $url = '', $remark = '
 					'color' => '#ff510'
 				),
 			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['group'], $data, $url);
+			$status = $acc->sendTplNotice($openid, $acc->noticetpl['group']['tpl'], $data, $url);
 		} else {
 			$content = "您的会员等级在{$time}由{$old_group}变更为{$now_group}。";
 			$status = mc_notice_public($openid, '会员组变更通知', $_W['account']['name'], $content, $url);
@@ -1184,7 +1230,7 @@ function mc_notice_nums_plus($openid, $type, $num, $total_num, $remark = '感谢
 					'color' => '#ff510'
 				),
 			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['nums_plus'], $data);
+			$status = $acc->sendTplNotice($openid, $acc->noticetpl['nums_plus']['tpl'], $data);
 		} else {
 			$content = "您的{$type}已充值成功，本次充次【{$num}】次，总剩余【{$total_num}】次";
 			$status = mc_notice_public($openid, $type . '充值通知', $_W['account']['name'], $content);
@@ -1246,7 +1292,7 @@ function mc_notice_nums_times($openid, $card_id, $type, $num, $remark = '感谢�
 					'color' => '#ff510'
 				),
 			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['nums_times'], $data);
+			$status = $acc->sendTplNotice($openid, $acc->noticetpl['nums_times']['tpl'], $data);
 		} else {
 			$content = "您的{$type}已成功使用了一次，总剩余【{$num}】次，消费时间【{$time}】。";
 			$status = mc_notice_public($openid, $type . '消费通知', $_W['account']['name'], $content);
@@ -1308,7 +1354,7 @@ function mc_notice_times_plus($openid, $card_id, $type, $fee, $days, $endtime = 
 					'color' => '#ff510'
 				),
 			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['times_plus'], $data);
+			$status = $acc->sendTplNotice($openid, $acc->noticetpl['times_plus']['tpl'], $data);
 		} else {
 			$content = "您的{$type}已成功续费，续费时长【{$days}】天，续费金额【{$fee}】元，有效期至【{$endtime}】";
 			$status = mc_notice_public($openid, $type . '续费通知', $_W['account']['name'], $content);
@@ -1358,7 +1404,7 @@ function mc_notice_times_times($openid, $title, $type, $endtime = '', $remark = 
 					'color' => '#ff510'
 				),
 			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['times_times'], $data);
+			$status = $acc->sendTplNotice($openid, $acc->noticetpl['times_times']['tpl'], $data);
 		} else {
 			$content = "您的{$type}即将到期，有效期至【{$endtime}】";
 			$status = mc_notice_public($openid, $type . '服务到期通知', $_W['account']['name'], $content);

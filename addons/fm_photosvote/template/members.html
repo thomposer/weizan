@@ -132,7 +132,7 @@
 							<a data='{$row['istuijian']}' class='btn  btn-default {if $row['istuijian']==1}btn-info{/if}  btn-sm manage' onclick="setProperty(this,{$row['id']},'tuijian')"><i class="fa fa-star"></i>{if $row['istuijian']==1}取消推荐{else}设为推荐{/if}</a>
 							<p></p>
 							<div class="dropdown btn  btn-default btn-danger  btn-sm manage">
-								<a href="javascript:;" id="limitsd" class="dropdown-toggle " data-toggle="dropdown" style="display:block; max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff " aria-expanded="true"><i class="fa fa-ban"></i>{if $row['limitsd']==0}开始限速{else}限速中{/if} <b class="caret"></b></a>
+								<a href="javascript:;" id="limitsd_{$row['id']}" class="dropdown-toggle " data-toggle="dropdown" style="display:block; max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff " aria-expanded="true"><i class="fa fa-ban"></i>{if $row['limitsd']==0}开始限速{else}限速中{/if} <b class="caret"></b></a>
 								<ul class="dropdown-menu">
 									<li><a data='1' href="javascript:;" {if $row['limitsd'] == 1} class="label label-info" style="color:#fff" {/if} target="_blank" onclick="setProperty(this,{$row['id']},'limitsd')"><i class="fa fa-ban"></i> 1分钟投一票</a></li>
 									<li><a data='3'href="javascript:;"  {if $row['limitsd'] == 3} class="label label-info" style="color:#fff" {/if} target="_blank" onclick="setProperty(this,{$row['id']},'limitsd')"><i class="fa fa-ban"></i> 3分钟投一票</a></li>
@@ -141,6 +141,7 @@
 									<li><a data='15'href="javascript:;" {if $row['limitsd'] == 15} class="label label-info" style="color:#fff" {/if} target="_blank" onclick="setProperty(this,{$row['id']},'limitsd')"><i class="fa fa-ban"></i> 15分钟投一票</a></li>
 									<li><a data='30'href="javascript:;" {if $row['limitsd'] == 30} class="label label-info" style="color:#fff" {/if} target="_blank" onclick="setProperty(this,{$row['id']},'limitsd')"><i class="fa fa-ban"></i> 30分钟投一票</a></li>
 									<li><a data='60'href="javascript:;" {if $row['limitsd'] == 60} class="label label-info" style="color:#fff" {/if} target="_blank" onclick="setProperty(this,{$row['id']},'limitsd')"><i class="fa fa-ban"></i> 60分钟投一票</a></li>
+									<li><a data=''href="javascript:;" {if $row['limitsd'] == 60} class="label label-info" style="color:#fff" {/if} target="_blank" onclick="setProperty(this,{$row['id']},'limitsd')"><i class="fa fa-ban"></i> 停止限速</a></li>
 								</ul>
 							</div>
 
@@ -274,7 +275,7 @@
 	});	
  	function setProperty(obj,id,type){
  		if (type == 'limitsd') {
- 			$("#limitsd").html($("#limitsd").html() + "...");
+ 			$("#limitsd_"+id).html($("#limitsd_"+id).html() + "...");
  		}
 		$(obj).html($(obj).html() + "...");
 		$.post("{php echo $this->createWebUrl('settuijian')}"
@@ -290,8 +291,8 @@
 					}
 				}
 				if(type=='limitsd'){
-					$("#limitsd").html($("#limitsd").html().replace("...",""));
-					$("#limitsd").html( d.data=='0'?'<i class="fa fa-ban"></i>开始限速':'<i class="fa fa-ban"></i>限速中');
+					$("#limitsd_"+id).html($("#limitsd_"+id).html().replace("...",""));
+					$("#limitsd_"+id).html( d.data=='0'?'<i class="fa fa-ban"></i>开始限速':'<i class="fa fa-ban"></i>限速中');
 
 				}
 				

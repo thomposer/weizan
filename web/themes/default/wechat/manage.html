@@ -290,8 +290,7 @@
 		<div class="form-group" style="margin-bottom: 40px;margin-left:-15px">
 			<div class="col-sm-12">
 				<a href="{php echo url('wechat/manage/location_post')}" class="btn btn-success col-lg-1" style="margin-right:10px;">添加门店</a>
-				<a href="{php echo url('wechat/manage/export')}" class="btn btn-danger col-lg-1" style="margin-right:10px;">微信导入</a>
-				<a href="{php echo url('wechat/manage/export')}" class="btn btn-danger col-lg-1">更新门店</a>
+				<a href="{php echo url('wechat/manage/export')}" onclick="if(!confirm('系统将删除本地数据,然后从微信拉取数据,确认操作吗?')) return false;" class="btn btn-danger col-lg-1" style="margin-right:10px;">微信导入</a>
 			</div>
 		</div>
 		<div class="panel panel-info">

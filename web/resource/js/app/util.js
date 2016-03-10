@@ -453,15 +453,63 @@
 		modalobj.modal({'keyboard': false});
 		modalobj.find('.modal-body').css({'height':'300px','overflow-y':'auto' });
 		modalobj.modal('show');
-		
+
 		window.selectLinkComplete = function(link){
 			if($.isFunction(callback)){
 				callback(link);
 				modalobj.modal('hide');
 			}
 		};
-	}; // end of icon dialog
-	
+	}; // end of icon dialo
+	util.pageBrowser = function(callback, page){
+		var footer = '';
+		var modalobj = util.dialog('',['./index.php?c=utility&a=link&do=page&callback=pageLinkComplete&page='+ page],footer,{containerName:'link-container'});
+		modalobj.modal({'keyboard': false});
+		modalobj.find('.modal-body').css({'height':'700px','overflow-y':'auto' });
+		modalobj.modal('show');
+
+		window.pageLinkComplete = function(link, page){
+			if($.isFunction(callback)){
+				callback(link, page);
+				if (page == '' || page == undefined) {
+					modalobj.modal('hide');
+				}
+			}
+		};
+	};
+	util.newsBrowser = function(callback, page){
+		var footer = '';
+		var modalobj = util.dialog('',['./index.php?c=utility&a=link&do=news&callback=newsLinkComplete&page='+ page],footer,{containerName:'link-container'});
+		modalobj.modal({'keyboard': false});
+		modalobj.find('.modal-body').css({'height':'700px','overflow-y':'auto' });
+		modalobj.modal('show');
+
+		window.newsLinkComplete = function(link, page){
+			if($.isFunction(callback)){
+				callback(link, page);
+				if (page == '' || page == undefined) {
+					modalobj.modal('hide');
+				}
+			}
+		};
+	};
+	util.articleBrowser = function(callback, page){
+		var footer = '';
+		var modalobj = util.dialog('',['./index.php?c=utility&a=link&do=article&callback=articleLinkComplete&page='+ page],footer,{containerName:'link-container'});
+		modalobj.modal({'keyboard': false});
+		modalobj.find('.modal-body').css({'height':'700px','overflow-y':'auto' });
+		modalobj.modal('show');
+
+		window.articleLinkComplete = function(link, page){
+			if($.isFunction(callback)){
+				callback(link, page);
+				if (page == '' || page == undefined) {
+					modalobj.modal('hide');
+				}
+			}
+		};
+	};
+
 	/**
 	 * val : image 值;
 	 * callback: 回调函数

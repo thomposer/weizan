@@ -26,12 +26,30 @@
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">{$row['title']}</label>
 					<div class="col-xs-12 col-sm-9 col-md-10">
-						<select name="{$row['type']}" class="form-control">
-							<option value="" {if !array_key_exists($row['current'], $mtypes)}selected{/if}>不处理(使用系统默认回复)</option>
+						<label class="radio-inline">
+							<input type="radio" {if $setting[$row['type']]['type'] == 'module'}checked{/if} value="module" name="setting[{$row['type']}][type]" onclick="$(this).parent().parent().parent().next().show();$(this).parent().parent().parent().next().next().hide();" autocomplete="off" />模块
+						</label>
+						<label class="radio-inline">
+							<input type="radio" {if $setting[$row['type']]['type'] == 'keyword' || empty($setting[$row['type']]['type'])}checked{/if} value="keyword" name="setting[{$row['type']}][type]" onclick="$(this).parent().parent().parent().next().hide();$(this).parent().parent().parent().next().next().show();" autocomplete="off" />关键字
+						</label>
+					</div>
+				</div>
+				<div class="form-group" {if $setting[$row['type']]['type'] != 'module'}style="display: none"{/if}>
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-xs-12 col-sm-9 col-md-10">
+						<select name="setting[{$row['type']}][module]" class="form-control">
+							<option value="">不处理(使用系统默认回复)</option>
 							{loop $row['handles'] $item}
-								<option value="{$item['name']}" {if $row['current'] == $item['name']}selected{/if}>{$item['title']}</option>
+								<option value="{$item['name']}" {if $setting[$row['type']]['module'] == $item['name']}selected{/if}>{$item['title']}</option>
 							{/loop}
 						</select>
+						<div class="help-block">如果【{$row['title']}】到达时, 并且此时并不在对话上下文中, 将会采用选中的模块来处理. 如果选择"不处理", 那么这个消息将会使用系统默认回复来回复</div>
+					</div>
+				</div>
+				<div class="form-group" {if $setting[$row['type']]['type'] != 'keyword' && !empty($setting[$row['type']]['type'])}style="display: none"{/if}>
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					<div class="col-xs-12 col-sm-9 col-md-10">
+						<input type="text" value="{$setting[$row['type']]['keyword']}" name="setting[{$row['type']}][keyword]" class="form-control">
 						<div class="help-block">如果【{$row['title']}】到达时, 并且此时并不在对话上下文中, 将会采用选中的模块来处理. 如果选择"不处理", 那么这个消息将会使用系统默认回复来回复</div>
 					</div>
 				</div>

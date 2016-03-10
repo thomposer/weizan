@@ -7,8 +7,7 @@ defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('site_category');
 $do = !empty($do) ? $do : 'display';
 $do = in_array($do, array('display', 'post', 'delete', 'fetch', 'check')) ? $do : 'display';
-$setting = uni_setting($_W['uniacid'], 'default_site');
-$default_site = intval($setting['default_site']);
+
 if ($do == 'display') {
 	if (!empty($_GPC['displayorder'])) {
 		foreach ($_GPC['displayorder'] as $id => $displayorder) {
@@ -61,6 +60,13 @@ if ($do == 'display') {
 	}
 	$category['style'] = $styles[$category['styleid']];
 	$category['style']['tname'] = empty($category['style']['tname'])? 'default' : $category['style']['tname'];
+	if(!empty($category['nid'])) {
+		$category['nav'] = pdo_get('site_nav', array('id' => $category['nid']));
+	} else {
+		$category['nav'] = array();
+	}
+	$multis = pdo_getall('site_multi', array('uniacid' => $_W['uniacid']), array(), 'id');
+	
 	if (checksubmit('submit')) {
 		if (empty($_GPC['cname'])) {
 			message('抱歉，请输入分类名称！');
@@ -103,7 +109,7 @@ if ($do == 'display') {
 				'url' => "./index.php?c=site&a=site&cid={$category['id']}&i={$_W['uniacid']}",
 				'status' => 1,
 				'position' => 1,
-				'multiid' => $default_site,
+				'multiid' => intval($_GPC['multiid']),
 			);
 			if ($data['icontype'] == 1) {
 				$nav['icon'] = '';

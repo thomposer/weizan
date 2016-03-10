@@ -83,6 +83,8 @@ class Mon_EggModule extends WeModule
 			'share_award_count' =>$_GPC['share_award_count'],
 			'music' => $_GPC['music'],
 			'exchangeEnable' => $_GPC['exchangeEnable'],
+			'xhjf_enable' => $_GPC['xhjf_enable'],
+			'xhjf' => $_GPC['xhjf'],
 			'updatetime' => TIMESTAMP
 		);
 

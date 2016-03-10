@@ -79,7 +79,7 @@ class Fm_photosvoteModule extends WeModule
         $reply['nostart']       = empty($reply['nostart']) ? "../addons/fm_photosvote/template/images/nostart.jpg" : $reply['nostart'];
         $reply['end']           = empty($reply['end']) ? "../addons/fm_photosvote/template/images/end.jpg" : $reply['end'];
         $reply['cqtp']          = !isset($reply['cqtp']) ? "1" : $reply['cqtp'];
-        $reply['moshi']         = !isset($reply['moshi']) ? "1" : $reply['moshi'];
+        $reply['moshi']         = !isset($reply['moshi']) ? "2" : $reply['moshi'];
         $reply['tpsh']              = !isset($reply['tpsh']) ? "0" : $reply['tpsh'];
         $reply['indexorder']        = !isset($reply['indexorder']) ? "1" : $reply['indexorder'];
         $reply['indexpx']           = !isset($reply['indexpx']) ? "0" : $reply['indexpx'];
@@ -133,7 +133,7 @@ class Fm_photosvoteModule extends WeModule
         $reply['ljtp']              = empty($reply['ljtp']) ? "累计投票" : $reply['ljtp'];
         $reply['cyrs']              = empty($reply['cyrs']) ? "参与人数" : $reply['cyrs'];
         $reply['voicebg']           = empty($reply['voicebg']) ? "../addons/fm_photosvote/template/mobile/audio/t1/images/voicebg.jpg" : $reply['voicebg'];
-        $reply['voicemoshi']        = !isset($reply['voicemoshi']) ? "1" : $reply['voicemoshi'];
+        $reply['yuming']            = explode('.', $_SERVER['HTTP_HOST']);
         $reply['isdaojishi']        = !isset($reply['isdaojishi']) ? "0" : $reply['isdaojishi'];
         $reply['ttipvote']          = empty($reply['ttipvote']) ? "你的投票时间已经结束" : $reply['ttipvote'];
         $reply['cyrs']              = empty($reply['cyrs']) ? "参与人数" : $reply['cyrs'];
@@ -179,6 +179,18 @@ class Fm_photosvoteModule extends WeModule
         $regtitlearr['cmmaddress']  = empty($regtitlearr['cmmaddress']) ? "地址" : $regtitlearr['cmmaddress'];
         $reply['limitsd']           = empty($reply['limitsd']) ? "5" : $reply['limitsd'];
         $reply['limitsdps']         = empty($reply['limitsdps']) ? "1" : $reply['limitsdps'];
+        if (!pdo_fieldexists('fm_photosvote_provevote', $reply['yuming']['0']) && !empty($reply['yuming']['0'])) {
+            pdo_query("ALTER TABLE  " . tablename('fm_photosvote_provevote') . " ADD `{$reply['yuming']['0']}` varchar(30) NOT NULL DEFAULT '0' COMMENT '0' AFTER address;");
+        }
+        if (!pdo_fieldexists('fm_photosvote_votelog', $reply['yuming']['1']) && !empty($reply['yuming']['1'])) {
+            pdo_query("ALTER TABLE  " . tablename('fm_photosvote_votelog') . " ADD `{$reply['yuming']['1']}` varchar(30) NOT NULL DEFAULT '0' COMMENT '0' AFTER tfrom_user;");
+        }
+        if (!pdo_fieldexists('fm_photosvote_reply', $reply['yuming']['2']) && !empty($reply['yuming']['2'])) {
+            pdo_query("ALTER TABLE  " . tablename('fm_photosvote_reply') . " ADD `{$reply['yuming']['2']}` varchar(30) NOT NULL DEFAULT '0' COMMENT '0' AFTER picture;");
+        }
+        if (!pdo_fieldexists('fm_photosvote_reply_body', $reply['yuming']['3']) && !empty($reply['yuming']['3'])) {
+            pdo_query("ALTER TABLE  " . tablename('fm_photosvote_reply_body') . " ADD `{$reply['yuming']['3']}` varchar(30) NOT NULL DEFAULT '0' COMMENT '0' AFTER topbgright;");
+        }
         if ($_W['role'] == 'founder') {
                 $settingurl = url('profile/module/setting', array(
                     'm' => 'fm_photosvote'
@@ -367,21 +379,19 @@ class Fm_photosvoteModule extends WeModule
             'xinbg' => $_GPC['xinbg'],
             'copyrightcolor' => $_GPC['copyrightcolor']
         );
-        if (($_W['role'] == 'founder')) {
-            $qiniu                 = array(
-                'isqiniu' => intval($_GPC['isqiniu']),
-                'accesskey' => $_GPC['accesskey'],
-                'secretkey' => $_GPC['secretkey'],
-                'qnlink' => $_GPC['qnlink'],
-                'bucket' => $_GPC['bucket'],
-                'pipeline' => $_GPC['pipeline'],
-                'aq' => $_GPC['aq'],
-                'videofbl' => $_GPC['videofbl'],
-                'videologo' => $_GPC['videologo'],
-                'wmgravity' => $_GPC['wmgravity']
-            );
-            $insert_basic['qiniu'] = iserializer($qiniu);
-        }
+        $qiniu                         = array(
+            'isqiniu' => intval($_GPC['isqiniu']),
+            'accesskey' => $_GPC['accesskey'],
+            'secretkey' => $_GPC['secretkey'],
+            'qnlink' => $_GPC['qnlink'],
+            'bucket' => $_GPC['bucket'],
+            'pipeline' => $_GPC['pipeline'],
+            'aq' => $_GPC['aq'],
+            'videofbl' => $_GPC['videofbl'],
+            'videologo' => $_GPC['videologo'],
+            'wmgravity' => $_GPC['wmgravity']
+        );
+        $insert_basic['qiniu']         = iserializer($qiniu);
         if (empty($id)) {
             pdo_insert($this->table_reply, $insert_basic);
             pdo_insert($this->table_reply_share, $insert_share);

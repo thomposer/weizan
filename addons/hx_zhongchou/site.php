@@ -479,6 +479,9 @@ class Hx_zhongchouModuleSite extends WeModuleSite {
 		$carttotal = $this->getCartTotal();
 		$title = $item['title'];
 		$moduleconfig = $this->module['config'];
+		$sql = "select * from ".tablename('hx_zhongchou_order_ws')." WHERE weid='{$_W['uniacid']}' AND pid='{$id}' AND status=1 LIMIT 10";
+		$wslist = pdo_fetchall($sql);
+		//print_r($wslist);
 		$pagetitle = "项目展示";
 		include $this->template('detail');
 	}
@@ -534,6 +537,8 @@ class Hx_zhongchouModuleSite extends WeModuleSite {
 		$data = array(
 			'weid' => $_W['uniacid'],
 			'from_user' => $_W['fans']['from_user'],
+			'nickname' => $_W['fans']['tag']['nickname'],
+			'avatar' => $_W['fans']['tag']['avatar'],
 			'ordersn' => date('md') . random(4, 1),
 			'price' => $_GPC['pay_money'],
 			'status' => 0,
@@ -705,7 +710,7 @@ class Hx_zhongchouModuleSite extends WeModuleSite {
 	}
 	public function payResult($params) {
 		global $_W;
-		//if ($params['result'] == 'success' && $params['from'] == 'notify') {
+		if ($params['result'] == 'success' && $params['from'] == 'notify') {
 			$fee = intval($params['fee']);
 			$data = array('status' => $params['result'] == 'success' ? 1 : 0);
 			$paytype = array('credit' => '1', 'wechat' => '2', 'alipay' => '2', 'delivery' => '3');
@@ -829,7 +834,7 @@ class Hx_zhongchouModuleSite extends WeModuleSite {
 				$credit = $setting['creditbehaviors']['currency'];
 			}
 			
-		//}
+		}
 		if ($params['from'] == 'return') {
 			if ($params['type'] == $credit) {
 				message('支付成功！', $this->createMobileUrl('myorder'), 'success');
@@ -927,6 +932,26 @@ class Hx_zhongchouModuleSite extends WeModuleSite {
 		global $_W;
 		$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('hx_zhongchou_cart') . " WHERE weid = '{$_W['uniacid']}'  AND from_user = '{$_W['fans']['from_user']}'");
 		return empty($total) ? 0 : $total;
+	}
+	public function doWebWcorder(){
+		global $_W, $_GPC;
+		$operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+		$project_id = intval($_GPC['project_id']);
+		if ($operation == 'display') {
+			$pindex = max(1, intval($_GPC['page']));
+			$psize = 20;
+			$sql = "select * from ".tablename('hx_zhongchou_order_ws')." WHERE weid='{$_W['uniacid']}' AND pid='{$project_id}' AND status=1 LIMIT " . ($pindex - 1) * $psize . ',' . $psize;
+			$list = pdo_fetchall($sql,$paras);
+			$paytype = array (
+					'0' => array('css' => 'default', 'name' => '未支付'),
+					'1' => array('css' => 'danger','name' => '余额支付'),
+					'2' => array('css' => 'info', 'name' => '在线支付'),
+					'3' => array('css' => 'warning', 'name' => '货到付款')
+				);
+			$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('hx_zhongchou_order_ws')." WHERE weid='{$_W['uniacid']}' AND pid='{$project_id}' AND status=1");
+			$pager = pagination($total, $pindex, $psize);
+			include $this->template('wcorder');
+		}
 	}
 	public function doWebOrder() {
 		global $_W, $_GPC;
@@ -1658,6 +1683,12 @@ class Hx_zhongchouModuleSite extends WeModuleSite {
     	    }
     	    echo implode("\n",$data);
     	}
+ 	}
+
+ 	public function getFinishPrice($pid){
+ 		$project = pdo_fetch("SELECT * FROM ".tablename('hx_zhongchou_project')." WHERE id=:id",array(':id'=>$pid));
+ 		$wc = pdo_fetchcolumn("SELECT SUM(price) FROM ".tablename('hx_zhongchou_order_ws')." WHERE pid='{$pid}' AND status=1");
+ 		return $project['finish_price'] + $wc;
  	}
 
  	private function sendMoney($openid,$money,$desc = '退款') {

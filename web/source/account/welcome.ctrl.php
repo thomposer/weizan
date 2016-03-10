@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2013 012WZ.COM
- * $sn: pro/web/source/account/welcome.ctrl.php
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 if (!empty($_W['uid'])) {
@@ -21,4 +21,3 @@ $news = article_news_home();
 $case = article_case_home();
 $links = article_link_home();
 template('account/welcome');
-

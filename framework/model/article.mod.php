@@ -56,7 +56,39 @@ function article_link_info($id) {
 	}
 	return $link;
 }
-
+function article_about_info($id) {
+	$id = intval($id);
+	$about = pdo_fetch('SELECT * FROM ' . tablename('article_about') . ' WHERE id = :id', array(':id' => $id));
+	$about['info'] = cutstr(strip_tags($about['content']), 88);
+	if(empty($about)) {
+		return error(-1, '文章不存在或已经删除');
+	}else {
+		pdo_update('article_about',array('click' => $about['click']+1),array('id' => $id));
+	}
+	return $about;
+}
+function article_agent_info($id) {
+	$id = intval($id);
+	$agent = pdo_fetch('SELECT * FROM ' . tablename('article_agent') . ' WHERE id = :id', array(':id' => $id));
+	$agent['info'] = cutstr(strip_tags($agent['content']), 88);
+	if(empty($agent)) {
+		return error(-1, '公司不存在或已经删除');
+	}else {
+		pdo_update('article_agent',array('click' => $agent['click']+1),array('id' => $id));
+	}
+	return $agent;
+}
+function article_wenda_info($id) {
+	$id = intval($id);
+	$wenda = pdo_fetch('SELECT * FROM ' . tablename('article_wenda') . ' WHERE id = :id', array(':id' => $id));
+	$wenda['info'] = cutstr(strip_tags($wenda['content']), 88);
+	if(empty($wenda)) {
+		return error(-1, '问题不存在或已经删除');
+	}else {
+		pdo_update('article_agent',array('click' => $wenda['click']+1),array('id' => $id));
+	}
+	return $wenda;
+}
 function article_news_home($limit = 10) {
 	$limit = intval($limit);
 	$news = pdo_fetchall('SELECT * FROM ' . tablename('article_news') . ' WHERE is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
@@ -77,6 +109,21 @@ function article_link_home($limit = 30) {
 	$limit = intval($limit);
 	$links = pdo_fetchall('SELECT * FROM ' . tablename('article_link') . ' WHERE is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
 	return $links;
+}
+function article_about_home($limit = 30) {
+	$limit = intval($limit);
+	$about = pdo_fetchall('SELECT * FROM ' . tablename('article_about') . ' WHERE is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
+	return $about;
+}
+function article_agent_home($limit = 30) {
+	$limit = intval($limit);
+	$agent = pdo_fetchall('SELECT * FROM ' . tablename('article_agent') . ' WHERE is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
+	return $agent;
+}
+function article_wenda_home($limit = 30) {
+	$limit = intval($limit);
+	$wenda = pdo_fetchall('SELECT * FROM ' . tablename('article_wenda') . ' WHERE is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
+	return $wenda;
 }
 function article_news_all($filter = array(), $pindex = 1, $psize = 10) {
 	$condition = ' WHERE is_display = 1';
@@ -143,6 +190,54 @@ function article_link_all($filter = array(), $pindex = 1, $psize = 10) {
 	$link = pdo_fetchall('SELECT * FROM ' . tablename('article_link') . $condition . ' ORDER BY displayorder DESC ' . $limit, $params, 'id');
 	return array('total' => $total, 'link' => $link);
 }
+function article_about_all($filter = array(), $pindex = 1, $psize = 10) {
+	$condition = ' WHERE is_display = 1';
+	$params = array();
+	if(!empty($filter['title'])) {
+		$condition .= ' AND titie LIKE :title';
+		$params[':title'] = "%{$filter['title']}%";
+	}
+	if($filter['cateid'] > 0) {
+		$condition .= ' AND cateid = :cateid';
+		$params[':cateid'] = $filter['cateid'];
+	}
+	$limit = ' LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('article_about') . $condition, $params);
+	$abouts = pdo_fetchall('SELECT * FROM ' . tablename('article_about') . $condition . ' ORDER BY displayorder DESC ' . $limit, $params, 'id');
+	return array('total' => $total, 'abouts' => $abouts);
+}
+function article_agent_all($filter = array(), $pindex = 1, $psize = 10) {
+	$condition = ' WHERE is_display = 1';
+	$params = array();
+	if(!empty($filter['title'])) {
+		$condition .= ' AND titie LIKE :title';
+		$params[':title'] = "%{$filter['title']}%";
+	}
+	if($filter['cateid'] > 0) {
+		$condition .= ' AND cateid = :cateid';
+		$params[':cateid'] = $filter['cateid'];
+	}
+	$limit = ' LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('article_agent') . $condition, $params);
+	$agents = pdo_fetchall('SELECT * FROM ' . tablename('article_agent') . $condition . ' ORDER BY displayorder DESC ' . $limit, $params, 'id');
+	return array('total' => $total, 'agents' => $agents);
+}
+function article_wenda_all($filter = array(), $pindex = 1, $psize = 10) {
+	$condition = ' WHERE is_display = 1';
+	$params = array();
+	if(!empty($filter['title'])) {
+		$condition .= ' AND titie LIKE :title';
+		$params[':title'] = "%{$filter['title']}%";
+	}
+	if($filter['cateid'] > 0) {
+		$condition .= ' AND cateid = :cateid';
+		$params[':cateid'] = $filter['cateid'];
+	}
+	$limit = ' LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('article_wenda') . $condition, $params);
+	$wendas = pdo_fetchall('SELECT * FROM ' . tablename('article_wenda') . $condition . ' ORDER BY displayorder DESC ' . $limit, $params, 'id');
+	return array('total' => $total, 'wendas' => $wendas);
+}
 function cutstr_html($string, $sublen){
   $string = strip_tags($string);
   $string = preg_replace ('/\n/is', '', $string);
@@ -153,7 +248,13 @@ function cutstr_html($string, $sublen){
   else $string = join('', array_slice($t_string[0], 0, $sublen));
   return $string;
 }
-
+function cutstr_num($string, $sublen){
+$string = strip_tags($string);
+  preg_match_all("/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|\xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xef][\x80-\xbf][\x80-\xbf]|\xf0[\x90-\xbf][\x80-\xbf][\x80-\xbf]|[\xf1-\xf7][\x80-\xbf][\x80-\xbf][\x80-\xbf]/", $string, $t_string);
+  if(count($t_string[0]) - 0 > $sublen) $string = join('', array_slice($t_string[0], 0, $sublen))."…";   
+  else $string = join('', array_slice($t_string[0], 0, $sublen));
+  return $string;
+}
 
 
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 function coupon_colors($name, $value = 'Color082', $options = array()) {
@@ -86,7 +86,7 @@ function coupon_fetch($id, $format = true) {
 		if(!empty($item['location_id_list'])) {
 			$item['location_id_list'] = @iunserializer($item['location_id_list']);
 			foreach($item['location_id_list'] as $lic) {
-				$item['location_data'][] = pdo_fetch('SELECT business_name, address, location_id FROM ' . tablename('coupon_location') . ' WHERE uniacid = :aid AND location_id = :lid', array(':aid' => $_W['uniacid'], ':lid' => $lic), 'location_id');
+				$item['location_data'][] = pdo_fetch('SELECT business_name, address, location_id FROM ' . tablename('activity_stores') . ' WHERE uniacid = :aid AND location_id = :lid', array(':aid' => $_W['uniacid'], ':lid' => $lic), 'location_id');
 			}
 			$item['location_count'] = count($item['location_id_list']);
 			if(!empty($item['location_id_list'])) {
@@ -180,5 +180,5 @@ function coupon_qr($data) {
 function coupon_status() {
 	return array(
 		'CARD_STATUS_NOT_VERIFY' => 1, 		'CARD_STATUS_VERIFY_FAIL' => 2, 		'CARD_STATUS_VERIFY_OK' => 3, 		'CARD_STATUS_USER_DELETE' => 4,
-		'CARD_STATUS_DELETE' => 4,		'CARD_STATUS_USER_DISPATCH' => 5, 	);
+		'CARD_STATUS_DELETE' => 4,		'CARD_STATUS_USER_DISPATCH' => 5, 		'CARD_STATUS_DISPATCH' => 5, 	);
 }

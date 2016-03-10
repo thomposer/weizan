@@ -13,8 +13,7 @@
 </head>
 <body>
 <div class="view_full" id="full3dDiv">
-    <img id="bgImg" style="opacity:0;width:100%;"
-         src="../addons/weisrc_pano/template/images/bg.jpg"/>
+    <img id="bgImg" style="opacity:0;width:100%;" src="{if empty($config['bg'])}../addons/weisrc_pano/template/images/bg.jpg{else}{$bg}{/if}"/>
 </div>
 <div class="view_select">
     <div class="view_list" id="placeLink">
@@ -63,7 +62,6 @@
         $(window).on("resize", function () {
             resizeLayout();
         });
-        $("#bgImg").attr("src", "../addons/weisrc_pano/template/images/bg.jpg");
         $("#bgImg").on("load", function () {
             $(this).css({"opacity": "1"});
             resizeLayout();
@@ -91,7 +89,3 @@
 </script>
 </body>
 </html>
-<!--360全景-->
-<!--www.weisrc.com-->
-<!--作者:迷失卍国度-->
-<!--qq : 15595755-->

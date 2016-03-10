@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -26,7 +26,7 @@ if ($do == 'browser') {
 		}
 		$uids = implode(',', $uidArr);
 	}
-	$where = " WHERE status = '2' ";
+	$where = " WHERE status = '2' and type != '".ACCOUNT_OPERATE_CLERK."'";
 	if($mode == 'invisible' && !empty($uids)){
 		$where .= " AND uid not in ( {$uids} )";
 	}

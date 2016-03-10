@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 define('IN_GW', true);
@@ -85,12 +85,16 @@ function _login($forward = '') {
 		$cookie['lastip'] = $record['lastip'];
 		$cookie['hash'] = md5($record['password'] . $record['salt']);
 		$session = base64_encode(json_encode($cookie));
-		isetcookie('__session', $session, !empty($_GPC['rember']) ? 7 * 86400 : 0);
+		isetcookie('__session', $session, !empty($_GPC['rember']) ? 7 * 86400 : 0, true);
 		$status = array();
 		$status['uid'] = $record['uid'];
 		$status['lastvisit'] = TIMESTAMP;
 		$status['lastip'] = CLIENT_IP;
 		user_update($status);
+				if($record['type'] == ACCOUNT_OPERATE_CLERK) {
+			header('Location:' . url('account/switch', array('uniacid' => $record['uniacid'])));
+			die;
+		}
 		if(empty($forward)) {
 			$forward = $_GPC['forward'];
 		}

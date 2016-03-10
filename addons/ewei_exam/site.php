@@ -2468,7 +2468,6 @@ class Ewei_examModuleSite extends WeModuleSite
 			}
 			$where .= " AND p.status = 1";
 			if (!empty($pcate)){
-				$where .= " AND c.weid = :weid";
 				$where .= " AND c.status = 1";
 
 				//判断是否为一级分类

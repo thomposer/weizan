@@ -129,7 +129,7 @@ body{background: #f0f0f0;}
             <!--2-->
             <div class="paiduan">
                 <span class="caption-title">
-                    已筹资：<span class="symbol">¥</span><span class="f_money">{$item['finish_price']}</span>&nbsp;&nbsp; 
+                    已筹资：<span class="symbol">¥</span><span class="f_money">{php echo $this->getFinishPrice($item['id'])}</span>&nbsp;&nbsp; 
                     目标：<span class="symbol" style="color:#333">¥</span><span class="f_money" style="color:#333">{$item['limit_price']}</span>
                 </span>
                 <span class="f_r ">
@@ -150,10 +150,10 @@ body{background: #f0f0f0;}
             <!--3-->
             <div class="deal_content_box pd">
                 <div class="ui">
-                    {if floor($item['finish_price']*100/$item['limit_price']) >= 100}
+                    {if floor($this->getFinishPrice($item['id'])*100/$item['limit_price']) >= 100}
                     <span class="common-success" style="width:100%;"></span>
                     {else}
-                	<span class="progress" style="width:{php echo floor($item['finish_price']*100/$item['limit_price'])}%;"></span>
+                	<span class="progress" style="width:{php echo floor($this->getFinishPrice($item['id'])*100/$item['limit_price'])}%;"></span>
                     {/if}
                 </div>
                 <div class="blank">
@@ -174,7 +174,7 @@ body{background: #f0f0f0;}
                 </div>
                 {else}
                 <div class="div_dt">
-                    <span class="num">{php echo floor($item['finish_price']*100/$item['limit_price'])}%</span><br />
+                    <span class="num">{php echo floor($this->getFinishPrice($item['id'])*100/$item['limit_price'])}%</span><br />
                     <span class="til">已达</span>
                 </div>
                 <div class="div_dt">

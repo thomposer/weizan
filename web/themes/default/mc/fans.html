@@ -102,7 +102,7 @@
 				<input type="hidden" name="c" value="mc" />
 				<input type="hidden" name="a" value="fans" />
 				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label">昵称</label>
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">昵称/openid</label>
 					<div class="col-sm-9 col-md-8 col-lg-8 col-xs-12">
 						<input type="text" class="form-control" name="nickname" value="{$nickname}"/>
 					</div>
@@ -216,8 +216,8 @@
 				<td class="text-left">
 					<input name="token" type="hidden" value="{$_W['token']}" />
 					<input type="submit" class="btn btn-primary span2" name="submit" value="删除" /> &nbsp; 
-					<input type="button" class="btn btn-default" name="submit" value="同步粉丝信息{{adv.enabled ? (adv.running ? adv.syncState : '') : '({if empty($account)}请指定公众号{else}需要高级接口{/if})'}}" ng-click="sync();" ng-disabled="!adv.enabled || adv.running" /> &nbsp;
-					<input type="button" class="btn btn-default" name="submit" value="下载所有粉丝{{adv.enabled ? (adv.running ? adv.downloadState : '') : '({if empty($account)}请指定公众号{else}需要高级接口{/if})'}}" ng-click="download();" ng-disabled="!adv.enabled || adv.running" />
+					<input type="button" class="btn btn-default" name="submit" value="同步选中粉丝信息{{adv.enabled ? (adv.running ? adv.syncState : '') : '({if empty($account)}请指定公众号{else}需要高级接口{/if})'}}" ng-click="sync();" ng-disabled="!adv.enabled || adv.running" /> &nbsp;
+					<input type="button" class="btn btn-default" name="submit" value="同步全部粉丝信息{{adv.enabled ? (adv.running ? adv.downloadState : '') : '({if empty($account)}请指定公众号{else}需要高级接口{/if})'}}" ng-click="download();" ng-disabled="!adv.enabled || adv.running" />
 				</td>
 			</tr>
 			<tr>

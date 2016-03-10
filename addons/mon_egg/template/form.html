@@ -68,7 +68,6 @@
 
 
 
-
         <div class="form-group">
             <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class='red'>*</span>每个用户每天砸金蛋次数：</label>
 
@@ -89,6 +88,25 @@
                 <div class="help-block"></div>
             </div>
         </div>
+
+
+
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class='red'>*</span>消耗积分砸金蛋：</label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="radio" name="xhjf_enable" value="0" {if $reply['xhjf_enable'] == 0}checked="checked"{/if}>关闭  &nbsp; <input type="radio" name="xhjf_enable" value="1" {if $reply['xhjf_enable'] == 1}checked="checked"{/if}/>开启
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class='red'>*</span>每次砸蛋消耗积分数：</label>
+            <div class="col-sm-9 col-xs-12">
+                    <input type="text" id="xhjf" class="form-control span7" placeholder="" name="xhjf"
+                           value="{if $reply['xhjf']}{$reply['xhjf']}{else}0{/if}">
+                    <div class="help-block"></div>
+            </div>
+        </div>
+
 
         <!--<div class="form-group">-->
             <!--<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class='red'>*</span>滚动显示中奖条数</label>-->
@@ -123,7 +141,7 @@
 
                 <div class="help-block">
                     <div class="alert alert-warning" role="alert">
-                        开启二维码核销，需单独安装二维码核销管理中心插件。 需再核销模块中添加挖宝游戏，挖宝游戏编号为: 1001 (请准确配置，否则无法识别)
+                        开启二维码核销，需单独安装二维码核销管理中心插件。 需再核销模块中添加砸金蛋游戏，砸金蛋游戏编号为: 1001 (请准确配置，否则无法识别)
                     </div>
 
                 </div>

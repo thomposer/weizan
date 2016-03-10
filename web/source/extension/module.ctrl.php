@@ -871,7 +871,7 @@ function manifest($m) {
 	}
 	$tpl = <<<TPL
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns="www.012wz.com" versionCode="{$versions}">
+<manifest xmlns="http://www.012wz.com" versionCode="{$versions}">
 	<application setting="{$setting}">
 		<name><![CDATA[{$m['application']['name']}]]></name>
 		<identifie><![CDATA[{$m['application']['identifie']}]]></identifie>

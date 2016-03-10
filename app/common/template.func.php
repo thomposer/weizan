@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -420,12 +420,10 @@ function site_widget_link($params = array()) {
 
 function site_quickmenu() {
 	global $_W, $_GPC;
-	if ($_GPC['c'] == 'mc') {
-		if ($_GPC['a'] == 'card' || $_GPC['a'] == 'bond') {
-			return false;
-		}
+	
+	if ($_GPC['c'] == 'mc' || $_GPC['c'] == 'activity') {
 		$quickmenu = pdo_fetch("SELECT html, params FROM ".tablename('site_page')." WHERE uniacid = :uniacid AND type = '4' AND status = '1'", array(':uniacid' => $_W['uniacid']));
-	} elseif ($_GPC['c'] == 'activity') {
+	} elseif ($_GPC['c'] == 'auth') {
 		return false;
 	} else {
 		$multiid = intval($_GPC['t']);
@@ -443,7 +441,6 @@ function site_quickmenu() {
 	if (empty($quickmenu)) {
 		return false;
 	}
-	$params = $quickmenu['params'];
 	$quickmenu['params'] = json_decode($quickmenu['params'], true);
 	if ($_GPC['c'] == 'home' && empty($quickmenu['params']['position']['homepage'])) {
 		return false;

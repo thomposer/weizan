@@ -16,7 +16,7 @@ if ($_GPC['vfrom'] == 'photosvote') {
 } else {
 	$turl = referer();
 }
-
+	
 if ($reply['subscribe'] == 1) {//判断关注情况
 	if ($follow != 1) {
 		$fmdata = array(
@@ -25,7 +25,7 @@ if ($reply['subscribe'] == 1) {//判断关注情况
 			"msg" => '请关注后参与活动，3秒后跳转到关注页面...',
 		);
 		echo json_encode($fmdata);
-		exit();	
+		exit;	
 	}
 }
 if($now <= $reply['tstart_time'] || $now >= $reply['tend_time']) {//判断活动时间是否开始及提示
@@ -36,7 +36,7 @@ if($now <= $reply['tstart_time'] || $now >= $reply['tend_time']) {//判断活动
 			"msg" => $reply['ttipstart'],
 		);
 		echo json_encode($fmdata);
-		exit();	
+		exit;	
 	}
 	if ($now >= $reply['tend_time']) {
 		$fmdata = array(
@@ -44,13 +44,13 @@ if($now <= $reply['tstart_time'] || $now >= $reply['tend_time']) {//判断活动
 			"msg" => $reply['ttipend'],
 		);
 		echo json_encode($fmdata);
-		exit();	
+		exit;	
 	}
 }
 
 //查询是否参与活动
 if(!empty($tfrom_user)) {
-	$user = pdo_fetch("SELECT uid,realname,nickname,limitsd,photosnum  FROM ".tablename($this->table_users)." WHERE uniacid = :uniacid and from_user = :from_user and rid = :rid", array(':uniacid' => $uniacid,':from_user' => $tfrom_user,':rid' => $rid));
+	$user = pdo_fetch("SELECT uid,realname,nickname,limitsd,photosnum,hits,xnphotosnum,xnhits  FROM ".tablename($this->table_users)." WHERE uniacid = :uniacid and from_user = :from_user and rid = :rid", array(':uniacid' => $uniacid,':from_user' => $tfrom_user,':rid' => $rid));
 	if (empty($user)) {
 		$url = $_W['siteroot'] .'app/'. $turl;
 		//header("location:$url");
@@ -60,7 +60,7 @@ if(!empty($tfrom_user)) {
 			"msg" => '此用户还没有参与活动，3秒后返回...',
 		);
 		echo json_encode($fmdata);
-		exit();	
+		exit;	
 	}
 }else{
 	$url = $_W['siteroot'] .'app/'. $turl;
@@ -71,7 +71,7 @@ if(!empty($tfrom_user)) {
 		"msg" => '没有此用户，3秒后返回...',
 	);
 	echo json_encode($fmdata);
-	exit();	
+	exit;	
 }
 
 $starttime=mktime(0,0,0);//当天：00：00：00
@@ -94,7 +94,7 @@ if ($reply['isipv'] == 1) {//ip限制
 			"msg" => '你存在刷票的嫌疑或者您的网络不稳定，请重新进入！',
 		);
 		echo json_encode($fmdata);
-		exit();	
+		exit;	
 	}
 	
 	$mineipz = sprintf("%u",ip2long($mineip));
@@ -124,70 +124,72 @@ if ($reply['isipv'] == 1) {//ip限制
 					"msg" => '你存在刷票的嫌疑或者您的网络不稳定，请重新进入！',
 				);
 				echo json_encode($fmdata);
-				exit();	
+				exit;	
 			}
 			break;
 		}
 	}
 }
 
-if($_GPC['vote'] == '1') {
-	if ($tfrom_user == $from_user) {//自己不能给自己投票
+if($_GPC['vote'] == '1') {	if (empty($from_user)) {		$fmdata = array(				"success" => -1,				"msg" => '投票人出错',			);		echo json_encode($fmdata);		exit();	}			
+	if ($tfrom_user == $from_user ) {//自己不能给自己投票
 		$msg = '您不能为自己投票';
 		$fmdata = array(
 			"success" => -1,
 			"msg" => $msg,
 		);
 		echo json_encode($fmdata);
-		exit();	
+		exit;	
 	}
 	if (!empty($reply['limitsd']) && !empty($reply['limitsdps'])) {// 全体投票限速
-		$limitsd= $reply['limitsd'] * 60;
-		$wltime = $_COOKIE["user_nowtime_".$from_user] + $limitsd;//未来时间点 全局
-		if ($wltime <= $now) {
-			setcookie("user_nowtime_".$from_user, '0');
-		}				
-		$cstime = !empty($_COOKIE["user_nowtime_".$from_user]) ? $_COOKIE["user_nowtime_".$from_user] : '0' ;
-			
+		$zf = date('H',time()) * 60 + date('i',time());
+		$timeduan = intval((1440 / $reply['limitsd'])*($zf / 1440));//总时间段 288 当前时间段
+		$cstime = $timeduan*$reply['limitsd'] * 60+mktime(0,0,0);//初始限制时间
+		$jstime = ($timeduan+1)*$reply['limitsd'] * 60+mktime(0,0,0);//结束限制时间
+
+
 		$tptimes = '';
 		$tptimes .= ' AND createtime >=' .$cstime;
-		$tptimes .= ' AND createtime <=' .$now;
-		$limitsdvote = pdo_fetchcolumn('SELECT COUNT(id) FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid AND from_user = :from_user AND rid = :rid '.$tptimes.' ORDER BY createtime DESC', array(':uniacid' => $uniacid, ':from_user' => $from_user, ':rid' => $rid));	//每几分钟投几票 全体
-		
-		if ((($wltime >= $now) && ($limitsdvote >= $reply['limitsdps'])) || $cstime > 0) {
-			$msg = '亲，您投票的速度太快了';
-			$fmdata = array(
-				"success" => -1,
-				"msg" => $msg,
-			);
-			echo json_encode($fmdata);
-			exit();	
+		$tptimes .= ' AND createtime <=' .$jstime;
+		$limitsdvote = pdo_fetchcolumn('SELECT COUNT(id) FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid AND tfrom_user = :tfrom_user AND rid = :rid '.$tptimes.' ORDER BY createtime DESC', array(':uniacid' => $uniacid, ':tfrom_user' => $tfrom_user, ':rid' => $rid));	// 全体当前时间段投票总数
+
+
+		if ($cstime > 0) {
+			if ($limitsdvote >= $reply['limitsdps']) {
+				$msg = '亲，投票的速度太快了';
+				$fmdata = array(
+					"success" => -1,
+					"msg" => $msg,
+				);
+				echo json_encode($fmdata);
+				exit;	
+			}
 		}
 	}
 	if (!empty($user['limitsd'])){//个人单独投票限速
-		$limitsdge= $user['limitsd'] * 60;
-		$wltimegr = $_COOKIE["user_nowtimegr_".$tfrom_user] + $limitsdge;//未来时间点 个人
-		if ($wltimegr <= $now) {
-			setcookie("user_nowtimegr_".$tfrom_user, '0');	
-		}
-		$cstimegr = !empty($_COOKIE["user_nowtimegr_".$tfrom_user]) ? $_COOKIE["user_nowtimegr_".$tfrom_user] : '0' ;
+		$zf = date('H',time()) * 60 + date('i',time());
+		$timeduan = intval((1440 / $user['limitsd'])*($zf / 1440));//总时间段 288 当前时间段
+		$cstime = $timeduan*$user['limitsd'] * 60+mktime(0,0,0);//初始限制时间
+		$jstime = ($timeduan+1)*$user['limitsd'] * 60+mktime(0,0,0);//结束限制时间
+
+
 		$tptimesgr = '';
-		$tptimesgr .= ' AND createtime >=' .$cstimegr;
-		$tptimesgr .= ' AND createtime <=' .$now;
+		$tptimesgr .= ' AND createtime >=' .$cstime;
+		$tptimesgr .= ' AND createtime <=' .$jstime;
 		$limitsdvotegr = pdo_fetchcolumn('SELECT COUNT(id) FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid AND tfrom_user = :tfrom_user AND rid = :rid '.$tptimesgr.' ORDER BY createtime DESC', array(':uniacid' => $uniacid, ':tfrom_user' => $tfrom_user, ':rid' => $rid));	//每几分钟投几票 个人
 		if ($user['limitsd'] > 0)  {
-			if ((($wltimegr >= $now) && ($limitsdvotegr >= 1)) || $cstimegr > 0) {
+			if ($limitsdvotegr >= 1) {
 				$msg = '亲，您投票的速度太快了';
 				$fmdata = array(
 					"success" => -1,
 					"msg" => $msg,
 				);
 				echo json_encode($fmdata);
-				exit();	
+				exit;	
 			}
 		}
 	}
-	$fansmostvote = pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid AND from_user = :from_user AND rid = :rid ORDER BY createtime DESC', array(':uniacid' => $uniacid, ':from_user' => $from_user, ':rid' => $rid));	//总共可以投几次
+	$fansmostvote = pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid AND from_user = :from_user AND rid = :rid ORDER BY createtime DESC', array(':uniacid' => $uniacid, ':from_user' => $from_user, ':rid' => $rid));	//总共可以投几次	
 	if ($fansmostvote >= $reply['fansmostvote']) { //活动期间一共可以投多少次票限制（全部人）
 		$msg = '在此活动期间，你总共可以投 '.$reply['fansmostvote'].' 票，目前你已经投完！';
 		$fmdata = array(
@@ -195,7 +197,7 @@ if($_GPC['vote'] == '1') {
 			"msg" => $msg,
 		);
 		echo json_encode($fmdata);
-		exit();	
+		exit;	
 	}
 	$daytpxz = pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid AND from_user = :from_user AND rid = :rid '.$times.' ORDER BY createtime DESC', array(':uniacid' => $uniacid, ':from_user' => $from_user,':rid' => $rid));//当天共投多少参赛者
 	if ($daytpxz >= $reply['daytpxz']) {//每天总共投票的次数限制（全部人）
@@ -205,7 +207,7 @@ if($_GPC['vote'] == '1') {
 			"msg" => $msg,
 		);
 		echo json_encode($fmdata);
-		exit();	
+		exit;	
 	}
 	$allonetp = pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid AND from_user = :from_user AND tfrom_user = :tfrom_user AND rid = :rid ORDER BY createtime DESC', array(':uniacid' => $uniacid, ':from_user' => $from_user, ':tfrom_user' => $tfrom_user,':rid' => $rid));
 	if ($allonetp >= $reply['allonetp']) {//在活动期间，给某个人总共投的票数限制（单个人）
@@ -215,7 +217,7 @@ if($_GPC['vote'] == '1') {
 			"msg" => $msg,
 		);
 		echo json_encode($fmdata);
-		exit();	
+		exit;	
 	}
 	$dayonetp = pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid AND from_user = :from_user AND tfrom_user = :tfrom_user AND rid = :rid '.$times.' ORDER BY createtime DESC', array(':uniacid' => $uniacid, ':from_user' => $from_user, ':tfrom_user' => $tfrom_user,':rid' => $rid));
 	if ($dayonetp >= $reply['dayonetp']) {//每天总共可以给某个人投的票数限制（单个人）
@@ -225,7 +227,7 @@ if($_GPC['vote'] == '1') {
 			"msg" => $msg,
 		);
 		echo json_encode($fmdata);
-		exit();	
+		exit;	
 	}
 
 	$votedate = array(
@@ -243,17 +245,8 @@ if($_GPC['vote'] == '1') {
 	$votedate['iparr'] = getiparr($votedate['ip']);
 	pdo_insert($this->table_log, $votedate);
 	pdo_update($this->table_users, array('photosnum'=> $user['photosnum']+1,'hits'=> $user['hits']+1), array('rid' => $rid, 'from_user' => $tfrom_user,'uniacid' => $uniacid));
-	if (!empty($reply['limitsd']) && !empty($reply['limitsdps'])) {
-		if (empty($_COOKIE["user_nowtime_".$from_user])) {
-			setcookie("user_nowtime_".$from_user, $now, $now+$limitsd);//全局
-		}
-	}
-	if ($user['limitsd'] > 0){
-		if (empty($_COOKIE["user_nowtimegr_".$tfrom_user])) {
-			setcookie("user_nowtimegr_".$tfrom_user, $now, $now+$limitsdge);//个人
-		}
-	}		
-	if ($_W['account']['level'] == 4){
+	
+	if ($_W['account']['level'] == 4 && !empty($reply['messagetemplate'])) {
 		$tuservote = array('rid' => $rid,'tfrom_user' => $tfrom_user,'from_user' => $from_user,'nickname' => $nickname,'realname' => $nickname,'createtime' => $now);
 		$messagetemplate = $reply['messagetemplate'];
 		$this->sendMobileVoteMsg($tuservote,$from_user, $messagetemplate);
@@ -275,5 +268,5 @@ if($_GPC['vote'] == '1') {
 		"msg" => $msg
 	);
 	echo json_encode($fmdata);
-	exit();
+	exit;
 }

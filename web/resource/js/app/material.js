@@ -310,7 +310,7 @@ define(['jquery', 'underscore', 'bootstrap', 'jquery.wookmark', 'jquery.jplayer'
 				'									<div class="panel-body">'+
 				'										<div class="img">'+
 				'											<i class="default">封面图片</i>'+
-				'											<img src="<%=data.thumb%>">'+
+				'											<img src="<%=data.thumb_url%>">'+
 				'											<span class="text-left"><%=data.title%></span>'+
 				'										</div>'+
 				'									</div>'+
@@ -320,7 +320,7 @@ define(['jquery', 'underscore', 'bootstrap', 'jquery.wookmark', 'jquery.jplayer'
 				'											<h4><%=data.title%></h4>'+
 				'										</div>'+
 				'										<div class="img">'+
-				'											<img src="<%=data.thumb%>">'+
+				'											<img src="<%=data.thumb_url%>">'+
 				'											<i class="default">缩略图</i>'+
 				'										</div>'+
 				'									</div>'+

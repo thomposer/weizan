@@ -1,9 +1,10 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
+uni_user_permission_check('wechat_card_list');
 $dos = array('module', 'coupon', 'location', 'discount', 'display', 'del', 'sync', 'modifystock', 'toggle', 'qr', 'record', 'cash', 'gift', 'groupon', 'general_coupon');
 $do = in_array($do, $dos) ? $do : 'display';
 $op = trim($_GPC['op']) ? trim($_GPC['op']) : 'post';
@@ -14,7 +15,7 @@ if(!$acid) {
 }
 
 if($do == 'location') {
-		$location = pdo_fetchall('SELECT id,location_id, business_name, address FROM ' . tablename('coupon_location') . " WHERE acid = :acid AND status = :status AND location_id != ''", array(':acid' => $acid, ':status' => 1));
+		$location = pdo_fetchall('SELECT id,location_id, business_name, address FROM ' . tablename('activity_stores') . " WHERE uniacid = :uniacid AND status = :status AND location_id != ''", array(':uniacid' => $_W['uniacid'], ':status' => 1));
 	template('wechat/location_model');
 	exit();
 }
@@ -304,14 +305,14 @@ if($do == 'record') {
 				$outer_str = implode(',', $outer_ids);
 				$outers = pdo_fetchall('SELECT name,qrcid FROM ' . tablename('qrcode') . "WHERE acid = {$acid} AND type = 'card' AND qrcid IN ({$outer_str})", array(), 'qrcid');
 			}
+			$operator = mc_account_change_operator($da['clerk_type'], $da['store_id'], $da['clerk_id']);
+			$da['clerk_cn'] = $operator['clerk_cn'];
+			$da['store_cn'] = $operator['store_cn'];
 		}
 		$pager = pagination($total, $pindex, $psize);
 	}
 
 	if($op == 'unavailable') {
-		if($_W['role'] == 'operator') {
-			message('您属于公众号操作员，没有使用该功能的权限', referer(), 'error');
-		}
 		$id = intval($_GPC['id']);
 		$del = intval($_GPC['del']);
 		$record = pdo_fetch('SELECT code,status FROM ' . tablename('coupon_record') . ' WHERE acid = :acid AND id = :id', array(':acid' => $acid, ':id' => $id));
@@ -324,7 +325,7 @@ if($do == 'record') {
 			if(is_error($status)) {
 				message($status['message'], '', 'error');
 			} else {
-				pdo_update('coupon_record', array('status' => 2, 'usetime' => TIMESTAMP), array('acid' => $acid, 'code' => $record['code'], 'id' => $id));
+				pdo_update('coupon_record', array('status' => 2, 'clerk_name' => $_W['user']['name'], 'clerk_id' => $_W['user']['clerk_id'], 'store_id' => $_W['user']['store_id'], 'clerk_type' => $_W['user']['clerk_type'], 'usetime' => TIMESTAMP), array('acid' => $acid, 'code' => $record['code'], 'id' => $id));
 			}
 		}
 		if($del == 1) {
@@ -337,27 +338,17 @@ if($do == 'record') {
 	if($op == 'consume') {
 		$id = intval($_GPC['id']);
 		$record = pdo_fetch('SELECT code,status FROM ' . tablename('coupon_record') . ' WHERE acid = :acid AND id = :id', array(':acid' => $acid, ':id' => $id));
-
 		if(empty($record)) {
 			message('对应code码不存在', referer(), 'error');
 		}
 
-		$pwd = trim($_GPC['pdw']);
-		if(empty($pwd)) {
-			message('请输入店员密码', referer(), 'error');
-		}
-		$sql = 'SELECT * FROM ' . tablename('activity_coupon_password') . " WHERE `uniacid` = :uniacid AND `password` = :password";
-		$clerk = pdo_fetch($sql, array(':uniacid' => $_W['uniacid'], ':password' => $pwd));
-		if(empty($clerk)) {
-			message('店员密码错误', referer(), 'error');
-		}
 		if($record['status'] == 1) {
 			$acc = new coupon($acid);
 			$status = $acc->ConsumeCode(array('code' => $record['code']));
 			if(is_error($status)) {
 				message($status['message'], '', 'error');
 			} else {
-				pdo_update('coupon_record', array('status' => 3, 'clerk_name' => $clerk['name'], 'usetime' => TIMESTAMP), array('acid' => $acid, 'code' => $record['code'], 'id' => $id));
+				pdo_update('coupon_record', array('status' => 3, 'clerk_name' => $_W['user']['name'], 'clerk_id' => $_W['user']['clerk_id'], 'store_id' => $_W['user']['store_id'], 'clerk_type' => $_W['user']['clerk_type'], 'usetime' => TIMESTAMP), array('acid' => $acid, 'code' => $record['code'], 'id' => $id));
 			}
 		}
 		message('核销卡券成功', referer(), 'success');

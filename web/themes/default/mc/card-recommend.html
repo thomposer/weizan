@@ -62,10 +62,10 @@
 {else if $op == 'list'}
 <div class="clearfix">
 	<form action="" method="post" class="form-horizontal" role="form">
-		<div class="form-group">
-			<div class="col-sm-8 col-lg-9 col-xs-12">
-				<a href="{php echo url('mc/card/recommend/', array('op' => 'post'));}" class="btn btn-success"><i class="fa fa-plus"></i> 添加每日推荐</a>
-			</div>
+		<div style="margin-bottom:20px">
+			是否开启每日推荐:
+			<input type="checkbox" name="recommend_status" value="1" {if intval($setting['recommend_status'])==1} checked="checked" {/if}/>
+			<a href="{php echo url('mc/card/recommend/', array('op' => 'post'));}" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加每日推荐</a>
 		</div>
 		<div class="panel panel-default">
 			<div class="panel-body table-responsive">
@@ -102,5 +102,22 @@
 		{$pager}
 	</form>
 </div>
+<script type="text/javascript">
+	require(['jquery.ui', 'bootstrap.switch'], function($){
+		$(":checkbox[name='recommend_status']").bootstrapSwitch();
+		$(":checkbox[name='recommend_status']").on('switchChange.bootstrapSwitch', function(e, state){
+			$this = $(this);
+			var status = this.checked ? 1 : 0;
+			$.post("{php echo url('mc/card/ajax', array('op' => 'other', 'field' => 'recommend_status'));}", {status:status}, function(resp){
+				if(resp != 'success') {
+					util.message(resp, '', 'error');
+					return false;
+				} else {
+					util.message('操作成功', location.href, 'success');
+				}
+			});
+		});
+	});
+</script>
 {/if}
 {template 'common/footer'}

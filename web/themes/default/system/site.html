@@ -8,8 +8,8 @@
 	<li{if $do == 'copyright'} class="active"{/if}><a href="{php echo url('system/site');}">站点信息</a></li>
 </ul>
 <div class="clearfix">
-	<h5 class="page-header">关闭站点</h5>
 	<form action="" method="post"  class="form-horizontal" role="form" enctype="multipart/form-data" id="form1">
+		<h5 class="page-header">关闭站点</h5>
 		<div class="form-group">
 			<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">关闭站点</label>
 			<div class="col-sm-10 col-xs-12">
@@ -26,6 +26,18 @@
 			<div class="col-sm-10 col-xs-12">
 				<textarea style="height:150px;" class="form-control" cols="70" name="reason" autocomplete="off">{$settings['reason']}</textarea>
 				<input type="hidden" name="reasons" value="{$settings['reason']}">
+			</div>
+		</div>
+	<h5 class="page-header">登录站点</h5>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">是否开启验证码</label>
+		<div class="col-sm-10 col-xs-12">
+			<label class="radio-inline">
+			<input type="radio" name="verifycode" {if $settings['verifycode'] == 1} checked="checked" {/if} value="1" /> 是
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="verifycode" {if $settings['verifycode'] == 0} checked="checked" {/if} value="0" /> 否
+			</label>
 			</div>
 		</div>
 	<h5 class="page-header">版权信息</h5>

@@ -54,6 +54,9 @@ class Hx_zhongchouModule extends WeModule {
                 'password' => trim($_GPC['password']),
                 'ip' => trim($_GPC['ip']),
                 'pemname' => $pemname,
+                'share_title' => $_GPC['share_title'],
+                'share_img' => $_GPC['share_img'],
+                'share_description' => $_GPC['share_description'],
             );
             if (!empty($_GPC['logo'])) {
                 $cfg['logo'] = $_GPC['logo'];

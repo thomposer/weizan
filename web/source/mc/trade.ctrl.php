@@ -1,23 +1,16 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-uni_user_permission_check('mc_trade');
+if($_W['role'] != 'clerk') {
+	uni_user_permission_check('mc_member');
+}
 $_W['page']['title'] = '会员交易-会员管理';
-$dos = array('consume', 'user', 'modal', 'clerk', 'credit', 'card', 'cardsn', 'tpl');
+$dos = array('consume', 'user', 'modal', 'credit', 'card', 'cardsn', 'tpl');
 $do = in_array($do, $dos) ? $do : 'tpl';
 load()->model('mc');
-
-if($do == 'clerk') {
-	$clerk = pdo_get('activity_coupon_password', array('uniacid' => $_W['uniacid'], 'password' => trim($_GPC['password'])));
-	if(empty($clerk) ) {
-		exit(json_encode(array('valid' => false)));
-	} else {
-		exit(json_encode(array('valid' => true)));
-	}
-}
 
 if($do == 'user') {
 	$type = trim($_GPC['type']);
@@ -87,10 +80,6 @@ if($do == 'cardsn') {
 }
 
 if($_W['isajax'] && !in_array($do, array('user', 'clerk', 'cardsn'))) {
-	$clerk = pdo_get('activity_coupon_password', array('uniacid' => $_W['uniacid'], 'password' => trim($_GPC['password'])));
-	if(empty($clerk)) {
-		exit('店员密码错误');
-	}
 	$uid = intval($_GPC['uid']);
 	$user = pdo_get('mc_members', array('uniacid' => $_W['uniacid'], 'uid' => $uid));
 	if(empty($user)) {
@@ -179,13 +168,13 @@ if($do == 'consume') {
 	$log = $note.$log;
 
 	if($credit2 > 0) {
-		$status = mc_credit_update($uid, 'credit2', -$credit2, array(0, $log, 'system', $clerk['id'], $clerk['store_id']));
+		$status = mc_credit_update($uid, 'credit2', -$credit2, array(0, $log, 'system', $_W['user']['clerk_id'], $_W['user']['store_id'], $_W['user']['clerk_type']));
 		if(is_error($status)) {
 			exit($status['message']);
 		}
 	}
 	if($credit1 > 0) {
-		$status = mc_credit_update($uid, 'credit1', -$credit1, array(0, $log, 'system', $clerk['id'], $clerk['store_id']));
+		$status = mc_credit_update($uid, 'credit1', -$credit1, array(0, $log, 'system', $_W['user']['clerk_id'], $_W['user']['store_id'], $_W['user']['clerk_type']));
 		if(is_error($status)) {
 			exit($status['message']);
 		}
@@ -203,8 +192,9 @@ if($do == 'consume') {
 		'final_cash' => $final_cash,
 		'return_cash' => $return_cash,
 		'remark' => $log,
-		'clerk_id' => $clerk['id'],
-		'store_id' => $clerk['store_id'],
+		'clerk_id' => $_W['user']['clerk_id'],
+		'store_id' => $_W['user']['store_id'],
+		'clerk_type' => $_W['user']['clerk_type'],
 		'createtime' => TIMESTAMP,
 	);
 	pdo_insert('mc_cash_record', $data);
@@ -213,7 +203,7 @@ if($do == 'consume') {
 		if(!empty($card) && $card['grant_rate'] > 0) {
 		$num = $money * $card['grant_rate'];
 		$tips .= "，积分赠送比率为:【1：{$card['grant_rate']}】,共赠送【{$num}】积分";
-		mc_credit_update($uid, 'credit1', $num, array(0, $log, 'system', $clerk['id'], $clerk['store_id']));
+		mc_credit_update($uid, 'credit1', $num, array(0, $log, 'system', $_W['user']['clerk_id'], $_W['user']['store_id'], $_W['user']['clerk_type']));
 	}
 		$openid = pdo_fetchcolumn('SELECT openid FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND uid = :uid', array(':acid' => $_W['acid'], ':uid' => $uid));
 	if(!empty($openid)) {
@@ -230,7 +220,7 @@ if($do == 'credit') {
 	if($num < 0 && abs($num) > $credits[$type]) {
 		exit("会员账户{$names[$type]}不够");
 	}
-	$status = mc_credit_update($uid, $type, $num, array(0, trim($_GPC['remark']), 'system', $clerk['id'], $clerk['store_id']));
+	$status = mc_credit_update($uid, $type, $num, array(0, trim($_GPC['remark']), 'system', $_W['user']['clerk_id'], $_W['user']['store_id'], $_W['user']['clerk_type']));
 	if(is_error($status)) {
 		exit($status['message']);
 	}
@@ -287,15 +277,15 @@ if($do == 'card') {
 	);
 	if(pdo_insert('mc_card_members', $record)) {
 		pdo_update('mc_card', array('snpos' => $card['snpos']), array('uniacid' => $_W['uniacid'], 'id' => $card['id']));
-
 				$notice = '';
 		if($card['grant']['credit1'] > 0) {
 			$log = array(
 				$uid,
 				"领取会员卡，赠送{$card['grant']['credit1']}积分",
 				'system',
-				$clerk['id'],
-				$clerk['store_id'],
+				$_W['user']['clerk_id'],
+				$_W['user']['store_id'],
+				$_W['user']['clerk_type']
 			);
 			mc_credit_update($uid, 'credit1', $card['grant']['credit1'], $log);
 		}
@@ -304,8 +294,9 @@ if($do == 'card') {
 				$uid,
 				"领取会员卡，赠送{$card['credit2']['credit1']}余额",
 				'system',
-				$clerk['id'],
-				$clerk['store_id'],
+				$_W['user']['clerk_id'],
+				$_W['user']['store_id'],
+				$_W['user']['clerk_type']
 			);
 			mc_credit_update($uid, 'credit2', $card['grant']['credit2'], $log);
 		}
@@ -331,7 +322,7 @@ if($do == 'group') {
 		exit('积分和贡献相加不能小于0');
 	}
 	if($credit6 != $user['credit6']) {
-		mc_credit_update($uid, 'credit6', (-$user['credit6'] + $credit6), array(0, "通过修改贡献值,来变更会员用户组", 'group', $clerk['id'], $clerk['store_id']));
+		mc_credit_update($uid, 'credit6', (-$user['credit6'] + $credit6), array(0, "通过修改贡献值,来变更会员用户组", 'group', $_W['user']['clerk_id'], $_W['user']['store_id'], $_W['user']['clerk_type']));
 	}
 	$groupid = $user['groupid'];
 	$_W['member'] = $user;

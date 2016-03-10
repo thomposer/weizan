@@ -28,7 +28,9 @@ require.config({
 		'jquery.wookmark': '../lib/jquery.wookmark.min',
 		'validator': '../lib/bootstrapValidator.min',
 		'select2' : '../../components/select2/zh-CN',
-		'clockpicker': '../../components/clockpicker/clockpicker.min'
+		'clockpicker': '../../components/clockpicker/clockpicker.min',
+		'jquery.qrcode': '../lib/jquery.qrcode.min',
+		'raty': '../lib/raty.min'
 	},
 	shim:{
 		'jquery.ui': {
@@ -111,6 +113,10 @@ require.config({
 		'clockpicker': {
 			exports: "$",
 			deps: ['css!../../components/clockpicker/clockpicker.min.css', 'bootstrap']
+		},
+		'jquery.qrcode': {
+			exports: "$",
+			deps: ['jquery']
 		}
 	}
 });

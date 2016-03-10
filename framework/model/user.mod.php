@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -111,6 +111,22 @@ function user_single($user_or_uid) {
 			return false;
 		}
 	}
+	if($record['type'] == ACCOUNT_OPERATE_CLERK) {
+		$clerk = pdo_get('activity_clerks', array('uid' => $record['uid']));
+		if(!empty($clerk)) {
+			$record['name'] = $clerk['name'];
+			$record['clerk_id'] = $clerk['id'];
+			$record['store_id'] = $clerk['storeid'];
+			$record['store_name'] = pdo_fetchcolumn('SELECT business_name FROM ' . tablename('activity_stores') . ' WHERE id = :id', array(':id' => $clerk['storeid']));
+			$record['clerk_type'] = '3';
+			$record['uniacid'] = $clerk['uniacid'];
+		}
+	} else {
+				$record['name'] = $user['username'];
+		$record['clerk_id'] = $user['uid'];
+		$record['store_id'] = 0;
+		$record['clerk_type'] = '2';
+	}
 	return $record;
 }
 
@@ -137,6 +153,9 @@ function user_update($user) {
 	}
 	if (isset($user['remark'])) {
 		$record['remark'] = $user['remark'];
+	}
+	if (isset($user['type'])) {
+		$record['type'] = $user['type'];
 	}
 	if (isset($user['status'])) {
 		$status = intval($user['status']);

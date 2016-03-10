@@ -133,7 +133,7 @@
                   <p>当前模板 (<span style="color:red"> {$item['name']} </span>) 位置：</p>
                   {loop $files $mid $file}
                     {php $name = getnames($file) }
-                     <p>{$name} :  <span style="color:green">{php echo '/addons/fm_photosvote/template/mobile/templates/' . $item['name'] . '/' . $file};</span><span class="label label-error"></span></p>
+                     <p>{$name} :  <span style="color:green">{php echo '/addons/fm_photosvote/template/mobile/templates/' . $item['name'] . '/' . $file};</span></p>
                     
                   {/loop}
                 </label>
@@ -208,5 +208,6 @@
   </form>
   </div>
 {elseif $operation == 'designer'}
+
 {/if}
 {template 'common/footer'}

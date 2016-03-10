@@ -32,7 +32,15 @@ function cache_read($key) {
 	if (is_error($memcache)) {
 		return $memcache;
 	}
-	return $memcache->get(cache_prefix($key));
+	$result = $memcache->get(cache_prefix($key));
+	if (empty($result)) {
+		$dbcache = pdo_get('core_cache', array('key' => $key), array('value'));
+		if (!empty($dbcache['value'])) {
+			$result = iunserializer($dbcache['value']);
+			$memcache->set(cache_prefix($key), $result);
+		}
+	}
+	return $result;
 }
 
 
@@ -46,7 +54,15 @@ function cache_write($key, $value, $ttl = 0) {
 	if (is_error($memcache)) {
 		return $memcache;
 	}
-	return $memcache->set(cache_prefix($key), $value, MEMCACHE_COMPRESSED, $ttl);
+	if ($memcache->set(cache_prefix($key), $value, MEMCACHE_COMPRESSED, $ttl)) {
+		$record = array();
+		$record['key'] = $key;
+		$record['value'] = iserializer($value);
+		pdo_insert('core_cache', $record, true);
+		return true;
+	} else {
+		return false;
+	}
 }
 
 
@@ -55,7 +71,13 @@ function cache_delete($key) {
 	if (is_error($memcache)) {
 		return $memcache;
 	}
-	return $memcache->delete(cache_prefix($key));
+	if ($memcache->delete(cache_prefix($key))) {
+		pdo_delete('core_cache', array('key' => $key));
+		return true;
+	} else {
+		pdo_delete('core_cache', array('key' => $key));
+		return false;
+	}
 }
 
 
@@ -64,9 +86,15 @@ function cache_clean($prefix = '') {
 	if (is_error($memcache)) {
 		return $memcache;
 	}
-	return $memcache->flush();
+	if ($memcache->flush()) {
+		unset($_W['cache']);
+		pdo_delete('core_cache');
+		return true;
+	} else {
+		return false;
+	}
 }
 
 function cache_prefix($key) {
 	return $GLOBALS['_W']['config']['setting']['authkey'] . $key;
-} 
+}

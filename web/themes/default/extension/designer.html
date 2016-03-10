@@ -217,19 +217,6 @@ function deleteOption(o) {
 				<div class="alert-warning alert">注意: 如果需要嵌入规则, 那么此模块必须能够处理文本类型消息 (需要定义Processor)</div>
 			</div>
 		</div>
-		<div class="form-group">
-			<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">是否支持使用优惠券</label>
-			<div class="col-sm-10 col-xs-12">
-				<label class="checkbox-inline">
-					<input type="checkbox" name="platform[card]" value="true" />
-					支持优惠券
-				</label>
-				<div class="alert-warning alert">
-					设置支持优惠券后，运营者在创建（代金券和折扣券）时,当前设计的模块将出现在（适用模块列表）。<br>
-					模块需引导粉丝领取该优惠券。领取后，粉丝在该模块需要支付金钱时,可选择使用该优惠券来减免金额
-				</div>
-			</div>
-		</div>
 		<h5 class="page-header">微站功能绑定 <small>这里来定义此功能模块中微站的相关功能如何同系统对接</small></h5>
 		{loop $points $point $row}
 		<div id="bindings-{$point}">
@@ -254,7 +241,7 @@ function deleteOption(o) {
 							<input class="form-control" name="bindings[{$point}][state][]" type="text" placeholder="操作附加数据">
 						</div>
 					</div>
-					<div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
+					<div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 {if $point == 'menu'}hide{/if}">
 						<div style="margin-left:-15px;margin-bottom:17px">
 							<label class="checkbox-inline" style="vertical-align:bottom">
 								<input type="hidden" name="bindings[{$point}][direct][]" value="false" />
@@ -380,8 +367,6 @@ function deleteOption(o) {
 				<span class="help-block">如果您的服务器不能直接读写文件, 请下载后上传至服务器目录 addons/<span class="identifie"></span> 下来编辑开发 </span>
 			</div>
 		</div>
-	</form>
-</div>
 	</form>
 </div>
 {template 'common/footer-gw'}

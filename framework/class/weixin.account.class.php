@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 load()->func('communication');
@@ -1129,7 +1129,7 @@ class WeiXinAccount extends WeAccount {
 
 	
 	public function sendTplNotice($touser, $template_id, $postdata, $url = '', $topcolor = '#FF683F') {
-		if(empty($this->account['secret']) || empty($this->account['key']) || $this->account['level'] != 4) {
+		if(empty($this->account['key']) || $this->account['level'] != ACCOUNT_SERVICE_VERIFY) {
 			return error(-1, '你的公众号没有发送模板消息的权限');
 		}
 		if(empty($touser)) {

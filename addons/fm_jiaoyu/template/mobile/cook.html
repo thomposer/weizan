@@ -1,0 +1,702 @@
+<!DOCTYPE html><!-- html5标识 --><html class="html-bg-2"><head>
+		
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--每一款手机有不同的分辨率，不同屏幕大小，使我们开发出来的应用或页面大小能适合各种高端手机-->
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta name="apple-mobile-web-app-capable" content="no">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=yes" name="format-detection">
+<!--相关jquery mobile框架的css和js的引入-->
+
+
+<!-- <link rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/reset.css?{php echo time()}"> -->
+<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/global.css?{php echo time()}">
+<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/layout.css?{php echo time()}">
+<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/button.css?{php echo time()}">
+<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/loadmore.css?{php echo time()}">
+<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/mobiscroll.android-ics-2.5.2.css?{php echo time()}">
+<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/mobiscroll.core-2.5.2.css?{php echo time()}">
+<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/mobiscroll.animation-2.5.2.css?{php echo time()}">
+<link type="text/css" rel="styleSheet" href="../addons/fm_jiaoyu/public/mobile/css/layer.css?{php echo time()}" id="layermcss">
+<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/layer.css?{php echo time()}">
+<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/stdfood.css?{php echo time()}">	
+<script type="text/javascript" src="../addons/fm_jiaoyu/public/mobile/js/mobileCommon.js"></script>
+<script type="text/javascript" src="../addons/fm_jiaoyu/public/mobile/js/jquery-1.8.0.min.js"></script>
+<script type="text/javascript" src="../addons/fm_jiaoyu/public/mobile/js/layer.m.js"></script>
+<script src="../addons/fm_jiaoyu/public/mobile/js/jquery.touchwipe.1.1.1.js"></script>
+<script src="../addons/fm_jiaoyu/public/mobile/js/jquery.lazyload.js"></script>		
+<script src="../addons/fm_jiaoyu/public/mobile/js/stdfood.js?{php echo time()}"></script>
+		
+		
+		<title>{$item['title']}</title>		
+<script type="text/javascript">
+	var needoauth = false;
+</script>
+
+		<script type="text/javascript">	
+		$.fn.smartFloat = function() {
+			var position = function(element) {
+				var top = element.offset().top; //当前元素对象element距离浏览器上边缘的距离 
+				var pos = element.css("position"); //当前元素距离页面document顶部的距离 
+				$(window).scroll(function() { //侦听滚动时	        	
+					var scrolls = $(this).scrollTop(); 
+					if (scrolls > top) { //如果滚动到页面超出了当前元素element的相对页面顶部的高度 
+						if (window.XMLHttpRequest) { //如果不是ie6 
+							element.css({ //设置css 
+								position: "fixed", //固定定位,即不再跟随滚动
+								left:myLeft,
+								top: 0 //距离页面顶部为0 
+							}).css("background","rgba(0, 0, 0, 0.8)");
+						} else { //如果是ie6 
+							element.css({ 
+								top: scrolls  //与页面顶部距离 
+							});     
+						} 
+					}else { 
+						element.css({ //如果当前元素element未滚动到浏览器上边缘，则使用默认样式 
+							position: pos, 
+							top: top 
+						}).css("background","");                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+					} 
+				}); 
+			};
+			return $(this).each(function() {
+				position($(this));                          
+			}); 
+		}; 
+		
+		function init(){			
+			//$("#category10").addClass("select");//$("#label").addClass("label");
+			$(".fullimg img").lazyload({
+				effect : "fadeIn"
+			});
+			$(".bigImg img").lazyload({
+				event : "click",
+				effect : "fadeIn"
+			});
+			/*
+			$("li[category]").hide();
+			if(share){
+				$("li[category=30]").show();
+				$("li[name=categoryli]").hide();
+				
+				loadByCategory('30');
+			}else{
+				$("li[category=10]").show();
+				loadByCategory('0');
+			}*/
+			loadOrder();
+			initLabelImg();
+			initArrow();
+			initPromoStartEnd();
+			if(share){
+				$("#goOrderA").text("找人成全我");
+				$("#tips").hide();
+			}
+			//收起没有产品的分类
+			var lastcode = "";
+			$("li[name=categoryli]").each(function(){
+				var li = $(this);
+				var code = li.data("code");
+				//console.log(li.data("code"));
+				//console.log($("div[category="+li.data("code")+"]").length);
+				if($("li[category="+code+"]").length == 0 ){
+					li.hide();
+				}else{
+					lastcode = code;
+				}
+			});
+			loadByCategory(lastcode);
+		}
+		
+		$(window).load(function(){
+			$("#header-nav").smartFloat();
+		})
+		
+		</script>
+		<style type="text/css">
+			html,body {
+				position: inherit;
+			}
+			.mxw640{
+				max-width:640px; 
+			}
+			.header-nav li,.header-nav li a,.header-nav li.select a{width: auto;min-width: 50px;-webkit-box-sizing: border-box;padding: 1px 3px;}
+			.nav-red li.select a,.nav-red2 li.select a{background-color: rgb(176,0,0);border: 1px solid rgb(232,191,154);border-bottom:none;}
+			.nav-green li.select a{background-color: #5F921A;border: 1px solid #6AA022;border-bottom:none;}
+			
+			.hot{
+				position: absolute;right: 10px;
+			}
+		</style>
+	</head><iframe id="__WeixinJSBridgeIframe_SetResult" style="display: none;"></iframe><iframe id="__WeixinJSBridgeIframe" style="display: none;"></iframe>
+	<body>
+
+		
+		
+		<style>
+			#confStoreDiv{z-index: 20001; position: fixed;background-color: #141414;height:94%;width: 90%;top:3%;left: 5%;-webkit-box-sizing: border-box;border: 1px solid #fff;border-radius:5px;}
+			#confStoreDivMsg{background-color:#9A9A9A; color: #FFF;width: 100%;text-align: center;padding: 10px;-webkit-box-sizing: border-box;border-bottom:1px solid #DFDFDF;}
+			/*左菜单*/
+			#city-div {position: relative;width: 22%;height: 100%;overflow: hidden;float: left;}
+			#city-nav {width:100%;height: 100%;overflow: hidden;}
+			#city-nav li {width:100%;position: relative;font-size:0.95em;}
+			#city-nav li a{display: block;text-decoration: none;padding:8px 0;text-align: center;border-bottom:1px solid #DFDFDF;background-color: #141414;color: #fff;}
+			#city-nav li.selected a{background-color:#AE1418;font-size: 1.1em}
+			
+			#store-div{float:right;width: 78%;}
+			
+			.chooseStoreItem{width:100%;display:inline-block;clear:both;margin-bottom:3px;border-bottom:1px solid #999;}
+			.chooseStoreItem .title{font-size:1em;color: #DD6622;text-align: center;}
+			.chooseStoreItem .content,.chooseStoreItem .choose{font-size:0.9em;color:#fff;margin-top:4px;padding: 2px 5px;font-weight: normal;}
+			.chooseStoreItem .choose{text-align: center;}
+			</style>
+
+		<div id="article" class="article96">
+		
+			<ul class="header-nav nav-red2 mxw640" id="header-nav" style="z-index: 10; position: fixed; top: 0px; left: 0px; background: rgba(0, 0, 0, 0.8);">
+
+					<li id="category7" name="categoryli" data-code="7" onclick="loadByCategory('7');" style="{if empty($sunarr['sun_wc'])}display: none;{eles}{/if}">
+						<a href="javascript:void(0);">周日</a>
+					</li>			
+			
+					<li id="category6" name="categoryli" data-code="6" onclick="loadByCategory('6');" style="{if empty($satarr['sat_wc'])}display: none;{eles}{/if}">
+						<a href="javascript:void(0);">周六</a>
+					</li>			
+			
+					<li id="category5" name="categoryli" data-code="5" onclick="loadByCategory('5'); " style="{if empty($friarr['fri_wc'])}display: none;{eles}{/if}">
+						<a href="javascript:void(0);">周五</a>
+					</li>			
+			
+					<li id="category4" name="categoryli" data-code="4" onclick="loadByCategory('4');" style="{if empty($thuarr['thu_wc'])}display: none;{eles}{/if}">
+						<a href="javascript:void(0);">周四</a>
+					</li>			
+			
+					<li id="category3" name="categoryli" data-code="3" onclick="loadByCategory('3');" style="{if empty($wedarr['wed_wc'])}display: none;{eles}{/if}">
+						<a href="javascript:void(0);">周三</a>
+					</li>
+				
+					<li id="category2" name="categoryli" data-code="2" onclick="loadByCategory('2');" style="{if empty($tusarr['tus_wc'])}display: none;{eles}{/if}">
+						<a href="javascript:void(0);">周二</a>
+					</li>
+				
+					<li id="category1" name="categoryli" data-code="1" onclick="loadByCategory('1');" class="select" style="{if empty($monarr['mon_wc'])}display: none;{eles}{/if}">
+						<a href="javascript:void(0);">周一</a>
+					</li>
+				
+			</ul>
+			<!-- 所有食谱 -->
+			
+
+
+
+
+
+
+ 
+
+
+        <ul class="ul-img-text-1" style = "margin-top:40px;">
+	
+		
+		
+		    <li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="1">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($monarr['mon_zc_pic'])}" data-original="{php echo toimage($monarr['mon_zc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$monarr['mon_zc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">早餐</div>	
+			   </div>			   
+		    </li>
+		    <li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="1">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($monarr['mon_zjc_pic'])}" data-original="{php echo toimage($monarr['mon_zjc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$monarr['mon_zjc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">早加餐</div>	
+			   </div>			   
+		    </li>
+		    <li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="1">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($monarr['mon_wc_pic'])}" data-original="{php echo toimage($monarr['mon_wc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$monarr['mon_wc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">午餐</div>	
+			   </div>			   
+		    </li>
+		    <li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="1">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($monarr['mon_wjc_pic'])}" data-original="{php echo toimage($monarr['mon_wjc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$monarr['mon_wjc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">午加餐</div>	
+			   </div>			   
+		    </li>
+		    <li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="1">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($monarr['mon_wwc_pic'])}" data-original="{php echo toimage($monarr['mon_wwc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$monarr['mon_wwc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">晚餐</div>	
+			   </div>			   
+		    </li>		
+             <!--  周二	 -->		
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="2" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($tusarr['tus_zc_pic'])}" data-original="{php echo toimage($tusarr['tus_zc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$tusarr['tus_zc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">早餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="2" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($tusarr['tus_zjc_pic'])}" data-original="{php echo toimage($tusarr['tus_zjc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$tusarr['tus_zjc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">早加餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="2" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($tusarr['tus_wc_pic'])}" data-original="{php echo toimage($tusarr['tus_wc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$tusarr['tus_wc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">午餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="2" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($tusarr['tus_wjc_pic'])}" data-original="{php echo toimage($tusarr['tus_wjc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$tusarr['tus_wjc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">午加餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="2" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($tusarr['tus_wwc_pic'])}" data-original="{php echo toimage($tusarr['tus_wwc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$tusarr['tus_wwc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">晚餐</div>	
+			   </div>			   
+		    </li>
+			 <!--  周三	 -->
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="3" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($wedarr['wed_zc_pic'])}" data-original="{php echo toimage($wedarr['wed_zc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$wedarr['wed_zc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">早餐</div>	
+			   </div>			   
+		    </li>	
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="3" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($wedarr['wed_zjc_pic'])}" data-original="{php echo toimage($wedarr['wed_zjc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$wedarr['wed_zjc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">早加餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="3" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($wedarr['wed_wc_pic'])}" data-original="{php echo toimage($wedarr['wed_wc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$wedarr['wed_wc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">午餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="3" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($wedarr['wed_wjc_pic'])}" data-original="{php echo toimage($wedarr['wed_wjc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$wedarr['wed_wjc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">午加餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="3" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($wedarr['wed_wwc_pic'])}" data-original="{php echo toimage($wedarr['wed_wwc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$wedarr['wed_wwc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">晚餐</div>	
+			   </div>			   
+		    </li>	
+			 <!--  周四  -->
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="4" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($thuarr['thu_zc_pic'])}" data-original="{php echo toimage($thuarr['thu_zc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$thuarr['thu_zc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">早餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="4" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($thuarr['thu_zjc_pic'])}" data-original="{php echo toimage($thuarr['thu_zjc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$thuarr['thu_zjc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">早加餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="4" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($thuarr['thu_wc_pic'])}" data-original="{php echo toimage($thuarr['thu_wc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$thuarr['thu_wc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">午餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="4" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($thuarr['thu_wjc_pic'])}" data-original="{php echo toimage($thuarr['thu_wjc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$thuarr['thu_wjc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">午加餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="4" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($thuarr['thu_wwc_pic'])}" data-original="{php echo toimage($thuarr['thu_wwc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$thuarr['thu_wwc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">晚餐</div>	
+			   </div>			   
+		    </li>	
+			 <!--  周五  -->
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="5" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($friarr['fri_zc_pic'])}" data-original="{php echo toimage($friarr['fri_zc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$friarr['fri_zc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">早餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="5" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($friarr['fri_zjc_pic'])}" data-original="{php echo toimage($friarr['fri_zjc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$friarr['fri_zjc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">早加餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="5" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($friarr['fri_wc_pic'])}" data-original="{php echo toimage($friarr['fri_wc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$friarr['fri_wc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">午餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="5" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($friarr['fri_wjc_pic'])}" data-original="{php echo toimage($friarr['fri_wjc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$friarr['fri_wjc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">午加餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="5" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($friarr['fri_wwc_pic'])}" data-original="{php echo toimage($friarr['fri_wwc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$friarr['fri_wwc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">晚餐</div>	
+			   </div>			   
+		    </li>	
+			 <!--  周六  -->
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="6" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($satarr['sat_zc_pic'])}" data-original="{php echo toimage($satarr['sat_zc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$satarr['sat_zc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">早餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="6" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($satarr['sat_zjc_pic'])}" data-original="{php echo toimage($satarr['sat_zjc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$satarr['sat_zjc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">早加餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="6" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($satarr['sat_wc_pic'])}" data-original="{php echo toimage($satarr['sat_wc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$satarr['sat_wc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">午餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="6" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($satarr['sat_wjc_pic'])}" data-original="{php echo toimage($satarr['sat_wjc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$satarr['sat_wjc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">午加餐</div>	
+			   </div>			   
+		    </li>
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="6" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($satarr['sat_wwc_pic'])}" data-original="{php echo toimage($satarr['sat_wwc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$satarr['sat_wwc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">晚餐</div>	
+			   </div>			   
+		    </li>	
+			 <!--  周日  -->
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="7" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($sunarr['sun_zc_pic'])}" data-original="{php echo toimage($sunarr['sun_zc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$sunarr['sun_zc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">早餐</div>	
+			   </div>			   
+		    </li>	
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="7" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($sunarr['sun_zjc_pic'])}" data-original="{php echo toimage($sunarr['sun_zjc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$sunarr['sun_zjc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">早加餐</div>	
+			   </div>			   
+		    </li>	
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="7" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($sunarr['sun_wc_pic'])}" data-original="{php echo toimage($sunarr['sun_wc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$sunarr['sun_wc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">午餐</div>	
+			   </div>			   
+		    </li>	
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="7" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($sunarr['sun_wjc_pic'])}" data-original="{php echo toimage($sunarr['sun_wjc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$sunarr['sun_wjc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">午加餐</div>	
+			   </div>			   
+		    </li>	
+			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="7" style="display: none;">
+			<!-- 图片 -->
+			   <div class="fullimg">
+					<a href="#" style="-webkit-tap-highlight-color: rgba(0,0,0,0);">
+						<img src="{php echo toimage($sunarr['sun_wwc_pic'])}" data-original="{php echo toimage($sunarr['sun_wwc_pic'])}" style="display: block;">
+					</a>
+				<div class="num">
+						<span style="margin-left:2%">{$sunarr['sun_wwc']}</span>
+				</div>	
+			   </div>	
+			   <div class="one-line-text">
+				<div class="name">晚餐</div>	
+			   </div>			   
+		    </li>				
+        </ul>
+	
+</body>
+</html>

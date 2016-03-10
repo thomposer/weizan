@@ -18,7 +18,7 @@
 			<div id='address_{$row['id']}' class="{if $row['isdefault']==1}shopcart-main1{else}shopcart-main{/if} img-rounded address_item" style='margin:0;padding:10px;margin-bottom:10px;cursor:pointer' onclick='editAddress({$row['id']},{php echo $row['isdefault']==1?'1':'0'})'>
 				<span>{$row['province']} {$row['city']} {$row['district']} {$row['address']} <br/> {$row['username']} - {$row['mobile']}</span><br/>
 				<span>
-					<a href="javascript:;" onclick="saveDefaultAddress(event,{$row['id']})">设为默认</a>
+					{if !$row['isdefault']}<a href="javascript:;" onclick="saveDefaultAddress(event,{$row['id']})">设为默认</a>{/if}
 					<a href="javascript:;" onclick="removeAddress(event,{$row['id']})"><i class="fa fa-remove"></i> 删除</a>
 				</span>
 			</div>
@@ -143,6 +143,11 @@
 				cascdeInit('','','');
 			}
 			$('#addAddressPanel').hide();
+			if (returnurl != '') {
+				window.location.href = decodeURIComponent(returnurl);
+				return;
+			}
+			window.location.href = '{php echo $this->createMobileUrl('confirm')}';
 		}, 'json');
 	}
 
@@ -216,5 +221,5 @@
 	}
 </script>
 
-{template 'footer'}
+{template 'footer-base'}
 {template 'footerbar'}

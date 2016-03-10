@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 define('IN_SYS', true);
 require '../framework/bootstrap.inc.php';
@@ -101,14 +101,37 @@ $acl = array(
 			'news-show',
 			'case-show',
 			'plug-show',
-			'link-show'
+			'link-show',
+			'about-show',
+			'agent-show',
+			'agent-list'
 		),
 		'founder' => array(
 			'news',
 			'notice',
 			'case',
 			'plug',
-			'link'
+			'link',
+			'about',
+			'agent'
+			
+		)
+	),
+	'website' => array(
+		'direct' => array(
+			'sdp-show',
+			'xiaoqu-show',
+			'canting-show',
+			'taocan-show',
+			'wenda-show',
+		),
+		'founder' => array(
+			'sdp',
+			'xiaoqu',
+			'canting',
+			'taocan',
+			'wenda'
+			
 		)
 	),
 	'cron' => array(
@@ -187,7 +210,7 @@ checklogin();
 
 if(!defined('IN_GW')) {
 	checkaccount();
-	if(!in_array($_W['role'], array('manager', 'operator', 'founder'))) {
+	if(!in_array($_W['role'], array('manager', 'operator', 'founder', 'clerk'))) {
 		message('您的账号没有访问此公众号的权限.');
 	}
 }

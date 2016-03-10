@@ -42,7 +42,6 @@
 <body>
 <!--body-->
 {template 'templates/stylebase/tvote'}
-<div style="width:100%;border:0px;"><img style="vertical-align:top; display:block;border:0;width:100%;padding:0;margin:0;width:100%;border:0px;" alt="" src="{php echo toimage($reply['picture'])}"></div>
 <div id="content" style="max-width: 640px;margin: 0 auto;">
     <div class="masonry" style="margin: 0px auto; ">
     	<div id="pblist" class="list">
@@ -123,7 +122,7 @@
 				<span class="j_btn_zan_icon btn_zan_icon {if $zan['zan']}btn_zan_like_anim{/if}"></span><span class="j_btn_zan_text btn_zan_text">{$user['zans']}</span>
 			</div>
 			<a href="javascript:;" class="bottom-bar-button btn_reply j_btn_reply"><span class="btn_reply_text pb_icon">{$tcommentnum}</span></a>
-			<a href="{php echo $this->createMobileUrl('photosvote', array('rid'=> $rid))}" target="_blank" class="bottom-bar-button bottom-share-button" ></a>
+			<a href="javascript:history.go(-1)" target="_blank" class="bottom-bar-button bottom-fanhui-button" ></a>
 		</div>
 		<footer id="colophon" role="contentinfo">
 			<div class="site-info" >

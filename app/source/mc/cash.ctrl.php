@@ -1,7 +1,7 @@
 <?php 
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $moduels = uni_modules();
@@ -35,6 +35,7 @@ $type = in_array($do, $dos) ? $do : '';
 if(empty($type)) {
 	message('支付方式错误,请联系商家', '', 'error');
 }
+
 if(!empty($type)) {
 	$sql = 'SELECT * FROM ' . tablename('core_paylog') . ' WHERE `uniacid`=:uniacid AND `module`=:module AND `tid`=:tid';
 	$pars  = array();
@@ -42,7 +43,7 @@ if(!empty($type)) {
 	$pars[':module'] = $params['module'];
 	$pars[':tid'] = $params['tid'];
 	$log = pdo_fetch($sql, $pars);
-	if(!empty($log) && $log['status'] != '0') {
+	if(!empty($log) && ($type != 'credit' && !empty($_GPC['notify'])) && $log['status'] != '0') {
 		message('这个订单已经支付成功, 不需要重复支付.');
 	}
 	if(!empty($log) && $log['status'] == '0') {
@@ -157,36 +158,62 @@ if(!empty($type)) {
 		$setting = uni_setting($_W['uniacid'], array('creditbehaviors'));
 		$credtis = mc_credit_fetch($_W['member']['uid']);
 		
-		if($credtis[$setting['creditbehaviors']['currency']] < $ps['fee']) {
-			message("余额不足以支付, 需要 {$ps['fee']}, 当前 {$credtis[$setting['creditbehaviors']['currency']]}");
-		}
-		$fee = floatval($ps['fee']);
-		$result = mc_credit_update($_W['member']['uid'], $setting['creditbehaviors']['currency'], -$fee, array($_W['member']['uid'], '消费' . $setting['creditbehaviors']['currency'] . ':' . $fee));
-		if (is_error($result)) {
-			message($result['message'], '', 'error');
-		}
 		$sql = 'SELECT * FROM ' . tablename('core_paylog') . ' WHERE `plid`=:plid';
 		$pars = array();
 		$pars[':plid'] = $ps['tid'];
 		$log = pdo_fetch($sql, $pars);
-		if(!empty($log) && $log['status'] == '0') {
-			$record = array();
-			$record['status'] = '1';
-			pdo_update('core_paylog', $record, array('plid' => $log['plid']));
-						if($log['is_usecard'] == 1 && $log['card_type'] == 1 && !empty($log['encrypt_code']) && $_W['acid']) {
-				load()->classs('coupon');
-				$acc = new coupon($_W['acid']);
-				$codearr['encrypt_code'] = $log['encrypt_code'];
-				$codearr['module'] = $log['module'];
-				$codearr['card_id'] = $log['card_id'];
-				$a = $acc->PayConsumeCode($codearr);
+				if(empty($_GPC['notify'])) {
+			if($credtis[$setting['creditbehaviors']['currency']] < $ps['fee']) {
+				message("余额不足以支付, 需要 {$ps['fee']}, 当前 {$credtis[$setting['creditbehaviors']['currency']]}");
 			}
-						if($log['is_usecard'] == 1 && $log['card_type'] == 2) {
-				$now = time();
-				$log['card_id'] = intval($log['card_id']);
-				pdo_query('UPDATE ' . tablename('activity_coupon_record') . " SET status = 2, usetime = {$now}, usemodule = '{$log['module']}' WHERE uniacid = :aid AND couponid = :cid AND uid = :uid AND status = 1 LIMIT 1", array(':aid' => $_W['uniacid'], ':uid' => $log['openid'], ':cid' => $log['card_id']));
+			$fee = floatval($ps['fee']);
+			$result = mc_credit_update($_W['member']['uid'], $setting['creditbehaviors']['currency'], -$fee, array($_W['member']['uid'], '消费' . $setting['creditbehaviors']['currency'] . ':' . $fee));
+			if (is_error($result)) {
+				message($result['message'], '', 'error');
 			}
-
+			if(!empty($log) && $log['status'] == '0') {
+				$record = array();
+				$record['status'] = '1';
+				pdo_update('core_paylog', $record, array('plid' => $log['plid']));
+								if($log['is_usecard'] == 1 && $log['card_type'] == 1 && !empty($log['encrypt_code']) && $_W['acid']) {
+					load()->classs('coupon');
+					$acc = new coupon($_W['acid']);
+					$codearr['encrypt_code'] = $log['encrypt_code'];
+					$codearr['module'] = $log['module'];
+					$codearr['card_id'] = $log['card_id'];
+					$a = $acc->PayConsumeCode($codearr);
+				}
+								if($log['is_usecard'] == 1 && $log['card_type'] == 2) {
+					$now = time();
+					$log['card_id'] = intval($log['card_id']);
+					pdo_query('UPDATE ' . tablename('activity_coupon_record') . " SET status = 2, usetime = {$now}, usemodule = '{$log['module']}' WHERE uniacid = :aid AND couponid = :cid AND uid = :uid AND status = 1 LIMIT 1", array(':aid' => $_W['uniacid'], ':uid' => $log['openid'], ':cid' => $log['card_id']));
+				}
+				$site = WeUtility::createModuleSite($log['module']);
+				if(!is_error($site)) {
+					$site->weid = $_W['weid'];
+					$site->uniacid = $_W['uniacid'];
+					$site->inMobile = true;
+					$method = 'payResult';
+					if (method_exists($site, $method)) {
+						$ret = array();
+						$ret['result'] = 'success';
+						$ret['type'] = $log['type'];
+						$ret['from'] = 'return';
+						$ret['tid'] = $log['tid'];
+						$ret['user'] = $log['openid'];
+						$ret['fee'] = $log['fee'];
+						$ret['weid'] = $log['weid'];
+						$ret['uniacid'] = $log['uniacid'];
+						$ret['acid'] = $log['acid'];
+												$ret['is_usecard'] = $log['is_usecard'];
+						$ret['card_type'] = $log['card_type']; 						$ret['card_fee'] = $log['card_fee'];
+						$ret['card_id'] = $log['card_id'];
+						echo '<iframe style="display:none;" src="'.murl('mc/cash/credit', array('notify' => 'yes', 'params' => $_GPC['params']), true, true).'"></iframe>';
+						$site->$method($ret);
+					}
+				}
+			}
+		} else {
 			$site = WeUtility::createModuleSite($log['module']);
 			if(!is_error($site)) {
 				$site->weid = $_W['weid'];
@@ -208,10 +235,6 @@ if(!empty($type)) {
 					$ret['card_type'] = $log['card_type']; 					$ret['card_fee'] = $log['card_fee'];
 					$ret['card_id'] = $log['card_id'];
 					$site->$method($ret);
-					
-					$ret['from'] = 'return';
-					exit($site->$method($ret));
-					
 				}
 			}
 		}

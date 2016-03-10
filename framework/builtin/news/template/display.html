@@ -70,7 +70,7 @@
 										<input type="text" class="form-control" placeholder="添加图文消息的作者" ng-model="context.activeItem.author"/>
 									</div>
 								</div>
-								<div class="form-group">
+								<div class="form-group" ng-show="!context.activeItem.isFirst">
 									<label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
 									<div class="col-sm-9 col-xs-12">
 										<input type="text" class="form-control" placeholder="添加排序" ng-model="context.activeItem.displayorder"/>
@@ -239,6 +239,10 @@
 			$scope.context.activeItem = $scope.context.groups[$scope.context.activeGroupIndex][$scope.context.activeIndex];
 			$scope.context.activeItem.incontent = $scope.context.activeItem.incontent == 1;
 			$scope.context.activeItem.detail = $scope.context.activeItem.content != '';
+			$scope.context.activeItem.isFirst = false;
+			if(!index) {
+				$scope.context.activeItem.isFirst = true;
+			}
 		};
 
 		$scope.context.changeItem = function(item) {
@@ -347,7 +351,7 @@
 				$scope.modalobj = $('#link-search-cms').data('modal');
 			}
 			page = page || 1;
-			$http.get('./index.php?c=site&a=editor&do=articlelist' + '&page=' + page).success(function(result, status, headers, config){
+			$http.get('./index.php?c=utility&a=link&do=articlelist' + '&page=' + page).success(function(result, status, headers, config){
 				if (result.message.list) {
 					$scope.modalobj.find('#articlelist').data('articles', result.message.list);
 					$scope.modalobj.find('#articlelist tbody').html(_.template(html['articleitem'])(result.message));

@@ -58,7 +58,7 @@ defined('IN_IA') or exit('Access Denied');
 		$pager = pagination($total, $pindex, $psize);	
 		
 
-		$sql="SELECT * FROM ".tablename(account_wechats)." WHERE  uniacid = '{$_W['uniacid']}' AND acid = '{$acid}'";
+		/**$sql="SELECT * FROM ".tablename(account_wechats)." WHERE  uniacid = '{$_W['uniacid']}' AND acid = '{$acid}'";
 		$wechats = pdo_fetch($sql);
 		$token =iunserializer($wechats['access_token']);
 		$access_token=$token['token'];
@@ -73,8 +73,8 @@ defined('IN_IA') or exit('Access Denied');
 			$row = array();
 			$row['access_token'] = iserializer($record);//序列化保存
 			pdo_update('account_wechats', $row, array('uniacid' => $_W['uniacid'], 'acid' => $acid));
-		}
-
+		}**/
+		$access_token = WeAccount::token();
 		for ($i=0; $i < count($list); $i++){
 			$openid=$list[$i]['openid'];
 			$url="https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$access_token."&openid=".$openid."&lang=zh_CN";  

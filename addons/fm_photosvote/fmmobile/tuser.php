@@ -73,30 +73,13 @@ defined('IN_IA') or exit('Access Denied');
 		
 		$udayonetp = pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid AND from_user = :from_user AND tfrom_user = :tfrom_user AND rid = :rid '.$times.' ORDER BY createtime DESC', array(':uniacid' => $uniacid, ':from_user' => $from_user, ':tfrom_user' => $tfrom_user,':rid' => $rid));
 		if ($reply['isvoteusers']) {
-			$voteuserlist = pdo_fetchall('SELECT * FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid AND rid = :rid  AND tfrom_user = :tfrom_user ORDER BY `id` DESC LIMIT 5', array(':uniacid' => $uniacid,':rid' => $rid,':tfrom_user' => $tfrom_user));
+			$voteuserlist = pdo_fetchall('SELECT avatar,nickname FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid AND rid = :rid  AND tfrom_user = :tfrom_user GROUP BY `nickname` ORDER BY `id` DESC LIMIT 5', array(':uniacid' => $uniacid,':rid' => $rid,':tfrom_user' => $tfrom_user));
 		}
 
 		if ($reply['isbbsreply'] == 1) {//开启评论
-			//评论
-			$pindex = max(1, intval($_GPC['page']));
-			$psize = 10;
 			//取得用户列表
-			$where = '';
-			if (!empty($_GPC['keyword'])) {
-					$keyword = $_GPC['keyword'];
-					if (is_numeric($keyword)) 
-						$where .= " AND uid = '".$keyword."'";
-					else 				
-						$where .= " AND nickname LIKE '%{$keyword}%'";
-				
-			}
-			$bbsreply = pdo_fetchall("SELECT * FROM ".tablename($this->table_bbsreply)." WHERE uniacid = :uniacid AND tfrom_user = :tfrom_user AND rid = :rid ".$where." order by `id` desc LIMIT " . ($pindex - 1) * $psize . ',' . $psize,  array(':uniacid' => $uniacid,':tfrom_user' => $tfrom_user,':rid' => $rid));
-			
-			$total = pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename($this->table_bbsreply).' WHERE uniacid= :uniacid AND tfrom_user = :tfrom_user AND rid = :rid '.$where.'', array(':uniacid' => $uniacid, ':tfrom_user' => $tfrom_user,':rid' => $rid));
-			$pager = paginationm($total, $pindex, $psize, '', array('before' => 0, 'after' => 0, 'ajaxcallback' => ''));
-			$btotal = pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename($this->table_bbsreply).' WHERE uniacid= :uniacid AND tfrom_user = :tfrom_user AND rid = :rid ', array(':uniacid' => $uniacid, ':tfrom_user' => $tfrom_user,':rid' => $rid));
-						
-			
+			$bbsreply = pdo_fetchall("SELECT avatar,nickname,from_user,content,createtime FROM ".tablename($this->table_bbsreply)." WHERE uniacid = :uniacid AND tfrom_user = :tfrom_user AND rid = :rid ORDER BY `id` DESC LIMIT 10",  array(':uniacid' => $uniacid,':tfrom_user' => $tfrom_user,':rid' => $rid));
+			$btotal = $this->getcommentnum($rid,$uniacid,$tfrom_user);
 		}		
 		$votetime = $reply['votetime']*3600*24;
 		$isvtime = TIMESTAMP - $user['createtime'];

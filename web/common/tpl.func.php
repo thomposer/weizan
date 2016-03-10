@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -222,8 +222,53 @@ function tpl_form_field_link($name, $value = '', $options = array()) {
 		<script type="text/javascript">
 			function showLinkDialog(elm) {
 				require(["util","jquery"], function(u, $){
-					var ipt = $(elm).parent().prev();
+					var ipt = $(elm).parent().parent().parent().prev();
 					u.linkBrowser(function(href){
+						var multiid = "'. $_GPC['multiid'] .'";
+						if (multiid) {
+							href = /(&)?t=/.test(href) ? href : href + "&t=" + multiid;
+						}
+						ipt.val(href);
+					});
+				});
+			}
+			function newsLinkDialog(elm, page) {
+				require(["util","jquery"], function(u, $){
+					var ipt = $(elm).parent().parent().parent().prev();
+					u.newsBrowser(function(href, page){
+						if (page != "" && page != undefined) {
+							newsLinkDialog(elm, page);
+							return false;
+						}
+						var multiid = "'. $_GPC['multiid'] .'";
+						if (multiid) {
+							href = /(&)?t=/.test(href) ? href : href + "&t=" + multiid;
+						}
+						ipt.val(href);
+					}, page);
+				});
+			}
+			function articleLinkDialog(elm, page) {
+				require(["util","jquery"], function(u, $){
+					var ipt = $(elm).parent().parent().parent().prev();
+					u.articleBrowser(function(href, page){
+						if (page != "" && page != undefined) {
+							articleLinkDialog(elm, page);
+							return false;
+						}
+						var multiid = "'. $_GPC['multiid'] .'";
+						if (multiid) {
+							href = /(&)?t=/.test(href) ? href : href + "&t=" + multiid;
+						}
+						ipt.val(href);
+					}, page);
+				});
+			}
+			function mapLinkDialog(elm) {
+				require(["util","jquery"], function(u, $){
+					var ipt = $(elm).parent().parent().parent().prev();
+					u.map(elm, function(val){
+						var href = \'http://api.map.baidu.com/marker?location=\'+val.lat+\',\'+val.lng+\'&output=html&src=we7\';
 						var multiid = "'. $_GPC['multiid'] .'";
 						if (multiid) {
 							href = /(&)?t=/.test(href) ? href : href + "&t=" + multiid;
@@ -237,9 +282,16 @@ function tpl_form_field_link($name, $value = '', $options = array()) {
 	}
 	$s .= '
 	<div class="input-group">
-		<input type="text" value="'.$value.'" name="'.$name.'" class="form-control ' . $options['css']['input'] . '" autocomplete="off">
+		<input type="text" value="'.$value.'" name="'.$name.'" class="form-control" autocomplete="off">
 		<span class="input-group-btn">
-			<button class="btn btn-default ' . $options['css']['btn'] . '" type="button" onclick="showLinkDialog(this);">选择链接</button>
+			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">选择链接 <span class="caret"></span></button>
+			<ul class="dropdown-menu">
+				<li><a href="javascript:" data-type="system" onclick="showLinkDialog(this);">系统菜单</a></li>
+				<li><a href="javascript:" data-type="page" onclick="newsLinkDialog(this);">微页面</a></li>
+				<li><a href="javascript:" data-type="article" onclick="articleLinkDialog(this)">文章及分类</a></li>
+				<li><a href="javascript:" data-type="news" onclick="newsLinkDialog(this)">图文回复</a></li>
+				<li><a href="javascript:" data-type="map" onclick="mapLinkDialog(this)">一键导航</a></li>
+			</ul>
 		</span>
 	</div>
 	';

@@ -1,14 +1,13 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('mc_member');
-$dos = array('display', 'post','del', 'add', 'group');
+$dos = array('display', 'post','del', 'add', 'group', 'credit_record', 'credit_stat');
 $do = in_array($do, $dos) ? $do : 'display';
 load()->model('mc');
-
 if($do == 'display') {
 	$_W['page']['title'] = '会员列表 - 会员 - 会员中心';
 	$groups = mc_groups();
@@ -18,7 +17,14 @@ if($do == 'display') {
 	$starttime = empty($_GPC['createtime']['start']) ? strtotime('-90 days') : strtotime($_GPC['createtime']['start']);
 	$endtime = empty($_GPC['createtime']['end']) ? TIMESTAMP + 86399 : strtotime($_GPC['createtime']['end']) + 86399;
 	$condition .= " AND createtime >= {$starttime} AND createtime <= {$endtime}";
-	$condition .= empty($_GPC['username']) ? '' : " AND (( `realname` LIKE '%".trim($_GPC['username'])."%' ) OR ( `nickname` LIKE '%".trim($_GPC['username'])."%' ) OR ( `mobile` LIKE '%".trim($_GPC['username'])."%' )) ";
+	$condition .= empty($_GPC['username']) ? '' : " AND (( `realname` LIKE '%".trim($_GPC['username'])."%' ) OR ( `nickname` LIKE '%".trim($_GPC['username'])."%' ) OR ( `mobile` LIKE '%".trim($_GPC['username'])."%' )";
+	if (!empty($_GPC['username'])) {
+		if (strlen(trim($_GPC['username'])) == 28) {
+			$condition .= " OR ( `uid` = (SELECT `uid` FROM". tablename('mc_mapping_fans')." WHERE openid = '".trim($_GPC['username'])."')))";
+		} else {
+			$condition .= ")";
+		}
+	}
 	$condition .= intval($_GPC['groupid']) > 0 ?  " AND `groupid` = '".intval($_GPC['groupid'])."'" : '';
 	if(checksubmit('export_submit', true)) {
 		$sql = "SELECT uid, uniacid, groupid, realname, nickname, email, mobile, credit1, credit2, credit6, createtime  FROM ".tablename('mc_members')." WHERE uniacid = '{$_W['uniacid']}' ".$condition." ORDER BY createtime";
@@ -74,11 +80,49 @@ if($do == 'display') {
 	$stat['total'] = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_members') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
 	$stat['today'] = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_members') . ' WHERE uniacid = :uniacid AND createtime >= :starttime AND createtime <= :endtime', array(':uniacid' => $_W['uniacid'], ':starttime' => strtotime('Y-m-d'), ':endtime' =>  strtotime('Y-m-d') + 86399));
 }
-
 if($do == 'post') {
 	$_W['page']['title'] = '编辑会员资料 - 会员 - 会员中心';
 	$uid = intval($_GPC['uid']);
 	if ($_W['ispost'] && $_W['isajax']) {
+		if ($_GPC['op'] == 'addaddress' || $_GPC['op'] == 'editaddress') {
+			$post = array(
+			'uniacid' => $_W['uniacid'],
+			'province' => trim($_GPC['province']),
+			'city' => trim($_GPC['city']),
+			'district' => trim($_GPC['district']),
+			'address' => trim($_GPC['detail']),
+			'uid' => intval($_GPC['uid']),
+			'username' => trim($_GPC['name']),
+			'mobile' => trim($_GPC['phone']),
+			'zipcode' => trim($_GPC['code'])
+			);
+			if ($_GPC['op'] == 'addaddress') {
+				$sql = "SELECT COUNT(*) FROM ". tablename('mc_member_address'). " WHERE uniacid = :uniacid AND uid = :uid";
+				$exist_address = pdo_fetchcolumn($sql, array(':uniacid' => $post['uniacid'], ':uid' => $uid));
+				if (!$exist_address) {
+					$post['isdefault'] = 1;
+				}
+				pdo_insert('mc_member_address', $post);
+				$post['id'] = pdo_insertid();
+				message(error(1, $post), '', 'ajax');
+			} else {
+				pdo_update('mc_member_address', $post, array('id' => intval($_GPC['id']), 'uniacid' => $_W['uniacid']));
+				$post['id'] = intval($_GPC['id']);
+				message(error(1, $post), '', 'ajax');
+			}
+		}
+		if ($_GPC['op'] == 'del') {
+			$id = intval($_GPC['id']);
+			pdo_delete('mc_member_address', array('id' => $id, 'uniacid' => $_W['uniacid']));
+			message(error(1), '', 'ajax');
+		}
+		if ($_GPC['op'] == 'isdefault') {
+			$id = intval($_GPC['id']);
+			$uid = intval($_GPC['uid']);
+			pdo_update('mc_member_address', array('isdefault' => 0), array('uid' => $uid, 'uniacid' => $_W['uniacid']));
+			pdo_update('mc_member_address', array('isdefault' => 1), array('id' => $id, 'uniacid' => $_W['uniacid']));
+			message(error(1), '', 'ajax');
+		}
 		$uid = $_GPC['uid'];
 		$password = $_GPC['password'];
 		$sql = 'SELECT `uid`, `salt` FROM ' . tablename('mc_members') . " WHERE `uniacid`=:uniacid AND `uid` = :uid";
@@ -94,7 +138,6 @@ if($do == 'post') {
 	}
 	if (checksubmit('submit')) {
 		$uid = intval($_GPC['uid']);
-
 		if (!empty($_GPC)) {
 			if (!empty($_GPC['birth'])) {
 				$_GPC['birthyear'] = $_GPC['birth']['year'];
@@ -157,7 +200,7 @@ if($do == 'post') {
 				if(($email_effective == 1 && empty($_GPC['email']))) {
 					unset($_GPC['email']);
 				}
-
+				unset($_GPC['addresss']);
 				$uid = mc_update($uid, $_GPC);
 			}
 		}
@@ -204,6 +247,7 @@ if($do == 'post') {
 			}
 		}
 	}
+	$addresss = pdo_getall('mc_member_address', array('uid' => $uid, 'uniacid' => $_W['uniacid']));
 }
 
 if($do == 'del') {
@@ -291,5 +335,52 @@ if($do == 'group') {
 		}
 	}
 	exit('error');
+}
+
+if($do == 'credit_record') {
+	$_W['page']['title'] = '积分日志-会员管理';
+	$uid = intval($_GPC['uid']);
+	$credits = array(
+		'credit1' => '积分',
+		'credit2' => '余额'
+	);
+	$type = trim($_GPC['type']) ? trim($_GPC['type']) : 'credit1';
+	$pindex = max(1, intval($_GPC['page']));
+	$psize = 50;
+	$total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('mc_credits_record') . ' WHERE uid = :uid AND uniacid = :uniacid AND credittype = :credittype ', array(':uniacid' => $_W['uniacid'], ':uid' => $uid, ':credittype' => $type));
+	$data = pdo_fetchall("SELECT r.*, u.username FROM " . tablename('mc_credits_record') . ' AS r LEFT JOIN ' .tablename('users') . ' AS u ON r.operator = u.uid ' . ' WHERE r.uid = :uid AND r.uniacid = :uniacid AND r.credittype = :credittype ORDER BY id DESC LIMIT ' . ($pindex - 1) * $psize .',' . $psize, array(':uniacid' => $_W['uniacid'], ':uid' => $uid, ':credittype' => $type));
+	$pager = pagination($total, $pindex, $psize);
+	$modules = pdo_getall('modules', array('issystem' => 0), array('title', 'name'), 'name');
+	$modules['card'] = array('title' => '会员卡', 'name' => 'card');
+}
+
+if($do == 'credit_stat') {
+	$_W['page']['title'] = '积分日志-会员管理';
+	$uid = intval($_GPC['uid']);
+	$credits = array(
+		'credit1' => '积分',
+		'credit2' => '余额'
+	);
+	$type = intval($_GPC['type']);
+	$starttime = strtotime('-7 day');
+	$endtime = strtotime('7 day');
+	if($type == 1) {
+		$starttime = strtotime(date('Y-m-d'));
+		$endtime = TIMESTAMP;
+	} elseif($type == -1) {
+		$starttime = strtotime('-1 day');
+		$endtime = strtotime(date('Y-m-d'));
+	} else{
+		$starttime = strtotime($_GPC['datelimit']['start']);
+		$endtime = strtotime($_GPC['datelimit']['end']) + 86399;
+	}
+	if(!empty($credits)) {
+		$data = array();
+		foreach($credits as $key => $li) {
+			$data[$key]['add'] = round(pdo_fetchcolumn('SELECT SUM(num) FROM ' . tablename('mc_credits_record') . ' WHERE uniacid = :id AND uid = :uid AND createtime > :start AND createtime < :end AND credittype = :type AND num > 0', array(':id' => $_W['uniacid'], ':uid' => $uid, ':start' => $starttime, ':end' => $endtime, ':type' => $key)),2);
+			$data[$key]['del'] = abs(round(pdo_fetchcolumn('SELECT SUM(num) FROM ' . tablename('mc_credits_record') . ' WHERE uniacid = :id AND uid = :uid AND createtime > :start AND createtime < :end AND credittype = :type AND num < 0', array(':id' => $_W['uniacid'], ':uid' => $uid, ':start' => $starttime, ':end' => $endtime, ':type' => $key)),2));
+			$data[$key]['end'] = $data[$key]['add'] - $data[$key]['del'];
+		}
+	}
 }
 template('mc/member');

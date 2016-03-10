@@ -1,5 +1,4 @@
 {template 'header'}
-
 <link rel="stylesheet" type="text/css" href="../addons/fm_photosvote/template/css/style.css?v=3.03">
 <style>
 	body {background: {$reply['zbgcolor']} url({php echo toimage($reply['zbg'])});}
@@ -80,14 +79,14 @@
 							<a href="{php echo $this->createMobileUrl('tuserphotos', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}">
 								<img src="{php echo $this->getphotos($fmimage['photos'], $user['avatar'], $reply['picture'])}" width="50"/>
 							</a>
-						
 							<span style="  right: 6px;  top: 6px;  padding: 17px 17px;  border-radius: 100px;  width: 70px;  height: 70px;  text-align: center;"> <strong class="bnum">ID<p>{$user['uid']}</p></strong></span>
 							<span style="right:6px;bottom: 6px;">{$reply['tpsname']}: <strong>{php echo $user['photosnum'] + $user['xnphotosnum']} </strong></span>
 						</dt>
 						
 						<dd style="text-align:center;  text-decoration: none;"><strong >{php echo cutstr($user['photoname'], '20')}</strong></dd>
 						<dd style="text-decoration: none;">
-							<img src="{php echo $this->getphotos($user['avatar'], $fmimage['photos'], $reply['picture'])}" width="35" style="border-radius: 35px;margin-right:10px;"><strong >{if empty($user['realname'])}{php echo cutstr($user['nickname'], '6')}{else}{php echo cutstr($user['realname'], '6')}{/if} <span class="level level_{$level}">{$level}</span> {if ($tfrom_user == $from_user)}<span> [<a href="{php echo $this->createMobileUrl('reg', array('rid' => $rid, 'from_user' => $from_user))}"><i class="fa fa-edit"></i> 编辑</a>]</span>{/if}</strong>
+							<img src="{php echo $this->getphotos($user['avatar'], $fmimage['photos'], $reply['picture'])}" width="35" height="35" style="border-radius: 35px;margin-right:10px;">
+							<strong >{php echo $this->getusernames($user['realname'], $user['nickname'], '6')} <span class="level level_{$level}">{$level}</span> {if ($tfrom_user == $from_user)}<span> [<a href="{php echo $this->createMobileUrl('reg', array('rid' => $rid, 'from_user' => $from_user))}"><i class="fa fa-edit"></i> 编辑</a>]</span>{/if}</strong>
 						</dd>
 						<dd>
 						<strong ><i class="fa fa-list-ul"></i> 编号 ID： <strong class="bnum"> <span class="label " style="font-size:15px;">{$user['uid']}</span> </strong>
@@ -175,28 +174,28 @@
 									<dd style="text-decoration: none;text-align:center;">	
 										<h1 style="font-size: 23px;"><strong id="RemainD">XX</strong>天<strong id="RemainH">XX</strong>小时<strong id="RemainI">XX</strong>分<strong id="RemainS">XX</strong>秒</h1>
 									<script language="JavaScript">
-									var runtimes = 0;
-									function GetRTime(){
-										var nMS = {$totaltime}*1000-runtimes*1000;
-										//var nY=Math.floor(nMS/(1000*60*60*24*30*12)) % 365;//一年
-										//var nM=Math.floor(nMS/(1000*60*60*24*30)) % 12;//一个月
-										var nD=Math.floor(nMS/(1000*60*60*24));//一天
-										var nH=Math.floor(nMS/(1000*60*60)) % 24;//一小时
-										var nI=Math.floor(nMS/(1000*60)) % 60;//1一分钟
-										var nS=Math.floor(nMS/1000) % 60;//60秒
-										//document.getElementById("RemainY").innerHTML=nY;
-										//document.getElementById("RemainM").innerHTML=nM;
-										document.getElementById("RemainD").innerHTML=nD;
-										document.getElementById("RemainH").innerHTML=nH;
-										document.getElementById("RemainI").innerHTML=nI;
-										document.getElementById("RemainS").innerHTML=nS;
-										if(nMS>5*59*1000&&nMS<=5*60*1000){
-											alert("还有最后五分钟！");
+										var runtimes = 0;
+										function GetRTime(){
+											var nMS = {$totaltime}*1000-runtimes*1000;
+											//var nY=Math.floor(nMS/(1000*60*60*24*30*12)) % 365;//一年
+											//var nM=Math.floor(nMS/(1000*60*60*24*30)) % 12;//一个月
+											var nD=Math.floor(nMS/(1000*60*60*24));//一天
+											var nH=Math.floor(nMS/(1000*60*60)) % 24;//一小时
+											var nI=Math.floor(nMS/(1000*60)) % 60;//1一分钟
+											var nS=Math.floor(nMS/1000) % 60;//60秒
+											//document.getElementById("RemainY").innerHTML=nY;
+											//document.getElementById("RemainM").innerHTML=nM;
+											document.getElementById("RemainD").innerHTML=nD;
+											document.getElementById("RemainH").innerHTML=nH;
+											document.getElementById("RemainI").innerHTML=nI;
+											document.getElementById("RemainS").innerHTML=nS;
+											if(nMS>5*59*1000&&nMS<=5*60*1000){
+												alert("还有最后五分钟！");
+											}
+											runtimes++;
+											setTimeout("GetRTime()",1000);
 										}
-										runtimes++;
-										setTimeout("GetRTime()",1000);
-									}
-									window.onload=GetRTime();
+										window.onload=GetRTime();
 
 									</script>
 									</dd>
@@ -269,16 +268,11 @@
 								<p style="text-indent:2em;">{$brow['content']}</p>
 								</dd>
 							{/loop}
-							<div style="margin:0 auto;padding:0;text-align:center;">{$pager}</div>
-							
-							<dd style="text-decoration: none;"><strong ><i class="fa fa-comment-o"></i> {if ($tfrom_user <> $from_user)}我也评一个{else}回复一个{/if} </strong> </dd>
-								<dd>
-								  <textarea style="height:50px; width: 100%;" class="span7 richtext-clone w" id="content" name="content" cols="70"></textarea>
-								</dd>								
-								<dd style="margin: 0 auto;  text-align: center;">
-									<input type="hidden" name="token" value="{$_W['token']}"/>
-									<input type="submit" class="btn btn-large btn-info submit" style="  float: right;" value="提交" name="submit">
-								</dd>	
+							<div style="margin:0 auto;padding:0;text-align:center;"><a href="{php echo $this->createMobileUrl('comment', array('rid'=>$rid,'tfrom_user'=>$tfrom_user));}">更多评论</a</div>
+							<dd></dd>
+							<dd></dd>
+							<dd></dd>
+
 						{/if}
 					</dl>
 				</li>				
@@ -294,21 +288,6 @@
 </div>
 {template 'fnav'}
 {template 'tvote'}
-
-	<script>
-		var iscode = "{$reply['iscode']}";		
-		$('.submit').click(function(){
-			var content = $('#content').val();
-			if(content == '' || content == null) {
-				fminfo("请输入回复内容！");
-				return false;
-			}
-			var bbstype = "bbsreply";
-			bbsreply(content, iscode, bbstype);
-			
-		});	
-		
-	</script>
 
 
 

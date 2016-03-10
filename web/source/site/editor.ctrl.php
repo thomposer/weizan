@@ -1,13 +1,13 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 load()->model('site');
 
 $do = !empty($do) ? $do : 'page';
-$do = in_array($do, array('design', 'page', 'quickmenu', 'articlelist', 'catelist', 'newslist', 'pagelist', 'uc', 'del')) ? $do : 'page';
+$do = in_array($do, array('design', 'page', 'quickmenu', 'uc', 'del')) ? $do : 'page';
 
 if ($do == 'design') {
 	$_W['page']['title'] = '专题页面 - 微站功能';
@@ -208,56 +208,7 @@ if ($do == 'design') {
 	}
 	$modules = uni_modules();
 	template('site/editor');
-} elseif ($do == 'articlelist') {
-	$result = array();
-	$psize = 10;
-	$pindex = max(1, intval($_GPC['page']));
-	$result['list'] = pdo_fetchall("SELECT id, title, thumb, description, content, author, incontent, linkurl,  createtime, uniacid FROM ".tablename('site_article')." WHERE uniacid = :uniacid ORDER BY displayorder DESC, id  LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':uniacid' => $_W['uniacid']), 'id');
-	if (!empty($result['list'])) {
-		foreach ($result['list'] as $k => &$v) {
-			$v['thumb_url'] = tomedia($v['thumb']);
-			$v['createtime'] = date('Y-m-d H:i', $v['createtime']);
-			$v['name'] = cutstr($v['name'], 10);
-		}
-		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('site_article').' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
-		$result['pager'] = pagination($total, $pindex, $psize, '', array('before' => '2', 'after' => '3', 'ajaxcallback'=>'null'));
-	}
-	message($result, '', 'ajax');
-} elseif ($do == 'catelist') {
-	$category = pdo_fetchall("SELECT id, uniacid, parentid, name FROM ".tablename('site_category')." WHERE uniacid = :uniacid ORDER BY parentid, displayorder DESC, id", array(':uniacid' => $_W['uniacid']), 'id');
-	foreach ($category as $index => $row) {
-		if (!empty($row['parentid'])){
-			$category[$row['parentid']]['children'][$row['id']] = $row;
-			unset($category[$index]);
-		}
-	}
-	message($category, '', 'ajax');
-} elseif ($do == 'newslist') {
-	$result = array();
-	$psize = 10;
-	$pindex = max(1, intval($_GPC['page']));
-	$sql = "SELECT n.id, n.title FROM ". tablename('rule')."AS r,". tablename('news_reply'). " AS n WHERE r.id = n.rid AND r.module = :news AND r.uniacid = :uniacid ORDER BY n.displayorder DESC LIMIT ". ($pindex - 1) * $psize . ',' . $psize;
-	$result['list'] = pdo_fetchall($sql, array(':news' => 'news', ':uniacid' => $_W['uniacid']), 'id');
-	if (!empty($result['list'])) {
-		$sql = "SELECT COUNT(*) FROM ". tablename('rule')."AS r,". tablename('news_reply'). " AS n WHERE r.id = n.rid AND r.module = :news AND r.uniacid = :uniacid ";
-		$total = pdo_fetchcolumn($sql, array(':news' => 'news', ':uniacid' => $_W['uniacid']));
-		$result['pager'] = pagination($total, $pindex, $psize, '', array('before' => '2', 'after' => '3', 'ajaxcallback'=>'null'));
-	}
-	message($result, '', 'ajax');
-} elseif ($do == 'pagelist') {
-	$result = array();
-	$psize = 10;
-	$pindex = max(1, intval($_GPC['page']));
-	$result['list'] = pdo_fetchall("SELECT * FROM ".tablename('site_page')." WHERE uniacid = :uniacid AND type = '2' ORDER BY id DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':uniacid' => $_W['uniacid']), 'id');
-	if (!empty($result['list'])) {
-		foreach ($result['list'] as $k => &$v) {
-			$v['createtime'] = date('Y-m-d H:i', $v['createtime']);
-		}
-		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('site_page'). ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
-		$result['pager'] = pagination($total, $pindex, $psize, '', array('before' => '2', 'after' => '3', 'ajaxcallback'=>'null'));
-	}
-	message($result, '', 'ajax');
-} elseif ($do == 'del') {
+}  elseif ($do == 'del') {
 	$id = intval($_GPC['id']);
 	pdo_delete('site_page', array('id' => $id, 'uniacid' => $_W['uniacid']));
 	site_cover_delete($id);

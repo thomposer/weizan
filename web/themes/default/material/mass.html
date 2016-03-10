@@ -40,10 +40,6 @@
 <ul class="nav nav-tabs">
 	<li {if $_GPC['a'] == 'mass'  && $do == 'list'}class="active"{/if}><a href="{php echo url('material/mass/')}">定时群发</a></li>
 	<li {if $_GPC['a'] == 'mass' && $do == 'send'}class="active"{/if}><a href="{php echo url('material/mass/send')}">发送记录</a></li>
-	<li {if $type == 'image'}class="active"{/if}><a href="{php echo url('material/display/list', array('type' => 'image'));}">图片</a></li>
-	<li {if $type == 'voice'}class="active"{/if}><a href="{php echo url('material/display/list', array('type' => 'voice'));}">语音</a></li>
-	<li {if $type == 'video'}class="active"{/if}><a href="{php echo url('material/display/list', array('type' => 'video'));}">视频</a></li>
-	<li {if $type == 'news'}class="active"{/if}><a href="{php echo url('material/display/list', array('type' => 'news'));}">图文</a></li>
 </ul>
 <div class="alert alert-info">
 	<strong class="text-danger"><i class="fa fa-info-circle"></i> 该功能是定时群发,如果你需要立即群发,请在素材列表里找到对用的素材直接群发</strong><br>

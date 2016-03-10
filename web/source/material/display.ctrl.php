@@ -1,13 +1,14 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-uni_user_permission_check('mc_material_display');
+uni_user_permission_check('material_mass');
 $_W['page']['title'] = '永久素材-微信素材';
 $dos = array('image', 'del', 'export', 'news', 'down', 'list', 'purview', 'modal', 'send');
 $do = in_array($do, $dos) ? $do : 'list';
+
 if($do == 'down') {
 	set_time_limit(0);
 	load()->func('file');

@@ -244,7 +244,11 @@
 				$('footer').show();
 				hideloading();
 			} else {
-				alert(data.error);
+				if (data.error) {
+					alert(data.error);
+				}else {
+					alert('题库里没有试题');
+				}
 				return false;
 			}
 		});

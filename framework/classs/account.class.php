@@ -645,7 +645,7 @@ abstract class WeBase {
 				$source = IA_ROOT . "/app/themes/{$_W['template']}/{$filename}.html";
 			}
 			if(!is_file($source)) {
-				if (in_array($filename, array('header', 'footer', 'slide', 'toolbar', 'message'))) {
+				if (in_array($filename, array('header', 'footer', 'footer-base', 'slide', 'toolbar', 'message'))) {
 					$source = IA_ROOT . "/app/themes/default/common/{$filename}.html";
 				} else {
 					$source = IA_ROOT . "/app/themes/default/{$filename}.html";

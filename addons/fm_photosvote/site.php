@@ -362,14 +362,6 @@ class Fm_photosvoteModuleSite extends WeModuleSite
     {
         $this->__mobile(__FUNCTION__);
     }
-    public function doMobileSaverecord1()
-    {
-        $this->__mobile(__FUNCTION__);
-    }
-    public function doMobileTregs()
-    {
-        $this->__mobile(__FUNCTION__);
-    }
     public function doMobileTreg()
     {
         $this->__mobile(__FUNCTION__);
@@ -415,10 +407,6 @@ class Fm_photosvoteModuleSite extends WeModuleSite
         $this->__mobile(__FUNCTION__);
     }
     public function doMobileGetuserinfo()
-    {
-        $this->__mobile(__FUNCTION__);
-    }
-	public function doMobilePhotosvoteview()
     {
         $this->__mobile(__FUNCTION__);
     }
@@ -917,8 +905,6 @@ class Fm_photosvoteModuleSite extends WeModuleSite
     }
     public function sendtempmsg($template_id, $url, $data, $topcolor, $tousers = '')
     {
-        load()->func('communication');
-        load()->classs('weixin.account');
         $access_token = WeAccount::token();
         if (empty($access_token)) {
             return;
@@ -1597,59 +1583,61 @@ class Fm_photosvoteModuleSite extends WeModuleSite
     }
     public function emotion($text)
     {
-        $str     = array(
-            '(#呵呵)' => '<span class="smile_popo" style="background-position-y: -0px;display: inline-block;  width: 30px"></span>',
-            '(#哈哈)' => '<span class="smile_popo" style="background-position-y: -30px;display: inline-block;  width: 30px"></span>',
-            '(#吐舌)' => '<span class="smile_popo" style="background-position-y: -60px;display: inline-block;  width: 30px"></span>',
-            '(#啊)' => '<span class="smile_popo" style="background-position-y: -90px;display: inline-block;  width: 30px"></span>',
-            '(#酷)' => '<span class="smile_popo" style="background-position-y: -120px;display: inline-block;  width: 30px"></span>',
-            '(#怒)' => '<span class="smile_popo" style="background-position-y: -150px;display: inline-block;  width: 30px"></span>',
-            '(#开心)' => '<span class="smile_popo" style="background-position-y: -180px;display: inline-block;  width: 30px"></span>',
-            '(#汗)' => '<span class="smile_popo" style="background-position-y: -210px;display: inline-block;  width: 30px"></span>',
-            '(#泪)' => '<span class="smile_popo" style="background-position-y: -240px;display: inline-block;  width: 30px"></span>',
-            '(#黑线)' => '<span class="smile_popo" style="background-position-y: -270px;display: inline-block;  width: 30px"></span>',
-            '(#鄙视)' => '<span class="smile_popo" style="background-position-y: -300px;display: inline-block;  width: 30px"></span>',
-            '(#不高兴)' => '<span class="smile_popo" style="background-position-y: -330px;display: inline-block;  width: 30px"></span>',
-            '(#真棒)' => '<span class="smile_popo" style="background-position-y: -360px;display: inline-block;  width: 30px"></span>',
-            '(#钱)' => '<span class="smile_popo" style="background-position-y: -390px;display: inline-block;  width: 30px"></span>',
-            '(#疑问)' => '<span class="smile_popo" style="background-position-y: -420px;display: inline-block;  width: 30px"></span>',
-            '(#阴险)' => '<span class="smile_popo" style="background-position-y: -450px;display: inline-block;  width: 30px"></span>',
-            '(#吐)' => '<span class="smile_popo" style="background-position-y: -480px;display: inline-block;  width: 30px"></span>',
-            '(#咦)' => '<span class="smile_popo" style="background-position-y: -510px;display: inline-block;  width: 30px"></span>',
-            '(#委屈)' => '<span class="smile_popo" style="background-position-y: -540px;display: inline-block;  width: 30px"></span>',
-            '(#花心)' => '<span class="smile_popo" style="background-position-y: -570px;display: inline-block;  width: 30px"></span>',
-            '(#呼~)' => '<span class="smile_popo" style="background-position-y: -600px;display: inline-block;  width: 30px"></span>',
-            '(#笑眼)' => '<span class="smile_popo" style="background-position-y: -630px;display: inline-block;  width: 30px"></span>',
-            '(#冷)' => '<span class="smile_popo" style="background-position-y: -660px;display: inline-block;  width: 30px"></span>',
-            '(#太开心)' => '<span class="smile_popo" style="background-position-y: -690px;display: inline-block;  width: 30px"></span>',
-            '(#滑稽)' => '<span class="smile_popo" style="background-position-y: -720px;display: inline-block;  width: 30px"></span>',
-            '(#勉强)' => '<span class="smile_popo" style="background-position-y: -750px;display: inline-block;  width: 30px"></span>',
-            '(#狂汗)' => '<span class="smile_popo" style="background-position-y: -780px;display: inline-block;  width: 30px"></span>',
-            '(#乖)' => '<span class="smile_popo" style="background-position-y: -810px;display: inline-block;  width: 30px"></span>',
-            '(#睡觉)' => '<span class="smile_popo" style="background-position-y: -840px;display: inline-block;  width: 30px"></span>',
-            '(#惊哭)' => '<span class="smile_popo" style="background-position-y: -870px;display: inline-block;  width: 30px"></span>',
-            '(#升起)' => '<span class="smile_popo" style="background-position-y: -900px;display: inline-block;  width: 30px"></span>',
-            '(#惊讶)' => '<span class="smile_popo" style="background-position-y: -930px;display: inline-block;  width: 30px"></span>',
-            '(#喷)' => '<span class="smile_popo" style="background-position-y: -960px;display: inline-block;  width: 30px"></span>',
-            '(#爱心)' => '<span class="smile_popo" style="background-position-y: -990px;display: inline-block;  width: 30px"></span>',
-            '(#心碎)' => '<span class="smile_popo" style="background-position-y: -1020px;display: inline-block;  width: 30px"></span>',
-            '(#玫瑰)' => '<span class="smile_popo" style="background-position-y: -1050px;display: inline-block;  width: 30px"></span>',
-            '(#礼物)' => '<span class="smile_popo" style="background-position-y: -1080px;display: inline-block;  width: 30px"></span>',
-            '(#彩虹)' => '<span class="smile_popo" style="background-position-y: -1110px;display: inline-block;  width: 30px"></span>',
-            '(#星星月亮)' => '<span class="smile_popo" style="background-position-y: -1140px;display: inline-block;  width: 30px"></span>',
-            '(#太阳)' => '<span class="smile_popo" style="background-position-y: -1170px;display: inline-block;  width: 30px"></span>',
-            '(#钱币)' => '<span class="smile_popo" style="background-position-y: -1200px;display: inline-block;  width: 30px"></span>',
-            '(#灯泡)' => '<span class="smile_popo" style="background-position-y: -1230px;display: inline-block;  width: 30px"></span>',
-            '(#茶杯)' => '<span class="smile_popo" style="background-position-y: -1260px;display: inline-block;  width: 30px"></span>',
-            '(#蛋糕)' => '<span class="smile_popo" style="background-position-y: -1290px;display: inline-block;  width: 30px"></span>',
-            '(#音乐)' => '<span class="smile_popo" style="background-position-y: -1320px;display: inline-block;  width: 30px"></span>',
-            '(#haha)' => '<span class="smile_popo" style="background-position-y: -1350px;display: inline-block;  width: 30px"></span>',
-            '(#胜利)' => '<span class="smile_popo" style="background-position-y: -1380px;display: inline-block;  width: 30px"></span>',
-            '(#大拇指)' => '<span class="smile_popo" style="background-position-y: -1410px;display: inline-block;  width: 30px"></span>',
-            '(#弱)' => '<span class="smile_popo" style="background-position-y: -1440px;display: inline-block;  width: 30px"></span>',
-            '(#OK)' => '<span class="smile_popo" style="background-position-y: -1470px;display: inline-block;  width: 30px"></span>'
+        $smile_popo  = '<span class="smile_popo" style="background-position-y: ';
+        $smile_popoe = 'px;display: inline-block;  width: 30px"></span>';
+        $str         = array(
+            '(#呵呵)' => $smile_popo . '-0' . $smile_popoe,
+            '(#哈哈)' => $smile_popo . '-30' . $smile_popoe,
+            '(#吐舌)' => $smile_popo . '-60' . $smile_popoe,
+            '(#啊)' => $smile_popo . '-90' . $smile_popoe,
+            '(#酷)' => $smile_popo . '-120' . $smile_popoe,
+            '(#怒)' => $smile_popo . '-150' . $smile_popoe,
+            '(#开心)' => $smile_popo . '-180' . $smile_popoe,
+            '(#汗)' => $smile_popo . '-210' . $smile_popoe,
+            '(#泪)' => $smile_popo . '-240' . $smile_popoe,
+            '(#黑线)' => $smile_popo . '-270' . $smile_popoe,
+            '(#鄙视)' => $smile_popo . '-300' . $smile_popoe,
+            '(#不高兴)' => $smile_popo . '-330' . $smile_popoe,
+            '(#真棒)' => $smile_popo . '-360' . $smile_popoe,
+            '(#钱)' => $smile_popo . '-390' . $smile_popoe,
+            '(#疑问)' => $smile_popo . '-420' . $smile_popoe,
+            '(#阴险)' => $smile_popo . '-450' . $smile_popoe,
+            '(#吐)' => $smile_popo . '-480' . $smile_popoe,
+            '(#咦)' => $smile_popo . '-510' . $smile_popoe,
+            '(#委屈)' => $smile_popo . '-540' . $smile_popoe,
+            '(#花心)' => $smile_popo . '-570' . $smile_popoe,
+            '(#呼~)' => $smile_popo . '-600' . $smile_popoe,
+            '(#笑眼)' => $smile_popo . '-630' . $smile_popoe,
+            '(#冷)' => $smile_popo . '-660' . $smile_popoe,
+            '(#太开心)' => $smile_popo . '-690' . $smile_popoe,
+            '(#滑稽)' => $smile_popo . '-720' . $smile_popoe,
+            '(#勉强)' => $smile_popo . '-750' . $smile_popoe,
+            '(#狂汗)' => $smile_popo . '-780' . $smile_popoe,
+            '(#乖)' => $smile_popo . '-810' . $smile_popoe,
+            '(#睡觉)' => $smile_popo . '-840' . $smile_popoe,
+            '(#惊哭)' => $smile_popo . '-870' . $smile_popoe,
+            '(#升起)' => $smile_popo . '-900' . $smile_popoe,
+            '(#惊讶)' => $smile_popo . '-930' . $smile_popoe,
+            '(#喷)' => $smile_popo . '-960' . $smile_popoe,
+            '(#爱心)' => $smile_popo . '-990' . $smile_popoe,
+            '(#心碎)' => $smile_popo . '-1020' . $smile_popoe,
+            '(#玫瑰)' => $smile_popo . '-1050' . $smile_popoe,
+            '(#礼物)' => $smile_popo . '-1080' . $smile_popoe,
+            '(#彩虹)' => $smile_popo . '-1110' . $smile_popoe,
+            '(#星星月亮)' => $smile_popo . '-1140' . $smile_popoe,
+            '(#太阳)' => $smile_popo . '-1170' . $smile_popoe,
+            '(#钱币)' => $smile_popo . '-1200' . $smile_popoe,
+            '(#灯泡)' => $smile_popo . '-1230' . $smile_popoe,
+            '(#茶杯)' => $smile_popo . '-1260' . $smile_popoe,
+            '(#蛋糕)' => $smile_popo . '-1290' . $smile_popoe,
+            '(#音乐)' => $smile_popo . '-1320' . $smile_popoe,
+            '(#haha)' => $smile_popo . '-1350' . $smile_popoe,
+            '(#胜利)' => $smile_popo . '-1380' . $smile_popoe,
+            '(#大拇指)' => $smile_popo . '-1410' . $smile_popoe,
+            '(#弱)' => $smile_popo . '-1440' . $smile_popoe,
+            '(#OK)' => $smile_popo . '-1470' . $smile_popoe
         );
-        $content = strtr($text, $str);
+        $content     = strtr($text, $str);
         return $content;
     }
     public function doWebdownload()

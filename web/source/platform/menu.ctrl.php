@@ -1,12 +1,12 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('platform_menu');
 load()->model('mc');
-$dos = array('display', 'save', 'remove', 'refresh', 'search_key', 'add', 'push');
+$dos = array('display', 'save', 'remove', 'refresh', 'search_key', 'add', 'push', 'copy');
 $do = in_array($do, $dos) ? $do : 'display';
 if($_W['isajax']) {
 	if($do == 'search_key') {
@@ -176,6 +176,24 @@ if($do == 'push') {
 	}
 }
 
+if($do == 'copy') {
+	$id = intval($_GPC['id']);
+	$menu = pdo_get('uni_account_menus', array('uniacid' => $_W['uniacid'], 'id' => $id));
+	if(empty($menu)) {
+		message('菜单不存在或已经删除', url('platform/menu/display'), 'error');
+	}
+	if($menu['type'] != 3) {
+		message('该菜单不能复制', url('platform/menu/display'), 'error');
+	}
+	unset($menu['id'], $menu['menuid']);
+	$menu['status'] = 0;
+	$menu['title'] = $menu['title'] . '- 复本';
+	pdo_insert('uni_account_menus', $menu);
+	$id = pdo_insertid();
+	header('Location:' . url('platform/menu/add', array('id' => $id)));
+	die;
+}
+
 if($do == 'add') {
 	$_W['page']['title'] = '菜单设计器 - 自定义菜单 - 高级功能';
 	$type = intval($_GPC['type']);
@@ -195,7 +213,10 @@ if($do == 'add') {
 				$params = $menu['data'];
 				$params['title'] = $menu['title'];
 				$params['type'] = $menu['type'];
+				$params['id'] = $menu['id'];
+				$params['status'] = $menu['status'];
 			}
+			$type = $menu['type'];
 		}
 	}
 	$groups = mc_fans_groups();
@@ -211,11 +232,16 @@ if($do == 'remove') {
 	if(empty($data)) {
 		message('菜单不存在或已经删除', referer(), 'error');
 	}
-	if($data['type'] != 2) {
+
+	if($data['type'] == 1 || ($data['type'] == 3 && $data['menuid'] > 0)) {
 		$account = WeAccount::create($_W['acid']);
 		$ret = $account->menuDelete($data['menuid']);
-		if(is_error($ret)) {
-			message($ret['message'], referer(), 'error');
+		if(is_error($ret) && empty($_GPC['f'])) {
+			$url = url('platform/menu/remove', array('id' => $id, 'f' => 1));
+			$url_display = url('platform/menu/display', array('id' => $id, 'f' => 1));
+			$message = "调用微信接口删除失败:{$ret['message']}<br>";
+			$message .= "强制删除本地数据? <a href='{$url}' class='btn btn-primary'>是</a> <a href='{$url_display}' class='btn btn-default'>取消</a>";
+			message($message, '', 'error');
 		}
 	}
 	if($data['type'] == 1) {
@@ -274,11 +300,12 @@ if($do == 'save') {
 		if($post['matchrule']['client_platform_type'] > 0) {
 			$menu['matchrule']['client_platform_type'] = $post['matchrule']['client_platform_type'];
 		}
+
 		if(!empty($post['matchrule']['province'])) {
 			$menu['matchrule']['country'] = urlencode('中国');
-			$menu['matchrule']['province'] = urlencode(rtrim($post['matchrule']['province'], '省'));
+			$menu['matchrule']['province'] = urlencode(str_replace('省', '', $post['matchrule']['province']));
 			if(!empty($post['matchrule']['city'])) {
-				$menu['matchrule']['city'] = urlencode(rtrim($post['matchrule']['city'], '市'));
+				$menu['matchrule']['city'] = urlencode(str_replace('市', '', $post['matchrule']['city']));
 			}
 		}
 	}
@@ -321,11 +348,18 @@ if($do == 'save') {
 			$default = pdo_get('uni_account_menus', array('uniacid' => $_W['uniacid'], 'type' => 1));
 			if(!empty($default)) {
 				pdo_update('uni_account_menus', $insert, array('uniacid' => $_W['uniacid'], 'type' => 1));
-				message(error(0, ''), '', 'ajax');
+			} else {
+				pdo_insert('uni_account_menus', $insert);
 			}
+			message(error(0, ''), '', 'ajax');
+		} elseif($post['type'] == 3) {
+			if($post['status'] == 0 && $post['id'] > 0) {
+				pdo_update('uni_account_menus', $insert, array('uniacid' => $_W['uniacid'], 'type' => 3, 'id' => $post['id']));
+			} else {
+				pdo_insert('uni_account_menus', $insert);
+			}
+			message(error(0, ''), '', 'ajax');
 		}
-		pdo_insert('uni_account_menus', $insert);
-		message(error(0, ''), '', 'ajax');
 	}
 }
 

@@ -23,7 +23,7 @@
     	<!--2-->
     	<div class="paiduan">
                 <span class="caption-title">
-                    已筹资：<span class="symbol">¥</span><span class="f_money">{$item['finish_price']}</span>&nbsp;&nbsp; 
+                    已筹资：<span class="symbol">¥</span><span class="f_money">{php echo $this->getFinishPrice($item['id'])}</span>&nbsp;&nbsp; 
                     目标：<span class="symbol" style="color:#333">¥</span><span class="f_money" style="color:#333">{$item['limit_price']}</span>
                 </span>
                 <span class="f_r ">
@@ -31,7 +31,7 @@
                         {if $item['status'] == 2}
                             <span class="common common-fail">即将开始</span>
                         {else}
-                            {if $item['finish_price'] >= $item['limit_price']}
+                            {if $this->getFinishPrice($item['id']) >= $item['limit_price']}
                                 <span class="common common-success">已成功</span>
                             {else}
                                 <span class="common common-sprite">筹资中</span>
@@ -44,7 +44,7 @@
      	<!--3-->
     	<div class="deal_content_box pd">
                 <div class="ui">
-                    {if floor($item['finish_price']*100/$item['limit_price']) >= 100}
+                    {if floor($this->getFinishPrice($item['id'])*100/$item['limit_price']) >= 100}
                     <span class="common-success" style="width:100%;"></span>
                     {else}
                 	<span class="progress" style="width:{php echo floor($item['finish_price']*100/$item['limit_price'])}%;"></span>
@@ -68,7 +68,7 @@
                 </div>
                 {else}
                 <div class="div_dt">
-                    <span class="num">{php echo floor($item['finish_price']*100/$item['limit_price'])}%</span><br />
+                    <span class="num">{php echo floor($this->getFinishPrice($item['id'])*100/$item['limit_price'])}%</span><br />
                     <span class="til">已达</span>
                 </div>
                 <div class="div_dt">
@@ -171,10 +171,34 @@
 				</div>
 				<p>感谢您对我们产品的大力支持！您的无私奉献我们将牢记于心！祝您生活愉快！</p>
 			</div>	 	
-				   
     	<div class="blank"></div>
 	</section>
-			</div>
+	{if !empty($wslist)}
+	<section class="detailborder">
+	    <div class="detailmain Dynamic">        
+	        <span class="span1">无私支持列表</span>
+	        <span class="span3"><i class="fa fa-angle-right "></i></span>
+	    </div>
+	    <div class="critical_ul">
+	        <ul>
+	        	{loop $wslist $row}
+	            <li>
+	                <div class="uer_pic"><img src="{if !empty($row['avatar'])}{$row['avatar']}{else}./resource/images/heading.jpg{/if}" width="44" height="44"></div>
+	                <div class="comment">
+	                    <h4>{if !empty($row['nickname'])}{$row['nickname']}{else}匿名{/if}<p style="float: right;color: #333;font-size: 10px;">{php echo date('m-d H:i:s',$row['createtime'])}</p></h4>
+	                    <div class="details">
+	                    	<span style="color: #f63;">{$row['price']}元</span>
+	                    	<span style="font-size: 12px;color: #333;">感想：{$row['remark']}</span>
+	                    </div>
+	                </div>
+	            </li>
+	            {/loop} 
+	        </ul>
+	    </div>
+    	<div class="blank"></div>
+	</section>
+	{/if}
+</div>
 <div class="hide" id="dedicate_demo">
 	<div class="dedicate_box">
 		<form class="ajax_form_dedicate" action="{php echo $this->createMobileUrl('wsconfirm')}" method="post">

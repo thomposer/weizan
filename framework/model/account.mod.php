@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -64,7 +64,10 @@ function uni_permission($uid = 0, $uniacid = 0) {
 	$pars[':uid'] = $uid;
 	$pars[':uniacid'] = $uniacid;
 	$role = pdo_fetchcolumn($sql, $pars);
-	return in_array($role, array('manager', 'owner')) ? 'manager' : 'operator';
+	if(in_array($role, array('manager', 'owner'))) {
+		$role = 'manager';
+	}
+	return $role;
 }
 
 
@@ -331,18 +334,37 @@ function uni_templates() {
 }
 
 
-function uni_setting($uniacid = 0, $fields = '*', $force_update = false) {
+function uni_setting_save($name, $value) {
+	global $_W;
+	if (empty($name)) {
+		return false;
+	}
+	if (is_array($value)) {
+		$value = serialize($value);
+	}
+	$unisetting = pdo_get('uni_settings', array('uniacid' => $_W['uniacid']), array('uniacid'));
+	if (!empty($unisetting)) {
+		pdo_update('uni_settings', array($name => $value), array('uniacid' => $_W['uniacid']));
+	} else {
+		pdo_insert('uni_settings', array($name => $value, 'uniacid' => $_W['uniacid']));
+	}
+	$cachekey = "unisetting:{$_W['uniacid']}";
+	cache_delete($cachekey);
+	return true;
+}
+
+
+function uni_setting_load($name = '', $uniacid = 0) {
 	global $_W;
 	$uniacid = empty($uniacid) ? $_W['uniacid'] : $uniacid;
 	$cachekey = "unisetting:{$uniacid}";
-	$unisetting = array();
-	if(!$force_update) {
-		$unisetting = cache_load($cachekey);
-	}
+	$unisetting = cache_load($cachekey);
 	if (empty($unisetting)) {
-		$unisetting = pdo_fetch("SELECT * FROM " . tablename('uni_settings') . " WHERE uniacid = :uniacid", array(':uniacid' => $uniacid));
+		$unisetting = pdo_get('uni_settings', array('uniacid' => $uniacid));
 		if (!empty($unisetting)) {
-			$serialize = array('site_info', 'menuset', 'stat', 'oauth', 'passport', 'uc', 'notify', 'creditnames', 'default_message', 'creditbehaviors', 'shortcuts', 'payment', 'recharge', 'tplnotice');
+			$serialize = array('site_info', 'stat', 'oauth', 'passport', 'uc', 'notify', 
+								'creditnames', 'default_message', 'creditbehaviors', 'shortcuts', 'payment', 
+								'recharge', 'tplnotice', 'mcplugin');
 			foreach ($unisetting as $key => &$row) {
 				if (in_array($key, $serialize)) {
 					$row = iunserializer($row);
@@ -351,12 +373,28 @@ function uni_setting($uniacid = 0, $fields = '*', $force_update = false) {
 		}
 		cache_write($cachekey, $unisetting);
 	}
-	if (is_array($fields)) {
-		return array_elements($fields, $unisetting);
+	if (empty($unisetting)) {
+		return array();
 	}
-	return $unisetting;
+	if (empty($name)) {
+		return $unisetting;
+	}
+	if (!is_array($name)) {
+		$name = array($name);
+	}
+	return array_elements($name, $unisetting);
 }
 
+if (!function_exists('uni_setting')) {
+	function uni_setting($uniacid = 0, $fields = '*', $force_update = false) {
+		global $_W;
+		load()->model('account');
+		if ($fields == '*') {
+			$fields = '';
+		}
+		return uni_setting_load($fields, $uniacid);
+	}
+}
 
 function uni_account_default($uniacid = 0) {
 	global $_W;
@@ -379,7 +417,11 @@ function uni_user_permission_exist($uid = 0, $uniacid = 0) {
 	}
 	$is_exist = pdo_fetch('SELECT id FROM ' . tablename('users_permission') . ' WHERE `uid`=:uid AND `uniacid`=:uniacid', array(':uid' => $uid, ':uniacid' => $uniacid));
 	if(empty($is_exist)) {
-		return true;
+		if($_W['role'] != 'clerk') {
+			return true;
+		} else {
+			return error(-1, '');
+		}
 	} else {
 		return error(-1, '');
 	}

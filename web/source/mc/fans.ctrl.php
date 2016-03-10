@@ -146,7 +146,7 @@ if($do == 'display') {
 	}
 	$nickname = trim($_GPC['nickname']);
 	if(!empty($nickname)) {
-		$condition .= " AND nickname LIKE '%{$nickname}%'";
+		$condition .= " AND ((nickname LIKE '%{$nickname}%') OR (`openid`='{$nickname}'))";
 	}
 	$starttime = empty($_GPC['time']['start']) ? strtotime('-60 days') : strtotime($_GPC['time']['start']);
 	$endtime = empty($_GPC['time']['end']) ? TIMESTAMP + 86399 : strtotime($_GPC['time']['end']) + 86399;

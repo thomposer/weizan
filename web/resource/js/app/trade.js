@@ -118,14 +118,6 @@ define(['bootstrap'], function($){
 			'							</td>'+
 			'						</tr>'+
 			'						<tr>'+
-			'							<th>店员密码</th>'+
-			'							<td>'+
-			'								<div class="form-group">'+
-			'									<input type="password" name="password" class="form-control">'+
-			'								</div>'+
-			'							</td>'+
-			'						</tr>'+
-			'						<tr>'+
 			'							<th>备注</th>'+
 			'							<td>'+
 			'								<textarea name="remark" class="form-control" cols="81"></textarea>'+
@@ -209,22 +201,6 @@ define(['bootstrap'], function($){
 							regexp: {
 								regexp: reg_credit,
 								message: '最多只保留小数点后2位的正数'
-							}
-						}
-					},
-					password: {
-						validators: {
-							notEmpty: {
-								message: '店员密码不能为空'
-							},
-							remote: {
-								url: "./index.php?c=mc&a=trade&do=clerk",
-								data: function(validator) {
-									return {
-										data: validator.getFieldElements('password').val()
-									};
-								},
-								message: '店员密码错误'
 							}
 						}
 					}
@@ -637,14 +613,6 @@ define(['bootstrap'], function($){
 			'							</td>'+
 			'						</tr>'+
 			'						<tr>'+
-			'							<th>店员密码</th>'+
-			'							<td>'+
-			'								<div class="form-group">'+
-			'									<input type="password" name="password" class="form-control">'+
-			'								</div>'+
-			'							</td>'+
-			'						</tr>'+
-			'						<tr>'+
 			'							<th>备注</th>'+
 			'							<td>'+
 			'								<textarea name="remark" class="form-control" cols="81"></textarea>'+
@@ -683,22 +651,6 @@ define(['bootstrap'], function($){
 							regexp: {
 								regexp: /^[+-]?(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/i,
 								message: '最多只保留小数点后2位的正数'
-							}
-						}
-					},
-					password: {
-						validators: {
-							notEmpty: {
-								message: '店员密码不能为空'
-							},
-							remote: {
-								url: "./index.php?c=mc&a=trade&do=clerk",
-								data: function(validator) {
-									return {
-										data: validator.getFieldElements('password').val()
-									};
-								},
-								message: '店员密码错误'
 							}
 						}
 					}
@@ -829,14 +781,6 @@ define(['bootstrap'], function($){
 			'								</div>'+
 			'							</td>'+
 			'						</tr>'+
-			'						<tr>'+
-			'							<th>店员密码</th>'+
-			'							<td>'+
-			'								<div class="form-group">'+
-			'									<input type="password" name="password" class="form-control">'+
-			'								</div>'+
-			'							</td>'+
-			'						</tr>'+
 			'					</table>'+
 			'				</div>'+
 			'				<div class="modal-footer">'+
@@ -859,22 +803,6 @@ define(['bootstrap'], function($){
 						validators: {
 							notEmpty: {
 								message: '请填写用户手机或UID'
-							}
-						}
-					},
-					password: {
-						validators: {
-							notEmpty: {
-								message: '店员密码不能为空'
-							},
-							remote: {
-								url: "./index.php?c=mc&a=trade&do=clerk",
-								data: function(validator) {
-									return {
-										data: validator.getFieldElements('password').val()
-									};
-								},
-								message: '店员密码错误'
 							}
 						}
 					}
@@ -1020,14 +948,6 @@ define(['bootstrap'], function($){
 			'								</div>'+
 			'							</td>'+
 			'						</tr>'+
-			'						<tr>'+
-			'							<th>店员密码</th>'+
-			'							<td>'+
-			'								<div class="form-group">'+
-			'									<input type="password" name="password" class="form-control">'+
-			'								</div>'+
-			'							</td>'+
-			'						</tr>'+
 			'					</table>'+
 			'				</div>'+
 			'				<div class="modal-footer">'+
@@ -1066,22 +986,6 @@ define(['bootstrap'], function($){
 									};
 								},
 								message: '卡号已经被其他用户使用'
-							}
-						}
-					},
-					password: {
-						validators: {
-							notEmpty: {
-								message: '店员密码不能为空'
-							},
-							remote: {
-								url: "./index.php?c=mc&a=trade&do=clerk",
-								data: function(validator) {
-									return {
-										data: validator.getFieldElements('password').val()
-									};
-								},
-								message: '店员密码错误'
 							}
 						}
 					}

@@ -792,6 +792,14 @@ img.small{
     max-width: 44px;
     margin-left: 10px
 }
+.bottom-fanhui-button {
+    background-image: url(../images/fanhui.png);
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    max-width: 44px;
+    margin-left: 10px
+}
 
 
 .btn_zan {

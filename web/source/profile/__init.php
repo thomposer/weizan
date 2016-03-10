@@ -1,11 +1,11 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 if($controller == 'profile' && $action == 'notify') { 
-	define('FRAME', 'mc');
+	define('FRAME', 'setting');
 } elseif(empty($_GPC['m']) && $action != 'module') {
 	define('FRAME', 'setting');
 } else {

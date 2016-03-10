@@ -21,7 +21,7 @@
 			<div class="name"><a href="{php echo $this->createMobileUrl('detail', array('id' => $g['id']))}">{$g['title']}</a></div>
 			<div class="price">
 				<span>{$g['marketprice']} 元{if $g['unit']} / {$g['unit']}{/if}</span>
-				<span class="num">{$goodsid['total']}  {if $g['unit']} {$g['unit']}{/if}</span>
+				<span class="num">{$g['total']}  {if $g['unit']} {$g['unit']}{/if}</span>
 			</div>
 		</div>
 	</div>
@@ -116,5 +116,5 @@
 	});
 </script>
 
-{template 'footer'}
+{template 'footer-base'}
 {template 'footerbar'}

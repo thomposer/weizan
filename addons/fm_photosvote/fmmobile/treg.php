@@ -659,7 +659,7 @@ defined('IN_IA') or exit('Access Denied');
 					'xingqu'  => $_GPC["xingqu"],
 					'address'  => $_GPC["address"],
 					'tagid' => $_GPC['tagid'],
-					'status'  => $reply['tpsh'] == 1 ? '2' : '1',
+					//'status'  => $reply['tpsh'] == 1 ? '2' : '1',
 					'lastip' => getip(),
 					'lasttime' => $now,
 				);

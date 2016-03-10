@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 load()->model('app');
@@ -161,9 +161,11 @@ if ($do == 'card') {
 		$setting['background'] = iunserializer($setting['background']);
 		$setting['fields'] = iunserializer($setting['fields']);
 		$setting['grant'] = iunserializer($setting['grant']);
-		$coupon_id = intval($setting['grant']['coupon']);
-		if($coupon_id > 0) {
-			$coupon = pdo_fetch('SELECT couponid,title,type FROM ' . tablename('activity_coupon') . ' WHERE uniacid = :uniacid AND couponid = :couponid', array(':uniacid' => $_W['uniacid'], ':couponid' => $coupon_id));
+		if(is_array($setting['grant'])) {
+			$coupon_id = intval($setting['grant']['coupon']);
+			if($coupon_id > 0) {
+				$coupon = pdo_fetch('SELECT couponid,title,type FROM ' . tablename('activity_coupon') . ' WHERE uniacid = :uniacid AND couponid = :couponid', array(':uniacid' => $_W['uniacid'], ':couponid' => $coupon_id));
+			}
 		}
 	} else {
 		message('公众号尚未开启会员卡功能', url('mc'), 'error');
@@ -257,39 +259,40 @@ if ($do == 'card') {
 				mc_update($_W['member']['uid'], $data);
 			}
 						$notice = '';
-			if($setting['grant']['credit1'] > 0) {
-				$log = array(
-					$_W['member']['uid'],
-					"领取会员卡，赠送{$setting['grant']['credit1']}积分"
-				);
-				mc_credit_update($_W['member']['uid'], 'credit1', $setting['grant']['credit1'], $log);
-				$notice .= "赠送【{$setting['grant']['credit1']}】积分";
-			}
-			if($setting['grant']['credit2'] > 0) {
-				$log = array(
-					$_W['member']['uid'],
-					"领取会员卡，赠送{$setting['credit2']['credit1']}余额"
-				);
-				mc_credit_update($_W['member']['uid'], 'credit2', $setting['grant']['credit2'], $log);
-				$notice .= ",赠送【{$setting['grant']['credit2']}】余额";
-			}
-			if($setting['grant']['coupon'] > 0 && !empty($coupon)) {
-				if($coupon['type'] == 1) {
-					$status = activity_coupon_grant($_W['member']['uid'], $coupon['couponid'], 'card', '领取会员卡，赠送优惠券');
-				} else {
-					$status = activity_token_grant($_W['member']['uid'], $coupon['couponid'], 'card', '领取会员卡，赠送优惠券');
+			if(is_array($setting['grant'])) {
+				if($setting['grant']['credit1'] > 0) {
+					$log = array(
+						$_W['member']['uid'],
+						"领取会员卡，赠送{$setting['grant']['credit1']}积分"
+					);
+					mc_credit_update($_W['member']['uid'], 'credit1', $setting['grant']['credit1'], $log);
+					$notice .= "赠送【{$setting['grant']['credit1']}】积分";
 				}
-				if(!is_error($status)) {
-					$notice .= ",赠送【{$coupon['title']}】优惠券";
+				if($setting['grant']['credit2'] > 0) {
+					$log = array(
+						$_W['member']['uid'],
+						"领取会员卡，赠送{$setting['credit2']['credit1']}余额"
+					);
+					mc_credit_update($_W['member']['uid'], 'credit2', $setting['grant']['credit2'], $log);
+					$notice .= ",赠送【{$setting['grant']['credit2']}】余额";
+				}
+				if($setting['grant']['coupon'] > 0 && !empty($coupon)) {
+					if($coupon['type'] == 1) {
+						$status = activity_coupon_grant($_W['member']['uid'], $coupon['couponid'], 'card', '领取会员卡，赠送优惠券');
+					} else {
+						$status = activity_token_grant($_W['member']['uid'], $coupon['couponid'], 'card', '领取会员卡，赠送优惠券');
+					}
+					if(!is_error($status)) {
+						$notice .= ",赠送【{$coupon['title']}】优惠券";
+					}
 				}
 			}
-
 			$time = date('Y-m-d H:i');
 			$url = murl('mc/bond/mycard/', array(), true, true);
-			$info = "【{$_W['account']['name']}】- 领取会员卡通知\n";
-			$info .= "您在{$time}成功领取会员卡，{$notice}。\n\n";
+			$title = "【{$_W['account']['name']}】- 领取会员卡通知\n";
+			$info = "您在{$time}成功领取会员卡，{$notice}。\n\n";
 			$info .= "<a href='{$url}'>点击查看详情</a>";
-			$status = mc_notice_custom_text($info, $_W['openid']);
+			$status = mc_notice_custom_text($_W['openid'], $title, $info);
 			message("领取会员卡成功<br>{$notice}", url('mc/bond/mycard'), 'success');
 		} else {
 			message('领取会员卡失败.', referer(), 'error');
@@ -310,27 +313,18 @@ if ($do == 'mycard') {
 		$setting = pdo_fetch('SELECT * FROM ' . tablename('mc_card') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
 		if(!empty($setting)) {
 			$setting['color'] = iunserializer($setting['color']);
-			$setting['background'] = iunserializer($setting['background']);
-			if(!empty($setting['discount']) && $setting['discount_type'] > 0) {
-				$setting['discount'] = iunserializer($setting['discount']);
-			}
-			if(!empty($setting['nums']) && $setting['nums_status'] == 1) {
-				$setting['nums'] = iunserializer($setting['nums']);
-			}
-			if(!empty($setting['times']) && $setting['times_status'] == 1) {
-				$setting['times'] = iunserializer($setting['times']);
-			}
-			$unisetting = uni_setting($_W['uniacid'], array('recharge'));
-			$recharge =  $unisetting['recharge'];
+			$setting['background'] = iunserializer($setting['background']);;
 		}
 	}
+	load()->model('card');
+	$notice_count = card_notice_stat();
 }
 
 
 if($do == 'consume') {
 	load()->model('card');
 	$setting = card_setting();
-	$stores = pdo_fetchall('SELECT id,business_name FROM ' . tablename('activity_stores') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']), 'id');
+		$stores = pdo_fetchall('SELECT id,business_name FROM ' . tablename('activity_stores') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']), 'id');
 
 	if(checksubmit()) {
 		$credit = floatval($_GPC['credit']);

@@ -17,7 +17,6 @@ class Fm_photosvoteModuleReceiver extends WeModuleReceiver
         $openid  = $this->message['from'];
         $event   = $this->message['event'];
         $cfg     = $this->module['config'];
-        file_put_contents(IA_ROOT . '/addons/fm_photosvote/test/fm_test.txt', iserializer($event));
         if ($event == 'unsubscribe') {
             $record = array(
                 'updatetime' => TIMESTAMP,
@@ -57,33 +56,14 @@ class Fm_photosvoteModuleReceiver extends WeModuleReceiver
             }
         } elseif ($event == 'subscribe') {
             if ($cfg['oauthtype'] == 2) {
-                $wechats      = pdo_fetch("SELECT * FROM " . tablename('account_wechats') . " WHERE uniacid = :uniacid ", array(
-                    ':uniacid' => $_W['uniacid']
-                ));
-                $token        = iunserializer($wechats['access_token']);
                 $arrlog       = pdo_fetch("SELECT * FROM " . tablename('mc_mapping_fans') . " WHERE uniacid = :uniacid AND openid = :openid", array(
                     ':uniacid' => $_W['uniacid'],
                     ':openid' => $openid
                 ));
-                $access_token = $token['token'];
-                $expire       = $token['expire'];
-                if (time() >= $expire || empty($access_token)) {
-                    $url                 = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" . $wechats['key'] . "&secret=" . $wechats['secret'];
-                    $html                = file_get_contents($url);
-                    $arr                 = json_decode($html, true);
-                    $access_token        = $arr['access_token'];
-                    $record              = array();
-                    $record['token']     = $access_token;
-                    $record['expire']    = time() + 3600;
-                    $row                 = array();
-                    $row['access_token'] = iserializer($record);
-                    pdo_update('account_wechats', $row, array(
-                        'uniacid' => $_W['uniacid']
-                    ));
-                }
-                $url  = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" . $access_token . "&openid=" . $openid . "&lang=zh_CN";
-                $html = file_get_contents($url);
-                $re   = @json_decode($html, true);
+                $access_token = WeAccount::token();
+                $url          = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" . $access_token . "&openid=" . $openid . "&lang=zh_CN";
+                $html         = file_get_contents($url);
+                $re           = @json_decode($html, true);
                 if (!empty($arrlog)) {
                     $data = array(
                         'nickname' => $re['nickname'],

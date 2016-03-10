@@ -1,10 +1,13 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('wechat_consume');
+load()->model('mc');
+
+$_W['page']['title'] = '卡券核销-微信卡券';
 $dos = array('account', 'record');
 $do = in_array($do, $dos) ? $do : 'record';
 if($do == 'record') {
@@ -62,6 +65,9 @@ if($do == 'record') {
 				if($da['outer_id'] > 0) {
 					$outer_ids[] = $da['outer_id'];
 				}
+				$operator = mc_account_change_operator($da['clerk_type'], $da['store_id'], $da['clerk_id']);
+				$da['clerk_cn'] = $operator['clerk_cn'];
+				$da['store_cn'] = $operator['store_cn'];
 			}
 
 			if(!empty($openids)) {
@@ -82,9 +88,6 @@ if($do == 'record') {
 	}
 
 	if($op == 'unavailable') {
-		if($_W['role'] == 'operator') {
-			message('您属于公众号操作员，没有使用该功能的权限', referer(), 'error');
-		}
 		$id = intval($_GPC['id']);
 		$del = intval($_GPC['del']);
 		$record = pdo_fetch('SELECT code,status FROM ' . tablename('coupon_record') . ' WHERE acid = :acid AND id = :id', array(':acid' => $acid, ':id' => $id));
@@ -102,7 +105,7 @@ if($do == 'record') {
 				$message = "<a href='{$url_1}' class='btn btn-default'>否</a> <a href='{$url_2}' class='btn btn-primary'>是</a> ";
 				message($status['message'] . " <br>是否强制删除本地数据 {$message}", '', 'error');
 			} else {
-				pdo_update('coupon_record', array('status' => 2, 'usetime' => TIMESTAMP), array('acid' => $acid, 'code' => $record['code'], 'id' => $id));
+				pdo_update('coupon_record', array('status' => 2, 'clerk_name' => $_W['user']['name'], 'clerk_id' => $_W['user']['clerk_id'], 'store_id' => $_W['user']['store_id'], 'clerk_type' => $_W['user']['clerk_type'], 'usetime' => TIMESTAMP), array('acid' => $acid, 'code' => $record['code'], 'id' => $id));
 			}
 		}
 		if($del == 1) {
@@ -115,18 +118,8 @@ if($do == 'record') {
 	if($op == 'consume') {
 		$id = intval($_GPC['id']);
 		$record = pdo_fetch('SELECT code,status FROM ' . tablename('coupon_record') . ' WHERE acid = :acid AND id = :id', array(':acid' => $acid, ':id' => $id));
-
 		if(empty($record)) {
 			message('对应code码不存在', referer(), 'error');
-		}
-		$pwd = trim($_GPC['pdw']);
-		if(empty($pwd)) {
-			message('请输入店员密码', referer(), 'error');
-		}
-		$sql = 'SELECT * FROM ' . tablename('activity_coupon_password') . " WHERE `uniacid` = :uniacid AND `password` = :password";
-		$clerk = pdo_fetch($sql, array(':uniacid' => $_W['uniacid'], ':password' => $pwd));
-		if(empty($clerk)) {
-			message('店员密码错误', referer(), 'error');
 		}
 		if($record['status'] == 1) {
 			load()->classs('coupon');
@@ -135,7 +128,7 @@ if($do == 'record') {
 			if(is_error($status)) {
 				message($status['message'], '', 'error');
 			} else {
-				pdo_update('coupon_record', array('status' => 3, 'clerk_name' => $clerk['name'], 'usetime' => TIMESTAMP), array('acid' => $acid, 'code' => $record['code'], 'id' => $id));
+				pdo_update('coupon_record', array('status' => 3, 'clerk_name' => $_W['user']['name'], 'clerk_id' => $_W['user']['clerk_id'], 'store_id' => $_W['user']['store_id'], 'clerk_type' => $_W['user']['clerk_type'], 'usetime' => TIMESTAMP), array('acid' => $acid, 'code' => $record['code'], 'id' => $id));
 			}
 		}
 		message('核销卡券成功', referer(), 'success');

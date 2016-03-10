@@ -67,9 +67,19 @@
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">是否添加微站首页导航</label>
 					<div class="col-sm-8 col-xs-12">
-						<label for="isnav_1" class="radio-inline"><input type="radio" name="isnav" id="isnav_1" value="1" autocomplete="off" {if !empty($category['nid'])} checked{/if}/> 是</label>
-						<label for="isnav_2" class="radio-inline"><input type="radio" name="isnav" id="isnav_2" value="0" autocomplete="off" {if empty($category['nid'])} checked{/if}/> 否</label>
+						<label for="isnav_1" class="radio-inline" onclick="$('.js-site-selector').show();"><input type="radio" name="isnav" id="isnav_1" value="1" autocomplete="off" {if !empty($category['nid'])} checked{/if}/> 是</label>
+						<label for="isnav_2" class="radio-inline" onclick="$('.js-site-selector').hide();"><input type="radio" name="isnav" id="isnav_2" value="0" autocomplete="off" {if empty($category['nid'])} checked{/if}/> 否</label>
 						<div class="help-block">开启此选项后,系统在微站首页导航自动生成以分类名称为导航名称的记录.关闭此选项后,系统将删除对应的导航记录</div>
+					</div>
+				</div>
+				<div class="form-group js-site-selector" {if empty($category['nid'])} style="display:none;"{/if}>
+					<label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">分配到微站</label>
+					<div class="col-sm-8 col-xs-12">
+						<select class="form-control" name="multiid">
+							{loop $multis $multi}
+								<option value="{$multi['id']}" {if $category['nav']['multiid'] == $multi['id'] || $_GPC['mtid'] == $multi['id']}selected{/if}>{$multi['title']}{if $multi['id'] == $default_site}[默认微站]{/if}</option>
+							{/loop}
+						</select>
 					</div>
 				</div>
 				<div class="form-group">

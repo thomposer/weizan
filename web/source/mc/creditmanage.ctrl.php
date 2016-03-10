@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('mc_creditmanage');
@@ -87,7 +87,7 @@ if($do == 'display') {
 
 if($do == 'manage') {
 	load()->model('mc');
-	$clerk = pdo_get('activity_coupon_password', array('uniacid' => $_W['uniacid'], 'password' => trim($_GPC['password'])));
+	$clerk = pdo_get('activity_clerks', array('uniacid' => $_W['uniacid'], 'password' => trim($_GPC['password'])));
 	if(empty($clerk)) {
 		message('店员密码错误');
 	}

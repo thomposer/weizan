@@ -450,13 +450,20 @@ class Mon_EggModuleSite extends WeModuleSite
 		if (!empty($_W['fans']['follow'])){
 			$follow=2;
 		}
-		//$follow = 1;
+		//$follow = 2;
 		include $this->template("index");
 	}
 
 	function getUserSystemCredit() {
 		load()->model('mc');
 		$uid = mc_openid2uid($this->getOpenId());
+		$result = mc_credit_fetch($uid);
+		return $result['credit1'];
+	}
+
+	function getUserSystemCreditByOpenid($openid) {
+		load()->model('mc');
+		$uid = mc_openid2uid($openid);
 		$result = mc_credit_fetch($uid);
 		return $result['credit1'];
 	}
@@ -497,12 +504,24 @@ class Mon_EggModuleSite extends WeModuleSite
 			die(json_encode($res));
 		}
 
+
+
 		$leftCount = $this->getLeftCountAndShare($egg, $openid);
 
 		if ($leftCount <= 0) {
 			$res['code'] = 506;
 			$res['msg'] = "您今天的机会已用完，下次再来参加吧!";
 			die(json_encode($res));
+		}
+
+		if ($egg['xhjf_enable'] == 1) {
+			$userCredit = $this->getUserSystemCredit();
+
+			if ($userCredit - $egg['xhjf'] < 0) {
+				$res['code'] = 5041;
+				$res['msg'] = "您的积分已不够砸金蛋，攒足积分再来玩吧!";
+				die(json_encode($res));
+			}
 		}
 
 		$dbUser = DBUtil::findUnique(DBUtil::$TABLE_EGG_USER, array(":egid" => $egid, ":openid" => $openid));
@@ -814,6 +833,23 @@ class Mon_EggModuleSite extends WeModuleSite
 			'createtime' => TIMESTAMP
 		);
 		DBUtil::create(DBUtil::$TABLE_EGG_RECORD, $recordData);
+
+
+		$egg = DBUtil::findById(DBUtil::$TABLE_EGG, $egid);
+
+		if ($egg['xhjf_enable'] == 1) {
+			$userCredit = $this->getUserSystemCreditByOpenid($openid);
+
+			if ($userCredit - $egg['xhjf'] >= 0) {
+
+
+				load()->model('mc');
+				$muid = mc_openid2uid($openid);
+				$result = mc_credit_update($muid, 'credit1', -$egg['xhjf'], array($muid,'砸金蛋消耗积分'));
+
+			}
+		}
+
 
 	}
 

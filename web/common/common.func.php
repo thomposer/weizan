@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -77,6 +77,9 @@ function checkaccount() {
 
 function buildframes($frame = array('platform')){
 	global $_W, $_GPC;
+	if($_W['role'] == 'clerk') {
+		return false;
+	}
 	$GLOBALS['top_nav'] = pdo_fetchall('SELECT name, title, append_title FROM ' . tablename('core_menu') . ' WHERE pid = 0 AND is_display = 1 ORDER BY displayorder DESC');
 	$ms = cache_load('system_frame');
 	if(empty($ms)) {
@@ -296,7 +299,7 @@ function buildframes($frame = array('platform')){
 function system_modules() {
 	return array(
 		'basic', 'news', 'music', 'userapi', 'recharge', 
-		'custom', 'images', 'video', 'voice', 'chats', 'wxcard'
+		'custom', 'images', 'video', 'voice', 'chats', 'wxcard', 'paycenter'
 	);
 }
 

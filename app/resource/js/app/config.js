@@ -18,6 +18,7 @@ require.config({
 		'iscroll': '../lib/iscroll-lite',
 		'swiper': '../../components/swiper/swiper.min',
 		'calendar': '../lib/calendar',
+		'jquery.qrcode': '../../../../web/resource/js/lib/jquery.qrcode.min'
 	},
 	shim:{
 		'angular': {
@@ -54,6 +55,10 @@ require.config({
 			deps: ['jquery']
 		},
 		'calendar': {
+			exports: "$",
+			deps: ['jquery']
+		},
+		'jquery.qrcode': {
 			exports: "$",
 			deps: ['jquery']
 		}

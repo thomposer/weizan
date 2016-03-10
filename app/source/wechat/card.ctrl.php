@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $dos = array('display', 'detail', 'use', 'qr');
@@ -78,7 +78,7 @@ if($do == 'use') {
 
 	if(checksubmit()) {
 		$password = trim($_GPC['password']);
-		$clerk = pdo_get('activity_coupon_password', array('uniacid' => $_W['uniacid'], 'password' => $password));
+		$clerk = pdo_get('activity_clerks', array('uniacid' => $_W['uniacid'], 'password' => $password));
 		if(empty($clerk)) {
 			message('店员密码错误', referer(), 'error');
 		}
@@ -90,7 +90,7 @@ if($do == 'use') {
 		if(is_error($status)) {
 			message($status['message'], referer(), 'error');
 		}
-		pdo_update('coupon_record', array('status' => 3, 'clerk_id' => $clerk['id'], 'clerk_name' => $clerk['name'], 'usetime' => TIMESTAMP), array('acid' => $_W['acid'], 'card_id' => $card_id, 'openid' => $openid, 'code' => $code));
+		pdo_update('coupon_record', array('status' => 3, 'clerk_id' => $clerk['id'], 'clerk_type' => 3, 'store_id' => $clerk['storeid'], 'clerk_name' => $clerk['name'], 'usetime' => TIMESTAMP), array('acid' => $_W['acid'], 'card_id' => $card_id, 'openid' => $openid, 'code' => $code));
 		message('核销微信卡券成功', url('mc/home'), 'success');
 	}
 }

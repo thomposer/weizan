@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('platform_special');
@@ -64,27 +64,44 @@ if($do == 'message') {
 	$mtypes['trace'] = '上报地理位置';
 	$mtypes['link'] = '链接消息';
 	$mtypes['merchant_order'] = '微小店消息';
+	$mtypes['ShakearoundUserShake'] = '摇一摇:开始摇一摇消息';
+	$mtypes['ShakearoundLotteryBind'] = '摇一摇:摇到了红包消息';
+	$mtypes['WifiConnected'] = 'Wifi连接成功消息';
+	
 	if(checksubmit()) {
-		$s = array_elements(array_keys($mtypes), $_GPC);
 		$ms = array();
 		foreach($_W['account']['modules'] as $m) {
 			$ms[] = $m['name'];
 		}
-		foreach($s as $k => $v) {
-			if($v != '' && !in_array($v, $ms)) {
-				message($mtypes[$k] . "选择的处理模块无效. ");
+		$setting = $_GPC['setting'];
+		foreach($setting as $modulename => &$message_handler) {
+			if (empty($message_handler['module']) && empty($message_handler['keyword'])) {
+				unset($setting[$modulename]);
+			}
+			if(!empty($message_handler['module']) && $message_handler['type'] == 'module' && !in_array($message_handler['module'], $ms)) {
+				message($message_handler['module'] . "选择的处理模块无效. ");
 			}
 		}
-		$row = array();
-		$row['default_message'] = iserializer($s);
-		if(pdo_update('uni_settings', $row, array('uniacid' => $_W['uniacid']))!== FALSE) {
-			cache_delete("unisetting:{$_W['uniacid']}");
+		if(uni_setting_save('default_message', $setting)) {
 			message('保存特殊类型消息处理成功.', 'refresh');
 		} else {
 			message('保存失败, 请稍后重试. ');
 		}
 	}
-	$setting = uni_setting($_W['uniacid'], array('default_message'));
+	$setting = uni_setting_load('default_message', $_W['uniacid']);
+	$setting = $setting['default_message'];
+	if (!empty($setting)) {
+		foreach ($setting as $modulename => $row) {
+			if (!is_array($row)) {
+				$setting[$modulename] = array(
+					'type' => 'module',
+					'module' => $row,
+				);
+			}
+		}
+	} else {
+		$setting = array();
+	}
 	$ds = array();
 	foreach($mtypes as $k => $v) {
 		$row = array();
@@ -96,8 +113,6 @@ if($do == 'message') {
 				$row['handles'][] = array('name' => $m['name'], 'title' => $_W['account']['modules'][$m['name']]['title']);
 			}
 		}
-		$row['empty'] = empty($row['handles']);
-		$row['current'] = is_array($setting['default_message']) ? $setting['default_message'][$k] : '';
 		$ds[] = $row;
 	}
 	template('platform/special-message');

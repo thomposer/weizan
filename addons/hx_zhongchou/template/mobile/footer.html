@@ -45,13 +45,13 @@
 	}
 </script>
 <?php
-	$_share['title'] = !empty($_share['title']) ? $_share['title'] : $_W['account']['name'];
-	$_share['imgUrl'] = !empty($_share['imgUrl']) ? $_share['imgUrl'] : '';
+	$_share['title'] = !empty($_share['title']) ? $_share['title'] : $modulec['share_title'];
+	$_share['imgUrl'] = !empty($_share['imgUrl']) ? $_share['imgUrl'] : tomedia($modulec['share_img']);
 	if(isset($_share['content'])){
 		$_share['desc'] = $_share['content'];
 		unset($_share['content']);
 	}
-	$_share['desc'] = !empty($_share['desc']) ? $_share['desc'] : '';
+	$_share['desc'] = !empty($_share['desc']) ? $_share['desc'] : $modulec['share_description'];
 	$_share['desc'] = preg_replace('/\s/i', '', str_replace('	', '', cutstr(str_replace('&nbsp;', '', ihtmlspecialchars(strip_tags($_share['desc']))), 60)));
 	if(empty($_share['link'])) {
 		$_share['link'] = '';

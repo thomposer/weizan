@@ -1,9 +1,9 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
-if ($do == 'oauth' || $action == 'credit' || $action == 'passport' || $action == 'uc') {
+if ($do == 'oauth' || in_array($action, array('credit1', 'passport', 'uc', 'fields', 'tplnotice'))) {
 	define('FRAME', 'setting');
 } else {
 	define('FRAME', 'mc');
@@ -11,6 +11,11 @@ if ($do == 'oauth' || $action == 'credit' || $action == 'passport' || $action ==
 
 if($action == 'stat') {
 	define('ACTIVE_FRAME_URL', url('mc/trade'));
+} elseif($action == 'card') {
+	if(in_array($do, array('notice', 'credit', 'recommend', 'sign'))) {
+		define('ACTIVE_FRAME_URL', url('mc/card/other'));
+	}
 }
+
 $frames = buildframes(array(FRAME));
 $frames = $frames[FRAME];

@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 load()->func('communication');
@@ -42,9 +42,11 @@ if ($do == 'forward') {
 			$level = '2';
 		}
 	}
-	$account_found = pdo_get('account_wechats', array('account' => $account_info['authorizer_info']['alias']));
-	if (!empty($account_found)) {
-		message('公众号已经在系统中接入，是否要更改为授权接入方式？ <div><a class="btn btn-primary" href="' . url('account/auth/confirm', array('level' => $level, 'auth_refresh_token' => $auth_refresh_token, 'auth_appid' => $auth_appid, 'acid' => $account_found['acid'], 'uniacid' => $account_found['uniacid'])) . '">是</a> &nbsp;&nbsp;<a class="btn btn-default" href="index.php">否</a></div>', '', 'tips');
+	if (!empty($account_info['authorizer_info']['alias'])) {
+		$account_found = pdo_get('account_wechats', array('account' => $account_info['authorizer_info']['alias']));
+		if (!empty($account_found)) {
+			message('公众号已经在系统中接入，是否要更改为授权接入方式？ <div><a class="btn btn-primary" href="' . url('account/auth/confirm', array('level' => $level, 'auth_refresh_token' => $auth_refresh_token, 'auth_appid' => $auth_appid, 'acid' => $account_found['acid'], 'uniacid' => $account_found['uniacid'])) . '">是</a> &nbsp;&nbsp;<a class="btn btn-default" href="index.php">否</a></div>', '', 'tips');
+		}
 	}
 	$account_insert = array(
 			'name' => $account_info['authorizer_info']['nick_name'],
@@ -124,7 +126,7 @@ if ($do == 'forward') {
 	$qrcode = ihttp_request($account_info['authorizer_info']['qrcode_url']);
 	file_put_contents(IA_ROOT . '/attachment/headimg_'.$acid.'.jpg', $headimg['content']);
 	file_put_contents(IA_ROOT . '/attachment/qrcode_'.$acid.'.jpg', $qrcode['content']);
-	message('授权登录成功', url('account/display'), 'success');
+	message('授权登录成功', url('account/display', array('type' => '3')), 'success');
 } elseif ($do == 'confirm') {
 	$auth_refresh_token = $_GPC['auth_refresh_token'];
 	$auth_appid = $_GPC['auth_appid'];
@@ -146,7 +148,7 @@ if ($do == 'forward') {
 	cache_delete("jsticket:{$acid}");
 	cache_delete("cardticket:{$acid}");
 	cache_delete("account:auth:refreshtoken:{$acid}");
-	message('更改公众号授权接入成功', url('account/display'), 'success');
+	message('更改公众号授权接入成功', url('account/display', array('type' => '3')), 'success');
 } elseif ($do == 'ticket') {
 	$post = file_get_contents('php://input');
 	WeUtility::logging('debug', 'account-ticket' . $post);

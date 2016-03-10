@@ -1,193 +1,195 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-uni_user_permission_check('mc_card');
 $_W['page']['title'] = '会员卡管理 - 会员中心';
 
-$dos = array('display', 'manage', 'delete', 'coupon', 'submit', 'modal', 'record', 'notice', 'care', 'credit', 'recommend', 'stat');
-$do = in_array($do, $dos) ? $do : 'display';
+$dos = array('display', 'manage', 'delete', 'coupon', 'submit', 'modal', 'record', 'notice', 'credit', 'recommend', 'editor', 'sign','ajax');
+$do = in_array($do, $dos) ? $do : 'other';
 load()->model('mc');
 $setting = pdo_fetch("SELECT * FROM ".tablename('mc_card')." WHERE uniacid = '{$_W['uniacid']}'");
-if ($do == 'display') {
-	if ($_W['ispost'] && $_W['isajax']) {
-		$sql = 'SELECT `uniacid` FROM ' . tablename('mc_card') . " WHERE `uniacid` = :uniacid";
-		$status = pdo_fetch($sql, array(':uniacid' => $_W['uniacid']));
-		if (empty($status)) {
-			$open = array('uniacid' => $_W['uniacid']);
+
+if($do == 'ajax') {
+	$op = trim($_GPC['op']);
+	$sql = 'SELECT `uniacid` FROM ' . tablename('mc_card') . " WHERE `uniacid` = :uniacid";
+	$setting = pdo_fetch($sql, array(':uniacid' => $_W['uniacid']));
+	if($op == 'status') {
+		if(empty($setting)) {
+			$open = array(
+				'uniacid' => $_W['uniacid'],
+				'title' => '我的会员卡',
+				'format_type' => 1,
+				'fields' => iserializer(array(
+					array('title' => '姓名', 'require' => 1, 'bind' => 'realname'),
+					array('title' => '手机', 'require' => 1, 'bind' => 'mobile'),
+				)),
+				'status' => 1,
+			);
 			pdo_insert('mc_card', $open);
 		}
-		$data['status'] = intval($_GPC['status']);
-		if (false === pdo_update('mc_card', $data, array('uniacid' => $_W['uniacid']))) {
+		if (false === pdo_update('mc_card', array('status' => intval($_GPC['status'])), array('uniacid' => $_W['uniacid']))) {
 			exit('error');
 		}
-		exit('success');
-	}
-	$groups = $_W['account']['groups'];
-	$fields = mc_fields();
-	if (!empty($setting)) {
-		if(!empty($setting['color'])) {
-			$setting['color'] = iunserializer($setting['color']);
-		} else {
-			$setting['color'] = array();
+	} elseif($op == 'other') {
+		if(empty($setting)) {
+			exit('还没有开启会员卡,请先开启会员卡');
 		}
-		$setting['background'] = (array)iunserializer($setting['background']);
-		$setting['fields'] = iunserializer($setting['fields']);
-		if(!empty($setting['fields'])) {
-			foreach($setting['fields'] as $field) {
-				$re_fields[] = $field['bind'];
+		$field = trim($_GPC['field']);
+		if(!in_array($field, array('recommend_status', 'sign_status'))) {
+			exit('非法操作');
+		}
+		pdo_update('mc_card', array($field => intval($_GPC['status'])), array('uniacid' => $_W['uniacid']));
+	}
+	exit('success');
+}
+
+if($do == 'editor') {
+	uni_user_permission_check('mc_card_editor');
+	if (!empty($_GPC['wapeditor'])) {
+		$params = $_GPC['wapeditor']['params'];
+		if (empty($params)) {
+			message('请您先设计手机端页面.', '', 'error');
+		}
+		$params = json_decode(ihtml_entity_decode($params), true);
+		if (empty($params)) {
+			message('请您先设计手机端页面.', '', 'error');
+		}
+		$html = htmlspecialchars_decode($_GPC['wapeditor']['html'], ENT_QUOTES);
+		$html = str_replace(array("{\$_W['uniacid']}", "{\$_W['acid']}"), array($_W['uniacid'], $_W['acid']), $html);
+		
+		$basic = $params[0]['params'];
+		$activity = $params[1]['params'];
+		$nums = $params[2]['params'];
+		$times = $params[3]['params'];
+		$title = trim($basic['title']) ? trim($basic['title']) : message('名称不能为空');
+		$format_type = intval($basic['format_type']);
+		$format = trim($basic['format']);
+		if(!$format_type) {
+			if(empty($format)) {
+				message('卡号不能为空');
 			}
 		}
-		if(empty($setting['logo'])) {
-			$setting['logo'] = 'images/global/card/logo.png';
-		}
-		if(!empty($setting['discount'])) {
-			$setting['discount'] = iunserializer($setting['discount']);
-		} else {
-			$setting['discount'] = array();
-		}
-		if(!empty($setting['grant'])) {
-			$setting['grant'] = iunserializer($setting['grant']);
-			$coupon_id = intval($setting['grant']['coupon']);
-			if($coupon_id > 0) {
-				$coupon = pdo_fetch('SELECT * FROM ' . tablename('activity_coupon') . ' WHERE uniacid = :uniacid AND couponid = :couponid', array(':uniacid' => $_W['uniacid'], ':couponid' => $coupon_id));
+		if(!empty($basic['fields'])) {
+			foreach($basic['fields'] as $field) {
+				if(!empty($field['title']) && !empty($field['bind'])) {
+					$fields[] = $field;
+				}
 			}
-		} else {
-			$setting['grant'] = array();
 		}
-
-		if(!empty($setting['times'])) {
-			$setting['times'] = iunserializer($setting['times']);
-		} else {
-			$setting['times'] = array(
-				array('recharge' => 100, 'time' => 10),
-				array('recharge' => 200, 'time' => 20),
-				array('recharge' => 300, 'time' => 30)
-			);
+		if($basic['background']['type'] == 'system') {
+			$image = pathinfo($basic['background']['image']);
+			$basic['background']['image'] = $image['filename'];
 		}
-
-		if(!empty($setting['nums'])) {
-			$setting['nums'] = iunserializer($setting['nums']);
-		} else {
-			$setting['nums'] = array(
-				array('recharge' => 100, 'num' => 30),
-				array('recharge' => 200, 'num' => 60),
-				array('recharge' => 300, 'num' => 90)
-			);
-		}
-	}
-	$uni_setting = uni_setting();
-	$recharge = $uni_setting['recharge'];
-
-	if (checksubmit('submit')) {
-		if (empty($_GPC['title'])) {
-			message('请输入会员卡名称！');
-		}
-		if (empty($_GPC['format'])) {
-			message('请输入会员卡的卡号生成格式！');
-		}
-
-		$data = array(
-			'title' => $_GPC['title'],
-			'color' => iserializer(array(
-				'title' => $_GPC['color-title'],
-				'number' => $_GPC['color-number'],
-				'name' => $_GPC['color-name'],
-				'credit' => $_GPC['color-credit'],
-				'rank' => $_GPC['color-rank'],
-			)),
+		$update = array(
+			'title' => $title,
+			'format_type' => $basic['format_type'],
+			'format' => $format,
+			'color' => iserializer($basic['color']),
 			'background' => iserializer(array(
-				'background' => $_GPC['background'],
-				'image' => $_GPC[$_GPC['background'].'-bg'],
+				'background' => $basic['background']['type'],
+				'image' => $basic['background']['image'],
 			)),
-			'logo' => $_GPC['logo'],
-			'format' => $_GPC['format'],
-			'description' => trim($_GPC['description']),
-			'discount_type' => intval($_GPC['discount_type']),
-			'grant_rate' => intval($_GPC['grant_rate']),
-			'offset_rate' => intval($_GPC['offset_rate']),
-			'offset_max' => intval($_GPC['offset_max']),
+			'logo' => $basic['logo'],
+			'description' => trim($basic['description']),
+			'grant_rate' => intval($basic['grant_rate']),
+			'offset_rate' => intval($basic['offset_rate']),
+			'offset_max' => intval($basic['offset_max']),
+			'fields' => iserializer($fields),
+			'grant' => iserializer(
+				array(
+					'credit1' => intval($basic['grant']['credit1']),
+					'credit2' => intval($basic['grant']['credit2']),
+					'coupon' => intval($basic['grant']['coupon']),
+				)
+			),
+			'discount_type' => intval($activity['discount_type']),
+			'nums_status' => intval($nums['nums_status']),
+			'nums_text' => trim($nums['nums_text']),
+			'times_status' => intval($times['times_status']),
+			'times_text' => trim($times['times_text']),
+			'params' => json_encode($params),
+			'html' => $html
 		);
-				$grant = array(
-			'credit1' => intval($_GPC['grant']['credit1']),
-			'credit2' => intval($_GPC['grant']['credit2']),
-			'coupon' => intval($_GPC['grant']['coupon']),
-		);
-		$data['grant'] = iserializer($grant);
-
-				$discount = array();
-		foreach($groups as $row) {
-			$discount[$row['groupid']] = array(
-				'condition_1' => trim($_GPC['condition_1'][$row['groupid']]),
-				'discount_1' => trim($_GPC['discount_1'][$row['groupid']]),
-				'condition_2' => trim($_GPC['condition_2'][$row['groupid']]),
-				'discount_2' => trim($_GPC['discount_2'][$row['groupid']]),
-			);
-		}
-		$data['discount'] = iserializer($discount);
-
-		$data['times_status'] = intval($_GPC['times_status']);
-		$data['times_text'] = trim($_GPC['times_text']);
-		if(!empty($_GPC['times']['recharge'])) {
-			$data['times'] = array();
-			foreach($_GPC['times']['recharge'] as $key => $val) {
-				$val = floatval($val);
-				$time = intval($_GPC['times']['time'][$key]);
-				if($val <= 0 || $time <= 0) continue;
-				$data['times'][$val] = array(
-					'recharge' => $val,
-					'time' => $time
+		if($update['discount_type'] != 0 && !empty($activity['discounts'])) {
+			$update['discount'] = array();
+			foreach($activity['discounts'] as $discount) {
+				$groupid = intval($discount['groupid']);
+				if($groupid <= 0) continue;
+				$update['discount'][$groupid] = array(
+					'condition_1' => intval($discount['condition_1']),
+					'discount_1' => intval($discount['discount_1']),
+					'condition_2' => floatval($discount['condition_2']),
+					'discount_2' => floatval($discount['discount_2']),
 				);
 			}
-			$data['times'] = iserializer($data['times']);
+			$update['discount'] = iserializer($update['discount']);
 		}
 
-		$data['nums_status'] = intval($_GPC['nums_status']);
-		$data['nums_text'] = trim($_GPC['nums_text']);
-		if(!empty($_GPC['nums']['recharge'])) {
-			$data['nums'] = array();
-			foreach($_GPC['nums']['recharge'] as $key => $val) {
-				$val = floatval($val);
-				$num = intval($_GPC['nums']['num'][$key]);
-				if($val <= 0 || $num <= 0) continue;
-				$data['nums'][$val] = array(
-					'recharge' => $val,
+		if($update['nums_status'] != 0 && !empty($nums['nums'])) {
+			$update['nums'] = array();
+			foreach($nums['nums'] as $row) {
+				$num = floatval($row['num']);
+				$recharge = intval($row['recharge']);
+				if($num <= 0 || $recharge <= 0) continue;
+				$update['nums'][$recharge] = array(
+					'recharge' => $recharge,
 					'num' => $num
 				);
 			}
-			$data['nums'] = iserializer($data['nums']);
+			$update['nums'] = iserializer($update['nums']);
 		}
-
-		$data['fields'][] = array('title' => '姓名', 'require' => 1, 'bind' => 'realname');
-		$data['fields'][] = array('title' => '手机号', 'require' => 1, 'bind' => 'mobile');
-		if (!empty($_GPC['fields'])) {
-			foreach ($_GPC['fields']['title'] as $index => $row) {
-				if (empty($_GPC['fields']['title'][$index]) || $_GPC['fields']['bind'][$index] == 'mobile' || $_GPC['fields']['bind'][$index] == 'realname') {
-					continue;
-				}
-				$data['fields'][] = array(
-					'title' => $_GPC['fields']['title'][$index],
-					'require' => intval($_GPC['fields']['require'][$index]),
-					'bind' => $_GPC['fields']['bind'][$index],
+		if($update['times_status'] != 0 && !empty($times['times'])) {
+			$update['times'] = array();
+			foreach($times['times'] as $row) {
+				$time = intval($row['time']);
+				$recharge = intval($row['recharge']);
+				if($time <= 0 || $recharge <= 0) continue;
+				$update['times'][$recharge] = array(
+					'recharge' => $recharge,
+					'time' => $time
 				);
 			}
+			$update['times'] = iserializer($update['times']);
 		}
 
-		$data['fields'] = iserializer($data['fields']);
 		if (!empty($setting)) {
-			pdo_update('mc_card', $data, array('uniacid' => $_W['uniacid']));
+			pdo_update('mc_card', $update, array('uniacid' => $_W['uniacid']));
 		} else {
 			$data['uniacid'] = $_W['uniacid'];
-			pdo_insert('mc_card', $data);
+			pdo_insert('mc_card', $update);
 		}
-		message('会员卡设置成功！', url('mc/card/display'), 'success');
+		message('会员卡设置成功！', url('mc/card/editor'), 'success');
 	}
-	template('mc/card');
+	$unisetting = uni_setting_load('creditnames');
+	$fields_temp = mc_acccount_fields();
+	$fields = array();
+	foreach($fields_temp as $key => $val) {
+		$fields[] = array(
+			'title' => $val,
+			'bind' => $key
+		);
+	}
+
+	$discounts = array();
+	foreach($_W['account']['groups'] as $group) {
+		$discounts[] = array(
+			'groupid' => $group['groupid'],
+			'title' => $group['title'],
+			'credit' => $group['credit'],
+			'condition_1' => '',
+			'discount_1' => '',
+			'condition_2' => '',
+			'discount_2' => '',
+		);
+	}
+	template('mc/card-editor');
+	exit();
 }
 
 if ($do == 'manage') {
+	uni_user_permission_check('mc_card_manage');
 	if ($_W['ispost']) {
 		$status = array('status' => intval($_GPC['status']));
 		if (false === pdo_update('mc_card_members', $status, array('uniacid' => $_W['uniacid'], 'id' => $_GPC['cardid']))) {
@@ -196,7 +198,7 @@ if ($do == 'manage') {
 		exit('success');
 	}
 	if ($setting['status'] == 0) {
-		message('会员卡功能未开启', url('mc/card'), 'error');
+		message('会员卡功能未开启', url('mc/card/editor'), 'error');
 	}
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 10;
@@ -212,15 +214,6 @@ if ($do == 'manage') {
 		$where .= " AND a.status = :status";
 		$param[':status'] = $status;
 	}
-	$birth = isset($_GPC['birth']) ? intval($_GPC['birth']) : -1;
-	if ($birth >= 0) {
-		$time = strtotime(date('Y-m-d')) + $birth * 86400;
-		$month = date('m', $time);
-		$day = date('d', $time);
-		$where .= " AND (b.birthmonth = :month) AND (b.birthday = :day)";
-		$param[':month'] = $month;
-		$param[':day'] = $day;
-	}
 	$num = isset($_GPC['num']) ? intval($_GPC['num']) : -1;
 	if($num >= 0) {
 		if(!$num) {
@@ -229,7 +222,6 @@ if ($do == 'manage') {
 			$where .= " AND a.nums > 0";
 		}
 	}
-
 	$endtime = isset($_GPC['endtime']) ? intval($_GPC['endtime']) : -1;
 	if($endtime >= 0) {
 		$where .= " AND a.endtime <= :endtime";
@@ -240,29 +232,10 @@ if ($do == 'manage') {
 	if(!empty($keyword)) {
 		$where .= " AND (b.mobile LIKE '%{$keyword}%' OR b.realname LIKE '%{$keyword}%')";
 	}
-	$sql = 'SELECT a.*, b.realname, b.groupid, b.credit1, b.credit2, b.mobile, b. birthmonth, b.birthday FROM ' . tablename('mc_card_members') . " AS a LEFT JOIN " . tablename('mc_members') . " AS b ON a.uid = b.uid WHERE a.uniacid = :uniacid $where ORDER BY a.id DESC LIMIT ".($pindex - 1) * $psize.','.$psize;
+	$sql = 'SELECT a.*, b.realname, b.groupid, b.credit1, b.credit2, b.mobile FROM ' . tablename('mc_card_members') . " AS a LEFT JOIN " . tablename('mc_members') . " AS b ON a.uid = b.uid WHERE a.uniacid = :uniacid $where ORDER BY a.id DESC LIMIT ".($pindex - 1) * $psize.','.$psize;
 	$list = pdo_fetchall($sql, $param);
 	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_card_members') . " AS a LEFT JOIN " . tablename('mc_members') . " AS b ON a.uid = b.uid WHERE a.uniacid = :uniacid $where", $param);
 	$pager = pagination($total, $pindex, $psize);
-	foreach ($list as &$value) {
-		$value['is_birth'] = 0;
-		if($value['birthmonth'] == date('m') && $value['birthday'] == date('d')) {
-			$value['is_birth'] = 1;
-		}
-	}
-	$has_members = pdo_get('mc_card_members', array('uniacid' => $_W['uniacid']));
-	if($has_members) {
-		for($i = 0; $i < 3; $i++) {
-			$time = strtotime(date('Y-m-d')) + $i * 86400;
-			$month = date('m', $time);
-			$day = date('d', $time);
-			$uids = pdo_getall('mc_card_members', array('uniacid' => $_W['uniacid']), array('uid'));
-			$uids = implode(', ', array_keys($uids));
-			$sql = 'SELECT COUNT(*) FROM ' . tablename('mc_members') . " WHERE uniacid = :uniacid AND uid IN ({$uids})AND birthmonth = :month AND birthday = :day";
-			$param = array(':uniacid' => $_W['uniacid'], ':month' => $month, ':day' => $day);
-			$total[$i] = intval(pdo_fetchcolumn($sql, $param));
-		}
-	}
 	template('mc/card');
 }
 
@@ -452,6 +425,7 @@ if($do == 'record') {
 }
 
 if($do == 'notice') {
+	uni_user_permission_check('mc_card_other');
 	$op = trim($_GPC['op']) ? trim($_GPC['op']) : 'list';
 	if($op == 'list') {
 		$pindex = max(1, intval($_GPC['page']));
@@ -505,71 +479,8 @@ if($do == 'notice') {
 	template('mc/card-notice');
 }
 
-if($do == 'care') {
-	$op = trim($_GPC['op']) ? trim($_GPC['op']) : 'list';
-	if($op == 'list') {
-		$pindex = max(1, intval($_GPC['page']));
-		$psize = 30;
-		$limit = " ORDER BY id DESC LIMIT " . ($pindex -1) * $psize . ", {$psize}";
-
-		$where = ' WHERE uniacid = :uniacid';
-		$param = array(':uniacid' => $_W['uniacid']);
-
-		$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_card_care') . " {$where}", $param);
-		$cares = pdo_fetchall('SELECT * FROM ' . tablename('mc_card_care') . " {$where} {$limit}", $param);
-		$pager = pagination($total, $pindex, $psize);
-	}
-
-	if($op == 'post') {
-		$id = intval($_GPC['id']);
-		if($id > 0) {
-			$care = pdo_get('mc_card_care', array('uniacid' => $_W['uniacid'], 'id' => $id));
-			if(empty($care)) {
-				message('节日关怀不存在或已被删除', referer(), 'error');
-			}
-			if($care['couponid'] > 0) {
-				$coupon = pdo_get('activity_coupon', array('uniacid' => $_W['uniacid'], 'couponid' => $care['couponid']));
-			}
-		} else {
-			$care = array(
-				'time' => 18
-			);
-		}
-		if(checksubmit()) {
-			$title = trim($_GPC['title']) ? trim($_GPC['title']) : message('节日标题不能为空');
-			$data = array(
-				'uniacid' => $_W['uniacid'],
-				'title' => $title,
-				'type' => intval($_GPC['type']),
-				'groupid' => intval($_GPC['groupid']),
-				'credit1' => intval($_GPC['credit1']),
-				'credit2' => intval($_GPC['credit2']),
-				'couponid' => intval($_GPC['couponid']),
-				'granttime' => strtotime($_GPC['granttime']),
-				'days' => intval($_GPC['days']),
-				'time' => intval($_GPC['time']),
-				'show_in_card' => intval($_GPC['show_in_card']),
-				'content' => trim($_GPC['content']),
-				'sms_notice' => intval($_GPC['sms_notice']),
-			);
-			if($id > 0) {
-				pdo_update('mc_card_care', $data, array('uniacid' => $_W['uniacid'], 'id' => $id));
-			} else {
-				pdo_insert('mc_card_care', $data);
-			}
-			message('发布节日关怀成功', url('mc/card/care') , 'success');
-		}
-	}
-
-	if($op == 'del') {
-		$id = intval($_GPC['id']);
-		pdo_delete('mc_card_care', array('uniacid' => $_W['uniacid'], 'id' => $id));
-		message('删除成功', referer(), 'success');
-	}
-	template('mc/card-care');
-}
-
 if($do == 'credit') {
+	uni_user_permission_check('mc_card_other');
 	$set = pdo_get('mc_card_credit_set', array('uniacid' => $_W['uniacid']));
 	if(empty($set)) {
 		$set = array();
@@ -604,6 +515,7 @@ if($do == 'credit') {
 }
 
 if($do == 'recommend') {
+	uni_user_permission_check('mc_card_other');
 	$op = trim($_GPC['op']) ? trim($_GPC['op']) : 'list';
 	if($op == 'list') {
 		$pindex = max(1, intval($_GPC['page']));
@@ -656,35 +568,23 @@ if($do == 'recommend') {
 	template('mc/card-recommend');
 }
 
-if($do == 'stat') {
-	$now = strtotime(date('Y-m-d'));
-	$starttime = empty($_GPC['time']['start']) ? $now - 30*86400 : strtotime($_GPC['time']['start']);
-	$endtime = empty($_GPC['time']['end']) ? TIMESTAMP : strtotime($_GPC['time']['end']) + 86399;
-	$num = ($endtime + 1 - $starttime) / 86400;
-	if($_W['isajax']) {
-		$stat = array();
-		for($i = 0; $i < $num; $i++) {
-			$time = $i * 86400 + $starttime;
-			$key = date('m-d', $time);
-			$stat[$key] = 0;
-		}
-		$data = pdo_fetchall('SELECT id,createtime FROM ' . tablename('mc_card_members') . ' WHERE uniacid = :uniacid AND createtime >= :starttime AND createtime <= :endtime', array(':uniacid' => $_W['uniacid'], ':starttime' => $starttime, ':endtime' => $endtime));
-		if(!empty($data)) {
-			foreach($data as $da) {
-				$key = date('m-d', $da['createtime']);
-				$stat[$key] += 1;
-			}
-		}
-
-		$out['label'] = array_keys($stat);
-		$out['datasets'] = array_values($stat);
-		exit(json_encode($out));
+if ($do == 'sign') {
+	uni_user_permission_check('mc_card_other');
+	$pindex = max(1, intval($_GPC['page']));
+	$psize = 10;
+	$list = pdo_fetchall("SELECT * FROM ". tablename('mc_card_sign_record'). " WHERE uniacid = :uniacid ORDER BY id DESC LIMIT " . ($pindex - 1)*$psize. ','. $psize, array('uniacid' => $_W['uniacid']));
+	foreach ($list as $key => &$value){
+		$value['addtime'] = date('Y-m-d H:i:s', $value['addtime']);
+		$value['realname'] = pdo_fetchcolumn("SELECT realname FROM ". tablename('mc_members'). ' WHERE uniacid = :uniacid AND uid = :uid', array(':uniacid' => $_W['uniacid'], ':uid' => $value['uid']));
 	}
+	$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ". tablename('mc_card_sign_record'). " WHERE uniacid = :uniacid", array(':uniacid' => $_W['uniacid']));
+	$pager = pagination($total, $pindex, $psize);
+	template('mc/card-sign');
+}
 
-	$total = floatval(pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_card_members') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid'])));
-	$today = floatval(pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_card_members') . ' WHERE uniacid = :uniacid AND createtime >= :starttime AND createtime <= :endtime', array(':uniacid' => $_W['uniacid'], ':starttime' => strtotime(date('Y-m-d')), ':endtime' => TIMESTAMP)));
-	$yesterday = floatval(pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_card_members') . ' WHERE uniacid = :uniacid AND createtime >= :starttime AND createtime <= :endtime', array(':uniacid' => $_W['uniacid'], ':starttime' => strtotime(date('Y-m-d')) - 86400, ':endtime' => strtotime(date('Y-m-d')))));
-	template('mc/card-stat');
+if($do == 'other') {
+	uni_user_permission_check('mc_card_other');
+	template('mc/card-other');
 }
 
 

@@ -14,7 +14,7 @@ if(empty($_W['uniaccount'])) {
 	exit('指定主公众号不存在。');
 }
 if (!empty($_W['uniaccount']['endtime']) && TIMESTAMP > $_W['uniaccount']['endtime']) {
-	message('抱歉，您的公众号服务已过期，请及时联系管理员', '', 'info');
+	exit('抱歉，您的公众号服务已过期，请及时联系管理员');
 }
 
 $_W['acid'] = $_W['uniaccount']['acid'];
@@ -79,7 +79,7 @@ if (empty($_W['openid']) && !empty($_SESSION['oauth_openid'])) {
 		'follow' => 0
 	);
 }
-$unisetting = uni_setting($_W['uniacid']);
+$unisetting = uni_setting_load();
 if (!empty($unisetting['oauth']['account'])) {
 	$oauth = account_fetch($unisetting['oauth']['account']);
 	if (!empty($oauth) && $_W['account']['level'] <= $oauth['level']) {

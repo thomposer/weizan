@@ -9,6 +9,8 @@ $do = in_array($do, $dos) ? $do : 'copyright';
 $settings = $_W['setting']['copyright'];
 if(empty($settings) || !is_array($settings)) {
 	$settings = array();
+} else {
+	$settings['slides'] = iunserializer($settings['slides']);
 }
 
 if ($do == 'copyright') {

@@ -4,8 +4,9 @@
  * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-uni_user_permission_check('activity_coupon');
-$dos = array('display', 'post', 'del', 'record', 'record-del');
+uni_user_permission_check('activity_coupon_display');
+$_W['page']['title'] = '折扣券-积分兑换';
+$dos = array('display', 'post', 'del');
 $do = in_array($do, $dos) ? $do : 'display';
 
 $creditnames = array();
@@ -77,7 +78,6 @@ if($do == 'post') {
 			'amount' => $amount,
 			'starttime' => $starttime,
 			'endtime' => $endtime,
-			'use_module' => 0
 		);
 		if ($couponid) {
 			if(empty($item['couponsn'])) {
@@ -114,9 +114,6 @@ if($do == 'post') {
 				);
 				$i++;
 				pdo_insert('activity_coupon_modules', $data);
-			}
-			if($i > 0) {
-				pdo_update('activity_coupon', array('use_module' => '1'), array('uniacid' => $_W['uniacid'], 'couponid' => $couponid));
 			}
 		}
 		message('折扣券更新成功！', url('activity/coupon/display'), 'success');
@@ -163,83 +160,5 @@ if($do == 'del') {
 	pdo_delete('activity_coupon', array('couponid' => $id, 'uniacid' => $_W['uniacid']));
 	pdo_delete('activity_coupon_record', array('uniacid' => $_W['uniacid'], 'couponid' => $id));
 	message('折扣券删除成功！',url('activity/coupon/display'), 'success');
-}
-
-if($do == 'record') {
-	if (checksubmit('submit')) {
-		$password = $_GPC['password'];
-		if (empty($password)) {
-			message('店员密码不能为空');
-		}
-		$couponid = intval($_GPC['couponid']);
-		$uid = intval($_GPC['uid']);
-		$recid = intval($_GPC['recid']);
-		$sql = 'SELECT * FROM ' . tablename('activity_coupon_password') . " WHERE `uniacid` = :uniacid AND `password` = :password";
-		$clerk = pdo_fetch($sql, array(':uniacid' => $_W['uniacid'], ':password' => $password));
-		if(!empty($clerk)) {
-			load()->model('activity');
-			$status = activity_coupon_use($uid, $couponid, $clerk['name'], $clerk['id'], $recid);
-			if (!is_error($status)) {
-				message('折扣券使用成功！', referer(), 'success');
-			} else {
-				message($status['message'], referer(), 'error');
-			}
-		}
-		message('店员密码错误！', referer(), 'error');
-	}
-	$modules = uni_modules();
-	$coupons = pdo_fetchall('SELECT couponid, title FROM ' . tablename('activity_coupon') . ' WHERE uniacid = :uniacid AND type = 1 ORDER BY couponid DESC', array(':uniacid' => $_W['uniacid']), 'couponid');
-	$starttime = empty($_GPC['time']['start']) ? strtotime('-1 month') : strtotime($_GPC['time']['start']);
-	$endtime = empty($_GPC['time']['end']) ? TIMESTAMP : strtotime($_GPC['time']['end']) + 86399;
-	
-	$where = " WHERE a.uniacid = {$_W['uniacid']} AND b.type = 1 AND a.granttime>=:starttime AND a.granttime<:endtime";
-	$params = array(
-		':starttime' => $starttime,
-		':endtime' => $endtime,
-	);
-	$uid = intval($_GPC['uid']);
-	if (!empty($uid)) {
-		$where .= ' AND a.uid=:uid';
-		$params[':uid'] = $uid;
-	}
-	$operator = trim($_GPC['operator']);
-	if (!empty($operator)) {
-		$where .= " AND a.operator LIKE '%{$operator}%'";
-	}
-	$couponid = intval($_GPC['couponid']);
-	if (!empty($couponid)) {
-		$where .= " AND a.couponid = {$couponid}";
-	}
-	$status = intval($_GPC['status']);
-	if (!empty($status)) {
-		$where .= " AND a.status = {$status}";
-	}
-	$pindex = max(1, intval($_GPC['page']));
-	$psize = 20;
-	
-	$list = pdo_fetchall("SELECT a.*, b.title,b.thumb,b.discount FROM ".tablename('activity_coupon_record'). ' AS a LEFT JOIN ' . tablename('activity_coupon') . ' AS b ON a.couponid = b.couponid ' . " $where ORDER BY a.couponid DESC,a.recid DESC LIMIT ".($pindex - 1) * $psize.','.$psize, $params);
-	$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('activity_coupon_record') . ' AS a LEFT JOIN ' . tablename('activity_coupon') . ' AS b ON a.couponid = b.couponid '. $where , $params);
-	if(!empty($list)) {
-		$uids = array();
-		foreach ($list as $row) {
-			$uids[] = $row['uid'];
-		}
-		load()->model('mc');
-		$members = mc_fetch($uids, array('uid', 'nickname'));
-		foreach ($list as &$row) {
-			$row['nickname'] = $members[$row['uid']]['nickname'];
-			$row['thumb'] = tomedia($row['thumb']);
-		}
-	}
-	$pager = pagination($total, $pindex, $psize);
-	$status = array('1' => '未使用', '2' => '已使用');
-}
-if($do == 'record-del') {
-	$id = intval($_GPC['id']);
-	if(empty($id)) {
-		message('没有要删除的记录', '', 'error');
-	}
-	pdo_delete('activity_coupon_record', array('recid' => $id));
-	message('删除兑换记录成功', '', 'success');
 }
 template('activity/coupon');

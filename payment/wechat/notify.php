@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 define('IN_MOBILE', true);
 require '../../framework/bootstrap.inc.php';
@@ -56,6 +56,7 @@ if(is_array($setting['payment'])) {
 				$log['tag'] = iunserializer($log['tag']);
 				$log['tag']['transaction_id'] = $get['transaction_id'];
 				$log['uid'] = $log['tag']['uid'];
+				$log['transaction_id'] = $get['transaction_id'];
 				$record = array();
 				$record['status'] = '1';
 				$record['tag'] = iserializer($log['tag']);
@@ -72,12 +73,7 @@ if(is_array($setting['payment'])) {
 				if($log['is_usecard'] == 1 && $log['card_type'] == 2) {
 					$now = time();
 					$log['card_id'] = intval($log['card_id']);
-					$iscard = pdo_fetchcolumn('SELECT iscard FROM ' . tablename('modules') . ' WHERE name = :name', array(':name' => $log['module']));
-					$condition = '';
-					if($iscard == 1) {
-						$condition = " AND grantmodule = '{$log['module']}'";
-					}
-					pdo_query('UPDATE ' . tablename('activity_coupon_record') . " SET status = 2, usetime = {$now}, usemodule = '{$log['module']}' WHERE uniacid = :aid AND couponid = :cid AND uid = :uid AND status = 1 {$condition} LIMIT 1", array(':aid' => $_W['uniacid'], ':uid' => $log['uid'], ':cid' => $log['card_id']));
+					pdo_query('UPDATE ' . tablename('activity_coupon_record') . " SET status = 2, usetime = {$now}, usemodule = '{$log['module']}' WHERE uniacid = :aid AND couponid = :cid AND uid = :uid AND status = 1 LIMIT 1", array(':aid' => $_W['uniacid'], ':uid' => $log['uid'], ':cid' => $log['card_id']));
 				}
 
 				$site = WeUtility::createModuleSite($log['module']);
@@ -93,6 +89,9 @@ if(is_array($setting['payment'])) {
 						$ret['from'] = 'notify';
 						$ret['tid'] = $log['tid'];
 						$ret['uniontid'] = $log['uniontid'];
+						$ret['transaction_id'] = $log['transaction_id'];
+						$ret['trade_type'] = $get['trade_type'];
+						$ret['follow'] = $get['is_subscribe'] == 'Y' ? 1 : 0;
 						$ret['user'] = empty($get['openid']) ? $log['openid'] : $get['openid'];
 						$ret['fee'] = $log['fee'];
 						$ret['tag'] = $log['tag'];
@@ -100,6 +99,9 @@ if(is_array($setting['payment'])) {
 						$ret['card_type'] = $log['card_type'];
 						$ret['card_fee'] = $log['card_fee'];
 						$ret['card_id'] = $log['card_id'];
+						if(!empty($get['time_end'])) {
+							$ret['paytime'] = strtotime($get['time_end']);
+						}
 						$site->$method($ret);
 						if($isxml) {
 							$result = array(

@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -10,7 +10,7 @@ function activity_coupon_available($uid, $pindex = 1, $psize = 10) {
 	global $_W;
 	$user = mc_fetch($uid, array('groupid'));
 	$groupid = $user['groupid'];
-	$data = pdo_fetchall("SELECT * FROM " . tablename('activity_coupon') . " WHERE `type` = 1 AND `starttime` <= :starttime AND `endtime` >= :endtime AND `couponid` IN (SELECT couponid FROM " . tablename('activity_coupon_allocation') . " WHERE `groupid` = :groupid) ORDER BY `couponid` DESC", array(':groupid' => $groupid, ':starttime' => TIMESTAMP, 'endtime' => TIMESTAMP));
+	$data = pdo_fetchall("SELECT * FROM " . tablename('activity_coupon') . " WHERE `type` = 1 AND `starttime` <= :starttime AND `endtime` >= :endtime AND `couponid` IN (SELECT couponid FROM " . tablename('activity_coupon_allocation') . " WHERE `groupid` = :groupid) ORDER BY `couponid` DESC", array(':groupid' => $groupid, ':starttime' => TIMESTAMP, ':endtime' => TIMESTAMP));
 	foreach ($data as $da) {
 		if ($da['dosage'] >= $da['amount']) {
 			continue;
@@ -129,7 +129,7 @@ function activity_coupon_grant($uid, $couponid, $module = '', $remark = '') {
 
 
 
-function activity_coupon_use($uid, $couponid, $operator, $clerk_id = 0, $recid = '', $module = 'system') {
+function activity_coupon_use($uid, $couponid, $operator, $clerk_id = 0, $recid = '', $module = 'system', $clerk_type = 1, $store_id = 0) {
 	global $_W;
 	$coupon = pdo_fetch("SELECT * FROM " . tablename('activity_coupon') . " WHERE `type` = 1 AND `couponid` = :couponid LIMIT 1", array(':couponid' => $couponid));
 	if (empty($coupon)) {
@@ -156,7 +156,9 @@ function activity_coupon_use($uid, $couponid, $operator, $clerk_id = 0, $recid =
 		'usemodule' => $module,
 		'usetime' => TIMESTAMP,
 		'operator' => $operator,
-		'clerk_id' => intval($clerk_id)
+		'clerk_id' => intval($clerk_id),
+		'clerk_type' => $clerk_type,
+		'store_id' => $store_id
 	);
 	pdo_update('activity_coupon_record', $update, array('recid' => $precord['recid']));
 	return true;
@@ -307,7 +309,7 @@ function activity_token_grant($uid, $couponid, $module = '', $remark = '') {
 }
 
 
-function activity_token_use($uid, $couponid, $operator, $clerk_id = 0, $recid = '', $module = 'system') {
+function activity_token_use($uid, $couponid, $operator, $clerk_id = 0, $recid = '', $module = 'system', $clerk_type = 1, $store_id = 0) {
 	global $_W;
 	$coupon = pdo_fetch("SELECT * FROM " . tablename('activity_coupon') . " WHERE `type` = 2 AND `couponid` = :couponid LIMIT 1", array(':couponid' => $couponid));
 	if (empty($coupon)) {
@@ -335,6 +337,8 @@ function activity_token_use($uid, $couponid, $operator, $clerk_id = 0, $recid = 
 		'usetime' => TIMESTAMP,
 		'operator' => $operator,
 		'clerk_id' => $clerk_id,
+		'clerk_type' => $clerk_type,
+		'store_id' => $store_id,
 	);
 	pdo_update('activity_coupon_record', $update, array('recid' => $precord['recid']));
 	return true;

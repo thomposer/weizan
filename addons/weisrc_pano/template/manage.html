@@ -2,8 +2,8 @@
 {template 'common'}
 <div class="main">
 	<ul class="nav nav-tabs">
-		<li{if $_GPC['do'] == 'manage' || $_GPC['do'] == '' } class="active"{/if}><a href="{php echo $this->createWebUrl('manage');}">活动管理</a></li>
-<li{if $_GPC['do'] == 'post'} class="active"{/if}><a href="{php echo url('platform/reply/post',array('m'=>'weisrc_pano'));}">添加活动规则</a></li>
+		<li{if $_GPC['do'] == 'manage' || $_GPC['do'] == '' } class="active"{/if}><a href="{php echo $this->createWebUrl('manage');}">管理360全景</a></li>
+<li{if $_GPC['do'] == 'post'} class="active"{/if}><a href="{php echo url('platform/reply/post',array('m'=>'weisrc_pano'));}">添加360全景</a></li>
 	</ul>
     <div class="panel panel-default account">
         <div class="panel-body">

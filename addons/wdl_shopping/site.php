@@ -456,8 +456,8 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 				$optionids = array();
 				for ($k = 0; $k < $len; $k++) {
 					$option_id = "";
-					$get_option_id = $_GPC['option_id_' . $ids][0];
 					$ids = $option_idss[$k]; $idsarr = explode("_",$ids);
+					$get_option_id = $_GPC['option_id_' . $ids][0];
 					$newids = array();
 					foreach($idsarr as $key=>$ida){
 						foreach($spec_items as $it){
@@ -1705,6 +1705,7 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 				pdo_update('mc_member_address', array('isdefault' => 0), array('uniacid' => $_W['uniacid'], 'uid' => $_W['fans']['uid']));
 				$data['isdefault'] = 1;
 				pdo_insert('mc_member_address', $data);
+				pdo_update('mc_members', array('address' => $data['province'].$data['city'].$data['district'].$data['address']), array('uniacid' => $_W['uniacid'], 'uid' => $_W['fans']['uid']));
 				$id = pdo_insertid();
 				if (!empty($id)) {
 					message($id, '', 'ajax');
@@ -1714,7 +1715,7 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 			}
 		} elseif ($operation == 'default') {
 			$id = intval($_GPC['id']);
-			$sql = 'SELECT `isdefault` FROM ' . tablename('mc_member_address') . ' WHERE `id` = :id AND `uniacid` = :uniacid
+			$sql = 'SELECT * FROM ' . tablename('mc_member_address') . ' WHERE `id` = :id AND `uniacid` = :uniacid
 					 AND `uid` = :uid';
 			$params = array(':id' => $id, ':uniacid' => $_W['uniacid'], ':uid' => $_W['fans']['uid']);
 			$address = pdo_fetch($sql, $params);
@@ -1722,6 +1723,7 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 			if (!empty($address) && empty($address['isdefault'])) {
 				pdo_update('mc_member_address', array('isdefault' => 0), array('uniacid' => $_W['uniacid'], 'uid' => $_W['fans']['uid']));
 				pdo_update('mc_member_address', array('isdefault' => 1), array('uniacid' => $_W['uniacid'], 'uid' => $_W['fans']['uid'], 'id' => $id));
+				pdo_update('mc_members', array('address' => $address['province'].$address['city'].$address['district'].$address['address']), array('uniacid' => $_W['uniacid'], 'uid' => $_W['fans']['uid']));
 			}
 			message(1, '', 'ajax');
 		} elseif ($operation == 'detail') {
@@ -1809,7 +1811,6 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 	}
 	public function payResult($params) {
 		global $_W;
-
 		$fee = intval($params['fee']);
 		$data = array('status' => $params['result'] == 'success' ? 1 : 0);
 		$paytype = array('credit' => '1', 'wechat' => '2', 'alipay' => '2', 'delivery' => '3');
@@ -1830,21 +1831,43 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 		if ($params['type'] == 'delivery') {
 			$data['status'] = 1;
 		}
-		$goods = pdo_fetchall("SELECT `goodsid`, `total` FROM " . tablename('shopping_order_goods') . " WHERE `orderid` = :orderid", array(':orderid' => $params['tid']));
-		if (!empty($goods)) {
-			$row = array();
-			foreach ($goods as $row) {
-				$goodsInfo = pdo_fetch("SELECT `total`, `totalcnf`, `sales` FROM " . tablename('shopping_goods') . " WHERE `id` = :id", array(':id' => $row['goodsid']));
-				$goodsupdate = array();
-				if ($goodsInfo['totalcnf'] == '1' && !empty($goodsInfo['total'])) {
-					$goodsupdate['total'] = $goodsInfo['total'] - $row['total'];
-					$goodsupdate['total'] = ($goodsupdate['total'] < 0) ? 0 : $goodsupdate['total'];
+
+		if (empty($_SESSION['wdl_shopping_pay_result'])) {
+			session_start();
+			$_SESSION['wdl_shopping_pay_result'] = 1;
+
+			$goods = pdo_fetchall("SELECT `goodsid`, `total`, `optionid` FROM " . tablename('shopping_order_goods') . " WHERE `orderid` = :orderid", array(':orderid' => $params['tid']));
+			if (!empty($goods)) {
+				$row = array();
+				foreach ($goods as $row) {
+					$goodsInfo = pdo_fetch("SELECT `total`, `totalcnf`, `sales` FROM " . tablename('shopping_goods') . " WHERE `id` = :id", array(':id' => $row['goodsid']));
+					$goodsupdate = array();
+					if ($goodsInfo['totalcnf'] == '1' && !empty($goodsInfo['total'])) {
+						$goodsupdate['total'] = $goodsInfo['total'] - $row['total'];
+						$goodsupdate['total'] = ($goodsupdate['total'] < 0) ? 0 : $goodsupdate['total'];
+					}
+					$goodsupdate['sales'] = $goodsInfo['sales'] + $row['total'];
+					pdo_update('shopping_goods', $goodsupdate, array('id' => $row['goodsid']));
+
+					$optionInfo = pdo_fetch("SELECT `stock` FROM " . tablename('shopping_goods_option') . " WHERE `id` = :id", array(':id' => $row['optionid']));
+					$options = array();
+					if ($goodsInfo['totalcnf'] == '1' && !empty($optionInfo['stock'])) {
+						$options['stock'] = $optionInfo['stock'] - $row['total'];
+						$options['stock'] = ($optionInfo['stock'] < 0) ? 0 : $options['stock'];
+						pdo_update('shopping_goods_option', $options, array('id' => $row['optionid']));
+					}
 				}
-				$goodsupdate['sales'] = $goodsInfo['sales'] + $row['total'];
-				pdo_update('shopping_goods', $goodsupdate, array('id' => $row['goodsid']));
+			}
+			pdo_update('shopping_order', $data, array('id' => $params['tid'], 'weid' => $_W['uniacid']));
+		}else {
+			$setting = uni_setting($_W['uniacid'], array('creditbehaviors'));
+			$credit = $setting['creditbehaviors']['currency'];
+			if ($params['type'] == $credit) {
+				message('支付成功！', $this->createMobileUrl('myorder'), 'success');
+			} else {
+				message('支付成功！', '../../app/' . $this->createMobileUrl('myorder'), 'success');
 			}
 		}
-		pdo_update('shopping_order', $data, array('id' => $params['tid'], 'weid' => $_W['uniacid']));
 		if ($params['from'] == 'return') {
 			//积分变更
 			$this->setOrderCredit($params['tid']);
@@ -1902,7 +1925,7 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 					cloud_prepare();
 
 					$body = '用户' . $address[0] . ',电话:' . $address[1] . '于' . date('m月d日H:i') . '成功支付订单' . $order['ordersn']
-							. ',总金额' . $order['price'] . '元' . '.' . random(3);
+						. ',总金额' . $order['price'] . '元' . '.' . random(3);
 
 					cloud_sms_send($this->module['config']['mobile'], $body);
 				}

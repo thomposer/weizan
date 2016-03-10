@@ -130,7 +130,7 @@
     {/if}
 
     <div class="detail-div img-rounded detail-content" style="word-break:break-all">
-        {$goods['content']}
+        {php echo html_entity_decode($goods['content'], ENT_QUOTES)}
     </div>
     <div style="position:fixed; bottom:0; left:0; width:100%; z-index:88; text-align:center; background:#E9E9E9; padding:10px 2%;">
         {if $goods['status']!=1 || $goods['deleted']==1}
@@ -340,5 +340,5 @@
 </script>
 
 
-{template 'footer'}
+{template 'footer-base'}
 

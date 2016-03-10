@@ -40,7 +40,7 @@ defined('IN_IA') or exit('Access Denied');
 		arsort($tagsarr);
 		
 		if ($_GPC['votelog'] == 1) {//投票人
-			$tuser = pdo_fetch("SELECT avatar,nickname FROM ".tablename($this->table_users)." WHERE uniacid = :uniacid and from_user = :from_user and rid = :rid", array(':uniacid' => $uniacid,':from_user' => $tfrom_user,':rid' => $rid));
+			$tuser = pdo_fetch("SELECT avatar,nickname,realname,from_user FROM ".tablename($this->table_users)." WHERE uniacid = :uniacid and from_user = :from_user and rid = :rid", array(':uniacid' => $uniacid,':from_user' => $tfrom_user,':rid' => $rid));
 			
 			$pindex = max(1, intval($_GPC['page']));
 			$psize = empty($reply['phbtpxz']) ? 10 : $reply['phbtpxz'];
@@ -56,14 +56,14 @@ defined('IN_IA') or exit('Access Denied');
 			$total = pdo_fetchcolumn('SELECT COUNT(*) FROM '.tablename($this->table_log).' WHERE uniacid= :uniacid and rid = :rid '.$where.'', array(':uniacid' => $uniacid,':rid' => $rid));
 			$total_pages = ceil($total/$psize);	
 			$pager = paginationm($total, $pindex, $psize, '', array('before' => 0, 'after' => 0, 'ajaxcallback' => ''));
-			
-			$title = $tuser['nickname'] . ' 的投票用户 - ' . $reply['title']; 
-			$sharetitle = $tuser['nickname'] . '正在参加'. $reply['title'] .'，快来为'.$tuser['nickname'].'投一票吧！';
-			$sharecontent = $tuser['nickname'] . '正在参加'. $reply['title'] .'，快来为'.$tuser['nickname'].'投一票吧！';
+			$username = $this->getusernames($tuser['realname'], $tuser['nickname'], '6');
+			$title = $username . ' 的投票用户 - ' . $reply['title']; 
+			$sharetitle = $username . '正在参加'. $reply['title'] .'，快来为'.$username.'投一票吧！';
+			$sharecontent = $username . '正在参加'. $reply['title'] .'，快来为'.$username.'投一票吧！';
 			$sharephoto = !empty($mygift['photo']) ? toimage($mygift['photo']) : toimage($tuser['avatar']);
 			
-			 $_share['title'] = $tuser['nickname'] . '正在参加'. $reply['title'] .'，快来为'.$tuser['nickname'].'投一票吧！';
-			$_share['content'] = $tuser['nickname'] . '正在参加'. $reply['title'] .'，快来为'.$tuser['nickname'].'投一票吧！';
+			 $_share['title'] = $username . '正在参加'. $reply['title'] .'，快来为'.$username.'投一票吧！';
+			$_share['content'] = $username . '正在参加'. $reply['title'] .'，快来为'.$username.'投一票吧！';
 			$_share['imgUrl'] =  !empty($mygift['photo']) ? toimage($mygift['photo']) : toimage($tuser['avatar']);
 		}else {//排行榜用户
 
