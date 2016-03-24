@@ -2,7 +2,7 @@
 /**
  * 微小区模块
  *
- * [晓锋] Copyright (c) 2013 qfinfo.cn
+ * [微赞] Copyright (c) 2013 012wz.com
  */
 /**
  * 后台导航管理

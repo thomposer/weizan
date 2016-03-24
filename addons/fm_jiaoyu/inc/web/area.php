@@ -4,8 +4,9 @@
  *
  * @author 高贵血迹
  */
+        global $_GPC, $_W;
         $GLOBALS['frames'] = $this->getNaveMenu();
-
+        $weid = $this->_weid;  
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
         if ($operation == 'display') {
             if (!empty($_GPC['ssort'])) {

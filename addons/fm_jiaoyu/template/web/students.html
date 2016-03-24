@@ -90,8 +90,10 @@ require(['bootstrap'],function($){
 					<th style="width:8%;">详情</th>
                     <th style="width:8%;">手机</th>
 					<!--th style="width:8%;">固话</th-->
-					<th style="width:13%;">班级</th>
-                    <th style="width:15%;">家庭地址</th>
+					<th style="width:13%;">班级/家庭地址</th>
+					<th style="width:6%;"></br>本人</th>
+                    <th style="width:6%;">微信绑定</br>母亲</th>
+					<th style="width:6%;"></br>父亲</th>
 					<th style="width:7%;">成绩数目</th>
                     <th style="width:7%;">报名时间</th>	
 					<th style="width:8%;">终止时间</th>	
@@ -115,15 +117,28 @@ require(['bootstrap'],function($){
 					<td>
                         {$item['mobile']}
                     </td>
-                    <!--td>
-                        {$item['homephone']}
-                    </td-->
                     <td>
-                        {if !empty($category[$item['xq_id']])}{$category[$item['xq_id']]['sname']}{/if}丨{if !empty($category[$item['bj_id']])}{$category[$item['bj_id']]['sname']}{/if}
-                    </td>					
-                    <td>
-                        {$item['area_addr']}
+                        {if !empty($category[$item['xq_id']])}{$category[$item['xq_id']]['sname']}{/if}丨{if !empty($category[$item['bj_id']])}{$category[$item['bj_id']]['sname']}{/if}</br></br>
+						{$item['area_addr']}
                     </td>
+                    <td>
+					{if !empty($item['own'])}
+                     <img src="{$member[$item['ouid']]['avatar']}" width="50"  onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$member[$item['ouid']]['nickname']} </br>
+					 <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('students', array('id' => $item['id'], 'openid' => $item['own'], 'op' => 'own', 'schoolid' => $schoolid))}" onclick="return confirm('此操作不可恢复，确认解绑？');return false;" title="解绑"><i class="fa fa-times"></i>解绑</a>
+                    {/if}
+					</td>
+                    <td>
+					{if !empty($item['mom'])}
+                     <img src="{$member[$item['muid']]['avatar']}" width="50"  onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$member[$item['muid']]['nickname']} </br>
+					 <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('students', array('id' => $item['id'], 'openid' => $item['mom'], 'op' => 'mom', 'schoolid' => $schoolid))}" onclick="return confirm('此操作不可恢复，确认解绑？');return false;" title="解绑"><i class="fa fa-times"></i>解绑</a>
+                    {/if}
+				   </td>
+                    <td>
+					{if !empty($item['dad'])}
+                     <img src="{$member[$item['duid']]['avatar']}" width="50"  onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$member[$item['duid']]['nickname']} </br>
+					 <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('students', array('id' => $item['id'], 'openid' => $item['dad'], 'op' => 'dad', 'schoolid' => $schoolid))}" onclick="return confirm('此操作不可恢复，确认解绑？');return false;" title="解绑"><i class="fa fa-times"></i>解绑</a>
+                   {/if}
+				   </td>					
 					<td><span class="label label-warning">共{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_score')." WHERE sid = '".$item['id']."'")}条</span></td>
 					<td>{php echo date('Y-m-d',$item['seffectivetime'])}</td> 
                     <td>{php echo date('Y-m-d',$item['stheendtime'])}</td>  					
@@ -324,11 +339,11 @@ $(function(){
                         <select class="form-control" style="margin-right:15px;" name="xueqi" onchange="fetchChildBj(this.options[this.selectedIndex].value)"  autocomplete="off" class="form-control">
                             <option value="0">请选择年级</option>
                             {loop $xueqi $it}
-                            <option value="{$it['sid']}" {if $row['sid'] == $it['xueqi']} selected="selected"{/if}>{$it['sname']}</option>
+                            <option value="{$it['sid']}" {if $it['sid'] == $item['xq_id']} selected="selected"{/if}>{$it['sname']}</option>
                             {/loop}
                         </select>
                     </div>
-                </div>	
+                </div>					
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">选择期号</label>
                     <div class="col-sm-9">

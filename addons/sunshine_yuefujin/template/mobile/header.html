@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+	<meta name="format-detection" content="telephone=no"/>
+	<link rel="stylesheet" href="{$_W['siteroot']}/addons/sunshine_yuefujin/frozenui/css/frozen.css">
+	<link rel="stylesheet" href="{$_W['siteroot']}/addons/sunshine_yuefujin/css/common.css">
+	<title>{if $info['name']}{$info['name']}{if $distance}-距离我{$distance}{$unit}{/if}-{/if}约附近~约起来~</title>
+	<!--<script type="text/javascript" src="{$_W['siteroot']}addons/sunshine_yuefujin/js/jquery-1.11.1.min.js"></script>-->
+	<script src="{$_W['siteroot']}addons/sunshine_yuefujin/frozenui/lib/zepto.min.js"></script>
+    <script src="{$_W['siteroot']}addons/sunshine_yuefujin/frozenui/js/frozen.js"></script>
+	<script type="text/javascript">
+	   /* var el = $.loading({content:'加载中...'});
+	    el.on("loading:hide",function(){
+	        console.log("loading hide");
+	     });*/
+		window.onload = function() {
+			$("#loading_layer").remove();
+		};
+		var Surrounds = {
+			openNew : function(url,id) {
+				window.location.href=url+"&id="+id;
+			},
+			page:1
+
+		}
+	</script>
+</head>
+<body>
+<!-- loading -->
+<div class="ui-loading-block show" id="loading_layer">
+<div class="ui-loading-cnt">
+<i class="ui-loading-bright"></i>
+<p>正在加载中...</p>
+</div>
+</div>
+<!-- share -->
+<div id="mcover" onclick="$(this).hide()" style="display: none;">
+    <img src="../addons/sunshine_yuefujin/common/guide.png">
+</div>

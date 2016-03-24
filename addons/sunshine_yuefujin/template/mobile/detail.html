@@ -1,0 +1,117 @@
+{template 'header'}
+{template 'wx_gps'}
+	<!-- header -->
+	<div class="ui-header ui-header-wx ui-border-b">
+		<span class="ui-icon-return" onclick="window.location.href=document.referrer;" style="color:white;"></span>
+		<h1>快来约我</h1>
+	</div>
+	<style type="text/css">
+	.ui-slider {
+		padding-top: 70%;
+	}
+	</style>
+	<div class="ui-container">
+		<!-- img -->
+		{if $imglist}
+		<div class="ui-slider">
+		    <ul class="ui-slider-content">
+		    	{loop $imglist $one}
+		        <li><img src="{$one['img_url']}" style="height:100%;"></li>
+		    	{/loop}
+		    </ul>
+		</div>
+		{/if}
+		<br>
+		<div class="ui-row-flex ui-whitespace" style="border-top:1px solid rbg(220,220,220);">
+		    <div class="ui-col ui-col ui-flex ui-flex-ver ui-flex-pack-end ui-flex-align-center">
+		    	<div class="ui-list-icon">
+					<span style="background-image:url({$info['headimgurl']});border-radius:3px;height:60px;width:60px;"></span>
+				</div>
+		    </div>
+		    <div class="ui-col ui-col-3 ui-flex ui-flex-ver ui-flex-pack-center ui-flex-align-start" style="font-size:14px;">
+		    {$info['sign']}
+		    </div>
+		</div>
+		<!--intro-->
+		<div class="" style="font-size:16px;padding:20px;">
+		</div>
+		<a href='#' name='comment_tag'></a>
+		<!-- comment begin -->
+		<div class="ui-panel ui-panel-simple">
+			<h2 class="ui-arrowlink"><span>留言</span><span class="ui-panel-subtitle">{$commentcount['num']}条</span><span class="ui-panel-title-tips"><a href="{php echo $this->createMobileUrl('commentlist',array('comment_openid'=>$info['openid'],'user_openid'=>$sunshine_openid_nocookie))}">更多留言</a></span></h2>
+		</div>
+		<!-- comment list -->
+		<ul class="ui-list ui-border-tb">
+			{loop $commentlist $item}
+			<li class="ui-border-t">
+				<div class="ui-avatar-s">
+					{if $item['usericon']}
+					<span style="background-image:url({$item['usericon']})"></span>
+					{else}
+					<span style="background-image:url(http://placeholder.qiniudn.com/100x100)"></span>
+					{/if}
+				</div>
+				<div class="ui-list-info">
+					<p>{$item['username']}:</p>
+					<h4>{$item['content']}</h4>
+					<p>{$item['add_time']}</p>
+				</div>
+			</li>
+			{/loop}
+		</ul>
+		<!-- comment input -->
+		<div class="ui-input-wrap ui-border-t">
+			<div class="ui-input ui-border-radius">
+				<input type="text" id="comment_content" name='' value="" placeholder='我也说一句...'>
+			</div>
+			<button class="ui-btn" onclick="doComment()">留言</button>
+		</div>
+		<!-- comment end -->
+	</div>
+	<!-- js -->
+	<script>
+		(function(){
+
+		    var slider = new fz.Scroll('.ui-slider', {
+		        role: 'slider',
+		        indicator: true,
+		        autoplay: true,
+		        interval: 3000
+		    });
+
+		    slider.on('beforeScrollStart', function(from, to) {
+		        
+		    });
+
+		    slider.on('scrollEnd', function(cruPage) {
+		        
+		    });
+		})();
+		function doComment() {
+			var content = $("#comment_content").val();
+			if(!content) {
+				alert("^^请输入留言内容");
+				return;
+			}
+			$.ajax({
+				type:'post',
+				url:"{php echo $this->createMobileUrl('doComment')}",
+				data:{comment_content:content,comment_openid:"{php echo $info['openid']}",user_openid:"{php echo $sunshine_openid_nocookie}"},
+				success:function(d) {
+					if(d.res == '100') {
+						alert("^^留言成功");
+						window.location.href='';
+					}else if(d.res == '101') {
+						alert("请先登陆");
+					}else if(d.res == '102') {
+						alert("留言失败");
+					}else{
+						alert(d.msg);
+					}
+					return ;
+				}
+			})
+
+		}
+	</script>
+{template 'footer'}

@@ -66,7 +66,7 @@
                     </tr>
                     </thead>
                     <tbody id="level-list">
-                    {loop $list $row}
+                    {loop $type $row}
                     <tr>
                         <td><input type="text" class="form-control" name="ssort[{$row['id']}]" value="{$row['ssort']}"></td>
                         <td><div class="type-parent">{$row['name']}&nbsp;&nbsp;</div></td>

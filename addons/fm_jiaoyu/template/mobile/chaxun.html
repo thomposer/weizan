@@ -16,8 +16,9 @@
         </style>
         <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
         <title>查询成绩</title>
-        <link rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/reset.css?{php echo time()}">
-        <script src="../addons/fm_jiaoyu/public/mobile/js/jquery.js?{php echo time()}"></script>
+        <link rel="stylesheet" href="{MODULE_URL}public/mobile/css/reset.css?{php echo time()}">
+		<link rel="stylesheet" href="{MODULE_URL}public/mobile/css/weixin.css?{php echo time()}">
+        <script src="{MODULE_URL}public/mobile/js/jquery.js?{php echo time()}"></script>
 </head>
 <body>
 <div id="wrap" class="teacher_inf">
@@ -33,36 +34,36 @@
                 </ul>               
                 <div style="clear:both"></div>
             </dd>
+			{loop $list $item}
             <dd class="teacher_count">
-                <h3>考试成绩列表</h3>
+                <h3 style="color:red;">{if !empty($category[$item['qh_id']])}{$category[$item['qh_id']]['sname']}{/if}</h3>
                    <ul>
-				   {loop $list $item}
+				   
                            <li class="" href="#">
-                                <h4>{if !empty($category[$item['xq_id']])}{$category[$item['xq_id']]['sname']}{/if}</h4>
+                                <h4>{if !empty($category[$item['xq_id']])}{$category[$item['xq_id']]['sname']}{/if}-{if !empty($category[$item['km_id']])}{$category[$item['km_id']]['sname']}{/if}</h4>
                                 <span>{if !empty($category[$item['bj_id']])}{$category[$item['bj_id']]['sname']}{/if}</span>
-                                <span>{if !empty($category[$item['qh_id']])}{$category[$item['qh_id']]['sname']}{/if}</span>	
+                                <span>{if !empty($category[$item['km_id']])}{$category[$item['km_id']]['sname']}{/if}</span>	
 								<div class="hot">
 								    <span>分数</span>
                                     <div style="font-size:12px;">{$item['my_score']}</div>     									
-                                    <a href="#"></a>
                                 </div>
-                           </li>
-					{/loop}		
+                           </li>	
                    </ul>
 
 
             </dd>
 
             <dd class="teacher_introduce">
-                <h3>老师点评</h3>
+                <header>老师点评</header>
                 <article>
-                    <header>考试点评</header>
+                    <!-- <header>老师点评</header> -->
                     <section>暂无</section>
                 </article>
             </dd>
-
+          {/loop}	
         </dl>
-    </div>
+</div>
+{php include $this->template('footer');}
     <!-- 修改开始 -->
 </body>
 </html>

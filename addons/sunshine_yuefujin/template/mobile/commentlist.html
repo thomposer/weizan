@@ -1,0 +1,70 @@
+{template 'header'}
+	<!-- header -->
+	<div class="ui-header ui-header-wx ui-border-b">
+		<span class="ui-icon-return" onclick="window.location.href=document.referrer;" style="color:white;"></span>
+		<h1>留言列表</h1>
+		<!--<a style="ui-btn" href="{php echo $this->createMobileUrl('index')}"></a>-->
+		<a href="{php echo $this->createMobileUrl('index')}">
+			<i class="ui-icon-home" style="position:absolute;right:5px;top:0px;"></i>
+		</a>
+	</div>
+	<div class="ui-container">
+		<!-- comment begin -->
+		<!-- comment list -->
+		<ul class="ui-list ui-border-tb">
+			{loop $commentlist $item}
+			<li class="ui-border-t">
+				<div class="ui-avatar-s">
+					{if $item['usericon']}
+					<span style="background-image:url({$item['usericon']})"></span>
+					{else}
+					<span style="background-image:url(http://placeholder.qiniudn.com/100x100)"></span>
+					{/if}
+				</div>
+				<div class="ui-list-info">
+					<p>{$item['username']}:</p>
+					<h4>{$item['content']}</h4>
+					<p>{$item['add_time']}</p>
+				</div>
+			</li>
+			{/loop}
+		</ul>
+		<!-- comment input -->
+		<div class="ui-input-wrap ui-border-t">
+			<div class="ui-input ui-border-radius">
+				<input type="text" id="comment_content" name='' value="" placeholder='我也说一句...'>
+			</div>
+			<button class="ui-btn" onclick="doComment()">评论</button>
+		</div>
+		<!-- comment end -->
+	</div>
+	<script type="text/javascript">
+	// comment
+	function doComment() {
+		var content = $("#comment_content").val();
+		if(!content) {
+			alert("^^请输入点评内容");
+			return;
+		}
+		$.ajax({
+			type:'post',
+			url:"{php echo $this->createMobileUrl('doComment')}",
+			data:{comment_content:content,comment_openid:"{php echo $comment_openid}",user_openid:"{php echo $sunshine_openid_nocookie}"},
+			success:function(d) {
+				if(d.res == '100') {
+					alert("^^留言成功");
+					window.location.href='';
+				}else if(d.res == '101') {
+					alert("请先登陆");
+				}else if(d.res == '102') {
+					alert("留言失败");
+				}else{
+					alert(d.msg);
+				}
+				return ;
+			}
+		})
+
+	}
+	</script>
+{template 'footer'}

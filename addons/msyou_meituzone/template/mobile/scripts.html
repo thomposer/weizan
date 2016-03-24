@@ -1,0 +1,430 @@
+<style type="text/css">
+body { margin-bottom:60px !important; }
+a, button, input { -webkit-tap-highlight-color:rgba(255, 0, 0, 0); }
+ul, li { list-style:none; margin:0; padding:0 }
+.top_bar { position: fixed; z-index: 90; bottom: 0; left: 0; right: 0; margin: auto; font-family: Helvetica, Tahoma, Arial, Microsoft YaHei, sans-serif; }
+.top_menu { display:-webkit-box; border-top: 1px solid #3D3D46; display: block; width: 100%; background: rgba(255, 255, 255, 0.7); height: 48px; display: -webkit-box; display: box; margin:0; padding:0; -webkit-box-orient: horizontal; background: -webkit-gradient(linear, 0 0, 0 100%, from(#524945), to(#48403c), color-stop(60%, #524945)); box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1) inset; }
+.top_bar .top_menu>li { -webkit-box-flex:1; position:relative; text-align:center; }
+.top_menu li:first-child { background:none; }
+.top_bar .top_menu>li>a { height:48px; margin-right: 1px; display:block; text-align:center; color:#FFF; text-decoration:none; text-shadow: 0 1px rgba(0, 0, 0, 0.3); -webkit-box-flex:1; }
+.top_bar .top_menu>li.home { max-width:70px }
+.top_bar .top_menu>li.home a { height: 62px; width: 62px; margin: auto; border-radius: 60px; position: relative; top: -22px; left: 2px; background-color: #428bca;border:2px solid rgb(61,61,70) }
+.top_bar .top_menu>li>a label { overflow:hidden; margin: 0 0 0 0; font-size: 12px; display: block !important; line-height: 18px; text-align: center; }
+.top_bar .top_menu>li>a img { padding: 3px 0 0 0; height: 24px; width: 24px; color: #fff; line-height: 48px; vertical-align:middle; }
+.top_bar li:first-child a { display: block; }
+.menu_font { text-align:left; position:absolute; right:10px; z-index:90; background: -webkit-gradient(linear, 0 0, 0 100%, from(#524945), to(#48403c), color-stop(60%, #524945)); border-radius: 5px; width: 120px; margin-top: 10px; padding: 0; box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3); }
+.menu_font.hidden { display:none; }
+.menu_font { top:inherit !important; bottom:60px; }
+.menu_font li a { height:40px; margin-right: 1px; display:block; text-align:center; color:#FFF; text-decoration:none; text-shadow: 0 1px rgba(0, 0, 0, 0.3); -webkit-box-flex:1; }
+.menu_font li a { text-align: left !important; }
+.top_menu li:last-of-type a { background: none; overflow:hidden; }
+.menu_search:after { left: 20px!important; }
+.menu_join:after { left: 50%!important; }
+.menu_font:after { top: inherit!important; bottom: -6px; border-color: #48403c rgba(0, 0, 0, 0) rgba(0, 0, 0, 0); border-width: 6px 6px 0; position: absolute; content: ""; display: inline-block; width: 0; height: 0; border-style: solid; left: 80%; }
+.menu_font li { border-top: 1px solid rgba(255, 255, 255, 0.1); border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
+.menu_font li:first-of-type { border-top: 0; }
+.menu_font li:last-of-type { border-bottom: 0; }
+.menu_font li a { height: 40px; line-height: 40px !important; position: relative; color: #fff; display: block; width: 100%; text-indent: 10px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.menu_font li a img { width: 20px; height:20px; display: inline-block; margin-top:-2px; color: #fff; line-height: 40px; vertical-align:middle; }
+.menu_font>li>a label { padding:3px 0 0 3px; font-size:14px; overflow:hidden; margin: 0; }
+#menu_list0 { right:0; left:10px; }
+#menu_list0:after { left: 20%; }
+#sharemcover { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: none; z-index: 20000; }
+#sharemcover img { position: fixed; right: 18px; top: 5px; width: 260px; height: 180px; z-index: 20001; border:0; }
+/*
+.top_bar .top_menu>li>a:hover, .top_bar .top_menu>li>a:active { background-color:#333; }
+.menu_font li a:hover, .menu_font li a:active { background-color:#333; }
+*/
+.menu_font li:first-of-type a { border-radius:5px 5px 0 0; }
+.menu_font li:last-of-type a { border-radius:0 0 5px 5px; }
+#plug-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0); z-index:800; }
+#cate18 .device {bottom: 49px;}
+#cate18 #indicator {bottom: 240px;}
+#cate19 .device {bottom: 49px;}
+#cate19 #indicator {bottom: 330px;}
+#cate19 .pagination {bottom: 60px;}
+.menu_font>li>a label { padding:3px 0 0 3px; font-size:14px; overflow:hidden; margin: 0; display: initial!important;padding: 15px 5px 15px 10px!important;}
+.top_menu>li>a label { display: initial!important;padding: 0!important;}
+
+.btn_mh{
+position: fixed;
+z-index: 80;
+right: 15px;
+top: 20px;
+color:#FFF;
+position: fixed;opacity: 0.8;
+width: 39px;
+}
+.btn_mh span{
+    margin-bottom: 10px;
+}
+.btn_music {
+display: inline-block;
+width: 35px;
+height: 35px;
+/*
+background: url('./tpl/Wap/default/common/images/play.png') no-repeat center center;
+background-size: 100% auto;
+*/
+background-color: #428bca;
+border-radius: 35px;
+border: 2px solid rgba(61,61,70,0.5);
+}
+
+</style>
+
+<style>
+.yao1{
+	 -moz-transform:rotate(-4deg);
+    -webkit-transform:rotate(-4deg);
+	-o-transform:rotate(-4deg);
+}
+
+.yao2{
+	 -moz-transform:rotate(4deg);
+    -webkit-transform:rotate(4deg);
+	-o-transform:rotate(4deg);
+}
+</style>
+<div class="btn_mh">
+	{if ($reply['musicurl']) }
+	<span id="playbox" class="btn_music on" onclick="playbox.init(this).play();" >
+		<i id="playbox2" class="fa fa-pause" style="font-size:120%;margin-left: 10px;line-height: 35px;"></i>
+		<audio autoplay="autoplay" src="{php echo tomedia($reply['musicurl'])}" loop="loop" id="audio"></audio>
+	</span>
+	<!--  音乐播放  -->
+	<script>
+		var playbox = (function(){
+		    //author:eric_wu
+		    var _playbox = function(){
+		        var that = this;
+		        that.box = null;
+		        that.player = null;
+		        that.src = null;
+		        that.on = true;
+		        //
+		        that.autoPlayFix = {
+		            on: true,
+		            //evtName: ("ontouchstart" in window)?"touchstart":"mouseover"
+		        }
+
+		    }
+		    _playbox.prototype = {
+		        init: function(box_ele){
+		            this.box = "string" === typeof(box_ele)?document.getElementById(box_ele):box_ele;
+		            this.player = this.box.querySelectorAll("audio")[0];
+		            this.src = this.player.src;
+		            this.init = function(){return this;}
+		            this.autoPlayEvt(true);
+		            return this;
+		        },
+		        play: function(){
+		            if(this.autoPlayFix.on){
+		                this.autoPlayFix.on = false;
+		                this.autoPlayEvt(false);
+		            }
+		            this.on = !this.on;
+		            if(true == this.on){
+		                this.player.src = this.src;
+		                this.player.play();
+		            }else{
+		                this.player.pause();
+		                this.player.src = null;
+		            }
+		            if("function" == typeof(this.play_fn)){
+		                this.play_fn.call(this);
+		            }
+		        },
+		        handleEvent: function(evt){
+		            this.play();
+		        },
+		        autoPlayEvt: function(important){
+		            if(important || this.autoPlayFix.on){
+		                document.body.addEventListener(this.autoPlayFix.evtName, this, false);
+		            }else{
+		                document.body.removeEventListener(this.autoPlayFix.evtName, this, false);
+		            }
+		        }
+		    }
+		    //
+		    return new _playbox();
+		})();
+
+		playbox.play_fn = function(){
+		    this.box.className = this.on?"btn_music on":"btn_music";
+		    document.getElementById('playbox2').className = this.on?"fa fa-pause":"fa fa-play";
+		}
+	</script>
+	{/if}
+	<!-- 活动详情 -->
+	<span class="btn_music" onclick="displayit(99)" >
+		<i class="fa fa-bullhorn" style="font-size:120%;margin-left: 10px;line-height: 35px;"></i>
+	</span>
+	{if ($_GPC['fanid']==771111) }
+	<a class="btn_music" href="{php echo $this->createMobileUrl('wxdemo',array('id'=>$_GPC['id']),true);}" >
+		<i class="fa fa-comments" style="font-size:120%;margin-left: 10px;line-height: 35px;"></i>
+	</a>
+	{/if}
+</div>
+
+
+
+<div class="top_bar" style="-webkit-transform:translate3d(0,0,0);opacity: 0.9;">
+				<!-- 搜索 -->
+				<ul id="menu_list2" class="menu_font menu_search nohide" style="display: none;width: 204px;left: 20%;position: fixed;">
+					<li style="height: 40px;padding: 5px;">
+						<input class="form-control" id="searchval" name="searchval" type="text" placeholder="输入编号或姓名." style="height:75%;width: 140px;margin-bottom: auto;padding: 4px;left: 0px;" />
+						<button onclick="if ($('#searchval').val()){displayit(1000); reloadlists(0,$('#searchval').val());}" class="btn btn-success" type="button" style="width: 40px;padding: 4px;height:100%;"><i class="fa fa-search"></i></button>
+					</li>
+				</ul>
+	<nav>
+		<ul id="top_menu" class="top_menu">
+			<li>
+				<a onclick="javascript:displayit(1)">
+					<i class="fa fa-user" style="font-size:150%;margin-top: 5px;"></i><label>我的</label>
+				</a>
+				<!-- menu_list0是参与的子窗口，但必须放在此子菜单中，因为‘参与’的样式风格不同，造成子UL样式异常 -->
+				<ul id="menu_list0" class="menu_font menu_join"   style="left:0;padding-bottom: 10px;display: none;width: 100%;right: auto;position: fixed;">
+					<li style="height: 100%;overflow: hidden; opacity: 1;">
+						{template 'submit'}
+					</li>
+				</ul>
+				<!-- 我的 -->
+				<ul id="menu_list1" class="menu_font menu_search" style="padding-bottom: 10px;display: none;width: 100%;right: auto;position: fixed;height:230px;/*min-height:400px;*/">
+					<li style="height: 100%;overflow: hidden;">
+						{template 'user'}
+					</li>
+				</ul>
+			</li>
+			<li>
+				<a onclick="javascript:displayit(2);">
+					<i class="fa fa-search" style="font-size:150%;margin-top: 5px;"></i><label>搜索</label>
+				</a>
+			</li>
+			<li class="home">
+				<a onclick="javascript:displayit(0)" style="background-color: #428bca;">
+					<i class="yao fa fa-camera" style="font-size: 200%;margin-top: 8px;}"></i><label style="font-size:14px;">参与</label>
+				</a>
+			</li>
+			<li>
+				<a onclick="javascript:displayit(3)">
+					<i class="fa fa-share-alt" style="font-size:150%;margin-top: 5px;"></i><label>分享</label>
+				</a>
+			</li>
+			<li>
+				<a onclick="javascript:displayit(4)">
+					<i class="fa fa-list" style="font-size:150%;margin-top: 5px;"></i><label>更多</label>
+				</a>
+				<ul id="menu_list4" class="menu_font" style="display: none;">
+					<li>
+						<a {if $reply['followurl']} href="{$reply['followurl']}" target="_blank" {else} onclick="javascript:displayit(41)" {/if}>
+							<i class="fa fa-comments" style="font-size:150%;margin-top: 5px;"></i><label>关注</label>
+						</a>
+					</li>
+					<!--
+					<li>
+						<a onclick="closeall();alert('建议');">
+							<i class="fa fa-envelope" style="font-size:150%;margin-top: 5px;"></i><label>建议</label>
+						</a>
+					</li>
+					-->
+					<li>
+						<a onclick="closeall();reloadlists(0,'');">
+							<i class="fa fa-star" style="font-size:150%;margin-top: 5px;"></i><label>最新</label>
+						</a>
+					</li>
+					<li>
+						<a onclick="closeall();reloadlists(1,'');">
+							<i class="fa fa-heart" style="font-size:150%;margin-top: 5px;"></i><label>最热</label>
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+  </nav>
+</div>
+<!--
+<div id="plug-wrap" onclick="closeall()" style="display: none;"></div>
+-->
+<!-- 分享引导<<<-->
+<div id="menu_list3" onclick="$('#menu_list3').hide();reload = true;" style="position:fixed;top:0px;left:0px;width:100%;height:100%;display:none;z-index: 99;background-color: rgb(82,73,69);">
+	<img src="{$resroot}images/share.jpg" style="width:100%;"/>
+</div>
+<!-- 分享引导>>>-->
+
+<!-- 活动详情<<<-->
+<div id="menu_list99" style="position:fixed;top:0px;left:0px;width:100%;height:100%;display:none;z-index: 99;background-color: rgb(82,73,69);">
+<!--onclick="$('#menu_list99').hide();reload = true;"-->
+<style>
+.icon-double-angle-down:before{
+content: "\f103";
+}
+</style>
+	<div style="height:auto;text-align:right;color: #fff;">
+		<i class="fa fa-close" style="font-size:200%;margin: 10px;" onclick="$('#menu_list99').hide();reload = true;"></i>
+	</div>
+	<div class="container" style="height:80%;padding:20px;color:#fff;overflow-y: auto;">
+        <div class="header" style="border: 1px solid rgb(200,200,200);border-radius: 5px;margin: 5px;">
+	        <h4 style="color:#fff;font-size:18px;">活动说明</h4>
+			<div style="border-top: 2px solid #fff;">
+		        <div class="body" >
+		        <h4 style="color:#fff;">{$reply['detail']}</h4>
+		        </div>
+			</div>
+        </div>
+        <div class="body" style="border: 1px solid rgb(200,200,200);border-radius: 5px;margin: 5px;">
+        <h4 style="color:#fff;font-size:18px;">活动时间：</h4><span>{$reply['startend']}</span>
+        </div>
+		<div class="footer" style="border: 1px solid rgb(200,200,200);border-radius: 5px;margin: 5px;">
+			<div onclick="$(this).next().toggle();">
+				<div class="pull-right">
+					<h4 style="color:#fff;font-size:18px;"><i class="fa icon-double-angle-down"></i></h4>
+				</div>
+				<div class="clearfix">
+					<h4 style="color:#fff;font-size:18px;">活动规则</h4>
+				</div>
+			</div>
+			<div style="border-top: 2px solid #fff;">
+		        <div class="body" style="padding: 10px;">
+		        	{$reply['content']}
+		        </div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<!-- 活动详情>>>-->
+
+<!-- 关注<<<-->
+<div id="menu_list41" style="color:#fff;position:fixed;top:0px;left:0px;width:100%;height:100%;display:none;z-index: 99;background-color: rgb(82,73,69);text-align:center;">
+	<div style="height:auto;text-align:right;">
+	<i class="fa fa-close" style="font-size:200%;margin: 10px;" onclick="$('#menu_list41').hide();reload = true;" ></i>
+	</div>
+		<div class="container">
+			<div class="item-image">
+				<img src="{$_W['account']['qrcode']}" style="max-width:100%;"/>
+			</div>
+            <div class="header">
+				<h3 style="color:#fff;">{$_W['account']['name']}</h3>
+            </div>
+            <div class="body">
+				<a href="{$_W['account']['subscribeurl']}" target="_blank">点击关注</a>
+            </div>
+        </div>
+</div>
+<!-- 关注>>>-->
+
+
+
+<div id="test" style="display:none">
+submit<br>
+
+$list['fanid']:{$list['fanid']}<br>
+$_W['member']['uid']:{$_W['member']['uid']}<br>
+$zan:{$zan}<br>
+$params_zan[':fanid']:{php echo $params_zan[':fanid']}<br>
+</div>
+<div class="text-center footer" style="margin-bottom:80px;bottom:0px; width:100%; text-align:center; word-break:break-all;">
+	{$reply["crinfo"]}
+</div>
+<script type="text/javascript">
+	reply_musicurl="{$reply['musicurl']}";
+	reply_pagesize="{$reply['pagesize']}";
+	GPC_pageid="{$_GPC['pageid']}";
+	reply_indexshowzan="{$reply['indexshowzan']}";
+	reply_topurl="{$reply['topurl']}";
+	reply_indexshownick="{$reply['indexshownick']}";
+	reply_indexshowcontent="{$reply['indexshowcontent']}";
+	index_url="{php echo $this->createMobileUrl('index',array('id'=>$_GPC['id'],'rid'=>$_GPC['rid']),true)}";
+</script>
+
+<script type="text/javascript" src="{$resroot}js/appscript.js"></script>
+
+<!--  微信分享  -->
+<script>
+sharedata = {
+	title: '{$reply["title"]}',
+	desc: '{php echo preg_replace("/\s/i", "", str_replace("	", "", cutstr(str_replace("&nbsp;", "", ihtmlspecialchars(strip_tags($reply["detail"]))), 60)))}',
+	link: "{php echo $_W['siteroot']}app/{php echo $this->createMobileUrl($_GPC['do'],array('id'=>$_GPC['id'],'rid'=>$reply['rid']),true);}",
+	imgUrl: "{php echo $_W['siteroot']}addons/msyou_meituzone/preview.jpg",
+	success: function(){
+			$.ajax({
+				url : sharedata['link']+"&share=1",
+				type : 'get',
+	            dataType : 'json',
+				success : function(data){
+                   	//alert(JSON.stringify(data));
+	                if(data.error == ''){
+                    	replycount(data.replycount);
+                    	listcount(data.listid,data.listcount);
+	                    showMsg({'msg':'点赞 成功！'});
+                    }else{
+                    	showMsg({'msg':data.error});
+	                }
+				},
+	            error: function(data, status, e){
+	                showMsg({"msg":+JSON.stringify(e)});
+	            }
+			});
+	},
+	cancel: function(){
+//		alert('cancel');
+	}
+};
+/*
+	var p_share = {php echo json_encode($_share);};
+	if(typeof sharedata == 'undefined'){
+		sharedata = p_share;
+	} else {
+		sharedata['title'] = p_share['title'] || sharedata['title'];
+		sharedata['desc'] = p_share['desc'] || sharedata['desc'];
+		sharedata['link'] = p_share['link'] || sharedata['link'];
+		sharedata['imgUrl'] = p_share['imgUrl'] || sharedata['imgUrl'];
+	}
+*/
+	function upd_sharedata(p_share){
+		sharedata['title'] = p_share.title || sharedata['title'];
+		sharedata['desc'] = p_share.desc || sharedata['desc'];
+		sharedata['link'] = p_share.link || sharedata['link'];
+		sharedata['imgUrl'] = p_share.imgUrl || sharedata['imgUrl'];
+	}
+
+	wx.ready(function () {
+	
+{if (empty($reply))}
+	alert("活动不存在！");
+	wx.closeWindow();
+{/if}
+	
+        {if ($_GPC['do']=='submit') }
+        	wx.hideOptionMenu();
+        {else}
+        /*
+		wx.checkJsApi({
+	      jsApiList: [
+		    'onMenuShareTimeline',
+		    'onMenuShareAppMessage',
+		    'onMenuShareQQ',
+		    'onMenuShareWeibo',
+	        'getNetworkType',
+	        'previewImage',
+	        'chooseImage'
+	      ],
+	      success: function (res) {
+	        alert(JSON.stringify(res));
+	      }
+	    });
+	    */
+		wx.showOptionMenu();
+		
+		wx.onMenuShareAppMessage(sharedata);
+		wx.onMenuShareTimeline(sharedata);
+		wx.onMenuShareQQ(sharedata);
+		wx.onMenuShareWeibo(sharedata);
+		wx.onMenuShareQZone(sharedata);
+		{/if}
+	});
+</script>
+
+</body>
+</html>

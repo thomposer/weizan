@@ -1,0 +1,31 @@
+{template 'common/header'}
+<script src="../addons/xkd_mhggl/template/js/web.min.js"></script>
+<h1>活动设置</h1>
+<hr>
+<form method="post" onsubmit="return setBlurPic(this);">
+    <div class="form-group">
+        <label>活动入口连接</label>
+        <p>
+            {if $zfbggl}
+            <a href="{$zfbggl['url']}" target="_blank">查看</a>
+            {else}
+            请先设置活动
+            {/if}
+        </p>
+    </div>
+    <div class="form-group">
+        <label>活动标题</label>
+        <input required class="form-control" type="text" name="zfbggl[title]"
+               value="{$zfbggl['title']}">
+    </div>
+
+    <div class="form-group">
+        <label>背景图片</label>
+        {php echo tpl_form_field_image('zfbggl[background]',$zfbggl['background']);}
+    </div>
+
+    <div class="form-group">
+        <button class="btn btn-primary">保存</button>
+    </div>
+</form>
+{template 'common/footer'}

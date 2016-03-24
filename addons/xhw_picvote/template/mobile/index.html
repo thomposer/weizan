@@ -177,7 +177,7 @@ button, input, select, textarea {
 
 <div class="con">
 	<p class="tips"><i>投票活动说明</i></p>
-    <div class="neirong">{php echo htmlspecialchars_decode($rule)}<!-- <a href="" class="more">[更多]</a> --></div>
+    <div class="neirong">{php echo htmlspecialchars_decode($rule_url)}<!-- <a href="" class="more">[更多]</a> --></div>
     	
 
       <div style="padding-top: 20px;" class="btn_box">
@@ -246,7 +246,7 @@ button, input, select, textarea {
 <section class="w-index-search">
 <form style="margin: 6px;margin-bottom: 15px;" id="index_search_form" method="get" action="" target="_parent">
 <div class="search-input-wrap">
-<input style="color: rgb(64, 64, 64);line-height:30px; " id="id" name="id" type="text" value="" placeholder="找不到投票照片?试试搜索ID或名字" class="keyword text" onkeydown="this.style.color='#404040'" autocomplete="off">
+<input style="color: rgb(64, 64, 64);line-height:30px; " id="id" name="id" type="text" value="" placeholder="找不到投票照片?试试搜索ID或名字" class="keyword text" onKeyDown="this.style.color='#404040'" autocomplete="off">
 <input type="submit" value="" class="submit">
 <input type="hidden" name="c" value="entry" />
 <input type="hidden" value="item" name="do">
@@ -388,7 +388,7 @@ button, input, select, textarea {
 	<li><a href="{php echo $this->createmobileUrl('top',array('do'=>'top', 'id'=>$id))}">排行榜</a></li>
   <li><a href="{php echo $this->createmobileUrl('my',array('do'=>'my', 'id'=>$id))}">我的主页</a></li>
 
-     <div id="mcover" onclick="weChat()" style="display:none;">
+     <div id="mcover" onClick="weChat()" style="display:none;">
               <img src="http://img.pccoo.cn/wx/vote/images//guide.png">
      </div>
 </ul>

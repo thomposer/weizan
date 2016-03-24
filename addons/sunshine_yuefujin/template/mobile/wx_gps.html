@@ -1,0 +1,146 @@
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="http://api.map.baidu.com/api?type=quick&ak=k1zVICSOf3x3UWEZBUUFVuBO&v=1.0" type="text/javascript"></script>
+
+<div class="ui-loading-block show" id="loading_gps_layer" style="display:none;">
+	<div class="ui-loading-cnt">
+		<i class="ui-loading-bright"></i>
+		<p>正在定位...</p>
+	</div>
+</div>
+
+<div class="ui-dialog" id="loading_gps_dialog">
+    <div class="ui-dialog-cnt">
+      <header class="ui-dialog-hd ui-border-b">
+                  <h3>系统提示</h3>
+                  <i class="ui-dialog-close" data-role="button"></i>
+              </header>
+        <div class="ui-dialog-bd">
+            <h4>定位失败</h4>
+            <div>无法定位到您所在的位置，确认是否开启GPS</div>
+        </div>
+        <div class="ui-dialog-ft">
+            <button type="button"  onclick="window.location.reload()">重试</button>
+            <button type="button"  onclick="$('#loading_gps_dialog').hide()">关闭</button>
+        </div>
+    </div>        
+</div>
+
+<script type="text/javascript">
+	//2011-7-25
+	var wx_gps_res = {}; // 结果
+	var wx_gps_status = false; // 状态
+	var wx_gps_sign = 1;
+	var intv_wx;
+
+	// 定时器
+	function clock() {
+		wx_gps_sign ++;
+		// 10s  500ms
+		if(wx_gps_sign > 20) {
+			$("#loading_gps_layer").hide();
+			$("#loading_gps_dialog").dialog('show');
+			clearInterval(intv_wx);
+		}
+	}
+
+	wx.config({
+		debug: false,
+		// appId: '{php echo $signPackage["appId"]}',
+		// timestamp: '{php echo $signPackage["timestamp"]}',
+		// nonceStr: '{php echo $signPackage["nonceStr"]}',
+		// signature: '{php echo $signPackage["signature"]}',
+		appId: "{php echo $_W['account']['jssdkconfig']['appId'];}",
+		timestamp: "{php echo $_W['account']['jssdkconfig']['timestamp'];}",
+		nonceStr: "{php echo $_W['account']['jssdkconfig']['nonceStr'];}",
+		signature: "{php echo $_W['account']['jssdkconfig']['signature'];}",
+		jsApiList: [
+		  // 所有要调用的 API 都要加到这个列表中
+		  'getLocation'
+		]
+	});
+    wx.ready(function () {
+    	$("#loading_gps_layer").show();
+    	// clock
+    	intv_wx = setInterval('clock()',500);
+	    // 在这里调用 API
+		wx.getLocation({
+		    success: function (res) {
+		        var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+		        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+		        var speed = res.speed; // 速度，以米/每秒计
+		        var accuracy = res.accuracy; // 位置精度
+		        convert(res); 
+
+		    }
+		});
+
+		// 朋友圈
+		// wx.onMenuShareTimeline({
+		// 	title:'test',
+		// 	link:'http://www.baidu.com',
+		// 	imgUrl:'http://pu.osinger.com/addons/sunshine_yuefujin/upload/images/20150718180929.jpg',
+		// 	success:function() {
+		// 		alert('hi');
+		// 	},
+		// 	cancel:function() {
+		// 		alert('no');
+		// 	}
+		// });
+		// wx.onMenuShareAppMessage({
+		//     title: '微附近-发现身边的乐趣', // 分享标题
+		//     desc: '', // 分享描述
+		//     link: '', // 分享链接
+		//     imgUrl: '', // 分享图标
+		//     type: '', // 分享类型,music、video或link，不填默认为link
+		//     dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+		//     success: function () { 
+		//         // 用户确认分享后执行的回调函数
+		//     },
+		//     cancel: function () { 
+		//         // 用户取消分享后执行的回调函数
+		//     }
+		// });
+	});
+
+	function convert(point) {
+		$.ajax({
+			type:'get',
+			dataType:'jsonp',
+			async:false,
+			url:"http://api.map.baidu.com/geoconv/v1/?coords="+point.longitude+","+point.latitude+"&from=1&to=5&ak={php echo $this->baidu_key}",
+			success:function(d) {
+				if(d.status==0) {
+					wx_gps_res = d.result[0];
+					$("#loading_gps_layer").hide();
+					wx_gps_status = true;
+
+					// 更新用户坐标为实时坐标
+					doSynclnglat(wx_gps_res);
+
+					clearInterval(intv_wx);
+				}
+				else
+				{
+					convert(point);
+				}
+			}
+		})
+	}
+
+	// 获取当前用户的坐标直接更新到数据表
+	function doSynclnglat(wx_gps_res) {
+		$.ajax({
+		 	async:false,
+		 	type:'post',
+		 	data:{'lat':wx_gps_res.y,'lng':wx_gps_res.x},
+		 	url:"{php echo $this->createMobileUrl('updatelnglat',array('sunshine_openid_nocookie'=>$sunshine_openid_nocookie))}",
+		 	success:function(d) {
+		 		if(d.res == '100') {
+		 			//
+		 		}else {
+		 			alert(d.msg);
+		 		}
+		 	}
+		})
+	}
+</script>

@@ -1,0 +1,133 @@
+{template 'common/header'} {php echo tpl_nav($navs)}
+<style type="text/css">
+	.editable-has-buttons{
+		width:80px !important;
+	}
+</style>
+
+<link rel="stylesheet" type="text/css" href="{MODULE_URL}public/js/xeditable.css" />
+<script type="text/javascript" src="{MODULE_URL}public/js/angular.min.js"></script>
+<script type="text/javascript" src="{MODULE_URL}public/js/smart-table.js"></script>
+<script type="text/javascript" src="{MODULE_URL}public/js/xeditable.js"></script>
+{if empty($act)}
+<section id="page-title" class="padding-top-15 padding-bottom-15">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			{$title}
+		</div>
+		<div class="panel-body table-responsive" ng-controller="formCtrl">
+			<table st-table="list" class="table table-hover" style="display:auto;">
+				<thead class="navbar-inner">
+					<tr>
+						<th style="width:180px;">插件标题</th>
+						<th style="width:100px;">插件版本</th>
+						<th style="width:100px;">插件作者</th>
+						<th style="width:120px;">所属模块</th>
+						<th style="width:80px;">插件费用</th>
+						<th style="width:100px;">使用人数</th>
+						<th style="width:280px;">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in list">
+						<td>
+							{{item.name}}
+						</td>
+						<td>
+							{{item.version}}
+						</td>
+						<td>
+							{{item.author}}
+						</td>
+						<td>
+							{{item.module}}
+						</td>
+						<td>
+							<label class="label label-success">{{item.fee}}</label>
+						</td>
+						<td>
+							<label class="label label-info">{{item.num}}人</label>
+						</td>
+						<td>
+							<a type="button" class="btn btn-primary" ng-click="delete(item)" ng-mouseenter="tooltip()" data-toggle="tooltip" data-placement="top" title="卸载"><i class="fa fa-times"></i></a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+	{$pager}
+</section>
+
+<script>
+	var app = angular.module('app', []);
+	app.controller('formCtrl', function($scope, $http) {
+		$scope.list = {php echo json_encode($list)};
+		
+		$scope.delete = function(e) {
+			angular.forEach($scope.list, function(i, t, s) {
+				if (e.id == i.id) {
+					$scope.list.splice(t, 1);
+				}
+			});
+			$http.post(e.uninstall, e).success(function(data) {});
+		}
+	});
+	angular.bootstrap(document, ['app']);
+</script>
+{/if} {if $act == 'post'} {template 'common/post'} {/if} {if $act == 'more'}
+<section id="page-title" class="padding-top-15 padding-bottom-15">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			{$title}
+		</div>
+		<div class="panel-body table-responsive" ng-controller="formCtrl">
+			<table class="table table-hover" style="display:auto;">
+				<thead class="navbar-inner">
+					<tr>
+						<th style="width:150px;">插件名称</th>
+						<th style="width:80px;">插件版本</th>
+						<th style="width:100px;">插件作者</th>
+						<th style="width:180px;">所属模块</th>
+						<th style="width:80px;">插件费用</th>
+						<th style="width:180px;">操作</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr ng-repeat="item in list">
+						<td ng-click="edit(item)">{{item.name}}</td>
+						<td>{{item.version}}</td>
+						<td>{{item.author}}</td>
+						<td>{{item.module}}</td>
+						<td>
+							<label class="label label-info">{{item.fee}}M币</label>
+						</td>
+						<td>
+							<a type="button" class="btn btn-default" ng-click="install(item)" ng-mouseenter="tooltip()" data-toggle="tooltip" data-placement="top" title="安装"><i class="fa fa-cloud-download"></i></a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{$pager}
+</section>
+
+<script>
+var app = angular.module('app', []);
+app.controller('formCtrl', function($scope, $http) {
+	$scope.list = {php echo json_encode($list)};
+	$scope.install = function(e) {
+		angular.forEach($scope.list, function(i, t, s) {
+			if (e.name == i.name) {
+				$scope.list.splice(t, 1);
+			}
+		});
+		$http.post(e.install, e).success(function(data) {});
+	}
+});
+angular.bootstrap(document, ['app']);
+</script>
+{/if} {if $act == 'desc'} {template 'common/post'} {/if} {if $act == 'log'} {template 'common/post'} {/if} {if $act == 'privite'} {template 'common/post'} {/if} {template 'common/footer'}

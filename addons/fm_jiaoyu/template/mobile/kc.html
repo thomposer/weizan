@@ -15,8 +15,9 @@
         </style>
         <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
         <title>找课程</title>
-        <link rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/reset.css?{php echo time()}">
-        <script src="../addons/fm_jiaoyu/public/mobile/js/jquery.js?{php echo time()}"></script>
+		<link rel="stylesheet" href="{MODULE_URL}public/mobile/css/weixin.css?{php echo time()}">
+        <link rel="stylesheet" href="{MODULE_URL}public/mobile/css/reset.css?{php echo time()}">
+        <script src="{MODULE_URL}public/mobile/js/jquery.js?{php echo time()}"></script>
 </head>
 <body>
 
@@ -46,13 +47,13 @@
 								{if $item['end']<TIMESTAMP}
 								<div class="hot">
                                     <div style="font-size:12px;">已完</div>                                   
-                                    <a href="{php echo $this->createMobileUrl('kcinfo', array('id' => $item['id'], 'schoolid' =>$item['schoolid']), true)}">查看详情</a>
+                                    <a href="{php echo $this->createMobileUrl('kcinfo', array('id' => $item['id'], 'schoolid' =>$schoolid), true)}">查看详情</a>
                                 </div>
 								{else}
                                 <div class="add">
                                     <div style="font-size:12px;">{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_kcbiao')." WHERE kcid = '".$item['id']."'")}节</div>
                                     <span>剩余{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_kcbiao')." WHERE date>'".TIMESTAMP."' And kcid = '".$item['id']."'")}节</span>
-                                    <a href="{php echo $this->createMobileUrl('kcinfo', array('id' => $item['id'],'schoolid' =>$item['schoolid']), true)}">查看详情</a>
+                                    <a href="{php echo $this->createMobileUrl('kcinfo', array('id' => $item['id'],'schoolid' =>$schoolid), true)}">查看详情</a>
                                 </div>
 								{/if}
                            </li>
@@ -64,6 +65,7 @@
 
         </dl>
     </div>
+	   {php include $this->template('footer');}  
     <script>
         $(document).ready(function(e) {
             $("#wrap").css("min-height", $(document).height())

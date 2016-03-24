@@ -1,16 +1,11 @@
 <?php
 /**
  * 微商圈
+
  *
- * 作者:迷失卍国度
- *
- * 联系qq : 15595755
- *
- * 未经许可，任何盗用代码行为都属于侵权
  */
 
 defined('IN_IA') or exit('Access Denied');
-define('LOCK', 'Li9zb3VyY2UvbW9kdWxlcy9pYnVzaW5lc3NjZW50ZXIvdGVtcGxhdGUvdGhlbWVzL3ZlcnNpb24uY3Nz');
 include "../addons/weisrc_businesscenter/model.php";
 
 class weisrc_businesscenterModule extends WeModule

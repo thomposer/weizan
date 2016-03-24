@@ -11,6 +11,7 @@
 		$schoolid = intval($_GPC['schoolid']);
 
         $category = pdo_fetchall("SELECT * FROM " . tablename($this->table_teachers) . " WHERE weid = :weid And schoolid=:schoolid ORDER BY id ASC, sort DESC", array(':weid' => $weid, ':schoolid' => $schoolid), 'id');
+		
 
 
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
@@ -23,7 +24,8 @@
 		$sd = pdo_fetchall("SELECT * FROM " . tablename($this->table_classify) . " where weid = '{$_W['uniacid']}' AND schoolid ={$schoolid} And type = 'timeframe' ORDER BY ssort DESC", array(':weid' => $_W['uniacid'], ':type' => 'timeframe', ':schoolid' => $schoolid));
 
         $category = pdo_fetchall("SELECT * FROM " . tablename($this->table_classify) . " WHERE weid =  '{$_W['uniacid']}' AND schoolid ={$schoolid} ORDER BY sid ASC, ssort DESC", array(':weid' => $_W['uniacid'], ':schoolid' => $schoolid), 'sid');
-        if (!empty($category)) {
+       		   
+	   if (!empty($category)) {
             $children = array();
             foreach ($category as $cid => $cate) {
                 if (!empty($cate['parentid'])) {
@@ -31,7 +33,9 @@
                 }
             }
         }
-
+		
+		
+		
         $kcbiao = pdo_fetchall("SELECT * FROM " . tablename($this->table_kcbiao) . " WHERE weid =  '{$_W['uniacid']}' AND schoolid ={$schoolid} ", array(':weid' => $_W['uniacid'], ':schoolid' => $schoolid), 'id');
         if (!empty($kcbiao)) {
             $children = array();
@@ -40,7 +44,9 @@
                     $children[$cate['parentid']][$cate['id']] = array($cate['id'], $cate['name']);
                 }
             }
-        }		
+        }	
+		
+		$member = pdo_fetchall("SELECT * FROM " . tablename ( 'mc_members' ) . " where uniacid = :uniacid ORDER BY uid ASC", array(':uniacid' => $_W ['uniacid']), 'uid');		
 		
 		if (empty($schoolid)) {
             message('没有选中任何学校!');
@@ -50,7 +56,8 @@
             load()->func('tpl');
             $id = intval($_GPC['id']);
             if (!empty($id)) {
-                $item = pdo_fetch("SELECT * FROM " . tablename($this->table_teachers) . " WHERE id = :id", array(':id' => $id));														
+                $item = pdo_fetch("SELECT * FROM " . tablename($this->table_teachers) . " WHERE id = :id", array(':id' => $id));
+			
                 if (empty($item)) {
                     message('抱歉，教师不存在或是已经删除！', '', 'error');
                 } else {
@@ -59,6 +66,15 @@
                     }
                 }
             }
+			if ($item['code'] == 0){
+			     $randStr = str_shuffle('1234567890');
+                 $rand = substr($randStr,0,6);
+				}else{
+		  	     $rand = $item['code'];	
+			}
+			if(!empty($_GPC['code'])){
+				 $rand = $_GPC['code'];	   
+			}
             if (checksubmit('submit')) {
                 $data = array(
 				    'weid' => $_W['uniacid'],
@@ -84,6 +100,7 @@
 					'headinfo' => trim($_GPC['headinfo']),
 					'jinyan' => trim($_GPC['jinyan']),
 					'info' => htmlspecialchars_decode($_GPC['info']),
+					'code' => $rand,
                 );
 
                 if (empty($data['tname'])) {
@@ -138,10 +155,28 @@
             }
             if (!empty($row['thumb'])) {
                 load()->func('file');
-            //    file_delete($row['thumb']);
+                file_delete($row['thumb']);
             }
             pdo_delete($this->table_teachers, array('id' => $id));
             message('删除成功！', referer(), 'success');
+        } elseif ($operation == 'jiebang') {
+            $id = intval($_GPC['id']);
+            $row = pdo_fetch("SELECT id, thumb FROM " . tablename($this->table_teachers) . " WHERE id = :id", array(':id' => $id));
+            if (empty($row)) {
+                message('抱歉，教师不存在或是已经被删除！');
+            }
+            if (!empty($row['thumb'])) {
+                load()->func('file');
+            //    file_delete($row['thumb']);
+            }
+			$temp = array(
+			        'openid' => '',
+		           	'uid'    => 0
+			       );
+			
+			pdo_update($this->table_teachers, $temp, array('id' => $id));
+            pdo_delete($this->table_user, array('tid' => $id));
+            message('解绑成功！', referer(), 'success');
         } elseif ($operation == 'deleteall') {
             $rowcount = 0;
             $notrowcount = 0;

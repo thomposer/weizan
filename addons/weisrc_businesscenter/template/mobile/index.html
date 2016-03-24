@@ -4,7 +4,7 @@
 		<title>{$title}</title>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
-        <meta name="author" content="For Memory For Joel,Mailto:15595755@qq.com"/>
+        <meta name="author" content="For Memory For Joel,Mailto:800083075@qq.com"/>
 		<meta name="keywords" content=""/>
 		<meta name="description" content=""/>
         <!--viewport 等比 不缩放-->
@@ -405,13 +405,15 @@
         }
 
         .foot {
-            border-top: 1px solid #f0f0f0;
-            line-height: 30px;
-            font-size: 0.7em;
+            /*border-top: 1px solid #f0f0f0;*/
+            /*line-height: 30px;*/
+            /*font-size: 0.7em;*/
             text-align: center;
-            /*color: #bbb;*/
             color: #f39f6c;
             background-color: #eee;
+            border-top: 1px solid #e5e5e5;
+            line-height: 38px;
+            font-size: 0.9em;
         }
 
         .foot a {
@@ -491,6 +493,7 @@
             background-image: url({RES}/themes/images/yellowfork.png);
         }
         </style>
+        {php echo register_jssdk(false);}
     </head>
     <body>
     {if !empty($setting)&&$setting['scroll_announce_enable'] == 1}
@@ -525,7 +528,7 @@
                         {loop $slide $item}
                         <li>
                             <a href="{if empty($item['url'])}#{else}{$item['url']}{/if}">
-                                <img _src="{$_W['attachurl']}{$item['attachment']}" src="{$_W['attachurl']}{$item['attachment']}" onerror="this.src='{RES}/themes/images/nopic.jpeg'"/>
+                                <img _src="{php echo tomedia($item['attachment'])}" src="{php echo tomedia($item['attachment'])}" onerror="this.src='{RES}/themes/images/nopic.jpeg'"/>
                             </a>
                         </li>
                         {/loop}
@@ -556,8 +559,8 @@
                 {loop $category_first $item}
                 <li>
                     <a href="{php echo $this->createMobileurl('list', array('cid' => $item['id'], true))}">
-                    <div class="J-imglazyload" data-url="{if strstr($item['logo'], 'http') || strstr($item['logo'], '../addons/')}{$item['logo']}{else}{$_W['attachurl']}{$item['logo']}{/if}"></div>
-                    <p>{$item['name']}</p></a>
+                        <img src="{if strstr($item['logo'], 'http') || strstr($item['logo'], '../addons/')}{$item['logo']}{else}{$_W['attachurl']}{$item['logo']}{/if}" width="73" height="55">
+                        <p>{$item['name']}</p></a>
                 </li>
                 {/loop}
             </ul>
@@ -571,7 +574,8 @@
                 {loop $hotstores $item}
                 <li style="width:50%;">
                     <a href="{php echo $this->createMobileurl('shop', array('id' => $item['id'], true))}">
-                        <div class="J-imglazyload" data-url="{if strstr($item['logo'], 'http') || strstr($item['logo'], '../addons/')}{$item['logo']}{else}{$_W['attachurl']}{$item['logo']}{/if}"></div>
+                        <img src="{if strstr($item['logo'], 'http') || strstr($item['logo'], '../addons/')}{$item['logo']}{else}{$_W['attachurl']}{$item['logo']}{/if}" width="175" height="87">
+                        <p>{$item['name']}</p>
                     </a>
                 </li>
                 {/loop}
@@ -601,142 +605,11 @@
     </div>
     <!--{php include $this->template('_footer');}-->
     <!-- footer e -->
-    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <script>
-        /*
-         * 注意：
-         * 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
-         * 2. 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
-         * 3. 完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
-         *
-         * 如有问题请通过以下渠道反馈：
-         * 邮箱地址：weixin-open@qq.com
-         * 邮件主题：【微信JS-SDK反馈】具体问题
-         * 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
-         */
-        var appid = '{$_W['account']['jssdkconfig']['appId']}';
-        var timestamp = '{$_W['account']['jssdkconfig']['timestamp']}';
-        var nonceStr = '{$_W['account']['jssdkconfig']['nonceStr']}';
-        var signature = '{$_W['account']['jssdkconfig']['signature']}';
 
-        wx.config({
-            debug: false,
-            appId: appid,
-            timestamp: timestamp,
-            nonceStr: nonceStr,
-            signature: signature,
-            jsApiList: [
-                // 所有要调用的 API 都要加到这个列表中
-                'checkJsApi',
-                'onMenuShareTimeline',
-                'onMenuShareAppMessage',
-                'onMenuShareQQ',
-                'onMenuShareWeibo',
-                'hideMenuItems',
-                'showMenuItems',
-                'hideAllNonBaseMenuItem',
-                'showAllNonBaseMenuItem',
-                'translateVoice',
-                'startRecord',
-                'stopRecord',
-                'onRecordEnd',
-                'playVoice',
-                'pauseVoice',
-                'stopVoice',
-                'uploadVoice',
-                'downloadVoice',
-                'chooseImage',
-                'previewImage',
-                'uploadImage',
-                'downloadImage',
-                'getNetworkType',
-                'openLocation',
-                'getLocation',
-                'hideOptionMenu',
-                'showOptionMenu',
-                'closeWindow',
-                'scanQRCode',
-                'chooseWXPay',
-                'openProductSpecificView',
-                'addCard',
-                'chooseCard',
-                'openCard'
-            ]
-        });
-
-        var shareData = {
-            title: '{$share_title}',
-            desc: '{$share_desc}',
-            link: '{$share_url}',
-            imgUrl: '{$share_image}'
-        };
-
-        wx.ready(function () {
-            wx.onMenuShareAppMessage({
-                title: shareData.title,
-                desc: shareData.desc,
-                link: shareData.link,
-                imgUrl: shareData.imgUrl,
-                trigger: function (res) {
-                    //alert('用户点击发送给朋友');
-                },
-                success: function (res) {
-                    alert('感谢您的分享...');
-                },
-                cancel: function (res) {
-                    //alert('已取消');
-                },
-                fail: function (res) {
-                    alert(JSON.stringify(res));
-                }
-            });
-
-            wx.onMenuShareTimeline({
-                title: shareData.title,
-                link: shareData.link,
-                imgUrl: shareData.imgUrl,
-                success: function () {
-                    // 用户确认分享后执行的回调函数
-                },
-                cancel: function () {
-                    // 用户取消分享后执行的回调函数
-                }
-            });
-
-            wx.onMenuShareQQ({
-                title: shareData.title,
-                desc: shareData.desc,
-                link: shareData.link,
-                imgUrl: shareData.imgUrl,
-                success: function () {
-                    // 用户确认分享后执行的回调函数
-                },
-                cancel: function () {
-                    // 用户取消分享后执行的回调函数
-                }
-            });
-
-            wx.onMenuShareWeibo({
-                title: shareData.title,
-                desc: shareData.desc,
-                link: shareData.link,
-                imgUrl: shareData.imgUrl,
-                success: function () {
-                    // 用户确认分享后执行的回调函数
-                },
-                cancel: function () {
-                    // 用户取消分享后执行的回调函数
-                }
-            });
-        });
-
-        wx.error(function (res) {
-            //alert(res.errMsg);
-        });
-    </script>
     </body>
-	<!--页面JS部分-->
+    {php echo htmlspecialchars_decode($setting['statistics']);}
 
+    <!--页面JS部分-->
 	<script type="text/javascript">
         $('#s-fork').click(function(){
             $('#speaker').hide();
@@ -790,4 +663,22 @@
 			document.getElementById("scroller").style.cssText = " width:" + document.body.clientWidth * count + "px";
 		}
 	</script>
+    <script>
+        wx.ready(function () {
+            sharedata = {
+                title: '{$share_title}',
+                desc: '{$share_desc}',
+                link: '{$share_url}',
+                imgUrl: '{$share_image}',
+                success: function(){
+                    //alert('感谢分享');
+                },
+                cancel: function(){
+                    //alert('cancel');
+                }
+            };
+            wx.onMenuShareAppMessage(sharedata);
+            wx.onMenuShareTimeline(sharedata);
+        });
+    </script>
 </html>

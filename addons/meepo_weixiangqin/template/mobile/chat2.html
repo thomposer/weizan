@@ -16,7 +16,8 @@
 <meta content="telephone=no, address=no" name="format-detection" />
 <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
 <link rel="stylesheet" type="text/css" href="{RES2}css/mobilemain.css?t={php echo time();}"/>
-
+<script type="text/javascript" src="{MODULE_URL}template/mobile/sweetalert.min.js"></script>
+	<link rel="stylesheet" href="{MODULE_URL}template/mobile/sweetalert.css" />
 {php echo register_jssdk(false);}
     <script src="{RES2}js/jquery_min.js"></script>
     <script>
@@ -50,76 +51,57 @@ function tip_close(){
 	$("#poptip_content").fadeOut(500);
 }
 </script>
-
-	
-</head>
-<body onselectstart="return true;" ondragstart="return false;">
-<ul style="position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-		height: 35px;
-        margin: auto;
-        background: #f3f3f3;
-        z-index: 1000;
-        border-top: 1px solid #b2b2b2;">
-                    
-                        <li style="width:100%">
-						  
-						<div style="float:left;margin-left:10px" class="acolor">
-						
-                           <a href="{php echo $this->createMobileUrl('mynews')}" target="__blank"   class="ui-btn" ">我的消息</a>
-</div>
-<div style="float:right;margin-right:10px" class="acolor">
-  <a href="{php echo $this->createMobileUrl('dropblack',array('toname'=>$to,'toopenid'=>$toopenid))}" target="__blank"  class="ui-btn" >{if empty($result)}拉黑{else}取消{/if}</a>
-</div>
-                        </li>
-                         
-         <style>
-.acolor a:link {color: #0079ff;} 
-.acolor a:visited {color: #0079ff;} 
- .acolor a:hover{color: #0079ff;} 
-.acolor a:active {color: #0079ff;} 
-		 .ui-btn{height: 30px;
+<style type='text/css'>
+.acolor a:link {color:#ff5858} 
+.acolor a:visited {color:#ff5858} 
+ .acolor a:hover{color:#ff5858} 
+.acolor a:active {color:#ff5858} 
+.ui-btn{
+height: 30px;
 line-height: 30px;
 padding: 0 13px;
 min-width: 56px;
 display: inline-block;
-position: relative;
 text-align: center;
 border: none;
 font-size: 14px;
-background-color: #fdfdfd;
 background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.5, white), to(#fafafa));
 border-radius: 3px;
-vertical-align: top;
-
-text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
 -webkit-box-sizing: border-box;
 border: 1px solid #cacccd;
 -webkit-background-clip: padding-box;
 background-clip: padding-box;
 outline:0;
 }
-		 </style>                
-     <style type='text/css'>
-	#poptip { display:block;position: fixed; top:40%;left:50%;width:160px;margin-left:-80px;height: 80px;background:#000; opacity: 0.7;filter:alpha(opacity=0.7); color:#fff;z-index: 999;  border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;}
-	#poptip_content { display:block;position: fixed; top:40%;left:50%;width:160px;margin-left:-80px; height: 27px; color:#fff;text-align:center;font-size:14px;z-index: 9909;text-align:center;line-height:80px}
-   </style>                  
-                   
+.content{color:#fff}
+#poptip { display:block;position: fixed; top:40%;left:50%;width:160px;margin-left:-80px;height: 80px;background:#000; opacity: 0.7;filter:alpha(opacity=0.7); color:#fff;z-index: 999;  border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;}
+#poptip_content { display:block;position: fixed; top:40%;left:50%;width:160px;margin-left:-80px; height: 27px; color:#fff;text-align:center;font-size:14px;z-index: 9909;text-align:center;line-height:80px}
+#more{width:100%;text-align:center;font-family: sans-serif;background: rgba(200,200,200,0.4);height:30px;line-height:30px;font-size:10px}
+#loading img,#loading2 img{height:15px;width:15px;}
+.page{width:100%;margin:0 auto;font:12px 'Microsoft YaHei',Arial;color: #007aff;}
+.nav{width:100%;overflow:hidden;margin:0 auto;height:50px;position:relative; line-height:100px;}
+.nav ul{position:absolute;left:0;top:0;width:100%;z-index:1;margin:0;padding:0}
+.nav ul li{width:25%; float:left;margin:0;padding:0}
+.nav a{color:#007aff;width:100%; display:block; text-decoration:none; text-align:center;}
+#facetype div{text-align:center;height:50px}
+#facetype div span{text-align:center;width:100%;height:50px;line-height:50px}
+   </style>
+</head>
+<body onselectstart="return true;" ondragstart="return false;">
+<ul style="position: fixed;top: 0;left: 0;width: 100%;margin: auto;background: #ff5858;z-index: 1000;">
+ <li style="width:100%">
+	<div style="float:left;padding:5px" class="acolor">		
+            <a href="{php echo $this->createMobileUrl('mynews')}" target="__blank"   class="ui-btn" ">我的消息</a>
+    </div>
+    <div style="float:right;padding:5px" class="acolor">
+       <a class="ui-btn" id="dropblack" style="color:#ff5858">{if empty($result)}加黑名单{else}取消拉黑{/if}</a>
+     </div>
+</li>                                  
 </ul>
-
-
-
-
-<div style="height:16px"></div>
-
     <div id="container" class="container animate">
-	
-        <div class="containertop" id="containertop">
-            
-            
-        </div>
+	     <div style="height:50px">&nbsp;</div>
+	    <div id="more"><span id="loading">查看历史消息</span></div>
+        <div class="containertop" id="containertop"></div>
         <footer>
             <section class="nav_footer" id="nav_footer">
                 <ul>
@@ -140,7 +122,7 @@ outline:0;
                         </li>
 
                         <li>
-                            <a id="btnsend" class="toolssend on" style="height: 24px; padding-top: 6px; margin: 0 7px;">发送</a>
+                            <a id="btnsend" class="toolssend on" style="height: 24px; padding-top: 6px; margin: 0 7px;background-color:#ff5858;color:#fff">发送</a>
                         </li>
                     </ol>
                   
@@ -219,18 +201,11 @@ outline:0;
                         </li>
 
                     </ol>
-
-
-                    <!--ol style="margin:0;padding:0;display:none;border:1px solid gray" id="wrapper2" >
-                        <li  style="width:100%;color:#000;text-align:center;margin: 10px auto;font-size: 16px;" id="scroller2">
-						</li>
-				   </ol-->
 <div class="page">
 
 <div class="nav" id="nav">
 <ul  class="facetype" id="facetype" style="">
 <li><div href="#"><span data-key="jingdian" class="jingdian on">经典</span></div></li>
-
 <li><div href="#"><span data-key="mayi" class="mayi" >搞笑蚂蚁</span></div></li>
 <li><div href="#"><span data-key="paopaobing" class="xiong" >炮炮兵</span></div></li>
 <li><div href="#"><span data-key="qbl" class="xiong">丘比龙</span></div></li>
@@ -241,21 +216,12 @@ outline:0;
 </ul>
 </div>
 </div>
-<style>
-.page{width:100%;margin:0 auto;font:12px 'Microsoft YaHei',Arial;color: #007aff;}
-.nav{width:100%;overflow:hidden;margin:0 auto;height:50px;position:relative; line-height:100px;}
-.nav ul{position:absolute;left:0;top:0;width:100%;z-index:1;margin:0;padding:0}
-.nav ul li{width:25%; float:left;margin:0;padding:0}
-.nav a{color:#007aff;width:100%; display:block; text-decoration:none; text-align:center;}
-#facetype div{text-align:center;height:50px}
-#facetype div span{text-align:center;width:100%;height:50px;line-height:50px}
-</style>
-                </ul>
+</ul>
 
 
             </section>
         </footer>
-        <input type="hidden" id="pageNumber" value="2" />
+        <input type="hidden" id="page" value="1" />
         <input type="hidden" id="lastmsgtime" value="" />
     </div>
 <script src="http://www.baidufe.com/fe/base/static/js/base.js?v=7a0db0e0"></script>
@@ -265,10 +231,7 @@ outline:0;
 var $jq = jQuery.noConflict(true);
 $jq(document).ready(function () {
 	   $jq("#btnimg").live("click",function (event) { 
-	//$("#btnimg").click(function(event){
-		
-       var curSrc = $jq(this).attr("num");
-	   //alert(curSrc);
+        var curSrc = $jq(this).attr("num");
 		WeixinApi.ready(function(Api) {
         var srcList = [curSrc];
         Api.imagePreview(curSrc, srcList);
@@ -278,11 +241,9 @@ $jq(document).ready(function () {
 </script> 
 </body>
 </html>
-
-<script src="{RES2}js/emotion.js?t={$num}" ></script>
+<script src="{RES2}js/emotion.js" ></script>
 <script src="{RES2}js/helper_min.js" ></script>
 <script src="{RES2}js/swipe.js" ></script>
-
 <script>
     var userAgent = navigator.userAgent.toLowerCase();
     var IsIOS = false;
@@ -333,20 +294,9 @@ $(document).ready(function () {
     });
     $("#face_area").hide();
 	$(".page").hide();
-	onLoadMessage(1);//加载历史已读消息 
-    setInterval(getnewMessage2,2000); //每1秒发送一次请求 加载最新回复消息
-    $(window).bind("scroll", function () {
-		
-        if ($(document).scrollTop() <= 0 && getType) {
-            var oldheight = document.body.scrollHeight;
-            var page = $("#pageNumber").val();
-            onLoadMessage(page);
-            $(document).scrollTop(document.body.scrollHeight - oldheight)
-        }
-
-    });
+    setInterval(getnewMessage2,2000);
     scrollTop();
-   
+    
 });
 
 
@@ -360,10 +310,11 @@ function TscrollTop() {
     $(window).scrollTop(document.body.scrollHeight);
 }
 
-function onLoadMessage(page) {
-	var fromType = 'amr';
-	var id="1";
-    $.ajax({
+$("#more").click(function(){
+	var page = $('#containertop ul').length;
+	$("#loading").html("<img src='{MEEPORES}/static/forum/css/img/loading.gif'/>");
+	tip('拼命的加载中!');
+	 $.ajax({
         type: 'post',
         url: "{php echo $this->createMobileUrl('getfatherback10')}",
         data: {
@@ -374,102 +325,119 @@ function onLoadMessage(page) {
         },
         dataType: 'json',
         success: function (json) {
-            if (json) {
-                for (var i = 0; i <= json.length - 1; i++) {
+			
+			tip_close();
+		if(json.length > 0){
+			 for (var i = 0; i < json.length; i++) {
                     var uliHtml = "";
                     var voiceId = "";
                     var obj = json[i];
                     var fromType = obj.sender;
-					var fromwho = obj.sender;//谁发的
-                    var ulclass = 'class="ul_talk reply"';
+					var fromwho = obj.sender    
                     var showFlag = true;
-                    var path = '<path d="M18,40 A9,5,0,0,0,2,37 L0,23" stroke-width="1" stroke="#2792ff" fill="#2792ff" />';
-                    var preobj;
-                    if (obj.fromwho == "{$_W['fans']['from_user']}") {
-                        ulclass = 'class="ul_talk"';
-                        path = '<path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#e2e2e2" fill="#e2e2e2" />';
-                    }
-                    //alert(obj.sender);
-                    
-                    if (obj.sender != sender) {//回复的放于左边
-						
-						uliHtml = '<p class="time" style="border:1px solid gray;width:50%;margin-left:20px;border-radius:8px;-webkit-border-radius:8px;">' + obj.stime + '</p>';
-						
-						if(obj.msgtype == 'text'){
-                             uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#e2e2e2" fill="#e2e2e2" /></svg></span></div><div><article class="content">' + obj.content + '</article></div></li></ul>';
-                        }else if(obj.msgtype == 'voice'){
-							var time = 5;
-                                uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#e2e2e2" fill="#e2e2e2" /></svg></span></div><div>';
-								uliHtml += '<article class="content" data-id="' + time + '" data-value="2" num="'+ obj.content +'" style="padding-bottom: 8px;" id="playto">' +
-                                '<span class="voice" id="voicespan' + obj.content + '"></span><span class="second" id="VoiceSecond' + time + '" style="margin-left: 30px;">'+ obj.voicetime +'”</span>' +
-                                '<audio id="myaudio" data-value="2" data-id="' + time + '" controls="" name="MessageFromaudio" style="display:none"><source src="' + obj.content + '" type="video/mp4"></audio>' +
-                           ' </article></div></li></ul>';
-                        }else if(obj.msgtype == 'images'){
-						         uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#e2e2e2" fill="#e2e2e2" /></svg></span></div><div><img src="{$_W['attachurl']}' + obj.thumburl + '" num="{$_W['attachurl']}' + obj.content + '" id="btnimg" style="height:60px;width:60px" /></div></li></ul>';
-						 
-						}else{
-						   
-						   uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#e2e2e2" fill="#e2e2e2" /></svg></span></div><div><img src=' + obj.content + ' data-src=' + obj.content + ' data-gid="g2" title="点击查看大图" class="image" onload="preViewImg(this, event);" onerror="preViewImg(this, event);" style="height:70px;width:70px" /></div></li></ul>';
-						}
-          
-                    }
-                    else {//自己发的放于右边
-						
-						uliHtml = '<p class="time" style="color:blue;border:1px solid blue;width:50%;margin-left:140px;border-radius:8px;-webkit-border-radius:8px;">' + obj.stime + '</p>';
-						
-						if(obj.msgtype == 'text'){
-                                uliHtml += '<ul class="ul_talk reply"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >{$member['nickname']}</label></div><div><span class="arrow" ><svg><path d="M18,40 A9,5,0,0,0,2,37 L0,23" stroke-width="1" stroke="#2792ff" fill="#2792ff" /></svg></span></div><div><article class="content">' + obj.content + '</article></div></li></ul>';
-						}else if(obj.msgtype == 'voice'){
-                    
-					var time = 5;
+					var sendtime = '<font  style="color:#fff;font-size:10px">'+obj.stime+'</font>';
+				if (obj.sender != sender) {//回复的放于左边
 					
-						   uliHtml += '<ul class="ul_talk reply">' +
-                '<li class="tbox">' +
-                    '<div>' +
-                        '<span class="head">' +
-                            '<img src="{$avatar}">' +
-                       ' </span><label class="name" >{$member['nickname']}</label>' +
-                    '</div>' +
-                    '<div>' +
-                        '<span class="arrow">' +
-                            '<svg>' +
-                                '<path d="M18,40 A9,5,0,0,0,2,37 L0,23" stroke-width="1" stroke="#2792ff" fill="#2792ff" />' +
-                            '</svg>' +
-                    '</span>' +
-                   ' </div>' +
-                    '<div>' +
-                        '<article class="content" data-id="' + time + '" data-value="1"  num="'+ obj.content +'" style="padding-bottom: 8px;" id="playto">' +
-                            '<span class="replysecond" id="replysecond' + time + '">'+obj.voicetime+'”</span><span class="replyvoice" id="replyvoice' + time + '" style="margin-left:30px;"></span>' +
-                            '<audio id="myaudio_' + time + '" data-value="1" data-id="' + time + '" controls name="MessageFromaudio" style="display:none;"><source src="' + obj.content + '" type="video/mp4"></source></audio>' +
-                        '</article> ' +
-                   '</div>' +
-               ' </li>' +
-           ' </ul>';
-                        }else if(obj.msgtype == 'images'){
-
-						          uliHtml += '<ul class="ul_talk reply"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >{$member['nickname']}</label></div><div><span class="arrow" ><svg><path d="M18,40 A9,5,0,0,0,2,37 L0,23" stroke-width="1" stroke="#2792ff" fill="#2792ff" /></svg></span></div><div><img src="{$_W['attachurl']}' + obj.thumburl + '" num="{$_W['attachurl']}' + obj.content + '"  id = "btnimg" style="float:right;height:70px;width:70px" /></div></li></ul>';
-						 
-						}else{
-						     
-							  uliHtml += '<ul class="ul_talk reply"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >{$member['nickname']}</label></div><div><span class="arrow" ><svg><path d="M18,40 A9,5,0,0,0,2,37 L0,23" stroke-width="1" stroke="#2792ff" fill="#2792ff" /></svg></span></div><div><img src=' + obj.content + ' data-src=' + obj.content + ' data-gid="g2" title="点击查看大图" class="image" onload="preViewImg(this, event);" onerror="preViewImg(this, event);" style="height:70px;width:70px" /></div></li></ul>';
-						}
-                    }
-                   
-                    $("#containertop").prepend(uliHtml);
-                    
-                }
-                if (json.length > 0) {
-                    page++;
-                }else{
-				    getType = false;
-				}
-                $("#pageNumber").val(page);
+					
+					
+					if(obj.msgtype == 'text'){
+						 uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#ff5858" fill="#ff5858" /></svg></span></div><div><article class="content">' + obj.content + '<br>'+sendtime+'</article></div></li></ul>';
+					}else if(obj.msgtype == 'voice'){
+						var time = 5;
+							uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#ff5858" fill="#ff5858" /></svg></span></div><div>';
+							uliHtml += '<article class="content" data-id="' + time + '" data-value="2" num="'+ obj.content +'" style="padding-bottom: 8px;" id="playto">' +
+							'<span class="voice" id="voicespan' + obj.content + '"></span><span class="second" id="VoiceSecond' + time + '" style="margin-left: 30px;">'+ obj.voicetime +'”</span>' +
+							'<audio id="myaudio" data-value="2" data-id="' + time + '" controls="" name="MessageFromaudio" style="display:none"><source src="' + obj.content + '" type="video/mp4"></audio>' +
+					   ' </article></div></li></ul>';
+					}else if(obj.msgtype == 'images'){
+							 uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#ff5858" fill="#ff5858" /></svg></span></div><div><img src="{$_W['attachurl']}' + obj.thumburl + '" num="{$_W['attachurl']}' + obj.content + '" id="btnimg" style="height:60px;width:60px" /></div></li></ul>';
+					 
+					}else{
+					   
+					   uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#ff5858" fill="#ff5858" /></svg></span></div><div><img src=' + obj.content + ' data-src=' + obj.content + ' data-gid="g2" title="点击查看大图" class="image" onload="preViewImg(this, event);" onerror="preViewImg(this, event);" style="height:70px;width:70px" /></div></li></ul>';
+					}
+	  
+				}else {//自己发的放于右边
+					
+								
+									
+									if(obj.msgtype == 'text'){
+											uliHtml += '<ul class="ul_talk reply"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >{$member['nickname']}</label></div><div><span class="arrow" ><svg><path d="M18,40 A9,5,0,0,0,2,37 L0,23" stroke-width="1" stroke="#ff5858" fill="#ff5858" /></svg></span></div><div><article class="content">' + obj.content + '<br>'+sendtime+'</article></div></li></ul>';
+									}else if(obj.msgtype == 'voice'){
+													var time = 5;
+												uliHtml += '<ul class="ul_talk reply">' +
+												'<li class="tbox">' +
+													'<div>' +
+														'<span class="head">' +
+															'<img src="{$avatar}">' +
+													   ' </span><label class="name" >{$member['nickname']}</label>' +
+													'</div>' +
+													'<div>' +
+														'<span class="arrow">' +
+															'<svg>' +
+																'<path d="M18,40 A9,5,0,0,0,2,37 L0,23" stroke-width="1" stroke="#ff5858" fill="#ff5858" />' +
+															'</svg>' +
+													'</span>' +
+												   ' </div>' +
+													'<div>' +
+														'<article class="content" data-id="' + time + '" data-value="1"  num="'+ obj.content +'" style="padding-bottom: 8px;" id="playto">' +
+															'<span class="replysecond" id="replysecond' + time + '">'+obj.voicetime+'”</span><span class="replyvoice" id="replyvoice' + time + '" style="margin-left:30px;"></span>' +
+															'<audio id="myaudio_' + time + '" data-value="1" data-id="' + time + '" controls name="MessageFromaudio" style="display:none;"><source src="' + obj.content + '" type="video/mp4"></source></audio>' +
+														'</article> ' +
+												   '</div>' +
+											   ' </li>' +
+										   ' </ul>';
+									}else if(obj.msgtype == 'images'){
+											  uliHtml += '<ul class="ul_talk reply"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >{$member['nickname']}</label></div><div><span class="arrow" ><svg><path d="M18,40 A9,5,0,0,0,2,37 L0,23" stroke-width="1" stroke="#ff5858" fill="#ff5858" /></svg></span></div><div><img src="{$_W['attachurl']}' + obj.thumburl + '" num="{$_W['attachurl']}' + obj.content + '"  id = "btnimg" style="float:right;height:70px;width:70px" /></div></li></ul>';
+									 
+									}else{
+										  uliHtml += '<ul class="ul_talk reply"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >{$member['nickname']}</label></div><div><span class="arrow" ><svg><path d="M18,40 A9,5,0,0,0,2,37 L0,23" stroke-width="1" stroke="#ff5858" fill="#ff5858" /></svg></span></div><div><img src=' + obj.content + ' data-src=' + obj.content + ' data-gid="g2" title="点击查看大图" class="image" onload="preViewImg(this, event);" onerror="preViewImg(this, event);" style="height:70px;width:70px" /></div></li></ul>';
+									}
+				   }
+				$("#containertop").prepend(uliHtml);
             }
+			
+			        $("#loading").html('查看更多');
+			       
+			  
+		 }else{
+		   
+		   $("#more").hide();
+		 }
+                
+				    
+				
         },
         error: function () {
+			tip_close();
+		    alert('加载失败，请检查网络');
         }
     });
-}
+	
+});
+//***********拉黑操作*********//
+$("#dropblack").click(function(){
+	//'toname'=>$to,'toopenid'=>
+    $.ajax({
+	    type: 'post',
+        url: "{php echo $this->createMobileUrl('dropblackajax')}",
+        data:{toname:'{$to}',toopenid:"{$toopenid}"},
+        dataType: 'json',
+			success:function(data){
+			   
+               if(data.succ != '0'){
+				   tip('操作成功！',true);
+				    if(data.succ == '1'){
+					   $('#dropblack').html('取消拉黑');
+					}else{
+					   $('#dropblack').html('加黑名单');
+					}
+			   }else{
+			     tip(data.message,true);
+			   }
+			}
+		});
+});
 //**********************不停的发送ajax接收返回的最新消息**************
 function getnewMessage2() {
 	var fromType = 'amr';
@@ -488,19 +456,20 @@ function getnewMessage2() {
                     var uliHtml = "";
                     
                     var obj = json[i];
+					var sendtime = '<font  style="color:#fff;font-size:10px">'+obj.stime+'</font>';
                     if(obj.msgtype == 'text'){
                     //alert(obj.sender);
-					    uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#e2e2e2" fill="#e2e2e2" /></svg></span></div><div><article class="content">' + obj.content + '</article></div></li></ul>';
+					    uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#ff5858" fill="#ff5858" /></svg></span></div><div><article class="content">' + obj.content + '<br>'+sendtime+'</article></div></li></ul>';
                     }else if(obj.msgtype == 'voice'){
                     //alert(obj.sender);
 					
 
-					    uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#e2e2e2" fill="#e2e2e2" /></svg></span></div><div><article class="content" data-id=' + id + ' data-value=' + fromType + ' data-name="Messagevoice" style="padding-bottom: 8px;" num="'+ obj.content +'" id="playto">' +'<span class="voice" id="voicespan' + id + '"></span><span class="second" id="VoiceSecond' + id + '" style="margin-left: 30px;">'+obj.voicetime+'”</span>' +'<audio id="myaudio_' + id + '" data-value=' + fromType + ' data-id=' + id + ' controls name="MessageFromaudio" style="display:none;"><source src=' + obj.content + ' type="video/mp4"></source></audio></article></div></li></ul>';
+					    uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#ff5858" fill="#ff5858" /></svg></span></div><div><article class="content" data-id=' + id + ' data-value=' + fromType + ' data-name="Messagevoice" style="padding-bottom: 8px;" num="'+ obj.content +'" id="playto">' +'<span class="voice" id="voicespan' + id + '"></span><span class="second" id="VoiceSecond' + id + '" style="margin-left: 30px;">'+obj.voicetime+'”</span>' +'<audio id="myaudio_' + id + '" data-value=' + fromType + ' data-id=' + id + ' controls name="MessageFromaudio" style="display:none;"><source src=' + obj.content + ' type="video/mp4"></source></audio></article></div></li></ul>';
                     }else if(obj.msgtype == 'images'){
-						uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#e2e2e2" fill="#e2e2e2" /></svg></span></div><div><img src="{$_W['attachurl']}' + obj.thumburl + '" num="{$_W['attachurl']}' + obj.content + '" id="btnimg" style="float:left;height:70px;width:70px" /></div></li></ul>';
+						uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#ff5858" fill="#ff5858" /></svg></span></div><div><img src="{$_W['attachurl']}' + obj.thumburl + '" num="{$_W['attachurl']}' + obj.content + '" id="btnimg" style="float:left;height:70px;width:70px" /></div></li></ul>';
 					
 					}else{
-						uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#e2e2e2" fill="#e2e2e2" /></svg></span></div><div><img src=' + obj.content + ' data-src=' + obj.content + ' data-gid="g2" title="点击查看大图" class="image" onload="preViewImg(this, event);" onerror="preViewImg(this, event);" style="height:70px;width:70px" /></div></li></ul>';
+						uliHtml += '<ul class="ul_talk"><li class="tbox"><div><span class="head"><img src="' + obj.senderavatar + '" /></span><label class="name" >' + obj.sendernickname + '</label></div><div><span class="arrow" ><svg><path d="M2,20 A9,5,0,0,1,18,24 L20,0" stroke-width="1" stroke="#ff5858" fill="#ff5858" /></svg></span></div><div><img src=' + obj.content + ' data-src=' + obj.content + ' data-gid="g2" title="点击查看大图" class="image" onload="preViewImg(this, event);" onerror="preViewImg(this, event);" style="height:70px;width:70px" /></div></li></ul>';
 					
 					}
                           
@@ -518,20 +487,7 @@ function getnewMessage2() {
     });
 }
 function sendMessage(sender, geter,msgtype, Content) {
-	{if empty($res2['constellation'])}
-	   alert('亲,需要先完善个人资料哦！');
-       window.location='{php echo  $this->createMobileUrl('userinfo')}';  
-	   return;
-	{/if}
 	
-	{if !empty($result)}
-	  tip('抱歉，您已经将{$to}拉入黑名单！',true);
-	  return;
-	  {/if}
-	{if !empty($uresult)}
-	   tip('抱歉，{$to}已经将你拉入黑名单！',true);
-	   return;
-	{/if}
     var type;
     var extension;
 	if (msgtype == "xiong" || msgtype == "mayi" || msgtype == "smiley" || msgtype == 'paopaobing' || msgtype == 'qbl' || msgtype == 'bzmh') {
@@ -546,7 +502,6 @@ function sendMessage(sender, geter,msgtype, Content) {
         else {
             extension = '.gif';
         }
-        //Content = '{$_W['siteroot']}addons/meepo_weixiangqin/template/style/' + type + '/' + Content.replace('[', '').replace(']', '') + extension;
 		if(msgtype == 'paopaobing'  || msgtype == 'qbl' || msgtype == 'bzmh'){
 			Content = '{$_W['siteroot']}addons/meepo_weixiangqin/template/style/' + type + '/' + Content.replace('[', '').replace(']', '') + extension;
 		}else{
@@ -555,13 +510,10 @@ function sendMessage(sender, geter,msgtype, Content) {
         
 
     }
-	tip("拼命发送中...");
+	//tip("拼命发送中...");
     $("#sendtext").val("");
     $("#sendtext").html("");
-    
     $("#btnsend").addClass("on");
-  //alert(geter);
-
     var date = new Date();
     var time = date.getFullYear() + "" + (date.getMonth() + 1) + "" + date.getDate() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
 
@@ -584,17 +536,17 @@ function sendMessage(sender, geter,msgtype, Content) {
         },
         dataType: 'json',
         success: function (json) {
-			//alert(json.succ);
-            if (json.succ != '0') {
-             tip_close();
+			
+            if (json.succ=='1') {
+            // tip_close();
+			 var sendtime = '<font  style="color:#fff;font-size:10px">'+json.message+'</font>';
 			  switch (msgtype) {
 								case 'text':
 									 case 'text':
-									liHtml = '<ul class="ul_talk reply"><li class="tbox"><div><span class="head"><img src="' + CustomerHeadUrl + '" /></span><label class="name" >{$member['nickname']}</label></div><div><span class="arrow" ><svg><path d="M18,40 A9,5,0,0,0,2,37 L0,23" stroke-width="1" stroke="#2792ff" fill="#2792ff" /></svg></span></div><div><article class="content">' + FormatFace(Content) + '</article></div></li></ul>';
+									liHtml = '<ul class="ul_talk reply"><li class="tbox"><div><span class="head"><img src="' + CustomerHeadUrl + '" /></span><label class="name" >{$member['nickname']}</label></div><div><span class="arrow" ><svg><path d="M18,40 A9,5,0,0,0,2,37 L0,23" stroke-width="1" stroke="#ff5858" fill="#ff5858" /></svg></span></div><div><article class="content">' + FormatFace(Content) + '<br>'+sendtime+'</article></div></li></ul>';
 								break;
 								case 'smiley':
-								/*alert(Content);
-								return;*/
+								
 									liHtml = '<ul class="ul_talk reply">' +
 												'<li class="tbox">' +
 													'<div>' +
@@ -610,8 +562,7 @@ function sendMessage(sender, geter,msgtype, Content) {
 														'<img src="' + Content + '" style="float:right;height:70px;width:70px" /></div></li></ul>';
 									break;
 									case 'xiong':
-								/*alert(Content);
-								return;*/
+								
 									liHtml = '<ul class="ul_talk reply">' +
 												'<li class="tbox">' +
 													'<div>' +
@@ -627,8 +578,7 @@ function sendMessage(sender, geter,msgtype, Content) {
 														'<img src="' + Content + '" style="float:right;height:70px;width:70px" /></div></li></ul>';
 									break;
 									case 'mayi':
-								/*alert(Content);
-								return;*/
+								
 									liHtml = '<ul class="ul_talk reply">' +
 												'<li class="tbox">' +
 													'<div>' +
@@ -644,8 +594,7 @@ function sendMessage(sender, geter,msgtype, Content) {
 														'<img src="' + Content + '" style="float:right;height:70px;width:70px" /></div></li></ul>';
 									break;
 									case 'paopaobing':
-								/*alert(Content);
-								return;*/
+								
 									liHtml = '<ul class="ul_talk reply">' +
 												'<li class="tbox">' +
 													'<div>' +
@@ -661,8 +610,7 @@ function sendMessage(sender, geter,msgtype, Content) {
 														'<img src="' + Content + '" style="float:right;height:70px;width:70px" /></div></li></ul>';
 									break;
 									case 'qbl':
-								/*alert(Content);
-								return;*/
+								
 									liHtml = '<ul class="ul_talk reply">' +
 												'<li class="tbox">' +
 													'<div>' +
@@ -678,8 +626,7 @@ function sendMessage(sender, geter,msgtype, Content) {
 														'<img src="' + Content + '" style="float:right;height:70px;width:70px" /></div></li></ul>';
 									break;
 									case 'bzmh':
-								/*alert(Content);
-								return;*/
+								
 									liHtml = '<ul class="ul_talk reply">' +
 												'<li class="tbox">' +
 													'<div>' +
@@ -697,12 +644,32 @@ function sendMessage(sender, geter,msgtype, Content) {
 							}
 							
 							$("#containertop").append(liHtml);
-            }
-            else {
-				tip('网络超时，发送失败！',true);
-            }
+							scrollTop();
+            }else if (json.succ == '0') {
+				  tip(json.message,true);
+		    }else{
+				   swal({
+						title: "积分不足",
+						text: json.message,
+						timer: 10000,
+						showCancelButton: true,
+						confirmButtonColor: "#ff5858",   
+						confirmButtonText: "开通包月", 
+						cancelButtonText: "充值积分", 
+						closeOnConfirm: true,  
+						closeOnCancel: true },
+						function(isConfirm){ 
+							if (isConfirm) { 
+								window.location.href="{php echo $this->createMobileUrl('baoyue')}"; 
+							} else {
+								window.location.href="{php echo $this->createMobileUrl('payjifen')}"; 
+							} 
+					});
+			}
+            
         },
         error: function () {
+			
             tip('网络超时，发送失败！',true);
         }
     });
@@ -1033,59 +1000,40 @@ $("#facetype span").click(function () {
     localId: [],
     serverId: []
   };
-  
-  document.querySelector('#camera').onclick = function () {
+$("#camera").click(function(){
     wx.chooseImage({
-      success: function (res) {
-        images.localId = res.localIds;
-        alert('已选择 ' + res.localIds.length + ' 张图片');
-		if (images.localId.length == 0) {
-      alert('请先点击上传图片选择图片');
-      return;
-    }
-    var i = 0, length = images.localId.length;
-    images.serverId = [];
-    function upload() {
-      wx.uploadImage({
-        localId: images.localId[i],
         success: function (res) {
-          i++;
-          alert('已上传：' + i + '/' + length);
-          images.serverId.push(res.serverId);
-          if (i < length) {
-			  //alert(i);
-			downphotos(res.serverId);
-          
-			upload();
-          }else{
-			  //alert(res.serverId);
-		     downphotos(res.serverId);
-		  }
-		  
-        },
-        fail: function (res) {
-          alert(JSON.stringify(res));
+            var localIds = res.localIds;
+            syncUpload(localIds);
         }
-      });
-    }
-	
-    upload();
-      }
     });
-  };
-
+});
+var syncUpload = function(localIds){
+    var localId = localIds.pop();
+    wx.uploadImage({
+        localId: localId,
+        isShowProgressTips: 1,
+        success: function (res) {
+            var serverId = res.serverId; // 返回图片的服务器端ID
+            downphotos(serverId);
+            if(localIds.length > 0){
+                syncUpload(localIds);
+            }
+        }
+    });
+};
 function downphotos(id){
 	var cr = '';
    $.ajax({
-			type:"POST",
-			url:"{php echo $this->createMobileUrl('UploadImage3')}",
-			data:{id:id,geter:"{$geter}"},
-			cache:false,
+	    type: 'post',
+        url: "{php echo $this->createMobileUrl('UploadImage3')}",
+        data:{id:id,geter:"{$geter}"},
+        dataType: 'json',
 			success:function(data){
-			   //alert(data);
-               if(data != '0'){
+			   
+               if(data.succ != '0'){
 				     scrollTop();
-				     data = JSON.parse(data);
+				   
 			         liHtml = '<ul class="ul_talk reply">' +
                         '<li class="tbox">' +
                             '<div>' +
@@ -1101,12 +1049,11 @@ function downphotos(id){
                                 '<img src="{$_W['attachurl']}' + data.thumburl + '" style="float:right;height:70px;width:70px" / id="btnimg" num="{$_W['attachurl']}' + data.picurl + '"></div></li></ul>';
 								 $("#containertop").append(liHtml);
 			   }else{
-			     tip('网络超时，发送失败！',true);
+			     tip(data.message,true);
 			   }
 			}
 		});
 }
-
  </script>
   
 <script>

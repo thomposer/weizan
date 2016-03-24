@@ -83,6 +83,27 @@ font-weight:bold;
                         <input type="text" name="catename" class="form-control" value="{$theclass['sname']}" />
                     </div>
                 </div>
+				<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">班级主任ID:</label>
+                    
+                    <div class="col-sm-9">
+					<div class="input-group">
+                        <input type="text" name="tid" class="form-control" value="{$theclass['tid']}" />请前往教师中心查询
+					</div>
+                    </div>
+                </div>					
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">微群二维码</label>
+                    <div class="col-sm-9">
+                        {php echo tpl_form_field_image('erwei', $theclass['erwei'])}
+                    </div>
+                </div>								
+				<div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">QQ群链接</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="qun" class="form-control" value="{$theclass['qun']}" />
+                    </div>
+                </div>
             </div>
         </div>
         <div class="form-group col-sm-12">
@@ -108,6 +129,9 @@ font-weight:bold;
 					    <th style="width:100px;">序号</th>
                         <th style="width:100px;">排序</th>
                         <th>班级名称</th>
+						<th>班级主任</th>
+						<th>班级群二维码</th>
+						<th>班级QQ群</th>
                         <th style="text-align:right;">编辑/删除</th>
                     </tr>
                     </thead>
@@ -117,6 +141,9 @@ font-weight:bold;
 					    <td><div class="type-parent">{$row['sid']}</div></td>
                         <td><input type="text" class="form-control" name="ssort[{$row['ssort']}]" value="{$row['ssort']}"></td>
                         <td><div class="type-parent">{$row['sname']}&nbsp;&nbsp;</div></td>
+						<td><div class="type-parent">{$teachers[$row['tid']]['tname']}</div></td>
+						<td><img src="{$_W['attachurl']}{$row['erwei']}" width="50" onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></td>
+						<td><div class="type-parent">{$row['qun']}&nbsp;&nbsp;</div></td>
                         <td style="text-align:right;"><a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('theclass', array('op' => 'post', 'sid' => $row['sid'], 'schoolid' => $schoolid))}" title="编辑"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;<a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('theclass', array('op' => 'delete', 'sid' => $row['sid'], 'schoolid' => $schoolid))}" onclick="return confirm('确认删除此分类吗？');return false;" title="删除"><i class="fa fa-times"></i></a></td>
                     </tr>
                     {/loop}

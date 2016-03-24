@@ -31,7 +31,7 @@
                     <td>{if $row['isshow'] == 1}<span class="label label-success">是</span>{else}<span class="label label-default">否</span>{/if}</td>
                     <td>{$row['display']}</td>
                     <td>{php echo date('Y-m-d',$row['dateline'])}</td>
-                    <td>{$row['exprtime']}</td>
+                    <td>{php echo date('Y-m-d',$row['exprtime'])}</td>
                     <td>
                         <a href="javascript:void(0);" onclick="delete_adslider({$row['id']})" title="删除" class="btn btn-danger btn-sm">删除</a>
                         <a href="{php echo $this->createWebUrl('ADSlider', array('op' => 'edit', 'id' => $row['id']));}" class="btn btn-primary btn-sm">编辑</a>

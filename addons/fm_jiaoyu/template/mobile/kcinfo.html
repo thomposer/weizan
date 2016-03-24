@@ -16,8 +16,9 @@
         </style>
         <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
         <title>课程详情</title>
-        <link rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/reset.css?{php echo time()}">
-        <script src="../addons/fm_jiaoyu/public/mobile/js/jquery.js?{php echo time()}"></script>
+		<link rel="stylesheet" href="{MODULE_URL}public/mobile/css/weixin.css?{php echo time()}">
+        <link rel="stylesheet" href="{MODULE_URL}public/mobile/css/reset.css?{php echo time()}">
+        <script src="{MODULE_URL}public/mobile/js/jquery.js?{php echo time()}"></script>
 
 </head>
 <body>
@@ -42,7 +43,7 @@
 			{if $item['is_hot']==1 && $item['end']>TIMESTAMP}
 			    <span>已报{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_students')." WHERE bj_id = '".$item['bj_id']."' And schoolid = '".$item['schoolid']."'")}人</span>
                 <span value="热报" class="count_hot" style="font-size:12px;"></span>
-				<div class="btn_none"><a href="tel:{$item['tel']}">报名</a></div>
+				<div class="btn_none"><a href="tel:{$school['tel']}">报名</a></div>
             {else}
                 <span>已报{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_students')." WHERE bj_id = '".$item['bj_id']."' And schoolid = '".$item['schoolid']."'")}人</span>
                 <span value="已满" class="count_none" style="font-size:12px;">
@@ -85,5 +86,6 @@
             </div>
         </section-->
     </div>
+	   {php include $this->template('footer');}  
 </body>
 </html>

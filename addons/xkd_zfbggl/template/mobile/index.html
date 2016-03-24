@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <title>{$zfbggl['title']}</title>
+    {php echo register_jssdk(false);}
+    <link rel="stylesheet" href="../addons/xkd_zfbggl/template/css/style.css">
+</head>
+{php $backgrouund = tomedia($zfbggl['background'])}
+<body style="background-image: url('{$backgrouund}')">
+<!--<button onclick="location.reload(true)">RELOAD</button>-->
+<div class="debug"></div>
+<canvas class="ggl_canvas" id="ggl_canvas"></canvas>
+<div class="gglbox">
+    <div class="gglbody">
+        <div class="gglin">
+            <div class="gglpanel gglresult gglresult-a">
+                <div class="gglresult-text">差点就中了哦</div>
+                <button class="start-btn">刮下一次</button>
+            </div>
+            <div class="gglpanel gglresult gglresult-b">
+                <div class="gglresult-text">差点就中了哦~</div>
+            </div>
+            <div class="gglpanel ggltip">
+                <button class="start-btn">开始刮奖</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="gglinfo">
+    <div class="info-left">
+        你有 <b class="ggl_chance">{$chance_today}</b> 次刮奖机会
+    </div>
+    <div class="info-right">
+        <a class="my-prize" href="{$record_url}">我的奖品<span class="my-prize-amount">{$record_count}</span></a>
+    </div>
+</div>
+<input class="start-url" type="hidden" value="{$start_url}">
+
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<!--<script src="../addons/xkd_zfbggl/template/js/mobile.js"></script>-->
+<script>
+    /**
+     * Created by luwei on 2016/2/4.
+     */
+    (function () {
+        var startUrl = $(".start-url").val();
+        $(".start-btn").click(function () {
+            doStart();
+        });
+
+        function doStart() {
+            $(".start-btn").prop("disabled", true);
+            $.ajax({
+                url: startUrl,
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    var width = $(".gglpanel").width();
+                    var height = $(".gglpanel").height();
+                    var ggl_canvas = document.getElementById("ggl_canvas");
+                    var ggl_ctx = ggl_canvas.getContext("2d");
+                    ggl_canvas.width = width;
+                    ggl_canvas.height = height;
+                    ggl_ctx.fillStyle = "#bbbbbb";
+                    ggl_ctx.fillRect(0, 0, width, height);
+                    canvas_wipe(ggl_canvas, 40, function () {
+                        $(".ggl_canvas").fadeOut(300);
+                    });
+
+                    $(".start-btn").prop("disabled", false);
+                    if (data.code == 1) {
+                        if (data.chance > 0) {
+                            $(".gglresult-a").find(".gglresult-text").html(data.result_text);
+                            $(".ggltip").hide();
+                            $(".ggl_canvas").show();
+                            $(".gglresult-a").show();
+                        } else {
+                            $(".gglresult-b").find(".gglresult-text").html(data.result_text);
+                            $(".ggltip").hide();
+                            $(".ggl_canvas").show();
+                            $(".gglresult-b").show();
+                        }
+                    } else {
+                        //todo
+                    }
+
+                    $(".ggl_chance").html(data.chance);
+                }
+            });
+        }
+    })();
+
+    /**
+     * 通过修改globalCompositeOperation来达到擦除的效果
+     * @param {element} canvas canvasElement
+     * @param {int} path 超过百分之多少时使用回调
+     * @param {function} callback 回调函数
+     * */
+    function canvas_wipe(canvas, path, callback) {
+        console.log(canvas);
+        var ctx = canvas.getContext("2d");
+        var x1, y1, a = 25, timeout, totimes = 100, jiange = 30;
+        var hastouch = "ontouchstart" in window ? true : false,
+                tapstart = hastouch ? "touchstart" : "mousedown",
+                tapmove = hastouch ? "touchmove" : "mousemove",
+                tapend = hastouch ? "touchend" : "mouseup";
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.lineWidth = a * 2;
+        ctx.globalCompositeOperation = "destination-out";
+        canvas.addEventListener(tapstart, function (e) {
+            clearTimeout(timeout);
+            e.preventDefault();
+
+            x1 = hastouch ? e.targetTouches[0].pageX - canvas.offsetLeft : e.clientX - canvas.offsetLeft;
+            y1 = hastouch ? e.targetTouches[0].pageY - canvas.offsetTop : e.clientY - canvas.offsetTop;
+            //$(".debug").text(e.targetTouches[0].pageX + "，" + e.targetTouches[0].pageY);
+            //$(".debug").text(e.clientX + "，" + e.clientY);
+            //$(".debug").text(x1 + "，" + y1);
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(x1, y1, 1, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.restore();
+
+            canvas.addEventListener(tapmove, tapmoveHandler);
+            canvas.addEventListener(tapend, function () {
+                canvas.removeEventListener(tapmove, tapmoveHandler);
+
+                timeout = setTimeout(function () {
+                    var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    var dd = 0;
+                    for (var x = 0; x < imgData.width; x += jiange) {
+                        for (var y = 0; y < imgData.height; y += jiange) {
+                            var i = (y * imgData.width + x) * 4;
+                            if (imgData.data[i + 3] > 0) {
+                                dd++
+                            }
+                        }
+                    }
+                    if (dd / (imgData.width * imgData.height / (jiange * jiange)) < (1 - ( path / 100))) {
+                        if (callback)
+                            callback();
+                    }
+                }, totimes)
+            });
+            var iii = 0;
+
+            function tapmoveHandler(e) {
+                iii++;
+                //console.log(iii);
+                clearTimeout(timeout);
+                e.preventDefault();
+                x2 = hastouch ? e.targetTouches[0].pageX - canvas.offsetLeft : e.clientX - canvas.offsetLeft;
+                y2 = hastouch ? e.targetTouches[0].pageY - canvas.offsetTop : e.clientY - canvas.offsetTop;
+
+                ctx.save();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+                ctx.restore();
+                x1 = x2;
+                y1 = y2;
+            }
+        });
+    }
+</script>
+</body>
+</html>

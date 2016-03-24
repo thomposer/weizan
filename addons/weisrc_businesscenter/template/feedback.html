@@ -114,9 +114,9 @@
                 </tfoot>
             </table>
         </div>
-		{$pager}
     </form>
 </div>
+{$pager}
 <script type="text/javascript">
     $(function(){
         $(".check_all").click(function(){
@@ -189,7 +189,7 @@
                     <th style="width:100px;">操作</th>
                 </tr>
                 </thead>
-                <tbody id="level-list">
+                <tbody>
                 {loop $list $item}
                 <tr>
                     <td>{$item['id']}</td>

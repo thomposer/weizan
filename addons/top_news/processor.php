@@ -2,8 +2,6 @@
 /**
  * 头条新闻模块处理程序
  *
- * @author LEO
- * @url http://www.leo163.com/
  */
 defined('IN_IA') or exit('Access Denied');
 

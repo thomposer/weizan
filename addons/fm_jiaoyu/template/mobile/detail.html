@@ -14,10 +14,11 @@
         </style>
         <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
         <title>{$title}</title>
-        <link rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/weixin.css?{php echo time()}">
-		<link rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/reset.css?{php echo time()}">
-        <script src="../addons/fm_jiaoyu/public/mobile/js/jquery.js?{php echo time()}"></script>
-		<script type="text/javascript" src="../addons/fm_jiaoyu/public/mobile/js/swipe.js?{php echo time()}"></script>
+        <link rel="stylesheet" href="{MODULE_URL}public/mobile/css/weixin.css?{php echo time()}">
+		<link rel="stylesheet" href="{MODULE_URL}public/mobile/css/reset.css?{php echo time()}">
+		<script src="{$MODOLE_URL}/js/banner.js?{php echo time()}"></script>
+        <script src="{MODULE_URL}public/mobile/js/jquery.js?{php echo time()}"></script>
+		<script type="text/javascript" src="{MODULE_URL}public/mobile/js/swipe.js?{php echo time()}"></script>
 </head>
 <body>
 <!--header>
@@ -31,7 +32,7 @@
             </div>
 </div>
 </header-->
-    <div id="wrap" class="count_inf">
+<div id="wrap" class="count_inf">
 		{if !empty($banners)}
 <div id="wrap" class = "count_ban">	
   <style type="text/css">
@@ -104,19 +105,6 @@
         {/loop}
       </ol>
   </div>
-
-  <script>
-      $(function() {
-        new Swipe($('#banner_box')[0], {
-        speed:500,
-            auto:3000,
-            callback: function(){
-            var lis = $(this.element).next("ol").children();
-                lis.removeClass("on").eq(this.index).addClass("on");
-            }
-        });
-      });
-  </script>
   </div>
   {/if}
      <dl id="main">
@@ -135,11 +123,19 @@
 			{if $item['is_hot']==0}
 			    <span>已报{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_students')." WHERE schoolid = '".$item['id']."'")}人</span>
                 <span value="热报" class="count_hot" style="font-size:12px;"></span>
-				<div class="btn_none"><a href="tel:{$item['tel']}">报名</a></div>
+				{if $isxz['status'] == 2 || $isxz['status'] == 1}
+				<div class="btn_none"><a href="{php echo $this->createMobileUrl('myschool', array('schoolid' => $schoolid), true)}">管理</a></div>
+				{else}
+				<div class="btn_none"><a href="{php echo $this->createMobileUrl('bangding', array('schoolid' => $schoolid), true)}">绑定</a></div>
+				{/if}
             {else}
                 <span>已报{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_students')." WHERE schoolid = '".$item['id']."'")}人</span>
                 <span value="已满" class="count_none" style="font-size:12px;"></span>
-				<div class="btn_null">报名</div>
+				{if $isxz['status'] == 2 || $isxz['status'] == 1}
+				<div class="btn_none"><a href="{php echo $this->createMobileUrl('myschool', array('schoolid' => $schoolid), true)}">管理</a></div>
+				{else}
+				<div class="btn_none"><a href="{php echo $this->createMobileUrl('bangding', array('schoolid' => $schoolid), true)}">绑定</a></div>
+				{/if}
             {/if}    
             </dd>
     </dl>
@@ -154,27 +150,27 @@
         {/if}
         <div class="operation-navs ng-scope">
             <div class="operation-nav-item ng-scope">
-                <a href="{php echo $this->createMobileUrl('teachers', array('schoolid' => $item['id']), true)}">
-                    <div class="icon red ng-scope" ng-if="!branch_type.order_in_seat_img"><i class="fa fa-group"></i>
+                <a href="{php echo $this->createMobileUrl('teachers', array('schoolid' => $schoolid), true)}">
+                    <div class="icon red ng-scope"><i class="fa fa-group"></i>
                     </div>
-                    <div class="text ng-binding">找老师</div>
+                    <div class="text ng-binding">老师</div>
                 </a>
             </div>
             <div class="operation-nav-item ng-scope">
-                <a href="{php echo $this->createMobileUrl('kc', array('schoolid' => $item['id']), true)}">
+                <a href="{php echo $this->createMobileUrl('kc', array('schoolid' => $schoolid), true)}">
                     <div class="icon red ng-scope"><i class="fa fa-list"></i></div>
-                    <div class="text ng-binding">看课程</div>
+                    <div class="text ng-binding">课程</div>
                 </a>
             </div>
             <div class="operation-nav-item ng-scope">
-                <a href="{php echo $this->createMobileUrl('chengji', array('schoolid' => $item['id']), true)}">
+                <a href="{php echo $this->createMobileUrl('chengji', array('schoolid' => $schoolid), true)}">
                     <div class="icon red ng-scope"><i class="fa fa-graduation-cap"></i></div>
-                    <div class="text ng-binding">查成绩</div>
+                    <div class="text ng-binding">成绩</div>
                 </a>
             </div>
 			{if $item['is_rest']==1}
             <div class="operation-nav-item ng-scope">
-                <a href="{php echo $this->createMobileUrl('cooklist', array('schoolid' => $item['id']), true)}">
+                <a href="{php echo $this->createMobileUrl('cooklist', array('schoolid' => $schoolid), true)}">
                     <div class="icon red ng-scope"><i class="fa fa-fire"></i></div>
                     <div class="text ng-binding">食谱</div>
                 </a>
@@ -182,11 +178,11 @@
             {/if} 			
         </div>
      </div>	
-	<dl id="main">
+	<dl id="main" style="margin-bottom:55px;">
         <dl class="count_tips">
             <dt>联系方式</dt>
 			    <dd class="red phone">
-                    <a href="{php echo $this->createMobileUrl('jianjie', array('id' => $id), true)}"><i class="fa fa-university"></i>&nbsp;&nbsp;学校简介及招生简章</a>
+                    <a href="{php echo $this->createMobileUrl('jianjie', array('id' => $schoolid, 'schoolid' => $schoolid), true)}"><i class="fa fa-university"></i>&nbsp;&nbsp;学校简介及招生简章</a>
                 </dd>
                 <dd class="red phone">
                     <a href="tel:{$item['tel']}"><i class="fa fa-phone"></i>&nbsp;&nbsp;{$item['tel']}</a>
@@ -205,6 +201,9 @@
             </div>
 		</dl-->	
 	</dl>
+   {php include $this->template('footer');} 
     </div>
+
+	 <!-- {php include $this->template('footer');} -->
 </body>
 </html>

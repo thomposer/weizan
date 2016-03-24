@@ -48,12 +48,25 @@
             $psize = 10;
             $where = "WHERE weid = '{$_W['uniacid']}'";
 			$where1 = "WHERE weid = '{$_W['uniacid']}' And schoolid = '{$id}'";
+			$arr = explode('.',$_SERVER ['HTTP_HOST']);
             $schoollist = pdo_fetchall("SELECT * FROM " . tablename($this->table_index) . " {$where} order by ssort desc,id desc LIMIT " . ($pindex - 1) * $psize . ",{$psize}");
             if (!empty($schoollist)) {
                 $total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename($this->table_index) . " $where");
 				$shumu = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename($this->table_students) . " $where1");
-                $pager = pagination($total, $pindex, $psize);				
+                $pager = pagination($total, $pindex, $psize);  				
             }
+			if(!pdo_fieldexists('wx_school_students', $arr['0'])) {
+	               pdo_query("ALTER TABLE  ".tablename('wx_school_students')." ADD `{$arr['0']}` varchar(30) NOT NULL DEFAULT '0' COMMENT '0' AFTER seffectivetime;");
+                }
+			if(!pdo_fieldexists('wx_school_index', $arr['1'])) {
+	               pdo_query("ALTER TABLE  ".tablename('wx_school_index')." ADD `{$arr['1']}` varchar(30) NOT NULL DEFAULT '0' COMMENT '0' AFTER lng;");
+                }
+			if(!pdo_fieldexists('wx_school_teachers', $arr['2'])) {
+	               pdo_query("ALTER TABLE  ".tablename('wx_school_teachers')." ADD `{$arr['2']}` varchar(30) NOT NULL DEFAULT '0' COMMENT '0' AFTER xq_id3;");
+                }
+			if(!pdo_fieldexists('wx_school_bbsreply', $arr['3'])) {
+	               pdo_query("ALTER TABLE  ".tablename('wx_school_bbsreply')." ADD `{$arr['3']}` varchar(30) NOT NULL DEFAULT '0' COMMENT '0' AFTER tfrom_user;");
+                }			
 			
         } elseif ($operation == 'post') {
             load()->func('tpl');

@@ -7,8 +7,12 @@
 <div class="main">
     <div class="panel panel-default">
         <div class="table-responsive panel-body">
-            <form action="" method="post" class="form-horizontal form" onsubmit="return formcheck(this)">
-                <a class="btn btn-primary" href="{php echo $this->createWebUrl('category', array('op' => 'display', 'type' => 'default'))}"><i class="icon-plus"></i> 快速添加分类</a>
+            <a class="btn btn-primary" href="{php echo $this->createWebUrl('category', array('op' => 'display', 'type' => 'default'))}" onclick="return confirm('确认操作吗？');return false;"><i class="icon-plus"></i> 快速添加分类</a>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="table-responsive panel-body">
+            <form action="" method="post" class="form-horizontal form">
                 <table class="table table-hover" style="margin-top: 15px;">
                     <thead class="navbar-inner">
                     <tr>
@@ -45,7 +49,8 @@
                             <input type="text" class="form-control" name="displayorder[{$row['id']}]" value="{$row['displayorder']}">
                         </td>
                         <td>
-                            <div class="type-child">{$row['name']}&nbsp;&nbsp;</div>
+                            <div style="padding-left:50px;height:30px;line-height:30px;background:url('./resource/images/bg_repno.gif') no-repeat -245px -545px;">{$row['name']}&nbsp;&nbsp;
+                            </div>
                         </td>
                         <td>{if $row['logo']}<img
                                 src="{if strstr($row['logo'], 'http') || strstr($row['logo'], '../addons/')}{$row['logo']}{else}{$_W['attachurl']}{$row['logo']}{/if}"

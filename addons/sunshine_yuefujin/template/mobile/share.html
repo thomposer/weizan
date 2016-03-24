@@ -1,0 +1,20 @@
+{template 'header'}
+<div class="container">
+	<h3>{$_W['account']['name']}-公众服务号</h3>
+	<br>
+	<br>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+		⬇️⬇️苹果、安卓手机请长按下方二维码，点击“识别二维码”
+		<p>关注【{$_W['account']['name']}】<p>
+		<p>{if $keyword}回复“{$keyword}”进入  微附近模块 -发现身边的乐趣{/if}</p>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<img class="img-responsive" src="{$_W['account']['qrcode']}">
+			</div>
+		</div>
+	</div>	
+</div>
+<link rel="stylesheet" type="text/css" href="{$_W['siteroot']}addons/sunshine_yuefujin/bootstrap/css/bootstrap.css">
+{template 'footer'}

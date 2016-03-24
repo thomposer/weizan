@@ -1,0 +1,24 @@
+{template 'header'}
+{template 'wx_gps'}
+	<!-- container -->
+	<div class="ui-container">
+
+	</div>
+	<div class="ui-footer ui-footer-stable ui-btn-group ui-border-t">
+		<button class="ui-btn-lg" onclick="window.location.href='{php echo $this->createMobileUrl('list',array('sunshine_openid_nocookie'=>$sunshine_openid_nocookie))}'">
+		约！
+	    </button>
+	    <button class="ui-btn-lg" onclick="window.location.href='{php echo $this->createMobileUrl('usercenter',array('sunshine_openid_nocookie'=>$sunshine_openid_nocookie))}'">
+	    个人中心
+	    </button>
+	</div>
+	<!-- hide -->
+	<script type="text/javascript">
+	// mobile keyboard
+	$(window).keydown(function(e) {
+		if(e.keyCode=='13') {
+			window.location.href="{php echo $this->createMobileUrl('list')}&keyword="+$("#search_box").val();
+		}
+	})
+	</script>
+{template 'footer'}

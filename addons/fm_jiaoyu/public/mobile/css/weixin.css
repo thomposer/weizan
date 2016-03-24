@@ -2111,27 +2111,27 @@
     word-break: break-all
 }
 
-body {
+/* body {
     font-family: Helvetica, Tahoma, Arial, STXihei, "华文细黑", "Microsoft YaHei", "微软雅黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
     font-size: 14px;
     line-height: 21px;
     color: #000;
     background-color: #fff
-}
+} */
 
-a {
+/* a {
     color: #428bca;
     text-decoration: none !important;
     -webkit-user-drag: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent
-}
+} */
 
 a[href]:hover {
     cursor: pointer
 }
 
-h1, h2, h3, h4, h5, h6 {
+/* h1, h2, h3, h4, h5, h6 {
     margin-top: 0;
     margin-bottom: 10px;
     line-height: 1
@@ -2161,14 +2161,14 @@ h5, .h5 {
 h6, .h6 {
     font-size: 12px;
     margin-top: 20px
-}
+} */
 
-p {
+/* p {
     margin-top: 0;
     margin-bottom: 10px;
     font-size: 14px;
-    color: #777
-}
+    color: #ffffff
+} */
 
 li {
     list-style: none !important
@@ -2318,9 +2318,9 @@ li {
     border-bottom: 0 !important
 }
 
-body, html {
+/* body, html {
     height: 100%
-}
+} */
 
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -2749,7 +2749,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     border-bottom: 1px solid #eeeeee
 }
 
-.section .list-item textarea, .section .list-item textarea:focus {
+/* .section .list-item textarea, .section .list-item textarea:focus {
     width: 100%;
     -webkit-appearance: none;
     border-color: #dbdbdb;
@@ -2758,7 +2758,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     font-size: 14px;
     line-height: 26px;
     border: 0
-}
+} */
 
 .section .list-item:last-child {
     border-bottom: 0
@@ -2913,9 +2913,9 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
     display: none
 }
 
-.center {
+/* .center {
     text-align: center
-}
+} */
 
 .ddb-nav-header .location-header {
     display: inline-block;

@@ -27,7 +27,8 @@
                 }
             }
         }
-
+		
+        $member = pdo_fetchall("SELECT * FROM " . tablename ( 'mc_members' ) . " where uniacid = :uniacid ORDER BY uid ASC", array(':uniacid' => $_W ['uniacid']), 'uid');
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
         if ($operation == 'post') {
             load()->func('tpl');
@@ -97,6 +98,54 @@
             }
             pdo_delete($this->table_students, array('id' => $id));
             message('删除成功！', referer(), 'success');
+        } elseif ($operation == 'own') {
+            $id = intval($_GPC['id']);
+			$openid = $_GPC['openid'];
+            $row = pdo_fetch("SELECT id FROM " . tablename($this->table_students) . " WHERE id = :id", array(':id' => $id));
+            if (empty($row)) {
+                message('抱歉，学员不存在或是已经被删除！');
+            }
+
+			$temp = array(
+			        'own'  => 0,
+		           	'ouid' => 0
+			       );
+			   
+			pdo_update($this->table_students, $temp, array('id' => $id));
+            pdo_delete($this->table_user, array('sid' => $id, 'openid' => $openid));
+            message('解绑成功！', referer(), 'success');
+        } elseif ($operation == 'mom') {
+            $id = intval($_GPC['id']);
+			$openid = $_GPC['openid'];
+            $row = pdo_fetch("SELECT id FROM " . tablename($this->table_students) . " WHERE id = :id", array(':id' => $id));
+            if (empty($row)) {
+                message('抱歉，学员不存在或是已经被删除！');
+            }
+
+			$temp = array(
+			        'mom'   => 0,
+		           	'muid'  => 0
+			       );
+			
+			pdo_update($this->table_students, $temp, array('id' => $id));
+            pdo_delete($this->table_user, array('sid' => $id, 'openid' => $openid));
+            message('解绑成功！', referer(), 'success');
+        } elseif ($operation == 'dad') {
+            $id = intval($_GPC['id']);
+			$openid = $_GPC['openid'];
+            $row = pdo_fetch("SELECT id FROM " . tablename($this->table_students) . " WHERE id = :id", array(':id' => $id));
+            if (empty($row)) {
+                message('抱歉，学员不存在或是已经被删除！');
+            }
+
+			$temp = array(
+			        'dad'   => 0,
+		           	'duid'  => 0
+			       );
+			
+			pdo_update($this->table_students, $temp, array('id' => $id));
+            pdo_delete($this->table_user, array('sid' => $id, 'openid' => $openid));
+            message('解绑成功！', referer(), 'success');
         } elseif ($operation == 'deleteall') {
             $rowcount = 0;
             $notrowcount = 0;

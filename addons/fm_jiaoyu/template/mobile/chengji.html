@@ -16,8 +16,9 @@
         </style>
         <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
         <title>查询成绩</title>
-        <link rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/reset.css?{php echo time()}">
-        <script src="../addons/fm_jiaoyu/public/mobile/js/jquery.js?{php echo time()}"></script>
+		<link rel="stylesheet" href="{MODULE_URL}public/mobile/css/weixin.css?{php echo time()}">
+        <link rel="stylesheet" href="{MODULE_URL}public/mobile/css/reset.css?{php echo time()}">
+        <script src="{MODULE_URL}public/mobile/js/jquery.js?{php echo time()}"></script>
 </head>
 <body>
     <div id="wrap" class="page_search">
@@ -39,6 +40,7 @@
             </section>
         </form>
     </div>
+	  {php include $this->template('footer');} 
     <!-- 修改开始 -->
     <script>
         //验证表单提交事件

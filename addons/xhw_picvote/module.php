@@ -3,7 +3,7 @@
  * 图片投票模块定义
  *
  * @author 小黑屋
- * @url http://www.012wz.com
+ * @url http://www.wdlcms.com
  */
 defined('IN_IA') or exit('Access Denied');
 

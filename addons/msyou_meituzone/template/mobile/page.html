@@ -1,0 +1,65 @@
+					<style>
+                    	.header small{
+                    		color:#aaa
+                    	}
+                    </style>
+
+             <div id="page"  style="display:none;">
+             	<div class="grid-sizer" onclick="mytoggle($('#lists'),$('#page'));reload=true;" style="padding-left: 10px;position: fixed;top: 0px;left: 0px;width: 100%;height: 45px;line-height: 45px;background: -webkit-gradient(linear, 0 0, 0 100%, from(rgb(82, 73, 69)), color-stop(0.6, rgb(82, 73, 69)), to(rgb(72, 64, 60)));opacity: 0.9;margin: 0;color: #fff;">
+             		<i class="fa fa-reply btn" style="border-radius: 5px;">返回</i>
+             	</div>
+				<div class="tc-gridbox" style="width:100%;">
+					<div class="header">
+                        <div>
+	                        <div class="pull-left">
+	                        	<small>编号</small>
+		                        <h3 style="font-size:18px;">1</h3>
+	                        </div>
+	                        <div class="pull-right" id='minepm'>
+		                        <div class="pull-right" style="padding:0 5px 0 5px;">
+		                        	<small>排名</small>
+			                        <h3 style="font-size:18px;">33</h3>
+		                        </div>
+		                        <div class="pull-right" style="padding:0 5px 0 5px;">
+		                        	<small>得分</small>
+			                        <h3 style="font-size:18px;">123</h3>
+		                        </div>
+	                        </div>
+	                        <div class="clearfix">
+	                        	<small>昵称</small>
+		                        <h3 style="font-size:18px;">这不是逗比</h3>
+	                        </div>
+                        </div>
+                        <hr>
+					</div>
+					<div class="body">
+						提交 的 个人说明
+						<div class="image">
+							<img  src="{php echo tomedia($reply['bgurl'])}" class="img-responsive" alt="{$reply['title']}">
+						</div>
+					</div>
+                    <div class="footer">
+                    	<div class="pull-left" style="padding:5px;">
+							<i class="fa fa-thumbs-up yao" style="font-size:32px;color:#428bca;"></i><span style="font-size:26px;color:#fff;line-height:60px;">333</span>
+						</div>
+                        <div class="clearfix" onclick="alert('点赞');" style="background-color: rgba(72,64,60,0.8);color: #fff;text-align:center;">
+                        	<h3 style="color:#fff;">为我点赞</h3>
+                        </div>
+                    </div>
+					<div class="footer">
+						<div class="pull-left">
+							<span class="meta">{php echo date('Y-m-d H:i',$reply['createtime'])}</span>
+						</div>
+						<div class="pull-right">
+							<i class="fa fa-eye"></i><span>{$reply['viewx']}</span>
+							<i class="fa fa-share-alt"></i><span class="count">{$reply['zanx']}</span>
+							<span onclick="alert('收藏');">
+								<i class="fa fa-star-o" style="font-size:22px;color:#428bca;"></i>33
+							</span>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+<!-- 评论 -->
+
+				</div>
+			</div>

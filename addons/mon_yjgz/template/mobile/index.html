@@ -60,4 +60,33 @@
 
 		      </div>
     </div>
-</body></html>
+</body>
+
+
+{php echo register_jssdk(false);}
+<script type="text/javascript">
+
+
+    wx.ready(function () {
+        sharedata = {
+            title: "{php echo $gz['share_title']}",
+            desc: "{php echo $gz['share_content']}",
+            link: window.location.href,
+            imgUrl: "{$_W['attachurl']}{$gz['share_icon']}",
+            success: function(){
+               //// alert("更多好玩请关注官方微信号。");
+               // window.location.href = '{$fool['follow_url']}';//这个关注连接修改成自己的
+            },
+            cancel: function(){
+               // alert("分享失败，可能是网络问题，一会儿再试试？");
+            }
+        };
+        wx.onMenuShareAppMessage(sharedata);
+        wx.onMenuShareTimeline(sharedata);
+    });
+
+
+
+</script>
+
+</html>

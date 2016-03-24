@@ -2,102 +2,78 @@
 /**
  * 微小区模块
  *
- * [晓锋] Copyright (c) 2013 qfinfo.cn
+ * [微赞] Copyright (c) 2013 012wz.com
  */
 /**
  * 后台菜单设置
  */
-defined('IN_IA') or exit('Access Denied');
 	global $_W,$_GPC;
-	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
-	$navs = pdo_fetchAll("SELECT * FROM".tablename('xcommunity_nav')."WHERE uniacid= '{$_W['uniacid']}'");
-	if(empty($navs)){
-		$data1 =array('displayorder' => 0,'pcate' => 0 ,'title' => '物业服务','url' => '','status' => 1,'uniacid' => $_W['uniacid']);
-		$data2 =array('displayorder' => 0,'pcate' => 0 ,'title' => '小区互动','url' => '','status' => 1,'uniacid' => $_W['uniacid']);
-		$data3 =array('displayorder' => 0,'pcate' => 0 ,'title' => '生活服务','url' => '','status' => 1,'uniacid' => $_W['uniacid']);
-		if ($data1) {
-			pdo_insert('xcommunity_nav',$data1);
-			$nid1 = pdo_insertid();
-			$menu1 = array(
-					array('displayorder' => 0,'pcate' => $nid1,'title' => '物业介绍','icon' => 'glyphicon glyphicon-user','bgcolor' => '#ffb81c','url' => $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=property&m=xfeng_community','status' => 1,'uniacid' => $_W['uniacid']),
-					array('displayorder' => 0,'pcate' => $nid1,'title' => '公告信息','icon' => 'glyphicon glyphicon-bullhorn','bgcolor' => '#95bd38','url' => $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=announcement&m=xfeng_community','status' => 1,'uniacid' => $_W['uniacid']),
-					array('displayorder' => 0,'pcate' => $nid1,'title' => '小区报修','icon' => 'glyphicon glyphicon-wrench','bgcolor' => '#3c87c8','url' => $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=repair&m=xfeng_community','status' => 1,'uniacid' => $_W['uniacid']),
-					array('displayorder' => 0,'pcate' => $nid1,'title' => '投诉建议','icon' => 'fa fa-legal','bgcolor' => '#dd4b2b','url' => $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=report&m=xfeng_community','status' => 1,'uniacid' => $_W['uniacid']),
-					array('displayorder' => 0,'pcate' => $nid1,'title' => '便民号码','icon' => 'glyphicon glyphicon-earphone','bgcolor' => '#ab5e90','url' =>$_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=phone&m=xfeng_community','status' => 1,'uniacid' => $_W['uniacid']),
-					array('displayorder' => 0,'pcate' => $nid1,'title' => '查物业费','icon' => 'fa fa-money','bgcolor' => '#660000','url' => $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=propertyfree&m=xfeng_community','status' => 1,'uniacid' => $_W['uniacid']),
-			);
-			foreach ($menu1 as $key => $value1) {
-				pdo_insert('xcommunity_nav',$value1);
-			}
-		}
-		if ($data2) {
-			pdo_insert('xcommunity_nav',$data2);
-			$nid2 = pdo_insertid();
-			$menu2 = array(
-					array('displayorder' => 0,'pcate' => $nid2,'title' => '小区活动','icon' => 'glyphicon glyphicon-tasks','bgcolor' => '#65944e','url' => $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=activity&m=xfeng_community','status' => 1,'uniacid' => $_W['uniacid']),
-					array('displayorder' => 0,'pcate' => $nid2,'title' => '家政服务','icon' => 'glyphicon glyphicon-leaf','bgcolor' => '#95bd38','url' => $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=homemaking&m=xfeng_community','status' => 1,'uniacid' => $_W['uniacid']),
-					array('displayorder' => 0,'pcate' => $nid2,'title' => '房屋租赁','icon' => 'fa fa-info','bgcolor' => '#38bfc8','url' => $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=houselease&m=xfeng_community','status' => 1,'uniacid' => $_W['uniacid']),
-					array('displayorder' => 0,'pcate' => $nid2,'title' => '常用查询','icon' => 'glyphicon glyphicon-search','bgcolor' => '#ec9510','url' => $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=search&m=xfeng_community','status' => 1,'uniacid' => $_W['uniacid']),
-					array('displayorder' => 0,'pcate' => $nid2,'title' => '二手市场','icon' => 'fa fa-exchange','bgcolor' => '#666699','url' => $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=fled&m=xfeng_community','status' => 1,'uniacid' => $_W['uniacid']),
-					array('displayorder' => 0,'pcate' => $nid2,'title' => '小区拼车','icon' => 'fa fa-truck','bgcolor' => '#7f6000','url' => $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=car&m=xfeng_community','status' => 1,'uniacid' => $_W['uniacid']),
-			);
-			foreach ($menu2 as $key => $value2) {
-				pdo_insert('xcommunity_nav',$value2);
-			}
-		}		
-		if ($data3) {
-			pdo_insert('xcommunity_nav',$data3);
-			$nid3 = pdo_insertid();
-			$menu3 = array(
-					array('displayorder' => 0,'pcate' => $nid3,'title' => '小区商家','icon' => 'glyphicon glyphicon-shopping-cart','bgcolor' => '#65944e','url' => $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=business&op=app&m=xfeng_community','status' => 1,'uniacid' => $_W['uniacid']),
-					array('displayorder' => 0,'pcate' => $nid3,'title' => '小区超市','icon' => 'glyphicon glyphicon-shopping-cart','bgcolor' => '#65944e','url' => $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=shopping&op=list&m=xfeng_community','status' => 1,'uniacid' => $_W['uniacid']),
-
-			);
-			foreach ($menu3 as $key => $value3) {
-				pdo_insert('xcommunity_nav',$value3);
-			}
-		}	
+	$GLOBALS['frames'] = $this->NavMenu();
+	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
+	$id = intval($_GPC['id']);
+	$regions = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}'");
+	if (empty($regions)) {
+		message('请先添加小区',$this->createWebUrl('region',array('op' => 'add')),'error');
 	}
+	if ($op == 'list') {
+		$pindex = max(1, intval($_GPC['page']));
+		$psize  = 10;
+		$list = pdo_fetchall("SELECT * FROM".tablename('xcommunity_nav')."WHERE  uniacid='{$_W['uniacid']}' AND pcate = 0 order by displayorder asc LIMIT ".($pindex - 1) * $psize.','.$psize);
+		$children = array();
+		foreach ($list as $key => $value) {
+			$sql  = "select *from".tablename("xcommunity_nav")."where uniacid='{$_W['uniacid']}' and  pcate='{$value['id']}' order by displayorder asc";
+			$li = pdo_fetchall($sql);
 
-	$pindex = max(1, intval($_GPC['page']));
-	$psize  = 10;
-	$list = pdo_fetchall("SELECT * FROM".tablename('xcommunity_nav')."WHERE  uniacid='{$_W['uniacid']}' AND pcate = 0 order by displayorder asc LIMIT ".($pindex - 1) * $psize.','.$psize);
-	$children = array();
-	foreach ($list as $key => $value) {
-		$sql  = "select *from".tablename("xcommunity_nav")."where uniacid='{$_W['uniacid']}' and  pcate='{$value['id']}' order by displayorder asc";
-		$li = pdo_fetchall($sql);
-
-		$children[$value['id']] = $li;
-	}
-	//print_r($children);
-	$total = pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_nav')."WHERE uniacid='{$_W['uniacid']}' AND pcate = 0 ");
-	$pager  = pagination($total, $pindex, $psize);
-
-	// AJAX是否显示
-	if($_W['isajax'] && $_GPC['id']){
-		$data = array();
-		$data['status'] = intval($_GPC['status']);
-		if(pdo_update('xcommunity_nav', $data, array('id' => $_GPC['id'])) !== false) {
-				exit('success');
+			$children[$value['id']] = $li;
 		}
-		
-	}
-	if ($op == 'post') {
-		if ($_GPC['id']) {
-			$category = pdo_fetch("SELECT * FROM".tablename('xcommunity_nav')."WHERE id=:id",array(":id" => $_GPC['id']));
+		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_nav')."WHERE uniacid='{$_W['uniacid']}' AND pcate = 0 ");
+		$pager  = pagination($total, $pindex, $psize);
+
+		// AJAX是否显示
+		if($_W['isajax'] && $_GPC['id']){
+			$data = array();
+			$data['status'] = intval($_GPC['status']);
+			if(pdo_update('xcommunity_nav', $data, array('id' => $_GPC['id'])) !== false) {
+					exit('success');
+			}
+			
 		}
-		if ($_W['ispost']) {
+		if (!empty($_GPC['displayorder'])) {
+			foreach ($_GPC['displayorder'] as $id => $displayorder) {
+				pdo_update('xcommunity_nav', array('displayorder' => $displayorder), array('id' => $id));
+			}
+			message('排序更新成功！', 'refresh', 'success');
+		}
+		include $this->template('web/nav/list');
+	}elseif ($op == 'add') {
+		if ($id) {
+			$item = pdo_fetch("SELECT * FROM".tablename('xcommunity_nav')."WHERE id=:id",array(":id" => $id));
+			$regs = unserialize($item['regionid']);
+		}
+		if (checksubmit('submit')) {
+			if (empty($_GPC['url'])) {
+				$url = '#';
+			}else{
+				$url = $_GPC['url'];
+			}
 			$insert = array(
 				'uniacid' => $_W['uniacid'],
 				'displayorder' => $_GPC['displayorder'],
 				'title' => $_GPC['title'],
-				'url' => $_GPC['url'], 
+				'url' => $url, 
 				'status' => 1,
 				'icon' => $_GPC['icon'],
 				'bgcolor' => $_GPC['bgcolor'],
+				'thumb' => $_GPC['thumb'],
 			);
+			if (!empty($_GPC['regionid']) && $_GPC['regionid'] != 'N;') {
+				$insert['regionid'] = serialize($_GPC['regionid']);
+			}else{
+				$insert['enable'] = 1;
+			}
 			if ($_GPC['id']) {
-				$insert['pcate'] = $category['pcate'];
+				$insert['pcate'] = $item['pcate'];
+				pdo_query("UPDATE ".tablename('xcommunity_nav')."SET enable = 0 WHERE id='{$_GPC['id']}'");
 				pdo_update('xcommunity_nav',$insert,array('id' => $_GPC['id']));
 			}else{
 				$insert['pcate'] = $_GPC['pcate'];
@@ -105,36 +81,108 @@ defined('IN_IA') or exit('Access Denied');
 			}
 			message('操作成功',referer(),'success');
 		}
-	}elseif ($op == 'display') {
-		//print_r($_GPC['displayorder']);exit();
-		if (!empty($_GPC['displayorder'])) {
-			foreach ($_GPC['displayorder'] as $id => $displayorder) {
-				pdo_update('xcommunity_nav', array('displayorder' => $displayorder), array('id' => $id));
+		load()->func('tpl');
+		include $this->template('web/nav/add');
+	}elseif ($op == 'cover') {
+	//设置入口信息
+		if (empty($id)) {
+			message('缺少参数',referer(),'error');
+		}
+		$nav = pdo_fetch("SELECT * FROM".tablename('xcommunity_nav')."WHERE id=:id AND uniacid=:uniacid",array(':uniacid' => $_W['uniacid'],':id' => $id));
+		if (empty($nav)) {
+			message('该菜单不存在或已删除',referer(),'error');
+		}
+		$reply = pdo_fetch("SELECT id,rid,title,thumb,description FROM".tablename('cover_reply')."WHERE do='{$nav['do']}' AND uniacid=:uniacid",array(':uniacid' => $_W['uniacid']));
+		if ($reply) {
+			$k = pdo_fetchall("SELECT content FROM".tablename('rule_keyword')."WHERE rid=:rid",array(':rid' => $reply['rid']));
+			$kds = '';
+			foreach ($k as $key => $value) {
+				$kds[]= $value['content'];
 			}
-			message('排序更新成功！', 'refresh', 'success');
+			$kds = implode('|',$kds);
 		}
-	}elseif ($op == 'style') {
-
-		$data = array(
+		if (checksubmit('submit')) {
+			if(trim($_GPC['keywords']) == '') {
+				message('必须输入触发关键字.');
+			}
+			$keywords = explode('|',$_GPC['keywords']);
+			$rule = array(
 				'uniacid' => $_W['uniacid'],
-				'styleid' => $_GPC['styleid'],
+				'name' => $_GPC['title'],
+				'module' => 'cover', 
+				'status' => 1,
 			);
-		$item = pdo_fetch("SELECT * FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
-		if ($_W['ispost']) {
-				if (empty($item)) {
-					pdo_insert('xcommunity_template',$data);
-				}else{
-					$row = pdo_query("UPDATE ".tablename('xcommunity_template')."SET styleid = '{$_GPC['styleid']}' WHERE uniacid='{$_W['uniacid']}'");
-					if ($row) {
-						message('操作成功',refresh,'success');
-					}
+			if (!empty($reply)) {
+				$rid = $reply['rid'];
+				$result = pdo_update('rule',$rule,array('id' => $rid));
+			}else{
+				$result = pdo_insert('rule', $rule);
+				$rid = pdo_insertid();
+			}
+			if (!empty($rid)) {
+				$sql = 'DELETE FROM '. tablename('rule_keyword') . ' WHERE `rid`=:rid AND `uniacid`=:uniacid';
+				$pars = array();
+				$pars[':rid'] = $rid;
+				$pars[':uniacid'] = $_W['uniacid'];
+				pdo_query($sql, $pars);
+				$rowtpl = array(
+					'rid' => $rid,
+					'uniacid' => $_W['uniacid'],
+					'module' => 'cover',
+					'status' => $rule['status'],
+					'displayorder' => $rule['displayorder'],
+				);
+				foreach($keywords as $kw) {
+					$krow = $rowtpl;
+					$krow['type'] = 1;
+					$krow['content'] = $kw;
+					pdo_insert('rule_keyword', $krow);
 				}
+				$url = murl('entry', array('do' => $nav['do'], 'm' => 'xfeng_community'));
+				$entry = array(
+					'uniacid' => $_W['uniacid'],
+					'multiid' => $multiid,
+					'rid' => $rid,
+					'title' => $_GPC['title'],
+					'description' => $_GPC['description'],
+					'thumb' => $_GPC['thumb'],
+					'url' => $url,
+					'do' => $nav['do'],
+					'module' => 'xfeng_community',
+				);
+				if (empty($reply['id'])) {
+					pdo_insert('cover_reply', $entry);
+				} else {
+					pdo_update('cover_reply', $entry, array('id' => $reply['id']));
+				}
+				message('封面保存成功！', 'refresh', 'success');
+			} else {
+				message('封面保存失败, 请联系网站管理员！');
+			}
 		}
-
-
+		load()->func('tpl');
+	include $this->template('web/nav/cover');
+}elseif($op == 'delete'){
+		if (pdo_delete('xcommunity_nav',array('id' => $id))) {
+			$result = array(
+					'status' => 1,
+				);
+			echo json_encode($result);exit();
+		}
+}elseif($op == 'set'){
+	$id = intval($_GPC['id']);
+	if (empty($id)) {
+		message('缺少参数',referer(),'error');
 	}
+	$type = $_GPC['type'];
+	$data = intval($_GPC['data']);
+	$data = ($data==1? 0:1);
+	pdo_query("UPDATE ".tablename('xcommunity_nav')."SET isshow = '{$data}' WHERE id=:id",array(":id" => $id ));
+	die(json_encode(array("result" => 1, "data" => $data)));
+}
 
-	include $this->template('category');
+
+
 
 
 

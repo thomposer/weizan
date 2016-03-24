@@ -76,31 +76,33 @@
 			<thead class="navbar-inner">
 				<tr>
                     <th class='with-checkbox' style="width: 20px;"><input type="checkbox" class="check_all" /></th>
+					<th style="width:2%;">ID</th>
 					<th style="width:5%">姓名</th>
 					<th style="width:4%;">性别</th>
-					<th style="width:4%;">年龄</th>
 					<th style="width:10%;">授课年级 </th>
-					<th style="width:15%;">授课班级</th>
-					<th style="width:8%;">授课科目</th>
+					<th style="width:13%;">授课班级</th>
+					<th style="width:6%;">授课科目</th>
 					<th style="width:5%;">课程数目</th>
 					<th style="width:5%;">课时</th>
                     <th style="width:8%;">手机</th>
                     <!--th style="width:8%;">入职时间</th-->	
-                    <th style="width:8%;">添加课程</th>					
-					<th style="text-align:right; width:11%;">操作</th>
+                    <th style="width:8%;">添加课程</th>	
+                    <th style="width:8%;">微信绑定</th>	
+                    <th style="width:4%;"></th>						
+					<th style="text-align:right; width:8%;">操作</th>
 				</tr>
 			</thead>
 			<tbody>
 				{loop $list $item}
 				<tr>
                     <td class="with-checkbox"><input type="checkbox" name="check" value="{$item['id']}"></td>
+					<td style ="color:red;><div class="type-parent"><h5>{$item['id']}</h5></div></td>
 					<td>
-                        <img src="{$_W['attachurl']}{$item['thumb']}" width="50" onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$item['tname']}
+                        <img src="{$_W['attachurl']}{$item['thumb']}" width="50" onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br></br>{$item['tname']}
                     </td>
-					<td>{if $item['sex'] == 1}<span class="label label-success">男</span>{else}<span class="label label-success">女</span>{/if}</td>
-					<td>
-                        <span class="label label-success">{php echo (date('Y',TIMESTAMP) - date('Y',$item['birthdate']))}岁</span>
-                    </td>
+					<td>{if $item['sex'] == 1}<span class="label label-info">男</span>{else}<span class="label label-success">女</span>{/if}</br></br>
+					<span class="label label-success">{php echo (date('Y',TIMESTAMP) - date('Y',$item['birthdate']))}岁</span>
+					</td>
 					<td>{if !empty($category[$item['xq_id1']])}{$category[$item['xq_id1']]['sname']}{/if} / {if !empty($category[$item['xq_id2']])}{$category[$item['xq_id2']]['sname']}{/if} / {if !empty($category[$item['xq_id3']])}{$category[$item['xq_id3']]['sname']}{/if}
 					</br>共{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_students')." WHERE xq_id = '".$item['xq_id1']."'")}人/共{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_students')." WHERE xq_id = '".$item['xq_id2']."'")}人/共{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_students')." WHERE xq_id = '".$item['xq_id3']."'")}人
 					</td>
@@ -119,6 +121,21 @@
                     </td>
 					<!--td>{php echo date('Y-m-d',$item['jiontime'])}</td-->     
                     <td><a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('assess', array('id' => $item['id'], 'op' => 'add', 'schoolid' => $schoolid))}" title="添加课程"><i class="fa fa-qrcode">&nbsp;&nbsp;添加课程</i></a></td>					
+					<td>
+					{if $item['openid'] != 0}
+					<img src="{$member[$item['uid']]['avatar']}" width="50"  onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$member[$item['uid']]['nickname']} </br>
+					<a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('assess', array('id' => $item['id'], 'op' => 'jiebang', 'schoolid' => $schoolid))}" onclick="return confirm('此操作不可恢复，确认解绑？');return false;" title="解绑"><i class="fa fa-times"></i>解绑</a>
+					{else}
+					绑定码:{$item['code']}
+					{/if}
+					</td>
+					
+					<td>
+
+                    {if $item['status'] == 2}<span class="label label-danger">校长</span>{else if $item['status'] == 1}<span class="label label-success">教员</span>{/if}
+
+					</td>
+					
 					<td style="text-align:right;">
 						<a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('assess', array('id' => $item['id'], 'op' => 'post', 'schoolid' => $schoolid))}" title="编辑"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;<a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('assess', array('id' => $item['id'], 'op' => 'delete', 'schoolid' => $schoolid))}" onclick="return confirm('此操作不可恢复，确认删除？');return false;" title="删除"><i class="fa fa-times"></i></a>
 					</td>
@@ -247,6 +264,23 @@ $(function(){
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">绑定码</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="text" name="code" class="form-control" value="{$item['code']}" />
+                        </div>
+                    </div>
+                </div>
+				<div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否校长</label>
+                    <div class="col-sm-9">
+                        <label for="isshow1" class="radio-inline"><input type="radio" name="status" value="2" id="isshow1" {if empty($item) || $item['status'] == 2}checked="true"{/if} /> 是</label>
+                        &nbsp;&nbsp;&nbsp;
+                        <label for="isshow2" class="radio-inline"><input type="radio" name="status" value="1" id="isshow2"  {if !empty($item) && $item['status'] == 1}checked="true"{/if} /> 否</label>
+                        <span style ="color:red;" class="help-block">每个学校只能设置一个校长，否则出错后果自负</span>
+                    </div>
+                </div>				
 		    </div>
 			<div class="panel panel-info">
               <div class="panel-heading"><a class="btn btn-primary" href="{php echo $this->createWebUrl('assess', array('op' => 'display', 'schoolid' => $schoolid))}"><i class="fa fa-tasks"></i> 返回教师列表</a></div>

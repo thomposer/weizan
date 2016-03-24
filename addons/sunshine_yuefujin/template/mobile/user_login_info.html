@@ -1,0 +1,38 @@
+{template 'header'}
+<div class="ui-header ui-header-wx ui-border-b">
+	<span class="ui-icon-return" onclick="window.location.href=document.referrer" style="color:white;"></span>
+	<h1>当前登录账号</h1>
+</div>
+<div class="ui-container">
+	<div style="height:20px;">
+	</div>
+	<div style="padding:10px;">
+	    <div class="ui-avatar-one" style="margin:0px auto;"><span style="background-image:url({$userinfo['headimgurl']})"></span></div>
+		<div class="ui-form-item ui-border-b">
+			<label>
+			用户名
+			</label>
+			<input type="text" placeholder="" value="{$userinfo['nickname']}" disabled>
+		</div>
+		<div class="ui-form-item ui-border-b">
+			<label>
+			性别
+			</label>
+			<input type="text" placeholder="" value="{if $userinfo['sex'] == 1}男{else}女{/if}" disabled>
+		</div>
+		<div class="ui-form-item ui-border-b">
+			<label>
+			地区
+			</label>
+			<input type="text" placeholder="" value="{$userinfo['country']}{$userinfo['province']}{$userinfo['city']}" disabled>
+		</div>
+		<br>
+		<div class="ui-btn-wrap">
+			<button class="ui-btn-lg ui-btn-primary" onclick="window.location.href='{php echo $this->createMobileUrl('merchantsrm')}'">使用该账号</button>
+		</div>
+		<div class="ui-btn-wrap">
+			<button class="ui-btn-lg ui-btn-primary" onclick="window.location.href='{php echo $this->createMobileUrl('relogin')}'">重新登录</button>
+		</div>
+	</div>
+</div>
+{template 'footer'}

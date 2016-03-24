@@ -757,8 +757,8 @@ class Thinkidea_rencaiModuleSite extends WeModuleSite {
     				$tmp_name = $upfile['tmp_name'];
     				$error = $upfile['error'];
     				//上传路径
-    				$upload_path = IA_ROOT."/attachment/thinkidea_rencai/avatar/";
-    			        load()->func('file');@mkdirs($upload_path);
+    				$upload_path = $_SERVER['DOCUMENT_ROOT']."/attachment/thinkidea_rencai/avatar/";
+    			
     				if(intval($error) > 0){
     					message('上传错误：错误代码：'.$error, 'referer', 'error');
     				}else {
@@ -2006,8 +2006,7 @@ class Thinkidea_rencaiModuleSite extends WeModuleSite {
         $tmp_name = $upfile['tmp_name'];
         $error = $upfile['error'];
         //上传路径
-        $upload_path = IA_ROOT."/attachment/thinkidea_rencai/";
-        load()->func('file');@mkdirs($upload_path);
+        $upload_path = $_SERVER['DOCUMENT_ROOT']."/attachment/thinkidea_rencai/";
 
         if(intval($error) > 0){
             message('上传错误：错误代码：'.$upload_name.'-'.$error, 'referer', 'error');

@@ -1301,7 +1301,9 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 		}
 		if (!$direct) {
 			//如果不是直接购买（从购物车购买）
-			$list = pdo_fetchall("SELECT * FROM " . tablename('shopping_cart') . " WHERE  weid = '{$_W['uniacid']}' AND from_user = '{$_W['fans']['from_user']}'");
+			$goodids = $_GPC['goodids'];
+			$condition =  empty($goodids) ? '' : 'AND id IN ('.$goodids.")";
+			$list = pdo_fetchall("SELECT * FROM " . tablename('shopping_cart') . " WHERE  weid = '{$_W['uniacid']}' AND from_user = '{$_W['fans']['from_user']}' {$condition}");
 			if (!empty($list)) {
 				foreach ($list as &$g) {
 					$item = pdo_fetch("select id,thumb,title,weight,marketprice,total,type,totalcnf,sales,unit from " . tablename("shopping_goods") . " where id=:id limit 1", array(":id" => $g['goodsid']));

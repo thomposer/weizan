@@ -87,6 +87,10 @@ class Mon_yjgzModuleSite extends WeModuleSite
                     'title' => $_GPC["title"],
                     'banner_pic' => $_GPC['banner_pic'],
                     'banner_desc' =>htmlspecialchars_decode( $_GPC['banner_desc']),
+					'share_title' => $_GPC['share_title'],
+					'share_icon' => $_GPC['share_icon'],
+					'share_content' => $_GPC['share_content'],
+
                     'createtime' => TIMESTAMP
                 );
 
@@ -208,6 +212,7 @@ class Mon_yjgzModuleSite extends WeModuleSite
     public function  doMobileIndex(){
         global $_W,$_GPC;
 
+		$this->checkmobile();
         $yid=$_GPC['yid'];
 
         $gz = pdo_fetch("SELECT * FROM " . tablename($this->table_gz) . " WHERE id = :id", array(
@@ -226,6 +231,16 @@ class Mon_yjgzModuleSite extends WeModuleSite
 
     }
 
+	 public function  checkmobile(){
+    	
+    	$user_agent = $_SERVER['HTTP_USER_AGENT'];
+    	if (strpos($user_agent, 'MicroMessenger') === false) {
+    		echo "本页面仅支持微信访问!非微信浏览器禁止浏览!";
+    		exit();
+    	}
+    	
+    }
+	
     public function  str_murl($url){
         global $_W,$_GPC;
 

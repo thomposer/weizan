@@ -1,0 +1,95 @@
+{template 'header'}
+	<!-- header -->
+	<div class="ui-header ui-header-wx ui-border-b">
+		<span class="ui-icon-return" onclick="window.location.href=document.referrer" style="color:white;"></span>
+		<h1>约附近</h1>
+	</div>
+	<!-- container -->
+	<div class="ui-container">
+		<!-- list -->
+		<ul class="ui-list ui-list-link ui-border-tb ui-list-active" id="list_container">
+		</ul>
+		<!-- bottom -->
+		<div class="ui-loading-wrap" style="display:none" onclick="listload(this)" id="listload_more">
+			<p>点击加载更多</p>
+		</div>
+		<!-- loading -->
+		<div class="ui-loading-wrap" id="loading_more_layer">
+		    <p>加载中...</p>
+		    <i class="ui-loading"></i>
+		</div>
+		<div class="ui-footer ui-footer-stable ui-btn-group ui-border-t">
+		<button class="ui-btn-lg" onclick="window.location.href='{php echo $this->createMobileUrl('list',array('sunshine_openid_nocookie'=>$sunshine_openid_nocookie))}'">
+		刷新
+	    </button>
+	    <button class="ui-btn-lg" onclick="window.location.href='{php echo $this->createMobileUrl('usercenter',array('sunshine_openid_nocookie'=>$sunshine_openid_nocookie))}'">
+	    个人中心
+	    </button>
+	</div>
+	</div>
+	<!-- hide -->
+	<script type="text/javascript">
+	
+	var intv = setInterval('listload()',500);
+	// init page
+	var page = 1;
+
+	function listload() {
+		var _self = $('#listload_more');
+		
+		_self.hide();
+		$("#loading_more_layer").show();
+
+		$.ajax({
+			async:false,
+			type:'post',
+			data:{'page':page,'keyword':$("#search_box").val(),'sunshine_openid_nocookie':"{php echo $sunshine_openid_nocookie}"},
+			url : "{php echo $this->createMobileUrl('listload');}",
+			success :function(d) {
+				if(d.res == '100') {
+					clearInterval(intv);
+					var html = '';
+					for (var i in d.list) {
+						var info = d.list[i];
+						html += '<li class="ui-border-t">';
+						html += '<div class="ui-list-icon">';
+						if(info.headimgurl) {
+							html += '<span style="border-radius:3px;background-image:url('+info.headimgurl+')"></span>';
+
+						}else {
+							//html += '<span style="border-radius:3px;background-image:url(http://placeholder.qiniudn.com/100x100)"></span>';
+						}
+						
+						html += '</div>';
+						html += '<div class="ui-list-info" onclick="Surrounds.openNew(\'{php echo $this->createMobileUrl('detail')}&distance='+info.distance+'&unit='+info.unit+'&sunshine_openid_nocookie='+info.openid+'\','+info.id+')">';
+						html += '<h4 class="ui-nowrap">'+info.nickname;
+						if(info.sex == '1') {
+							html += '<span class="ui-icon-male" style="display:inline;color:blue;"></span>';
+						}else {
+							html += '<span class="ui-icon-female" style="display:inline;color:red;"></span>';
+						}
+						html += "</h4>";
+						html += '<p class="ui-nowrap">'+info.last_time+'前刷新</p>';
+						html += '<p class="ui-nowrap">'+info.province+info.city+'&nbsp;&nbsp;距离'+info.distance+info.unit+'</p>';
+						html += '</div>';
+						html += '</li>';
+					}
+					$("#list_container").append(html);
+
+					page ++;
+
+					// loading 
+					$("#loading_more_layer").hide();
+					_self.show();
+				}else if(d.res=='102') {
+					clearInterval(intv);
+					$("#loading_more_layer").hide();
+					_self.children("p").html("暂无新记录");
+					_self.show();
+					
+				}
+			}
+		})
+	}
+	</script>
+{template 'footer'}

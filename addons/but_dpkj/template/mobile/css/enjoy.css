@@ -1,0 +1,81 @@
+@charset "utf-8";
+/* CSS 分享*/
+#desc{
+	   width:80%;
+	   margin:0 auto;
+	   font-size:0.8em;
+     }
+	 
+#desc p{
+	    border: 1px solid #ccc;
+        border-radius: 7px;
+        height: 35px;
+        line-height: 35px;
+        text-align: center;
+        background-image: linear-gradient( #fdfdfd,#eee);
+        margin:0.3em auto;
+        }
+		
+#btn{
+	width:90%;
+	margin:0 auto;
+	margin-top:15px;
+   }
+   
+#btn div{
+	  text-align:center;
+	  background:red;
+	  border: #900 solid 1px;
+	  padding:0.3em;
+	  color:#FFF;
+	  border-radius:6px;
+	  cursor:pointer
+	}
+
+#btn div:active{
+	background:rgba(153,0,0,1)
+	}
+
+#dao{
+	   display:none;
+	   z-index:20001;
+	   left:-2em;
+	 }
+#dcover{
+	       position:fixed;
+		   top:0;
+		   left:0;
+		   width:100%; 
+		   height:100%;
+		   background:black;
+		   display:none;
+		   z-index:20000;
+		   margin:0 auto;
+		}
+#bengz{
+	    position:fixed;
+		text-align:center;
+		top:25em;
+		left:0;
+		width:100%;
+		z-index:20002;
+		display:none;
+	  }
+#mcover{
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	background:rgba(0, 0, 0, 0.7);
+	display:none;
+	z-index:20000;
+	}
+#mcover img{
+	position:fixed;
+	right: 18px;
+	top:5px;
+	width:260px;
+	height:180px;
+	z-index:20001;
+	}

@@ -168,10 +168,10 @@ $(function(){
     $("input[name=btndeleteall]").click(function(){
         var check = $("input[type=checkbox][class!=check_all]:checked");
         if(check.length < 1){
-            alert('请选择要删除的学员!');
+            alert('请选择要删除的课程!');
             return false;
         }
-        if(confirm("确认要删除选择的学员?")){
+        if(confirm("确认要删除选择的课程?")){
             var id = new Array();
             check.each(function(i){
                 id[i] = $(this).val();

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <title>中奖纪录</title>
+    {php echo register_jssdk(false);}
+    <link rel="stylesheet" href="../addons/xkd_zfbggl/template/css/style.css">
+</head>
+<body>
+<div class="record-header">
+    <a href="{$index_url}">返回</a>
+    中奖纪录
+</div>
+{if $empty_record}
+<div>没有中奖哦</div>
+{else}
+<ul class="record-list">
+    {loop $record_list $key $record}
+    <li>
+        {$record['name']}
+        <button class="get-card-btn" data-cardid="{$record['cardid']}">领取</button>
+        <textarea class="cardext">{$record['card_ext']}</textarea>
+    </li>
+    {/loop}
+</ul>
+{/if}
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+    wx.ready(function () {
+        $(".get-card-btn").click(function () {
+            var cardid = $(this).data("cardid");
+            var cardext = $(this).parent("li").find(".cardext").val();
+            wx.addCard({
+                cardList: [{
+                    cardId: cardid,
+                    cardExt: cardext
+                }], // 需要添加的卡券列表
+                success: function (res) {
+                    var cardList = res.cardList; // 添加的卡券列表信息
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

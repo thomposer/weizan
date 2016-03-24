@@ -22,14 +22,29 @@
                 message('批量更新排序成功', $this->createWebUrl('theclass', array('op' => 'display', 'schoolid' => $schoolid)), 'success');
             }
             $children = array();
+			
             $theclass = pdo_fetchall("SELECT * FROM " . tablename($this->table_classify) . " WHERE weid = '{$_W['uniacid']}' And type = 'theclass' And schoolid = {$schoolid} ORDER BY sid ASC, ssort DESC");
             foreach ($theclass as $index => $row) {
                 if (!empty($row['parentid'])) {
                     $children[$row['parentid']][] = $row;
                     unset($theclass[$index]);
                 }
+            }			
+			
+
+            $teachers = pdo_fetchall("SELECT * FROM " . tablename($this->table_teachers) . " WHERE weid =  '{$_W['uniacid']}' AND schoolid ={$schoolid} ORDER BY id ASC, id DESC", array(':weid' => $_W['uniacid'], ':schoolid' => $schoolid), 'id');
+            if (!empty($teachers)) {
+            $child = '';
+            foreach ($teachers as $pid => $pcate) {
+                if (!empty($pcate['parentid'])) {
+                    $child[$pcate['parentid']][$pcate['id']] = array($pcate['id'], $pcate['name']);
+                }
+              }
             }
+			
+
         } elseif ($operation == 'post') {
+			load()->func('tpl');
             $parentid = intval($_GPC['parentid']);
             $sid = intval($_GPC['sid']);
             if (!empty($sid)) {
@@ -40,6 +55,7 @@
                 );
             }
 
+			
             if (checksubmit('submit')) {
                 if (empty($_GPC['catename'])) {
                     message('抱歉，请输入名称！');
@@ -51,6 +67,9 @@
                     'sname' => $_GPC['catename'],
                     'ssort' => intval($_GPC['ssort']),
                     'type' => 'theclass',
+					'erwei' => trim($_GPC['erwei']),
+					'qun' => trim($_GPC['qun']),
+					'tid' => trim($_GPC['tid']),
 					'parentid' => intval($parentid),
                 );
 				

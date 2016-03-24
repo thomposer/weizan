@@ -1,0 +1,89 @@
+@charset "utf-8";
+/* CSS Document */
+body,ul,li,h1,p,hr{
+	       margin:0; padding:0;
+	      }
+body{
+	  min-width:320px;
+	  max-width:640px;
+	  margin:0 auto;
+	  font-family:"黑体"; 
+	  font-size:1.2em;
+	  color:#333333; 
+	  line-height:1.2;
+	  background-color:#efefef;
+	 }
+	 
+li{ 
+    list-style:none;
+  }
+  
+img{ 
+     border:none
+   }
+   
+a{
+	font-family:"黑体"; 
+	font-size:0.8em; 
+	color:#fff; 
+	text-decoration:none;
+  }
+a:hover{
+	     text-decoration:none;
+		 font-size:0.8em; 
+		 color:#fff;
+		 font-family:"黑体"; 
+	   }
+.fl{
+	  float:left
+   }
+   
+.fr{ 
+     float:right
+   }
+   
+.rel{
+	   position:relative
+	}
+	
+.abs{ 
+       position:absolute
+	}
+	
+.black{ 
+        display:block
+	  }
+	  
+.clear{ 
+        clear:both; 
+		height:0; 
+		overflow:hidden
+	   }
+	   
+.top{ 
+        width:90%; 
+		margin:0 auto;
+	}
+.top a{ 
+         font-size:16px; 
+		 float:left; 
+		 line-height:25px; 
+	  }  
+.banner{ 
+          width:100%;
+	   }
+.pic{
+	   width:100%; 
+	   height:100%;
+	}
+
+/*头部开始*/
+ #top{ 
+          width:90%;
+		  margin:0 auto;
+	 }
+ #top_link a{ 
+              font-size:0.9em; 
+			  line-height:5px;
+			}
+

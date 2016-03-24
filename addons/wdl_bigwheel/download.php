@@ -2,12 +2,18 @@
 if (PHP_SAPI == 'cli')
 	die('This example should only be run from a Web Browser');
 global $_GPC,$_W;
+
 $rid= intval($_GPC['rid']);
+$starttime = $_GPC['starttime'];
+$endtime = $_GPC['endtime'];
+$starttime = strtotime($starttime);
+$endtime = strtotime($endtime);
+
 if(empty($rid)){
 	message('抱歉，传递的参数错误！','', 'error');
 }
 $list = pdo_fetchall("SELECT a.*,b.tel FROM ".tablename('bigwheel_award')." as a LEFT JOIN ".tablename('bigwheel_fans')." as b on a.rid=b.rid and a.from_user=b.from_user "
-					."WHERE a.rid = :rid and a.weid=:weid ORDER BY a.id DESC" , array(':rid' => $rid,':weid'=>$_W['weid']));
+					."WHERE a.rid = :rid and a.weid=:weid and :starttime < a.createtime and a.createtime < :endtime ORDER BY a.id DESC" , array(':rid' => $rid,':weid'=>$_W['weid'], ':starttime' => $starttime, ':endtime' => $endtime));
 foreach ($list as &$row) {
 	if($row['status'] == 0){
 		$row['status']='未领取';

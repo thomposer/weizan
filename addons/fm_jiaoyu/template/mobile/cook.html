@@ -9,111 +9,22 @@
 <!--相关jquery mobile框架的css和js的引入-->
 
 
-<!-- <link rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/reset.css?{php echo time()}"> -->
-<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/global.css?{php echo time()}">
-<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/layout.css?{php echo time()}">
-<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/button.css?{php echo time()}">
-<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/loadmore.css?{php echo time()}">
-<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/mobiscroll.android-ics-2.5.2.css?{php echo time()}">
-<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/mobiscroll.core-2.5.2.css?{php echo time()}">
-<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/mobiscroll.animation-2.5.2.css?{php echo time()}">
-<link type="text/css" rel="styleSheet" href="../addons/fm_jiaoyu/public/mobile/css/layer.css?{php echo time()}" id="layermcss">
-<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/layer.css?{php echo time()}">
-<link type="text/css" rel="stylesheet" href="../addons/fm_jiaoyu/public/mobile/css/stdfood.css?{php echo time()}">	
-<script type="text/javascript" src="../addons/fm_jiaoyu/public/mobile/js/mobileCommon.js"></script>
-<script type="text/javascript" src="../addons/fm_jiaoyu/public/mobile/js/jquery-1.8.0.min.js"></script>
-<script type="text/javascript" src="../addons/fm_jiaoyu/public/mobile/js/layer.m.js"></script>
-<script src="../addons/fm_jiaoyu/public/mobile/js/jquery.touchwipe.1.1.1.js"></script>
-<script src="../addons/fm_jiaoyu/public/mobile/js/jquery.lazyload.js"></script>		
-<script src="../addons/fm_jiaoyu/public/mobile/js/stdfood.js?{php echo time()}"></script>
+<!-- <link rel="stylesheet" href="{MODULE_URL}public/mobile/css/reset.css?{php echo time()}"> -->
+<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/global.css?{php echo time()}">
+<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/layout.css?{php echo time()}">
+<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/button.css?{php echo time()}">
+<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/loadmore.css?{php echo time()}">
+<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/mobiscroll.android-ics-2.5.2.css?{php echo time()}">
+<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/mobiscroll.core-2.5.2.css?{php echo time()}">
+<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/mobiscroll.animation-2.5.2.css?{php echo time()}">
+<link type="text/css" rel="styleSheet" href="{MODULE_URL}public/mobile/css/layer.css?{php echo time()}" id="layermcss">
+<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/layer.css?{php echo time()}">
+<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/stdfood.css?{php echo time()}">	
+<script type="text/javascript" src="{MODULE_URL}public/mobile/js/jquery-1.8.0.min.js"></script>	
+<script src="http://wmeiapi-session.stor.sinaapp.com/js/stdfood.js?{php echo time()}"></script>
 		
 		
 		<title>{$item['title']}</title>		
-<script type="text/javascript">
-	var needoauth = false;
-</script>
-
-		<script type="text/javascript">	
-		$.fn.smartFloat = function() {
-			var position = function(element) {
-				var top = element.offset().top; //当前元素对象element距离浏览器上边缘的距离 
-				var pos = element.css("position"); //当前元素距离页面document顶部的距离 
-				$(window).scroll(function() { //侦听滚动时	        	
-					var scrolls = $(this).scrollTop(); 
-					if (scrolls > top) { //如果滚动到页面超出了当前元素element的相对页面顶部的高度 
-						if (window.XMLHttpRequest) { //如果不是ie6 
-							element.css({ //设置css 
-								position: "fixed", //固定定位,即不再跟随滚动
-								left:myLeft,
-								top: 0 //距离页面顶部为0 
-							}).css("background","rgba(0, 0, 0, 0.8)");
-						} else { //如果是ie6 
-							element.css({ 
-								top: scrolls  //与页面顶部距离 
-							});     
-						} 
-					}else { 
-						element.css({ //如果当前元素element未滚动到浏览器上边缘，则使用默认样式 
-							position: pos, 
-							top: top 
-						}).css("background","");                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-					} 
-				}); 
-			};
-			return $(this).each(function() {
-				position($(this));                          
-			}); 
-		}; 
-		
-		function init(){			
-			//$("#category10").addClass("select");//$("#label").addClass("label");
-			$(".fullimg img").lazyload({
-				effect : "fadeIn"
-			});
-			$(".bigImg img").lazyload({
-				event : "click",
-				effect : "fadeIn"
-			});
-			/*
-			$("li[category]").hide();
-			if(share){
-				$("li[category=30]").show();
-				$("li[name=categoryli]").hide();
-				
-				loadByCategory('30');
-			}else{
-				$("li[category=10]").show();
-				loadByCategory('0');
-			}*/
-			loadOrder();
-			initLabelImg();
-			initArrow();
-			initPromoStartEnd();
-			if(share){
-				$("#goOrderA").text("找人成全我");
-				$("#tips").hide();
-			}
-			//收起没有产品的分类
-			var lastcode = "";
-			$("li[name=categoryli]").each(function(){
-				var li = $(this);
-				var code = li.data("code");
-				//console.log(li.data("code"));
-				//console.log($("div[category="+li.data("code")+"]").length);
-				if($("li[category="+code+"]").length == 0 ){
-					li.hide();
-				}else{
-					lastcode = code;
-				}
-			});
-			loadByCategory(lastcode);
-		}
-		
-		$(window).load(function(){
-			$("#header-nav").smartFloat();
-		})
-		
-		</script>
 		<style type="text/css">
 			html,body {
 				position: inherit;
@@ -199,7 +110,7 @@
         <ul class="ul-img-text-1" style = "margin-top:40px;">
 	
 		
-		
+		    {if !empty($monarr['mon_zc'])}
 		    <li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="1">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -214,6 +125,8 @@
 				<div class="name">早餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($monarr['mon_zjc'])}
 		    <li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="1">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -228,6 +141,8 @@
 				<div class="name">早加餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($monarr['mon_wc'])}
 		    <li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="1">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -242,6 +157,8 @@
 				<div class="name">午餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($monarr['mon_wjc'])}
 		    <li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="1">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -256,6 +173,8 @@
 				<div class="name">午加餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($monarr['mon_wwc'])}
 		    <li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="1">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -269,7 +188,9 @@
 			   <div class="one-line-text">
 				<div class="name">晚餐</div>	
 			   </div>			   
-		    </li>		
+		    </li>
+            {/if}
+			{if !empty($tusarr['tus_zc'])}			
              <!--  周二	 -->		
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="2" style="display: none;">
 			<!-- 图片 -->
@@ -285,6 +206,8 @@
 				<div class="name">早餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($tusarr['tus_zjc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="2" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -299,6 +222,8 @@
 				<div class="name">早加餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($tusarr['tus_wc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="2" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -313,6 +238,8 @@
 				<div class="name">午餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($tusarr['tus_wjc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="2" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -327,6 +254,8 @@
 				<div class="name">午加餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($tusarr['tus_wwc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="2" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -341,6 +270,8 @@
 				<div class="name">晚餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($wedarr['wed_zc'])}
 			 <!--  周三	 -->
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="3" style="display: none;">
 			<!-- 图片 -->
@@ -356,6 +287,8 @@
 				<div class="name">早餐</div>	
 			   </div>			   
 		    </li>	
+			{/if}
+			{if !empty($wedarr['wed_zjc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="3" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -370,6 +303,8 @@
 				<div class="name">早加餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($wedarr['wed_wc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="3" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -384,6 +319,8 @@
 				<div class="name">午餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($wedarr['wed_wjc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="3" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -398,6 +335,8 @@
 				<div class="name">午加餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($wedarr['wed_wwc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="3" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -411,7 +350,9 @@
 			   <div class="one-line-text">
 				<div class="name">晚餐</div>	
 			   </div>			   
-		    </li>	
+		    </li>
+            {/if}
+			{if !empty($thuarr['thu_zc'])}			
 			 <!--  周四  -->
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="4" style="display: none;">
 			<!-- 图片 -->
@@ -427,6 +368,8 @@
 				<div class="name">早餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($thuarr['thu_zjc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="4" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -441,6 +384,8 @@
 				<div class="name">早加餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($thuarr['thu_wc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="4" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -455,6 +400,8 @@
 				<div class="name">午餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($thuarr['thu_wjc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="4" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -469,6 +416,8 @@
 				<div class="name">午加餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($thuarr['thu_wwc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="4" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -482,7 +431,9 @@
 			   <div class="one-line-text">
 				<div class="name">晚餐</div>	
 			   </div>			   
-		    </li>	
+		    </li>
+            {/if}
+			{if !empty($friarr['fri_zc'])}			
 			 <!--  周五  -->
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="5" style="display: none;">
 			<!-- 图片 -->
@@ -498,6 +449,8 @@
 				<div class="name">早餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($friarr['fri_zjc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="5" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -512,6 +465,8 @@
 				<div class="name">早加餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($friarr['fri_wc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="5" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -526,6 +481,8 @@
 				<div class="name">午餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($friarr['fri_wjc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="5" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -540,6 +497,8 @@
 				<div class="name">午加餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($friarr['fri_wwc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="5" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -553,7 +512,9 @@
 			   <div class="one-line-text">
 				<div class="name">晚餐</div>	
 			   </div>			   
-		    </li>	
+		    </li>
+            {/if}
+			{if !empty($satarr['sat_zc'])}			
 			 <!--  周六  -->
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="6" style="display: none;">
 			<!-- 图片 -->
@@ -569,6 +530,8 @@
 				<div class="name">早餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($satarr['sat_zjc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="6" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -583,6 +546,8 @@
 				<div class="name">早加餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($satarr['sat_wc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="6" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -597,6 +562,8 @@
 				<div class="name">午餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($satarr['sat_wjc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="6" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -611,6 +578,8 @@
 				<div class="name">午加餐</div>	
 			   </div>			   
 		    </li>
+			{/if}
+			{if !empty($satarr['sat_wwc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="6" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -625,6 +594,8 @@
 				<div class="name">晚餐</div>	
 			   </div>			   
 		    </li>	
+			{/if}
+			{if !empty($sunarr['sun_zc'])}
 			 <!--  周日  -->
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="7" style="display: none;">
 			<!-- 图片 -->
@@ -640,6 +611,8 @@
 				<div class="name">早餐</div>	
 			   </div>			   
 		    </li>	
+			{/if}
+			{if !empty($sunarr['sun_zjc'])}
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="7" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -653,7 +626,9 @@
 			   <div class="one-line-text">
 				<div class="name">早加餐</div>	
 			   </div>			   
-		    </li>	
+		    </li>
+            {/if}
+			{if !empty($sunarr['sun_wc'])}			
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="7" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -667,7 +642,9 @@
 			   <div class="one-line-text">
 				<div class="name">午餐</div>	
 			   </div>			   
-		    </li>	
+		    </li>
+			{/if}
+			{if !empty($sunarr['sun_wjc'])} 
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="7" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -681,7 +658,9 @@
 			   <div class="one-line-text">
 				<div class="name">午加餐</div>	
 			   </div>			   
-		    </li>	
+		    </li>
+            {/if}
+			{if !empty($sunarr['sun_wwc'])}			
 			<li id="itemeb59082386ea43db99767b0d0fa56cc0" class="item" category="7" style="display: none;">
 			<!-- 图片 -->
 			   <div class="fullimg">
@@ -695,7 +674,8 @@
 			   <div class="one-line-text">
 				<div class="name">晚餐</div>	
 			   </div>			   
-		    </li>				
+		    </li>	
+            {/if}			
         </ul>
 	
 </body>

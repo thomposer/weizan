@@ -12,7 +12,7 @@
 </style>
 <div class="charge panel panel-info">
 	<div class="panel-heading">
-		<h4>积分充值<br>[1元代表{$cfg['bilv']}积分，最少充值{$cfg['bilv']}]积分</h4>
+		<h4>积分充值<br>1元代表{$cfg['bilv']}积分、最少充值一元</h4>
 	</div>
 	<div class="panel-body">
 		<form name="theform" method="get" role="form" id="form1">
@@ -29,6 +29,8 @@
 					<div class="input-group-addon"><i class="fa fa-money"></i></div>
 					<select name="moneySe" id="moneySe" class="form-control">
 						<option value="0">请选择充值积分数量</option>
+						<option value="{php echo 5*$cfg['bilv']}">5元【{php echo 5*$cfg['bilv']}积分】</option>
+						<option value="{php echo 10*$cfg['bilv']}">10元【{php echo 10*$cfg['bilv']}积分】</option>
 						<option value="{php echo 30*$cfg['bilv']}">30元【{php echo 30*$cfg['bilv']}积分】</option>
 						<option value="{php echo 80*$cfg['bilv']}">50元【{php echo 80*$cfg['bilv']}积分】</option>
 						<option value="{php echo 120*$cfg['bilv']}">100元【{php echo 120*$cfg['bilv']}积分】</option>

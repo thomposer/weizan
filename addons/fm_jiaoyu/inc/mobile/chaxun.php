@@ -36,14 +36,16 @@
         if(!empty($sid['id'])){
 			$list = pdo_fetchall("SELECT * FROM " . tablename($this->table_score) . " where schoolid = :schoolid And weid = :weid And sid = :sid", array(':weid' => $weid, ':schoolid' => $schoolid, ':sid'=>$sid['id']));
             $item = pdo_fetch("SELECT * FROM " . tablename($this->table_score) . " WHERE id = :id", array(':id' => $id));
-
+        
+		
+		 include $this->template('chaxun');
           }else{
-           message('输入信息有误');
+          include $this->template('404');
           }
 		
         if (empty($sid['id'])) {
-            message('参数错误！');
+          include $this->template('404');
         }
 		
-        include $this->template('chaxun');
+        
 ?>

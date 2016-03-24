@@ -5,7 +5,7 @@
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
-<meta name="author" content="For Memory For Joel,Mailto:15595755@qq.com"/>
+<meta name="author" content="For Memory For Joel,Mailto:800073075@qq.com"/>
 <meta name="keywords" content=""/>
 <meta name="description" content=""/>
 <!--viewport 等比 不缩放-->
@@ -512,13 +512,13 @@ a {
 <body>
 <!--页面搜索-->
 <div id="J-search">
-    <form action="">
-        <input type="hidden" name="name" value="{$modulename}" />
-        <input type="hidden" name="act" value="module" />
-        <input type="hidden" name="do" value="list" />
-        <input type="hidden" name="weid" value="{$weid}" />
-        <input type="hidden" name="token" value="{$_W['token']}" />
-        <input class="sear_box" name="keyword" type="text"  placeholder="搜索店面或关键词...">
+    <form action="" method="post">
+        <input type="hidden" name="name" value="{$modulename}"/>
+        <input type="hidden" name="act" value="module"/>
+        <input type="hidden" name="do" value="list"/>
+        <input type="hidden" name="weid" value="{$weid}"/>
+        <input type="hidden" name="token" value="{$_W['token']}"/>
+        <input class="sear_box" name="keyword" type="text" placeholder="搜索店面或关键词...">
         <input class="sear_but" name="submit" type="submit" value="">
     </form>
 </div>
@@ -547,7 +547,7 @@ a {
             <p style="display: block;">
                 <span class="act_date">商家：</span>
                 <span class="act_addr">
-                    <a href="{if $item['storeid']==0}#{else}{php echo $this->createMobileurl('shop', array('id' => $item['storeid']), true)}{/if}" class="shop-link">{if $item['storeid']==0}微商圈{else}{$stores[$item['storeid']]['title']}{/if}>></a>
+                    <a href="{if $item['storeid']==0}#{else}{php echo $this->createMobileurl('shop', array('id' => $item['storeid']), true)}{/if}" class="shop-link">{if $item['storeid']==0}{$_W['account']['name']}{else}{$stores[$item['storeid']]['title']}{/if}>></a>
                 </span>
                 {if !empty($item['address'])}
                 <br>

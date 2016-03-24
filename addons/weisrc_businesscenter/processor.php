@@ -2,9 +2,9 @@
 /**
  * 微商圈
  *
- * 作者:迷失卍国度
+ * 作者:微赞科技
  *
- * 联系qq : 15595755
+ * 联系：www.012wz.com
  *
  * 未经许可，任何盗用代码行为都属于侵权
  */
@@ -14,55 +14,181 @@ class weisrc_businesscenterModuleProcessor extends WeModuleProcessor {
 	
 	public $name = 'weisrc_businesscenterModuleProcessor';
 
-	public function isNeedInitContext() {
-		return 0;
-	}
-	
-	public function respond() {
+    public function respond() {
+
         global $_W;
-        $rid = $this->rule;
-        $sql = "SELECT * FROM " . tablename('weisrc_businesscenter_reply') . " WHERE `rid`=:rid LIMIT 1";
-        $row = pdo_fetch($sql, array(':rid' => $rid));
-        $site_index = 1;
-        $site_store = 2;
-        $site_list = 3;
-        $site_menu = 4;
-        $site_intelligent = 5;
 
-        if (empty($row['id'])) {
-            return array();
+        $lat = $this->message['location_x'];
+
+        $lng = $this->message['location_y'];
+
+
+
+        $range = isset($this->module['config']['range']) ? $this->module['config']['range'] : 5;
+
+
+
+        $point = $this->squarePoint($lng, $lat, $range);
+
+
+
+        $sql = "SELECT id, title, thumb, content, lat, lng FROM " . tablename('business') . " WHERE weid = '{$_W['weid']}' AND lat<>0 AND lat >= '{$point['right-bottom']['lat']}' AND
+
+					 lat <= '{$point['left-top']['lat']}' AND lng >= '{$point['left-top']['lng']}' AND lng <= '{$point['right-bottom']['lng']}'";
+
+        $result = pdo_fetchall($sql);
+
+
+
+        $stores = array();
+
+
+
+        $news = array();
+
+        if (!empty($result)) {
+
+            $min = -1;
+
+            foreach ($result as &$row) {
+
+                $row['distance'] = $this->getDistance($lat, $lng, $row['lat'], $row['lng']);
+
+                if ($min < 0 || $row['distance'] < $min) {
+
+                    $min = $row['distance'];
+
+                }
+
+            }
+
+            unset($row);
+
+
+
+            $temp = array();
+
+            for ($i = 0; $i < 8; $i++) {
+
+                foreach ($result as $j => $row) {
+
+                    if (empty($temp['distance']) || $row['distance'] < $temp['distance']) {
+
+                        $temp = $row;
+
+                        $h = $j;
+
+                    }
+
+                }
+
+                if (!empty($temp)) {
+
+                    $news[] = array(
+
+                        'title' => $temp['title'] . '(距' . $temp['distance'] . '米)',
+
+                        'description' => cutstr(strip_tags($temp['content']), 300),
+
+                        'picurl' => $_W['attachurl'] . $temp['thumb'],
+
+                        'url' => $this->createMobileUrl('detail', array('id' => $temp['id'])),
+
+                    );
+
+                    unset($result[$h]);
+
+                    $temp = array();
+
+                }
+
+            }
+
+            return $this->respNews($news);
+
+        } else {
+
+            return $this->respText('抱歉，系统中的商户不在您附近！');
+
         }
 
-        $method_name = 'wapindex';//默认为首页
+    }
 
-        if ($row['type'] == $site_store) {
-            $method_name = 'waprestlist';
-        } else if($row['type'] == $site_list) {
-            $method_name = 'waplist';
-        } else if($row['type'] == $site_menu) {
-            $method_name = 'wapmenu';
-        } else if($row['type'] == $site_intelligent) {
-            $method_name = 'wapselect';
-        }
 
-        $url = $_W['siteroot'] . create_url('mobile/module', array('do' => $method_name, 'name' => 'weisrc_businesscenter', 'weid' => $_W['uniacid'],'from_user' => base64_encode(authcode($this->message['from'], 'ENCODE')), 'storeid' => $row['storeid']));
 
-        $response['FromUserName'] = $this->message['to'];
-        $response['ToUserName'] = $this->message['from'];
-        $response['MsgType'] = 'news';
-        $response['ArticleCount'] = 1;
-        $response['Articles'] = array();
-        $response['Articles'][] = array(
-            'Title' => $row['title'],
-            'Description' => $row['description'],
-            'PicUrl' => $_W['attachurl'] . $row['picture'],
-            'Url' => $url,
-            'TagName' => 'item',
+    /**
+
+     * 计算某个经纬度的周围某段距离的正方形的四个点
+
+     *
+
+     * @param lng float 经度
+
+     * @param lat float 纬度
+
+     * @param distance float 该点所在圆的半径，该圆与此正方形内切，默认值为0.5千米
+
+     * @return array 正方形的四个点的经纬度坐标
+
+     */
+
+    public function squarePoint($lng, $lat, $distance = 0.5) {
+
+
+
+        $dlng = 2 * asin(sin($distance / (2 * EARTH_RADIUS)) / cos(deg2rad($lat)));
+
+        $dlng = rad2deg($dlng);
+
+
+
+        $dlat = $distance / EARTH_RADIUS;
+
+        $dlat = rad2deg($dlat);
+
+
+
+        return array(
+
+            'left-top' => array('lat' => $lat + $dlat, 'lng' => $lng - $dlng),
+
+            'right-top' => array('lat' => $lat + $dlat, 'lng' => $lng + $dlng),
+
+            'left-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng - $dlng),
+
+            'right-bottom' => array('lat' => $lat - $dlat, 'lng' => $lng + $dlng)
+
         );
-        return $response;
-	}
 
-	public function isNeedSaveContext() {
-		return false;
-	}
+    }
+
+
+
+    function getDistance($lat1, $lng1, $lat2, $lng2, $len_type = 1, $decimal = 2) {
+
+        $radLat1 = $lat1 * M_PI / 180;
+
+        $radLat2 = $lat2 * M_PI / 180;
+
+        $a = $lat1 * M_PI / 180 - $lat2 * M_PI / 180;
+
+        $b = $lng1 * M_PI / 180 - $lng2 * M_PI / 180;
+
+
+
+        $s = 2 * asin(sqrt(pow(sin($a / 2), 2) + cos($radLat1) * cos($radLat2) * pow(sin($b / 2), 2)));
+
+        $s = $s * EARTH_RADIUS;
+
+        $s = round($s * 1000);
+
+        if ($len_type > 1) {
+
+            $s /= 1000;
+
+        }
+
+        return round($s, $decimal);
+
+    }
 }

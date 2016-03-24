@@ -24,6 +24,7 @@
 	{php $goods = $item['goods']}
 	<span id="stock_{$item['id']}" style='display:none'>{$goods['total']}</span>
 	<div class="shopcart-item clearfix" id='item_{$item['id']}' style='height:{if !empty($goods['optionname'])}140px;{else}120px{/if}'>
+		<label class="pull-left"><input type="checkbox" name="goodsid" value="{$item['id']}"></label>
 		<img src="{php echo tomedia($goods['thumb']);}">
 		<div class="shopcart-item-detail">
 			<div class="name">{$goods['title']}{if $goods['unit']}{/if}</div>
@@ -54,10 +55,19 @@
 <div style='height:80px;width:100%;'>&nbsp;</div>
 <div id='cartfooter' class="shopcart-footer" {if count($list)<=0}style='display:none'{/if}' style="z-index:3;">
 	<span class="pull-left">合计：<span id="pricetotal">{$price}</span> 元</span>
-	<a href="{php echo $this->createMobileUrl('confirm')}" class="btn btn-success pull-right">立即结算</a>
+	<a href="javascript:" class="btn btn-success pull-right" id="confirm">立即结算</a>
 </div>
 
 <script type="text/javascript">
+	$('#confirm').click(function() {
+		var ids =  new Array();
+		var i = 0;
+		$('[name="goodsid"]:checked').each(function () {
+			ids[i] = $(this).val();
+			i++;
+		});
+		location.href = "{php echo murl('entry//confirm',array('m'=>'ewei_shopping'))}&goodids="+ids;
+	});
 	$(function(){
 		$(".goodsnum").blur(function(){
 			var id = $(this).attr("cartid");

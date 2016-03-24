@@ -44,6 +44,10 @@
     .icon-box a {color: #FFF;}
     .icon-box a i{color: #FFF;}
     .icon-box-home {top: 20px; right: 20px;padding: 5px 10px;background: rgba(0,0,0,0.5); border-radius: 4px;}
+
+    .contentinfo img {
+        width: 100%;
+    }
     </style>
     <div class="wrap_out">
 
@@ -56,7 +60,7 @@
             <section class="reserve-exp" name="nodata6">
                 <span class="reserve-exp-tit">
                     <h1 class="reserve-exp-hd">商家入驻</h1>
-                    <div>
+                    <div class="contentinfo">
                         {php echo htmlspecialchars_decode($setting['announcement']);}
                     </div>
                 </span>
@@ -174,15 +178,6 @@
             <!--<footer class="reserve-btn"><a href="javascript:postenroll();">提交</a></footer>-->
             <footer class="reserve-btn"><a href="javascript:$('#form_main').submit();">提交</a></footer>
         </div>
-    </div>
-    <div id="copyright">
-        <a href="{if !empty($setting['copyright_link'])}{$setting['copyright_link']}{else}#{/if}">
-            {if empty($setting['copyright'])}
-            &copy;{$_W['account']['account']}微商圈
-            {else}
-            {$setting['copyright']}
-            {/if}
-        </a>
     </div>
     <!--抄你麻痹-->
     <script type="text/javascript" src="{RES}/themes/wsj/js/ajaxfileupload.js"></script>

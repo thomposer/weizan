@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html ontouchstart="" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name = "viewport" content = "user-scalable=no, width=device-width">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>{$info['name']}</title>
+<link href="../../../../addons/but_dpkj/template/mobile/css/style.css" rel="stylesheet" type="text/css" />
+<link href="../../../../addons/but_dpkj/template/mobile/css/product.css" rel="stylesheet" type="text/css" />
+<link href="../../../../addons/but_dpkj/template/mobile/css/enjoy.css" rel="stylesheet" type="text/css" />
+{php echo register_jssdk(false);} 
+<script type="text/javascript" src="../../../../addons/but_dpkj/template/mobile/js/jquery-1.7.1.min.js"></script>
+</head>
+<body>
+<!--banner开始-->
+<div style="width:100%;">
+<img src="{php echo tomedia($info['logo'])}" style="width:100%; margin:0 auto;"/>
+</div>
+  <div id="product_box">
+    <div class="product_banner">
+      <img src="{$itemimg}" style="width:100%; margin:0 auto;"/>
+    </div>
+   <div class="clear"></div>
+<!-- banner结束-->
+<!--商品开始-->
+   <div class="product_description">
+     <div class="product_description_amount"> 
+      <p>还剩{$item['count']}个</p>
+     </div>
+  
+   </div>
+  <div style="clear:both;padding:5px 0 0 0;"></div>
+    <div class="product_description_title">
+     <p>{$item['name']}</p>
+    </div>
+    <div class="product_description_text">
+      <div class="product_description_kanjia">
+       <p>能砍至￥<span>{$item['sp']}</span>元</p>
+      </div>
+    <div class="product_description_price">
+     <p>商品原价￥{$item['price']}元</p>
+    </div>
+   </div>
+  <div style="clear:both;padding:10px 0 0 0;"></div>
+<!--商品结束-->  
+<!--分享信息开始-->
+
+  {$desc}
+
+
+  <div style="height:40px;"></div>
+   <div class="product_description_content_title_content">
+    <p>宝贝描述及领取地址</p>
+   </div>
+ <!--商品描述开始-->
+ 
+   <div class="biaodan">
+    <div class="biaodan_text" style="font-size:0.8em;">
+    <br />
+    领取地址:{$item['address']}<br /><br />
+    {$detail}
+    </div>
+   </div>
+</div>
+   <div id="dao">
+    <img src="../../../../addons/but_dpkj/template/mobile/images/dao.gif" style="width:100%; margin:0 auto;"/> 
+   </div>
+   <div id="dcover"></div>
+   <div id="bengz">
+   <p style="color:red; font-size:2em;" id="spj"></p>
+</div>
+<input type="hidden" id="order" value="{$_GPC['id']}">
+<input type="hidden" id="openid" value="{$_W['openid']}">
+<input type="hidden" id="uniacid" value="{$_W['uniacid']}">
+<!--分享按钮结束-->
+ <div style="width:100%">
+ 	<img src="{php echo tomedia($info['ad'])}" style="width:100%;">
+ </div>
+ <div id="mcover" onClick="$(this).hide()"><img src="../../../../addons/but_dpkj/template/mobile/images/guide.png"></div>
+</body>
+<script>
+
+
+    function cut(){
+		
+		var order = $("#order").val()
+		var openid = $("#openid").val()
+		var uniacid = $("#uniacid").val()
+		
+		 $.ajax({
+           type:"POST",
+           url:"{php echo $this->createMobileUrl('kanjia')}", 
+           data:{order:order,openid:openid,uniacid:uniacid},
+		   dataType:"json",
+           success: function(data){  // 成功返回的函数
+		
+		if(data.code == '102' || data.code == '303'){
+			   
+			   alert(data.msg)
+			   
+			   return false;
+			   }
+
+		   if(data.code == '202'){
+			   
+			   alert('大侠，您已出过刀了！')
+			   return false;
+			   }
+		   	window.sj = data.msg;
+			 $("#spj").html(-[data.msg]);
+             $("#dcover").fadeIn(50,dao);
+			
+		   }
+		})
+		 }
+		 
+		 
+   function dao(){     //定义刀光函数
+	$('#dao').css("display","block"); 
+	$('#dao').css("position","absolute"); 
+	$('#dao').css("top", Math.max(0, (($(window).height() - $('#dao').outerHeight())/ 2) + $(window).scrollTop()) + "px"); 
+	//调用css方法
+	$('#dao').css("left", Math.max(0, (($(window).width() - $('#dao').outerWidth()) / 2) + $(window).scrollLeft()) + "px"); 
+	$("#dao").fadeIn(100,dc);    //刀光淡进,并且回调dc函数
+	}
+    function dc(){
+		$("#dao").fadeOut(400,leftz);  //刀光淡出
+		}
+	function leftz(){
+	  qx();   //调用qx函数方法
+		
+    }
+		function qx(){
+			$("#dcover").fadeOut(300);    //黑色背景动画淡出
+			$("#dao").hide(10,bengshu);   //刀光隐藏 出现数字
+			}	
+		function bengshu(){
+			$("#bengz").show();            //砍价数字出现
+			$("#bengz").css('top','50%');  //调用css方法
+			$("#bengz").css('opacity',1);  
+			$("#bengz").animate({top:'35%',opacity:"0"},1000,function(){
+				
+				$(this).hide();
+				window.location.reload();
+				
+				});  //砍价数字css样式 
+			
+
+   }
+
+</script>
+<script>
+	wx.ready(function () {
+		sharedata = {
+			title: '{$title}',
+			desc: '{$info["sharecontent"]}',
+			link: '{$sharelink}',
+			imgUrl: '{$urllink}/attachment/{$info["shareicon"]}',
+			success: function(){
+				//alert('success');
+			},
+			cancel: function(){
+				//alert('cancel');
+			}
+		};
+	 friendshare = {
+    title: '{$title}', // 分享标题
+    link: '{$sharelink}', // 分享链接
+    imgUrl: '{$urllink}/attachment/{$info["shareicon"]}', // 分享图标
+    success: function () { 
+        // 用户确认分享后执行的回调函数
+    },
+    cancel: function () { 
+        // 用户取消分享后执行的回调函数
+    }
+}
+		wx.onMenuShareTimeline(friendshare)
+		wx.onMenuShareAppMessage(sharedata);
+	});
+	
+	
+function mcover(){
+	
+	$("#mcover").show()
+	
+	}
+	</script>
+</html>

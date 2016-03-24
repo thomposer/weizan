@@ -1,0 +1,173 @@
+
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{$_W['uniaccount']['name']}</title>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/mGrzxTeacher.css?v=4.80915" />
+<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/jquery.Jcrop.css" />
+<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/jquery-emoji.css?v=4.8" />
+<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/greenStyle.css?v=4.80120" />
+<script type="text/javascript" src="{MODULE_URL}public/mobile/js/jquery-1.11.3.min.js?v=4.8"></script>
+<script type="text/javascript" src="{MODULE_URL}public/mobile/js/PromptBoxUtil.js?v=4.81022"></script>
+
+</head>
+<body>
+<div class="all">
+		
+<div id="BlackBg" class="BlackBg"></div>
+
+<div id="titlebar" class="header mainColor">
+	<div class="m">
+		
+	    
+	    
+		
+		
+			<span style="font-size: 18px">个人中心</span>   
+		   
+	
+	</div>
+		<div class="r">
+			<a href="#my-menu"></a>
+		</div>
+	</div>
+<div id="titlebar_bg" class="_header"></div>
+		<div class="stuBanner">
+			<div class="stuBannerBg">
+			</div>
+		</div>
+		<div class="stuBox">
+			<div class="stuInfo">
+				<div class="stuHeader">
+					<img alt="头像" src="{php echo tomedia($_W['fans']['tag']['avatar']);}" />
+				</div>
+				<div class="stuInfoCenter">
+					<div class="stuName">
+						<label class="m_r_10">{$teacher['tname']}</label>
+					</div>
+					<div class="stuCampusAndBjname">
+						<span class="campus">{if $teacher['status'] == 1}老师{else if $teacher['status'] == 2}校长{/if}</span>
+						<span id="teacher_mobile" class="bjname">-</span>
+					</div>
+				</div>
+				
+			</div>
+						
+			<div class="stuServer">
+				<label>服务</label>
+				<div class="server">
+					<span>已绑定</span>
+				</div>
+				<div onclick="unbound();" class="unbound">解绑</div>
+			</div>
+			<div class="stuServer">
+				<label>考勤</label>
+				<div class="server">
+					<span>请假</span>
+				</div>
+				<div onclick="qingjia();" class="unbound">请假</div>
+			</div>
+			
+		</div>
+		
+		<div class="linkDiv" style="margin-top:10px;">
+		
+			<a href="{php echo $this->createMobileUrl('tjiaoliulist', array('schoolid' => $schoolid), true)}">
+				<div class="linkBox leftBox">
+					<div class="linkImg">
+						<img alt="" src="{MODULE_URL}public/mobile/img/link_msg.png" style="width:35px;">
+					</div>
+					<span class="linkName">消息管理</span>
+				</div>
+			</a>
+			<a href="{php echo $this->createMobileUrl('noticelist', array('schoolid' => $schoolid), true)}">
+				<div class="linkBox centerBox">
+					<div class="linkImg">
+						<img alt="" src="{MODULE_URL}public/mobile/img/link_bjq.png" style="width:35px;">
+					</div>			
+					<span class="linkName">班级通知</span>	
+				</div>
+			</a>
+			<a href="{php echo $this->createMobileUrl('smssage', array('schoolid' => $schoolid), true)}">
+				<div class="linkBox rightBox">
+					<div class="linkImg">
+						<img alt="" src="{MODULE_URL}public/mobile/img/link_ktdt.png" style="width:35px;">
+					</div>			
+					<span class="linkName">学生请假</span>	
+				</div>
+			</a>			
+            {if $teacher['status'] == 2}	
+			<a href="#">
+				<div class="linkBox rightBox">
+					<div class="linkImg">
+						<img alt="" src="{MODULE_URL}public/mobile/img/link_ktdt.png" style="width:35px;">
+					</div>			
+					<span class="linkName">校园群发</span>	
+				</div>
+			</a>
+			<a href="{php echo $this->createMobileUrl('tmssage', array('schoolid' => $schoolid), true)}">
+				<div class="linkBox leftBox">
+					<div class="linkImg">
+						<img alt="" src="{MODULE_URL}public/mobile/img/link_msg.png" style="width:35px;">
+					</div>
+					<span class="linkName">职工请假</span>
+				</div>
+			</a>
+			{/if}			
+			<div class="cl"></div>
+		</div>		
+		<div class="campusDiv">
+			<div class="campusTop">
+				<div class="campusLogo">
+					<img alt="" src="{php echo tomedia($school['logo']);}">
+				</div>
+				<div class="campusInfo">
+					<div class="info">地址：{$school['address']}</span></div>
+					<div class="info">电话：{$school['tel']}</span></div>
+					<!-- <div class="info">微信号：<span>weixiaotong</span></div> -->
+				</div>
+				<div class="cl"></div>
+			</div>
+			<div class="campusBottom">
+				<div class="tips">扫一扫下方二维码，关注校园</div>
+				<img id="qrcodeurl" alt="" src="{$_W['attachurl']}qrcode_{$_W['acid']}.jpg?{php echo time()}">
+			</div>
+		
+		</div>
+		
+	</div>
+</body>
+
+
+<script type="text/javascript">
+var PB = new PromptBox();
+
+function unbound(){
+	if(confirm("解绑后数据将丢失？")){
+		var submitData = {
+			openid :"{$teacher['openid']}",
+			schoolid :"{$schoolid}",
+			weid :"{$weid}",
+			tid :"{$teacher['id']}",
+			user :"{$it['id']}",
+		};
+	        $.post("{php echo $this->createMobileUrl('indexajax',array('op'=>'unboundls'))}",submitData,function(data){
+            if(data.result){
+                PB.prompt(data.msg);
+				window.location.href = "{php echo $this->createMobileUrl('bangding', array('schoolid' => $schoolid), true)}"
+            }else{
+                PB.prompt(data.msg);
+            }
+        },'json'); 
+    }
+}
+
+function qingjia(){
+    window.location.href = "{php echo $this->createMobileUrl('qingjia', array('schoolid' => $schoolid), true)}"
+}
+</script>
+</html>

@@ -1,4 +1,4 @@
-/*! Amaze UI v2.2.1 ~ Old IE Fucker | by Amaze UI Team | (c) 2015 AllMobilize, Inc. | Licensed under MIT | 2015-01-29T06:01:38 UTC */
+/*! Amaze UI v2.3.0 ~ Old IE Fucker | by Amaze UI Team | (c) 2015 AllMobilize, Inc. | Licensed under MIT | 2015-04-08T06:04:29 UTC */
 (function e(t, n, r) {
   function s(o, u) {
     if (!n[o]) {
@@ -90,7 +90,7 @@
         var doc = window.document;
         var $html = $('html');
 
-        UI.VERSION = '2.0.0';
+        UI.VERSION = '2.3.0';
 
         UI.support = {};
 
@@ -495,7 +495,7 @@
         UI.ready = function(callback) {
           UI.DOMWatchers.push(callback);
           if (UI.DOMReady) {
-            console.log('ready call');
+            // console.log('Ready call');
             callback(document);
           }
         };
@@ -548,8 +548,13 @@
           $html.addClass('am-touch');
 
           $(function() {
-            var FastClick = $.AMUI.FastClick;
-            FastClick && FastClick.attach(document.body);
+            var FastClick = UI.FastClick;
+            if (FastClick) {
+              // Fixes contenteditable elements don't editable on touch devices
+              $('[contenteditable]').addClass('needsclick');
+
+              FastClick.attach(document.body);
+            }
           });
         }
 
@@ -2926,6 +2931,8 @@
 
           this.isPopup = this.$element.hasClass('am-popup');
           this.isActions = this.$element.hasClass('am-modal-actions');
+          this.isPrompt = this.$element.hasClass('am-modal-prompt');
+          this.isLoading = this.$element.hasClass('am-modal-loading');
           this.active = this.transitioning = this.relatedTarget = null;
 
           this.events();
@@ -3029,6 +3036,11 @@
               relatedTarget: relatedTarget
             }));
             this.transitioning = 0;
+
+            // Prompt auto focus
+            if (this.isPrompt) {
+              this.$dialog.find('input').eq(0).focus();
+            }
           };
 
           if (!supportTransition) {
@@ -3109,7 +3121,7 @@
           }
 
           // Close Modal when dimmer clicked
-          if (this.options.closeViaDimmer) {
+          if (this.options.closeViaDimmer && !this.isLoading) {
             dimmer.$element.on('click.dimmer.modal.amui', function(e) {
               that.close();
             });
@@ -4476,16 +4488,23 @@
           }
 
           var $element = this.$element;
+          var $elementMargin = '';
+
+          $.each($element.css(
+              ['marginTop', 'marginRight', 'marginBottom', 'marginLeft']),
+            function(name, value) {
+              return $elementMargin += ' ' + value;
+            });
+
           var $holder = $('<div class="am-sticky-placeholder"></div>').css({
             height: $element.css('position') != 'absolute' ?
               $element.outerHeight() : '',
             float: $element.css('float') != 'none' ? $element.css(
               'float') : '',
-            margin: $element.css('margin')
+            margin: $elementMargin
           });
 
           this.$holder = $element.css('margin', 0).wrap($holder).parent();
-
           this.inited = 1;
 
           return true;

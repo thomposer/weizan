@@ -1,0 +1,159 @@
+{template 'header'}
+	<div class="container-fluid">
+		<h4><span class='glyphicon glyphicon-circle-arrow-right'></span>&nbsp;&nbsp;百度地图API设置</h4>
+		<div class="row">			
+			<div class="col-md-4">
+				<label>百度key</label>
+				<input type='text' class="form-control" value="{php echo $this->baidu_key}" id='baidu_key'>
+				<br>
+				<button class="btn btn-sm btn-info" onclick="doSave('baidu_key')">保存</button>
+				<a href="http://lbsyun.baidu.com/apiconsole/key?application=key">申请百度ak</a>
+			</div>
+		</div>
+		<br>
+		<h4><span class='glyphicon glyphicon-circle-arrow-right'></span>&nbsp;&nbsp;借用网页授权设置</h4>
+		<div class="row">
+			<div class="col-md-6">
+				<label>AppID</label>
+				<input type="text" class="form-control" value="{$settings['oauth_appid']['value']}" id='oauth_appid' placeholder='AppID'>
+				<label>AppSecret</label>
+				<input type="text" class="form-control" value="{$settings['oauth_appsecret']['value']}" id='oauth_appsecret' placeholder='AppSecret'>
+				<br>
+				<button class="btn btn-sm btn-info" onclick="doSave('oauth')">保存</button>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-md-6">
+				{if $settings['opengetuserinfo']['value'] == 'open'}
+				<button class="btn btn-sm btn-success form-control" onclick="doSave('opengetuserinfo','close')">已开启借用</button>
+				{else}
+				<button class="btn btn-sm btn-danger form-control" onclick="doSave('opengetuserinfo','open')">已关闭借用</button>
+				{/if}
+				<p class="help-block">
+				如关闭借用，系统将自动调用本身的接口（该功能提供于非认证服务号）
+				</p>
+			</div>
+			
+		</div>
+		<br>
+		<h4><span class='glyphicon glyphicon-circle-arrow-right'></span>&nbsp;&nbsp;商家入驻开关</h4>
+		<div class="row">
+			<div class="col-md-6">
+				{if $settings['merchantsallow']['value'] == 'open'}
+				<button class="btn btn-sm btn-success form-control" onclick="doSave('merchantsallow','close')">已开启入口</button>
+				{else}
+				<button class="btn btn-sm btn-danger form-control" onclick="doSave('merchantsallow','open')">已关闭入口</button>
+				{/if}
+				<p class="help-block">
+				开启后，将在客户端展示商家入驻入口，注意开启前请保证为认证服务号或已借用接口
+				</p>
+			</div>
+		</div>
+		<br>
+		<h4><span class='glyphicon glyphicon-circle-arrow-right'></span>&nbsp;&nbsp;七牛云存储配置</h4>
+		<div class="row">
+			<div class="col-md-6">
+				<label>AK</label>
+				<input type="text" class="form-control" value="{$settings['qiniu_ak']['value']}" id='qiniu_ak' placeholder='AK'>
+				<label>SK</label>
+				<input type="text" class="form-control" value="{$settings['qiniu_sk']['value']}" id='qiniu_sk' placeholder='SK'>
+				<label>BUCKET (空间名称)</label>
+				<input type="text" class="form-control" value="{$settings['qiniu_bucket']['value']}" id='qiniu_bucket' placeholder='BUCKET'>
+				<label>七牛域名</label>
+				<input type="text" class="form-control" value="{$settings['qiniu_domain']['value']}" id='qiniu_domain' placeholder='domain'>
+				<br>
+				<button class="btn btn-sm btn-info" onclick="doSave('qiniu_info')">保存</button>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-md-6">
+				{if $settings['qiniuallow']['value'] == 'open'}
+				<button class="btn btn-sm btn-success form-control" onclick="doSave('qiniuallow','close')">已开启七牛</button>
+				{else}
+				<button class="btn btn-sm btn-danger form-control" onclick="doSave('qiniuallow','open')">已关闭七牛</button>
+				{/if}
+				<p class="help-block">
+				开启后，系统会将所有的上传文件写入到七牛云存储中。减少服务器空间压力。开启前请确保信息填写完整无误！
+				</p>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	function doSave(type,val) {
+
+		// 百度key提交
+		if(type == 'baidu_key') {
+			var baidu_key = $("#baidu_key").val();
+			if(!baidu_key) {
+				alert('baidu_key is empty!');
+				return;
+			}
+		}
+
+		// 授权key提交
+		if(type == 'oauth') {
+			var oauth_appid = $('#oauth_appid').val(),
+				oauth_appsecret = $('#oauth_appsecret').val();
+
+			if(!oauth_appid || !oauth_appsecret) {
+				alert('appid or appsecret is empty');
+				return;
+			}
+		}
+
+		// kaiguan
+		if(type == 'opengetuserinfo') {
+
+		}
+
+		// 七牛信息
+		if(type == 'qiniu_info') {
+			var qiniu_ak = $("#qiniu_ak").val(),
+				qiniu_sk = $("#qiniu_sk").val(),
+				qiniu_bucket = $("#qiniu_bucket").val(),
+				qiniu_domain = $("#qiniu_domain").val();
+		}
+
+		// 七牛开关
+		if(type == 'qiniuallow') {
+
+		}
+
+		
+		$.ajax({
+			type:'post',
+			data:{
+				dataType:type, // 数据类型区分
+
+				baidu_key:baidu_key, // 百度key
+				// 接口借用授权
+				oauth_appid:oauth_appid,
+				oauth_appsecret:oauth_appsecret,
+				// 开启授权
+				opengetuserinfo:val,
+				// 商家入驻开关
+				merchantsallow:val,
+				// 七牛密钥
+				qiniu_ak:qiniu_ak,
+				qiniu_sk:qiniu_sk,
+				qiniu_bucket:qiniu_bucket,
+				qiniu_domain:qiniu_domain,
+				// 七牛开关
+				qiniuallow:val
+			},
+			url:"{php echo $this->createWebUrl('settingform')}",
+			success:function(d) {
+				if(d.res == '100') {
+					alert('保存成功');
+					window.location.href='';
+				}else {
+					alert(d.msg);
+				}
+			}
+		})
+
+	}
+	</script>
+{template 'footer'}

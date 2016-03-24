@@ -1,0 +1,36 @@
+{template 'common/header'}
+<table class="table table-bordered">
+    <tr>
+        <th>活动主题</th>
+        <th>活动链接</th>
+        <th>活动时间</th>
+        <th>活动状态</th>
+        <th>操作</th>
+    </tr>
+    {loop $zfbggl_list $index $zfbggl}
+    <tr>
+        <td>{$zfbggl['title']}</td>
+        <td><a href="{php echo '../app/' . $this->createMobileUrl('index', array('uniqueid' => $zfbggl['uniqueid']))}" target="_blank">查看</a></td>
+        <td>{php echo '&nbsp;&nbsp;'.date('Y-m-d H:i:s',$zfbggl['start_time']).'<br>~'.date('Y-m-d H:i:s',$zfbggl['end_time']) }</td>
+        <td>
+            {if $zfbggl['status']==1}
+            <b>已开启</b>
+            {else}
+            <b>已关闭</b>
+            {/if}
+        </td>
+        <td>
+            {if $zfbggl['status']==1}
+            <a class="btn btn-warning btn-xs" href="{php echo $this->createWebUrl('status',array('offon'=>2,'uniqueid'=>$zfbggl['uniqueid']))}">关闭</a>
+            {else}
+            <a class="btn btn-success btn-xs" href="{php echo $this->createWebUrl('status',array('offon'=>1,'uniqueid'=>$zfbggl['uniqueid']))}">开启</a>
+            {/if}
+            |
+            <a class="btn btn-info btn-xs" href="{php echo $this->createWebUrl('edit',array('uniqueid'=>$zfbggl['uniqueid']))}">编辑</a>
+            |
+            <a class="btn btn-danger btn-xs" onclick="return confirm('确认删除？')" href="{php echo $this->createWebUrl('delete',array('uniqueid'=>$zfbggl['uniqueid']))}">删除</a>
+        </td>
+    </tr>
+    {/loop}
+</table>
+{template 'common/footer'}
