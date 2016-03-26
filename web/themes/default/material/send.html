@@ -10,6 +10,7 @@
 	<li {if $type == 'voice'}class="active"{/if}><a href="{php echo url('material/display/list', array('type' => 'voice'));}">语音</a></li>
 	<li {if $type == 'video'}class="active"{/if}><a href="{php echo url('material/display/list', array('type' => 'video'));}">视频</a></li>
 	<li {if $type == 'news'}class="active"{/if}><a href="{php echo url('material/display/list', array('type' => 'news'));}">图文</a></li>
+	<li {if $action == 'post' && $do == 'news'}class="active"{/if}><a href="{php echo url('material/post/edit');}">新增图文素材</a></li>
 </ul>
 
 <v class="clearfix">

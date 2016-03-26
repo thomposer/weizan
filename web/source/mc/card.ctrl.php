@@ -64,13 +64,8 @@ if($do == 'editor') {
 		$nums = $params[2]['params'];
 		$times = $params[3]['params'];
 		$title = trim($basic['title']) ? trim($basic['title']) : message('名称不能为空');
-		$format_type = intval($basic['format_type']);
+		$format_type = 1;
 		$format = trim($basic['format']);
-		if(!$format_type) {
-			if(empty($format)) {
-				message('卡号不能为空');
-			}
-		}
 		if(!empty($basic['fields'])) {
 			foreach($basic['fields'] as $field) {
 				if(!empty($field['title']) && !empty($field['bind'])) {
@@ -118,10 +113,10 @@ if($do == 'editor') {
 				$groupid = intval($discount['groupid']);
 				if($groupid <= 0) continue;
 				$update['discount'][$groupid] = array(
-					'condition_1' => intval($discount['condition_1']),
-					'discount_1' => intval($discount['discount_1']),
-					'condition_2' => floatval($discount['condition_2']),
-					'discount_2' => floatval($discount['discount_2']),
+					'condition_1' => trim($discount['condition_1']),
+					'discount_1' => trim($discount['discount_1']),
+					'condition_2' => trim($discount['condition_2']),
+					'discount_2' => trim($discount['discount_2']),
 				);
 			}
 			$update['discount'] = iserializer($update['discount']);
@@ -172,16 +167,25 @@ if($do == 'editor') {
 		);
 	}
 
+	$params = json_decode($setting['params'], true);
+	$discounts_params = $params[1]['params']['discounts'];
+	$discounts_temp = array();
+	if(!empty($discounts_params)) {
+		foreach($discounts_params as $row) {
+			$discounts_temp[$row['groupid']] = $row;
+		}
+	}
+
 	$discounts = array();
 	foreach($_W['account']['groups'] as $group) {
-		$discounts[] = array(
+		$discounts[$group['groupid']] = array(
 			'groupid' => $group['groupid'],
 			'title' => $group['title'],
 			'credit' => $group['credit'],
-			'condition_1' => '',
-			'discount_1' => '',
-			'condition_2' => '',
-			'discount_2' => '',
+			'condition_1' => $discounts_temp[$group['groupid']]['condition_1'],
+			'discount_1' => $discounts_temp[$group['groupid']]['discount_1'],
+			'condition_2' => $discounts_temp[$group['groupid']]['condition_2'],
+			'discount_2' => $discounts_temp[$group['groupid']]['discount_2'],
 		);
 	}
 	template('mc/card-editor');

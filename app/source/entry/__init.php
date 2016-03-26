@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 $eid = intval($_GPC['eid']);
@@ -17,10 +17,13 @@ if(!empty($eid)) {
 		'direct' => 0
 	);
 }
+$moduels = uni_modules();
+if (empty($moduels[$entry['module']])) {
+	message('您访问的功能模块不存在，请重新进入');
+}
 if(empty($entry) || empty($entry['do'])) {
 	message('非法访问.');
 }
-
 $_GPC['__entry'] = $entry['title'];
 $_GPC['__state'] = $entry['state'];
 

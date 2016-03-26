@@ -3,7 +3,7 @@ define(['bootstrap'], function($){
 	var reg_credit = /^[+-]?(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/i;
 	var reg_int = /^[0-9]\d*$/i;
 	trade.init = function() {
-		$('.modal-trade').on('click', function(){
+		$('.modal-trade-credit1, .modal-trade-credit2, .modal-trade-consume, .modal-trade-card, .modal-trade-cardsn').on('click', function(){
 			$('#consume-Modal, #credit-Modal, #card-Modal, #card-edit-Modal, #group-Modal').remove();
 			var type = $(this).data('type');
 			var uid = parseInt($(this).data('uid'));
@@ -393,7 +393,7 @@ define(['bootstrap'], function($){
 
 				'updatecredit1': function(){
 					var _this = this;
-					if(_this.card.offset_rate >= 0 || _this.card.offset_max >= 0 && _this.last_money > 0) {
+					if(_this.card.offset_rate > 0 && _this.card.offset_max > 0 && _this.last_money > 0) {
 						var min = Math.min.apply(null, [_this.user.credit1, _this.card.offset_rate * _this.card.offset_max, _this.card.offset_rate * _this.last_money]);
 						$('#credit1').val(min).focus().select();
 						$('#offset_money').val(min/_this.card.offset_rate);

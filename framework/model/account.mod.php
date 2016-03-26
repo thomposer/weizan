@@ -334,6 +334,60 @@ function uni_templates() {
 }
 
 
+function uni_pctemplates() {
+	global $_W;
+	$owneruid = pdo_fetchcolumn("SELECT uid FROM ".tablename('uni_account_users')." WHERE uniacid = :uniacid AND role = 'owner'", array(':uniacid' => $_W['uniacid']));
+	load()->model('user');
+	$owner = user_single(array('uid' => $owneruid));
+		if (empty($owner)) {
+		$groupid = '-1';
+	} else {
+		$groupid = $owner['groupid'];
+	}
+	$extend = pdo_getall('uni_account_group', array('uniacid' => $_W['uniacid']), array(), 'groupid');
+	if (!empty($extend)) {
+		$groupid = '-2';
+	}
+	if (empty($groupid)) {
+		$templates = pdo_fetchall("SELECT * FROM " . tablename('fournet_pctemplates') . " WHERE name = 'default'", array(), 'id');
+	} elseif ($groupid == '-1') {
+		$templates = pdo_fetchall("SELECT * FROM " . tablename('fournet_pctemplates') . " ORDER BY id ASC", array(), 'id');
+	} else {
+		$group = pdo_fetch("SELECT id, name, package FROM ".tablename('users_group')." WHERE id = :id", array(':id' => $groupid));
+		$packageids = iunserializer($group['package']);
+		if (!empty($extend)) {
+			foreach ($extend as $extend_packageid => $row) {
+				$packageids[] = $extend_packageid;
+			}
+		}
+		if(is_array($packageids)) {
+			if (in_array('-1', $packageids)) {
+				$templates = pdo_fetchall("SELECT * FROM " . tablename('fournet_pctemplates') . " ORDER BY id ASC", array(), 'id');
+			} else {
+				$wechatgroup = pdo_fetchall("SELECT `templates` FROM " . tablename('uni_group') . " WHERE id IN ('".implode("','", $packageids)."') OR uniacid = '{$_W['uniacid']}'");
+				$ms = array();
+				$mssql = '';
+				if (!empty($wechatgroup)) {
+					foreach ($wechatgroup as $row) {
+						$row['templates'] = iunserializer($row['templates']);
+						if (!empty($row['templates'])) {
+							foreach ($row['templates'] as $templateid) {
+								$ms[$templateid] = $templateid;
+							}
+						}
+					}
+					$ms[] = 1;
+					$mssql = " `id` IN ('".implode("','", $ms)."')";
+				}
+				$templates = pdo_fetchall("SELECT * FROM " . tablename('fournet_pctemplates') .(!empty($mssql) ? " WHERE $mssql" : '')." ORDER BY id DESC", array(), 'id');
+			}
+		}
+	}
+	if (empty($templates)) {
+		$templates = pdo_fetchall("SELECT * FROM " . tablename('fournet_pctemplates') . " WHERE id = 1 ORDER BY id DESC", array(), 'id');
+	}
+	return $templates;
+}
 function uni_setting_save($name, $value) {
 	global $_W;
 	if (empty($name)) {
@@ -823,9 +877,39 @@ function uni_setmeal($uniacid = 0) {
 		$user['timelimit'] = date('Y-m-d', $owner['starttime']) . ' ~ 无限制' ;
 	} else {
 		if($owner['endtime'] <= TIMESTAMP) {
-			$add = ' <strong class="text-danger"> 已到期</strong>';
+			$user['timelimit'] = ' <strong class="text-danger"> 已到期</strong>';
+		} else {
+			$year = 0;
+			$month = 0;
+			$day = 0;
+			$endtime = $owner['endtime'];
+			$time = strtotime('+1 year');
+			while ($endtime > $time)
+			{
+				$year = $year + 1;
+				$time = strtotime("+1 year", $time);
+			};
+			$time = strtotime("-1 year", $time);
+			$time = strtotime("+1 month", $time);
+			while($endtime > $time)
+			{
+				$month = $month + 1;
+				$time = strtotime("+1 month", $time);
+			} ;
+			$time = strtotime("-1 month", $time);
+			$time = strtotime("+1 day", $time);
+			while($endtime > $time)
+			{
+				$day = $day + 1;
+				$time = strtotime("+1 day", $time);
+			} ;
+			if (empty($year)) {
+				$timelimit = empty($month)? $day.'天' : date('Y-m-d', $owner['starttime']) . '~'. date('Y-m-d', $owner['endtime']);
+			}else {
+				$timelimit = date('Y-m-d', $owner['starttime']) . '~'. date('Y-m-d', $owner['endtime']);
+			}
+			$user['timelimit'] = $timelimit;
 		}
-		$user['timelimit'] = date('Y-m-d', $owner['starttime']) . ' ~ ' . date('Y-m-d', $owner['endtime']) . $add;
 	}
 	return $user;
 }

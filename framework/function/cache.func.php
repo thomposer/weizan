@@ -8,9 +8,13 @@ defined('IN_IA') or exit('Access Denied');
 if($_W['config']['setting']['cache'] == 'memcache') {
 	if (extension_loaded('memcache')) {
 		$config = $_W['config']['setting']['memcache'];
-		$memcacheobj = new Memcache();
-		$connect = @$memcacheobj->connect($config['server'], $config['port']);
-		if (empty($memcacheobj) || empty($connect)) {
+		if (!empty($config['server']) && !empty($config['port'])) {
+			$memcacheobj = new Memcache();
+			$connect = @$memcacheobj->connect($config['server'], $config['port'], 3);
+			if (empty($memcacheobj) || empty($connect)) {
+				$_W['config']['setting']['cache'] = 'mysql';
+			}
+		} else {
 			$_W['config']['setting']['cache'] = 'mysql';
 		}
 	} else {

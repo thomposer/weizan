@@ -1,19 +1,19 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('mc_fans');
 load()->model('mc');
 $dos = array('display', 'view', 'initsync', 'updategroup');
 $do = in_array($do, $dos) ? $do : 'display';
-if($do == 'display') {
+if ($do == 'display') {
 	$_W['page']['title'] = '粉丝列表 - 粉丝 - 会员中心';
-	if(checksubmit('submit')) {
+	if (checksubmit('submit')) {
 		if (!empty($_GPC['delete'])) {
 			$fanids = array();
-			foreach($_GPC['delete'] as $v) {
+			foreach ($_GPC['delete'] as $v) {
 				$fanids[] = intval($v);
 			}
 			pdo_query("DELETE FROM " . tablename('mc_mapping_fans') . " WHERE uniacid = :uniacid AND fanid IN ('" . implode("','", $fanids) . "')",array(':uniacid' => $_W['uniacid']));
@@ -21,12 +21,12 @@ if($do == 'display') {
 		}
 	}
 	$acid = $_W['acid'];
-	if($_W['isajax']) {
+	if ($_W['isajax']) {
 		$post = $_GPC['__input'];
-		if($post['method'] == 'sync') {
-			if(is_array($post['fanids'])) {
+		if ($post['method'] == 'sync') {
+			if (is_array($post['fanids'])) {
 				$fanids = array();
-				foreach($post['fanids'] as $fanid) {
+				foreach ($post['fanids'] as $fanid) {
 					$fanid = intval($fanid);
 					$fanids[] = $fanid;
 				}
@@ -34,9 +34,9 @@ if($do == 'display') {
 				$sql = 'SELECT `fanid`,`uid`,`openid` FROM ' . tablename('mc_mapping_fans') . " WHERE `acid`='{$acid}' AND `fanid` IN ({$fanids})";
 				$ds = pdo_fetchall($sql);
 				$acc = WeAccount::create($acid);
-				foreach($ds as $row) {
+				foreach ($ds as $row) {
 					$fan = $acc->fansQueryInfo($row['openid'], true);
-					if(!is_error($fan) && $fan['subscribe'] == 1) {
+					if (!is_error($fan) && $fan['subscribe'] == 1) {
 						$group = $acc->fetchFansGroupid($row['openid']);
 						$record = array();
 						if(!is_error($group)) {
@@ -75,15 +75,19 @@ if($do == 'display') {
 								pdo_update('mc_members', $rec, array('uid' => $row['uid']));
 							}
 						}
+					} elseif (!is_error($fan) && empty($fan['subscribe'])) {
+						pdo_update('mc_mapping_fans', array('follow' => 0, 'unfollowtime' => TIMESTAMP), array('fanid' => $row['fanid']));
 					}
 				}
 			}
 			exit('success');
 		}
-		if($post['method'] == 'download') {
+		if ($post['method'] == 'download') {
 			$acc = WeAccount::create($acid);
 			if(!empty($post['next'])) {
 				$_GPC['next_openid'] = $post['next'];
+			} else {
+				pdo_update('mc_mapping_fans', array('follow' => 0), array('uniacid' => $_W['uniacid']));
 			}
 			$fans = $acc->fansAll();
 			if(!is_error($fans) && is_array($fans['fans'])) {
@@ -94,26 +98,25 @@ if($do == 'display') {
 					$openids = implode("','", $buffer);
 					$openids = "'{$openids}'";
 					$sql = 'SELECT `openid` FROM ' . tablename('mc_mapping_fans') . " WHERE `acid`={$acid} AND `openid` IN ({$openids})";
-					$ds = pdo_fetchall($sql);
-					$exists = array();
-					foreach($ds as $row) {
-						$exists[] = $row['openid'];
-					}
+					$ds = pdo_fetchall($sql, array(), 'openid');
 					$sql = '';
-					foreach($buffer as $openid) {
-						if(!empty($exists) && in_array($openid, $exists)) {
-							continue;
+					if (!empty($ds)) {
+						foreach($buffer as $openid) {
+							if(!empty($ds[$openid])) {
+								unset($ds[$openid]);
+								continue;
+							}
+							$salt = random(8);
+							$sql .= "('{$acid}', '{$_W['uniacid']}', 0, '{$openid}', '{$salt}', 1, 0, ''),";
 						}
-						$salt = random(8);
-						$sql .= "('{$acid}', '{$_W['uniacid']}', 0, '{$openid}', '{$salt}', 1, 0, ''),";
-					}
-					if(!empty($sql)) {
-						$sql = rtrim($sql, ',');
-						$sql = 'INSERT INTO ' . tablename('mc_mapping_fans') . ' (`acid`, `uniacid`, `uid`, `openid`, `salt`, `follow`, `followtime`, `tag`) VALUES ' . $sql;
-						pdo_query($sql);
+						if(!empty($sql)) {
+							$sql = rtrim($sql, ',');
+							$sql = 'INSERT INTO ' . tablename('mc_mapping_fans') . ' (`acid`, `uniacid`, `uid`, `openid`, `salt`, `follow`, `followtime`, `tag`) VALUES ' . $sql;
+							pdo_query($sql);
+						}
+						pdo_query("UPDATE " . tablename('mc_mapping_fans') . " SET follow = '1' WHERE `openid` IN ({$openids})");
 					}
 				}
-
 				$ret = array();
 				$ret['total'] = $fans['total'];
 				if(!empty($fans['fans'])) {
@@ -152,7 +155,7 @@ if($do == 'display') {
 	$endtime = empty($_GPC['time']['end']) ? TIMESTAMP + 86399 : strtotime($_GPC['time']['end']) + 86399;
 	$follow = intval($_GPC['follow']);
 	if(!$follow) {
-		$orderby = ' ORDER BY fanid DESC';
+		$orderby = ' ORDER BY followtime DESC';
 		$condition .= ' AND ((followtime >= :starttime AND followtime <= :endtime) OR (unfollowtime >= :starttime AND unfollowtime <= :endtime))';
 	} elseif($follow == 1) {
 		$orderby = ' ORDER BY followtime DESC';
@@ -253,15 +256,13 @@ if($do == 'initsync') {
 	}
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 50;
-	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . " WHERE uniacid = :uniacid AND acid = :acid", array(':uniacid' => $_W['uniacid'], ':acid' => $acid));
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . " WHERE uniacid = :uniacid AND acid = :acid AND follow = '1'", array(':uniacid' => $_W['uniacid'], ':acid' => $acid));
 	$total_page = ceil($total / $psize);
-	$ds = pdo_fetchall("SELECT * FROM ".tablename('mc_mapping_fans') ." WHERE uniacid = :uniacid AND acid = :acid ORDER BY `fanid` DESC LIMIT ".($pindex - 1) * $psize.','.$psize, array(':uniacid' => $_W['uniacid'], ':acid' => $acid));
+	$ds = pdo_fetchall("SELECT * FROM ".tablename('mc_mapping_fans') ." WHERE uniacid = :uniacid AND acid = :acid AND follow = '1' ORDER BY `fanid` DESC LIMIT ".($pindex - 1) * $psize.','.$psize, array(':uniacid' => $_W['uniacid'], ':acid' => $acid));
+
 	$acc = WeAccount::create($acid);
 	if(!empty($ds)) {
 		foreach($ds as $row) {
-			if(!empty($row['tag'])) {
-				continue;
-			}
 			$fan = $acc->fansQueryInfo($row['openid'], true);
 			if(!is_error($fan) && $fan['subscribe'] == 1) {
 				$group = $acc->fetchFansGroupid($row['openid']);

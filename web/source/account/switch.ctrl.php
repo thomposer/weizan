@@ -17,4 +17,4 @@ if($_W['role'] == 'clerk' || $role == 'clerk') {
 	header('location: ' . url('activity/desk'));
 	die;
 }
-header('location: ' . url('home/welcome'));
+header('location: ' . url('home/welcome/platform'));

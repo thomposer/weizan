@@ -47,7 +47,7 @@ ul{list-style:none;}
 .app .modules .app-richText .inner h1,.app .modules .app-richText .inner h2,.app .modules .app-richText .inner h3,.app .modules .app-richText .inner h4,.app .modules .app-richText .inner h5,.app .modules .app-richText .inner h6{font-family: Verdana,Arial,Helvetica,sans-serif; font-weight:bold;}
 .app .modules .app-richText .inner{padding:10px; font-size:16px; overflow:hidden;}
 .app .modules .app-richText table{margin:10px 0; width:100%;}
-.app .modules .app-richText table td{padding:5px 10px;}
+.app .modules .app-richText table td, .app .modules  .app-richText table th{padding:5px 10px; border:1px solid #DDD}
 /*app商品*/
 .app .modules .app-goods .inner .goods-list,.app .modules .app-tagList2 .inner .goods-list{margin:10px;}
 .app .modules .app-goods .inner .goods-list li,.app .modules .app-tagList1 .inner .goods-list li,.app .modules .app-tagList2 .inner .goods-list li{position:relative; overflow:hidden; margin: 0 ;}

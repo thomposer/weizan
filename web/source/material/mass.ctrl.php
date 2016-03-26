@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('material_mass');
@@ -52,7 +52,7 @@ if($do == 'list') {
 			} elseif($li['msgtype'] == 'news') {
 				$li['media']['items'] = pdo_getall('wechat_news', array('attach_id' => $li['attach_id']));
 				foreach($li['media']['items'] as &$row) {
-					$row['thumb'] = media2local($row['thumb_media_id']);
+					$row['thumb_url'] = url('utility/wxcode/image', array('attach' => $row['thumb_url']));
 				}
 			} elseif($li['msgtype'] == 'wxcard') {
 				$li['media'] = pdo_get('coupon', array('id' => $li['attach_id']));

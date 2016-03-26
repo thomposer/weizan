@@ -5,6 +5,7 @@
 			<tr>
 				<th style="width: 35px;" class="text-center">选择</th>
 				<th style="width: 100px;">门店名称</th>
+				<th style="width: 100px;">分店名称</th>
 				<th style="width: 100px;">地址</th>
 			</tr>
 			</thead>
@@ -14,6 +15,7 @@
 					<tr id="loca-{$row['id']}">
 						<td class="text-center"><input type="checkbox" id="chk_loca_{$row['id']}" name="locationids[]" data-id="{$row['id']}" value="{$row['location_id']}"></td>
 						<td><label for="chk_loca_{$row['id']}" style="font-weight:normal;" class="name">{$row['business_name']}</label></td>
+						<td><label style="font-weight:normal;" class="name">{$row['branch_name']}</label></td>
 						<td><label class="label label-info address">{$row['address']}</label></td>
 					</tr>
 				{/loop}

@@ -11,7 +11,7 @@ function cache_memcache() {
 	if (!extension_loaded('memcache')) {
 		return error(1, 'Class Memcache is not found');
 	}
-	if(empty($memcacheobj)) {
+	if (empty($memcacheobj)) {
 		$config = $_W['config']['setting']['memcache'];
 		$memcacheobj = new Memcache();
 		if($config['pconnect']) {

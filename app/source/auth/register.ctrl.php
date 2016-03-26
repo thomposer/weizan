@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $openid = $_W['openid'];
@@ -17,14 +17,7 @@ $forward = url('mc');
 if(!empty($_GPC['forward'])) {
 	$forward = './index.php?' . base64_decode($_GPC['forward']) . '#wechat_redirect';
 }
-if (empty($setting['passport']['focusreg'])) {
-	$reregister = false;
-	if ($_W['member']['email'] == md5($_W['openid']).'@012wz.com') {
-		$reregister = true;
-	}
-}
-
-if(!$reregister && !empty($_W['member']) && (!empty($_W['member']['mobile']) || !empty($_W['member']['email']))) {
+if(!empty($_W['member']) && (!empty($_W['member']['mobile']) || !empty($_W['member']['email']))) {
 	header('location: ' . $forward);
 	exit;
 }
@@ -89,55 +82,32 @@ if($do == 'register') {
 			}
 		}
 		
-		if ($reregister) {
-			$data = array(
-				'salt' => random(8),
-			);
-			
-			$data['email']  = $type == 'email'  ? $username : '';
-			$data['mobile'] = $type == 'mobile' ? $username : '';
-			$data['password'] = md5($password . $data['salt'] . $_W['config']['setting']['authkey']);
-			
-			if(!empty($map_fans) && is_array($map_fans)) {
-				$data['nickname'] = $map_fans['nickname'];
-				$data['gender'] = $map_fans['sex'];
-				$data['residecity'] = $map_fans['city'] ? $map_fans['city'] . '市' : '';
-				$data['resideprovince'] = $map_fans['province'] ? $map_fans['province'] . '省' : '';
-				$data['nationality'] = $map_fans['country'];
-				if (!empty($map_fans['headimgurl'])) {
-					$data['avatar'] = rtrim($map_fans['headimgurl'], '0') . 132;
-				}
-			}
-			pdo_update('mc_members', $data, array('uid' => $_W['member']['uid']));
-			$user['uid'] = $_W['member']['uid'];
-		} else {
-			$default_groupid = pdo_fetchcolumn('SELECT groupid FROM ' .tablename('mc_groups') . ' WHERE uniacid = :uniacid AND isdefault = 1', array(':uniacid' => $_W['uniacid']));
-			$data = array(
-				'uniacid' => $_W['uniacid'], 
-				'salt' => random(8),
-				'groupid' => $default_groupid, 
-				'createtime' => TIMESTAMP,
-			);
-			
-			$data['email']  = $type == 'email'  ? $username : '';
-			$data['mobile'] = $type == 'mobile' ? $username : '';
-			$data['password'] = md5($password . $data['salt'] . $_W['config']['setting']['authkey']);
-			
-			if(!empty($map_fans)) {
-				$data['nickname'] = $map_fans['nickname'];
-				$data['gender'] = $map_fans['sex'];
-				$data['residecity'] = $map_fans['city'] ? $map_fans['city'] . '市' : '';
-				$data['resideprovince'] = $map_fans['province'] ? $map_fans['province'] . '省' : '';
-				$data['nationality'] = $map_fans['country'];
-				$data['avatar'] = rtrim($map_fans['headimgurl'], '0') . 132;
-			}
-			
-			pdo_insert('mc_members', $data);
-			$user['uid'] = pdo_insertid();
-			
-			if (!empty($fan) && !empty($fan['fanid'])) {
-				pdo_update('mc_mapping_fans', array('uid'=>$user['uid']), array('fanid'=>$fan['fanid']));
-			}
+		$default_groupid = pdo_fetchcolumn('SELECT groupid FROM ' .tablename('mc_groups') . ' WHERE uniacid = :uniacid AND isdefault = 1', array(':uniacid' => $_W['uniacid']));
+		$data = array(
+			'uniacid' => $_W['uniacid'], 
+			'salt' => random(8),
+			'groupid' => $default_groupid, 
+			'createtime' => TIMESTAMP,
+		);
+		
+		$data['email']  = $type == 'email'  ? $username : '';
+		$data['mobile'] = $type == 'mobile' ? $username : '';
+		$data['password'] = md5($password . $data['salt'] . $_W['config']['setting']['authkey']);
+		
+		if(!empty($map_fans)) {
+			$data['nickname'] = $map_fans['nickname'];
+			$data['gender'] = $map_fans['sex'];
+			$data['residecity'] = $map_fans['city'] ? $map_fans['city'] . '市' : '';
+			$data['resideprovince'] = $map_fans['province'] ? $map_fans['province'] . '省' : '';
+			$data['nationality'] = $map_fans['country'];
+			$data['avatar'] = rtrim($map_fans['headimgurl'], '0') . 132;
+		}
+		
+		pdo_insert('mc_members', $data);
+		$user['uid'] = pdo_insertid();
+		
+		if (!empty($fan) && !empty($fan['fanid'])) {
+			pdo_update('mc_mapping_fans', array('uid'=>$user['uid']), array('fanid'=>$fan['fanid']));
 		}
 		if(_mc_login($user)) {
 			exit('success');

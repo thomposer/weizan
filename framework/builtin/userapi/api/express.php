@@ -50,7 +50,7 @@ if(!empty($dat) && !empty($dat['content'])) {
 		preg_match_all('/&middot;(.*?)<br \/>(.*?)<\/p>/', $reply, $matchs);
 		$traces = '';
 		for ($i = 0; $i < count($matchs[0]); $i++ ) {
-			$traces .= $matchs[1][$i]. '-'. $matchs[2][$i]. '<br>';
+			$traces .= $matchs[1][$i]. '-'. $matchs[2][$i]. '<br/>';
 		}
 		$replys = array();
 		$replys[] = array(

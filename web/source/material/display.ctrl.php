@@ -20,7 +20,7 @@ if($do == 'down') {
 	$type = $types = $post['type'];
 	$count = $acc->getMaterialCount();
 	if(is_error($count)) {
-		message($result, '', 'ajax');
+		message($count, '', 'ajax');
 	}
 	$cache_key = "media_sync:{$_W['uniacid']}";
 	$has = cache_read($cache_key);
@@ -200,13 +200,9 @@ if($do == 'purview') {
 		exit('微信号不能为空');
 	}
 	$type = trim($_GPC['type']);
-	$id = trim($_GPC['id']);
-	$media = pdo_get('wechat_attachment', array('uniacid' => $_W['uniacid'], 'id' => $id));
-	if(empty($media)) {
-		exit('素材不存在');
-	}
+	$media_id = trim($_GPC['media_id']);
 	$acc = WeAccount::create();
-	$data = $acc->fansSendPreview($wxname, $media['media_id'], $type);
+	$data = $acc->fansSendPreview($wxname, $media_id, $type);
 	if(is_error($data)) {
 		exit($data['message']);
 	}

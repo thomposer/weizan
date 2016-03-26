@@ -39,6 +39,16 @@ if($do == 'index') {
 		$condition .= ' AND abs(num) <= :maxnum';
 		$params[':maxnum'] = $max;
 	}
+	$clerk_id = intval($_GPC['clerk_id']);
+	if (!empty($clerk_id)) {
+		$condition .= ' AND clerk_id = :clerk_id';
+		$params[':clerk_id'] = $clerk_id;
+	}
+	$store_id = trim($_GPC['store_id']);
+	if (!empty($store_id)) {
+		$condition .= " AND store_id = :store_id";
+		$params[':store_id'] = $store_id;
+	}
 
 	$user = trim($_GPC['user']);
 	if(!empty($user)) {
@@ -69,6 +79,86 @@ if($do == 'index') {
 		$users = pdo_fetchall('SELECT mobile,uid,realname FROM ' . tablename('mc_members') . " WHERE uniacid = :uniacid AND uid IN ($uids)", array(':uniacid' => $_W['uniacid']), 'uid');
 	}
 	$pager = pagination($total, $pindex, $psize);
+	if ($_GPC['export'] != '') {
+		$exports = pdo_fetchall('SELECT * FROM '.tablename('mc_credits_record'). $condition . ' ORDER BY id DESC', $params);
+		if(!empty($exports)) {
+			load()->model('clerk');
+			$uids = array();
+			foreach($exports as &$da) {
+				if(!in_array($da['uid'], $uids)) {
+					$uids[] = $da['uid'];
+				}
+				$operator = mc_account_change_operator($da['clerk_type'], $da['store_id'], $da['clerk_id']);
+				$da['clerk_cn'] = $operator['clerk_cn'];
+				$da['store_cn'] = $operator['store_cn'];
+			}
+			$uids = implode(',', $uids);
+			$user = pdo_fetchall('SELECT mobile,uid,realname FROM ' . tablename('mc_members') . " WHERE uniacid = :uniacid AND uid IN ($uids)", array(':uniacid' => $_W['uniacid']), 'uid');
+		}
+		
+		$html = "\xEF\xBB\xBF";
+
+		
+		$filter = array(
+			'uid' => '会员编号',
+			'name' => '姓名',
+			'phone' => '手机',
+			'type' => '类型',
+			'num' => '数量',
+			'store' => '消费门店	',
+			'operator' => '操作人	',
+			'createtime' => '操作时间	',
+			'remark' => '备注'
+		);
+		foreach ($filter as $title) {
+			$html .= $title . "\t,";
+		}
+		$html .= "\n";
+		foreach ($exports as $k => $v) {
+			foreach ($filter as $key => $title) {
+				if ($key == 'name') {
+					$html .= $user[$v['uid']]['realname']. "\t, ";
+				} elseif ($key == 'phone') {
+					$html .= $user[$v['uid']]['mobile']. "\t, ";
+				}elseif ($key == 'type') {
+					if ($v['num'] > 0) {
+						$html .= "充值\t, ";
+					} else {
+						$html .= "消费\t, ";
+					}
+				}
+				elseif ($key == 'num') {
+					$html .= abs($v[$key]). "\t, ";
+				} elseif ($key == 'store') {
+					if ($v['store_id'] > 0) {
+						$html .= $stores[$v['store_id']]['business_name']. '-'. $stores[$v['store_id']]['branch_name']. "\t, ";
+					} else {
+						$html .= "未知\t, ";
+					}
+				}elseif ($key == 'operator') {
+					if ($v['clerk_id'] > 0) {
+						$html .= $v['clerk_cn']. "\t, ";
+					} elseif ($v['clerk_type'] == 1) {
+						$html .= "系统\t, ";
+					}else {
+						$html .= "未知\t, ";
+					}
+				}elseif ($key == 'createtime') {
+					$html .= date('Y-m-d H:i', $v['createtime']). "\t, ";
+				}elseif ($key == 'remark') {
+					$html .= cutstr($v['remark'], '30', '...'). "\t, ";
+				}else {
+					$html .= $v[$key]. "\t, ";
+				}
+			}
+			$html .= "\n";
+		}
+		
+		header("Content-type:text/csv");
+		header("Content-Disposition:attachment; filename=全部数据.csv");
+		echo $html;
+		exit();
+	}
 }
 
 if($do == 'chart') {

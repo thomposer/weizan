@@ -442,7 +442,6 @@ require(['angular', 'underscore', 'jquery.ui', 'jquery.caret', 'wechatDistrict']
 						}
 					}, error);
 				} else {
-					console.dir(val);
 					if((val.type == 'view' && $.trim(val.url) == '') || ((val.type != 'view' && val.type != 'media_id' && val.type != 'view_limited') && $.trim(val.key) == '') || ((val.type == 'media_id' || val.type == 'view_limited') && !$.trim(val.media_id))) {
 						this.action += '菜单【' + val.name + '】不存在子菜单并且未设置操作选项. <br />';
 					}

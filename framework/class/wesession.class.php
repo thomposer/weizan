@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -16,7 +16,7 @@ class WeSession {
 
 	
 	public static function start($uniacid, $openid, $expire = 3600) {
-		if (empty($GLOBALS['_W']['config']['setting']['memcache']['session'])) {
+		if (empty($GLOBALS['_W']['config']['setting']['memcache']['session']) || empty($GLOBALS['_W']['config']['setting']['memcache']['server'])) {
 			WeSession::$uniacid = $uniacid;
 			WeSession::$openid = $openid;
 			WeSession::$expire = $expire;

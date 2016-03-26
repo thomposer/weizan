@@ -77,8 +77,21 @@ if($do == 'index') {
 	}
 	$pager = pagination($total, $pindex, $psize);
 
-	$exports = pdo_fetchall('SELECT * FROM ' . tablename('mc_credits_record') . $condition . " ORDER BY id DESC", $params);
 	if ($_GPC['export'] != '') {
+		$exports = pdo_fetchall('SELECT * FROM ' . tablename('mc_credits_record') . $condition . " ORDER BY id DESC", $params);
+		if(!empty($exports)) {
+			$uids = array();
+			foreach($exports as &$da) {
+				if(!in_array($da['uid'], $uids)) {
+					$uids[] = $da['uid'];
+				}
+				$operator = mc_account_change_operator($da['clerk_type'], $da['store_id'], $da['clerk_id']);
+				$da['clerk_cn'] = $operator['clerk_cn'];
+				$da['store_cn'] = $operator['store_cn'];
+			}
+			$uids = implode(',', $uids);
+			$users = pdo_fetchall('SELECT mobile,uid,realname FROM ' . tablename('mc_members') . " WHERE uniacid = :uniacid AND uid IN ($uids)", array(':uniacid' => $_W['uniacid']), 'uid');
+		}
 		
 		$html = "\xEF\xBB\xBF";
 
@@ -89,8 +102,8 @@ if($do == 'index') {
 			'phone' => '手机',
 			'type' => '类型',
 			'num' => '数量',
-			'store' => '消费门店	',
-			'operator' => '操作人	',
+			'store_cn' => '消费门店	',
+			'clerk_cn' => '操作人	',
 			'createtime' => '操作时间	',
 			'remark' => '备注'
 		);
@@ -122,7 +135,9 @@ if($do == 'index') {
 				}elseif ($key == 'operator') {
 					if ($v['clerk_id'] > 0) {
 						$html .= $clerks[$v['clerk_id']]['name']. "\t, ";
-					}else {
+					} elseif ($v['clerk_type'] == 1) {
+						$html .= "系统\t, ";
+					} else {
 						$html .= "未知\t, ";
 					}
 				}elseif ($key == 'createtime') {

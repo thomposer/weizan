@@ -140,7 +140,29 @@
 			<div class="form-group">
 				<label class="col-xs-12 col-sm-3 col-md-2 control-label">姓名/手机号码/UID</label>
 				<div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
-					<input type="text" class="form-control" name="user" value="{$_GPC['user']}" />
+					<input type="text" class="form-control" name="user" value="{$_GPC['uid']}" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">操作人</label>
+				<div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+					<select class="form-control" name="clerk_id">
+						<option value="">不限</option>
+						{loop $clerks $clerk}
+						<option value="{$clerk['id']}" {if $_GPC['clerk_id'] == $clerk['id']}selected{/if}>{$clerk['name']}</option>
+						{/loop}
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">消费门店</label>
+				<div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+					<select class="form-control" name="store_id">
+						<option value="">不限</option>
+						{loop $stores $store}
+						<option value="{$store['id']}" {if $_GPC['store_id'] == $store['id']}selected{/if}>{$store['business_name']}</option>
+						{/loop}
+					</select>
 				</div>
 			</div>
 			<div class="form-group">
@@ -157,6 +179,7 @@
 				<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
 				<div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
 					<button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+					<button name="export" value="export" class="btn btn-default"><i class="fa fa-download"></i> 导出数据</button>
 					<input type="hidden" name="token" value="{$_W['token']}"/>
 				</div>
 			</div>

@@ -248,6 +248,22 @@ function tpl_form_field_link($name, $value = '', $options = array()) {
 					}, page);
 				});
 			}
+			function pageLinkDialog(elm, page) {
+				require(["util","jquery"], function(u, $){
+					var ipt = $(elm).parent().parent().parent().prev();
+					u.pageBrowser(function(href, page){
+						if (page != "" && page != undefined) {
+							pageLinkDialog(elm, page);
+							return false;
+						}
+						var multiid = "'. $_GPC['multiid'] .'";
+						if (multiid) {
+							href = /(&)?t=/.test(href) ? href : href + "&t=" + multiid;
+						}
+						ipt.val(href);
+					}, page);
+				});
+			}
 			function articleLinkDialog(elm, page) {
 				require(["util","jquery"], function(u, $){
 					var ipt = $(elm).parent().parent().parent().prev();
@@ -287,12 +303,43 @@ function tpl_form_field_link($name, $value = '', $options = array()) {
 			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">选择链接 <span class="caret"></span></button>
 			<ul class="dropdown-menu">
 				<li><a href="javascript:" data-type="system" onclick="showLinkDialog(this);">系统菜单</a></li>
-				<li><a href="javascript:" data-type="page" onclick="newsLinkDialog(this);">微页面</a></li>
+				<li><a href="javascript:" data-type="page" onclick="pageLinkDialog(this);">微页面</a></li>
 				<li><a href="javascript:" data-type="article" onclick="articleLinkDialog(this)">文章及分类</a></li>
 				<li><a href="javascript:" data-type="news" onclick="newsLinkDialog(this)">图文回复</a></li>
 				<li><a href="javascript:" data-type="map" onclick="mapLinkDialog(this)">一键导航</a></li>
 			</ul>
 		</span>
+	</div>
+	';
+	return $s;
+}
+
+
+function tpl_form_module_link($name) {
+	$s = '';
+	if (!defined('TPL_INIT_module')) {
+		$s = '
+		<script type="text/javascript">
+			function showModuleLink(elm) {
+				require(["util","jquery"], function(u, $){
+					u.showModuleLink(function(href, permission) {
+						var ipt = $(elm).parent().prev();
+						var ipts = $(elm).parent().prev().prev();
+						ipt.val(href);
+						ipts.val(permission);
+						});
+					});
+				}
+		</script>';
+		define('TPL_INIT_module', true);
+	}
+	$s .= '
+	<div class="input-group">
+		<input type="text" class="form-control" name="permission" style="display: none">
+		<input type="text" class="form-control" name="'.$name.'">
+			<span class="input-group-btn">
+				<a href="javascript:"  class="btn btn-default" onclick="showModuleLink(this)">选择链接</a>
+			</span>
 	</div>
 	';
 	return $s;

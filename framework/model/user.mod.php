@@ -5,6 +5,19 @@
  */
 defined('IN_IA') or exit('Access Denied');
 
+function agent_add($user){
+	if (empty($user) || !is_array($user)) {
+		return 0;
+	}
+	$user['salt'] = random(8);
+	$user['password'] = user_hash($user['password'], $user['salt']);
+	$result = pdo_insert('agent', $user);
+	if (!empty($result)) {
+		$user['id'] = pdo_insertid();
+	}
+	return intval($user['id']);
+}
+
 
 function user_register($user) {
 	if (empty($user) || !is_array($user)) {
@@ -67,6 +80,41 @@ function user_check($user) {
 	return true;
 }
 
+function agent_single($user_or_uid){
+	$user = $user_or_uid;
+	if (empty($user)) {
+		return false;
+	}
+	if (is_numeric($user)) {
+		$user = array('id' => $user);
+	}
+	if (!is_array($user)) {
+		return false;
+	}
+	$where = ' WHERE 1 ';
+	$params = array();
+	if (!empty($user['name'])) {
+		$where .= ' AND `name`=:username';
+		$params[':username'] = $user['name'];
+	}
+	
+	
+	if (!empty($user['id'])) {
+		$where .= ' AND `id`=:id';
+		$params[':id'] = intval($user['id']);
+	}
+	$sql = 'SELECT * FROM ' . tablename('agent') . " $where LIMIT 1";
+	$record = pdo_fetch($sql, $params);
+	
+	if (!empty($user['password'])) {
+		$password = user_hash($user['password'], $record['salt']);
+		
+		if ($password != $record['password']) {
+			return false;
+		}
+	}
+	return $record;
+}
 
 function user_single($user_or_uid) {
 	$user = $user_or_uid;
@@ -102,6 +150,7 @@ function user_single($user_or_uid) {
 	}
 	$sql = 'SELECT * FROM ' . tablename('users') . " $where LIMIT 1";
 	$record = pdo_fetch($sql, $params);
+
 	if (empty($record)) {
 		return false;
 	}
@@ -109,6 +158,15 @@ function user_single($user_or_uid) {
 		$password = user_hash($user['password'], $record['salt']);
 		if ($password != $record['password']) {
 			return false;
+		}
+	}
+	if(!empty($record['agentid'])){
+		$url=$_SERVER['SERVER_NAME'];
+		$ids=$record['agentid'];
+		$sqla='select * from '.tablename('agent')." where id=$ids ";
+		$record1 = pdo_fetch($sqla, $params);
+		if($record1['siteurl']!=$url){
+			message('登录失败，请检查您访问的域名是否正确！');
 		}
 	}
 	if($record['type'] == ACCOUNT_OPERATE_CLERK) {
@@ -130,7 +188,45 @@ function user_single($user_or_uid) {
 	return $record;
 }
 
+function agent_update($user){
+	if (empty($user['id']) || !is_array($user)) {
+		return false;
+	}
+	$record = array();
+	if (!empty($user['password'])) {
+		$record['password'] = user_hash($user['password'], $user['salt']);
+	}
+	if (isset($user['intro'])) {
+		$record['intro'] = $user['intro'];
+	}
+	if (isset($user['endtime'])) {
+		$record['endtime'] = $user['endtime'];
+	}
+	if (isset($user['siteurl'])) {
+		$record['siteurl'] = $user['siteurl'];
+	}
+	if (isset($user['moneybalance'])) {
+		$record['moneybalance'] = $user['moneybalance'];
+	}
+	if (isset($user['mp'])) {
+		$record['mp'] = $user['mp'];
+	}
+	if (empty($record)) {
+		return false;
+	}
+	return pdo_update('agent', $record, array('id' => intval($user['id'])));
+}
 
+function record($user){
+	if (empty($user['id']) || !is_array($user)) {
+		return false;
+	}
+	$record = array();
+	if (isset($user['status'])) {
+		$record['status'] = $user['status'];
+	}
+	return pdo_update('agent_expenserecords', $record, array('id' => intval($user['id'])));	
+}
 function user_update($user) {
 	if (empty($user['uid']) || !is_array($user)) {
 		return false;

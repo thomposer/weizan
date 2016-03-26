@@ -36,6 +36,16 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">自助核销状态</label>
+					<div class="col-sm-9 col-xs-9 col-md-9">
+						<div class="btn-group">
+							<a href="{php echo filter_url('is_selfconsume:');}" class="btn {if $_GPC['is_selfconsume'] == ''}btn-primary{else}btn-default{/if}">不限</a>
+							<a href="{php echo filter_url('is_selfconsume:1');}" class="btn {if $_GPC['is_selfconsume'] == '1'}btn-primary{else}btn-default{/if}">开启</a>
+							<a href="{php echo filter_url('is_selfconsume:0');}" class="btn {if $_GPC['is_selfconsume'] == '0'}btn-primary{else}btn-default{/if}">关闭</a>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">券标题</label>
 					<div class="col-sm-7 col-lg-8 col-md-8 col-xs-12">
 						<input class="form-control" name="title" placeholder="券标题" type="text" value="{$_GPC['title']}">
@@ -98,6 +108,7 @@
 							{/if}
 						</td>
 						<td style="text-align:right;">
+							<a href="javascript:;" data-cid="{$dca['id']}" class="btn {if $dca['is_selfconsume'] == 1}btn-danger{else}btn-success{/if} btn-sm toggle-selfconsume" title="自助核销">{if $dca['is_selfconsume'] == 1}关闭自助核销{else}开启自助核销{/if}</a>
 							<a href="javascript:;" data-cid="{$dca['id']}" class="btn btn-default btn-sm toggle-display" title="上架/下架">{if $dca['is_display'] == 1}下架{else}上架{/if}</a>
 							<a href="{php echo url('wechat/card/sync', array('cid' => $dca['id']))}" class="btn btn-default btn-sm" title="更新状态">更新状态</a>
 							<a href="{php echo url('wechat/card/qr', array('cid' => $dca['id'], 'op' => 'list'))}" class="btn btn-default btn-sm" title="生成投放二维码">投放</a>
@@ -143,6 +154,19 @@
 			var id = parseInt($(this).attr('data-cid'));
 			if(id <= 0) return false;
 			$.post("{php echo url('wechat/card/toggle', array('op' => 'is_display'))}", {'id':id}, function(data){
+				if(data == 'success') {
+					location.reload();
+				} else {
+					u.message(data, '', 'error');
+				}
+				return false;
+			});
+			return false;
+		});
+		$('.toggle-selfconsume').click(function(){
+			var id = parseInt($(this).attr('data-cid'));
+			if(id <= 0) return false;
+			$.post("{php echo url('wechat/card/selfconsume', array('op' => 'is_selfconsume'))}", {'id':id}, function(data){
 				if(data == 'success') {
 					location.reload();
 				} else {

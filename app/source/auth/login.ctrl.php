@@ -1,7 +1,7 @@
 <?php
 /**
- * [WeiZan System] Copyright (c) 2014 WeiZan.Com
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $openid = $_W['openid'];
@@ -12,18 +12,11 @@ $setting = uni_setting($_W['uniacid'], array('uc', 'passport'));
 $uc_setting = $setting['uc'] ? $setting['uc'] : array();
 $ltype = empty($setting['passport']['type']) ? 'hybird' : $setting['passport']['type'];
 
-if (empty($setting['passport']['focusreg'])) {
-	$reregister = false;
-	if ($_W['member']['email'] == md5($_W['openid']).'@012wz.com') {
-		$reregister = true;
-	}
-}
-
 $forward = url('mc');
 if(!empty($_GPC['forward'])) {
 	$forward = './index.php?' . base64_decode($_GPC['forward']) . '#wechat_redirect';
 }
-if(!$reregister && !empty($_W['member']) && (!empty($_W['member']['mobile']) || !empty($_W['member']['email']))) {
+if(!empty($_W['member']) && (!empty($_W['member']['mobile']) || !empty($_W['member']['email']))) {
 	header('location: ' . $forward);
 	exit;
 }
@@ -71,14 +64,6 @@ if($do == 'basic') {
 			$user = pdo_fetch($sql, $pars);
 			if(empty($user)) {
 				exit('不存在该账号的用户资料');
-			}
-		}
-
-		if ($reregister) {
-			$fans = mc_fansinfo($_W['openid']);
-			if ($fans['uid'] != $user['uid']) {
-				pdo_update('mc_mapping_fans', array('uid' => $user['uid']), array('fanid' => $fans['fanid']));
-				pdo_delete('mc_mapping_fans', array('uid' => $fans['uid']));
 			}
 		}
 		if(_mc_login($user)) {

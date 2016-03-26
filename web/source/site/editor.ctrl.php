@@ -196,6 +196,9 @@ if ($do == 'design') {
 		if (!empty($id)) {
 			pdo_update('site_page', $data, array('id' => $id));
 		} else {
+			if ($type == 4) {
+				$data['status'] = 1;
+			}
 			pdo_insert('site_page', $data);
 			$id = pdo_insertid();
 		}

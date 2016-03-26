@@ -10,7 +10,7 @@ function clerk_check() {
 	if(empty($_W['openid'])) {
 		return error(-1, '获取粉丝openid失败');
 	}
-	$data = pdo_get('activity_coupon_password', array('uniacid' => $_W['uniacid'], 'openid' => $_W['openid']));
+	$data = pdo_get('activity_clerks', array('uniacid' => $_W['uniacid'], 'openid' => $_W['openid']));
 	if(empty($data)) {
 		return error(-1, '不是操作店员');
 	}
@@ -21,6 +21,7 @@ function clerk_permission_list() {
 	$data = array(
 		'mc' => array(
 			'title' => '快捷交易',
+			'permission' => 'mc_manage',
 			'items' => array(
 				array(
 					'title' => '会员积分修改',
@@ -59,6 +60,7 @@ function clerk_permission_list() {
 
 		'stat' => array(
 			'title' => '数据统计',
+			'permission' => 'stat_manage',
 			'items' => array(
 				array(
 					'title' => '会员积分统计',
@@ -93,6 +95,7 @@ function clerk_permission_list() {
 
 		'activity' => array(
 			'title' => '系统优惠券核销',
+			'permission' => 'activity_card_manage',
 			'items' => array(
 				array(
 					'title' => '折扣券核销',
@@ -113,6 +116,7 @@ function clerk_permission_list() {
 
 		'wechat' => array(
 			'title' => '微信卡券核销',
+			'permission' => 'wechat_card_manage',
 			'items' => array(
 				array(
 					'title' => '卡券核销',

@@ -146,7 +146,6 @@ if($do == 'display') {
 	foreach($list as &$li) {
 		$li['thumb'] = tomedia($li['thumb']);
 	}
-	
 	$pager = pagination($total, $pindex, $psize);
 }
 

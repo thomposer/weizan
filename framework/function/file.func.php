@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -169,8 +169,11 @@ function file_wechat_upload($file, $type = 'image', $name = '') {
 }
 
 
+
 function file_remote_upload($filename, $auto_delete_local = true) {
 	global $_W;
+
+
 	if (empty($_W['setting']['remote']['type'])) {
 		return false;
 	}
@@ -216,6 +219,18 @@ function file_remote_upload($filename, $auto_delete_local = true) {
 		} else {
 			return error(1, '远程附件上传失败，请检查配置并重新上传');
 		}
+	} elseif ($_W['setting']['remote']['type'] == '3') {
+		require_once(IA_ROOT . '/framework/library/qiniu/autoload.php');
+		$auth = new Qiniu\Auth($_W['setting']['remote']['qiniu']['accesskey'],$_W['setting']['remote']['qiniu']['secretkey']);
+		$uploadmgr = new Qiniu\Storage\UploadManager();
+		$putpolicy = Qiniu\base64_urlSafeEncode(json_encode(array('scope' => $_W['setting']['remote']['qiniu']['bucket'].':'. $filename)));
+		$uploadtoken = $auth->uploadToken($_W['setting']['remote']['qiniu']['bucket'], $filename, 3600, $putpolicy);
+		list($ret, $err) = $uploadmgr->putFile($uploadtoken, $filename, ATTACHMENT_ROOT. '/'.$filename);
+		if ($err !== null) {
+			return error(1, '远程附件上传失败，请检查配置并重新上传');
+		} else {
+			return true;
+		}
 	}
 }
 
@@ -248,7 +263,7 @@ function file_remote_delete($file) {
 		return true;
 	}
 	if ($_W['setting']['remote']['type'] == '1') {
-		require(IA_ROOT . '/framework/library/ftp/ftp.php');
+		require_once(IA_ROOT . '/framework/library/ftp/ftp.php');
 		$ftp_config = array(
 			'hostname' => $_W['setting']['remote']['ftp']['host'],
 			'username' => $_W['setting']['remote']['ftp']['username'],
@@ -270,13 +285,23 @@ function file_remote_delete($file) {
 			return error(1, '删除附件失败，请检查配置并重新删除');
 		}
 	} elseif ($_W['setting']['remote']['type'] == '2') {
-		require(IA_ROOT . '/framework/library/alioss/sdk.class.php');
+		require_once(IA_ROOT . '/framework/library/alioss/sdk.class.php');
 		$oss = new ALIOSS($_W['setting']['remote']['alioss']['key'], $_W['setting']['remote']['alioss']['secret'], $_W['setting']['remote']['alioss']['ossurl']);
 		$response = $oss->delete_object($_W['setting']['remote']['alioss']['bucket'], $file);
 		if ($response->status == 204) {
 			return true;
 		} else {
 			return error(1, '删除oss远程文件失败');
+		}
+	}  elseif ($_W['setting']['remote']['type'] == '3') {
+		require_once IA_ROOT . '/framework/library/qiniu/autoload.php';
+		$auth = new Qiniu\Auth($_W['setting']['remote']['qiniu']['accesskey'], $_W['setting']['remote']['qiniu']['secretkey']);
+		$bucketMgr = new Qiniu\Storage\BucketManager($auth);
+		$err = $bucketMgr->delete($_W['setting']['remote']['qiniu']['bucket'], $file);
+		if ($err !== 'null') {
+			return error(1, '删除七牛远程文件失败');
+		} else {
+			return true;
 		}
 	}
 	return true;
@@ -508,12 +533,14 @@ function file_fetch($url, $limit = 0, $path = '') {
 	}
 	if(!$limit) {
 		$limit = $_W['setting']['upload']['image']['limit'] * 1024;
+	} else {
+		$limit = $limit * 1024;
 	}
 	if(empty($path)) {
 		$path =  "images/{$_W['uniacid']}/" . date('Y/m/');
-		if(!file_exists(ATTACHMENT_ROOT . $path)) {
-			mkdirs(ATTACHMENT_ROOT . $path);
-		}
+	}
+	if(!file_exists(ATTACHMENT_ROOT . $path)) {
+		mkdirs(ATTACHMENT_ROOT . $path);
 	}
 	load()->func('communication');
 	$resp = ihttp_get($url);

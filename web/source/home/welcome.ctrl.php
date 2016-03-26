@@ -4,9 +4,9 @@
  * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-$dos = array('platform', 'site', 'mc', 'setting', 'ext', 'solution', 'members');
-$do = in_array($do, $dos) ? $do : 'platform';
-$title = array('platform'=>'公众平台','site'=>'微站功能','mc'=>'会员及会员营销','setting'=>'功能选项','ext'=>'扩展功能','solution'=>'行业功能','members'=>'会员续费');
+$dos = array('platform', 'site', 'mc', 'setting', 'ext', 'solution', 'members', 'fournet');
+$do = in_array($do, $dos) ? $do : $do;
+$title = array('platform'=>'公众平台','site'=>'微站功能','mc'=>'会员及会员营销','setting'=>'功能选项','ext'=>'扩展功能','solution'=>'行业功能','members'=>'会员续费','fournet'=>'四网融合');
 $_W['page']['title'] = $title[$do];
 
 define('FRAME', $do);
@@ -181,6 +181,9 @@ if($do == 'site') {
 	}
 }
 
+if($do == 'fournet') {
+	$title = 'APP应用列表';
+}
 if($do == 'mc') {
 	$title = '会员功能概况';
 }

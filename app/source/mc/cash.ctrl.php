@@ -171,6 +171,9 @@ if(!empty($type)) {
 			if (is_error($result)) {
 				message($result['message'], '', 'error');
 			}
+			if (!empty($_W['openid'])) {
+				mc_notice_credit2($_W['openid'], $_W['member']['uid'], $fee, 0, '线上消费');
+			}
 			if(!empty($log) && $log['status'] == '0') {
 				$record = array();
 				$record['status'] = '1';

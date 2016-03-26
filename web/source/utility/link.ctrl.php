@@ -7,8 +7,15 @@ defined('IN_IA') or exit('Access Denied');
 $callback = $_GPC['callback'];
 load()->model('module');
 load()->model('site');
-
-if ($do == 'articlelist') {
+if ($do == 'modulelink') {
+	$modules = uni_modules_app_binding();
+	$entries = array();
+	foreach ($modules as $module => $item) {
+		$entries[$module] = module_entries($module, array('menu'));
+		$entries[$module]['title'] = $item['title'];
+	}
+}
+elseif ($do == 'articlelist') {
 	$result = array();
 	$psize = 10;
 	$pindex = max(1, intval($_GPC['page']));
@@ -36,7 +43,7 @@ if ($do == 'articlelist') {
 		$result['pager'] = pagination($total, $pindex, $psize, '', array('before' => '2', 'after' => '3', 'ajaxcallback'=>'true'));
 	}
 	message($result, '', 'ajax');
-}elseif ($do == 'newslist') {
+} elseif ($do == 'newslist') {
 	$result = array();
 	$psize = 10;
 	$pindex = max(1, intval($_GPC['page']));
@@ -49,7 +56,14 @@ if ($do == 'articlelist') {
 	}
 	message($result, '', 'ajax');
 } elseif ($do == 'catelist') {
-	$category = pdo_fetchall("SELECT id, uniacid, parentid, name FROM ".tablename('site_category')." WHERE uniacid = :uniacid ORDER BY parentid, displayorder DESC, id", array(':uniacid' => $_W['uniacid']), 'id');
+	$condition = '';
+	if (!empty($_GPC['keyword'])) {
+		$condition .= " AND name LIKE :name";
+		$param = array(':uniacid' => $_W['uniacid'], ':name' => '%'.trim($_GPC['keyword']).'%');
+	} else {
+		$param = array(':uniacid' => $_W['uniacid']);
+	}
+	$category = pdo_fetchall("SELECT id, uniacid, parentid, name FROM ".tablename('site_category')." WHERE uniacid = :uniacid ". $condition." ORDER BY parentid, displayorder DESC, id", $param, 'id');
 	foreach ($category as $index => $row) {
 		if (!empty($row['parentid'])){
 			$category[$row['parentid']]['children'][$row['id']] = $row;
@@ -59,14 +73,14 @@ if ($do == 'articlelist') {
 	message($category, '', 'ajax');
 } elseif ($do == 'page') {
 	$result = array();
-	$psize = 2;
+	$psize = 10;
 	$pindex = max(1, intval($_GPC['page']));
-	$result['list'] = pdo_fetchall("SELECT * FROM ".tablename('site_page')." WHERE uniacid = :uniacid AND type = '2' ORDER BY id DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':uniacid' => $_W['uniacid']), 'id');
+	$result['list'] = pdo_fetchall("SELECT * FROM ".tablename('site_page')." WHERE uniacid = :uniacid AND type = '1' ORDER BY id DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':uniacid' => $_W['uniacid']), 'id');
 	if (!empty($result['list'])) {
 		foreach ($result['list'] as $k => &$v) {
 			$v['createtime'] = date('Y-m-d H:i', $v['createtime']);
 		}
-		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('site_page'). ' WHERE uniacid = :uniacid AND type = 2', array(':uniacid' => $_W['uniacid']));
+		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('site_page'). ' WHERE uniacid = :uniacid AND type = 1', array(':uniacid' => $_W['uniacid']));
 		$result['pager'] = pagination($total, $pindex, $psize, '', array('before' => '2', 'after' => '3', 'ajaxcallback'=>'true'));
 	}
 } elseif ($do == 'news') {
@@ -101,6 +115,24 @@ if ($do == 'articlelist') {
 			unset($category[$index]);
 		}
 	}
+} elseif ($do == 'newschunk') {
+	$result = array();
+	$psize = 10;
+	$pindex = max(1, intval($_GPC['page']));
+	$rids = pdo_getall('rule', array('uniacid' => $_W['uniacid'], 'module' => 'news'), array(), 'id');
+	$keys = array_keys($rids);
+	$keys[] = 0;
+	$keys = implode(',', $keys);
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('news_reply') . " WHERE parent_id = 0 AND rid IN ({$keys})");
+	$sql = "SELECT id,title,createtime FROM ". tablename('news_reply') . " WHERE parent_id = 0 AND rid IN ({$keys}) ORDER BY id DESC LIMIT ". ($pindex - 1) * $psize . ',' . $psize;
+	$result['list'] = pdo_fetchall($sql, array(), 'id');
+	if (!empty($result['list'])) {
+		foreach($result['list'] as &$row) {
+			$row['items'] = pdo_fetchall('SELECT * FROM ' . tablename('news_reply') . ' WHERE parent_id = :parent_id OR id = :id', array(':parent_id' => $row['id'], ':id' => $row['id']));
+		}
+		$result['pager'] = pagination($total, $pindex, $psize, '', array('before' => '2', 'after' => '3', 'ajaxcallback'=>'null'));
+	}
+	message($result, '', 'ajax');
 } else {
 		$permission = uni_user_permission_exist();
 	$has_permission = array();

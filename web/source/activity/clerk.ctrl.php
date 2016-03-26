@@ -6,7 +6,7 @@
 
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('activity_clerk_list');
-$dos = array('switch', 'list', 'post', 'del', 'post', 'verify');
+$dos = array('switch', 'list', 'post', 'del', 'post', 'verify', 'checkname');
 $do = in_array($do, $dos) ? $do : 'list';
 $_W['page']['title'] = '店员列表 - 门店营销参数 - 会员营销';
 if ($do == 'list') {
@@ -26,15 +26,29 @@ if ($do == 'list') {
 	$pager = pagination($total, $pindex, $psize);
 	$stores = pdo_getall('activity_stores', array('uniacid' => $_W['uniacid']), array('id', 'business_name', 'branch_name'), 'id');
 }
+if ($do == 'checkname' && $_W['isajax']) {
+	$username = trim($_GPC['username']);
+	$uid = intval($_GPC['uid']);
+	if (!empty($uid)) {
+		$exist = pdo_fetch("SELECT * FROM ". tablename('users'). " WHERE uid <> :uid AND username = :username", array(':uid' => $uid, ':username' => trim($_GPC['username'])));
+	} else {
+		$exist = pdo_get('users', array('username' => $username));
+	}
+	if (empty($exist)) {
+		message(error(1), '', 'ajax');
+	}else {
+		message(error(0), '', 'ajax');
+	}
+}
 if ($do == 'post') {
 	$id = intval($_GPC['id']);
-	if ($id > 0){
+	if (!empty($id)){
 		$sql = 'SELECT * FROM ' . tablename('activity_clerks') . " WHERE id = :id AND uniacid = :uniacid";
 		$clerk = pdo_fetch($sql, array(':id' => $id, ':uniacid' => $_W['uniacid']));
 		if (empty($clerk)) {
 			message('店员不存在', referer(), 'error');
 		}
-		if ($clerk['uid'] > 0) {
+		if (!empty($clerk['uid'])) {
 			$user = pdo_get('users', array('uid' => $clerk['uid']));
 			$clerk['username'] = $user['username'];
 			$clerk['uid'] = $user['uid'];
@@ -48,7 +62,6 @@ if ($do == 'post') {
 			'permission' => array()
 		);
 	}
-
 	if (checksubmit()) {
 		load()->model('user');
 		$name = trim($_GPC['name']) ? trim($_GPC['name']) : message('店员名称不能为空');
@@ -93,28 +106,49 @@ if ($do == 'post') {
 			$record['type'] = 3;
 			user_update($record);
 		}
-
 		$permission = $_GPC['permission'];
 		if (!empty($permission)) {
 			$permission = implode('|', array_unique($permission));
 		} else {
 			$permission = '';
 		}
-
 		$permission_exist = pdo_get('users_permission', array('uniacid' => $_W['uniacid'], 'uid' => $clerk['uid'], 'type' => 'system'));
 		if (empty($permission_exist)) {
 			pdo_insert('users_permission', array('uniacid' => $_W['uniacid'], 'uid' => $clerk['uid'], 'type' => 'system', 'permission' => $permission));
 		} else {
 			pdo_update('users_permission', array('permission' => $permission), array('uniacid' => $_W['uniacid'], 'uid' => $clerk['uid'], 'type' => 'system'));
 		}
-
+		$permission = $_GPC['permission'];
+		$modules_permission = array();
+		foreach ($permission as $permi) {
+			if (strexists($permi, 'menu')) {
+				$permis = $permi;
+				$permi = explode('_', $permi);
+				$num = count($permi);
+				unset($permi[$num-1]);
+				unset($permi[$num-2]);
+				$module_name = implode('_', $permi);
+				$modules = uni_modules_app_binding();
+				if (in_array($module_name, array_keys($modules))) {
+					$modules_permission[$module_name] = $permis.'|'.$modules_permission[$module_name];
+				}
+			}
+		}
+		foreach ($modules_permission as $module_name => $module_p) {
+			$module_p = trim($module_p, '|');
+			$module_permission = pdo_get('users_permission', array('uniacid' => $_W['uniacid'], 'uid' => $clerk['uid'], 'type' => $module_name));
+			if (!empty($module_permission)) {
+				pdo_update('users_permission', array('permission' => $module_p), array('uniacid' => $_W['uniacid'], 'uid' => $clerk['uid'], 'type' => $module_name));
+			} else {
+				pdo_insert('users_permission', array('permission' => $module_p.'|'.$permis, 'uniacid' => $_W['uniacid'], 'uid' => $clerk['uid'], 'type' => $module_name));
+			}
+		}
 		$account_user = pdo_get('uni_account_users', array('uniacid' => $_W['uniacid'], 'uid' => $clerk['uid']));
 		if (empty($account_user)) {
 			pdo_insert('uni_account_users', array('uniacid' => $_W['uniacid'], 'uid' => $clerk['uid'], 'role' => 'clerk'));
 		} else {
 			pdo_update('uni_account_users', array('role' => 'clerk'), array('uniacid' => $_W['uniacid'], 'uid' => $clerk['uid']));
 		}
-
 		$data = array(
 			'uniacid' => $_W['uniacid'],
 			'storeid' => $storeid,
@@ -125,6 +159,9 @@ if ($do == 'post') {
 			'uid' => $clerk['uid'],
 			'password' => $_GPC['password']
 		);
+		if (empty($_GPC['password'])) {
+			unset($data['password']);
+		}
 		if (empty($clerk['id'])) {
 			pdo_insert('activity_clerks', $data);
 		} else {
@@ -135,6 +172,16 @@ if ($do == 'post') {
 	$stores = pdo_getall('activity_stores', array('uniacid' => $_W['uniacid']), array('id', 'business_name', 'branch_name'));
 	load()->model('clerk');
 	$permission = clerk_permission_list();
+	$clerk_p = pdo_fetchall("SELECT * FROM ". tablename('activity_clerk_menu'). " WHERE (uniacid = :uniacid OR system = '1') AND pid = 0 ORDER BY system DESC", array(':uniacid' =>  $_W['uniacid']), 'group_name');
+	$clerk_c = pdo_fetchall("SELECT * FROM ". tablename('activity_clerk_menu'). " WHERE (uniacid = :uniacid OR system = '1') AND pid <> 0 ORDER BY displayorder ASC,system DESC", array(':uniacid' =>  $_W['uniacid']));
+	$permission = array();
+	foreach ($clerk_p as $p) {
+		$permission[$p['id']]['title'] = $p['title'];
+		$permission[$p['id']]['group_name'] = $p['group_name'];
+	}
+	foreach ($clerk_c as $c) {
+		$permission[$c['pid']]['items'][] = $c;
+	}
 }
 
 if ($do == 'verify') {

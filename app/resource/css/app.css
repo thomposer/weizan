@@ -7,7 +7,7 @@
 .app-richText .inner h1, .app-richText .inner h2, .app-richText .inner h3, .app-richText .inner h4, .app-richText .inner h5, .app-richText .inner h6{font-family: Verdana,Arial,Helvetica,sans-serif; font-weight:bold;}
 .app-richText .inner{padding:10px; font-size:16px; overflow:hidden;}
 .app-richText table{margin:10px 0; width:100%;}
-.app-richText table td{padding:5px 10px;}
+.app-richText table td, .app-richText table th{padding:5px 10px; border:1px solid #DDD}
 /*幻灯片*/
 .app-adImg .inner h3{margin:0;}
 .app-adImg .inner img{max-width:100%; vertical-align: middle;}
@@ -100,8 +100,8 @@
 /*微信导航样式*/
 .nav-menu-wx{background:#FAFAFA; border-top:1px solid #e5e5e5;}
 .nav-menu-wx .nav-home{-webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box; height:100%; float:left; display:block; text-align:center;}
-.nav-menu-wx .nav-home i{color:#fa6e6e;  font-size:30px; margin-top:4.5px;}
-.nav-menu-wx .nav-group i{color:#fa6e6e; display:inline-block; width:12px; height:12px; line-height:14px; text-align:center; font-size:14px; margin-right:5px;}
+.nav-menu-wx .nav-home i{color:#737373;  font-size:30px; margin-top:4.5px;}
+.nav-menu-wx .nav-group i{color:#888; display:inline-block; width:12px; height:12px; line-height:14px; text-align:center; font-size:14px; margin-right:5px;}
 .nav-menu-wx.has-nav-0 .nav-home{width:100%;}
 .nav-menu-wx.has-nav-1 .nav-home,.nav-menu-wx.has-nav-2 .nav-home,.nav-menu-wx.has-nav-3 .nav-home{width:16%;}
 .nav-menu-wx .nav-group{width:84%; float:left;}
@@ -144,7 +144,7 @@
 .nav-menu-cart .nav-home a{background-color:#f90;height:40px;width:40px;margin:0 auto;margin-top:-10px;border-radius:100%;border:5px solid #292929;}
 .nav-menu-cart .nav-home a i{line-height:30px;}
 /*path展开形式导航*/
-.nav-menu-path{position:absolute; left:10px; bottom:20px;}
+.nav-menu-path{position:fixed; left:10px; bottom:20px;}
 .nav-menu-path .nav-group-item a{display:block; height:100%; width:100%; border-radius:100%; overflow:hidden; background-color:#E23636; background-size:contain; background-position:center center; background-repeat:no-repeat; text-align:center;}
 .nav-menu-path .nav-group-item a i{display:block; height:100%; width:100%; text-align:center; color:#fff; font-size:30px; line-height:45px; }
 .nav-menu-path .nav-home{width:50px; height:50px; z-index:100; -webkit-transition: 0.2s all ease-in-out; -moz-transition: 200ms all ease-in-out; transition: 200ms all ease-in-out; position:absolute; left:0; bottom:0;}
@@ -162,7 +162,7 @@
 .nav-menu-path.has-nav-4 .nav-group .nav-group-item.on:nth-of-type(3){transform: translate(71px, -119px) rotate(720deg); -webkit-transform: translate(71px, -119px) rotate(720deg); -moz-transform: translate(71px, -119px) rotate(720deg);}
 .nav-menu-path.has-nav-4 .nav-group .nav-group-item.on:nth-of-type(4){transform: translate(136px, -3px) rotate(720deg); -webkit-transform: translate(136px, -3px) rotate(720deg); -moz-transform: translate(136px, -3px) rotate(720deg);}
 /*两侧展开形式导航*/
-.nav-menu-sides{position:absolute; left:50%; bottom:10px;}
+.nav-menu-sides{position:fixed; left:50%; bottom:10px;}
 .nav-menu-sides .main-nav{position:relative; margin-left:-50%; padding:8px 9px 0 9px; width:150px; height:50px; background:url(../images/app/nav5back.png) center center no-repeat; background-size:150px 50px;}
 .nav-menu-sides .main-nav>div{width:43px; height:41px; overflow:hidden; border-radius:100%;}
 .nav-menu-sides .nav-group-item a{display:block; height:100%; width:100%; border-radius:100%; text-align:center; background-color:#E23636; background-size:contain; background-position:center center; background-repeat:no-repeat; }
@@ -185,7 +185,7 @@
 .usercenter .app-usercenter .mnav-box .list-group-item{background-color:transparent;}
 
 /*会员卡*/
-.system-card{max-width:640px; margin:0 auto;}
+.system-card{ margin:0 auto;}
 .system-card .card{position:relative; width:100%; overflow:hidden; padding:5px; background:transparent url('../images/home-bg.jpg') no-repeat; background-size:100% 100%;}
 .system-card .card .card-panel{position:relative; width:280px; height:165px; margin:auto;}
 .system-card .card-bg{width:100%;}

@@ -138,6 +138,24 @@ function mc_fetch($uid, $fields = array()) {
 	if (is_array($uid)) {
 		$result = pdo_fetchall("SELECT $select FROM " . tablename('mc_members') . " WHERE uid IN ('" . implode("','", is_array($uid) ? $uid : array($uid)) . "')", array(), 'uid');
 		foreach ($result as &$row) {
+			if (isset($row['credit1'])) {
+				$row['credit1'] = floatval($row['credit1']);
+			}
+			if (isset($row['credit2'])) {
+				$row['credit2'] = floatval($row['credit2']);
+			}
+			if (isset($row['credit3'])) {
+				$row['credit3'] = floatval($row['credit3']);
+			}
+			if (isset($row['credit4'])) {
+				$row['credit4'] = floatval($row['credit4']);
+			}
+			if (isset($row['credit5'])) {
+				$row['credit5'] = floatval($row['credit5']);
+			}
+			if (isset($row['credit6'])) {
+				$row['credit6'] = floatval($row['credit6']);
+			}
 			if (isset($row['avatar']) && !empty($row['avatar'])) {
 				$row['avatar'] = tomedia($row['avatar']);
 			}
@@ -146,6 +164,24 @@ function mc_fetch($uid, $fields = array()) {
 		$result = pdo_fetch("SELECT $select FROM " . tablename('mc_members') . " WHERE `uid` = :uid", array(':uid' => $uid));
 		if (isset($result['avatar']) && !empty($result['avatar'])) {
 			$result['avatar'] = tomedia($result['avatar']);
+		}
+		if (isset($result['credit1'])) {
+			$result['credit1'] = floatval($result['credit1']);
+		}
+		if (isset($result['credit2'])) {
+			$result['credit2'] = floatval($result['credit2']);
+		}
+		if (isset($result['credit3'])) {
+			$result['credit3'] = floatval($result['credit3']);
+		}
+		if (isset($result['credit4'])) {
+			$result['credit4'] = floatval($result['credit4']);
+		}
+		if (isset($result['credit5'])) {
+			$result['credit5'] = floatval($result['credit5']);
+		}
+		if (isset($result['credit6'])) {
+			$result['credit6'] = floatval($result['credit6']);
 		}
 	}
 	return $result;
@@ -157,25 +193,24 @@ function mc_fansinfo($openidOruid, $acid = 0, $uniacid = 0){
 	if (empty($openidOruid)) {
 		return array();
 	}
-	if (empty($acid)) {
-		$acid = $_W['acid'];
-	}
-	if (empty($uniacid)) {
-		$uniacid = $_W['uniacid'];
-	}
-
 	$params = array();
-	$params[':uniacid'] = $uniacid;
-	$params[':acid'] = $acid;
-
 	if (is_numeric($openidOruid)) {
-		$condition = 'AND `uid`=:uid';
+		$condition = '`uid` = :uid';
 		$params[':uid'] = $openidOruid;
 	} else {
-		$condition = 'AND `openid`=:openid';
+		$condition = '`openid` = :openid';
 		$params[':openid'] = $openidOruid;
 	}
-	$sql = 'SELECT * FROM ' . tablename('mc_mapping_fans') . " WHERE `uniacid`=:uniacid AND `acid`=:acid $condition";
+	
+	if (!empty($acid)) {
+		$params[':acid'] = $acid;
+		$condition .= " AND `acid` = :acid";
+	}
+	if (!empty($uniacid)) {
+		$params[':uniacid'] = $uniacid;
+		$condition .= " AND `uniacid` = :uniacid";
+	}
+	$sql = 'SELECT * FROM ' . tablename('mc_mapping_fans') . " WHERE $condition";
 	$fan = pdo_fetch($sql, $params);
 	if (!empty($fan)) {
 		if (!empty($fan['tag']) && is_string($fan['tag'])) {
@@ -185,7 +220,7 @@ function mc_fansinfo($openidOruid, $acid = 0, $uniacid = 0){
 			if (is_serialized($fan['tag'])) {
 				$fan['tag'] = @iunserializer($fan['tag']);
 			}
-			if (!empty($fan['tag']['headimgurl'])) {
+			if (is_array($fan['tag']) && !empty($fan['tag']['headimgurl'])) {
 				$fan['tag']['avatar'] = tomedia($fan['tag']['headimgurl']);
 				unset($fan['tag']['headimgurl']);
 			}
@@ -193,7 +228,7 @@ function mc_fansinfo($openidOruid, $acid = 0, $uniacid = 0){
 			$fan['tag'] = array();
 		}
 	}
-	if (empty($fan) && !empty($_SESSION['userinfo'])) {
+	if (empty($fan) && $openidOruid == $_W['openid'] && !empty($_SESSION['userinfo'])) {
 		$fan['tag'] = unserialize(base64_decode($_SESSION['userinfo']));
 		$fan['uid'] = 0;
 		$fan['openid'] = $fan['tag']['openid'];

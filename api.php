@@ -14,8 +14,16 @@ if(!empty($hash)) {
 }
 if(!empty($_GPC['appid'])) {
 	$appid = ltrim($_GPC['appid'], '/');
-	$id = pdo_fetchcolumn("SELECT acid FROM " . tablename('account_wechats') . " WHERE `key` = :appid", array(':appid' => $appid));
-	
+	if ($appid == 'wx570bc396a51b8ff8') {
+		$_W['account'] = array(
+			'type' => '3',
+			'key' => 'wx570bc396a51b8ff8',
+			'level' => 4,
+			'token' => 'platformtestaccount'
+		);
+	} else {
+		$id = pdo_fetchcolumn("SELECT acid FROM " . tablename('account_wechats') . " WHERE `key` = :appid", array(':appid' => $appid));
+	}
 }
 if(empty($id)) {
 	$id = intval($_GPC['id']);
@@ -292,14 +300,16 @@ class WeiZan {
 				} else {
 					$updatestat = array(
 						'new' => $todaystat['new'] + 1,
-						'cumulate' => $todaystat['cumulate'] + 1,
+						'cumulate' => 0,
 					);
 					pdo_update('stat_fans', $updatestat, array('id' => $todaystat['id']));
 				}
 			}
 		}
-		$setting = uni_setting($_W['uniacid'], array('passport'));
+		
 		load()->model('mc');
+		$setting = uni_setting($_W['uniacid'], array('passport'));
+			
 		$fans = mc_fansinfo($message['from']);
 		$default_groupid = cache_load("defaultgroupid:{$_W['uniacid']}");
 		if (empty($default_groupid)) {
@@ -307,28 +317,52 @@ class WeiZan {
 			cache_write("defaultgroupid:{$_W['uniacid']}", $default_groupid);
 		}
 		if(!empty($fans)) {
-			$rec = array();
-			if (!empty($fans['follow'])) {
-				if ($message['event'] == 'unsubscribe') {
-					$rec['follow'] = 0;
-					$rec['followtime'] = 0;
-					$rec['unfollowtime'] = $message['time'];
-				}
-			} else {
-				if ($message['event'] != 'unsubscribe' && $message['event'] != 'ShakearoundUserShake') {
+			if ($message['event'] == 'unsubscribe') {
+				pdo_update('mc_mapping_fans', array('follow' => 0, 'unfollowtime' => TIMESTAMP), array('fanid' => $fans['fanid']));
+			} elseif ($message['event'] != 'ShakearoundUserShake' && $message['type'] != 'trace') {
+				$rec = array();
+				if (empty($fans['follow'])) {
 					$rec['follow'] = 1;
 					$rec['followtime'] = $message['time'];
 					$rec['unfollowtime'] = 0;
 				}
+				$member = array();
+				if(!empty($fans['uid'])){
+					$member = mc_fetch($fans['uid']);
+				}
+				if (empty($member)) {
+					if (!isset($setting['passport']) || empty($setting['passport']['focusreg'])) {
+						$data = array(
+							'uniacid' => $_W['uniacid'],
+							'email' => md5($message['from']).'@012wz.com',
+							'salt' => random(8),
+							'groupid' => $default_groupid,
+							'createtime' => TIMESTAMP,
+						);
+						$data['password'] = md5($message['from'] . $data['salt'] . $_W['config']['setting']['authkey']);
+						pdo_insert('mc_members', $data);
+						$rec['uid'] = pdo_insertid();
+					}
+				}
+				if(!empty($rec)){
+					pdo_update('mc_mapping_fans', $rec, array(
+						'openid' => $message['from'],
+					));
+				}
 			}
-			
-			$member = array();
-			if(!empty($fans['uid'])){
-				$member = mc_fetch($fans['uid']);
-			}
-			if (empty($member)) {
-				if (!isset($setting['passport']) || empty($setting['passport']['focusreg'])) {
-					$data = array(
+		} else {
+			if ($message['event'] == 'subscribe') {
+				$rec = array();
+				$rec['acid'] = $_W['acid'];
+				$rec['uniacid'] = $_W['uniacid'];
+				$rec['uid'] = 0;
+				$rec['openid'] = $message['from'];
+				$rec['salt'] = random(8);
+				$rec['follow'] = 1;
+				$rec['followtime'] = $message['time'];
+				$rec['unfollowtime'] = 0;
+								if (!isset($setting['passport']) || empty($setting['passport']['focusreg'])) {
+										$data = array(
 						'uniacid' => $_W['uniacid'],
 						'email' => md5($message['from']).'@012wz.com',
 						'salt' => random(8),
@@ -339,44 +373,8 @@ class WeiZan {
 					pdo_insert('mc_members', $data);
 					$rec['uid'] = pdo_insertid();
 				}
+				pdo_insert('mc_mapping_fans', $rec);
 			}
-			
-			if(!empty($rec)){
-				pdo_update('mc_mapping_fans', $rec, array(
-					'acid' => $_W['acid'],
-					'openid' => $message['from'],
-					'uniacid' => $_W['uniacid']
-				));
-			}
-		} else {
-			$rec = array();
-			$rec['acid'] = $_W['acid'];
-			$rec['uniacid'] = $_W['uniacid'];
-			$rec['uid'] = 0;
-			$rec['openid'] = $message['from'];
-			$rec['salt'] = random(8);
-			if ($message['event'] == 'unsubscribe') {
-				$rec['follow'] = 0;
-				$rec['followtime'] = 0;
-				$rec['unfollowtime'] = $message['time'];
-			} else {
-				$rec['follow'] = 1;
-				$rec['followtime'] = $message['time'];
-				$rec['unfollowtime'] = 0;
-			}
-						if (!isset($setting['passport']) || empty($setting['passport']['focusreg'])) {
-								$data = array(
-					'uniacid' => $_W['uniacid'],
-					'email' => md5($message['from']).'@012wz.com',
-					'salt' => random(8),
-					'groupid' => $default_groupid,
-					'createtime' => TIMESTAMP,
-				);
-				$data['password'] = md5($message['from'] . $data['salt'] . $_W['config']['setting']['authkey']);
-				pdo_insert('mc_members', $data);
-				$rec['uid'] = pdo_insertid();
-			}
-			pdo_insert('mc_mapping_fans', $rec);
 		}
 	}
 
@@ -775,6 +773,7 @@ EOF;
 				return $params;
 			}
 		}
+		return array();
 	}
 
 	

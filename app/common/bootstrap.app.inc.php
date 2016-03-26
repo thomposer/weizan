@@ -61,7 +61,7 @@ $_SESSION['uniacid'] = $_W['uniacid'];
 if (!empty($_SESSION['openid'])) {
 	$_W['openid'] = $_SESSION['openid'];
 	$_W['fans'] = mc_fansinfo($_W['openid']);
-	$_W['fans']['from_user'] = $_W['openid'];
+	$_W['fans']['from_user'] = $_W['fans']['openid'] = $_W['openid'];
 }
 if (!empty($_SESSION['uid']) || (!empty($_W['fans']) && !empty($_W['fans']['uid']))) {
 	$uid = intval($_SESSION['uid']);

@@ -23,10 +23,10 @@ $_W['page']['title'] = '功能模块展示';
 	load()->model('module');
 	load()->model('extension');
 	load()->model('cloud');
-load()->model('cache');
-load()->func('file');
+	load()->model('cache');
+	load()->func('file');
 	$modtypes = module_types();
-	$modules = pdo_fetchall("SELECT * FROM " . tablename('modules') .' ORDER BY `issystem` DESC, `mid` ASC', array(), 'mid');
+	$modules = pdo_fetchall("SELECT * FROM " . tablename('modules') .'WHERE mid > 10 ORDER BY `issystem` DESC, `mid` ASC', array(), 'mid');
 	if (!empty($modules)) {
 		foreach ($modules as $mid => $module) {
 			$manifest = ext_module_manifest($module['name']);
@@ -41,7 +41,7 @@ load()->func('file');
 					$modules[$mid]['imgsrc'] = '../framework/builtin/' . $module['name'] . '/icon.jpg';
 				}
 			} else {
-				$modules[$mid]['imgsrc'] = '../addons//' . $module['name'] . '/icon-custom.jpg';
+				$modules[$mid]['imgsrc'] = '../addons/' . $module['name'] . '/icon-custom.jpg';
 				if(!file_exists($modules[$mid]['imgsrc'])) {
 					$modules[$mid]['imgsrc'] = '../addons/' . $module['name'] . '/icon.jpg';
 				}

@@ -67,6 +67,12 @@ function checklogin() {
 	return true;
 }
 
+function checkagentlogin(){
+	if(empty($_SESSION['id'])){
+		message('抱歉，您无权进行该操作，请先登录！', url('agent/agent_login'), 'warning');
+		}
+	}
+
 
 function checkaccount() {
 	global $_W;
@@ -291,7 +297,7 @@ function buildframes($frame = array('platform')){
 	if($GLOBALS['ext_type'] == 1) {
 		$ms['ext'] = $navs;
 	} elseif($GLOBALS['ext_type'] == 3) {
-		$ms['ext'] = array_merge($navs, $ms['ext']);;
+		$ms['ext'] = array_merge($navs, $ms['ext']);
 	}
 	return $ms;
 }

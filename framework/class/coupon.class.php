@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 load()->classs('weixin.account');
@@ -375,7 +375,28 @@ class coupon extends WeiXinAccount{
 		}
 		return $result;
 	}
-
+	
+		public function selfConsume($data) {
+		$token = $this->getAccessToken();
+		if(is_error($token)) {
+			return $token;
+		}
+		$url = "https://api.weixin.qq.com/card/selfconsumecell/set?access_token={$token}";
+		load()->func('communication');
+		$response = ihttp_request($url, json_encode($data));
+		if(is_error($response)) {
+			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
+		}
+		$result = @json_decode($response['content'], true);
+		if(empty($result)) {
+			return error(-1, "接口调用失败, 元数据: {$response['meta']}");
+		} elseif(!empty($result['errcode'])) {
+			return error(-1, "访问微信接口错误, 错误代码: {$result['errcode']}, 错误信息: {$result['errmsg']},错误详情：{$this->error_code($result['errcode'])}");
+		}
+		return $result;
+		
+	}
+	
 		public function DecryptCode($data) {
 		$token = $this->getAccessToken();
 		if (is_error($token)) {

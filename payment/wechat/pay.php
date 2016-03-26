@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan isNOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 define('IN_MOBILE', true);
 require '../../framework/bootstrap.inc.php';
@@ -67,6 +67,13 @@ $sql = 'SELECT `key`,`secret` FROM ' . tablename('account_wechats') . ' WHERE `a
 $row = pdo_fetch($sql, array(':acid' => $wechat['account']));
 $wechat['appid'] = $row['key'];
 $wechat['secret'] = $row['secret'];
+$params = array(
+	'tid' => $log['plid'],
+	'fee' => $log['fee'],
+	'user' => $log['openid'],
+	'title' => $params['title'],
+	'uniontid' => $log['uniontid'],
+);
 $wOpt = wechat_build($params, $wechat);
 if (is_error($wOpt)) {
 	if ($wOpt['message'] == 'invalid out_trade_no' || $wOpt['message'] == 'OUT_TRADE_NO_USED') {

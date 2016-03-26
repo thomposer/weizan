@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 load()->func('communication');
@@ -42,7 +42,7 @@ if (intval($_W['account']['level']) == 4) {
 			}
 		}
 	} else {
-				$accObj = WeAccount::create($_W['account']);
+		$accObj = WeAccount::create($_W['account']);
 		$userinfo = $accObj->fansQueryInfo($oauth['openid']);
 		if(!is_error($userinfo) && !empty($userinfo) && !empty($userinfo['subscribe'])) {
 			$userinfo['nickname'] = stripcslashes($userinfo['nickname']);
@@ -51,8 +51,44 @@ if (intval($_W['account']['level']) == 4) {
 			}
 			$userinfo['avatar'] = $userinfo['headimgurl'];
 			$_SESSION['userinfo'] = base64_encode(iserializer($userinfo));
+
+			$record = array(
+				'openid' => $userinfo['openid'],
+				'uid' => 0,
+				'acid' => $_W['acid'],
+				'uniacid' => $_W['uniacid'],
+				'salt' => random(8),
+				'updatetime' => TIMESTAMP,
+				'nickname' => stripslashes($userinfo['nickname']),
+				'follow' => $userinfo['subscribe'],
+				'followtime' => $userinfo['subscribe_time'],
+				'unfollowtime' => 0,
+				'tag' => base64_encode(iserializer($userinfo))
+			);
+			if (!isset($unisetting['passport']) || empty($unisetting['passport']['focusreg'])) {
+				$default_groupid = pdo_fetchcolumn('SELECT groupid FROM ' .tablename('mc_groups') . ' WHERE uniacid = :uniacid AND isdefault = 1', array(':uniacid' => $_W['uniacid']));
+				$data = array(
+					'uniacid' => $_W['uniacid'],
+					'email' => md5($oauth['openid']).'@012wz.com',
+					'salt' => random(8),
+					'groupid' => $default_groupid,
+					'createtime' => TIMESTAMP,
+					'password' => md5($message['from'] . $data['salt'] . $_W['config']['setting']['authkey']),
+					'nickname' => stripslashes($userinfo['nickname']),
+					'avatar' => $userinfo['headimgurl'],
+					'gender' => $userinfo['sex'],
+					'nationality' => $userinfo['country'],
+					'resideprovince' => $userinfo['province'] . '省',
+					'residecity' => $userinfo['city'] . '市',
+				);
+				pdo_insert('mc_members', $data);
+				$uid = pdo_insertid();
+				$record['uid'] = $uid;
+				$_SESSION['uid'] = $uid;
+			}
+			pdo_insert('mc_mapping_fans', $record);
 		} else {
-			$userinfo = array(
+			$record = array(
 				'openid' => $oauth['openid'],
 				'nickname' => '',
 				'subscribe' => '0',
@@ -60,41 +96,6 @@ if (intval($_W['account']['level']) == 4) {
 				'headimgurl' => '',
 			);
 		}
-		$record = array(
-			'openid' => $userinfo['openid'],
-			'uid' => 0,
-			'acid' => $_W['acid'],
-			'uniacid' => $_W['uniacid'],
-			'salt' => random(8),
-			'updatetime' => TIMESTAMP,
-			'nickname' => stripslashes($userinfo['nickname']),
-			'follow' => $userinfo['subscribe'],
-			'followtime' => $userinfo['subscribe_time'],
-			'unfollowtime' => 0,
-			'tag' => base64_encode(iserializer($userinfo))
-		);
-		if (!isset($unisetting['passport']) || empty($unisetting['passport']['focusreg'])) {
-			$default_groupid = pdo_fetchcolumn('SELECT groupid FROM ' .tablename('mc_groups') . ' WHERE uniacid = :uniacid AND isdefault = 1', array(':uniacid' => $_W['uniacid']));
-			$data = array(
-				'uniacid' => $_W['uniacid'],
-				'email' => md5($oauth['openid']).'@012wz.com',
-				'salt' => random(8),
-				'groupid' => $default_groupid,
-				'createtime' => TIMESTAMP,
-				'password' => md5($message['from'] . $data['salt'] . $_W['config']['setting']['authkey']),
-				'nickname' => stripslashes($userinfo['nickname']),
-				'avatar' => $userinfo['headimgurl'],
-				'gender' => $userinfo['sex'],
-				'nationality' => $userinfo['country'],
-				'resideprovince' => $userinfo['province'] . '省',
-				'residecity' => $userinfo['city'] . '市',
-			);
-			pdo_insert('mc_members', $data);
-			$uid = pdo_insertid();
-			$record['uid'] = $uid;
-			$_SESSION['uid'] = $uid;
-		}
-		pdo_insert('mc_mapping_fans', $record);
 		$_SESSION['openid'] = $oauth['openid'];
 		$_W['fans'] = $record;
 		$_W['fans']['from_user'] = $record['openid'];
@@ -104,10 +105,10 @@ if (intval($_W['account']['level']) != 4) {
 	$mc_oauth_fan = mc_oauth_fans($oauth['openid'], $_W['acid']);
 	if (empty($mc_oauth_fan) && (!empty($_SESSION['openid']) || !empty($_SESSION['uid']))) {
 		$data = array(
-			'acid' => $_W['acid'],
-			'oauth_openid' => $oauth['openid'],
-			'uid' => intval($_SESSION['uid']),
-			'openid' => $_SESSION['openid']
+				'acid' => $_W['acid'],
+				'oauth_openid' => $oauth['openid'],
+				'uid' => intval($_SESSION['uid']),
+				'openid' => $_SESSION['openid']
 		);
 		pdo_insert('mc_oauth_fans', $data);
 	}
@@ -136,15 +137,6 @@ if ($scope == 'userinfo') {
 			$record['nickname'] = stripslashes($userinfo['nickname']);
 			$record['tag'] = base64_encode(iserializer($userinfo));
 			pdo_update('mc_mapping_fans', $record, array('openid' => $fan['openid'], 'acid' => $_W['acid'], 'uniacid' => $_W['uniacid']));
-		} else {
-			$record = array();
-			$record['updatetime'] = TIMESTAMP;
-			$record['nickname'] = stripslashes($userinfo['nickname']);
-			$record['tag'] = base64_encode(iserializer($userinfo));
-			$record['openid'] = $oauth['openid'];
-			$record['acid'] = $_W['acid'];
-			$record['uniacid'] = $_W['uniacid'];
-			pdo_insert('mc_mapping_fans', $record);
 		}
 		if(!empty($fan['uid']) || !empty($_SESSION['uid'])) {
 			$uid = $fan['uid'];

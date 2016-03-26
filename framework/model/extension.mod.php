@@ -794,7 +794,21 @@ function ext_template_manifest($tpl, $cloud = true) {
 	}
 	return $manifest;
 }
-
+function ext_pctemplate_manifest($tpl, $cloud = true) {
+	$filename = IA_ROOT . '/app/pc/' . $tpl . '/manifest.xml';
+	if (!file_exists($filename)) {
+		if ($cloud) {
+			load()->model('cloud');
+			$manifest = pccloud_t_info($tpl);
+		}
+		return is_error($manifest) ? array() : $manifest;
+	}
+	$manifest = ext_pctemplate_manifest_parse(file_get_contents($filename));
+	if (empty($manifest['name']) || $manifest['name'] != $tpl) {
+		return array();
+	}
+	return $manifest;
+}
 
 function ext_template_manifest_parse($xml) {
 	$xml = str_replace(array('&'), array('&amp;'), $xml);
@@ -823,7 +837,32 @@ function ext_template_manifest_parse($xml) {
 	return $manifest;
 }
 
-
+function ext_pctemplate_manifest_parse($xml) {
+	$xml = str_replace(array('&'), array('&amp;'), $xml);
+	$xml = @isimplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
+	if (empty($xml)) {
+		return array();
+	}
+	$manifest['name'] = strval($xml->identifie);
+	$manifest['title'] = strval($xml->title);
+	if (empty($manifest['title'])) {
+		return array();
+	}
+	$manifest['type'] = !empty($xml->type) ? strval($xml->type) : 'other';
+	$manifest['description'] = strval($xml->description);
+	$manifest['author'] = strval($xml->author);
+	$manifest['url'] = strval($xml->url);
+	if (isset($xml->sections)) {
+		$manifest['sections'] = strval($xml->sections);
+	}
+	if ($xml->settings->item) {
+		foreach ($xml->settings->item as $msg) {
+			$attrs = $msg->attributes();
+			$manifest['settings'][] = array('key' => trim(strval($attrs['variable'])), 'value' => trim(strval($attrs['content'])), 'desc' => trim(strval($attrs['description'])));
+		}
+	}
+	return $manifest;
+}
 function ext_template_type() {
 	static $types = array(
 		'often' => array(
@@ -868,12 +907,57 @@ function ext_template_type() {
 		),
 		'other' => array(
 			'name' => 'other',
-			'title' => '其它行业'
+			'title' => '其它'
 		)
 	);
 	return $types;
 }
 
+function ext_pctemplate_type() {
+	static $types = array(
+		'often' => array(
+			'name' => 'often',
+			'title' => '常用PC模板',
+		),
+		'site' => array(
+			'name' => 'site',
+			'title' => '微站PC模板',
+		),
+		'shop' => array(
+			'name' => 'shop',
+			'title' => '商城',
+		),
+		'drink' => array(
+			'name' => 'drink',
+			'title' => '餐饮',
+		),
+		'education' => array(
+			'name' => 'education',
+			'title' => '教育',
+		),
+		'realty' => array(
+			'name' => 'realty',
+			'title' => '房地产',
+		),
+		'medical' => array(
+			'name' => 'medical',
+			'title' => '医疗保健'
+		),
+		'cosmetology' => array(
+			'name' => 'cosmetology',
+			'title' => '健身美容'
+		),
+		'shoot' => array(
+			'name' => 'shoot',
+			'title' => '婚纱摄影'
+		),
+		'other' => array(
+			'name' => 'other',
+			'title' => '其它'
+		)
+	);
+	return $types;
+}
 
 function ext_module_script_clean($modulename, $manifest) {
 	$moduleDir = IA_ROOT . '/addons/' . $modulename . '/';

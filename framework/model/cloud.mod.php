@@ -207,7 +207,39 @@ function cloud_t_build($name) {
 	return $ret;
 }
 
-
+function pccloud_t_build($name) {
+	$sql = 'SELECT * FROM ' . tablename('fournet_pctemplates') . ' WHERE `name`=:name';
+	$theme = pdo_fetch($sql, array(':name' => $name));
+	
+	$pars = _cloud_build_params();
+	$pars['method'] = 'theme.build';
+	$pars['theme'] = $name;
+	if(!empty($theme)) {
+		$pars['themeversion'] = $theme['version'];
+	}
+	$dat = cloud_request(ADDONS_URL.'/gateway.php', $pars);
+	$file = IA_ROOT . '/data/pc/theme.build';
+	$ret = _cloud_shipping_parse($dat, $file);
+	if(!is_error($ret)) {
+		$dir = IA_ROOT . '/app/pc/' . $name;
+		$files = array();
+		if(!empty($ret['files'])) {
+			foreach($ret['files'] as $file) {
+				$entry = $dir . $file['path'];
+				if(!is_file($entry) || md5_file($entry) != $file['checksum']) {
+					$files[] = '/'. $name . $file['path'];
+				}
+			}
+		}
+		$ret['files'] = $files;
+		$ret['upgrade'] = true;
+		$ret['type'] = 'theme';
+				if(empty($theme)) {
+			$ret['install'] = 1;
+		}
+	}
+	return $ret;
+}
 function cloud_t_upgradeinfo($name) {
 	$sql = 'SELECT `name`, `version` FROM ' . tablename('site_templates') . ' WHERE `name` = :name';
 	$theme = pdo_fetch($sql, array(':name' => $name));
@@ -221,7 +253,19 @@ function cloud_t_upgradeinfo($name) {
 	$ret = _cloud_shipping_parse($dat, $file);
 	return $ret;
 }
-
+function pccloud_t_upgradeinfo($name) {
+	$sql = 'SELECT `name`, `version` FROM ' . tablename('fournet_pctemplates') . ' WHERE `name` = :name';
+	$theme = pdo_fetch($sql, array(':name' => $name));
+	$pars = _cloud_build_params();
+	$pars['method'] = 'theme.upgrade';
+	$pars['theme'] = $theme['name'];
+	$pars['version'] = $theme['version'];
+	$pars['isupgrade'] = 1;
+	$dat = cloud_request(ADDONS_URL.'/gateway.php', $pars);
+	$file = IA_ROOT . '/data/pc/module.info';
+	$ret = _cloud_shipping_parse($dat, $file);
+	return $ret;
+}
 function cloud_sms_send($mobile, $content) {
 	global $_W;
 	$row = pdo_fetch("SELECT `notify` FROM ".tablename('uni_settings') . " WHERE uniacid = :uniacid", array(':uniacid' => $_W['uniacid']));

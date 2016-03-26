@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 defined('IN_IA') or exit('Access Denied');
@@ -57,6 +57,15 @@ if($do == 'setting') {
 	$module_types = module_types();
 	
 	$config = $module['config'];
+	if ($module['settings'] == 2) {
+		if (empty($_W['setting']['site']['key']) || empty($_W['setting']['site']['token'])) {
+			message('站点未注册，请先注册站点。', url('cloud/profile'), 'info');
+		}
+		load()->model('cloud');
+		$iframe = cloud_module_setting_prepare($module, 'setting');
+		template('profile/module_setting');
+		exit();
+	}
 	$obj = WeUtility::createModule($module['name']);
 	$obj->settingsDisplay($config);
 	exit();

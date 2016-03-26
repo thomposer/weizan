@@ -302,5 +302,8 @@ p.module-description{display:block;padding:3px 10px;}
 
 .require{color:red; margin-right:5px}
 
+.deskmenu .cover{display : none;position: absolute;background : #000000;opacity: 0.5;width: 111px;height: 21px;}
+.deskmenu .edit{color : #FFF;position: absolute;display: none;}
+.deskmenu .del{color : #FFF;position: absolute;display: none;}
 
 

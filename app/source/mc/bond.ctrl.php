@@ -195,23 +195,30 @@ if ($do == 'card') {
 	}
 	if (checksubmit('submit')) {
 		$data = array();
+		$realname = trim($_GPC['realname']);
+		if(empty($realname)) {
+			message('请输入姓名', referer(), 'info');
+		}
+		$data['realname'] = $realname;
+		$mobile = trim($_GPC['mobile']);
+		if(!preg_match(REGULAR_MOBILE, $mobile)) {
+			message('手机号有误,请重新输入', referer(), 'info');
+		}
+		$data['mobile'] = $mobile;
 		if (!empty($setting['fields'])) {
 			foreach ($setting['fields'] as $row) {
-				if (!empty($row['require']) && empty($_GPC[$row['bind']])) {
-					message('请输入'.$row['title'].'！', referer(), 'info');
-				}
 				if($row['bind'] == 'mobile' && !preg_match(REGULAR_MOBILE, $_GPC['mobile'])) {
 					message('手机号有误,请重新输入', referer(), 'info');
-				}
-				if(!empty($row['require']) && $row['bind'] == 'birth') {
+				} if (!empty($row['require']) && ($row['bind'] == 'birth' || $row['bind'] == 'birthyear')) {
 					if (empty($_GPC['birth']['year']) || empty($_GPC['birth']['month']) || empty($_GPC['birth']['day'])) {
 						message('请输入完整的出生日期！', referer(), 'info');
 					}
-				}
-				if(!empty($row['require']) && $row['bind'] == 'reside') {
+				} elseif (!empty($row['require']) && $row['bind'] == 'resideprovince') {
 					if (empty($_GPC['reside']['province']) || empty($_GPC['reside']['city']) || empty($_GPC['reside']['district'])) {
 						message('请输入完整的居住地！', referer(), 'info');
 					}
+				} elseif (!empty($row['require']) && empty($_GPC[$row['bind']])) {
+					message('请输入'.$row['title'].'！', referer(), 'info');
 				}
 				$data[$row['bind']] = $_GPC[$row['bind']];
 			}
@@ -226,30 +233,13 @@ if ($do == 'card') {
 		if ($count >= 1) {
 			message('抱歉,您已经领取过该会员卡.', referer(), 'error');
 		}
-		if($setting['format_type'] == 1 && !empty($data['mobile'])) {
-			$cardsn = $data['mobile'];
-		} else {
-			
-			$cardsn = $_GPC['format'];
-			preg_match_all('/(\*+)/', $_GPC['format'], $matchs);
-			if (!empty($matchs)) {
-				foreach ($matchs[1] as $row) {
-					$cardsn = str_replace($row, random(strlen($row), 1), $cardsn);
-				}
-			}
-			preg_match('/(\#+)/', $_GPC['format'], $matchs);
-			$length = strlen($matchs[1]);
-			$pos = strpos($_GPC['format'], '#');
-			$cardsn = str_replace($matchs[1], str_pad($_GPC['snpos']++, $length - strlen($number), '0', STR_PAD_LEFT), $cardsn);
-			pdo_update('mc_card', array('snpos' => $_GPC['snpos']), array('uniacid' => $_W['uniacid'], 'id' => $_GPC['cardid']));
-		}
 
 		$record = array(
 			'uniacid' => $_W['uniacid'],
 			'openid' => $_W['openid'],
 			'uid' => $_W['member']['uid'],
 			'cid' => $_GPC['cardid'],
-			'cardsn' => $cardsn,
+			'cardsn' => $data['mobile'],
 			'status' => '1',
 			'createtime' => TIMESTAMP,
 			'endtime' => TIMESTAMP
@@ -514,6 +504,7 @@ if($do == 'mobile') {
 }
 
 if($do == 'email') {
+	$item = empty($setting['passport']['item']) ? 'random' : $setting['passport']['item'];
 	$profile = mc_fetch($_W['member']['uid'], array('uid', 'email', 'salt'));
 	if ($_W['member']['email'] == md5($_W['openid']).'@012wz.com') {
 		$reregister = true;
@@ -523,10 +514,18 @@ if($do == 'email') {
 		$data = array();
 		if ($type == 1) {
 			if ($reregister) {
-				$data['email'] = $_GPC['email'];
-				$emailexists = pdo_fetch("SELECT uid FROM ".tablename('mc_members')." WHERE email = :email AND uniacid = :uniacid AND uid != :uid ", array(':email' => $data['email'], ':uniacid' => $_W['uniacid'], ':uid' => $_W['member']['uid']));
-				if (!empty($emailexists['uid'])) {
-					message('抱歉，该E-Mail地址已经被注册，请更换。', '', 'error');
+				if (empty($_GPC['email'])) {
+					$data['mobile'] = trim($_GPC['mobile']);
+					$mobileexists = pdo_fetch("SELECT uid FROM ".tablename('mc_members')." WHERE mobile = :mobile AND uniacid = :uniacid AND uid != :uid ", array(':mobile' => $data['mobile'], ':uniacid' => $_W['uniacid'], ':uid' => $_W['member']['uid']));
+					if (!empty($mobileexists['uid'])) {
+						message('抱歉，该手机号已经被注册，请更换。', '', 'error');
+					}
+				}else{
+					$data['email'] = trim($_GPC['email']);
+					$emailexists = pdo_fetch("SELECT uid FROM ".tablename('mc_members')." WHERE email = :email AND uniacid = :uniacid AND uid != :uid ", array(':email' => $data['email'], ':uniacid' => $_W['uniacid'], ':uid' => $_W['member']['uid']));
+					if (!empty($emailexists['uid'])) {
+						message('抱歉，该E-Mail地址已经被注册，请更换。', '', 'error');
+					}
 				}
 			}
 			if (empty($_GPC['password'])) {

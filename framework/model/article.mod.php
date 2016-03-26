@@ -41,7 +41,7 @@ function article_case_info($id) {
 	$case = pdo_fetch('SELECT * FROM ' . tablename('article_case') . ' WHERE id = :id', array(':id' => $id));
 	$case['info'] = cutstr(strip_tags($case['content']), 88);
 	if(empty($case)) {
-		return error(-1, '新闻不存在或已经删除');
+		return error(-1, '案例不存在或已经删除');
 	}else {
 		pdo_update('article_case',array('click' => $case['click']+1),array('id' => $id));
 	}
@@ -89,6 +89,17 @@ function article_wenda_info($id) {
 	}
 	return $wenda;
 }
+function article_product_info($id) {
+	$id = intval($id);
+	$product = pdo_fetch('SELECT * FROM ' . tablename('article_product') . ' WHERE id = :id', array(':id' => $id));
+	$product['info'] = cutstr(strip_tags($product['content']), 88);
+	if(empty($product)) {
+		return error(-1, '产品不存在或已经删除');
+	}else {
+		pdo_update('article_product',array('click' => $product['click']+1),array('id' => $id));
+	}
+	return $product;
+}
 function article_news_home($limit = 10) {
 	$limit = intval($limit);
 	$news = pdo_fetchall('SELECT * FROM ' . tablename('article_news') . ' WHERE is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
@@ -100,10 +111,20 @@ function article_notice_home($limit = 10) {
 	$notice = pdo_fetchall('SELECT * FROM ' . tablename('article_notice') . ' WHERE is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
 	return $notice;
 }
-function article_case_home($limit = 10) {
+function article_case_home($limit = 9) {
 	$limit = intval($limit);
 	$case = pdo_fetchall('SELECT * FROM ' . tablename('article_case') . ' WHERE is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
 	return $case;
+}
+function article_case2_home($limit = 9) {
+	$limit = intval($limit);
+	$case2 = pdo_fetchall('SELECT * FROM ' . tablename('article_case') . ' WHERE id > 10 AND is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
+	return $case2;
+}
+function article_case3_home($limit = 9) {
+	$limit = intval($limit);
+	$case3 = pdo_fetchall('SELECT * FROM ' . tablename('article_case') . ' WHERE id > 20 AND is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
+	return $case3;
 }
 function article_link_home($limit = 30) {
 	$limit = intval($limit);
@@ -119,6 +140,11 @@ function article_agent_home($limit = 30) {
 	$limit = intval($limit);
 	$agent = pdo_fetchall('SELECT * FROM ' . tablename('article_agent') . ' WHERE is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
 	return $agent;
+}
+function article_product_home($limit = 9) {
+	$limit = intval($limit);
+	$product = pdo_fetchall('SELECT * FROM ' . tablename('article_product') . ' WHERE is_display = 1 AND is_show_home = 1 ORDER BY displayorder DESC,id DESC LIMIT ' . $limit, array(), 'id');
+	return $product;
 }
 function article_wenda_home($limit = 30) {
 	$limit = intval($limit);
@@ -237,6 +263,22 @@ function article_wenda_all($filter = array(), $pindex = 1, $psize = 10) {
 	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('article_wenda') . $condition, $params);
 	$wendas = pdo_fetchall('SELECT * FROM ' . tablename('article_wenda') . $condition . ' ORDER BY displayorder DESC ' . $limit, $params, 'id');
 	return array('total' => $total, 'wendas' => $wendas);
+}
+function article_product_all($filter = array(), $pindex = 1, $psize = 10) {
+	$condition = ' WHERE is_display = 1';
+	$params = array();
+	if(!empty($filter['title'])) {
+		$condition .= ' AND titie LIKE :title';
+		$params[':title'] = "%{$filter['title']}%";
+	}
+	if($filter['cateid'] > 0) {
+		$condition .= ' AND cateid = :cateid';
+		$params[':cateid'] = $filter['cateid'];
+	}
+	$limit = ' LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('article_product') . $condition, $params);
+	$product = pdo_fetchall('SELECT * FROM ' . tablename('article_product') . $condition . ' ORDER BY displayorder DESC ' . $limit, $params, 'id');
+	return array('total' => $total, 'product' => $product);
 }
 function cutstr_html($string, $sublen){
   $string = strip_tags($string);

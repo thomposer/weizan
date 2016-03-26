@@ -104,7 +104,8 @@ $acl = array(
 			'link-show',
 			'about-show',
 			'agent-show',
-			'agent-list'
+			'agent-list',
+			'product-show'
 		),
 		'founder' => array(
 			'news',

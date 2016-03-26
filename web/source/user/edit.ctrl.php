@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $_W['page']['title'] = '编辑用户 - 用户管理 - 用户管理';
@@ -27,10 +27,9 @@ if ($do == 'edit') {
 		}
 		load()->model('user');
 		$record = array();
-				if(!empty($_GPC['endtime'])) {
+				if(!empty($_GPC['endtime']) || $_GPC['endtime'] == 0) {
 			$record['endtime'] = strtotime($_GPC['endtime']);
 		}
-
 		$_GPC['groupid'] = intval($_GPC['groupid']);
 		if (empty($_GPC['groupid'])) {
 			message('请选择所属用户组');
@@ -72,7 +71,6 @@ if ($do == 'edit') {
 					$profile[$row['field']] = $_GPC[$row['field']];
 				}
 			}
-			
 			if (!empty($profile)) {
 				$exists = pdo_fetchcolumn("SELECT uid FROM ".tablename('users_profile')." WHERE uid = :uid", array(':uid' => $uid));
 				if (!empty($exists)) {

@@ -4,9 +4,9 @@
  * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
+load()->func('file');
 $uniacid = intval($_GPC['uniacid']);
 $acid = intval($_GPC['acid']);
-
 if (!empty($acid)) {
 	$account = account_fetch($acid);
 	if (empty($account)) {
@@ -32,6 +32,8 @@ if (!empty($acid)) {
 	}
 	@unlink(IA_ROOT . '/attachment/qrcode_'.$acid.'.jpg');
 	@unlink(IA_ROOT . '/attachment/headimg_'.$acid.'.jpg');
+	file_remote_delete('qrcode_'.$acid.'.jpg');
+	file_remote_delete('headimg_'.$acid.'.jpg');
 	message('删除子公众号成功！', referer(), 'success');
 }
 if (!empty($uniacid)) {
@@ -71,10 +73,11 @@ if (!empty($uniacid)) {
 		foreach ($subaccount as $account) {
 			@unlink(IA_ROOT . '/attachment/qrcode_'.$account['acid'].'.jpg');
 			@unlink(IA_ROOT . '/attachment/headimg_'.$account['acid'].'.jpg');
+			file_remote_delete('qrcode_'.$account['acid'].'.jpg');
+			file_remote_delete('headimg_'.$account['acid'].'.jpg');
 		}
 		$acid = intval($_GPC['acid']);
 		if (empty($acid)) {
-			load()->func('file');
 			rmdirs(IA_ROOT . '/attachment/images/' . $uniacid);
 			@rmdir(IA_ROOT . '/attachment/images/' . $uniacid);
 			rmdirs(IA_ROOT . '/attachment/audios/' . $uniacid);

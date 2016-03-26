@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -41,6 +41,11 @@ function module_types() {
 		'biz' => array(
 			'name' => 'biz',
 			'title' => '行业解决方案',
+			'desc' => ''
+		),
+		'enterprise' => array(
+			'name' => 'enterprise',
+			'title' => '企业应用',
 			'desc' => ''
 		),
 		'other' => array(

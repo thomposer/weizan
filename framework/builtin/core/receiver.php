@@ -1,30 +1,45 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-
 class CoreModuleReceiver extends WeModuleReceiver {
 	public function receive() {
 		global $_W;
-				if($this->message['event'] == 'subscribe' && !empty($this->message['ticket'])) {
+		if($this->message['event'] == 'subscribe' && !empty($this->message['ticket'])) {
 			$sceneid = $this->message['scene'];
 			$acid = $this->acid;
 			$uniacid = $this->uniacid;
-			$row = pdo_fetch("SELECT id, name, acid FROM ".tablename('qrcode')." WHERE uniacid = :aid AND acid = :acid AND qrcid = :qrcid", array(':aid' => $uniacid, ':acid' => $acid, ':qrcid' => $sceneid));
-			if(empty($row)) {
-				$row = pdo_fetch("SELECT id, name, acid FROM ".tablename('qrcode')." WHERE uniacid = :aid AND acid = :acid AND scene_str = :scene_str", array(':aid' => $uniacid, ':acid' => $acid, ':scene_str' => $sceneid));
+			$ticket = trim($this->message['ticket']);
+			if(!empty($ticket)) {
+				$qr = pdo_fetchall("SELECT `id`, `keyword`, `name`, `acid` FROM " . tablename('qrcode') . " WHERE `uniacid` = '{$uniacid}' AND ticket = '{$ticket}'");
+				if(!empty($qr)) {
+					if(count($qr) != 1) {
+						$qr = array();
+					} else {
+						$qr = $qr[0];
+					}
+				}
+			}
+			if(empty($qr)) {
+				$sceneid = trim($sceneid = $this->message['scene']);
+				if(is_numeric($sceneid)) {
+					$scene_condition = " `qrcid` = '{$sceneid}'";
+				} else {
+					$scene_condition = " `scene_str` = '{$sceneid}'";
+				}
+				$qr = pdo_fetch("SELECT `id`, `keyword`, `name`, `acid` FROM " . tablename('qrcode') . " WHERE `uniacid` = '{$uniacid}' AND {$scene_condition}");
 			}
 			$insert = array(
 				'uniacid' => $_W['uniacid'],
-				'acid' => $row['acid'],
-				'qid' => $row['id'],
+				'acid' => $qr['acid'],
+				'qid' => $qr['id'],
 				'openid' => $this->message['from'],
 				'type' => 1,
 				'qrcid' => intval($sceneid),
 				'scene_str' => $sceneid,
-				'name' => $row['name'],
+				'name' => $qr['name'],
 				'createtime' => TIMESTAMP,
 			);
 			pdo_insert('qrcode_stat', $insert);
@@ -49,8 +64,36 @@ class CoreModuleReceiver extends WeModuleReceiver {
 			);
 			pdo_insert('qrcode_stat', $insert);
 		}
-		
-				$stat_setting = uni_setting($_W['uniacid'], 'stat');
+		if ($this->message['event'] == 'subscribe' && !empty($_W['account']) && ($_W['account']['level'] == ACCOUNT_SERVICE_VERIFY || $_W['account']['level'] == ACCOUNT_SUBSCRIPTION_VERIFY)) {
+			$account_obj = WeAccount::create();
+			$userinfo = $account_obj->fansQueryInfo($this->message['from']);
+			if(!is_error($userinfo) && !empty($userinfo) && !empty($userinfo['subscribe'])) {
+				$userinfo['nickname'] = stripcslashes($userinfo['nickname']);
+				if (!empty($userinfo['headimgurl'])) {
+					$userinfo['headimgurl'] = rtrim($userinfo['headimgurl'], '0') . 132;
+				}
+				$userinfo['avatar'] = $userinfo['headimgurl'];
+				$fans = array(
+						'unionid' => $userinfo['unionid'],
+						'nickname' => $userinfo['nickname'],
+						'tag' => base64_encode(iserializer($userinfo)),
+				);
+				pdo_update('mc_mapping_fans', $fans, array('openid' => $this->message['from']));
+				
+				if (!empty($_W['member']['uid'])) {
+					$member = array();
+					if (!empty($userinfo['nickname'])) {
+						$member['nickname'] = $fans['nickname'];
+					}
+					if (!empty($userinfo['headimgurl'])) {
+						$member['avatar'] = $userinfo['headimgurl'];
+					}
+					load()->model('mc');
+					mc_update($_W['member']['uid'], $member);
+				}
+			}
+		}
+		$stat_setting = uni_setting($_W['uniacid'], 'stat');
 		$stat_setting = $stat_setting['stat'];
 		if(!is_array($stat_setting) || empty($stat_setting)) {
 			$stat_setting = array();
@@ -58,12 +101,12 @@ class CoreModuleReceiver extends WeModuleReceiver {
 			$stat_setting['msg_history'] = 1;
 			$stat_setting['use_ratio'] = 1;
 		}
-		
-				if (!empty($stat_setting['msg_maxday']) && $stat_setting['msg_maxday'] > 0) {
+
+		if (!empty($stat_setting['msg_maxday']) && $stat_setting['msg_maxday'] > 0) {
 			pdo_delete('stat_msg_history', " createtime < ".TIMESTAMP.' - '. $stat_setting['msg_maxday'] * 86400);
 		}
-		
-				if ($stat_setting['msg_history']) {
+
+		if ($stat_setting['msg_history']) {
 			switch ($this->message['type']) {
 				case 'text':
 					$content = iserializer(array('content' => $this->message['content'], 'original' => $this->message['original'], 'redirection' => $this->message['redirection'], 'source' => $this->message['source']));
@@ -101,7 +144,7 @@ class CoreModuleReceiver extends WeModuleReceiver {
 				default:
 					$content = $this->message['content'];
 			}
-			
+				
 			pdo_insert('stat_msg_history', array(
 				'uniacid' => $_W['uniacid'],
 				'module' => $this->params['module'],
@@ -113,7 +156,7 @@ class CoreModuleReceiver extends WeModuleReceiver {
 				'createtime' => $this->message['time'],
 			));
 		}
-				if (!empty($stat_setting['use_ratio'])) {
+		if (!empty($stat_setting['use_ratio'])) {
 			if(!empty($this->params['rule'])) {
 				$rule_stat_found = pdo_get('stat_rule', array('rid' => $this->params['rule'], 'createtime' => strtotime(date('Y-m-d'))));
 				if (empty($rule_stat_found)) {

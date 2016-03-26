@@ -58,6 +58,16 @@ if($do == 'index') {
 		$condition .= ' AND abs(final_fee) <= :maxnum';
 		$params[':maxnum'] = $max;
 	}
+	$clerk_id = intval($_GPC['clerk_id']);
+	if (!empty($clerk_id)) {
+		$condition .= ' AND clerk_id = :clerk_id';
+		$params[':clerk_id'] = $clerk_id;
+	}
+	$store_id = trim($_GPC['store_id']);
+	if (!empty($store_id)) {
+		$condition .= " AND store_id = :store_id";
+		$params[':store_id'] = $store_id;
+	}
 
 	$user = trim($_GPC['user']);
 	if(!empty($user)) {
@@ -88,5 +98,62 @@ if($do == 'index') {
 		$users = pdo_fetchall('SELECT mobile,uid,realname FROM ' . tablename('mc_members') . " WHERE uniacid = :uniacid AND uid IN ($uids)", array(':uniacid' => $_W['uniacid']), 'uid');
 	}
 	$pager = pagination($total, $pindex, $psize);
+	if ($_GPC['export'] != '') {
+		$exports = pdo_fetchall ('SELECT * FROM ' . tablename ('mc_cash_record') . $condition. " ORDER BY uid DESC", $params);
+		if (!empty($exports)) {
+			load ()->model ('clerk');
+			$uids = array ();
+			foreach ($exports as &$da) {
+				if (!in_array ($da['uid'], $uids)) {
+					$uids[] = $da['uid'];
+				}
+				$operator = mc_account_change_operator ($da['clerk_type'], $da['store_id'], $da['clerk_id']);
+				$da['clerk_cn'] = $operator['clerk_cn'];
+				$da['store_cn'] = $operator['store_cn'];
+			}
+			$uids = implode (',', $uids);
+			$user = pdo_fetchall ('SELECT mobile,uid,realname FROM ' . tablename ('mc_members') . " WHERE uniacid = :uniacid AND uid IN ($uids)", array (':uniacid' => $_W['uniacid']), 'uid');
+		}
+		
+		$html = "\xEF\xBB\xBF";
+
+		
+		$filter = array (
+			'uid' => '会员编号',
+			'realname' => '姓名',
+			'mobile' => '手机',
+			'fee' => '消费金额',
+			'final_fee' => '实收金额',
+			'credit2' => '余额支付	',
+			'credit1_fee' => '积分抵消	',
+			'final_cash' => '实收现金	',
+			'store_cn' => '消费门店',
+			'clerk_cn' => '操作人',
+			'createtime' => '操作时间'
+		);
+		foreach ($filter as $title) {
+			$html .= $title . "\t,";
+		}
+		$html .= "\n";
+		foreach ($exports as $k => $v) {
+			foreach ($filter as $key => $title) {
+				if ($key == 'realname') {
+					$html .= $user[$v['uid']]['realname'] . "\t, ";
+				} elseif ($key == 'mobile') {
+					$html .= $user[$v['uid']]['mobile'] . "\t, ";
+				}  elseif ($key == 'createtime') {
+					$html .= date ('Y-m-d H:i', $v['createtime']) . "\t, ";
+				}else {
+					$html .= $v[$key] . "\t, ";
+				}
+			}
+			$html .= "\n";
+		}
+		
+		header ("Content-type:text/csv");
+		header ("Content-Disposition:attachment; filename=全部数据.csv");
+		echo $html;
+		exit();
+	}
 }
 template('stat/cash');

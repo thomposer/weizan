@@ -237,9 +237,13 @@ if($do == 'del') {
 if($do == 'export') {
 	load()->classs('coupon');
 	$acc = new coupon($acid);
-	$data = $acc->LocationBatchGet();
+	$begin = intval($_GPC['begin']);
+	$data = $acc->LocationBatchGet(array('begin' => $begin));
 	if(is_error($data)) {
 		message($data['message'], referer(), 'error');
+	}
+	if(!$begin) {
+		pdo_delete('activity_stores', array('uniacid' => $_W['uniacid']));
 	}
 	$location = $data['business_list'];
 	$status2local = array('', 3, 2, 1, 3);
@@ -296,6 +300,7 @@ if($do == 'export') {
 				}
 			}
 		}
+		message('正在导入微信门店,请不要关闭浏览器...', url('wechat/location/export', array('begin' => $begin + 50)), 'success');
 	}
 	message('导入门店成功', url('wechat/location/list'), 'success');
 }

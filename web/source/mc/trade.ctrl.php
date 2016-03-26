@@ -200,10 +200,10 @@ if($do == 'consume') {
 	pdo_insert('mc_cash_record', $data);
 
 	$tips = "用户消费{$money}元,使用{$data['credit1']}积分,抵现{$data['credit1_fee']}元,使用余额支付{$data['credit2']}元,现金支付{$data['final_cash']}元";
-		if(!empty($card) && $card['grant_rate'] > 0) {
+		if(!empty($card) && $card['grant_rate'] > 0 && !empty($member)) {
 		$num = $money * $card['grant_rate'];
 		$tips .= "，积分赠送比率为:【1：{$card['grant_rate']}】,共赠送【{$num}】积分";
-		mc_credit_update($uid, 'credit1', $num, array(0, $log, 'system', $_W['user']['clerk_id'], $_W['user']['store_id'], $_W['user']['clerk_type']));
+		mc_credit_update($uid, 'credit1', $num, array(0, $tips, 'system', $_W['user']['clerk_id'], $_W['user']['store_id'], $_W['user']['clerk_type']));
 	}
 		$openid = pdo_fetchcolumn('SELECT openid FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND uid = :uid', array(':acid' => $_W['acid'], ':uid' => $uid));
 	if(!empty($openid)) {

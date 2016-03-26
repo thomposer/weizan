@@ -1,12 +1,13 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 
 defined('IN_IA') or exit('Access Denied');
 $uniacid = intval($_GPC['uniacid']);
 $_W['page']['title'] = '添加/编辑公众号';
+load()->func('file');
 $step = intval($_GPC['step']) ? intval($_GPC['step']) : 1;
 if($step == 1) {
 	if(!empty($uniacid)) {
@@ -27,7 +28,6 @@ if($step == 1) {
 	}
 } elseif($step == 2) {
 	if(checksubmit('getinfo')) {
-		load()->func('file');
 		$username = trim($_GPC['wxusername']);
 		$password = md5(trim($_GPC['wxpassword']));
 		if(!empty($username) && !empty($password)) {
@@ -108,7 +108,6 @@ if($step == 1) {
 			load()->model('module');
 			module_build_privileges();
 		}
-		load()->func('file');
 		$update['account'] = trim($_GPC['account']);
 		$update['original'] = trim($_GPC['original']);
 		$update['level'] = intval($_GPC['level']);

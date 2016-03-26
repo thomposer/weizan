@@ -612,6 +612,55 @@ abstract class WeBase {
 		}
 		return $compile;
 	}
+	protected function pctemplate($filename) {
+		global $_W;
+		$name = strtolower($this->modulename);
+		$defineDir = dirname($this->__define);
+		if(defined('IN_SYS')) {
+			$source = IA_ROOT . "/web/themes/{$_W['template']}/{$name}/{$filename}.html";
+			$compile = IA_ROOT . "/data/tpl/web/{$_W['template']}/{$name}/{$filename}.tpl.php";
+			if(!is_file($source)) {
+				$source = IA_ROOT . "/web/themes/default/{$name}/{$filename}.html";
+			}
+			if(!is_file($source)) {
+				$source = $defineDir . "/template/{$filename}.html";
+			}
+			if(!is_file($source)) {
+				$source = IA_ROOT . "/web/themes/{$_W['template']}/{$filename}.html";
+			}
+			if(!is_file($source)) {
+				$source = IA_ROOT . "/web/themes/default/{$filename}.html";
+			}
+		} else {
+			$source = IA_ROOT . "/app/pc/{$_W['template']}/{$name}/{$filename}.html";
+			$compile = IA_ROOT . "/data/tpl/app/pc/{$_W['template']}/{$name}/{$filename}.tpl.php";
+			if(!is_file($source)) {
+				$source = IA_ROOT . "/app/pc/default/{$name}/{$filename}.html";
+			}
+			if(!is_file($source)) {
+				$source = $defineDir . "/template/mobile/{$filename}.html";
+			}
+			if(!is_file($source)) {
+				$source = IA_ROOT . "/app/pc/{$_W['template']}/{$filename}.html";
+			}
+			if(!is_file($source)) {
+				if (in_array($filename, array('header', 'footer', 'footer-base', 'slide', 'toolbar', 'message'))) {
+					$source = IA_ROOT . "/app/pc/default/common/{$filename}.html";
+				} else {
+					$source = IA_ROOT . "/app/pc/default/{$filename}.html";
+				}
+			}
+		}
+		if(!is_file($source)) {
+			exit("Error: template source '{$filename}' is not exist!");
+		}
+		$paths = pathinfo($compile);
+		$compile = str_replace($paths['filename'], $_W['uniacid'] . '_' . $paths['filename'], $compile);
+		if (DEVELOPMENT || !is_file($compile) || filemtime($source) > filemtime($compile)) {
+			template_compile($source, $compile, true);
+		}
+		return $compile;
+	}
 }
 
 
@@ -912,7 +961,7 @@ abstract class WeModuleReceiver extends WeBase {
 abstract class WeModuleSite extends WeBase {
 	
 	public $inMobile;
-	
+
 	public function __call($name, $arguments) {
 		$isWeb = stripos($name, 'doWeb') === 0;
 		$isMobile = stripos($name, 'doMobile') === 0;
@@ -930,6 +979,13 @@ abstract class WeModuleSite extends WeBase {
 			if(file_exists($file)) {
 				require $file;
 				exit;
+			} else {
+				$dir = str_replace("addons", "framework/builtin", $dir);
+				$file = $dir . $fun . '.inc.php';
+				if(file_exists($file)) {
+					require $file;
+					exit;
+				}
 			}
 		}
 		trigger_error("访问的方法 {$name} 不存在.", E_USER_WARNING);

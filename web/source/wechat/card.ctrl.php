@@ -5,17 +5,16 @@
  */
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('wechat_card_list');
-$dos = array('module', 'coupon', 'location', 'discount', 'display', 'del', 'sync', 'modifystock', 'toggle', 'qr', 'record', 'cash', 'gift', 'groupon', 'general_coupon');
+$dos = array('module', 'coupon', 'location', 'discount', 'display', 'del', 'sync', 'modifystock', 'toggle', 'selfconsume', 'qr', 'record', 'cash', 'gift', 'groupon', 'general_coupon');
 $do = in_array($do, $dos) ? $do : 'display';
 $op = trim($_GPC['op']) ? trim($_GPC['op']) : 'post';
 $acid = intval($_W['acid']);
-
 if(!$acid) {
 	message('公众号不存在', url('wechat/account'), 'error');
 }
 
 if($do == 'location') {
-		$location = pdo_fetchall('SELECT id,location_id, business_name, address FROM ' . tablename('activity_stores') . " WHERE uniacid = :uniacid AND status = :status AND location_id != ''", array(':uniacid' => $_W['uniacid'], ':status' => 1));
+		$location = pdo_fetchall('SELECT id,location_id, business_name, branch_name, address FROM ' . tablename('activity_stores') . " WHERE uniacid = :uniacid AND status = :status AND location_id != ''", array(':uniacid' => $_W['uniacid'], ':status' => 1));
 	template('wechat/location_model');
 	exit();
 }
@@ -64,6 +63,13 @@ if($do == 'display') {
 	if(!empty($_GPC['status'])) {
 		$status = intval($_GPC['status']);
 		$condition .= " AND status = {$status}";
+	}
+	if($_GPC['is_selfconsume'] == '1') {
+		$condition .= " AND is_selfconsume = 1";
+	} elseif ($_GPC['is_selfconsume'] == '0') {
+		$condition .= " AND is_selfconsume = 0";
+	} else {
+		$condition = $condition;
 	}
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 20;
@@ -246,6 +252,7 @@ if($do == 'qr') {
 }
 
 if($do == 'record') {
+	load()->model('mc');
 	if($op == 'list') {
 		$condition = ' WHERE acid = :acid';
 		$parma[':acid'] = $acid;
@@ -366,6 +373,31 @@ if($do == 'toggle') {
 			pdo_update('coupon', array('is_display' => 1), array('acid' => $acid, 'id' => $id));
 		}
 		exit('success');
+	}
+}
+
+if($do == 'selfconsume') {
+	$id = intval($_GPC['id']);
+	load()->classs('coupon');
+	$coupon = new coupon($acid);
+	$card_info = pdo_get('coupon', array('acid' => $acid,'id' => $id),array('is_selfconsume','card_id','location_id_list'));
+	$is_selfconsume = $card_info['is_selfconsume'];
+	$card_id = $card_info['card_id'];
+	$location_id_list = iunserializer($card_info['location_id_list']);
+	if(empty($location_id_list)) {
+		exit('该卡券未设置适用门店,无法设置自助核销');
+	} else {
+		$is_open = ($is_selfconsume == 1) ? false : true;
+		$selfconsume_value = ($is_selfconsume == 1) ? 0 : 1;
+		$data = array(
+			'card_id' => $card_id,
+			'is_open' => $is_open
+		);
+		$result = $coupon->selfConsume($data);
+		if(!is_error($result)) {
+			pdo_update('coupon', array('is_selfconsume' => $selfconsume_value), array('acid' => $acid, 'id' => $id));
+		}
+		exit('success'); 
 	}
 }
 

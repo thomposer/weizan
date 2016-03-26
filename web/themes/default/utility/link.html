@@ -26,7 +26,34 @@
 		});
 	});
 </script>
-{if $do == 'page'}
+{if $do == 'modulelink'}
+<style type="text/css">
+	.link-browser ul li{width: 120px; }
+	.link-module {margin-left: 15px; }
+	.list-group .list-group-item a{color:#428bca;}
+	.link-browser .page-header, .link-modal .page-header{margin:25px 0 10px;}
+	.link-browser .page-header:first-child, .link-modal .page-header:first-of-type{margin-top:0;}
+	.link-browser div.btn, .link-modal div.btn{min-width:100px; text-align:center; margin:5px 2px;}
+</style>
+
+<div class="link-module">
+	<div class="link-browser">
+		<form method="post" class="form-horizontal form" enctype="multipart/form-data" >
+			<div class="form-group" id="url">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+					{loop $entries $key $item}
+					<div class="page-header">
+						<h4><i class="fa fa-folder-open-o"></i> {$item['title']}</h4>
+					</div>
+						{loop $item['menu'] $entrie}
+							<div class="btn btn-default" onclick="clicklink('{$entrie['url']}', '{$key}_menu_{$entrie['do']}')" title="">{$entrie['title']}</div>
+						{/loop}
+					{/loop}
+			</div>
+		</form>
+	</div>
+</div>
+{elseif $do == 'page'}
 <div class="tab-pane active" role="tabpanel">
 	<table class="table table-hover">
 		<thead class="table table-hover">
@@ -48,7 +75,7 @@
 			<tr>
 				<td><a href="#">{$list['title']}</a></td>
 				<td><a href="#">{$list['createtime']}</a></td>
-				<td><button class="btn btn-default select" onclick="clicklink('./index.php?i={$list['uniacid']}&c=home&pageid={$list['id']}', '{$list['title']}')">选取</button></td>
+				<td><button class="btn btn-default select" onclick="clicklink('./index.php?i={$list['uniacid']}&c=home&a=page&pageid={$list['id']}')">选取</button></td>
 			</tr>
 		{/loop}
 		</tbody>
