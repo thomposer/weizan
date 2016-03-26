@@ -85,14 +85,13 @@ if($do == 'platform') {
 	$yesterday_stat = pdo_get('stat_fans', array('date' => $yesterday, 'uniacid' => $_W['uniacid']));
 	$today_stat = pdo_get('stat_fans', array('date' => date('Ymd'), 'uniacid' => $_W['uniacid']));
 	
-	//今日粉丝详情
-	$today_add_num = intval($today_stat['new']);
+		$today_add_num = intval($today_stat['new']);
 	$today_cancel_num = intval($today_stat['cancel']);
 	$today_jing_num = $today_add_num - $today_cancel_num;
-	$today_total_num = intval($today_stat['cumulate']) + intval($yesterday_stat['cumulate']);
-
-	load()->model('reply');
-		$cfg = $modules['userapi']['config'];
+	$today_total_num = intval($today_jing_num) + intval($yesterday_stat['cumulate']);
+	
+		load()->model('reply');
+	$cfg = $modules['userapi']['config'];
 	$ds = reply_search("`uniacid` = 0 AND module = 'userapi' AND `status`=1");
 	$apis = array();
 	foreach($ds as $row) {

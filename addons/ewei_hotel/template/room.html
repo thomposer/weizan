@@ -48,25 +48,25 @@
 				<th class='with-checkbox' style='width:30px;'>
 					<input type="checkbox" class="check_all" />
 				</th>
-				<th style="width:120px;">酒店</th>
-				<th style="width:120px;">房型</th>
-				<th style='width:150px;'>前台价（原价)</th>
-				<th style='width:150px;'>优惠价（现价)</th>
-				<th style='width:100px;'>会员价</th>
-				<th style='width:120px;'>订房积分</th>
-				<th style='width:100px;'>状态</th>
+				<th style="width:200px;">酒店</th>
+				<th style="width:170px;">房型</th>
+				<th style='width:200px;'>前台价（原价)</th>
+				<th style='width:200px;'>优惠价（现价)</th>
+				<th style='width:200px;'>订房积分</th>
+				<th style='width:200px;'>状态</th>
 				<th style="width:320px;">操作</th>
 			</tr>
 			</thead>
 			<tbody>
 			{loop $list $item}
-			<tr>  <td class="with-checkbox">
-				<input type="checkbox" name="check" value="{$item['id']}"></td>
+			<tr>
+				<td class="with-checkbox">
+				<input type="checkbox" name="check" value="{$item['id']}">
+				</td>
 				<td>{$item['hoteltitle']}</td>
 				<td>{$item['title']}</td>
 				<td>{$item['oprice']}</td>
 				<td>{$item['cprice']}</td>
-				<td>{$item['mprice']}</td>
 				<td>{$item['score']}</td>
 				<td>{if $item['status']==1}
 					<span class='label label-success'>显示</span>

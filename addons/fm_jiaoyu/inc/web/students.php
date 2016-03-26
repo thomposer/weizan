@@ -36,7 +36,7 @@
             if (!empty($id)) {
                 $item = pdo_fetch("SELECT * FROM " . tablename($this->table_students) . " WHERE id = :id", array(':id' => $id));
                 if (empty($item)) {   
-                    message('抱歉，学员不存在或是已经删除！', '', 'error');
+                    message('抱歉，学生不存在或是已经删除！', '', 'error');
                 } else {
                     if (!empty($item['thumb_url'])) {
                         $item['thumbArr'] = explode('|', $item['thumb_url']);
@@ -61,10 +61,10 @@
                 );
 
                 if (empty($data['s_name'])) {
-                    message('请输入学员姓名！');
+                    message('请输入学生姓名！');
                 }
 				if (empty($data['mobile'])) {
-                    message('清输入学员家长手机');
+                    message('清输入学生家长手机');
                 }				
                 if (empty($id)) {
                     pdo_insert($this->table_students, $data);
@@ -72,7 +72,7 @@
                     unset($data['dateline']);
                     pdo_update($this->table_students, $data, array('id' => $id));
                 }
-                message('添加学员信息成功！', $this->createWebUrl('students', array('op' => 'display', 'schoolid' => $schoolid)), 'success');
+                message('添加学生信息成功！', $this->createWebUrl('students', array('op' => 'display', 'schoolid' => $schoolid)), 'success');
             }
         } elseif ($operation == 'display') {
 
@@ -94,7 +94,7 @@
             $id = intval($_GPC['id']);
             $row = pdo_fetch("SELECT id, s_name FROM " . tablename($this->table_students) . " WHERE id = :id", array(':id' => $id));
             if (empty($row)) {
-                message('抱歉，学员不存在或是已经被删除！');
+                message('抱歉，学生不存在或是已经被删除！');
             }
             pdo_delete($this->table_students, array('id' => $id));
             message('删除成功！', referer(), 'success');
@@ -103,7 +103,7 @@
 			$openid = $_GPC['openid'];
             $row = pdo_fetch("SELECT id FROM " . tablename($this->table_students) . " WHERE id = :id", array(':id' => $id));
             if (empty($row)) {
-                message('抱歉，学员不存在或是已经被删除！');
+                message('抱歉，学生不存在或是已经被删除！');
             }
 
 			$temp = array(
@@ -119,7 +119,7 @@
 			$openid = $_GPC['openid'];
             $row = pdo_fetch("SELECT id FROM " . tablename($this->table_students) . " WHERE id = :id", array(':id' => $id));
             if (empty($row)) {
-                message('抱歉，学员不存在或是已经被删除！');
+                message('抱歉，学生不存在或是已经被删除！');
             }
 
 			$temp = array(
@@ -135,7 +135,7 @@
 			$openid = $_GPC['openid'];
             $row = pdo_fetch("SELECT id FROM " . tablename($this->table_students) . " WHERE id = :id", array(':id' => $id));
             if (empty($row)) {
-                message('抱歉，学员不存在或是已经被删除！');
+                message('抱歉，学生不存在或是已经被删除！');
             }
 
 			$temp = array(
@@ -168,7 +168,7 @@
             if (!empty($id)) {
                 $item = pdo_fetch("SELECT * FROM " . tablename($this->table_students) . " WHERE id = :id", array(':id' => $id));				
                 if (empty($item)) {
-                    message('抱歉，学员不存在或是已经删除！', '', 'error');
+                    message('抱歉，学生不存在或是已经删除！', '', 'error');
                 }
             }
 			if (checksubmit('submit')) {

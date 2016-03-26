@@ -122,7 +122,7 @@
 					<!--td>{php echo date('Y-m-d',$item['jiontime'])}</td-->     
                     <td><a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('assess', array('id' => $item['id'], 'op' => 'add', 'schoolid' => $schoolid))}" title="添加课程"><i class="fa fa-qrcode">&nbsp;&nbsp;添加课程</i></a></td>					
 					<td>
-					{if $item['openid'] != 0}
+					{if !empty($item['openid'])}
 					<img src="{$member[$item['uid']]['avatar']}" width="50"  onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$member[$item['uid']]['nickname']} </br>
 					<a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('assess', array('id' => $item['id'], 'op' => 'jiebang', 'schoolid' => $schoolid))}" onclick="return confirm('此操作不可恢复，确认解绑？');return false;" title="解绑"><i class="fa fa-times"></i>解绑</a>
 					{else}
@@ -228,7 +228,7 @@ $(function(){
                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">出生日期</label>
                    <div class="col-sm-9">
 				   <div class="input-group">
-                 {php echo tpl_form_field_date('birthdate', date('Y-m-d', $item['birthdate']))}				   
+                 {if !empty($item['birthdate'])}{php echo tpl_form_field_date('birthdate', date('Y-m-d', $item['birthdate']))}{else}{php echo tpl_form_field_date('birthdate', date('Y-m-d', TIMESTAMP))}{/if}			   
                    </div>
 				   </div>
                 </div>
@@ -252,7 +252,7 @@ $(function(){
                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">入职时间</label>
                      <div class="col-sm-9"> 
 				        <div class="input-group">
-				     {php echo tpl_form_field_date('jiontime', date('Y-m-d', $item['jiontime']))}	
+					  {if !empty($item['birthdate'])}{php echo tpl_form_field_date('jiontime', date('Y-m-d', $item['jiontime']))}{else}{php echo tpl_form_field_date('birthdate', date('Y-m-d', TIMESTAMP))}{/if}
                         </div>
 				     </div>
                 </div>				
@@ -275,9 +275,9 @@ $(function(){
 				<div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否校长</label>
                     <div class="col-sm-9">
-                        <label for="isshow1" class="radio-inline"><input type="radio" name="status" value="2" id="isshow1" {if empty($item) || $item['status'] == 2}checked="true"{/if} /> 是</label>
+                        <label for="isshow1" class="radio-inline"><input type="radio" name="status" value="2" id="isshow1" {if !empty($item) && $item['status'] == 2}checked="true"{/if} /> 是</label>
                         &nbsp;&nbsp;&nbsp;
-                        <label for="isshow2" class="radio-inline"><input type="radio" name="status" value="1" id="isshow2"  {if !empty($item) && $item['status'] == 1}checked="true"{/if} /> 否</label>
+                        <label for="isshow2" class="radio-inline"><input type="radio" name="status" value="1" id="isshow2"  {if empty($item) || $item['status'] == 1}checked="true"{/if} /> 否</label>
                         <span style ="color:red;" class="help-block">每个学校只能设置一个校长，否则出错后果自负</span>
                     </div>
                 </div>				

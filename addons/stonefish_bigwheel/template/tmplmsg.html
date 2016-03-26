@@ -7,8 +7,10 @@
         <li{if $_GPC['do'] == 'templatepost'} class="active"{/if}><a href="{php echo url('site/entry/templatepost',array('m'=>'stonefish_bigwheel'));}"><i class="fa fa-plus"></i> 添加活动模板</a></li>
 		<li{if $_GPC['do'] == 'tmplmsg' || $_GPC['do'] == ''} class="active"{/if}><a href="{php echo $this->createWebUrl('tmplmsg');}"> 管理消息模板</a></li>
         <li{if $_GPC['do'] == 'tmplmsgpost'} class="active"{/if}><a href="{php echo url('site/entry/tmplmsgpost',array('m'=>'stonefish_bigwheel'));}"><i class="fa fa-plus"></i> 添加消息模板</a></li>
+		<li{if $_GPC['do'] == 'virtual'} class="active"{/if}><a href="{php echo $this->createWebUrl('virtual');}"> 管理虚拟粉丝</a></li>
+        <li{if $_GPC['do'] == 'virtualpost'} class="active"{/if}><a href="{php echo url('site/entry/virtualpost',array('m'=>'stonefish_bigwheel'));}"><i class="fa fa-plus"></i> 添加</a></li>
 	</ul>
-	<div class="alert alert-info"><a href="http://bbs.012wz.com" target="_blank">消息模板说明</a></div>
+	<div class="alert alert-info"><a href="http://www.00393.com/we7_client/06/tmplmsg.html" target="_blank">消息模板说明</a></div>
     <div class="panel panel-info">
 	<div class="panel-heading">筛选</div>
 	<div class="panel-body">

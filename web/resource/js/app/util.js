@@ -510,6 +510,22 @@
 		};
 	};
 
+	util.showModuleLink = function(callback){
+		var footer = '';
+		var modalobj = util.dialog('模块链接选择',['./index.php?c=utility&a=link&do=modulelink&callback=moduleLinkComplete'], '');
+		modalobj.modal({'keyboard': false});
+		modalobj.find('.modal-body').css({'height':'700px','overflow-y':'auto' });
+		modalobj.modal('show');
+
+		window.moduleLinkComplete = function(link, permission){
+			if($.isFunction(callback)){
+				callback(link, permission);
+				modalobj.modal('hide');
+			}
+		};
+
+	};
+
 	/**
 	 * val : image 值;
 	 * callback: 回调函数

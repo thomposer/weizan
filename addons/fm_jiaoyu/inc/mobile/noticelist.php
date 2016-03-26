@@ -41,25 +41,25 @@
 		         ':weid' => $weid,
 				 ':schoolid' => $schoolid,
 				 ':bj_id' => $teachers['bj_id1'],
-				 ':type' => 0,
+				 ':type' => 1,
 				 ':tid' => $teachers['id']
 				 ));
 		    $leave2 = pdo_fetchall("SELECT * FROM " . tablename($this->table_notice) . " where :schoolid = schoolid And :weid = weid And :tid = tid And :bj_id = bj_id And :type = type ORDER BY createtime DESC", array(
 		         ':weid' => $weid,
 				 ':schoolid' => $schoolid,
 				 ':bj_id' => $teachers['bj_id2'],
-				 ':type' => 0,
+				 ':type' => 1,
 				 ':tid' => $teachers['id']
 				 ));
 		    $leave3 = pdo_fetchall("SELECT * FROM " . tablename($this->table_notice) . " where :schoolid = schoolid And :weid = weid And :tid = tid And :bj_id = bj_id And :type = type ORDER BY createtime DESC", array(
 		         ':weid' => $weid,
 				 ':schoolid' => $schoolid,
 				 ':bj_id' => $teachers['bj_id3'],
-				 ':type' => 0,
+				 ':type' => 1,
 				 ':tid' => $teachers['id']
 				 ));				 
-            $item = pdo_fetch("SELECT * FROM " . tablename($this->table_notice) . " WHERE id = :id ", array(':id' => $id));		
-			
+            $item = pdo_fetch("SELECT * FROM " . tablename($this->table_notice) . " WHERE id = :id ", array(':id' => $id));	
+						
 		 include $this->template('noticelist');
           }else{
          include $this->template('bangding');

@@ -567,39 +567,51 @@ function uni_user_module_permission_check($action = '', $module_name = '') {
 	return true;
 }
 
-function uni_update_yesterday_stat() {
+function uni_update_week_stat() {
 	global $_W;
 	$cachekey = "stat:todaylock:{$_W['uniacid']}";
 	$cache = cache_load($cachekey);
 	if (!empty($cache) && $cache['expire'] > TIMESTAMP) {
 		return true;
 	}
-	
-	$yesterday = date('Ymd', strtotime('-1 days'));
-	$yesterday_stat = pdo_get('stat_fans', array('date' => $yesterday, 'uniacid' => $_W['uniacid']));
-	if ($_W['account']['level'] == ACCOUNT_SUBSCRIPTION_VERIFY || $_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
-		$account_obj = WeAccount::create();
-		$weixin_stat = $account_obj->getFansStat();
-		if (!is_error($weixin_stat) && !empty($weixin_stat)) {
-			$yesterday_weixin_stat = $weixin_stat[$yesterday];
-			$update_stat = array(
-				'uniacid' => $_W['uniacid'],
-				'new' => $yesterday_weixin_stat['new'],
-				'cancel' => $yesterday_weixin_stat['cancel'],
-				'cumulate' => $yesterday_weixin_stat['cumulate'],
-				'date' => $yesterday,
-			);
+	$seven_days = array(
+		date('Ymd', strtotime('-1 days')),
+		date('Ymd', strtotime('-2 days')),
+		date('Ymd', strtotime('-3 days')),
+		date('Ymd', strtotime('-4 days')),
+		date('Ymd', strtotime('-5 days')),
+		date('Ymd', strtotime('-6 days')),
+		date('Ymd', strtotime('-7 days')),
+	);
+	$sevens_arr= implode(',', $seven_days);
+	$arr = pdo_fetchall("SELECT * FROM " . tablename('stat_fans') . " WHERE date IN ($sevens_arr) AND uniacid= :uniacid", array(':uniacid' => $_W['uniacid']), 'date');
+	foreach($seven_days as $sevens) {
+		if($_W['account']['level'] == ACCOUNT_SUBSCRIPTION_VERIFY || $_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
+			$account_obj = WeAccount::create();
+			$weixin_stat = $account_obj->getFansStat();
+			if(!is_error($weixin_stat) && !empty($weixin_stat)) {
+				$update_stat = array();
+				$update_stat = array(
+					'uniacid' => $_W['uniacid'],
+					'new' => $weixin_stat[$sevens]['new'],
+					'cancel' => $weixin_stat[$sevens]['cancel'],
+					'cumulate' => $weixin_stat[$sevens]['cumulate'],
+					'date' => $sevens,
+				);
+			}
+		} else {
+			$update_stat = array();
+			$update_stat['cumulate'] = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND uniacid = :uniacid AND follow = :follow AND followtime < :endtime', array(':acid' => $_W['acid'], ':uniacid' => $_W['uniacid'], ':endtime' => strtotime($sevens)+86400, ':follow' => 1));
+			$update_stat['date'] = $sevens;
+			$update_stat['new'] = $arr[$sevens]['new'];
+			$update_stat['cancel'] = $arr[$sevens]['cancel'];
+			$update_stat['uniacid'] = $_W['uniacid'];
 		}
-	} else {
-		$update_stat = array();
-		$update_stat['cumulate'] = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND uniacid = :uniacid AND follow = :follow AND followtime < :endtime', array(':acid' => $_W['acid'], ':uniacid' => $_W['uniacid'], ':endtime' => strtotime(date('Y-m-d')), ':follow' => 1));
-		$update_stat['date'] = $yesterday;
-		$update_stat['uniacid'] = $_W['uniacid'];
-	}
-	if (empty($yesterday_stat)) {
-		pdo_insert('stat_fans', $update_stat);
-	} else {
-		pdo_update('stat_fans', $update_stat, array('id' => $yesterday_stat['id']));
+		if(empty($arr[$sevens])) {
+			pdo_insert('stat_fans', $update_stat);
+		} elseif (empty($arr[$sevens]['cumulate'])) {
+			pdo_update('stat_fans', $update_stat, array('id' => $arr[$sevens]['id']));
+		}
 	}
 	cache_write($cachekey, array('expire' => strtotime(date('Y-m-d')) + 86399));
 	return true;

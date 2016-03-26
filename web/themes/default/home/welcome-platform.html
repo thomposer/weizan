@@ -15,14 +15,20 @@
 						{if $account['level'] == 3}认证订阅号{/if}
 						{if $account['level'] == 4}认证服务号/认证媒体/政府订阅号{/if}
 						</span>
+						{if $account['type'] == ACCOUNT_OAUTH_LOGIN}
+						<span class="text-success"><i class="fa fa-check-circle"></i> 登录授权</span>
+						{else}
 						{if $account['isconnect'] == 1}
 						<span class="text-success"><i class="fa fa-check-circle"></i> 成功接入{$accounttypes[$account['type']]['title']}</span>
 						{else}
 						<span class="text-warning"><i class="fa fa-times-circle"></i> 未接入{$accounttypes[$account['type']]['title']}</span>
 						{/if}
+						{/if}
 					</p>
+					{if $account['type'] == ACCOUNT_NORMAL_LOGIN}
 					<p><strong>接口地址： </strong> <a href="javascript:;" style="color:#66667C;">{$_W['siteroot']}api.php?id={$account['acid']}</a></p>
 					<p><strong>　Token： </strong> <a href="javascript:;" title="点击复制Token" style="color:#66667C;">{$account['token']}</a></p>
+					{/if}
 				</div>
 				<div class="col-sm-5 text-right">
 					<img src="{php echo tomedia('qrcode_'.$account['acid'].'.jpg')}?time={php echo time()}" class="img-responsive img-thumbnail" width="150" onerror="this.src='resource/images/gw-wx.gif'" />
@@ -39,20 +45,38 @@
 	});
 </script>
 {if $_W['acid'] == $_W['uniaccount']['default_acid']}
+<div class="panel panel-default" id="scroll">
+	<div class="panel-heading">
+		今日关键指标
+	</div>
+	<div class="account-stat">
+		<div class="account-stat-btn">
+			<div>新关注人数<span>{$today_add_num}</span></div>
+			<div>取消关注人数<span>{$today_cancel_num}</span></div>
+			<div>净增关注人数<span>{$today_jing_num}</span></div>
+			<div>累积关注人数<span>{$today_total_num}</span></div>
+		</div>
+	</div>
+</div>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		昨日关键指标
+	</div>
+	<div class="account-stat">
+		<div class="account-stat-btn">
+			<div>新关注人数<span>{$yesterday_stat['new']}</span></div>
+			<div>取消关注人数<span>{$yesterday_stat['cancel']}</span></div>
+			<div>净增关注人数<span>{php echo intval($yesterday_stat['new']) - intval($yesterday_stat['cancel'])}</span></div>
+			<div>累积关注人数<span>{$yesterday_stat['cumulate']}</span></div>
+		</div>
+	</div>
+</div>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		关键指标详解
 		<a class="text-danger" href="{php echo url('account/summary/', array('acid' => $_W['acid'], 'uniacid' => $_W['uniacid']));}" target="_blank">查看更多</a>
 	</div>
-	<div class="panel-body" id="scroll">
-		<div class="account-stat">
-			<div class="account-stat-btn">
-				<div>今日新关注人数<span>{$today_add_num}</span></div>
-				<div>今日取消关注人数<span>{$today_cancel_num}</span></div>
-				<div>今日净增关注人数<span>{$today_jing_num}</span></div>
-				<div>累积关注人数<span>{$today_total_num}</span></div>
-			</div>
-		</div>
+	<div class="panel-body">
 		<div class="pull-right">
 			<div class="checkbox">
 				<label style="color:#57B9E6;"><input checked type="checkbox"> 新关注人数</label>&nbsp;

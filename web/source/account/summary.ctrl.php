@@ -11,20 +11,20 @@ $account = account_fetch($acid);
 if(empty($account)) {
 	message('公众号不存在或已被删除', '', 'error');
 }
-uni_update_yesterday_stat();
-
+uni_update_week_stat();
 $_W['page']['title'] = $account['name'] . ' - 公众号详细信息';
-$starttime = $_GPC['datelimit']['start'] ? strtotime($_GPC['datelimit']['start']) : date('Ymd', strtotime('-7day'));
-$endtime = $_GPC['datelimit']['end'] ? strtotime($_GPC['datelimit']['end']) : date('Ymd');
+$starttime = $_GPC['datelimit']['start'] ? strtotime($_GPC['datelimit']['start']) : strtotime('-7day');
+$endtime = $_GPC['datelimit']['end'] ? strtotime($_GPC['datelimit']['end']) : strtotime(date('Ymd'));
 $yesterday = date('Ymd', strtotime('-1 days'));
 $today = date('Ymd');
-
 $type = intval($_GPC['type']) ? intval($_GPC['type']) : 1;
 
 if($_W['isajax']) {
 	$days = array();
 	$datasets = array();
-	$stat = pdo_fetchall("SELECT * FROM ".tablename('stat_fans')." WHERE date >= '$starttim' AND date <= '$endtime' AND uniacid = '{$_W['uniacid']}' ORDER BY date ASC", array(), 'date');
+	$starttime = $_GPC['starttime'] ? date('Ymd', $_GPC['starttime']) : date('Ymd', strtotime('-7day'));
+	$endtime = $_GPC['endtime'] ? date('Ymd', $_GPC['endtime']) : date('Ymd');
+	$stat = pdo_fetchall("SELECT * FROM ".tablename('stat_fans')." WHERE date >= '$starttime' AND date <= '$endtime' AND uniacid = '{$_W['uniacid']}' ORDER BY date ASC", array(), 'date');
 	for ($i = strtotime($starttime); $i <= strtotime($endtime); $i+=86400) {
 		$day = date('Ymd', $i);
 		if ($day == $today) {
@@ -42,6 +42,6 @@ if($_W['isajax']) {
 $scroll = intval($_GPC['scroll']);
 $yesterday_stat = pdo_get('stat_fans', array('date' => $yesterday, 'uniacid' => $_W['uniacid']));
 $today_stat = pdo_get('stat_fans', array('date' => date('Ymd'), 'uniacid' => $_W['uniacid']));
-$today_stat['cumulate'] = intval($today_stat['cumulate']) + intval($yesterday_stat['cumulate']);
+$today_stat['cumulate'] = intval($yesterday_stat['cumulate']) + intval($today_stat['new']) - intval($today_stat['cancel']);
 
 template('account/summary');

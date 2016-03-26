@@ -12,6 +12,7 @@
 	<meta name="description" content="{if empty($_W['page']['description'])}{if IMS_FAMILY != 'x'}公众平台自助引擎（www.012wz.com），简称微赞，微赞是一款免费开源的微信公众平台管理系统，是国内最完善移动网站及移动互联网技术解决方案。{/if}{else}{$_W['page']['description']}{/if}" />
 	<link rel="shortcut icon" href="{$_W['siteroot']}{$_W['config']['upload']['attachdir']}/{if !empty($_W['setting']['copyright']['icon'])}{$_W['setting']['copyright']['icon']}{else}images/global/wechat.jpg{/if}" />
 	<link href="{$_W['siteroot']}app/resource/css/bootstrap.min.css" rel="stylesheet">
+	<script src="{$_W['siteroot']}app/resource/js/app/common.js"></script>
 	<link href="{$_W['siteroot']}app/resource/css/font-awesome.min.css" rel="stylesheet">
 	<link href="{$_W['siteroot']}app/resource/css/animate.css" rel="stylesheet">
 	<link href="{$_W['siteroot']}app/resource/css/common.css" rel="stylesheet">
@@ -94,10 +95,6 @@
 		'chooseCard',
 		'openCard'
 	];
-	
-	</script>
-	
-	<script>
 	function _removeHTMLTag(str) {
 		if(typeof str == 'string'){
 			str = str.replace(/<script[^>]*?>[\s\S]*?<\/script>/g,'');

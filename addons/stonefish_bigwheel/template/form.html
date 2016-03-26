@@ -30,13 +30,15 @@
 	<div class="panel-body">
 	<div class="row-fluid">
     	<div class="span8 control-group">
+			<a class="btn btn-default" href="{php echo $this->createWebUrl('prize',array('rid' => $rid));}" style="margin-right:5px;"><i class="fa fa-gift"></i> 奖品配置</a>
 			<a class="btn btn-default" href="{php echo $this->createWebUrl('fansdata',array('rid' => $rid));}" style="margin-right:5px;"><i class="fa fa-users"></i> 参与粉丝</a>
-			<a class="btn btn-default" href="{php echo $this->createWebUrl('sharedata',array('rid' => $rid));}" style="margin:0 5px;"><i class="fa fa-share-alt"></i> 分享数据</a>
-			<a class="btn btn-default" href="{php echo $this->createWebUrl('prizedata',array('rid' => $rid));}" style="margin:0 5px;"><i class="fa fa-gift"></i> 中奖名单</a>
-			<a class="btn btn-default" href="{php echo $this->createWebUrl('rankdata',array('rid' => $rid));}" style="margin:0 5px;"><i class="fa fa-list-ol"></i> 粉丝排行</a>
-			<a class="btn btn-default" href="{php echo $this->createWebUrl('trend',array('rid' => $rid));}" style="margin:0 5px;"><i class="fa fa-bar-chart-o"></i> 活动分析</a>
-			<a class="btn btn-default" href="{php echo $this->createWebUrl('posttmplmsg',array('rid' => $rid));}" style="margin:0 5px;"><i class="fa fa-volume-up"></i> 消息通知</a>
-			{if $stonefish_branch}<a class="btn btn-default" href="{php echo $this->createWebUrl('branch',array('rid' => $rid));}" style="margin-left:5px;"><i class="fa fa-plus-square"></i> 商家赠送项</a>{/if}
+			<a class="btn btn-default" href="{php echo $this->createWebUrl('sharedata',array('rid' => $rid));}" style="margin-right:5px;"><i class="fa fa-share-alt"></i> 分享数据</a>
+			<a class="btn btn-default" href="{php echo $this->createWebUrl('prizedata',array('rid' => $rid));}" style="margin-right:5px;"><i class="fa fa-trophy"></i> 中奖名单</a>
+			<a class="btn btn-default" href="{php echo $this->createWebUrl('rankdata',array('rid' => $rid));}" style="margin-right:5px;"><i class="fa fa-list-ol"></i> 粉丝排行</a>
+			{if $reply['mobileverify']}<a class="btn btn-default" href="{php echo $this->createWebUrl('mobileverify',array('rid' => $rid));}" style="margin-right:5px;"><i class="fa fa-mobile"></i> 手机验证</a>{/if}
+			{if $stonefish_branch}<a class="btn btn-default" href="{php echo $this->createWebUrl('branch',array('rid' => $rid));}" style="margin-right:5px;"><i class="fa fa-plus-square"></i> 商家赠送</a>{/if}
+			<a class="btn btn-default" href="{php echo $this->createWebUrl('posttmplmsg',array('rid' => $rid));}" style="margin-right:5px;"><i class="fa fa-volume-up"></i> 消息通知</a>
+			<a class="btn btn-default" href="{php echo $this->createWebUrl('trend',array('rid' => $rid));}" style="margin-right:5px;"><i class="fa fa-bar-chart-o"></i> 活动分析</a>
         </div>
 		<div class="span8 control-group" style="margin-top:10px;">
 		    {loop $ids $idsname}
@@ -131,15 +133,35 @@
  			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 参与用户类型</label>
             <div class="col-sm-9 col-xs-6">
                	<div class="input-group">
-					<label for="issubscribe0" class="radio-inline"><input type="radio" name="issubscribe" value="0" id="issubscribe0" {if $reply['issubscribe'] == 0}checked="true"{/if}/> 任意粉丝</label>&nbsp;&nbsp;&nbsp;
-					<label for="issubscribe1" class="radio-inline"><input type="radio" name="issubscribe" value="1" id="issubscribe1" {if $reply['issubscribe'] == 1}checked="true"{/if}/> 关注粉丝</label>{if $stonefish_member}&nbsp;&nbsp;&nbsp;
-					<label for="issubscribe2" class="radio-inline"><input type="radio" name="issubscribe" value="2" id="issubscribe2" {if $reply['issubscribe'] == 2}checked="true"{/if}/> 正常会员</label>&nbsp;&nbsp;&nbsp;
-					<label for="issubscribe3" class="radio-inline"><input type="radio" name="issubscribe" value="3" id="issubscribe3" {if $reply['issubscribe'] == 3}checked="true"{/if}/> 手机验证会员</label>&nbsp;&nbsp;&nbsp;
-					<label for="issubscribe4" class="radio-inline"><input type="radio" name="issubscribe" value="4" id="issubscribe4" {if $reply['issubscribe'] == 4}checked="true"{/if}/> 分组验证会员</label>{if $stonefish_branch}&nbsp;&nbsp;&nbsp;
-					<label for="issubscribe5" class="radio-inline"><input type="radio" name="issubscribe" value="5" id="issubscribe5" {if $reply['issubscribe'] == 5}checked="true"{/if}/> 商家网点验证会员</label>{/if}{/if}
+					<label for="issubscribe0" class="radio-inline"><input type="radio" name="issubscribe" value="0" id="issubscribe0" {if $reply['issubscribe'] == 0}checked="true"{/if} onclick="$('#sys_users').hide();"/> 任意粉丝</label>&nbsp;
+					<label for="issubscribe1" class="radio-inline"><input type="radio" name="issubscribe" value="1" id="issubscribe1" {if $reply['issubscribe'] == 1}checked="true"{/if} onclick="$('#sys_users').hide();"/> 关注粉丝</label>{if $stonefish_member}&nbsp;
+					<label for="issubscribe2" class="radio-inline"><input type="radio" name="issubscribe" value="2" id="issubscribe2" {if $reply['issubscribe'] == 2}checked="true"{/if} onclick="$('#sys_users').hide();"/> 正常会员</label>&nbsp;
+					<label for="issubscribe3" class="radio-inline"><input type="radio" name="issubscribe" value="3" id="issubscribe3" {if $reply['issubscribe'] == 3}checked="true"{/if} onclick="$('#sys_users').hide();"/> 手机验证会员</label>&nbsp;
+					<label for="issubscribe4" class="radio-inline"><input type="radio" name="issubscribe" value="4" id="issubscribe4" {if $reply['issubscribe'] == 4}checked="true"{/if} onclick="$('#sys_users').hide();"/> 分组验证会员</label>{if $stonefish_branch}&nbsp;
+					<label for="issubscribe5" class="radio-inline"><input type="radio" name="issubscribe" value="5" id="issubscribe5" {if $reply['issubscribe'] == 5}checked="true"{/if} onclick="$('#sys_users').hide();"/> 商家网点验证会员</label>{/if}{/if}&nbsp;
+					<label for="issubscribe6" class="radio-inline"><input type="radio" name="issubscribe" value="6" id="issubscribe6" {if $reply['issubscribe'] == 6}checked="true"{/if} onclick="$('#sys_users').show();"/> 系统会员组</label>
 				</div>
             </div>
         </div>
+		<div id="sys_users"{if $reply['issubscribe'] != 6} style="display:none"{/if}>
+		<div class="form-group">
+ 			<label class="col-xs-12 col-sm-3 col-md-2 control-label">系统会员组</label>
+            <div class="col-sm-9 col-xs-6">
+				<select class="form-control" multiple="multiple" name="sys_users[]">
+					{loop $sys_users $sys_user}
+					<option value="{$sys_user['groupid']}" {if $sys_user['groupid_select'] == 1}selected{/if}>{$sys_user['title']}</option>
+					{/loop}
+				</select>
+            </div>
+        </div>
+		<div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"> 不在系统会员组下提示</label>
+            <div class="col-sm-9 col-xs-12">
+               	<textarea style="height:80px;" id='sys_users_tips' name="sys_users_tips" class="form-control" cols="60">{$reply['sys_users_tips']}</textarea>
+				<div class="help-block">系统会员粉丝不在所选的会员组下时，提示粉丝会员信息</div>
+            </div>
+        </div>
+		</div>
 		<!--
 		<div class="form-group">
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label">初始值</label>
@@ -184,7 +206,7 @@
 				</div>
             </div>
         </div>
-		<div class="form-group" id="poweravatar"{if $reply['power'] == 1}style="display:block"{/if}>
+		<div class="form-group" id="poweravatar"{if $reply['power'] == 1}style="display:none"{/if}>
  			<label class="col-xs-12 col-sm-3 col-md-2 control-label"> 头像大小</label>
             <div class="col-sm-9 col-xs-6">
                	<div class="input-group">
@@ -230,31 +252,7 @@
 					<span class="input-group-addon">次</span>
 				</div>
 			</div>
-		</div>
-		<!--
-        <div class="form-group">
-			<label class="col-xs-12 col-sm-3 col-md-2 control-label">助力值</label>
-			<div class="col-sm-9 col-xs-12">
-               	<div class="input-group">
-					<span class="input-group-addon">系统随机增送用户</span>
-					<input type="text" class="form-control" name="randompointstart" id="randompointstart" value="{$reply['randompointstart']}" />
-					<span class="input-group-addon" style="border-left:0px;border-right:0px;">至</span>
-					<input type="text" class="form-control" name="randompointend" id="randompointend" value="{$reply['randompointend']}" />
-					<span class="input-group-addon">助力值</span>
-				</div>
-            </div>
 		</div>		
-		<div class="form-group">
-			<label class="col-xs-12 col-sm-3 col-md-2 control-label">增加助力值概率</label>
-			<div class="col-sm-9 col-xs-12">
-				<div class="input-group">
-					<span class="input-group-addon">好友助力成功概率</span>					
-					<input type="text" class="form-control" name="addp" id="addp" value="{$reply['addp']}" />
-					<span class="input-group-addon">%(0-100)不足100%有可能为负助力</span>
-				</div>
-			</div>
-		</div>
-		-->
     </div>
 </div>
 
@@ -283,12 +281,21 @@
  			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 参与次数选项</label>
             <div class="col-sm-9 col-xs-6">
                	<div class="input-group">
-					<label for="opportunity1" class="radio-inline"><input type="radio" name="opportunity" value="0" id="opportunity1" {if empty($reply) || $reply['opportunity'] == 0}checked="true"{/if} onclick="{if $stonefish_branch}$('#opportunity_text').hide();{/if}$('#number_times').show();$('#credit').hide();"/> 活动设置次数</label>&nbsp;&nbsp;&nbsp;
-					{if $stonefish_branch}<label for="opportunity2" class="radio-inline"><input type="radio" name="opportunity" value="1" id="opportunity2" {if !empty($reply) && $reply['opportunity'] == 1}checked="true"{/if} onclick="$('#opportunity_text').show();$('#number_times').hide();$('#credit').hide();"/> 商户赠送次数</label>&nbsp;&nbsp;&nbsp;{/if}
-					<label for="opportunity3" class="radio-inline"><input type="radio" name="opportunity" value="2" id="opportunity3" {if !empty($reply) && $reply['opportunity'] == 2}checked="true"{/if} onclick="{if $stonefish_branch}$('#opportunity_text').hide();{/if}$('#number_times').hide();$('#credit').show();"/> 积分购买次数</label>
-				</div>				
+					<label for="opportunity1" class="radio-inline"><input type="radio" name="opportunity" value="0" id="opportunity1" {if empty($reply) || $reply['opportunity'] == 0}checked="true"{/if} onclick="{if $stonefish_branch}$('#opportunity_text').hide();{/if}$('#number_times').show();$('#credit').hide();$('#othermodule').hide();"/> 活动设置次数</label>&nbsp;&nbsp;&nbsp;
+					{if $stonefish_branch}<label for="opportunity2" class="radio-inline"><input type="radio" name="opportunity" value="1" id="opportunity2" {if !empty($reply) && $reply['opportunity'] == 1}checked="true"{/if} onclick="$('#opportunity_text').show();$('#number_times').hide();$('#credit').hide();$('#othermodule').hide();"/> 商户赠送次数</label>&nbsp;&nbsp;&nbsp;{/if}
+					<label for="opportunity3" class="radio-inline"><input type="radio" name="opportunity" value="2" id="opportunity3" {if !empty($reply) && $reply['opportunity'] == 2}checked="true"{/if} onclick="{if $stonefish_branch}$('#opportunity_text').hide();{/if}$('#number_times').hide();$('#credit').show();$('#othermodule').hide();"/> 积分购买次数</label>{if $othermodule}
+					<label for="opportunity4" class="radio-inline"><input type="radio" name="opportunity" value="3" id="opportunity4" {if !empty($reply) && $reply['opportunity'] == 3}checked="true"{/if} onclick="{if $stonefish_branch}$('#opportunity_text').hide();{/if}$('#number_times').hide();$('#credit').hide();$('#othermodule').show();"/> 其他模块赠送次数</label>{/if}
+				</div>
             </div>
         </div>
+		{if $othermodule}
+		<div class="form-group" id="othermodule"{if !empty($reply) && $reply['opportunity'] != 3} style="display:none"{/if}>
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">其他模块</label>
+            <div class="col-sm-9 col-xs-12">
+               	{if $stonefish_fighting}<label for="othermodule1" class="radio-inline"><input type="radio" name="othermodule" value="stonefish_fighting" id="othermodule1" {if $reply['othermodule'] == 'stonefish_fighting'}checked="true"{/if}/> 一战到底</label>{/if}
+            </div>
+        </div>
+		{/if}
 		{if $stonefish_branch}
 		<div class="form-group" id="opportunity_text"{if !empty($reply) && $reply['opportunity'] == 1} style="display:block"{else} style="display:none"{/if}>
             <label class="col-xs-12 col-sm-3 col-md-2 control-label">商家赠送参数</label>
@@ -377,12 +384,12 @@
             </div>
         </div>
 		<div class="form-group">
- 			<label class="col-xs-12 col-sm-3 col-md-2 control-label">排行榜显示人数</label>
+ 			<label class="col-xs-12 col-sm-3 col-md-2 control-label">中奖名单显示人数</label>
             <div class="col-sm-9 col-xs-6">
 				<div class="input-group">
-					<span class="input-group-addon">排行榜显示</span>
+					<span class="input-group-addon">中奖榜显示</span>
 					<input type="text" class="form-control" name="viewranknum" value="{$reply['viewranknum']}" />
-					<span class="input-group-addon">位粉丝</span>
+					<span class="input-group-addon">位粉丝/每页</span>
 				</div>
             </div>
         </div>
@@ -648,15 +655,10 @@
                     		<div class="col-sm-4">
                         		<input class="form-control" type="text" value="{$prizes['prizevalue']}" name="prizevalue[{$id}]" placeholder="请填写奖品价值或积分等值">
                     		</div>
-							<!--
-				    		<label class="col-xs-12 col-sm-2 col-md-2 control-label">助力人次</label>
+				    		<label class="col-xs-12 col-sm-2 col-md-2 control-label">兑奖密码</label>
                     		<div class="col-sm-3">
-                        		<div class="input-group">
-                            		<input class="form-control" type="text" value="{$prizes['break']}" name="break[{$id}]">
-                            		<span class="input-group-addon">人次</span>
-                        		</div>
+                            	<input class="form-control" type="text" value="{$prizes['password']}" name="password[{$id}]">
                     		</div>
-							-->
                 		</div>			
 			    		<div class="form-group">
                     		<label class="col-xs-12 col-sm-2 col-md-2 control-label"><span style='color:red'>*</span> 奖品等级</label>
@@ -766,13 +768,14 @@
             <div class="col-sm-9 col-xs-6">
                	<div class="input-group">
 					<label for="tickettype1" class="radio-inline"><input type="radio" name="tickettype" value="1" id="tickettype1" {if $exchange['tickettype'] == 1}checked="true"{/if} onclick="$('#address').show();$('#awardingpas').hide();$('#beihuo').hide();$('#beihuo_tips').hide();"/> 后台兑奖</label>&nbsp;&nbsp;&nbsp;
-					<label for="tickettype2" class="radio-inline"><input type="radio" name="tickettype" value="2" id="tickettype2" {if $exchange['tickettype'] == 2}checked="true"{/if} onclick="$('#address').show();$('#awardingpas').hide();$('#beihuo').show();{if $exchange['beihuo']==1}$('#beihuo_tips').show();{/if}"/> 店员兑奖</label>{if $stonefish_branch}&nbsp;&nbsp;&nbsp;
+					<label for="tickettype2" class="radio-inline"><input type="radio" name="tickettype" value="2" id="tickettype2" {if $exchange['tickettype'] == 2}checked="true"{/if} onclick="$('#address').hide();$('#awardingpas').hide();$('#beihuo').show();{if $exchange['beihuo']==1}$('#beihuo_tips').show();{/if}"/> 店员兑奖</label>{if $stonefish_branch}&nbsp;&nbsp;&nbsp;
 					<label for="tickettype3" class="radio-inline"><input type="radio" name="tickettype" value="3" id="tickettype3" {if $exchange['tickettype'] == 3}checked="true"{/if} onclick="$('#address').hide();$('#awardingpas').hide();$('#beihuo').show();{if $exchange['beihuo']==1}$('#beihuo_tips').show();{/if}"/> 商家网点兑奖</label>{/if}&nbsp;&nbsp;&nbsp;
-					<label for="tickettype4" class="radio-inline"><input type="radio" name="tickettype" value="4" id="tickettype4" {if $exchange['tickettype'] == 4}checked="true"{/if} onclick="$('#address').show();$('#awardingpas').show();$('#beihuo').hide();$('#beihuo_tips').hide();"/> 密码兑奖</label>
-				</div>				
+					<label for="tickettype4" class="radio-inline"><input type="radio" name="tickettype" value="4" id="tickettype4" {if $exchange['tickettype'] == 4}checked="true"{/if} onclick="$('#address').show();$('#awardingpas').show();$('#beihuo').hide();$('#beihuo_tips').hide();"/> 密码兑奖</label>&nbsp;&nbsp;&nbsp;
+					<label for="tickettype5" class="radio-inline"><input type="radio" name="tickettype" value="5" id="tickettype5" {if $exchange['tickettype'] == 5}checked="true"{/if} onclick="$('#address').hide();$('#awardingpas').hide();$('#beihuo').hide();$('#beihuo_tips').hide();"/> 奖品密码兑奖</label>
+				</div>
             </div>
         </div>
-		<div class="form-group" id="beihuo"{if $exchange['tickettype'] == 1 || $exchange['tickettype'] == 4} style="display:none"{/if}>
+		<div class="form-group" id="beihuo"{if $exchange['tickettype'] == 1 || $exchange['tickettype'] == 4 || $exchange['tickettype'] == 5} style="display:none"{/if}>
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label">备货选项</label>
 			<div class="col-sm-9 col-xs-12">
 				<div class="input-group">
@@ -782,7 +785,7 @@
 				<span class="help-block">开启备货，粉丝中奖后可选择兑奖地点，后台查看数据备货 <span style="color:red">注：兑奖开始时间前才启作用</span></span>
 			</div>
 		</div>
-		<div class="form-group" id="beihuo_tips"{if $exchange['beihuo']==0} style="display:none"{/if}>
+		<div class="form-group" id="beihuo_tips"{if $exchange['beihuo']==0 || $exchange['tickettype'] == 1 || $exchange['tickettype'] == 4 || $exchange['tickettype'] == 5} style="display:none"{/if}>
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label">备货按钮</label>
 			<div class="col-sm-9 col-xs-12">
 				<div class="input-group">
@@ -802,7 +805,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="address">
+		<div id="address"{if $exchange['tickettype'] == 2 || $exchange['tickettype'] == 3 || $exchange['tickettype'] == 5} style="display:none"{/if}>
 		<div class="form-group">
  			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 兑奖地点</label>
             <div class="col-sm-9 col-xs-6">
@@ -832,11 +835,13 @@
             </div>
         </div>
 		<div class="form-group">
- 			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 库存类型</label>
+ 			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 是否验证手机</label>
             <div class="col-sm-9 col-xs-6">
                	<div class="input-group">
-					<label for="inventory1" class="radio-inline"><input type="radio" name="inventory" value="1" id="inventory1" {if $exchange['inventory'] == 1}checked="true"{/if}/> 抽中立即减少库存</label>&nbsp;&nbsp;&nbsp;
-					<label for="inventory2" class="radio-inline"><input type="radio" name="inventory" value="2" id="inventory2" {if $exchange['inventory'] == 2}checked="true"{/if}/> 兑奖后才减少库存</label>
+					<label for="mobileverify0" class="radio-inline"><input type="radio" name="mobileverify" value="0" id="mobileverify0" {if $reply['mobileverify'] == 0}checked="true"{/if}/> 无需验证</label>&nbsp;
+					<label for="mobileverify1" class="radio-inline"><input type="radio" name="mobileverify" value="1" id="mobileverify1" {if $reply['mobileverify'] == 1}checked="true"{/if}/> 导入参与验证</label>&nbsp;
+					<label for="mobileverify2" class="radio-inline"><input type="radio" name="mobileverify" value="2" id="mobileverify2" {if $reply['mobileverify'] == 2}checked="true"{/if}/> 导入福利验证</label>
+					<div class="help-block">导入参与/福利验证：请不要选择 [输入项类型] 中奖后提示输入</div>
 				</div>
             </div>
         </div>
@@ -886,6 +891,7 @@
             <div class="col-sm-9 col-xs-12">
 				<label for="isfans_0" class="radio-inline"><input id="isfans_0" type="radio" name="isfans" value="0" {if $exchange['isfans'] == 0}checked="checked"{/if}> 参数项只保留本模块下</label>
 				<label for="isfans_1" class="radio-inline"><input id="isfans_1" type="radio" name="isfans" value="1"  {if $exchange['isfans'] == 1}checked="checked"{/if}> 参数项同步更新至官方会员信息表中</label>
+				<label for="isfans_2" class="radio-inline"><input id="isfans_2" type="radio" name="isfans" value="2"  {if $exchange['isfans'] == 2}checked="checked"{/if}> 官方会员信息/参数项信息互相同步</label>
             </div>
         </div>
     </div>

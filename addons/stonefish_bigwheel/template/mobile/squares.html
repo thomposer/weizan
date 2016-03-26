@@ -299,7 +299,7 @@ window.onload=function(){
 			return false;
 		}else{
 			$("#btn").hide();
-			$.getJSON('{php echo $this->createMobileUrl('get_award', array('rid' => $rid,'avatar' => $firend['headimgurl'],'nickname' => $firend['nickname']))}', function(data){
+			$.getJSON('{php echo $this->createMobileUrl('get_award', array('rid' => $rid,'avatar' => $userinfo['headimgurl'],'nickname' => $userinfo['nickname']))}', function(data){
 				if($("#count").length>0){
 					$("#count").text(parseInt($("#count").text())+1);
 				}
@@ -454,6 +454,8 @@ $("#save-btn").bind("click",function () {
 	    return;
 	}
 	{/if}
+	var avatar = '{$userinfo['headimgurl']}';
+	var nickname = '{$userinfo['nickname']}';
 	var submitData = {
         {if $exchange['isrealname']}realname: realname,{/if}
 		{if $exchange['ismobile']}mobile: mobile,{/if}
@@ -466,6 +468,8 @@ $("#save-btn").bind("click",function () {
 		{if $exchange['iscompany']}company: company,{/if}
 		{if $exchange['isoccupation']}occupation: occupation,{/if}
 		{if $exchange['isposition']}position: position,{/if}
+		avatar: avatar,
+		nickname: nickname,
 	};
 	$.post('{php echo $this->createMobileUrl('editfans', array('rid' => $rid,'from_user' => $page_from_user))}', submitData, function(data) {
 	if (data.success == 1) {
@@ -485,12 +489,15 @@ $("#save-btn").bind("click",function () {
 <!--常用弹出关闭-->
    $("#panel-close").click(function(){
 		$("#panel_box").hide();
+		$("#btn").show();
 	});
 	$("#savebtn").click(function(){
 		$("#panel_box").hide();
+		$("#btn").show();
 	});
 	$("#closebtn").click(function(){
 		$("#panel_box").hide();
+		$("#btn").show();
 	});
 	$("#share_close").click(function(){
 		$("#share_box").hide();

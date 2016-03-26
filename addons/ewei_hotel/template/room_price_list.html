@@ -12,7 +12,7 @@
 	<tbody>
 	{loop $list $data1}
 	<tr>
-		<td rowspan="3" style="text-align: center;width:100px;">{php echo cutstr($data1['title'], 8)}</td>
+		<td rowspan="2" style="text-align: center;width:100px;">{php echo cutstr($data1['title'], 8)}</td>
 		<td colspan='2'  style="text-align: center;">前台价</td>
 		{loop $date_array $row}
 		<td style="text-align: center">
@@ -31,18 +31,6 @@
 			<span class="price_span">{$data1['price_list'][$row['time']]['cprice']}</span>
             <span class="price_editspan hide">
                <input type="text" date="{$row['date']}"  pricetype="cprice" hotelid="{$data1['price_list'][$row['time']]['hotelid']}" roomid="{$data1['price_list'][$row['time']]['roomid']}" class="price_input form-control" value="{$data1['price_list'][$row['time']]['cprice']}" />
-            </span>
-		</td>
-		{/loop}
-		<td></td>
-	</tr>
-	<tr>
-		<td colspan='2' style="text-align: center;">会员价</td>
-		{loop $date_array $row}
-		<td style="text-align: center">
-			<span class="price_span">{$data1['price_list'][$row['time']]['mprice']}</span>
-            <span class="price_editspan hide">
-               <input type="text" date="{$row['date']}"  pricetype="mprice" hotelid="{$data1['price_list'][$row['time']]['hotelid']}" roomid="{$data1['price_list'][$row['time']]['roomid']}" class="price_input form-control" value="{$data1['price_list'][$row['time']]['mprice']}" />
             </span>
 		</td>
 		{/loop}

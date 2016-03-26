@@ -7,12 +7,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
-<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/mGrzxTeacher.css?v=4.80915" />
-<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/jquery.Jcrop.css" />
-<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/jquery-emoji.css?v=4.8" />
-<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/greenStyle.css?v=4.80120" />
-<script type="text/javascript" src="{MODULE_URL}public/mobile/js/jquery-1.11.3.min.js?v=4.8"></script>
-<script type="text/javascript" src="{MODULE_URL}public/mobile/js/PromptBoxUtil.js?v=4.81022"></script>
+<link type="text/css" rel="stylesheet" href="{OSSURL}public/mobile/css/mGrzxTeacher.css?v=4.80915" />
+<link type="text/css" rel="stylesheet" href="{OSSURL}public/mobile/css/jquery.Jcrop.css" />
+<link type="text/css" rel="stylesheet" href="{OSSURL}public/mobile/css/jquery-emoji.css?v=4.8" />
+<link type="text/css" rel="stylesheet" href="{OSSURL}public/mobile/css/greenStyle.css?v=4.80120" />
+<script type="text/javascript" src="{OSSURL}public/mobile/js/jquery-1.11.3.min.js?v=4.8"></script>
+<script type="text/javascript" src="{OSSURL}public/mobile/js/PromptBoxUtil.js?v=4.81022"></script>
 
 </head>
 <body>
@@ -79,7 +79,7 @@
 			<a href="{php echo $this->createMobileUrl('tjiaoliulist', array('schoolid' => $schoolid), true)}">
 				<div class="linkBox leftBox">
 					<div class="linkImg">
-						<img alt="" src="{MODULE_URL}public/mobile/img/link_msg.png" style="width:35px;">
+						<img alt="" src="{OSSURL}public/mobile/img/link_msg.png" style="width:35px;">
 					</div>
 					<span class="linkName">消息管理</span>
 				</div>
@@ -87,7 +87,7 @@
 			<a href="{php echo $this->createMobileUrl('noticelist', array('schoolid' => $schoolid), true)}">
 				<div class="linkBox centerBox">
 					<div class="linkImg">
-						<img alt="" src="{MODULE_URL}public/mobile/img/link_bjq.png" style="width:35px;">
+						<img alt="" src="{OSSURL}public/mobile/img/link_bjq.png" style="width:35px;">
 					</div>			
 					<span class="linkName">班级通知</span>	
 				</div>
@@ -95,28 +95,37 @@
 			<a href="{php echo $this->createMobileUrl('smssage', array('schoolid' => $schoolid), true)}">
 				<div class="linkBox rightBox">
 					<div class="linkImg">
-						<img alt="" src="{MODULE_URL}public/mobile/img/link_ktdt.png" style="width:35px;">
+						<img alt="" src="{OSSURL}public/mobile/img/link_ktdt.png" style="width:35px;">
 					</div>			
 					<span class="linkName">学生请假</span>	
 				</div>
-			</a>			
-            {if $teacher['status'] == 2}	
-			<a href="#">
-				<div class="linkBox rightBox">
+			</a>		
+            {if $teacher['status'] == 2}
+			<a href="{php echo $this->createMobileUrl('tmssage', array('schoolid' => $schoolid), true)}">
+				<div class="linkBox leftBox">
 					<div class="linkImg">
-						<img alt="" src="{MODULE_URL}public/mobile/img/link_ktdt.png" style="width:35px;">
+						<img alt="" src="{OSSURL}public/mobile/img/link_yezs.png" style="width:35px;">
+					</div>
+					<span class="linkName">职工请假</span>
+				</div>
+			</a>			
+			<a href="{php echo $this->createMobileUrl('mnoticelist', array('schoolid' => $schoolid), true)}">
+				<div class="linkBox centerBox">
+					<div class="linkImg">
+						<img alt="" src="{OSSURL}public/mobile/img/link_alarm.png" style="width:35px;">
 					</div>			
 					<span class="linkName">校园群发</span>	
 				</div>
 			</a>
-			<a href="{php echo $this->createMobileUrl('tmssage', array('schoolid' => $schoolid), true)}">
+			{else}
+			<a href="{php echo $this->createMobileUrl('mnoticelist', array('schoolid' => $schoolid), true)}">
 				<div class="linkBox leftBox">
 					<div class="linkImg">
-						<img alt="" src="{MODULE_URL}public/mobile/img/link_msg.png" style="width:35px;">
-					</div>
-					<span class="linkName">职工请假</span>
+						<img alt="" src="{OSSURL}public/mobile/img/link_alarm.png" style="width:35px;">
+					</div>			
+					<span class="linkName">校园公告</span>	
 				</div>
-			</a>
+			</a>			
 			{/if}			
 			<div class="cl"></div>
 		</div>		

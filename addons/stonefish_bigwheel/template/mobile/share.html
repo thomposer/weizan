@@ -83,7 +83,7 @@ a:link, a:visited, a:hover, a:active { color:{$template['textcolorlink']}; text-
 {template 'jssdkhide'}
 <script type="text/javascript">
 $("#help").click(function () {
-	$.ajax({type: "POST",url:"{php echo $this->createMobileUrl('firendhelp',array('rid'=>$rid,'fromuser'=>$fromuser))}",data: {fopenid: "{$from_user}",fnickname: "{$firend['nickname']}",fheadimgurl:"{$firend['headimgurl']}"},dataType: "json",async: true,timeout: 3000,success: function(data) {
+	$.ajax({type: "POST",url:"{php echo $this->createMobileUrl('firendhelp',array('rid'=>$rid,'fromuser'=>$fromuser))}",data: {fopenid: "{$from_user}",fnickname: "{$userinfo['nickname']}",fheadimgurl:"{$userinfo['headimgurl']}"},dataType: "json",async: true,timeout: 3000,success: function(data) {
 		showInfo(data.code);
 	},error: function(xhr, type) {
 		alert("发送网络请求失败！")

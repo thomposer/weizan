@@ -381,8 +381,8 @@ if(!function_exists('get_login_user')) {
 		$member = pdo_fetch("select * from " . tablename('hotel2_member') . " where weid=:weid and from_user=:from_user and islogin=1 limit 1", array(":weid" => $weid, ":from_user" => $_W['fans']['from_user']));
 		session_start();
 		$_SESSION['hotel2_member'] = json_encode($member);
-		
 		return $member;
+
 	}
 }
 
@@ -679,39 +679,28 @@ if(!function_exists('upload_question')) {
 		if (empty($question_type) || empty($question) || empty($answer)) {
 			return 0;
 		}
-
-		switch ($question_type)
-		{
-			case '单选题':
-				$type = 2;
-				$insert['answer'] = $answer;
-				break;
-
-			case '多选题':
-				$type = 3;
-				$insert['answer'] = $answer;
-				break;
-
-			case '判断题':
-				$type = 1;
-				if ($answer == '正确') {
-					$insert['answer'] = 1;
-				} else {
-					$insert['answer'] = 0;
-				}
-				break;
+		if ($question_type == '单选题') {
+			$type = 2;
+			$insert['answer'] = $answer;
+		} elseif ($question_type == '多选题') {
+			$type = 3;
+			$insert['answer'] = $answer;
+		} elseif ($question_type == '判断题') {
+			$type = 1;
+			if ($answer == '正确') {
+				$insert['answer'] = 1;
+			} else {
+				$insert['answer'] = 0;
+			}
 		}
-
 		if ($type > 1) {
 			$answer_array = array($answer1, $answer2, $answer3, $answer4,$answer5,$answer6);
 			$insert['items'] = serialize($answer_array);
 		}
-
 		$insert['type'] = $type;
-		$insert['question'] = $row_num."------".$question;
+		$insert['question'] = $question;
 
 		$flag = check_question($insert, 0);
-
 		if ($flag == 0) {
 			if (!empty($array['poolid'])) {
 				$insert['poolid'] = $array['poolid'];
@@ -719,7 +708,6 @@ if(!function_exists('upload_question')) {
 			$insert['level'] = $level;
 			$insert['explain'] = $explain;
 			$insert['weid'] = $_W['uniacid'];
-
 			pdo_insert('ewei_exam_question', $insert);
 		}
 	}
@@ -728,76 +716,32 @@ if(!function_exists('upload_question')) {
 if(!function_exists('uploadFile')) {
 	function uploadFile($file, $filetempname, $array)
 	{
-		//自己设置的上传文件存放路径
-		$filePath = 'addons/ewei_exam/upload/';
-
-	//    $filePath = $filePath . date("m") . '/';
-	//    if(!file_exists($filePath))
-	//    {
-	//        mkdir($filePath);
-	//    }
-	//    print_r($filePath);exit;
-
-		require_once '../framework/library/phpexcel/PHPExcel.php';
-		require_once '../framework/library/phpexcel/PHPExcel/IOFactory.php';
-		require_once '../framework/library/phpexcel/PHPExcel/Reader/Excel5.php';
-
-		//注意设置时区
-		$time = date("y-m-d-H-i-s"); //去当前上传的时间
-		//获取上传文件的扩展名
-		$extend = strrchr($file, '.');
-		//上传后的文件名
-		$name = $time . $extend;
-		$uploadfile = IA_ROOT."/". $filePath . $name; //上传后的文件名地址
-		//move_uploaded_file() 函数将上传的文件移动到新位置。若成功，则返回 true，否则返回 false。
-		$result = move_uploaded_file($filetempname,$uploadfile); //假如上传到当前目录下
-			
-
-		if ($result) //如果上传文件成功，就执行导入excel操作
-		{
-		
-			//include "conn.php";
-			$objReader = PHPExcel_IOFactory::createReader('Excel2007');//use excel2007 for 2007 format
-			$objPHPExcel = $objReader->load($uploadfile);
-			
-			$objWorksheet = $objPHPExcel->getActiveSheet();
-			$highestRow = $objWorksheet->getHighestRow();
-	 
-			//echo 'highestRow='.$highestRow;
-			//echo "<br>";
-			$highestColumn = $objWorksheet->getHighestColumn();
-			$highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);//总列数
-			//echo 'highestColumnIndex='.$highestColumnIndex;
-			//echo "<br>";
-			
-			
-			for ($row = 1;$row <= $highestRow;$row++)
-			{
-				if ($row == 1) {
+		if ($result = file_get_contents($filetempname)) {
+			$result = iconv('gbk', 'utf-8', $result);
+			if (empty($result)) {
+				return $msg = '导入失败';
+			}
+			$result = preg_replace('/\n/', 'h--h', $result);
+			$result = explode('h--h', $result);
+			foreach ($result as $key => $ques) {
+				$ques  = explode(',', $ques);
+				if ($key == 0) {
 					continue;
 				}
-				$strs=array();
-				//注意highestColumnIndex的列数索引从0开始
-				for ($col = 0;$col < $highestColumnIndex;$col++)
-				{
-					$strs[$col] =$objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
+				$strs = array();
+				foreach ($ques as $questi) {
+					$strs[] = preg_replace('/\s/', '', trim($questi, "\""));
+					if ($array['ac'] == 'question') {
+						upload_question($strs, time(), $array);
+					}elseif ($array['ac'] == 'member') {
+						upload_member($strs, time());
+					}
 				}
-
-				if ($array['ac'] == "member") {
-					upload_member($strs, time());
-				} else if ($array['ac'] == "question") {
-					$array['row_num'] = $row;
-					upload_question($strs, time(), $array);
-				}
-
-				$msg = 1;
 			}
-			unlink($uploadfile);
-			//$msg = upload_member($objPHPExcel);
+			$msg = '1';
 		} else {
 			$msg = "导入失败！";
 		}
-
 		return $msg;
 	}
 }

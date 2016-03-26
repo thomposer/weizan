@@ -284,7 +284,7 @@ class WeiZan {
 					$updatestat = array(
 						'cancel' => $todaystat['cancel'] + 1,
 					);
-					$updatestat['cumulate'] = intval($todaystat['cumulate']) - 1;
+					$updatestat['cumulate'] = 0;
 					pdo_update('stat_fans', $updatestat, array('id' => $todaystat['id']));
 				}
 			} elseif ($message['event'] == 'subscribe') {
@@ -293,7 +293,7 @@ class WeiZan {
 						'new' => 1,
 						'uniacid' => $_W['uniacid'],
 						'cancel' => 0,
-						'cumulate' => 1,
+						'cumulate' => 0,
 						'date' => date('Ymd'),
 					);
 					pdo_insert('stat_fans', $updatestat);

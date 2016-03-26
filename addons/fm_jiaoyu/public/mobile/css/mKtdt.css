@@ -106,58 +106,7 @@ a:focus {outline: none;}
 .sendSelectParamOperBtn {right:50px;}
 .sendParam_wot {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;background:#fff;margin:10px 0;}
 
-.iconloc {background:url(http://wmeiapi-session.stor.sinaapp.com/img/icon.png) no-repeat;width:20px;height:25px;z-index: 999;padding-right: 10px;}
-.bj_icon_background-position{;background-position:-171px -10px;margin-top:3px;}
-.xm_icon_background-position{background-position:-72px -6px;}
-.wz_icon_background-position{background-position:-106px -6px;}
-.qx_icon_background-position{background-position:-137px -6px;}
-.fx_icon_background-position{background-position:-310px -10px;}
-.float_left{float: left;}
-.float_right{float: left;}
 
-
-.xcBody .xcShareBox{width:100%;height:auto;margin:0 0 0;}
-.xcBody .xcShareBox .r{float:left;width:100%;}
-.xcBody .xcShareBox .r .content{float:left;width:100%;padding:5px 0;line-height:20px;font-size:14px;font-weight:bold;}
-.xcBody .xcShareBox .r .pic{float:left;width:96%;padding: 10px 2%;}
-.xcBody .xcShareBox .r .pic .img{float:left;width:30%;margin:5px 0;margin-right:5%;overflow:hidden;background:black;position:relative;}
-.xcBody .xcShareBox .r .pic .img img{position:absolute;}
-
-
-.blackBg{position:fixed;top:0;left:0;right:0;bottom:0;background:black;z-index:89;filter:alpha(opacity:30);opacity:0.3;display:none;}
-.selectList{position:fixed;width:80%;height:auto;max-height:70%;overflow:hidden;background:white;border:1px solid #e9e9e9;z-index:99;display:none;left:10%;top:50%;}
-.selectList .single{position:relative;width:100%;height:100%;overflow:hidden;display:none;}
-.selectList .double{position:relative;width:100%;height:100%;overflow:hidden;display:none;}
-.selectList ul{width:100%;height:auto;overflow:auto;}
-.selectList ul li{height:50px;line-height:50px;border-bottom:1px solid #e9e9e9;padding:0 10px;}
-.selectList ul li.selected{border-left:5px solid #ffc74e;}
-.selectList ul li span.le{height:50px;line-height:50px;float:left;font-size:16px;}
-.selectList ul li span.ri{float:right;width:30px;height:30px;margin:10px;}
-.selectList .btnBox{width:100%;height:50px;}
-.selectList .btn{position:absolute;width:100%;height:50px;bottom:0;left:0;}
-.selectList .btn button{height:40px;line-height:40px;text-align:center;background:-webkit-gradient(linear,0% 0%,0% 100%,color-stop(0.5,#e7e7e7), color-stop(1,#dedbde));border:1px solid #a4a4a4;border-top:1px solid #c6c6c6;}
-.selectList .single .btn button{width:80%;margin:5px 10%;}
-.selectList .double .btn button{width:35%;margin:5px 0 5px 10%;}
-.selectList .double .btn .box{width:50%;height:100%;background:#e9e9e9;float:left;}
-.selectList .double .btn .box span{display:block;height:50px;line-height:50px;text-align:center;background:white;cursor:pointer;}
-.selectList .double .btn .box span.ok{margin-right:1px;}
-
-/**选择班级**/
-.xcBody .xcShareBox .selectDialog {background-color:#eeeeee; height:0px; padding:0px; position:fixed !important; /* 浮动对话框 */ position:absolute; top:0px;width:100%; z-index:5; border-radius:5px; display:none; }
-.xcBody .xcShareBox .selectDialog .dialogList{background:white;}
-.xcBody .xcShareBox .selectDialog .dialogList .dialogBox{width:96%;height:50px;border-top:1px solid #e9e9e9;padding:0 2%;}
-.xcBody .xcShareBox .selectDialog .dialogList .dialogBox .l{height:50px;float:left;}
-.xcBody .xcShareBox .selectDialog .dialogList .dialogBox .l i{margin-top:12px;}
-.xcBody .xcShareBox .selectDialog .dialogList .dialogBox .r{height:50px;float:left;width:auto;}
-.xcBody .xcShareBox .selectDialog .dialogList .dialogBox .r span{height:50px;line-height:28px;}
-.xcBody .xcShareBox .selectDialog .dialogList .dialogBox .bjr{height:50px;float:left;width:auto;}
-.xcBody .xcShareBox .selectDialog .dialogList .dialogBox .bjr span{height:50px;line-height:50px;}
-.xcBody .xcShareBox .selectDialog .dialog_button{width:92%;background:#ffffff;text-align:center;height:20%;border:0px solid;border-radius:5px;margin:6px 4% 0 4%;line-height:250%;color:#4e4e4e !important;font-family:"微软雅黑";font-weight:bold;font-size:15px;}
-.xcBody .xcShareBox .selectDialog .cancel {margin-top:8px;background:#959595;color:#ffffff !important;}
-.xcBody .xcShareBox .selectDialog .position{left:65px;top:22px}
-.xcBody .xcShareBox .selectDialog .enterDialog{width:100%;height:50px;line-height:50px;border-top:1px solid #e9e9e9;text-align:center;background:#ffffff;}
-.xcBody .xcShareBox .selectDialog .closeDialog{width:100%;height:50px;line-height:50px;border-top:1px solid #e9e9e9;text-align:center;background:#eaeaea;}
-.xcBody .xcShareBox .selectDialog .line_height{line-height:0px;text-align: center;margin-bottom: 10px;}
 /*照片分享发送页面  end */
 
 .bottom{width:46px;height:46px;line-height:46px;position:fixed;text-align:center;bottom:10px;right:10px;display:none;}

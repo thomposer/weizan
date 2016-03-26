@@ -13,7 +13,6 @@
         $category = pdo_fetchall("SELECT * FROM " . tablename($this->table_teachers) . " WHERE weid = :weid And schoolid=:schoolid ORDER BY id ASC, sort DESC", array(':weid' => $weid, ':schoolid' => $schoolid), 'id');
 		
 
-
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
 		
 		$it = pdo_fetch("SELECT * FROM " . tablename($this->table_classify) . " WHERE sid = :sid", array(':sid' => $sid));
@@ -107,10 +106,10 @@
                     message('请输入教师姓名！');
                 }
 				if (empty($data['info'])) {
-                    message('清输入教师简介');
+                    message('请输入教师简介！');
                 }
 				if (empty($data['headinfo'])) {
-                    message('清输入教师描述');
+                    message('请输入教师描述！');
                 }
                 if (!empty($_FILES['thumb']['tmp_name'])) {
                     load()->func('file');

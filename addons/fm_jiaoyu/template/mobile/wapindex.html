@@ -4,14 +4,6 @@
     [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide:not(.ng-hide-animate) {
         display: none !important;
     }
-
-    ng\:form {
-        display: block;
-    }</style>
-    <style type="text/css">@charset "UTF-8";
-    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide:not(.ng-hide-animate) {
-        display: none !important;
-    }
     ng\:form {
         display: block;
     }
@@ -21,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta content="telephone=no" name="format-detection">
     <title>学校列表</title>
-	<link data-turbolinks-track="true" href="{MODULE_URL}public/mobile/css/weixin.css?{php echo time()" media="all" rel="stylesheet">
+	<link data-turbolinks-track="true" href="{OSSURL}public/mobile/css/weixin.css?{php echo time()" media="all" rel="stylesheet">
     <style type="text/css">
         @media screen {
         .smnoscreen {
@@ -33,9 +25,9 @@
             display: none
         }
     }</style>
-    <script type="text/javascript" src="{MODULE_URL}public/mobile/js/jquery.js"></script>
+    <script type="text/javascript" src="{OSSURL}public/mobile/js/jquery.js"></script>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GEurSyQ7NYatVGGVFS1ePKg2"></script>
-    <script type="text/javascript" src="{MODULE_URL}public/mobile/js/postion.js"></script>
+    <script type="text/javascript" src="{OSSURL}public/mobile/js/postion.js"></script>
 </head>
 <body>
 <div style="height: 100%;" class="ng-scope">
@@ -172,7 +164,7 @@
     </div>
 </div>
 </div>
-<script src="{MODULE_URL}public/mobile/js/jquery-1.11.3.min.js"></script>
+<script src="{OSSURL}public/mobile/js/jquery-1.11.3.min.js"></script>
 <script language="javascript">
     $('.ddb-tab-bar .ddb-tab-item').click(function () {
         $(".filter-nav-menu > .ddb-nav-pane").addClass('ng-hide').eq($('.ddb-tab-bar .ddb-tab-item').index(this)).removeClass('ng-hide');

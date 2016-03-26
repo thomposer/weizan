@@ -14,17 +14,17 @@
         </style>
         <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
         <title>用户中心</title>
-        <link rel="stylesheet" href="{MODULE_URL}public/mobile/css/weixin.css?{php echo time()}">
-		<link rel="stylesheet" href="{MODULE_URL}public/mobile/css/reset.css?{php echo time()}">
+        <link rel="stylesheet" href="{OSSURL}public/mobile/css/weixin.css?{php echo time()}">
+		<link rel="stylesheet" href="{OSSURL}public/mobile/css/reset.css?{php echo time()}">
 		<script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
-        <!-- <script src="{MODULE_URL}public/mobile/js/jquery.js?{php echo time()}"></script> -->
+        <!-- <script src="{OSSURL}public/mobile/js/jquery.js?{php echo time()}"></script> -->
 		<script src="{$MODOLE_URL}/js/tx.js?{php echo time()}"></script>
-		<script type="text/javascript" src="{MODULE_URL}public/mobile/js/swipe.js?{php echo time()}"></script>
+		<script type="text/javascript" src="{OSSURL}public/mobile/js/swipe.js?{php echo time()}"></script>
 </head>
 <body>
     <div class="saoma_info" id="saoma_info01" style="display:none;">
 	   <div>
-           <img src="{if !empty($category[$students['bj_id']])}{$_W['attachurl']}{$category[$students['bj_id']]['erwei']}{else}{MODULE_URL}public/mobile/img/ico_attention.png{/if}">
+           <img src="{if !empty($category[$students['bj_id']])}{$_W['attachurl']}{$category[$students['bj_id']]['erwei']}{else}{OSSURL}public/mobile/img/ico_attention.png{/if}">
 		
 		   <p>{if !empty($category[$students['bj_id']]['erwei'])}长按可以识别加入班级微信群{else}您所在班级还未上传群二维码哦{/if}</p>
 		   <span id="span_cha">×</span>
@@ -63,14 +63,14 @@
 	    <div id="bg"></div>
         <!-- 修改开始 -->
         <header id="header">
-            <div style="background-image:url({if !empty($item['avatar'])}{php echo toimage($item['avatar'])}{else}{MODULE_URL}public/mobile/img/mask_bg2.png{/if})"></div>
+            <div style="background-image:url({if !empty($item['avatar'])}{php echo toimage($item['avatar'])}{else}{OSSURL}public/mobile/img/mask_bg2.png{/if})"></div>
 			<p><span  style="font-color:#fff;"class="name">学生</span>:<span class="address">{$students['s_name']}</span></p>
 			<p><span  style="font-color:#fff;"class="name">{if $it['pard']==2}母亲{/if}{if $it['pard']==3}父亲{/if}{if $it['pard']==4}本人{/if}</span>:<span class="address">{if !empty($userinfo['name'])}{$userinfo['name']}{else if !empty($item['realname'])}{$item['realname']}{else}{$item['nickname']}{/if}</span></p>
         </header>
 		<div class="user_menu">
                 <ul>
                     <li class="li_share"><a href="{php echo $this->createMobileUrl('mytecher', array('schoolid' => $schoolid, 'bj_id' => $students['bj_id'], 'xq_id' => $students['xq_id']), true)}"><p>老师</p></a></li>
-                    <li class="li_gg"><a href=""><p>通知</p></a></li>
+                    <li class="li_gg"><a href="{php echo $this->createMobileUrl('snoticelist', array('schoolid' => $schoolid), true)}"><p>通知</p></a></li>
                     <li class="li_rank"><a href="{php echo $this->createMobileUrl('xsqj', array('schoolid' => $schoolid), true)}" id="rank"><p>请假</p></a></li>
                     <li class="li_qq"><a href="{if !empty($category[$students['bj_id']])}{$category[$students['bj_id']]['qun']}{else}#{/if}" id="A1"><p>Q群</p></a></li>
                     <li class="li_weixin"><a href="#" id="saoma"><p>微群</p></a></li>
@@ -81,7 +81,7 @@
             <a href="{php echo $this->createMobileUrl('myclass', array('schoolid' => $schoolid, 'bj_id' => $students['bj_id'], 'xq_id' => $students['xq_id']), true)}" class="my_count">学生在读班级</a>
             <a href="{php echo $this->createMobileUrl('chaxun', array('schoolid' => $schoolid, 'mobile' => $students['mobile'], 's_name' => $students['s_name']), true)}" class="my_score">学生考试成绩</a>
             <a href="#" class="lianxi" id="scroll">我的联系方式</a>
-			<a href="{php echo $this->createMobileUrl('jiaoliu', array('schoolid' => $schoolid, 'openid' => $openid), true)}" class="feedback">给班主任留言</a>
+			<a href="{php echo $this->createMobileUrl('jiaoliu', array('schoolid' => $schoolid), true)}" class="feedback">给班主任留言</a>
 			<a href="#" class="feedback" id="feedback">意见与反馈</a>
         </section>
     </div>

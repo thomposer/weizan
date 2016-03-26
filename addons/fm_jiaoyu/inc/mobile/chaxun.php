@@ -41,11 +41,6 @@
 		 include $this->template('chaxun');
           }else{
           include $this->template('404');
-          }
-		
-        if (empty($sid['id'])) {
-          include $this->template('404');
-        }
-		
-        
+          }	
+       
 ?>

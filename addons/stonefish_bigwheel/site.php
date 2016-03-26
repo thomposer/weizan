@@ -7,6 +7,19 @@ defined('IN_IA') or exit('Access Denied');
 
 class stonefish_bigwheelModuleSite extends WeModuleSite {	
 
+	//是否安装模块
+	public function modules_uniacid($modulesname) {
+		global $_W;
+		$modules = uni_modules($enabledOnly = true);
+		$modules_arr = array();
+		$modules_arr = array_reduce($modules, create_function('$v,$w', '$v[$w["mid"]]=$w["name"];return $v;'));
+		if(in_array($modulesname,$modules_arr)){
+		    return true;
+		}else{
+			return false;
+		}
+	}
+	//是否安装模块
 	//微信访问限制
 	function Weixin(){
 		global $_W;
@@ -148,13 +161,15 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
     }
 	//奖品名称替换
 	//提示出错页
-	function Message_tips($rid,$msg,$url){
+	function Message_tips($rid,$msg,$url = ''){
         global $_W;
 		$reply = pdo_fetch("select msgadpictime,msgadpic from ".tablename("stonefish_bigwheel_reply")." where rid = :rid ORDER BY `id` DESC", array(':rid' => $rid));
 		$time = $reply['msgadpictime'];
-		$msgadpic = iunserializer($reply['msgadpic']);
-		$msgadpicid = array_rand($msgadpic);
-		$msgadpic =$msgadpic[$msgadpicid];
+		if($reply['msgadpic']!='N;'){
+			$msgadpic = iunserializer($reply['msgadpic']);
+		    $msgadpicid = array_rand($msgadpic);
+		    $msgadpic =$msgadpic[$msgadpicid];
+		}
 		if(empty($msg)){
 			$msg = '未知错误！';
 		}
@@ -163,7 +178,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
     }
 	//提示出错页
 	//获取openid
-	function Get_openid() {
+	function Get_openid($rid) {
         global $_W;
 		$from_user = array();
 		$from_user['openidtrue'] = $_SESSION['openid'];
@@ -171,33 +186,66 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		$setting = $this->module['config'];
 		if($_W['account']['level']<4 && $setting['stonefish_bigwheel_oauth']==1){
 			$from_user['openid'] = $_SESSION['oauth_openid'];
+			if(empty($from_user['openid'])){
+				$this->message_tips($rid,'系统借用公众平台oAuth没有设置，请联系管理员设置！');
+			}
 		}
 		if($_W['account']['level']<4 && $setting['stonefish_bigwheel_oauth']==2){
 			$from_user['openid'] = $_COOKIE["stonefish_oauth_from_user"];
+			if(empty($from_user['openid'])){
+				$this->message_tips($rid,'系统模块借用公众平台oAuth没有设置，请联系管理员设置！');
+			}
 		}
 		if(empty($from_user['openid'])){
 			if (isset($_COOKIE["user_oauth2_wuopenid"])){
 				$from_user['openid'] = $_COOKIE["user_oauth2_wuopenid"];
 			}
 		}
-		//重新判断是否关注用户
-		if($_W['account']['level']==4){
-		    $fans_member = pdo_fetch("select follow,uid from " . tablename('mc_mapping_fans') . " where uniacid = :uniacid and acid = :acid and openid = :openid order by `fanid` desc", array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid'], ':openid' => $from_user['openid']));
-		    if(!empty($fans_member)){
-			    $_W['fans']['follow'] = $fans_member['follow'];
-		        $_W['member']['uid'] = $fans_member['uid'];
-		    }
-		}elseif(!empty($_SESSION['openid'])){
-			$fans_member = pdo_fetch("select follow,uid from " . tablename('mc_mapping_fans') . " where uniacid = :uniacid and acid = :acid and openid = :openid order by `fanid` desc", array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid'], ':openid' => $_SESSION['openid']));
-		    if(!empty($fans_member)){
-			    $_W['fans']['follow'] = $fans_member['follow'];
-		        $_W['member']['uid'] = $fans_member['uid'];
-		    }
+		if(empty($from_user['openid'])){
+			$from_user['openid'] = time().mt_rand(1000,9999);
 		}
-		//重新判断是否关注用户
 		return $from_user;
     }
 	//获取openid
+	//获取粉丝数据
+	function Get_UserInfo($power,$rid,$iid = 0,$page_fromuser = '',$entrytype) {   
+        global $_W;
+		$setting = $this->module['config'];
+		if(!empty($_COOKIE['stonefish_userinfo'])){
+			$userinfo = iunserializer($_COOKIE["stonefish_userinfo"]);
+			if($_COOKIE["stonefish_userinfo_power"]!=$power || empty($userinfo['openid'])){
+				setcookie("stonefish_userinfo", '', time()-7200);
+				setcookie("stonefish_userinfo_power", '', time()-7200);
+				$appUrl=$this->createMobileUrl('entry', array('rid' => $rid,'iid' => $iid,'from_user' => $page_fromuser,'entrytype' => $entrytype),true);
+				$appUrl=substr($appUrl,2);
+				$url = $_W['siteroot'] ."app/".$appUrl;
+				header("location: $url");
+				exit;
+			}
+			if(empty($userinfo['nickname']) && $power==2){
+				setcookie("stonefish_userinfo", '', time()-7200);
+				setcookie("stonefish_userinfo_power", '', time()-7200);
+				$appUrl=$this->createMobileUrl('entry', array('rid' => $rid,'iid' => $iid,'from_user' => $page_fromuser,'entrytype' => $entrytype),true);
+				$appUrl=substr($appUrl,2);
+				$url = $_W['siteroot'] ."app/".$appUrl;
+				header("location: $url");
+				exit;
+			}
+			if(empty($userinfo['headimgurl']) && $power==2){
+				$userinfo['headimgurl'] = MODULE_URL.'template/images/avatar.jpg';
+			}
+		}elseif($setting['stonefish_bigwheel_oauth']>=1){
+			$appUrl=$this->createMobileUrl('entry', array('rid' => $rid,'iid' => $iid,'from_user' => $page_fromuser,'entrytype' => $entrytype),true);
+			$appUrl=substr($appUrl,2);
+			$url = $_W['siteroot'] ."app/".$appUrl;
+			header("location: $url");
+			exit;
+		}else{
+			$userinfo = array('headimgurl' => MODULE_URL.'template/images/avatar.jpg','nickname' => '匿名');
+		}
+		return $userinfo;
+	}
+	//获取粉丝数据
 	//活动状态
 	function Check_reply($reply) {   
 		if ($reply == false) {
@@ -230,26 +278,16 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
         $entrytype = $_GPC['entrytype'];
         $code = $_GPC['code'];                
         $rid = $_GPC['rid'];
-		$tokenInfo = $this->getAuthTokenInfo($code);
+		$tokenInfo = $this->getAuthTokenInfo($code,$_GPC['power']);
         $from_user = $tokenInfo['openid'];
 		setcookie("stonefish_userinfo", iserializer($tokenInfo), time()+3600*24*$setting['stonefish_oauth_time']);
 		setcookie("stonefish_userinfo_power", $_GPC['power'], time()+3600*24*$setting['stonefish_oauth_time']);
 		setcookie("stonefish_oauth_from_user", $from_user, time()+3600*24*$setting['stonefish_oauth_time']);
-        if ($entrytype == "index") { // 粉丝参与活动
-		    $appUrl= $this->createMobileUrl('index', array('rid' => $rid),true);
-		    $appUrl=substr($appUrl,2);
-            $url = $_W['siteroot'] . "app/".$appUrl;
-        } elseif ($entrytype == "shareview") { // 好友进入认证
-            $appUrl=$this->createMobileUrl('shareview', array('rid' => $rid,"fromuser" => $_GPC['from_user']),true);
-			$appUrl=substr($appUrl,2);
-			$url = $_W['siteroot'] ."app/".$appUrl;
-        }
-        header("location: $url");
-		exit;
+        $this->appurlheader($entrytype, $rid, $_GPC['from_user']);
     }
 	//认证第二部获取 openid和accessToken
     //获取token信息
-    public function getAuthTokenInfo($code){
+    public function getAuthTokenInfo($code,$power){
         global $_GPC, $_W;
 		if ($_W['account']['level']==4){
 			$appid = $_W['account']['key'];
@@ -273,7 +311,11 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
             echo '<h1>获取微信公众号授权' . $code . '失败[无法取得token以及openid], 请稍后重试！ 公众平台返回原始数据为: <br />' . $content['meta'] . '<h1>';
             exit();
         }else{
-			$token = $this->getUserInfo($token['openid'], $token['access_token']);
+			if($power==1){
+				$token = array('openid'=>$token['openid'],'headimgurl' => MODULE_URL.'template/images/avatar.jpg','nickname' => '匿名'.time().mt_rand(1000,9999));
+			}else{
+				$token = $this->getUserInfo($token['openid'], $token['access_token']);
+			}
 		}
         return $token;
     }
@@ -347,9 +389,20 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		}		
 	}
 	//会员中心
+	//跳转
+	public function Appurlheader($entrytype, $rid, $from_user) {
+		global $_W;
+		$appUrl=$this->createMobileUrl($entrytype, array('rid' => $rid,'fromuser' => $from_user),true);
+		$appUrl=substr($appUrl,2);
+		$url = $_W['siteroot'] ."app/".$appUrl;
+		header("location: $url");
+		exit;
+	}
+	//跳转
 	//进入页
 	public function doMobileEntry() {
-		global $_GPC, $_W;          
+		global $_GPC, $_W;
+		$this->Weixin();
 		$rid = intval($_GPC['rid']);
 		$entrytype = $_GPC['entrytype'];
 		$uniacid = $_W['uniacid'];       
@@ -357,12 +410,12 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		$reply = pdo_fetch("select * from " . tablename('stonefish_bigwheel_reply') . " where rid = :rid order by `id` desc", array(':rid' => $rid));		
         //活动状态
 		$this->check_reply($reply);		
-		//活动状态
+		//活动状态		
 		//虚拟人数
 		$this->xuni_time($reply);
 		//虚拟人数
 		//获取openid
-		$openid = $this->get_openid();
+		$openid = $this->get_openid($rid);
 		$from_user = $openid['openidtrue'];
 		//获取openid
 		//广告显示控制
@@ -385,122 +438,76 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 				}
 				include $this->template('homepictime');
 				exit;
-			}			
-		}		
+			}
+		}
         //广告显示控制
-		if(!empty($_COOKIE['stonefish_userinfo']) && $_W['account']['level']<4){
-			$appUrl=$this->createMobileUrl($entrytype, array('rid' => $rid,'fromuser' => $_GPC['from_user']),true);
-			$appUrl=substr($appUrl,2);
-			$url = $_W['siteroot'] ."app/".$appUrl;
-			header("location: $url");
-		    exit;
+		//获取openid以及头像昵称
+		$setting = $this->module['config'];
+		if($_W['account']['level']==4){
+			load()->classs('weixin.account');
+		    $accObj= WeixinAccount::create($acid);
+		    $access_token = $accObj->fetch_token();
+			load()->func('communication');
+			$oauth2_code = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$access_token."&openid=".$from_user."&lang=zh_CN";
+			$content = ihttp_get($oauth2_code);
+			$token = @json_decode($content['content'], true);
+			if($token['subscribe']){
+				setcookie("stonefish_userinfo", iserializer($token), time()+3600*24*$setting['stonefish_oauth_time']);
+				setcookie("stonefish_userinfo_power", $reply['power'], time()+3600*24*$setting['stonefish_oauth_time']);
+				$this->appurlheader($entrytype, $rid, $_GPC['from_user']);
+			}else{
+				if(!empty($_COOKIE['stonefish_userinfo'])){
+			        $this->appurlheader($entrytype, $rid, $_GPC['from_user']);
+				}else{
+					//snsapi_base为只获取OPENID,snsapi_userinfo为获取头像和昵称
+			        $scope = $reply['power']==1 ? 'snsapi_base' : 'snsapi_userinfo';
+					if($scope==1){
+						$this->appurlheader($entrytype, $rid, $_GPC['from_user']);
+					}else{
+						$appid = $_W['account']['key'];
+				        $appUrl= $this->createMobileUrl('auth2', array('entrytype' => $entrytype,'rid' => $rid,'from_user' => $_GPC['from_user'],'power' => $reply['power']),true);
+		                $appUrl = substr($appUrl,2);
+                        $redirect_uri = $_W['siteroot'] ."app/".$appUrl ;
+                        $oauth2_code = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$appid."&redirect_uri=".urlencode($redirect_uri)."&response_type=code&scope=".$scope."&state=1#wechat_redirect";
+                        header("location: $oauth2_code");
+		                exit;	
+					}
+				}
+			}
 		}else{
-			$setting = $this->module['config'];
-		    //认证服务号
-		    //认证服务号
-		    if($_W['account']['level']==4){
-			    $fans = pdo_fetch("select * from " . tablename('mc_mapping_fans') . " where uniacid = :uniacid and acid = :acid and openid = :openid order by `fanid` desc", array(':uniacid' => $uniacid, ':acid' => $acid, ':openid' => $from_user));
-			    if(empty($fans) || empty($_COOKIE['stonefish_userinfo'])){
-			 	    $appid = $_W['account']['key'];
-                    $secret = $_W['account']['secret'];
-			        load()->classs('weixin.account');
-		            $accObj= WeixinAccount::create($acid);
-		            $access_token = $accObj->fetch_token();
-			        load()->func('communication');
-			        $oauth2_code = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$access_token."&openid=".$from_user."&lang=zh_CN";
-			        $content = ihttp_get($oauth2_code);
-			        $token = @json_decode($content['content'], true);
-			        setcookie("stonefish_userinfo", iserializer($token), time()+3600*24*$setting['stonefish_oauth_time']);
-				    setcookie("stonefish_userinfo_power", $reply['power'], time()+3600*24*$setting['stonefish_oauth_time']);
-			        //判断是否关注
-					if($token['subscribe']==1){
-					    //平台没有此粉丝数据重新写入数据，一般不会出现这个问题
-					    $rec = array();
-			            $rec['acid'] = $acid;
-			            $rec['uniacid'] = $uniacid;
-			            $rec['uid'] = 0;
-			            $rec['openid'] = $token['openid'];
-			            $rec['salt'] = random(8);
-				        $rec['follow'] = 1;
-				        $rec['followtime'] = $token['subscribe_time'];
-				        $rec['unfollowtime'] = 0;
-					    $settings = uni_setting($uniacid, array('passport'));
-					    if (!isset($settings['passport']) || empty($settings['passport']['focusreg'])) {
-						    $default_groupid = pdo_fetchcolumn('SELECT groupid FROM ' .tablename('mc_groups') . ' WHERE uniacid = :uniacid AND isdefault = 1', array(':uniacid' => $uniacid));
-						    $data = array(
-					            'uniacid' => $uniacid,
-					            'email' => md5($token['openid']).'@00393.com',
-					            'salt' => random(8),
-					            'groupid' => $default_groupid,
-								'avatar' => rtrim($token['headimgurl'],'0').'132',
-					            'createtime' => TIMESTAMP,
-				            );
-				            $data['password'] = md5($token['openid'] . $data['salt'] . $_W['config']['setting']['authkey']);
-				            pdo_insert('mc_members', $data);
-				            $rec['uid'] = pdo_insertid();
-						    $fans['uid'] = $rec['uid'];
-			            }
-			            pdo_insert('mc_mapping_fans', $rec);					
-					    //平台没有此粉丝数据重新写入数据，一般不会出现这个问题
-				    }
-				    $appUrl=$this->createMobileUrl($entrytype, array('rid' => $rid,'fromuser' => $_GPC['from_user']),true);
-			        $appUrl=substr($appUrl,2);
-			        $url = $_W['siteroot'] ."app/".$appUrl;
-			        header("location: $url");
-		            exit;		            
+			if(!empty($_COOKIE['stonefish_userinfo'])){
+			    $this->appurlheader($entrytype, $rid, $_GPC['from_user']);
+		    }else{
+				if($setting['stonefish_bigwheel_oauth']==0){
+				    if(!isset($_COOKIE["user_oauth2_wuopenid"]) || empty($_COOKIE['user_oauth2_wuopenid'])){
+				   	    //设置cookie信息
+					    $token = array('openid' => time().mt_rand(1000,9999),'headimgurl' => MODULE_URL.'template/images/avatar.jpg','nickname' => '匿名'.time().mt_rand(1000,9999));
+			    	    setcookie("user_oauth2_wuopenid", time(), time()+3600*24*$setting['stonefish_oauth_time']);
+					    setcookie("stonefish_userinfo", iserializer($token), time()+3600*24*$setting['stonefish_oauth_time']);
+				        setcookie("stonefish_userinfo_power", $reply['power'], time()+3600*24*$setting['stonefish_oauth_time']);
+			   	    }
+			        $this->appurlheader($entrytype, $rid, $_GPC['from_user']);
 			    }
-			    if(!empty($_COOKIE['stonefish_userinfo'])){
-				    $appUrl=$this->createMobileUrl($entrytype, array('rid' => $rid,'fromuser' => $_GPC['from_user']),true);
-				    $appUrl=substr($appUrl,2);
-				    $url = $_W['siteroot'] ."app/".$appUrl;
-				    header("location: $url");
-		   	        exit;
-		        }elseif($reply['power']==2){
-				    $appUrl= $this->createMobileUrl('auth2', array('entrytype' => $entrytype,'rid' => $rid,'from_user' => $_GPC['from_user'],'power' => $reply['power']),true);
+				if ($setting['stonefish_bigwheel_oauth']==1 && !empty($_W['oauth_account']['key']) && !empty($_W['oauth_account']['secret']))$appid = $_W['oauth_account']['key'];
+			    if ($setting['stonefish_bigwheel_oauth']==2 && !empty($setting['appid']) && ! empty($setting['secret']))$appid = $setting['appid'];
+		        //snsapi_base为只获取OPENID,snsapi_userinfo为获取头像和昵称
+			    $scope = $reply['power']==1 ? 'snsapi_base' : 'snsapi_userinfo';
+				if($setting['stonefish_bigwheel_oauth']==1 && $scope==1){
+					$token = array('openid' => $_SESSION['oauth_openid'],'headimgurl' => MODULE_URL.'template/images/avatar.jpg','nickname' => '匿名'.time().mt_rand(1000,9999));
+					setcookie("stonefish_userinfo", iserializer($token), time()+3600*24*$setting['stonefish_oauth_time']);
+				    setcookie("stonefish_userinfo_power", $reply['power'], time()+3600*24*$setting['stonefish_oauth_time']);
+					$this->appurlheader($entrytype, $rid, $_GPC['from_user']);
+				}else{
+					$appUrl= $this->createMobileUrl('auth2', array('entrytype' => $entrytype,'rid' => $rid,'from_user' => $_GPC['from_user'],'power' => $reply['power']),true);
 		            $appUrl = substr($appUrl,2);
                     $redirect_uri = $_W['siteroot'] ."app/".$appUrl ;
-		            //snsapi_base为只获取OPENID,snsapi_userinfo为获取头像和昵称
-			        $scope = $reply['power']==1 ? 'snsapi_base' : 'snsapi_userinfo';
                     $oauth2_code = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$appid."&redirect_uri=".urlencode($redirect_uri)."&response_type=code&scope=".$scope."&state=1#wechat_redirect";
                     header("location: $oauth2_code");
 		            exit;
-			    }
-		    }
-		    //认证服务号
-		    //非认证服务号和认证服务号未关注粉丝
-            //不是认证号又没有借用服务号获取头像昵称可认证服务号未关注用户
-		    if($setting['stonefish_bigwheel_oauth']==0){
-				if(!isset($_COOKIE["user_oauth2_wuopenid"]) && $_W['account']['level']!=4){
-				   	//设置cookie信息
-			    	setcookie("user_oauth2_wuopenid", time(), time()+3600*24*$setting['stonefish_oauth_time']);
-			   	}				
-			    $appUrl=$this->createMobileUrl($entrytype, array('rid' => $rid,'fromuser' => $_GPC['from_user']),true);
-			   	$appUrl=substr($appUrl,2);
-			   	$url = $_W['siteroot'] ."app/".$appUrl;
-			    header("location: $url");
-		        exit;
+				}
 			}
-		    //不是认证号又没有借用服务号获取头像昵称可认证服务号未关注用户			
-		    //不是认证号 借用服务号获取头像昵称
-            if ($setting['stonefish_bigwheel_oauth']==1 && !empty($_W['oauth_account']['key']) && !empty($_W['oauth_account']['secret'])) { // 判断是否是借用设置
-                $appid = $_W['oauth_account']['key'];
-                $secret = $_W['oauth_account']['secret'];
-            }
-			if ($setting['stonefish_bigwheel_oauth']==2 && !empty($setting['appid']) && ! empty($setting['secret'])) { // 判断是否是借用设置
-                $appid = $setting['appid'];
-                $secret = $setting['secret'];
-            }
-		    $appUrl= $this->createMobileUrl('auth2', array('entrytype' => $entrytype,'rid' => $rid,'from_user' => $_GPC['from_user'],'power' => $reply['power']),true);
-		    $appUrl = substr($appUrl,2);
-            $redirect_uri = $_W['siteroot'] ."app/".$appUrl ;
-		    //snsapi_base为只获取OPENID,snsapi_userinfo为获取头像和昵称
-			$scope = $reply['power']==1 ? 'snsapi_base' : 'snsapi_userinfo';
-            $oauth2_code = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$appid."&redirect_uri=".urlencode($redirect_uri)."&response_type=code&scope=".$scope."&state=1#wechat_redirect";
-            header("location: $oauth2_code");
-		    exit;
-		    //不是认证号 借用服务号获取头像昵称
-		    //非认证服务号和认证服务号未关注粉丝
 		}
+		//获取openid以及头像昵称
 	}
 	//进入页
 	//帮助页
@@ -513,7 +520,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		$page_fromuser = $_GPC['fromuser'];		
 		$acid = $_W['acid'];
 		//获取openid
-		$openid = $this->get_openid();
+		$openid = $this->get_openid($rid);
 		$from_user = $openid['openid'];
 		$page_from_user = base64_encode(authcode($from_user, 'ENCODE'));
 		//获取openid
@@ -540,27 +547,13 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		    }else{
 			    $this->message_tips($rid,'抱歉，您的朋友没有参与本活动！请告之你的朋友，3秒后自动进入活动页！',url('entry//index',array('m'=>'stonefish_bigwheel','rid'=>$rid)));
 		    }
-			$setting = $this->module['config'];
-			if(!empty($_COOKIE['stonefish_userinfo'])){
-				$firend = iunserializer($_COOKIE["stonefish_userinfo"]);
-				if($_COOKIE["stonefish_userinfo_power"]!=$reply['power'] || empty($firend['openid']) || !empty($firend['access_token'])){
-					setcookie("stonefish_userinfo", '', time()-7200);
-				    setcookie("stonefish_userinfo_power", '', time()-7200);
-					$appUrl=$this->createMobileUrl('entry', array('rid' => $rid,'entrytype' => 'shareview','from_user' => $page_fromuser),true);
-				    $appUrl=substr($appUrl,2);
-				    $url = $_W['siteroot'] ."app/".$appUrl;
-				    header("location: $url");
-				    exit;
-				}
-			}elseif($setting['stonefish_bigwheel_oauth']>=1 || $_W['account']['level']==4){
-				$appUrl=$this->createMobileUrl('entry', array('rid' => $rid,'entrytype' => 'shareview','from_user' => $page_fromuser),true);
-				$appUrl=substr($appUrl,2);
-				$url = $_W['siteroot'] ."app/".$appUrl;
-				header("location: $url");
-				exit;
-			}else{
-				$firend = array('headimgurl' => MODULE_URL.'template/images/avatar.jpg','nickname' => '匿名');
-			}
+			//获取粉丝信息		    
+			$userinfo = $this->get_userinfo($reply['power'],$rid,$iid,$page_fromuser,'shareview');
+		    //获取粉丝信息
+		}else{
+			header("HTTP/1.1 301 Moved Permanently");
+            header("Location: " . $this->createMobileUrl('entry', array('rid' => $rid,'entrytype' => 'index')) . "");
+            exit();
 		}
 		if($from_user!=$fromuser){
 			//是否开启互助模式
@@ -609,8 +602,8 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
                     'uniacid' => $uniacid,
                     'from_user' => $from_user,
 				    'fromuser' => $fromuser,
-				    'avatar' => $firend['headimgurl'],
-				    'nickname' => $firend['nickname'],
+				    'avatar' => $userinfo['headimgurl'],
+				    'nickname' => $userinfo['nickname'],
 				    'visitorsip'=> CLIENT_IP,
                     'visitorstime' => TIMESTAMP,
 					'point' => $point,
@@ -745,13 +738,13 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		$this->xuni_time($reply);
 		//虚拟人数		
 		//获取openid
-		$openid = $this->get_openid();
+		$openid = $this->get_openid($rid);
 		$from_user = $openid['openid'];
 		$page_from_user = base64_encode(authcode($from_user, 'ENCODE'));
 		//获取openid
         //获得关键词
         $reply['keyword']=  $this->rule_keyword($rid);
-        //获得关键词		
+        //获得关键词
 		//获取openid以及头像昵称
 		if(empty($from_user)) {
 		    //没有获取openid跳转至引导页
@@ -778,7 +771,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 			}
 			//查询是否为关注用户并查询是否需要关注粉丝参与活动否则跳转至引导页
 			//验证是否为会员
-			if($reply['issubscribe']>=2){
+			if($reply['issubscribe']>=2 && $reply['issubscribe']<6){
 				$members = pdo_fetch("select `status`,`groupid`,`districtid` FROM ".tablename('stonefish_member')." where `uniacid`=:uniacid AND `uid` = :uid",array(':uniacid' => $_W['uniacid'],':uid' => $_W['member']['uid']));
 				$profile = mc_fetch($_W['member']['uid'], array('mobile'));
 				if(!empty($members) && $members['status']==0) {
@@ -797,35 +790,25 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 				    $this->message_tips($rid,'请先验证成为会员才能参与活动！',url('entry//member',array('m'=>'stonefish_member','url'=>url('entry//index',array('m'=>'stonefish_bigwheel','rid'=>$rid)))));
 				}
 			}
-			//验证是否为会员 
-			$setting = $this->module['config'];
-			if(!empty($_COOKIE['stonefish_userinfo'])){
-				$firend = iunserializer($_COOKIE["stonefish_userinfo"]);
-				if($_COOKIE["stonefish_userinfo_power"]!=$reply['power'] || empty($firend['openid']) || !empty($firend['access_token'])){
-					setcookie("stonefish_userinfo", '', time()-7200);
-				    setcookie("stonefish_userinfo_power", '', time()-7200);
-					$appUrl=$this->createMobileUrl('entry', array('rid' => $rid,'entrytype' => 'index'),true);
-				    $appUrl=substr($appUrl,2);
-				    $url = $_W['siteroot'] ."app/".$appUrl;
-				    header("location: $url");
-				    exit;
+			//验证是否为会员
+			//获得用户资料
+		    if($_W['member']['uid']){
+			    $profile = mc_fetch($_W['member']['uid'], array('avatar','nickname','realname','mobile','groupid','qq','email','address','gender','telephone','idcard','company','occupation','position'));
+		    }
+		    //获得用户资料
+			//验证系统会员组
+			if($reply['issubscribe']==6){
+				$grouparr = (array)iunserializer($reply['sys_users']);
+				if(!in_array($profile['groupid'], $grouparr)) {
+					$this->message_tips($rid,$reply['sys_users_tips']);
 				}
-			}elseif($setting['stonefish_bigwheel_oauth']>=1){
-			    $appUrl=$this->createMobileUrl('entry', array('rid' => $rid,'entrytype' => 'index'),true);
-				$appUrl=substr($appUrl,2);
-				$url = $_W['siteroot'] ."app/".$appUrl;
-				header("location: $url");
-				exit;
-			}else{
-				$firend = array('headimgurl' => MODULE_URL.'template/images/avatar.jpg','nickname' => '匿名');
 			}
+			//验证系统会员组			
+			//获取粉丝信息
+			$userinfo = $this->get_userinfo($reply['power'],$rid,$iid,$page_fromuser,'index');
+		    //获取粉丝信息
 		}
-		//获取openid以及头像昵称
-        //获得用户资料
-		if($_W['member']['uid']){
-			$profile = mc_fetch($_W['member']['uid'], array('avatar','nickname','realname','mobile','qq','email','address','gender','telephone','idcard','company','occupation','position'));
-		}
-		//获得用户资料
+		//获取openid以及头像昵称        
 		//查询是否参与活动并更新头像和昵称
 		$fans = pdo_fetch("select * from ".tablename('stonefish_bigwheel_fans')." where rid = :rid and uniacid = :uniacid and from_user= :from_user", array(':rid' => $rid, ':uniacid' => $uniacid, ':from_user' => $from_user));
 		if(!empty($fans)){
@@ -839,7 +822,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 			//更新分享量
 			//更新头像和昵称
 			if($reply['power']==2 && ($setting['stonefish_bigwheel_oauth']>=1 || $_W['account']['level']==4)){
-				pdo_update('stonefish_bigwheel_fans', array('avatar' => $firend['headimgurl'], 'nickname' => $firend['nickname']), array('id' => $fans['id']));
+				pdo_update('stonefish_bigwheel_fans', array('avatar' => $userinfo['headimgurl'], 'nickname' => $userinfo['nickname']), array('id' => $fans['id']));
 			}
 			//更新头像和昵称
 			//查询是否需要弹出填写兑奖资料
@@ -849,7 +832,11 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 				foreach ($ziduan as $ziduans) {
 					if($exchange['is'.$ziduans]){
 			            if(!empty($profile[$ziduans]) && empty($fans[$ziduans])){
-				            pdo_update('stonefish_bigwheel_fans', array($ziduans => $profile[$ziduans]), array('id' => $fans['id']));
+				            if($exchange['isfans']==2){
+							    pdo_update('stonefish_bigwheel_fans', array($ziduans => $profile[$ziduans]), array('id' => $fans['id']));
+						    }else{
+							    $$ziduans = true;
+						    }
 				        }else{
 					        if(empty($fans[$ziduans])){
 						        $$ziduans = true;
@@ -1081,10 +1068,10 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		//分享信息
 		if($this->Weixin()){
 			if(!$reply['turntable']){
-                	include $this->template('index');
-		   	 }else{
+                include $this->template('index');
+		    }else{
 		        include $this->template('squares');
-		    	}
+		    }
 		}else{
 			$this->Weixin();
 		}
@@ -1097,13 +1084,12 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		$uniacid = $_W['uniacid'];
 		$acid = $_W['acid'];		
 		//获取openid
-		$openid = $this->get_openid();
+		$openid = $this->get_openid($rid);
 		$from_user = $openid['openid'];
 		$page_from_user = base64_encode(authcode($from_user, 'ENCODE'));
 		//获取openid
         $reply = pdo_fetch("select * from " . tablename('stonefish_bigwheel_reply') . " where rid = :rid order by `id` desc", array(':rid' => $rid));
 		$exchange = pdo_fetch("select * FROM ".tablename("stonefish_bigwheel_exchange")." where rid = :rid", array(':rid' => $rid));
-		//$template = pdo_fetch("select * from " . tablename('stonefish_bigwheel_template') . " where id = :id", array(':id' => $reply['templateid']));
 		$share = pdo_fetch("select * from " . tablename('stonefish_bigwheel_share') . " where rid = :rid and acid = :acid", array(':rid' => $rid,':acid' => $acid));
         if ($reply == false) {
             $this->Json_encode(array("success"=>2, "msg"=>'规则出错！...'));
@@ -1123,7 +1109,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 			if($reply['issubscribe']>=1 && intval($_W['fans']['follow'])!=1){
 				$this->Json_encode(array("success"=>2, "msg"=>'请先关注公众号【'.$_W['account']['name'].'】再来参与活动！'));
 			}
-			if($reply['issubscribe']>=2){
+			if($reply['issubscribe']>=2 && $reply['issubscribe']<6){
 				$members = pdo_fetch("select `status`,`groupid`,`districtid` FROM ".tablename('stonefish_member')." where `uniacid`=:uniacid AND `uid` = :uid",array(':uniacid' => $_W['uniacid'],':uid' => $_W['member']['uid']));
 				$profile = mc_fetch($_W['member']['uid'], array('mobile'));
 				if(!empty($members) && $members['status']==0) {
@@ -1141,7 +1127,16 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 				if(empty($members)) {
 				    $this->Json_encode(array("success"=>2, "msg"=>'请先验证成为会员才能参与活动！'));
 				}
-			}			
+			}
+			//验证系统会员组
+			if($reply['issubscribe']==6){
+				$profile = mc_fetch($_W['member']['uid'], array('groupid'));
+				$grouparr = (array)iunserializer($reply['sys_users']);
+				if(!in_array($profile['groupid'], $grouparr)) {
+					$this->Json_encode(array("success"=>2, "msg"=>$reply['sys_users_tips']));
+				}
+			}
+			//验证系统会员组
 		}
         //是否已关联用户，如果中奖一次，判断是否已中奖
         $fans = pdo_fetch("select * from " . tablename('stonefish_bigwheel_fans') . " where rid = :rid and from_user = :from_user", array(':rid' => $rid, ':from_user' => $from_user));
@@ -1302,6 +1297,16 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
             }
 		}
 		//计算礼物中的最小概率
+		//是否有福利
+		$fuli = 1;
+		if($reply['mobileverify']){
+			$mobileverify = pdo_fetch("select * FROM ".tablename("stonefish_bigwheel_mobileverify")." where rid = :rid and uniacid = :uniacid and mobile = :mobile", array(':rid' => $rid,':uniacid' => $uniacid,':mobile' => $fans['mobile']));
+			if(!empty($mobileverify)){
+				$fuli = $mobileverify['welfare'];
+				pdo_update('stonefish_bigwheel_mobileverify', array('verifytime' => time()), array('id' => $mobileverify['id']));
+			}
+		}
+		//是否有福利
         $prize_arr = array();
 		foreach ($gift as $row) {
 			$prize_ren = 0;
@@ -1324,7 +1329,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 			    $item = array(
 			    	'id'      => $row['id'],
 				    'prize'   => $row['prizetype'],
-				    'v'       => $row['probalilty'] * $rate,
+				    'v'       => $row['probalilty'] * $rate * $fuli,
 			    );
 				$prize_arr[] = $item;
 				$isgift = true;
@@ -1445,7 +1450,11 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 				    foreach ($ziduan as $ziduans) {
 					    if($exchange['is'.$ziduans]){
 			                if(!empty($profile[$ziduans]) && empty($fans[$ziduans])){
-				               pdo_update('stonefish_bigwheel_fans', array($ziduans => $profile[$ziduans]), array('id' => $fans['id']));
+				                if($exchange['isfans']==2){
+							        pdo_update('stonefish_bigwheel_fans', array($ziduans => $profile[$ziduans]), array('id' => $fans['id']));
+						        }else{
+							        $$ziduans = true;
+						        }
 				            }else{
 					            if(empty($fans[$ziduans])){
 						            $$ziduans = true;
@@ -1527,143 +1536,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		//查询此用户是否还有中奖记录并更新状态
 		$this->Json_encode($data);
     }
-	//抽奖
-	//用户注册
-	public function doMobileRegfans() {
-        global $_GPC, $_W;
-        $rid = intval($_GPC['rid']);
-        $from_user = authcode(base64_decode($_GPC['from_user']), 'DECODE');
-		$page_from_user = $_GPC['from_user'];
-		$uniacid = $_W['uniacid'];
-		//规则判断
-        $reply = pdo_fetch("select * FROM " . tablename('stonefish_bigwheel_reply') . " where rid = :rid ORDER BY `id` DESC", array(':rid' => $rid));
-        if ($reply == false) {
-            $this->json_encode(array("success"=>2, "msg"=>'规则出错！...'));
-        }
-        if($reply['isshow'] != 1){
-            $this->json_encode(array("success"=>2, "msg"=>'活动暂停，请稍后...'));
-        }
-        if ($reply['starttime'] > time()) {
-            $this->json_encode(array("success"=>2, "msg"=>'活动还没有开始呢，请等待...'));
-        }
-        if ($reply['endtime'] < time()) {
-            $this->json_encode(array("success"=>2, "msg"=>'活动已经结束了，下次再来吧！'));
-        }
-        if ($reply['power']==2&&intval($_W['fans']['follow'])!=0) {
-            $this->json_encode(array("success"=>2, "msg"=>'请先关注公共账号再来参与活动！详情请查看规则！'));
-        }
-		//规则判断		
-		//查询是活动定义还是商户赠送
-		$uid = pdo_fetchcolumn("select uid FROM ".tablename('mc_mapping_fans') ." where openid=:openid and uniacid=:uniacid",array(":openid"=>$from_user,":uniacid"=>$uniacid));
-		$profile = mc_fetch($uid, array('avatar','nickname','realname','mobile','qq','email','address','gender','telephone','idcard','company','occupation','position'));
-		if($reply['opportunity']==3){
-			$doings = pdo_fetch("select * from " . tablename($reply['othermodule'].'_prizeslist') . " where urlrid = " . $rid . " and prizetype='stonefish_bigwheel' and uniacid='".$uniacid."' and from_user='".$from_user."'");
-			if(!empty($doings)){
-				if($doings['usecount'] >= $doings['prizesnum']){
-					$this->json_encode(array("success"=>2, "msg"=>'抱歉，您的抽奖次数已用完了或没有获得抽奖次数!'));
-				}
-			}else{
-				$this->json_encode(array("success"=>2, "msg"=>'抱歉，您的还未获得抽奖资格!'));
-			}
-		}elseif($reply['opportunity']==1){
-			if(empty($profile['mobile'])){
-				$this->json_encode(array("success"=>2, "msg"=>'您没有注册成为会员，不能参与活动!'));
-			}
-			$doings = pdo_fetch("select * FROM " . tablename('stonefish_branch_doings') . " where rid = " . $rid . " and mobile='" . $profile['mobile'] . "' and uniacid='".$uniacid."'");
-			if(!empty($doings)){
-			    if ($doings['status']<2) {
-                    $this->json_encode(array("success"=>2, "msg"=>'抱歉，您的资格正在审核中!'));
-                 }else{
-				    if ($doings['awardcount'] == 0) {
-				        $this->json_encode(array("success"=>2, "msg"=>'抱歉，您的资格已用完了!'));
-                    }
-			    }
-			}else{
-				$this->json_encode(array("success"=>2, "msg"=>'抱歉，您还没有获取资格，不能参与!'));
-			}			
-		}elseif($reply['opportunity']==2){
-		    $unisettings = uni_setting($uniacid, array('creditnames'));
-		    foreach ($unisettings['creditnames'] as $key=>$credits) {
-		    	if ($reply['credit_type']==$key) {
-			    	$creditnames = $credits['title'];
-					break;
-			    }
-		    }
-		    $credit = mc_credit_fetch($uid, array($reply['credit_type']));
-			$credit_value = intval($credit[$reply['credit_type']]/$reply['credit_value']);
-			if($credit_value<1){
-			    $this->json_encode(array("success"=>2, "msg"=>'抱歉，您没有'.$creditnames.'兑换参与资格了!'));
-			}						
-		}
-        //查询是活动定义还是商户赠送
-        //判断是否参与过
-		$fans = pdo_fetch("select * from ".tablename('stonefish_bigwheel_fans')." where rid = :rid and uniacid = :uniacid and from_user= :from_user", array(':rid' => $rid, ':uniacid' => $uniacid, ':from_user' => $from_user));
-		if(!empty($fans)){
-			$this->json_encode(array("success"=>2, "msg"=>'已参与过本活动，请勿重复参与！'));
-		}else{
-			$fansdata = array(
-                'rid' => $rid,
-				'uniacid' => $uniacid,
-                'from_user' => $from_user,					
-				'avatar' => $_GPC['avatar'],
-				'nickname' => $_GPC['nickname'],
-				'todaynum' => 1,
-                'totalnum' => 1,
-                'awardnum' => 0,
-                'createtime' => time(),
-            );
-            pdo_insert('stonefish_bigwheel_fans', $fansdata);
-            $fans['id'] = pdo_insertid();
-			//自动读取会员信息存入FANS表中
-			$ziduan = array('realname','mobile','qq','email','address','gender','telephone','idcard','company','occupation','position');
-			foreach ($ziduan as $ziduans){
-				if($reply['is'.$ziduans]){
-					if(!empty($_GPC[$ziduans])){
-				        pdo_update('stonefish_bigwheel_fans', array($ziduans => $_GPC[$ziduans]), array('id' => $fans['id']));
-				        if($reply['isfans']){				            
-                            if($ziduans=='email'){
-								mc_update($_W['member']['uid'], array('email' => $_GPC['email']));
-							}else{
-								mc_update($_W['member']['uid'], array($ziduans => $_GPC[$ziduans],'email' => $profile['email']));
-							}
-				        }
-					}
-			    }
-		    }
-		    //自动读取会员信息存入FANS表中
-			//增加人数，和浏览次数
-            pdo_update('stonefish_bigwheel_reply', array('fansnum' => $reply['fansnum'] + 1), array('id' => $reply['id']));
-			//商家赠送增加使用次数
-		    if($reply['opportunity']==3){
-			    //pdo_update('stonefish_branch_doings', array('usecount' =>0,'usetime' => time()), array('id' => $doings['id']));
-				pdo_update($reply['othermodule'].'_prizeslist', array('usecount' => 0), array('id' => $doings['id']));
-		    }elseif($reply['opportunity']==1){
-			    pdo_update('stonefish_branch_doings', array('usecount' =>0,'usetime' => time()), array('id' => $doings['id']));
-				$content = '参与活动成功';
-				$insert = array(
-                	'uniacid' => $uniacid,
-                	'rid' => $rid,
-                	'module' => 'stonefish_bigwheel',
-                	'mobile' => $doings['mobile'],
-                	'content' =>$content,
-					'prizeid' =>0,
-					'createtime' => time()
-            	);
-				pdo_insert('stonefish_branch_doingslist', $insert);
-		    }elseif($reply['opportunity']==2){
-			    mc_credit_update($uid, $reply['credit_type'], -$reply['credit_value'], array($uid, '兑换活动资格 消耗：'.$reply['credit_value'].'个'.$creditnames));
-			    $credit_now = $credit[$reply['credit_type']]-$reply['credit_value'];
-		    }
-			$data = array(
-                'success' => 1,
-				'msg' => '成功参与活动,请邀请好友帮你吧!',
-				'credit_now' => $credit_now,
-            );
-		}
-		//判断是否参与过
-		$this->json_encode($data);
-    }
-	//用户注册
+	//抽奖	
 	//用户注册资料修改
 	public function doMobileEditfans() {
         global $_GPC, $_W;
@@ -1676,10 +1549,22 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		$fans = pdo_fetch("select * from ".tablename('stonefish_bigwheel_fans')." where rid = :rid and uniacid = :uniacid and from_user= :from_user", array(':rid' => $rid, ':uniacid' => $uniacid, ':from_user' => $from_user));
 		$uid = pdo_fetchcolumn("select uid FROM ".tablename('mc_mapping_fans') ." where openid=:openid and uniacid=:uniacid",array(":openid"=>$from_user,":uniacid"=>$uniacid));
 		if(empty($fans)){
+			//验证手机号
+			if($exchange['ismobile'] && $reply['mobileverify']==1){
+				$mobileverify = pdo_fetch("select * FROM ".tablename("stonefish_bigwheel_mobileverify")." where rid = :rid and uniacid = :uniacid and mobile = :mobile", array(':rid' => $rid,':uniacid' => $uniacid,':mobile' => $_GPC['mobile']));
+				if(empty($mobileverify)){
+					$this->json_encode(array("success"=>0, "msg"=>'未成功验证手机号，请确认手机号码！'));
+				}elseif($mobileverify['verifytime']){
+					$this->json_encode(array("success"=>0, "msg"=>'此手机号码已使用过，请确认手机号码！'));
+				}elseif($mobileverify['status']!=2){
+					$this->json_encode(array("success"=>0, "msg"=>'此手机号码还未审核，请等待管理员审核后再来参加！'));
+				}
+			}
+			//验证手机号
 			$fansdata = array(
                 'rid' => $rid,
 				'uniacid' => $uniacid,
-                'from_user' => $from_user,					
+                'from_user' => $from_user,
 				'avatar' => $_GPC['avatar'],
 				'nickname' => $_GPC['nickname'],
 				'todaynum' => 0,
@@ -1788,7 +1673,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		$this->xuni_time($reply);
 		//虚拟人数	
 		//获取openid
-		$openid = $this->get_openid();
+		$openid = $this->get_openid($rid);
 		$from_user = $openid['openid'];
 		$page_from_user = base64_encode(authcode($from_user, 'ENCODE'));
 		//获取openid
@@ -1843,7 +1728,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		$this->xuni_time($reply);
 		//虚拟人数
 		//获取openid
-		$openid = $this->get_openid();
+		$openid = $this->get_openid($rid);
 		$from_user = $openid['openid'];
 		$page_from_user = base64_encode(authcode($from_user, 'ENCODE'));
 		//获取openid
@@ -1875,7 +1760,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		$this->check_reply($reply);
 		$nojiang = iunserializer($reply['notawardtext']);
 		$nojiangid = array_rand($nojiang);
-		$awardname =$this->get_prizename($rid,$nojiang[$nojiangid]);		
+		$awardname =$this->get_prizename($rid,$nojiang[$nojiangid],0);		
 		//活动状态
 		//兑奖参数重命名
 		$isfansname = explode(',',$exchange['isfansname']);
@@ -1884,7 +1769,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		$this->xuni_time($reply);
 		//虚拟人数
 		//获取openid
-		$openid = $this->get_openid();
+		$openid = $this->get_openid($rid);
 		$from_user = $openid['openid'];
 		$page_from_user = base64_encode(authcode($from_user, 'ENCODE'));
 		//获取openid
@@ -1899,7 +1784,11 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 			foreach ($ziduan as $ziduans) {
 				if($exchange['is'.$ziduans]){
 			        if(!empty($profile[$ziduans]) && empty($fans[$ziduans])){
-				        pdo_update('stonefish_bigwheel_fans', array($ziduans => $profile[$ziduans]), array('id' => $fans['id']));
+				        if($exchange['isfans']==2){
+							pdo_update('stonefish_bigwheel_fans', array($ziduans => $profile[$ziduans]), array('id' => $fans['id']));
+						}else{
+							$$ziduans = true;
+						}
 				    }else{
 					    if(empty($fans[$ziduans])){
 						    $$ziduans = true;
@@ -1951,6 +1840,42 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 		}
     }
 	//我的奖品
+	//奖品展示
+	public function doMobilePrizeinfo() {
+        global $_GPC, $_W;
+		$id = intval($_GPC['id']);
+        if(empty($id)){
+			$data = array(                    
+			    'msg' => '奖品出错，请联系管理员！',
+                'success' => 2,
+            );
+		}else{
+			$item = pdo_fetch("select * FROM " . tablename('stonefish_bigwheel_prize') . " where id = :id", array(':id' => $id));
+			$daohangh = 320;
+			if(!empty($item['awardingaddress'])){
+				if(!empty($item['baidumaplng']) && !empty($item['baidumaplat'])){
+					$daohang = '<div class="btnduihuan" style="margin:5px;height: 35px;"><a href="http://api.map.baidu.com/marker?location='.$item['baidumaplat'].','.$item['baidumaplng'].'&title='.urlencode('兑奖地点').'&content='.urlencode($item['awardingaddress']).'&output=html"><h2 class="biaoti_address">'.$item['awardingaddress'].'</a></h2></div>';
+				}else{
+					$daohang = '<div class="btnduihuan" style="margin:5px;height: 35px;"><h2 class="biaoti_address">'.$item['awardingaddress'].'</h2></div>';
+				}				
+				$daohangh += 40;
+			}
+			if(!empty($item['awardingtel'])){
+				$daohang .= '<div class="btnduihuan" style="margin:5px;height: 35px;"><a href="tel:'.$item['awardingtel'].'"><h2 class="biaoti_tel">'.$item['awardingtel'].'</h2></a></div>';
+				$daohangh += 40;
+			}
+			$data = array(                    
+			    'prizepic' => toimage($item['prizepic']),
+				'description' => str_replace("\n","<br>",$item['description']),
+                'success' => 1,
+				'daohang' => $daohang,
+				'daohangh' => $daohangh,
+            );
+			
+		}
+		$this->Json_encode($data);
+    }
+	//奖品展示
 	//兑奖商家
 	public function doMobileExchange_shangjia() {
         global $_GPC, $_W;
@@ -2019,13 +1944,13 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 		$uniacid = $_W['uniacid'];
         $awardid = $_GPC['awardid'];
 		$rid = intval($_GPC['rid']);
-		$shangjiaid = $_GPC['dianmian'];
+		$shangjiaid = intval($_GPC['dianmian']);
 		$password = $_GPC['mima'];
 		//获取openid
 		$from_user = authcode(base64_decode($_GPC['from_user']), 'DECODE');
 		//获取openid
 		if(empty($from_user)){
-			$data = array(                    
+			$data = array(
 			    'msg' => '系统出错，兑奖人出错，请联系管理员！',
                 'success' => 2,
             );
@@ -2055,7 +1980,35 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
             );
 			$this->Json_encode($data);
 		}
-		if($exchange['tickettype']==4){
+		if($exchange['tickettype']==5){
+			$prize = pdo_fetch("select * FROM " . tablename('stonefish_bigwheel_prize') . " where id = :id", array(':id' => $awardid));
+			if($prize['password']!=$password){
+				$data = array(                    
+			        'msg' => '系统出错，兑奖密码不匹配！',
+                    'success' => 2,
+                );
+			    $this->Json_encode($data);
+			}
+			$prizenum = pdo_fetchcolumn("select count(id) FROM " . tablename('stonefish_bigwheel_fansaward') . " where rid = :rid and uniacid =:uniacid and from_user =:from_user and prizeid =:prizeid and zhongjiang=1", array(':rid' => $rid, ':uniacid' => $uniacid, ':from_user' => $from_user, ':prizeid' => $awardid));
+			pdo_update('stonefish_bigwheel_fansaward', array('tickettype' => $exchange['tickettype'],'zhongjiang' => 2, 'consumetime' => time()), array('rid' => $rid, 'uniacid' => $uniacid, 'from_user' => $from_user, 'prizeid' => $awardid, 'zhongjiang' => 1));
+			pdo_update('stonefish_bigwheel_fans', array('tickettype' => $exchange['tickettype'],'zhongjiang' => 2), array('rid' => $rid, 'uniacid' => $uniacid, 'from_user' => $from_user));
+			//减少库存
+			if($exchange['inventory']==2){
+				pdo_update('stonefish_bigwheel_prize', array('prizedraw' => $prize['prizedraw'] + $prizenum), array('id' => $awardid));
+			}
+		    //减少库存
+			$prizetime = pdo_fetchcolumn("select createtime FROM " . tablename('stonefish_bigwheel_fansaward') . " where rid = :rid and uniacid =:uniacid and from_user =:from_user and prizeid =:prizeid and zhongjiang>=1", array(':rid' => $rid, ':uniacid' => $uniacid, ':from_user' => $from_user, ':prizeid' => $awardid));
+			//发送消息模板之奖记录
+			if($exchange['tmplmsg_exchange']){
+				$this->seed_tmplmsg($from_user,$exchange['tmplmsg_exchange'],$rid,array('do' =>'myaward', 'prizerating' =>$prize['prizerating'], 'prizename' =>$prize['prizename'], 'prizenum' =>$prizenum, 'prizetime' =>$prizetime));
+			}
+			//发送消息模板之奖记录
+			$data = array(                    
+			    'msg' => '恭喜兑奖成功！',
+                'success' => 1,
+            );
+			$this->Json_encode($data);
+		}elseif($exchange['tickettype']==4){
 			if($exchange['awardingpas']!=$password){
 				$data = array(                    
 			        'msg' => '系统出错，兑奖密码或账号不匹配！',
@@ -2075,14 +2028,14 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 						}
 				    }
 					//减少库存
+					$prizetime = pdo_fetchcolumn("select createtime FROM " . tablename('stonefish_bigwheel_fansaward') . " where rid = :rid and uniacid =:uniacid and from_user =:from_user and zhongjiang>=1", array(':rid' => $rid, ':uniacid' => $uniacid, ':from_user' => $from_user));
 					//发送消息模板之奖记录
 					if($exchange['tmplmsg_exchange']){
-				        $this->seed_tmplmsg($from_user,$exchange['tmplmsg_exchange'],$rid,array('do' =>'myaward', 'prizerating' =>'所有', 'prizename' =>'奖品', 'prizenum' =>$prizenum));
+				        $this->seed_tmplmsg($from_user,$exchange['tmplmsg_exchange'],$rid,array('do' =>'myaward', 'prizerating' =>'所有', 'prizename' =>'奖品', 'prizenum' =>$prizenum, 'prizetime' =>$prizetime));
 			        }
 					//发送消息模板之奖记录
 				}else{
 					$prizenum = pdo_fetchcolumn("select count(id) FROM " . tablename('stonefish_bigwheel_fansaward') . " where rid = :rid and uniacid =:uniacid and from_user =:from_user and prizeid =:prizeid and zhongjiang=1", array(':rid' => $rid, ':uniacid' => $uniacid, ':from_user' => $from_user, ':prizeid' => $awardid));
-					$prizeid = pdo_fetchcolumn("select prizeid FROM " . tablename('stonefish_bigwheel_fansaward') . " where id='" . $awardid . "'");
 					pdo_update('stonefish_bigwheel_fansaward', array('tickettype' => $exchange['tickettype'],'zhongjiang' => 2, 'consumetime' => time()), array('rid' => $rid, 'uniacid' => $uniacid, 'from_user' => $from_user, 'prizeid' => $awardid, 'zhongjiang' => 1));
 					pdo_update('stonefish_bigwheel_fans', array('tickettype' => $exchange['tickettype'],'zhongjiang' => 2), array('rid' => $rid, 'uniacid' => $uniacid, 'from_user' => $from_user));
 					//减少库存
@@ -2090,9 +2043,11 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 					    pdo_update('stonefish_bigwheel_prize', array('prizedraw' => $prize['prizedraw'] + $prizenum), array('id' => $awardid));
 				    }
 					//减少库存
+					$prize = pdo_fetch("select * FROM " . tablename('stonefish_bigwheel_prize') . " where id = :id", array(':id' => $awardid));
+					$prizetime = pdo_fetchcolumn("select createtime FROM " . tablename('stonefish_bigwheel_fansaward') . " where rid = :rid and uniacid =:uniacid and from_user =:from_user and prizeid =:prizeid and zhongjiang>=1", array(':rid' => $rid, ':uniacid' => $uniacid, ':from_user' => $from_user, ':prizeid' => $awardid));
 					//发送消息模板之奖记录
 					if($exchange['tmplmsg_exchange']){
-				        $this->seed_tmplmsg($from_user,$exchange['tmplmsg_exchange'],$rid,array('do' =>'myaward', 'prizerating' =>$prize['prizerating'], 'prizename' =>$prize['prizename'], 'prizenum' =>$prizenum));
+				        $this->seed_tmplmsg($from_user,$exchange['tmplmsg_exchange'],$rid,array('do' =>'myaward', 'prizerating' =>$prize['prizerating'], 'prizename' =>$prize['prizename'], 'prizenum' =>$prizenum, 'prizetime' =>$prizetime));
 			        }
 					//发送消息模板之奖记录
 				}
@@ -2136,9 +2091,10 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 						}
 				    }
 					//减少库存
+					$prizetime = pdo_fetchcolumn("select createtime FROM " . tablename('stonefish_bigwheel_fansaward') . " where rid = :rid and uniacid =:uniacid and from_user =:from_user and prizeid =:prizeid and zhongjiang>=1", array(':rid' => $rid, ':uniacid' => $uniacid, ':from_user' => $from_user, ':prizeid' => $awardid));
 					//发送消息模板之奖记录
 					if($exchange['tmplmsg_exchange']){
-				        $this->seed_tmplmsg($from_user,$exchange['tmplmsg_exchange'],$rid,array('do' =>'myaward', 'prizerating' =>'所有', 'prizename' =>'奖品', 'prizenum' =>$prizenum));
+				        $this->seed_tmplmsg($from_user,$exchange['tmplmsg_exchange'],$rid,array('do' =>'myaward', 'prizerating' =>'所有', 'prizename' =>'奖品', 'prizenum' =>$prizenum, 'prizetime' =>$prizetime));
 			        }
 					//发送消息模板之奖记录
 				}else{
@@ -2151,9 +2107,10 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 					    pdo_update('stonefish_bigwheel_prize', array('prizedraw' => $prize['prizedraw'] + $prizenum), array('id' => $awardid));
 				    }
 					//减少库存
+					$prizetime = pdo_fetchcolumn("select createtime FROM " . tablename('stonefish_bigwheel_fansaward') . " where rid = :rid and uniacid =:uniacid and from_user =:from_user and prizeid =:prizeid and zhongjiang>=1", array(':rid' => $rid, ':uniacid' => $uniacid, ':from_user' => $from_user, ':prizeid' => $awardid));
 					//发送消息模板之奖记录
 					if($exchange['tmplmsg_exchange']){
-				        $this->seed_tmplmsg($from_user,$exchange['tmplmsg_exchange'],$rid,array('do' =>'myaward', 'prizerating' =>$prize['prizerating'], 'prizename' =>$prize['prizename'], 'prizenum' =>$prizenum));
+				        $this->seed_tmplmsg($from_user,$exchange['tmplmsg_exchange'],$rid,array('do' =>'myaward', 'prizerating' =>$prize['prizerating'], 'prizename' =>$prize['prizename'], 'prizenum' =>$prizenum, 'prizetime' =>$prizetime));
 			        }
 					//发送消息模板之奖记录
 				}
@@ -2192,9 +2149,7 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 	public function doWebManage() {
         global $_GPC, $_W;
         //查询是否有商户网点权限
-
-		    $stonefish_branch = true;
-		
+		$stonefish_branch = $this->modules_uniacid('stonefish_branch');
 		//查询是否有商户网点权限
 		//查询是否填写系统参数
 		$setting = $this->module['config'];
@@ -2245,8 +2200,7 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
         global $_GPC, $_W;
 		load()->func('tpl');
 		//查询是否有商户网点权限
-
-		    $stonefish_branch = true;
+		$stonefish_branch = $this->modules_uniacid('stonefish_branch');
 		//查询是否有商户网点权限
 		//查询是否填写系统参数
 		$setting = $this->module['config'];
@@ -2283,9 +2237,6 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 		$scroll = intval($_GPC['scroll']);
 		$st = $_GPC['datelimit']['start'] ? strtotime($_GPC['datelimit']['start']) : strtotime('-30day');
 	    $et = $_GPC['datelimit']['end'] ? strtotime($_GPC['datelimit']['end']) : strtotime(date('Y-m-d'));
-		if(empty($_GPC['datelimit']['start']) && $st!=$reply['starttime']){
-			$st=$reply['starttime'];
-		}
 	    $starttime = min($st, $et);
 	    $endtime = max($st, $et);
 		$day_num = ($endtime - $starttime) / 86400 + 1;
@@ -2338,12 +2289,6 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 			    }
 			    $shuju['datasets']['flow1']['-'] = $v;
 			
-			    foreach ($shuju['datasets']['flow2'] as $ky => $va) {
-				    $k = $ky;
-				    $v = $va;
-			    }
-			    $shuju['datasets']['flow2']['-'] = $v;
-			
 			    foreach ($shuju['datasets']['flow3'] as $ky => $va) {
 				    $k = $ky;
 				    $v = $va;
@@ -2358,7 +2303,6 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 		    }
 
 		    $shuju['datasets']['flow1'] = array_values($shuju['datasets']['flow1']);
-		    $shuju['datasets']['flow2'] = array_values($shuju['datasets']['flow2']);
 		    $shuju['datasets']['flow3'] = array_values($shuju['datasets']['flow3']);
 		    $shuju['datasets']['flow4'] = array_values($shuju['datasets']['flow4']);
 		    exit(json_encode($shuju));		
@@ -2608,6 +2552,106 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 		}
     }
 	//消息模板删除
+	//虚拟粉丝管理
+	public function doWebVirtual() {
+        global $_GPC, $_W;
+		//查询是否填写系统参数
+		$setting = $this->module['config'];
+		if(empty($setting)){
+			message('抱歉，系统参数没有填写，请先填写系统参数！', url('profile/module/setting',array('m' => 'stonefish_bigwheel')), 'error');
+		}
+		//查询是否填写系统参数
+		//活动模板
+		$template = pdo_fetch("select * FROM " . tablename('stonefish_virtual') . " where uniacid = :uniacid or uniacid = 0 ORDER BY `id` asc", array(':uniacid' => $_W['uniacid']));
+		//活动模板
+		$params = array(':uniacid' => $_W['uniacid']);
+		if (!empty($_GPC['keyword'])) {
+            $where = ' AND `nickname` LIKE :keyword';
+            $params[':keyword'] = "%{$_GPC['keyword']}%";
+        }
+        $total = pdo_fetchcolumn("select count(id) from " . tablename('stonefish_virtual') . "  where (uniacid=:uniacid or uniacid = 0) " . $where . "", $params);
+        $pindex = max(1, intval($_GPC['page']));
+        $psize = 20;
+        $pager = pagination($total, $pindex, $psize);
+        $start = ($pindex - 1) * $psize;
+        $limit .= " LIMIT {$start},{$psize}";
+        $list = pdo_fetchall("select * from " . tablename('stonefish_virtual') . " where (uniacid=:uniacid or uniacid = 0) " . $where . " order by id desc " . $limit, $params);
+        include $this->template('virtual');
+    }
+	//虚拟粉丝管理
+	//虚拟粉丝修改
+	public function doWebVirtualpost() {
+        global $_GPC, $_W;
+        $id = intval($_GPC['id']);
+		load()->func('tpl');
+		if(!empty($id)) {
+			$item = pdo_fetch("select * FROM ".tablename('stonefish_virtual')." where id = :id", array(':id' => $id));				
+		}else{
+			$item['uniacid'] = $_W['uniacid'];
+			$item['status'] = 1;
+			$item['public'] = 1;
+			$item['from_user'] = 'stonefishvirtualrobot'.time();
+		}
+		if(checksubmit('submit')) {
+			if(empty($_GPC['edit']) && empty($_GPC['fuzhi'])){
+				message('系统虚拟粉丝，无权修改', url('site/entry/virtual', array('m' => 'stonefish_bigwheel')), 'error');
+			}
+			if(empty($_GPC['nickname'])){
+				message('虚拟粉丝昵称必需输入', referer(), 'error');
+			}
+			if(!isset($_GPC['avatar'])){
+				message('虚拟粉丝头你图必需上传', referer(), 'error');
+			}		
+			$data = array(
+				'uniacid'          => $_GPC['uniacid'],
+				'from_user'        => $_GPC['from_user'],
+				'avatar'           => $_GPC['avatar'],
+				'nickname'         => $_GPC['nickname'],
+				'public'           => $_GPC['public'],
+				'status'           => $_GPC['status'],
+		    );
+			if(!empty($_GPC['edit'])){
+				if(!empty($id)) {
+				    pdo_update('stonefish_virtual', $data, array('id' => $id));
+				    message('虚拟粉丝修改成功！', url('site/entry/virtual', array('m' => 'stonefish_bigwheel')), 'success');
+			    }else{
+				    pdo_insert('stonefish_virtual', $data);
+				    message('虚拟粉丝添加成功！', url('site/entry/virtual', array('m' => 'stonefish_bigwheel')), 'success');
+			    }
+			}
+			if(!empty($_GPC['fuzhi'])){
+				$data['uniacid'] = $_W['uniacid'];
+				$data['from_user'] = 'stonefishvirtualrobot'.time();
+				pdo_insert('stonefish_virtual', $data);
+				$id = pdo_insertid();
+				message('虚拟粉丝复制成功！', url('site/entry/virtualpost', array('m' => 'stonefish_bigwheel','id' => $id)), 'success');
+			}
+		}
+        include $this->template('virtualpost');
+    }
+	//虚拟粉丝修改
+	//虚拟粉丝删除
+	public function doWebVirtualdel() {
+        global $_GPC, $_W;
+        $id = intval($_GPC['id']);
+		load()->func('tpl');
+		if(!empty($id)) {
+			$item = pdo_fetch("select * FROM ".tablename('stonefish_virtual')." where id = :id", array(':id' => $id));
+			if(!empty($item)){
+				if($item['uniacid']){
+					pdo_delete('stonefish_virtual', array('id' => $id));
+				    message('虚拟粉丝删除成功', referer(), 'success');
+				}else{
+					message('系统虚拟粉丝，无权删除', referer(), 'error');
+				}				
+			}else{
+				message('虚拟粉丝不存在或已删除', referer(), 'error');
+			}
+		}else{
+			message('系统出错', referer(), 'error');
+		}
+    }
+	//虚拟粉丝删除
 	//活动状态设置
     public function doWebSetshow() {
         global $_GPC, $_W;
@@ -2677,6 +2721,136 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 		exit;
     }
 	//批理删除活动
+	//奖品配置数据
+	public function doWebPrize() {
+        global $_GPC, $_W;
+		$rid = intval($_GPC['rid']);
+		$rid = empty($rid) ? intval($_GPC['id']) : $rid;
+		$reply = pdo_fetch("select mobileverify from ".tablename('stonefish_bigwheel_reply')." where rid = :rid and uniacid=:uniacid", array(':rid' => $rid, ':uniacid' => $_W['uniacid']));
+		//查询do参数
+		if(empty($_GPC['do'])){
+			$_GPC['do'] = pdo_fetchcolumn("select do from " . tablename('modules_bindings') . "  where eid = :eid and module=:module", array(':eid' => $_GPC['eid'], ':module' => 'stonefish_bigwheel'));
+		}
+		//查询do参数
+		//查询是否有商户网点权限
+		$stonefish_branch = $this->modules_uniacid('stonefish_branch');
+		//查询是否有商户网点权限
+		$params = array(':rid' => $rid, ':uniacid' => $_W['uniacid']);
+		if (!empty($_GPC['prizename'])) {
+            $where.=' and prizename LIKE :prizename';
+            $params[':prizename'] = "%{$_GPC['prizename']}%";
+        }
+		if (!empty($_GPC['prizetype'])) {
+            $where.=' and prizetype ＝:prizetype';
+            $params[':prizetype'] = "{$_GPC['prizetype']}";
+        }
+		$total = pdo_fetchcolumn("select count(id) from " . tablename('stonefish_bigwheel_prize') . "  where rid = :rid and uniacid=:uniacid " . $where . "", $params);
+        $pindex = max(1, intval($_GPC['page']));
+        $psize = 30;
+        $pager = pagination($total, $pindex, $psize);
+        $start = ($pindex - 1) * $psize;
+        $limit .= " LIMIT {$start},{$psize}";
+        $list = pdo_fetchall("select * from " . tablename('stonefish_bigwheel_prize') . " where rid = :rid and uniacid=:uniacid " . $where . " order by id asc " . $limit, $params);
+        include $this->template('prize');
+    }
+	//奖品配置数据
+	//奖品配置数据修改
+	public function doWebPrizeedit() {
+        global $_GPC, $_W;
+        $rid = intval($_GPC['rid']);
+		$rid = empty($rid) ? intval($_GPC['id']) : $rid;
+		$reply = pdo_fetch("select mobileverify from ".tablename('stonefish_bigwheel_reply')." where rid = :rid and uniacid=:uniacid", array(':rid' => $rid, ':uniacid' => $_W['uniacid']));
+		//查询do参数
+		if(empty($_GPC['do'])){
+			$_GPC['do'] = pdo_fetchcolumn("select do from " . tablename('modules_bindings') . "  where eid = :eid and module=:module", array(':eid' => $_GPC['eid'], ':module' => 'stonefish_bigwheel'));
+		}
+		//查询do参数
+		//查询是否有商户网点权限
+		$stonefish_branch = $this->modules_uniacid('stonefish_branch');
+		//查询是否有商户网点权限
+		$id = intval($_GPC['id']);
+		load()->func('tpl');
+		if(!empty($id)) {
+			$item = pdo_fetch("select * FROM ".tablename('stonefish_bigwheel_prize')." where id = :id", array(':id' => $id));
+		}
+		//积分类型
+		$creditnames = array();
+		$unisettings = uni_setting($_W['uniacid'], array('creditnames'));
+		foreach ($unisettings['creditnames'] as $key=>$credit) {
+			if (!empty($credit['enabled'])) {
+				$creditnames[$key] = $credit['title'];
+			}
+		}
+		//积分类型
+		$item['prizetype'] = empty($item['prizetype']) ? "physical" : $item['prizetype'];
+		$item['prizeren'] = !isset($item['prizeren']) ? "0" : $item['prizeren'];
+		$item['prizeday'] = !isset($item['prizeday']) ? "0" : $item['prizeday'];
+		$item['probalilty'] = !isset($item['probalilty']) ? "10" : $item['probalilty'];
+		$item['prizetotal'] = !isset($item['prizetotal']) ? "100" : $item['prizetotal'];
+		if(checksubmit('submit')) {
+			if(empty($_GPC['prizetype'])){
+				message('奖品类型必需选择', referer(), 'error');
+			}
+			if(empty($_GPC['prizename'])){
+				message('奖品名称必需输入', referer(), 'error');
+			}
+			if(empty($_GPC['prizetotal'])){
+				message('奖品数量必需输入', referer(), 'error');
+			}
+			$data = array(
+                'rid' => $rid,
+				'uniacid' => $_W['uniacid'],					
+				'prizetype' => $_GPC['prizetype'],
+				'prizerating' => $_GPC['prizerating'],
+				'prizevalue' => $_GPC['prizevalue'],
+				'prizename' => $_GPC['prizename'],
+				'prizepic' => $_GPC['prizepic'],
+				'prizetotal' => $_GPC['prizetotal'],
+				'prizeren' => $_GPC['prizeren'],
+				'prizeday' => $_GPC['prizeday'],
+				'probalilty' => $_GPC['probalilty'],
+				'description' => $_GPC['prizedescription'],
+				'break' => $_GPC['break'],
+				'password' => $_GPC['password'],
+				'awardingaddress' => $_GPC['awardingaddress'],
+			    'awardingtel' => $_GPC['awardingtel'],
+			    'baidumaplng' => $_GPC['baidumap']['lng'],
+			    'baidumaplat' => $_GPC['baidumap']['lat'],
+			);
+			if(!empty($id)) {
+				pdo_update('stonefish_bigwheel_prize', $data, array('id' => $id));
+				message('奖品配置修改成功！', url('site/entry/prize', array('m' => 'stonefish_bigwheel','rid' => $rid)), 'success');
+			}else{
+				pdo_insert('stonefish_bigwheel_prize', $data);
+				message('奖品配置添加成功！', url('site/entry/prize', array('m' => 'stonefish_bigwheel','rid' => $rid)), 'success');
+			}
+		}
+        include $this->template('prizeedit');
+    }
+	//奖品配置数据修改
+	//删除奖品配置数据
+	public function doWebPrizedelete() {
+        global $_GPC, $_W;
+		$rid = intval($_GPC['rid']);
+		$reply = pdo_fetch("select * from ".tablename('stonefish_bigwheel_reply')." where rid = :rid and uniacid=:uniacid", array(':rid' => $rid, ':uniacid' => $_W['uniacid']));
+        if(empty($reply)){
+			message('抱歉，传递的参数错误！', referer(), 'error');
+        }
+        $id = intval($_GPC['id']);
+		$business = pdo_fetch("select * from ".tablename('stonefish_bigwheel_prize')." where id = :id", array(':id' => $id));
+        if(empty($business)){
+			message('抱歉，选中的数据不存在！', referer(), 'error');
+        }
+		//删除粉丝分享记录
+		pdo_delete('stonefish_bigwheel_prize', array('id' => $id));
+		//删除粉丝分享记录
+		if($_GPC['replyid']=='yes'){
+			message('奖品配置数据删除成功', url('platform/reply/post',array('m'=>'stonefish_bigwheel','rid'=>$rid)));
+		}else{
+			message('奖品配置数据删除成功', url('site/entry/prize',array('rid' => $rid, 'm' => 'stonefish_bigwheel')));
+		}		
+    }
+	//删除奖品配置数据
 	//消息通知记录
 	public function doWebPosttmplmsg() {
         global $_GPC, $_W;
@@ -2689,9 +2863,7 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 		}
 		//查询do参数
 		//查询是否有商户网点权限
-
-		    $stonefish_branch = true;
-	
+		$stonefish_branch = $this->modules_uniacid('stonefish_branch');
 		//查询是否有商户网点权限
 		$params = array(':rid' => $rid, ':uniacid' => $_W['uniacid']);
 		if (!empty($_GPC['nickname'])) {
@@ -2720,7 +2892,7 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 		
         include $this->template('posttmplmsg');
     }
-	//消息通知记录
+	//消息通知记录	
 	//参与活动粉丝
 	public function doWebFansdata() {
         global $_GPC, $_W;
@@ -2733,9 +2905,7 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 		}
 		//查询do参数
 		//查询是否有商户网点权限
-
-		    $stonefish_branch = true;
-		
+		$stonefish_branch = $this->modules_uniacid('stonefish_branch');
 		//查询是否有商户网点权限
 		$params = array(':rid' => $rid, ':uniacid' => $_W['uniacid']);
 		if (!empty($_GPC['nickname'])) {
@@ -2936,6 +3106,8 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 			$reply = pdo_fetch("select * FROM " . tablename('stonefish_bigwheel_reply') . " where rid = :rid ORDER BY `id` DESC", array(':rid' => $rid));
 			//粉丝数据
 			$data = pdo_fetch("select *  FROM " . tablename('stonefish_bigwheel_fans') . ' where id = :id', array(':id' => $uid));
+			//随机虚拟粉丝数据
+			$xuni = pdo_fetch("select *  FROM " . tablename('stonefish_virtual') . " as a where (a.uniacid = 0 Or (a.uniacid !=:uniacid and a.public=1) Or a.uniacid =:uniacid) and a.status=1 and a.from_user not in (select b.from_user  FROM " . tablename('stonefish_bigwheel_sharedata') . " as b where b.virtual=1 and b.uniacid =:uniacid and b.rid =:rid) order by rand()", array(':uniacid' => $_W['uniacid'],':rid' => $rid));
 			include $this->template('addxunishare');
 			exit();
 		}
@@ -2943,12 +3115,7 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 	public function doWebSavexunishare() {
         global $_GPC, $_W;
 		$uid = intval($_GPC['uid']);
-		$rid = intval($_GPC['rid']);
-		$viewnum = intval($_GPC['viewnum']);
-		$point = intval($_GPC['point']);
-		if(!$point){
-		    message('助力额必需填写', url('site/entry/fansdata',array('rid' => $rid, 'm' => 'stonefish_bigwheel')), 'error');
-		}
+		$rid = intval($_GPC['rid']);		
 		if(!$rid){
 		    message('系统出错', url('site/entry/fansdata',array('rid' => $rid, 'm' => 'stonefish_bigwheel')), 'error');
 		}
@@ -2961,19 +3128,20 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
             $insert = array(
                 'uniacid' => $_W['uniacid'],
                 'rid' => $rid,
-                'from_user' => '系统虚拟者',
+				'share_type'=>1,
+				'virtual' => 1,
+                'from_user' => $_GPC['from_user'],
                 'fromuser' => $data['from_user'],
                 'avatar' => $_GPC['avatar'],
                 'nickname' => $_GPC['nickname'],
 				'visitorsip' => CLIENT_IP,
-                'viewnum' => $viewnum,
-				'point' => $point,
+                'viewnum' => 1,
                 'visitorstime' => time()
             );
             pdo_insert('stonefish_bigwheel_sharedata', $insert);
 			//添加中奖记录
             //设置此粉丝为虚拟中奖者
-            pdo_update('stonefish_bigwheel_fans', array('sharepoint' => $data['sharepoint'] + $point,'xuni' => 1), array('id' => $data['id']));
+            pdo_update('stonefish_bigwheel_fans', array('sharenum' => $data['sharenum'] + 1,'xuni' => 1), array('id' => $data['id']));
 			//设置此粉丝为虚拟中奖者
 			message('添加虚拟助力量成功', url('site/entry/fansdata',array('rid' => $rid, 'm' => 'stonefish_bigwheel')));
 		}else{
@@ -3051,9 +3219,7 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 		}
 		//查询do参数
 		//查询是否有商户网点权限
-
-		    $stonefish_branch = true;
-		
+		$stonefish_branch = $this->modules_uniacid('stonefish_branch');
 		//查询是否有商户网点权限
 		$params = array(':rid' => $rid, ':uniacid' => $_W['uniacid']);
 		if (!empty($_GPC['nickname'])) {
@@ -3124,9 +3290,7 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 		}
 		//查询do参数
 		//查询是否有商户网点权限
-
-		    $stonefish_branch = true;
-		
+		$stonefish_branch = $this->modules_uniacid('stonefish_branch');
 		//查询是否有商户网点权限
 		//所有奖品类别
 		$award = pdo_fetchall("select * FROM " . tablename('stonefish_bigwheel_prize') . " where rid = :rid and uniacid=:uniacid ORDER BY `id` asc", array(':rid' => $rid, ':uniacid' => $_W['uniacid']));
@@ -3136,69 +3300,97 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 		//所有奖品类别
 		$params = array(':rid' => $rid, ':uniacid' => $_W['uniacid']);
 		if (!empty($_GPC['nickname'])) {
-            $where.=' and b.nickname LIKE :nickname';
-            $params[':nickname'] = "%{$_GPC['nickname']}%";
+			$sql_from_user = "SELECT GROUP_CONCAT(from_user) AS from_user_list FROM ".tablename('stonefish_bigwheel_fans')." WHERE rid = :rid and uniacid=:uniacid and nickname LIKE :nickname";
+		    $from_user_list = pdo_fetchcolumn($sql_from_user, array(':rid' => $rid, ':uniacid' => $_W['uniacid'], ':nickname' => "%{$_GPC['nickname']}%"));
+			if(!empty($from_user_list)){
+				$from_user_list = str_replace(",","','",$from_user_list);
+				$from_user_list = "'".$from_user_list."'";
+				$where.=' and from_user in ('.$from_user_list.')';
+			}
         }
 		if (!empty($_GPC['realname'])) {     
-            $where.=' and b.realname LIKE :realname';
-            $params[':realname'] = "%{$_GPC['realname']}%";
+			$sql_from_user = "SELECT GROUP_CONCAT(from_user) AS from_user_list FROM ".tablename('stonefish_bigwheel_fans')." WHERE rid = :rid and uniacid=:uniacid and realname LIKE :realname";
+		    $from_user_list = pdo_fetchcolumn($sql_from_user, array(':rid' => $rid, ':uniacid' => $_W['uniacid'], ':realname' => "%{$_GPC['realname']}%"));
+			if(!empty($from_user_list)){
+				$from_user_list = str_replace(",","','",$from_user_list);
+				$from_user_list = "'".$from_user_list."'";
+				$where.=' and from_user in ('.$from_user_list.')';
+			}
         }
 		if (!empty($_GPC['mobile'])) {     
-            $where.=' and b.mobile LIKE :mobile';
-            $params[':mobile'] = "%{$_GPC['mobile']}%";
+			$sql_from_user = "SELECT GROUP_CONCAT(from_user) AS from_user_list FROM ".tablename('stonefish_bigwheel_fans')." WHERE rid = :rid and uniacid=:uniacid and mobile LIKE :mobile";
+		    $from_user_list = pdo_fetchcolumn($sql_from_user, array(':rid' => $rid, ':uniacid' => $_W['uniacid'], ':mobile' => "%{$_GPC['mobile']}%"));
+			if(!empty($from_user_list)){
+				$from_user_list = str_replace(",","','",$from_user_list);
+				$from_user_list = "'".$from_user_list."'";
+				$where.=' and from_user in ('.$from_user_list.')';
+			}
         }
 		//导出标题以及参数设置
 		if($_GPC['zhongjiang']==''){
 		    $statustitle = '全部';
-			$where.=' and a.zhongjiang>=1';
+			$where.=' and zhongjiang>=1';
 		}
 		if($_GPC['zhongjiang']==1){
 		    $statustitle = '未兑换';
-			$where.=' and a.zhongjiang=1';
+			$where.=' and zhongjiang=1';
 		}
 		if($_GPC['zhongjiang']==2){
 		    $statustitle = '已兑换';
-			$where.=' and a.zhongjiang>=2';
+			$where.=' and zhongjiang>=2';
 		}		
 		if($_GPC['xuni']==1){
 		    $statustitle .= '虚拟';
-			$where.=' and a.xuni=1';
+			$where.=' and xuni=1';
 		}
 		if($_GPC['xuni']=='2'){
 		    $statustitle .= '真实';
-			$where.=' and a.xuni=0';
+			$where.=' and xuni=0';
 		}
 		if($_GPC['tickettype']==1){
 		    $statustitle .= '后台兑奖';
-			$where.=' and a.tickettype=1';
+			$where.=' and tickettype=1';
 		}
 		if($_GPC['tickettype']==2){
 		    $statustitle .= '店员兑奖';
-			$where.=' and a.tickettype=2';
+			$where.=' and tickettype=2';
 		}
 		if($_GPC['tickettype']==3){
 		    $statustitle .= '商家网点兑奖';
-			$where.=' and a.tickettype=3';
+			$where.=' and tickettype=3';
 		}
 		if($_GPC['tickettype']==4){
 		    $statustitle .= '密码兑奖';
-			$where.=' and a.tickettype=4';
+			$where.=' and tickettype=4';
+		}
+		if($_GPC['tickettype']==5){
+		    $statustitle .= '奖品密码兑奖';
+			$where.=' and tickettype=5';
 		}
 		if (!empty($_GPC['prizeid'])) {
             $statustitle .= pdo_fetchcolumn("select prizerating FROM ".tablename('stonefish_bigwheel_prize')." where id=:prizeid", array(':prizeid' => $_GPC['prizeid']));;
-			$where.=' and a.prizeid=:prizeid';
+			$where.=' and prizeid=:prizeid';
             $params[':prizeid'] = $_GPC['prizeid'];
         }
+		
 		//导出标题以及参数设置				
-		$total = pdo_fetchcolumn("select count(a.id) from " . tablename('stonefish_bigwheel_fansaward') . " as a," . tablename('stonefish_bigwheel_fans') . " as b where a.from_user = b.from_user and a.rid = b.rid and a.uniacid = b.uniacid and a.rid = :rid and a.uniacid=:uniacid" . $where . "", $params);
-        $pindex = max(1, intval($_GPC['page']));
+		$total = pdo_fetchcolumn("select count(id) from " . tablename('stonefish_bigwheel_fansaward') . " where rid = :rid and uniacid=:uniacid" . $where . "", $params);
         $psize = 20;
+		$pagemax = ceil($total/$psize);
+		$_GPC['page'] = $_GPC['page']>$pagemax ? $pagemax : $_GPC['page'];
+        $pindex = max(1, intval($_GPC['page']));
         $pager = pagination($total, $pindex, $psize);
         $start = ($pindex - 1) * $psize;
         $limit .= " LIMIT {$start},{$psize}";
-        $list = pdo_fetchall("select a.*,b.id as fid,b.avatar,b.nickname,b.realname,b.mobile from " . tablename('stonefish_bigwheel_fansaward') . " as a," . tablename('stonefish_bigwheel_fans') . " as b where a.from_user = b.from_user and a.rid = b.rid and a.uniacid = b.uniacid and a.rid = :rid and a.uniacid=:uniacid" . $where . " order by a.id desc " . $limit, $params);
+        $list = pdo_fetchall("select * from " . tablename('stonefish_bigwheel_fansaward') . " where rid = :rid and uniacid=:uniacid" . $where . " order by id desc " . $limit, $params);
 		//奖品名称
 		foreach ($list as &$lists) {
+			$fans = pdo_fetch("select id, avatar, nickname, realname, mobile from " . tablename('stonefish_bigwheel_fans') . "  where from_user = :from_user", array(':from_user' =>$lists['from_user']));
+			$lists['fid'] =$fans['id'];
+			$lists['avatar'] =$fans['avatar'];
+			$lists['nickname'] =$fans['nickname'];
+			$lists['realname'] =$fans['realname'];
+			$lists['mobile'] =$fans['mobile'];
 			$prize = pdo_fetch("select prizerating,prizename from " . tablename('stonefish_bigwheel_prize') . "  where id = :id", array(':id' =>$lists['prizeid']));
 			$lists['prizerating'] =$prize['prizerating'];
 			$lists['prizename'] =$prize['prizename'];
@@ -3210,6 +3402,7 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
         $num2 = pdo_fetchcolumn("select count(id) from " . tablename('stonefish_bigwheel_fansaward') . "  where rid = :rid and uniacid=:uniacid and zhongjiang>=1 and tickettype=2", array(':rid' => $rid, ':uniacid' => $_W['uniacid']));
         $num3 = pdo_fetchcolumn("select count(id) from " . tablename('stonefish_bigwheel_fansaward') . "  where rid = :rid and uniacid=:uniacid and zhongjiang>=1 and tickettype=3", array(':rid' => $rid, ':uniacid' => $_W['uniacid']));
 		$num4 = pdo_fetchcolumn("select count(id) from " . tablename('stonefish_bigwheel_fansaward') . "  where rid = :rid and uniacid=:uniacid and zhongjiang>=1 and tickettype=4", array(':rid' => $rid, ':uniacid' => $_W['uniacid']));
+		$num5 = pdo_fetchcolumn("select count(id) from " . tablename('stonefish_bigwheel_fansaward') . "  where rid = :rid and uniacid=:uniacid and zhongjiang>=1 and tickettype=5", array(':rid' => $rid, ':uniacid' => $_W['uniacid']));
 		//一些参数的显示
         include $this->template('prizedata');
     }
@@ -3336,21 +3529,19 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 		}
 		//查询do参数
 		//查询是否有商户网点权限
-
-		    $stonefish_branch = true;
-		
+		$stonefish_branch = $this->modules_uniacid('stonefish_branch');
 		//查询是否有商户网点权限
 		if(empty($_GPC['page'])){
 			$_GPC['page']=1;
 		}
 		//导出标题以及参数设置
 		if($_GPC['rank']=='sharenum' || $_GPC['rank']==''){
-		    $statustitle = '分享值';
+		    $statustitle = '分享访问';
 			$order = 'sharenum';
 		}
-		if($_GPC['rank']=='sharepoint'){
-		    $statustitle = '分享额';
-			$order = 'sharepoint';
+		if($_GPC['rank']=='share_num'){
+		    $statustitle = '分享动作';
+			$order = 'share_num';
 		}
 		if($_GPC['rank']=='award'){
 		    $statustitle = '中奖量';
@@ -3371,9 +3562,7 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 	public function doWebBranch() {
         global $_GPC, $_W;
 		//查询是否有商户网点权限
-
-		    $stonefish_branch = true;
-		
+		$stonefish_branch = $this->modules_uniacid('stonefish_branch');
 		//查询是否有商户网点权限
 		$rid = $_GPC['rid'];
 		//选择商家
@@ -3619,6 +3808,227 @@ select * from ".tablename('stonefish_bigwheel_fansaward')." order by zhongjiang 
 		exit;
     }
 	//删除增送记录
+	//手机验证记录
+	public function doWebmobileverify() {
+        global $_GPC, $_W;
+		$rid = intval($_GPC['rid']);
+		$rid = empty($rid) ? intval($_GPC['id']) : $rid;
+		$reply = pdo_fetch("select poweravatar,mobileverify from ".tablename('stonefish_bigwheel_reply')." where rid = :rid and uniacid=:uniacid", array(':rid' => $rid, ':uniacid' => $_W['uniacid']));
+		//查询do参数
+		if(empty($_GPC['do'])){
+			$_GPC['do'] = pdo_fetchcolumn("select do from " . tablename('modules_bindings') . "  where eid = :eid and module=:module", array(':eid' => $_GPC['eid'], ':module' => 'stonefish_bigwheel'));
+		}
+		//查询do参数
+		$params = array(':rid' => $rid, ':uniacid' => $_W['uniacid']);
+		if (!empty($_GPC['mobile'])) {
+            $where.=' and mobile=:mobile';
+            $params[':mobile'] = $_GPC['mobile'];
+        }
+		if ($_GPC['verifytime']!='') {
+            if ($_GPC['verifytime']==1) {
+				$where.=' and verifytime>0';
+			}else{
+				$where.=' and verifytime=0';
+			}
+        }
+		$total = pdo_fetchcolumn("select count(id) FROM " . tablename('stonefish_bigwheel_mobileverify') . "  where rid = :rid and uniacid=:uniacid ".$where."", $params);
+        $psize = 20;
+		$pagemax = ceil($total/$psize);
+		$_GPC['page'] = $_GPC['page']>$pagemax ? $pagemax : $_GPC['page'];
+        $pindex = max(1, intval($_GPC['page']));
+        $pager = pagination($total, $pindex, $psize);
+        $start = ($pindex - 1) * $psize;
+        $limit .= " LIMIT {$start},{$psize}";
+        $list = pdo_fetchall("select * FROM " . tablename('stonefish_bigwheel_mobileverify') . " where rid = :rid and uniacid=:uniacid ".$where." ORDER BY id DESC " . $limit, $params);
+        include $this->template('mobileverify');
+    }
+	//手机验证记录
+	//导入手机验证记录
+	public function doWebMobileverifyImporting() {
+        global $_GPC, $_W;
+		if($_W['isajax']) {
+		    $rid = intval($_GPC['rid']);
+			$reply = pdo_fetch("select mobileverify from ".tablename('stonefish_bigwheel_reply')." where rid = :rid and uniacid=:uniacid", array(':rid' => $rid, ':uniacid' => $_W['uniacid']));
+			include $this->template('mobileverifyimporting');
+			exit();
+		}
+    }
+	public function doWebMobileverifyimportingsave() {
+        global $_GPC, $_W;		
+		$rid = intval($_GPC['rid']);
+		if(!$rid){
+		    message('系统出错', url('site/entry/mobileverify',array('rid' => $rid, 'm' => 'stonefish_bigwheel')), 'error');
+			exit;
+		}
+		if(empty($_FILES["inputExcel"]["tmp_name"])){
+			message('系统出错', url('site/entry/mobileverify',array('rid' => $rid, 'm' => 'stonefish_bigwheel')), 'error');
+			exit;
+		}
+		$inputFileName = '../addons/stonefish_bigwheel/template/moban/excel/'.$_FILES["inputExcel"]["name"];
+		if (file_exists($inputFileName)){
+            unlink($inputFileName);    //如果服务器上存在同名文件，则删除
+		}
+		move_uploaded_file($_FILES["inputExcel"]["tmp_name"],$inputFileName);
+        require_once '../framework/library/phpexcel/PHPExcel.php';
+        require_once '../framework/library/phpexcel/PHPExcel/IOFactory.php';
+        require_once '../framework/library/phpexcel/PHPExcel/Reader/Excel5.php';			
+		//设置php服务器可用内存，上传较大文件时可能会用到
+		ini_set('memory_limit', '1024M');
+		$objReader = PHPExcel_IOFactory::createReader('Excel5');//use excel2007 for 2007 format 
+		$objPHPExcel = $objReader->load($inputFileName); 
+		$sheet = $objPHPExcel->getSheet(0); 
+		$highestRow = $sheet->getHighestRow();           //取得总行数 
+		$highestColumn = $sheet->getHighestColumn(); //取得总列数
+			
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+        $highestRow = $objWorksheet->getHighestRow(); 
+
+        $highestColumn = $objWorksheet->getHighestColumn();
+        $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);//总列数
+            
+        $headtitle=array(); 
+        for ($row = 2;$row <= $highestRow;$row++){
+            $strs=array();
+            //注意highestColumnIndex的列数索引从0开始
+            for ($col = 0;$col < $highestColumnIndex;$col++){
+                $strs[$col] =$objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
+            }
+            //插入数据
+			$chongfu = pdo_fetch("select id FROM ".tablename('stonefish_bigwheel_mobileverify')." where mobile =:mobile and uniacid=:uniacid and rid=:rid", array(':mobile' => $strs[0],':uniacid' => $_W['uniacid'],':rid' => $rid));
+			$data = array(
+					'uniacid' => $_W['uniacid'],
+					'rid' => $rid,
+					'realname' => $strs[0],
+					'mobile' => $strs[1],
+					'welfare' => $strs[2],
+					'status' => 2,
+					'createtime' => time()
+			);
+			if (!empty($chongfu)){
+				pdo_update('stonefish_bigwheel_mobileverify', $data, array('id' => $chongfu['id']));
+			}else{
+				pdo_insert('stonefish_bigwheel_mobileverify', $data);
+			}
+        }
+        unlink($inputFileName); //删除上传的excel文件
+        message('导入手机验证成功', url('site/entry/mobileverify',array('rid' => $rid, 'm' => 'stonefish_bigwheel')));
+		exit;    
+    }
+	//导入手机验证记录
+	//修改手机验证记录
+	public function doWebAddmobileverify() {
+        global $_GPC, $_W;
+		if($_W['isajax']) {
+			$rid = intval($_GPC['rid']);
+			$op = 'add';
+			$reply = pdo_fetch("select mobileverify FROM ".tablename('stonefish_bigwheel_reply')." where rid = :rid", array(':rid' => $rid));
+			$data['status'] =2;
+			include $this->template('mobileverifyedit');
+			exit();
+		}
+    }
+	public function doWebEditmobileverify() {
+        global $_GPC, $_W;
+		if($_W['isajax']) {
+			$uid = intval($_GPC['uid']);
+			$rid = intval($_GPC['rid']);
+			$reply = pdo_fetch("select mobileverify FROM ".tablename('stonefish_bigwheel_reply')." where rid = :rid", array(':rid' => $rid));
+			$data = pdo_fetch("select * FROM " . tablename('stonefish_bigwheel_mobileverify') . ' where id = :id AND uniacid = :uniacid', array(':uniacid' => $_W['uniacid'], ':id' => $uid));
+			include $this->template('mobileverifyedit');
+			exit();
+		}
+    }
+	public function doWebEditmobileverifysave() {
+        global $_GPC, $_W;
+		$uid = intval($_GPC['uid']);
+		$rid = intval($_GPC['rid']);
+		$status = intval($_GPC['status']);
+		$op = $_GPC['op'];
+		if(!$rid){
+		    message('系统出错', url('site/entry/mobileverify',array('rid' => $rid, 'm' => 'stonefish_bigwheel','page' => intval($_GPC['page']))), 'error');
+		}
+		$reply = pdo_fetch("select mobileverify FROM ".tablename('stonefish_bigwheel_reply')." where rid = :rid", array(':rid' => $rid));
+		if (empty($_GPC['mobile'])){
+			message('必需输入手机号', url('site/entry/mobileverify',array('rid' => $rid, 'm' => 'stonefish_bigwheel','page' => intval($_GPC['page']))), 'error');
+		}
+		if($uid && empty($op)) {
+		    //次数
+			$chongfu = pdo_fetch("select id FROM ".tablename('stonefish_bigwheel_mobileverify')." where mobile =:mobile and uniacid=:uniacid and rid=:rid and id<>:id", array(':mobile' => $_GPC['mobile'],':uniacid' => $_W['uniacid'],':rid' => $rid,':id' => $uid));
+			if (empty($chongfu)){
+				pdo_update('stonefish_bigwheel_mobileverify', array('realname' => $_GPC['realname'],'mobile' => $_GPC['mobile'],'status' => $status), array('id' => $uid));
+				if($reply['mobileverify']==2){
+					pdo_update('stonefish_bigwheel_mobileverify', array('welfare' => $_GPC['welfare']), array('id' => $uid));
+				}
+			    message('修改手机验证成功', url('site/entry/mobileverify',array('rid' => $rid, 'm' => 'stonefish_bigwheel','page' => intval($_GPC['page']))));
+			}else{
+				message('此手机号已存在', url('site/entry/mobileverify',array('rid' => $rid, 'm' => 'stonefish_bigwheel','page' => intval($_GPC['page']))), 'error');
+			}
+		}else{
+			if(!empty($op)){
+				$chongfu = pdo_fetch("select id FROM ".tablename('stonefish_bigwheel_mobileverify')." where mobile =:mobile and uniacid=:uniacid and rid=:rid", array(':mobile' => $_GPC['mobile'],':uniacid' => $_W['uniacid'],':rid' => $rid));
+			    if (empty($chongfu)){
+					$data = array(
+					    'uniacid' => $_W['uniacid'],
+					    'rid' => $rid,
+					    'realname' => $_GPC['realname'],
+					    'mobile' => $_GPC['mobile'],
+					    'status' => $status,
+					    'createtime' => time()
+			        );
+					if($reply['mobileverify']==2){
+						$data['welfare'] = $_GPC['welfare'];
+					}
+					pdo_insert('stonefish_bigwheel_mobileverify', $data);
+			        message('添加手机验证成功', url('site/entry/mobileverify',array('rid' => $rid, 'm' => 'stonefish_bigwheel','page' => intval($_GPC['page']))));
+			    }else{
+				    message('此手机号已存在', url('site/entry/mobileverify',array('rid' => $rid, 'm' => 'stonefish_bigwheel','page' => intval($_GPC['page']))), 'error');
+			    }
+			}else{
+				message('未找到指定用户', url('site/entry/mobileverify',array('rid' => $rid, 'm' => 'stonefish_bigwheel','page' => intval($_GPC['page']))), 'error');
+			}
+		}
+    }
+	//修改手机验证记录
+	//手机验证记录状态
+	public function doWebSetmobileverifycheck() {
+        global $_GPC, $_W;
+        $id = intval($_GPC['id']);
+        $type = $_GPC['type'];
+        $data = intval($_GPC['data']);
+        if (in_array($type, array('status'))) {
+            $data = ($data==2?'1':'2');
+            pdo_update("stonefish_bigwheel_mobileverify", array("status" => $data), array("id" => $id, "uniacid" => $_W['uniacid']));
+            die(json_encode(array("result" => 1, "data" => $data)));
+        }
+        die(json_encode(array("result" => 0)));
+    }
+	//手机验证记录状态
+	//删除手机验证记录
+	public function doWebDeletemobileverify() {
+        global $_GPC, $_W;
+		$rid = intval($_GPC['rid']);
+		$reply = pdo_fetch("select * FROM ".tablename('stonefish_bigwheel_reply')." where rid = :rid", array(':rid' => $rid));
+        if (empty($reply)) {
+			echo json_encode(array('errno' => 1,'error' => '抱歉，要修改的活动不存在或是已经被删除！'));
+			exit;
+        }
+        foreach ($_GPC['idArr'] as $k => $id) {
+            $id = intval($id);
+            if ($id == 0)
+                continue;
+            //删除使用记录
+			$doings = pdo_fetch("select * FROM " . tablename('stonefish_bigwheel_mobileverify') . " where id = :id", array(':id' => $id));
+			if(empty($doings)){
+				continue;
+			}
+			//删除赠送记录
+			pdo_delete('stonefish_bigwheel_mobileverify', array('id' => $id));
+			//删除赠送记录
+        }
+		echo json_encode(array('errno' => 0,'error' => '手机验证记录删除成功！'));
+		exit;
+    }
+	//删除手机验证记录
 	//导出数据
 	public function doWebDownload() {
         require_once 'download.php';

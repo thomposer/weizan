@@ -27,6 +27,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 	public $table_set = 'wx_school_set';
 	public $table_leave = 'wx_school_leave';
 	public $table_notice = 'wx_school_notice';
+	
 	// ===============================================
 		
 	// public function doWebUpgrade(){
@@ -57,6 +58,10 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 	// 学校管理
 	public function doWebSchool() {
 		$this->getLogic ( __FUNCTION__, 'web' );
+	}
+
+	public function doWebIndexajax() {
+		$this->getLogic ( __FUNCTION__, 'web' );
 	}	
 	
 	// 分类管理
@@ -69,7 +74,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		$this->getLogic ( __FUNCTION__, 'web' );
 	}
 	
-	// 学员管理
+	// 学生管理
 	public function doWebStudents() {
 		$this->getLogic ( __FUNCTION__, 'web' );
 	}
@@ -78,7 +83,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 	public function doWebChengji() {
 		$this->getLogic ( __FUNCTION__, 'web' );
 	}
-	
+
     // 课程安排
 	public function doWebKecheng() {
 		$this->getLogic ( __FUNCTION__, 'web' );
@@ -165,6 +170,10 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 	public function doMobileIndexajax() {
 		$this->getLogic ( __FUNCTION__, 'mobile' );
 	}	
+	
+    public function doMobileDongtaiajax() {
+		$this->getLogic ( __FUNCTION__, 'mobile' );
+	}
 	
 	public function doMobileWapindex() {
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
@@ -261,6 +270,19 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
     public function doMobileTmcomet() {	
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
 	}
+
+    public function doMobileMnotice() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileMnoticelist() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileMfabu() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}	
+	
     //for teacher
     public function doMobileSmssage() {	
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
@@ -291,6 +313,14 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 	}
 
     public function doMobileFabu() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileSnoticelist() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileSnotice() {	
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
 	}	
 	
@@ -335,7 +365,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
     public $actions_titles1 = array(
 	    'semester' => '分类管理',
         'assess' => '教师管理',
-        'students' => '学员管理',
+        'students' => '学生管理',
         'chengji' => '成绩查询',
         'kecheng' => '课程安排',
 		'kcbiao' => '课表设置',
@@ -444,18 +474,104 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		
 		message('发送成功！', $this->createWebUrl('fmqf', array('rid' => $rid)));
 	}
-	
-	
-	private function sendMobileRegMsg($from_user, $rid, $uniacid) {
+
+	private function sendMobileXytz($notice_id, $schoolid, $weid, $tname, $groupid) {
 		global $_GPC,$_W;
-		$reply = pdo_fetch("SELECT regmessagetemplate FROM ".tablename($this->table_reply_huihua)." WHERE rid = :rid ORDER BY `id` DESC", array(':rid' => $rid));
+		$msgtemplate = pdo_fetch("SELECT * FROM ".tablename($this->table_set)." WHERE :weid = weid", array(':weid' => $weid));	
+		$notice = pdo_fetch("SELECT * FROM ".tablename($this->table_notice)." WHERE :weid = weid AND :id = id AND :schoolid = schoolid", array(':weid' => $weid, ':id' => $notice_id, ':schoolid' => $schoolid));
+		$school = pdo_fetch("SELECT * FROM ".tablename($this->table_index)." WHERE :weid = weid AND :id = id", array(':weid' => $weid, ':id' => $schoolid));
+        $template_id = $msgtemplate['xxtongzhi'];//消息模板id 微信的模板id
+		$category = pdo_fetchall("SELECT * FROM " . tablename($this->table_classify) . " WHERE :weid = weid AND :schoolid =schoolid", array(':weid' => $weid, ':schoolid' => $schoolid), 'sid');
 		
+		if ($groupid == 1) {
+			
+		$userinfo = pdo_fetchall("SELECT * FROM ".tablename($this->table_user)." where weid = :weid And schoolid = :schoolid",array(':weid'=>$weid, ':schoolid'=>$schoolid));	
+			
+		}elseif ($groupid == 2) {
+			
+		$userinfo = pdo_fetchall("SELECT * FROM ".tablename($this->table_teachers)." where weid = :weid And schoolid = :schoolid",array(':weid'=>$weid, ':schoolid'=>$schoolid));	
 		
-		$userinfo = pdo_fetch("SELECT * FROM ".tablename($this->table_users)." WHERE uniacid = :uniacid and from_user = :from_user and rid = :rid", array(':uniacid' => $uniacid,':from_user' => $from_user,':rid' => $rid));	
-		include 'mtemplate/regvote.php';
-		$url =  $_W['siteroot'] .'app/'.$this->createMobileUrl('tuser', array('rid' => $rid,'from_user' => $from_user,'tfrom_user' => $from_user));
-		if (!empty($template_id)) {
-			$this->sendtempmsg($template_id, $url, $data, '#FF0000', $from_user);
+		}elseif ($groupid == 3) {
+			
+		$userinfo = pdo_fetchall("SELECT * FROM ".tablename($this->table_students)." where weid = :weid And schoolid = :schoolid",array(':weid'=>$weid, ':schoolid'=>$schoolid));
+		
+        }	
+		
+		foreach ($userinfo as $key => $value) {
+			
+			$openid = "";
+			
+				if ($groupid == 1) {
+					
+				$openid = pdo_fetchcolumn("select openid from ".tablename($this->table_user)." where id = '{$value['id']}' ");	
+                
+                $url =  $_W['siteroot'] .'app/'.$this->createMobileUrl('mnotice', array('schoolid' => $schoolid,'id' => $notice_id));				
+			
+		        }elseif ($groupid == 2) {
+					
+				$openid = pdo_fetchcolumn("select openid from ".tablename($this->table_user)." where tid = '{$value['id']}' ");	
+				
+				$url =  $_W['siteroot'] .'app/'.$this->createMobileUrl('mnotice', array('schoolid' => $schoolid,'id' => $notice_id)); 
+					
+				}elseif ($groupid == 3) {
+					
+				$openid = pdo_fetchcolumn("select openid from ".tablename($this->table_user)." where sid = '{$value['id']}' ");  
+				
+				$url =  $_W['siteroot'] .'app/'.$this->createMobileUrl('snotice', array('schoolid' => $schoolid,'id' => $notice_id));
+				
+				}
+			$schoolname ="{$school['title']}";
+			$name  = "{$tname}老师";
+			$bjname  = "{$category[$notice['bj_id']]['sname']}";
+			$ttime = date('Y-m-d H:i:s', $notice['createtime']);
+			$body  = "点击本条消息查看详情 ";
+			$datas=array(
+				'name'=>array('value'=>$_W['account']['name'],'color'=>'#173177'),
+				'first'=>array('value'=>'您收到一条学校通知','color'=>'#1587CD'),
+				'keyword1'=>array('value'=>$schoolname,'color'=>'#1587CD'),
+				'keyword2'=>array('value'=>$name,'color'=>'#2D6A90'),
+				'keyword3'=>array('value'=>$ttime,'color'=>'#1587CD'),
+				'keyword4'=>array('value'=>$notice['title'],'color'=>'#1587CD'),
+				'remark'=> array('value'=>$body,'color'=>'#FF9E05')
+						);
+			$data = json_encode($datas); //发送的消息模板数据
+			
+			$this->sendtempmsg($template_id, $url, $data, '#FF0000', $openid);
+		}
+	}	
+
+	private function sendMobileBjtz($notice_id, $schoolid, $weid, $tname, $bj_id) {
+		global $_GPC,$_W;
+		$msgtemplate = pdo_fetch("SELECT * FROM ".tablename($this->table_set)." WHERE :weid = weid", array(':weid' => $weid));	
+		$notice = pdo_fetch("SELECT * FROM ".tablename($this->table_notice)." WHERE :weid = weid AND :id = id AND :schoolid = schoolid", array(':weid' => $weid, ':id' => $notice_id, ':schoolid' => $schoolid));
+        $template_id = $msgtemplate['bjtz'];//消息模板id 微信的模板id
+		$category = pdo_fetchall("SELECT * FROM " . tablename($this->table_classify) . " WHERE :weid = weid AND :schoolid =schoolid", array(':weid' => $weid, ':schoolid' => $schoolid), 'sid');
+		
+		$pindex = max(1, intval($_GPC['page']));
+		$psize = 20;
+		
+		$userinfo=pdo_fetchall("SELECT * FROM ".tablename($this->table_students)." where weid = :weid And schoolid = :schoolid And bj_id = :bj_id",array(':weid'=>$weid, ':schoolid'=>$schoolid, ':bj_id'=>$bj_id));	
+		
+		foreach ($userinfo as $key => $value) {
+			
+			$openid=pdo_fetchcolumn("select openid from ".tablename($this->table_user)." where sid = '{$value['id']}' ");
+			
+			$name  = "{$tname}老师";
+			$bjname  = "{$category[$notice['bj_id']]['sname']}";
+			$ttime = date('Y-m-d H:i:s', $notice['createtime']);
+			$body  = "点击本条消息查看详情 ";
+			$datas=array(
+				'name'=>array('value'=>$_W['account']['name'],'color'=>'#173177'),
+				'first'=>array('value'=>'您收到一条班级通知','color'=>'#1587CD'),
+				'keyword1'=>array('value'=>$bjname,'color'=>'#1587CD'),
+				'keyword2'=>array('value'=>$name,'color'=>'#2D6A90'),
+				'keyword3'=>array('value'=>$ttime,'color'=>'#1587CD'),
+				'keyword4'=>array('value'=>$notice['title'],'color'=>'#1587CD'),
+				'remark'=> array('value'=>$body,'color'=>'#FF9E05')
+						);
+			$data = json_encode($datas); //发送的消息模板数据
+			$url =  $_W['siteroot'] .'app/'.$this->createMobileUrl('snotice', array('schoolid' => $schoolid,'id' => $notice_id));
+			$this->sendtempmsg($template_id, $url, $data, '#FF0000', $openid);
 		}
 	}
 		
@@ -483,7 +599,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		$ttime = date('Y-m-d H:i:s', $leave['createtime']);
 		$time  = "{$stime}至{$etime}";
 		$body .= "消息时间：{$ttime} \n";
-		$body .= "点击本条消息快速处理 ☟";
+		$body .= "点击本条消息快速处理 ";
 	    $datas=array(
 		'name'=>array('value'=>$_W['account']['name'],'color'=>'#173177'),
 		'first'=>array('value'=>'您收到了一条'.$shenfen.'的请假申请','color'=>'#1587CD'),
@@ -563,7 +679,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		$time = date('Y-m-d H:i:s', $leave['createtime']);
 		$data1 = "{$students['s_name']}{$guanxi}";
 		$body .= "留言摘要：{$leave['conet']} \n";
-		$body .= "点击本条消息快速回复 ☟☟☟";
+		$body .= "点击本条消息快速回复 ";
 	    $datas=array(
 		'name'=>array('value'=>$_W['account']['name'],'color'=>'#173177'),
 		'first'=>array('value'=>'您收到了一条留言信息！','color'=>'#1587CD'),
@@ -602,7 +718,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
         if (!empty($template_id)) {
 		$time = date('Y-m-d H:i:s', $leave['createtime']);
 		$data1 = "{$students['s_name']}{$guanxi},您收到了一条老师的留言回复信息！";
-		$body = "点击本条消息快速回复 ☟☟☟";
+		$body = "点击本条消息快速回复 ";
 	    $datas=array(
 		'name'=>array('value'=>$_W['account']['name'],'color'=>'#173177'),
 		'first'=>array('value'=>$data1,'color'=>'#1587CD'),
@@ -635,7 +751,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 	    $stime = $leave['startime'];
 	    $etime = $leave['endtime'];
 		$time = "{$stime}至{$etime}";
-		$body = "点击本条消息快速处理 ☟";
+		$body = "点击本条消息快速处理 ";
 	    $datas=array(
 		'name'=>array('value'=>$_W['account']['name'],'color'=>'#173177'),
 		'first'=>array('value'=>'您收到了一条教师请假申请','color'=>'#1587CD'),
@@ -673,7 +789,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
         if (!empty($template_id)) {
 		
 		$time = date('Y-m-d H:i:s', $leave['cltime']);
-		$body = "点击本条消息查看详情 ☟";
+		$body = "点击本条消息查看详情 ";
 	    $datas=array(
 		'name'=>array('value'=>$_W['account']['name'],'color'=>'#173177'),
 		'first'=>array('value'=>'请假审批结果通知','color'=>'#1587CD'),

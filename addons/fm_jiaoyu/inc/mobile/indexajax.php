@@ -58,61 +58,6 @@
 		      die ( json_encode ( $data ) );
 	        }
     }
-	if ($operation == 'jiaoliu') {
-		$data = explode ( '|', $_GPC ['json'] );
-		if (empty($_GPC['openid'])) {
-                  die ( json_encode ( array (
-                    'result' => false,
-                    'msg' => '非法请求！' 
-		               ) ) );
-		}else{
-		     if (empty($_GPC['content'])) {
-                     die ( json_encode ( array (
-                    'result' => false,
-                    'msg' => '非法请求,内容为空！' 
-		               ) ) );
-		     }else {
-				
-				$tid = $_GPC['uid'];
-				$content = $_GPC['content'];
-				$from_user = $_GPC['openid'];
-				$tfrom_user = $_GPC['topenid'];
-				$bj_id = $_GPC['bj_id'];
-				$schoolid = $_GPC['schoolid'];
-				$weid = $_GPC['weid'];
-				$avatar = $_GPC['avatar'];
-				$nickname = $_GPC['nickname'];
-
-				$rdata = array(
-					'weid' => $weid,
-					'schoolid' => $schoolid,
-					'avatar' => $avatar,
-					'nickname' => $nickname,
-					'tfrom_user' => $tfrom_user,//帖子作者的openid
-					'tid' => $tid,//帖子的ID
-					'shenfen' => $_GPC['shenfen'],//帖子的ID
-					'from_user' => $from_user,//回复评论帖子的openid
-					//'reply_id' => $reply_id,//回复评论帖子的ID
-					//'rfrom_user' => $rfrom_user,//被回复的评论的作者的openid
-					'to_reply_id' => $bj_id,//本帖子所属班级ID
-					'content' => htmlspecialchars_decode($content),//评论回复内容
-					//'storey' => $storey,//绝对楼层
-					'createtime' => time(),
-					
-				);
-				pdo_insert($this->table_bbsreply, $rdata);
-				$reply_id = pdo_insertid();
-				pdo_update($this->table_bbsreply, array('storey' => $reply_id), array('weid' => $weid, 'schoolid' => $schoolid, 'id' => $reply_id ));
-				if ($reply['msgtemplate']) {
-					$this->sendMobileMsgtx($tfrom_user, $schoolid, $weid, $reply_id);
-				}
-				    $data ['result'] = true;
-			
-			        $data ['msg'] = '发送成功！';
-		    }
-		 die ( json_encode ( $data ) );
-		}
-    }
 	if ($operation == 'bdxs') {
 		$data = explode ( '|', $_GPC ['json'] );
 		if (! $_GPC ['schoolid'] || ! $_W ['openid']) {
@@ -904,5 +849,5 @@
           die ( json_encode ( $data ) );
 		  
 		}
-    }	
+    }
 ?>

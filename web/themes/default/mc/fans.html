@@ -125,10 +125,7 @@
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否关注</label>
 					<div class="col-sm-9 col-md-8 col-lg-8 col-xs-12">
 						<label class="radio-inline">
-							<input type="radio" name="follow" value="" {if $follow == ''}checked="checked"{/if}/> 不限
-						</label>
-						<label class="radio-inline">
-							<input type="radio" name="follow" value="1" {if $follow == '1'}checked="checked"{/if}/> 已关注
+							<input type="radio" name="follow" value="1" checked="checked"/> 已关注
 						</label>
 						<label class="radio-inline">
 							<input type="radio" name="follow" value="2" {if $follow == '2'}checked="checked"{/if}/> 取消关注
@@ -146,6 +143,9 @@
 				</div>
 			</form>
 		</div>
+	</div>
+	<div class="alert alert-info">
+		<i class="fa fa-info-circle"></i>当前搜索时间段:关注人数:<strong class="text-danger">{$fans['follow']}</strong>。取消关注人数:<strong class="text-danger">{$fans['unfollow']}</strong>。<br>
 	</div>
 	<form action="?{$_SERVER['QUERY_STRING']}" method="post" id="form1">
 	<div class="panel panel-default">

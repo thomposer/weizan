@@ -4,16 +4,17 @@
 </style>
 <div class="main">
 	<ul class="nav nav-tabs">
-		<li{if $_GPC['do'] == 'manage'} class="active"{/if}><a href="{php echo $this->createWebUrl('manage');}">管理幸运大转盘</a></li>
-		<li{if $_GPC['do'] == 'post'} class="active"{/if}><a href="{php echo url('platform/reply/post',array('m'=>'stonefish_bigwheel'));}"><i class="fa fa-plus"></i> 添加幸运大转盘</a></li>
+		<li{if $_GPC['do'] == 'manage'} class="active"{/if}><a href="{php echo $this->createWebUrl('manage');}">管理活动</a></li>
+		<li><a href="{php echo url('platform/reply/post',array('m'=>'stonefish_bigwheel', 'rid' => $rid));}">编辑活动</a></li>
+		<li{if $_GPC['do'] == 'prize'} class="active"{/if}><a href="{php echo $this->createWebUrl('prize',array('rid' => $rid));}">奖品配置</a></li>
 		<li{if $_GPC['do'] == 'fansdata'} class="active"{/if}><a href="{php echo $this->createWebUrl('fansdata',array('rid' => $rid));}">参与粉丝</a></li>
 		<li{if $_GPC['do'] == 'sharedata'} class="active"{/if}><a href="{php echo $this->createWebUrl('sharedata',array('rid' => $rid));}">分享数据</a></li>
 		<li{if $_GPC['do'] == 'prizedata'} class="active"{/if}><a href="{php echo $this->createWebUrl('prizedata',array('rid' => $rid));}">中奖名单</a></li>		
 		<li{if $_GPC['do'] == 'rankdata'} class="active"{/if}><a href="{php echo $this->createWebUrl('rankdata',array('rid' => $rid));}">粉丝排行</a></li>
-		<li{if $_GPC['do'] == 'trend'} class="active"{/if}><a href="{php echo $this->createWebUrl('trend',array('rid' => $rid));}">活动分析</a></li>
+		{if $reply['mobileverify']}<li{if $_GPC['do'] == 'mobileverify'} class="active"{/if}><a href="{php echo $this->createWebUrl('mobileverify',array('rid' => $rid));}">手机验证</a></li>{/if}
+		{if $stonefish_branch}<li{if $_GPC['do'] == 'branch'} class="active"{/if}><a href="{php echo $this->createWebUrl('branch',array('rid' => $rid));}">商家赠送</a></li>{/if}
 		<li{if $_GPC['do'] == 'posttmplmsg'} class="active"{/if}><a href="{php echo $this->createWebUrl('posttmplmsg',array('rid' => $rid));}">消息通知</a></li>
-		{if $stonefish_branch}<li{if $_GPC['do'] == 'branch'} class="active"{/if}><a href="{php echo $this->createWebUrl('branch',array('rid' => $rid));}">商家赠送项</a></li>{/if}
-		<li><a href="{php echo url('platform/reply/post',array('m'=>'stonefish_bigwheel', 'rid' => $rid));}">编辑幸运大转盘</a></li>
+		<li{if $_GPC['do'] == 'trend'} class="active"{/if}><a href="{php echo $this->createWebUrl('trend',array('rid' => $rid));}">活动分析</a></li>
 	</ul>
     <div class="panel panel-info">
 	<div class="panel-heading">筛选</div>
@@ -58,11 +59,12 @@
 						<option value="2" {if $_GPC['tickettype']=='2'}selected{/if}>店员兑奖</option>
 						{if $stonefish_branch}<option value="3" {if $_GPC['tickettype']=='3'}selected{/if}>商家网店</option>{/if}
 						<option value="4" {if $_GPC['tickettype']=='4'}selected{/if}>密码兑奖</option>
+						<option value="5" {if $_GPC['tickettype']=='5'}selected{/if}>奖品密码兑奖</option>
                 	</select>
 				</div>
 				<div class="col-xs-12 col-sm-3 col-lg-3">
 					<select name="xuni" class="form-control" style="float:left">
-                    	<option value="" {if $_GPC['xuni']==''}selected{/if}>全部真实虚拟奖</option>
+                    	<option value="" {if $_GPC['xuni']==''}selected{/if}>全部奖项</option>
 						<option value="2" {if $_GPC['xuni']=='2'}selected{/if}>真实</option>
                         <option value="1" {if $_GPC['xuni']=='1'}selected{/if}>虚拟</option>
                 	</select>
@@ -86,43 +88,41 @@
 	<div class="row-fluid">
     	<div class="span8 control-group">			
 			<a class="btn btn-default{if $_GPC['zhongjiang']==''} btn-primary active{/if}" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'xuni'=>$_GPC['xuni'],tickettype=>$_GPC['tickettype'],prizeid=>$_GPC['prizeid']))}">全　部</a>
-			<a class="btn btn-default{if $_GPC['zhongjiang']==1} btn-primary active{/if}" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>1,'xuni'=>$_GPC['xuni'],tickettype=>$_GPC['tickettype'],prizeid=>$_GPC['prizeid']))}">未兑换</a>
-			<a class="btn btn-default{if $_GPC['zhongjiang']==2} btn-primary active{/if}" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>2,'xuni'=>$_GPC['xuni'],tickettype=>$_GPC['tickettype'],prizeid=>$_GPC['prizeid']))}">已兑换</a>
+			<a class="btn btn-default{if $_GPC['zhongjiang']==1} btn-primary active{/if}" style="margin:5px;" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>1,'xuni'=>$_GPC['xuni'],tickettype=>$_GPC['tickettype'],prizeid=>$_GPC['prizeid']))}">未兑换</a>
+			<a class="btn btn-default{if $_GPC['zhongjiang']==2} btn-primary active{/if}" style="margin:5px;" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>2,'xuni'=>$_GPC['xuni'],tickettype=>$_GPC['tickettype'],prizeid=>$_GPC['prizeid']))}">已兑换</a>
         </div>
     </div>
 	<div class="row-fluid" style="margin-top:10px;">
     	<div class="span8 control-group">			
 			<a class="btn btn-default{if $_GPC['xuni']==''} btn-primary active{/if}" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],tickettype=>$_GPC['tickettype'],prizeid=>$_GPC['prizeid']))}">全　部</a>
-			<a class="btn btn-default{if $_GPC['xuni']==2} btn-primary active{/if}" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>2,tickettype=>$_GPC['tickettype'],prizeid=>$_GPC['prizeid']))}">真实奖</a>
-			<a class="btn btn-default{if $_GPC['xuni']==1} btn-primary active{/if}" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>1,tickettype=>$_GPC['tickettype'],prizeid=>$_GPC['prizeid']))}">虚拟奖</a>
+			<a class="btn btn-default{if $_GPC['xuni']==2} btn-primary active{/if}" style="margin:5px;" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>2,tickettype=>$_GPC['tickettype'],prizeid=>$_GPC['prizeid']))}">真实奖</a>
+			<a class="btn btn-default{if $_GPC['xuni']==1} btn-primary active{/if}" style="margin:5px;" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>1,tickettype=>$_GPC['tickettype'],prizeid=>$_GPC['prizeid']))}">虚拟奖</a>
         </div>
     </div>
 	<div class="row-fluid" style="margin-top:10px;">
     	<div class="span8 control-group">
 			<a class="btn btn-default{if $_GPC['tickettype']==''} btn-primary active{/if}" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],xuni=>$_GPC['xuni'],prizeid=>$_GPC['prizeid']))}">全　部</a>
-			<a class="btn btn-default{if $_GPC['tickettype']==1} btn-primary active{/if}" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>$_GPC['xuni'],tickettype=>1,prizeid=>$_GPC['prizeid']))}">后台兑奖</a>
-			<a class="btn btn-default{if $_GPC['tickettype']==2} btn-primary active{/if}" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>$_GPC['xuni'],tickettype=>2,prizeid=>$_GPC['prizeid']))}">店员兑奖</a>
-			{if $stonefish_branch}<a class="btn btn-default{if $_GPC['tickettype']==3} btn-primary active{/if}" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>$_GPC['xuni'],tickettype=>3,prizeid=>$_GPC['prizeid']))}">商家网店</a>{/if}
-			<a class="btn btn-default{if $_GPC['tickettype']==4} btn-primary active{/if}" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>$_GPC['xuni'],tickettype=>4,prizeid=>$_GPC['prizeid']))}">密码兑奖</a>
+			<a class="btn btn-default{if $_GPC['tickettype']==1} btn-primary active{/if}" style="margin:5px;" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>$_GPC['xuni'],tickettype=>1,prizeid=>$_GPC['prizeid']))}">后台兑奖（{$num1}）</a>
+			<a class="btn btn-default{if $_GPC['tickettype']==2} btn-primary active{/if}" style="margin:5px;" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>$_GPC['xuni'],tickettype=>2,prizeid=>$_GPC['prizeid']))}">店员兑奖（{$num2}）</a>
+			{if $stonefish_branch}<a class="btn btn-default{if $_GPC['tickettype']==3} btn-primary active{/if}" style="margin:5px;" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>$_GPC['xuni'],tickettype=>3,prizeid=>$_GPC['prizeid']))}">商家网店（{$num3}）</a>{/if}
+			<a class="btn btn-default{if $_GPC['tickettype']==4} btn-primary active{/if}" style="margin:5px;" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>$_GPC['xuni'],tickettype=>4,prizeid=>$_GPC['prizeid']))}">密码兑奖（{$num4}）</a>
+			<a class="btn btn-default{if $_GPC['tickettype']==5} btn-primary active{/if}" style="margin:5px;" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>$_GPC['xuni'],tickettype=>5,prizeid=>$_GPC['prizeid']))}">密码兑奖（{$num5}）</a>
         </div>
     </div>
-	<div class="alert" style="margin-bottom:0;">兑奖：共计{$total}个奖品　　后台兑奖：{$num1}个　　店员兑奖：{$num2}个{if $stonefish_branch}　　商家网店：{$num3}个{/if}　　密码兑奖：{$num4}个</div>
 	<div class="row-fluid" style="margin-top:10px;">
     	<div class="span8 control-group">
 			<a class="btn btn-default{if $_GPC['prizeid']==''} btn-primary active{/if}" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],xuni=>$_GPC['xuni'],tickettype=>$_GPC['tickettype']))}">全　部</a>
 			{loop $award $awardp}
-			<a class="btn btn-default{if $_GPC['prizeid']==$awardp['id']} btn-primary active{/if}" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>$_GPC['xuni'],tickettype=>$_GPC['tickettype'],'prizeid'=>$awardp['id']))}">{$awardp['prizerating']}</a>
+			<a class="btn btn-default{if $_GPC['prizeid']==$awardp['id']} btn-primary active{/if}" style="margin:5px;" href="{php echo $this->createWebUrl('prizedata',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>$_GPC['xuni'],tickettype=>$_GPC['tickettype'],'prizeid'=>$awardp['id']))}">{$awardp['prizerating']}（{$awardp['prizetotal']}/{$awardp['prizedraw']}）</a>
 			{/loop}			
         </div>
-    </div>
-	<div class="alert" style="margin-bottom:0;">
-		{loop $award $awardt}
-		    {$awardt['prizerating']}:{$awardt['prizetotal']}/{$awardt['prizedraw']}　　
-		{/loop}			
-	</div>
+    </div>	
+</div>
+<div class="panel-heading">
 	<div class="row-fluid">
     	<div class="span8 control-group">
-			<a class="btn btn-warning" href="{php echo $this->createWebUrl('download',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>$_GPC['xuni'],tickettype=>$_GPC['tickettype'],prizeid=>$_GPC['prizeid'],data=>'prizedata'))}"><i class="fa fa-download"></i> 导出{$statustitle}信息</a>
+			<a class="btn btn-success" href="#"><i class="fa fa-trophy"></i> 共计{$total}个奖品</a>
+			<a class="btn btn-warning" style="float:right;" href="{php echo $this->createWebUrl('download',array('rid'=>$rid,'zhongjiang'=>$_GPC['zhongjiang'],'xuni'=>$_GPC['xuni'],tickettype=>$_GPC['tickettype'],prizeid=>$_GPC['prizeid'],data=>'prizedata'))}"><i class="fa fa-download"></i> 导出{$statustitle}数据</a>
         </div>
     </div>
 </div>
@@ -132,15 +132,15 @@
 			<thead class="navbar-inner">
 				<tr>
 					<th style="width:30px;">删？</th>
-					<th style="width:40px;">头像</th>
-					<th style="width:100px;">真实姓名</th>
-					<th style="width:100px;">手机号码</th>					
+					<th style="width:50px;">头像</th>
+					<th style="width:120px;">真实姓名</th>
+					<th style="width:120px;">手机号码</th>					
 					<th style="width:100px;">奖品</th>
-					<th style="width:150px;">领取时间</th>
+					<th style="width:120px;">领取时间</th>
 					<th style="width:90px;">兑奖类型</th>
 					<th style="width:100px;">兑奖状态</th>
 					<th style="width:80px;">兑奖人</th>
-					<th style="width:150px;">操作</th>
+					<th style="width:180px;text-align:right;">操作</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -151,7 +151,7 @@
 					<td><a href="javascript:void(0)" id="{$row['fid']}" class="btn btn-default btn-sm userinfo" style="width:100px;" data-toggle="tooltip" data-placement="top" title="用户兑奖参数项"><i class="fa fa-child"></i> {if !empty($row['realname'])}{$row['realname']}{else}{php echo stripcslashes($row['nickname'])}{/if}</a></td>
 					<td>{$row['mobile']}</td>
 					<td>{$row['prizerating']}:{$row['prizename']}</td>
-					<td>{php echo date('Y/m/d H:i',$row['createtime']);}</td>
+					<td>{php echo date('y/m/d H:i',$row['createtime']);}</td>
 					<td>{if $row['tickettype']==1}<span class="label label-warning">后台兑奖</span>
 						{elseif $row['tickettype']==2}<span class="label label-warning">店员兑奖</span>
 						{elseif $row['tickettype']==3}<span class="label label-warning">商家网店</span>{else}<span class="label label-warning">密码兑奖</span>{/if}</td>
@@ -161,7 +161,7 @@
 						{if $row['xuni']==0}/真实</span>
 						{else}/虚拟</span>{/if}</td>
 					<td>{$row['ticketname']}</td>
-					<td>
+					<td style="width:180px;text-align:right;">
 						{if $row['fanid']}<a href="./index.php?c=mc&a=notice&do=tpl&id={$row['fanid']}" id="{$row['fanid']}" class="btn btn-success btn-sm sms"> 发送消息</a>{else}<span class="btn btn-default btn-sm sms"> 发送消息</span>{/if} {if $row['zhongjiang']==1}<a class="btn btn-warning btn-sm" href="{php echo $this->createWebUrl('setprizestatus',array('zhongjiang'=>2,'id'=>$row['id'],'pid'=>$row['prizeid'],'rid'=>$row['rid']))}"><i class="fa fa-times-circle-o"></i> 确认兑奖</a>{/if}
 						{if $row['zhongjiang']==2}<a class="btn btn-success btn-sm" href="{php echo $this->createWebUrl('setprizestatus',array('zhongjiang'=>1,'id'=>$row['id'],'pid'=>$row['prizeid'],'rid'=>$row['rid']))}"><i class="fa fa-check-circle-o"></i> 取消兑奖</a>{/if}
 					</td>

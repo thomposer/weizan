@@ -14,7 +14,35 @@ if(empty($reply)){
 }
 $isfansname = explode(',',$exchange['isfansname']);
 
-if($data=='branch'){
+if($data=='mobileverify'){
+    $statustitle='手机验证名单';	
+	$list = pdo_fetchall("SELECT * FROM ".tablename('stonefish_bigwheel_mobileverify')."  WHERE rid = :rid and uniacid=:uniacid ORDER BY id DESC" , array(':rid' => $rid,':uniacid'=>$_W['uniacid']));
+    $tableheader = array('ID', '姓名', '手机号', '验证时间', '添加时间', '福利倍数', '状态');
+	$html = "\xEF\xBB\xBF";
+    foreach ($tableheader as $value) {
+	    $html .= $value . "\t ,";
+    }
+    $html .= "\n";
+    foreach ($list as $value) {
+	    $html .= $value['id'] . "\t ,";
+	    $html .= $value['realname'] . "\t ,";	
+		$html .= $value['mobile'] . "\t ,";
+		if($value['verifytime']){
+			$html .= date('Y-m-d H:i:s', $value['verifytime']) . "\t ,";
+		}else{
+			$html .= "未使用\t ,";
+		}
+		$html .= date('Y-m-d H:i:s', $value['createtime']) . "\t ,";
+		$html .= $value['welfare'] . "\t ,";
+		if($value['status']==0){
+			$html .= "不可用\n";
+		}elseif($value['status']==1){
+			$html .= "未审核\n";
+		}else{
+			$html .= "已审核\n";
+		}		
+    }
+}elseif($data=='branch'){
     $statustitle='商家网点增送';
 	if (!empty($_GPC['districtid'])) {     
         $where.=' and districtid='.$_GPC['districtid'].'';
@@ -78,24 +106,6 @@ if($data=='branch'){
         $statustitle='全部用户';
     }
 	$list = pdo_fetchall("SELECT * FROM ".tablename('stonefish_bigwheel_fans')."  WHERE rid = :rid and uniacid=:uniacid ".$where." ORDER BY id DESC" , array(':rid' => $rid,':uniacid'=>$_W['uniacid']));
-	//变换变量
-	foreach ($list as &$lists) {
-		$lists['status']='';
-		if($lists['zhongjiang']==0){
-		    $lists['status']='未中奖';
-	    }elseif($lists['zhongjiang']==1){
-		    $lists['status']='未兑奖';
-		}elseif($lists['zhongjiang']==2){
-		    $lists['status']='已兑奖';
-		}
-		if($lists['xuni']==0){
-		    $lists['status'].='/真实';
-		}else{
-		    $lists['status'].='/虚拟';
-		}
-		$lists['status'].='/虚拟';
-	}
-	//变换变量
 	$tableheader = array('ID', '状态');
 	$ziduan = array('realname','mobile','qq','email','address','gender','telephone','idcard','company','occupation','position');
 	$k = 0;
@@ -106,9 +116,6 @@ if($data=='branch'){
 		$k++;
 	}
 	$tableheader[]='中奖者微信码';
-	//$tableheader[]='初始值';
-	$tableheader[]='助力值';
-	//$tableheader[]='兑换值';
 	$tableheader[]='分享量';
 	$tableheader[]='参与时间';
     $html = "\xEF\xBB\xBF";
@@ -117,19 +124,31 @@ if($data=='branch'){
     }
     $html .= "\n";
     foreach ($list as $value) {
-	    $html .= $value['id'] . "\t ,";	    
+	    $value['status']='';
+		if($value['zhongjiang']==0){
+		    $value['status']='未中奖';
+	    }elseif($value['zhongjiang']==1){
+		    $value['status']='未兑奖';
+		}elseif($value['zhongjiang']==2){
+		    $value['status']='已兑奖';
+		}
+		if($value['xuni']==0){
+		    $value['status'].='/真实';
+		}else{
+		    $value['status'].='/虚拟';
+		}
+		$value['status'].='/虚拟';
+		$html .= $value['id'] . "\t ,";	    
 	    $html .= $value['status'] . "\t ,";	
 	    foreach ($ziduan as $ziduans) {
 			if($exchange['is'.$ziduans]){
 				if($ziduans=='gender'){
 					if($value[$ziduans]==0){
-						$html .= "保密\t ,";	
-					}
-					if($value[$ziduans]==1){
-						$html .= "男\t ,";	
-					}
-					if($value[$ziduans]==2){
-						$html .= "女\t ,";	
+						$html .= "保密\t ,";
+					}elseif($value[$ziduans]==1){
+						$html .= "男\t ,";
+					}elseif($value[$ziduans]==2){
+						$html .= "女\t ,";
 					}
 				}else{
 					$html .= $value[$ziduans] . "\t ,";	
@@ -137,49 +156,28 @@ if($data=='branch'){
 			}
 		}
 	    $html .= $value['from_user'] . "\t ,";	
-		//$html .= $value['inpoint'] . "\t ,";
-		$html .= $value['sharepoint'] . "\t ,";
-		//$html .= $value['outpoint'] . "\t ,";
 		$html .= $value['sharenum'] . "\t ,";
 	    $html .= date('Y-m-d H:i:s', $value['createtime']) . "\n";
     }
 }elseif($data=='rankdata'){
     $rank = $_GPC['rank'];
 	if(!empty($rank)){        
-	    if($rank == 'sharenum'){
-		    $statustitle='分享值排行榜';
+	    if($rank == 'share_num'){
+		    $statustitle='分享动作排行榜';
+			$ORDER ='share_num';
+	    }elseif($rank == 'sharenum'){
+		    $statustitle='分享访问排行榜';
 			$ORDER ='sharenum';
-	    }elseif($rank == 'sharepoint'){
-		    $statustitle='分享额排行榜';
-			$ORDER ='sharepoint';
-		}elseif($rank == 'award'){
+	    }elseif($rank == 'award'){
 		    $statustitle='中奖量排行榜';
 			$ORDER ='awardnum';
 		}
     }else{
-        $statustitle='分享值排行榜';
+        $statustitle='分享访问排行榜';
 		$ORDER ='sharenum';
     }
 	$statustitle.='排名';
 	$list = pdo_fetchall("SELECT * FROM ".tablename('stonefish_bigwheel_fans')."  WHERE rid = :rid and uniacid=:uniacid ORDER BY ".$ORDER." DESC,id asc" , array(':rid' => $rid,':uniacid'=>$_W['uniacid']));
-	//变换变量
-	foreach ($list as &$lists) {
-		$lists['status']='';
-		if($lists['zhongjiang']==0){
-		    $lists['status']='未中奖';
-	    }elseif($lists['zhongjiang']==1){
-		    $lists['status']='未兑奖';
-		}elseif($lists['zhongjiang']==2){
-		    $lists['status']='已兑奖';
-		}
-		if($lists['xuni']==0){
-		    $lists['status'].='/真实';
-		}else{
-		    $lists['status'].='/虚拟';
-		}
-		$lists['status'].='/虚拟';
-	}
-	//变换变量
 	$tableheader = array('ID', '名次', '状态');
 	$ziduan = array('realname','mobile','qq','email','address','gender','telephone','idcard','company','occupation','position');
 	$k = 0;
@@ -190,10 +188,8 @@ if($data=='branch'){
 		$k++;
 	}
 	$tableheader[]='中奖者微信码';
-	//$tableheader[]='初始值';
-	$tableheader[]='助力值';
-	//$tableheader[]='兑换值';
-	$tableheader[]='分享量';
+	$tableheader[]='分享动作';
+	$tableheader[]='分享访问';
 	$tableheader[]='中奖量';
 	$tableheader[]='参与时间';
     $html = "\xEF\xBB\xBF";
@@ -203,20 +199,32 @@ if($data=='branch'){
     $html .= "\n";
 	$i = 1;
     foreach ($list as $value) {
-	    $html .= $value['id'] . "\t ,";
+	    $value['status']='';
+		if($value['zhongjiang']==0){
+		    $value['status']='未中奖';
+	    }elseif($value['zhongjiang']==1){
+		    $value['status']='未兑奖';
+		}elseif($value['zhongjiang']==2){
+		    $value['status']='已兑奖';
+		}
+		if($value['xuni']==0){
+		    $value['status'].='/真实';
+		}else{
+		    $value['status'].='/虚拟';
+		}
+		$value['status'].='/虚拟';
+		$html .= $value['id'] . "\t ,";
 		$html .= $i . "\t ,";	   
 	    $html .= $value['status'] . "\t ,";	
 	    foreach ($ziduan as $ziduans) {
 			if($exchange['is'.$ziduans]){
 				if($ziduans=='gender'){
 					if($value[$ziduans]==0){
-						$html .= "保密\t ,";	
-					}
-					if($value[$ziduans]==1){
-						$html .= "男\t ,";	
-					}
-					if($value[$ziduans]==2){
-						$html .= "女\t ,";	
+						$html .= "保密\t ,";
+					}elseif($value[$ziduans]==1){
+						$html .= "男\t ,";
+					}elseif($value[$ziduans]==2){
+						$html .= "女\t ,";
 					}
 				}else{
 					$html .= $value[$ziduans] . "\t ,";	
@@ -224,9 +232,7 @@ if($data=='branch'){
 			}
 		}
 	    $html .= $value['from_user'] . "\t ,";	
-		//$html .= $value['inpoint'] . "\t ,";
-		$html .= $value['sharepoint'] . "\t ,";
-		//$html .= $value['outpoint'] . "\t ,";
+		$html .= $value['share_num'] . "\t ,";
 		$html .= $value['sharenum'] . "\t ,";
 		$html .= $value['awardnum'] . "\t ,";
 	    $html .= date('Y-m-d H:i:s', $value['createtime']) . "\n";
@@ -238,75 +244,50 @@ if($data=='branch'){
 	if ($_GPC['tickettype']>=1) {
         if($_GPC['tickettype']==1){
 		    $statustitle = '后台兑奖统计';
-		    $params = " and a.tickettype=1";
+		    $params = " and tickettype=1";
 	    }
 	    if($_GPC['tickettype']==2){
 		    $statustitle = '店员兑奖统计';
-		    $params = " and a.tickettype=2";
+		    $params = " and tickettype=2";
 	    }
 	    if($_GPC['tickettype']==3){
 		    $statustitle = '商家网点兑奖统计';
-		    $params = " and a.tickettype=3";
-	    }    
+		    $params = " and tickettype=3";
+	    }
+		if($_GPC['tickettype']==4){
+		    $statustitle = '密码兑奖';
+		    $params = " and tickettype=4";
+	    }
+		if($_GPC['tickettype']==5){
+		    $statustitle = '奖品密码兑奖';
+		    $params = " and tickettype=5";
+	    }
     }else{
 		$statustitle = '全部兑奖统计';
 	}
 	if(!empty($prizeid)){
         $statustitle .= pdo_fetchcolumn("SELECT prizerating FROM ".tablename('stonefish_bigwheel_prize')." WHERE id=:prizeid", array(':prizeid' => $_GPC['prizeid']));
-		$params .= " and a.prizeid='".$prizeid."'";
+		$params .= " and prizeid='".$prizeid."'";
     }
 	if($_GPC['zhongjiang']==1){
 		$statustitle .= '未兑换';
-		$params.=' and a.zhongjiang=1';
-	}
-	if($_GPC['zhongjiang']==2){
+		$params.=' and zhongjiang=1';
+	}elseif($_GPC['zhongjiang']==2){
 		$statustitle .= '已兑换';
-		$params.=' and a.zhongjiang>=2';
-	}		
+		$params.=' and zhongjiang>=2';
+	}else{
+		$params.=' and zhongjiang>=1';
+	}
 	if($_GPC['xuni']==1){
 		$statustitle .= '虚拟';
-		$params.=' and a.xuni=1';
+		$params.=' and xuni=1';
 	}
 	if($_GPC['xuni']=='2'){
 		$statustitle .= '真实';
-		$params.=' and a.xuni=0';
+		$params.=' and xuni=0';
 	}
-	//导出标题
-    
-    $list = pdo_fetchall("SELECT a.*,b.realname,b.mobile,b.qq,b.email,b.address,b.gender,b.telephone,b.idcard,b.company,b.occupation,b.position FROM ".tablename('stonefish_bigwheel_fansaward')." as a,".tablename('stonefish_bigwheel_fans')." as b WHERE a.uniacid=b.uniacid and a.rid=b.rid and a.from_user=b.from_user and a.rid = :rid and a.uniacid=:uniacid ".$params." ORDER BY a.id DESC", array(':rid' => $rid,':uniacid'=>$_W['uniacid']));
-    foreach ($list as &$lists) {
-	    $lists['status']='';
-		if($lists['zhongjiang']==0){
-		    $lists['status']='未中奖';
-	    }elseif($lists['zhongjiang']==1){
-		    $lists['status']='未兑奖';
-		}elseif($lists['zhongjiang']==2){
-		    $lists['status']='已兑奖';
-		}
-		if($lists['xuni']==0){
-		    $lists['status'].='/真实';
-		}else{
-		    $lists['status'].='/虚拟';
-		}
-		$lists['status'].='/虚拟';
-		if($lists['tickettype']==1){
-			$lists['tickettype']='后台兑奖';
-		}
-		if($lists['tickettype']==2){
-			$lists['tickettype']='店员兑奖';
-			$lists['ticketname'] = pdo_fetchcolumn("SELECT name FROM " . tablename('activity_coupon_password') . " WHERE id = :id", array(':id' => $row['ticketid']));
-		}
-		if($lists['tickettype']==3){
-			$lists['tickettype'].='商家网店兑奖';
-			$lists['ticketname'] = pdo_fetchcolumn("SELECT title FROM " . tablename('stonefish_branch_business') . " WHERE id = :id", array(':id' => $row['ticketid']));
-		}
-		if($lists['tickettype']==4){
-			$lists['tickettype']='密码兑奖';
-		}
-		$prize = pdo_fetch("select prizerating,prizename from " . tablename('stonefish_bigwheel_prize') . "  where id = :id", array(':id' =>$lists['prizeid']));
-		$lists['prizerating'] =$prize['prizerating'];
-		$lists['prizename'] =$prize['prizename'];
-    }
+	//导出标题    
+    $list = pdo_fetchall("SELECT * FROM ".tablename('stonefish_bigwheel_fansaward')." WHERE rid = :rid and uniacid=:uniacid ".$params." ORDER BY id DESC", array(':rid' => $rid,':uniacid'=>$_W['uniacid']));
     $tableheader = array('ID', '奖项', '奖品名称', '状态');
     $ziduan = array('realname','mobile','qq','email','address','gender','telephone','idcard','company','occupation','position');
 	$k=0;
@@ -320,31 +301,65 @@ if($data=='branch'){
 	$tableheader[]='中奖时间';
 	$tableheader[]='兑奖时间';
 	$tableheader[]='兑奖类型';
-	$tableheader[]='兑奖地';
+	$tableheader[]='兑奖人';
 	$html = "\xEF\xBB\xBF";
     foreach ($tableheader as $value) {
 	    $html .= $value . "\t ,";
     }
     $html .= "\n";
     foreach ($list as $value) {
+		$value['status']='';
+		if($value['zhongjiang']==0){
+		    $value['status']='未中奖';
+	    }elseif($value['zhongjiang']==1){
+		    $value['status']='未兑奖';
+		}elseif($value['zhongjiang']==2){
+		    $value['status']='已兑奖';
+		}
+		if($value['xuni']==0){
+		    $value['status'].='/真实';
+		}else{
+		    $value['status'].='/虚拟';
+		}
+		$value['status'].='/虚拟';
+		if($value['tickettype']==1){
+			$value['tickettype']='后台兑奖';
+		}
+		if($value['tickettype']==2){
+			$value['tickettype']='店员兑奖';
+			$value['ticketname'] = pdo_fetchcolumn("SELECT name FROM " . tablename('activity_coupon_password') . " WHERE id = :id", array(':id' => $value['ticketid']));
+		}
+		if($value['tickettype']==3){
+			$value['tickettype'].='商家网店兑奖';
+			$value['ticketname'] = pdo_fetchcolumn("SELECT title FROM " . tablename('stonefish_branch_business') . " WHERE id = :id", array(':id' => $value['ticketid']));
+		}
+		if($value['tickettype']==4){
+			$value['tickettype']='密码兑奖';
+		}
+		if($value['tickettype']==5){
+			$value['tickettype']='奖品密码兑奖';
+		}
+		$prize = pdo_fetch("select prizerating,prizename from " . tablename('stonefish_bigwheel_prize') . "  where id = :id", array(':id' =>$value['prizeid']));
+		$value['prizerating'] =$prize['prizerating'];
+		$value['prizename'] =$prize['prizename'];
+		
 		$html .= $value['id'] . "\t ,";
 	    $html .= $value['prizerating'] . "\t ,";	
 	    $html .= $value['prizename'] . "\t ,";	
 	    $html .= $value['status'] . "\t ,";	
-	    foreach ($ziduan as $ziduans) {
+	    $fans = pdo_fetch("select realname,mobile,qq,email,address,gender,telephone,idcard,company,occupation,position from " . tablename('stonefish_bigwheel_fans') . "  where from_user = :from_user and rid = :rid and uniacid = :uniacid", array(':from_user' =>$value['from_user'],':rid' =>$rid,':uniacid' =>$_W['uniacid']));
+		foreach ($ziduan as $ziduans) {
 			if($exchange['is'.$ziduans]){
 				if($ziduans=='gender'){
-					if($value[$ziduans]==0){
-						$html .= "保密\t ,";	
-					}
-					if($value[$ziduans]==1){
+					if($fans[$ziduans]==0){
+						$html .= "保密\t ,";
+					}elseif($fans[$ziduans]==1){
 						$html .= "男\t ,";	
-					}
-					if($value[$ziduans]==2){
-						$html .= "女\t ,";	
+					}elseif($fans[$ziduans]==2){
+						$html .= "女\t ,";
 					}
 				}else{
-					$html .= $value[$ziduans] . "\t ,";	
+					$html .= $fans[$ziduans] . "\t ,";	
 				}				
 			}
 		}	

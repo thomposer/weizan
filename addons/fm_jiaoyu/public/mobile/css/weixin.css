@@ -8,6 +8,7 @@
     src: url("fontawesome-webfont-b64d4ac71dc58ef78afbc23d0aee020d.eot?v=4.2.0");
     src: url("fontawesome-webfont-b64d4ac71dc58ef78afbc23d0aee020d.eot?#iefix&v=4.2.0") format("embedded-opentype"), url("fontawesome-webfont-7b07ce57a267815b7902936332129d46.woff?v=4.2.0") format("woff"), url("fontawesome-webfont-9fdf91a58be546aefdb0d503cc72528a.ttf?v=4.2.0") format("truetype"), url("fontawesome-webfont-3f8802daf26a29590af69a9be2630c82.svg?v=4.2.0#fontawesomeregular") format("svg");
     font-weight: normal;
+	text-decorationnone;
     font-style: normal
 }
 

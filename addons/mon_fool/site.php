@@ -47,7 +47,7 @@ class Mon_FoolModuleSite extends WeModuleSite
 
         } else if ($operation == 'delete') {
             $id = $_GPC['id'];
-            pdo_delete(CRUD::$table_fool, array("sid" => $id));
+            pdo_delete(CRUD::$table_fool, array("id" => $id));
 
 
             message('删除成功！', referer(), 'success');

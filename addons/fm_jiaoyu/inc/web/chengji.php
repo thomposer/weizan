@@ -65,7 +65,7 @@
                 } else {
                     pdo_update($this->table_score, $data, array('id' => $id));
                 }
-                message('修改学员成绩成功！', $this->createWebUrl('chengji', array('op' => 'display', 'schoolid' => $schoolid)), 'success');
+                message('修改学生成绩成功！', $this->createWebUrl('chengji', array('op' => 'display', 'schoolid' => $schoolid)), 'success');
             }
         } elseif ($operation == 'display') {
 

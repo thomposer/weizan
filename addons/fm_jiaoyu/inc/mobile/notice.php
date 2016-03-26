@@ -26,7 +26,7 @@
             }
         }
 		
-		$picarr = iunserializer($item['picarr']);
+		
 		
         $bzrtid = $category[$leave['bj_id']]['tid'];
 		$bjname = $category[$leave['bj_id']]['sname'];
@@ -36,6 +36,7 @@
 			$student = pdo_fetch("SELECT * FROM " . tablename($this->table_students) . " where weid = :weid AND id = :id", array(':weid' => $_W ['uniacid'], ':id' => $leave['sid']));
 			$member = pdo_fetch("SELECT * FROM " . tablename ( 'mc_members' ) . " where uniacid = :uniacid AND uid = :uid", array(':uniacid' => $_W ['uniacid'], 'uid'=> $leave['uid']));
 			$isbzr = pdo_fetch("SELECT * FROM " . tablename($this->table_teachers) . " where weid = :weid AND id = :id", array(':weid' => $_W ['uniacid'], ':id' => $it['tid']));
+			$picarr = iunserializer($leave['picarr']);
 			
 		 include $this->template('notice');
           }else{

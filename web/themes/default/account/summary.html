@@ -155,18 +155,17 @@
 				chart.update();
 			}
 
-			var url = location.href + '&#aaaa';
+			var url = './index.php?c=account&a=summary&acid={$_W['acid']}&uniacid={$_W['uniacid']}&starttime={$starttime}&endtime={$endtime}#aaaa';
 			$.post(url, function(data){
-				var data = $.parseJSON(data)
+				var data = $.parseJSON(data);
 				var datasets = data.datasets;
-
 				if(!chart) {
 					var label = data.label;
 					var ds = $.extend(true, {}, templates);
-					ds.flow1.data = datasets.flow1;
-					ds.flow2.data = datasets.flow2;
-					ds.flow3.data = datasets.flow3;
-					ds.flow4.data = datasets.flow4;
+					ds.flow1.data = datasets.new;
+					ds.flow2.data = datasets.cancel;
+					ds.flow3.data = datasets.increase;
+					ds.flow4.data = datasets.cumulate;
 					var lineChartData = {
 						labels : label,
 						datasets : [ds.flow1, ds.flow2, ds.flow3, ds.flow4]

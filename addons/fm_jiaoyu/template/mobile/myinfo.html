@@ -16,17 +16,17 @@
         </style>
         <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
         <title>学生信息</title>
-        <link rel="stylesheet" href="{MODULE_URL}public/mobile/css/weixin.css?{php echo time()}">
-		<link rel="stylesheet" href="{MODULE_URL}public/mobile/css/reset.css?{php echo time()}">
-        <script src="{MODULE_URL}public/mobile/js/jquery.js?{php echo time()}"></script>
-		<script type="text/javascript" src="{MODULE_URL}public/mobile/js/swipe.js?{php echo time()}"></script>
+        <link rel="stylesheet" href="{OSSURL}public/mobile/css/weixin.css?{php echo time()}">
+		<link rel="stylesheet" href="{OSSURL}public/mobile/css/reset.css?{php echo time()}">
+        <script src="{OSSURL}public/mobile/js/jquery.js?{php echo time()}"></script>
+		<script type="text/javascript" src="{OSSURL}public/mobile/js/swipe.js?{php echo time()}"></script>
 </head>
 <body>
     <div id="wrap" class="user_inf">
         <dl>
             <dt>
             <label>头像</label>
-            <span class="potot" style="background-image:url({if !empty($item['avatar'])}{php echo toimage($item['avatar'])}{else}{MODULE_URL}public/mobile/img/mask_bg2.png{/if})"></span>
+            <span class="potot" style="background-image:url({if !empty($item['avatar'])}{php echo toimage($item['avatar'])}{else}{OSSURL}public/mobile/img/mask_bg2.png{/if})"></span>
             </dt>
             <dd>
                 <label>学生姓名</label>

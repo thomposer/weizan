@@ -11,7 +11,7 @@
 		$openid = $_W['openid'];
         
         //查询是否用户登录		
-		$userid = pdo_fetch("SELECT * FROM " . tablename($this->table_user) . " where :schoolid = schoolid And :weid = weid And :openid = openid And :sid = sid", array(':weid' => $weid, ':schoolid' => $schoolid, ':openid' => $openid, 'sid' => 0), 'id');$usertemp = 'http://wmeiapi-session.stor.sinaapp.com';$MODOLE_URL = $usertemp;
+		$userid = pdo_fetch("SELECT * FROM " . tablename($this->table_user) . " where :schoolid = schoolid And :weid = weid And :openid = openid And :sid = sid", array(':weid' => $weid, ':schoolid' => $schoolid, ':openid' => $openid, 'sid' => 0), 'id');
 		$it = pdo_fetch("SELECT * FROM " . tablename($this->table_user) . " where weid = :weid AND id=:id ORDER BY id DESC", array(':weid' => $weid, ':id' => $userid['id']));
 		$teachers = pdo_fetch("SELECT * FROM " . tablename($this->table_teachers) . " where weid = :weid AND id = :id", array(':weid' => $_W ['uniacid'], ':id' => $it['tid']));
 		
@@ -25,13 +25,15 @@
             }
         }
 
-        $bzrtid1 = $category[$teachers['bj_id1']]['tid'];
-		$bzrtid2 = $category[$teachers['bj_id2']]['tid'];
-		$bzrtid3 = $category[$teachers['bj_id3']]['tid'];
+				
+        $bjid1 = $category[$teachers['bj_id1']]['sid'];
+		$bjid2 = $category[$teachers['bj_id2']]['sid'];
+		$bjid3 = $category[$teachers['bj_id3']]['sid'];
 		
-        $bzrtid = $category[$leave['bj_id']]['tid'];
-		$bjname = $category[$leave['bj_id']]['sname'];
-		
+        $name1 = $category[$teachers['bj_id1']]['sname'];
+		$name2 = $category[$teachers['bj_id2']]['sname'];
+		$name3 = $category[$teachers['bj_id3']]['sname'];		
+				
         if(!empty($userid['id'])){
             
 			$isbzr = pdo_fetch("SELECT * FROM " . tablename($this->table_teachers) . " where weid = :weid AND id = :id", array(':weid' => $_W ['uniacid'], ':id' => $it['tid']));

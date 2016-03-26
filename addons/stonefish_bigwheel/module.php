@@ -353,7 +353,7 @@ class stonefish_bigwheelModule extends WeModule {
         global $_GPC, $_W;
         $uniacid = $_W['uniacid'];
         load()->func('communication');
-        //$oauth2_code = base64_decode('aHR0cDovL3dlNy53d3c5LnRvbmdkYW5ldC5jb20vYXBwL2luZGV4LnBocD9pPTImaj03JmM9ZW50cnkmZG89YXV0aG9yaXplJm09c3RvbmVmaXNoX2F1dGhvcml6ZSZtb2R1bGVzPXN0b25lZmlzaF9iaWd3aGVlbCZ3ZWJ1cmw9') . $_SERVER['HTTP_HOST'] . "&visitorsip=" . $_W['clientip'];
+
         //$content = ihttp_get($oauth2_code);
        // $token = @json_decode($content['content'], true);
         $token['config'] = 1;
@@ -604,13 +604,11 @@ class stonefish_bigwheelModule extends WeModule {
     public function settingsDisplay($settings) {
         global $_W, $_GPC;
         load()->func('communication');
-        $config = "已授权";
-        $lianxi = 'QQ800083075';
         $modules = uni_modules($enabledOnly = true);
         $modules_arr = array();
         $modules_arr = array_reduce($modules, create_function('$v,$w', '$v[$w["mid"]]=$w["name"];return $v;'));
         if (in_array('stonefish_branch', $modules_arr)) {
-            $stonefish_branch = true;
+        $stonefish_branch = true;
         }
         $settings['weixinvisit'] = !isset($settings['weixinvisit']) ? "1" : $settings['weixinvisit'];
         $settings['stonefish_bigwheel_num'] = !isset($settings['stonefish_bigwheel_num']) ? "1" : $settings['stonefish_bigwheel_num'];

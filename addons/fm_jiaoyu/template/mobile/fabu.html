@@ -5,51 +5,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
-<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/mKtdt.css?v=4.85" />
-<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/jquery-emoji.css?v=4.85" />
-<link type="text/css" rel="stylesheet" href="{MODULE_URL}public/mobile/css/greenStyle.css?v=4.80120" />
-<script type="text/javascript" src="{MODULE_URL}public/mobile/js/jquery-1.11.3.min.js?v=4.8"></script>
-<script type="text/javascript">
-	if(navigator.appName == 'Microsoft Internet Explorer'){
-		if(navigator.userAgent.indexOf("MSIE 5.0")>0 || navigator.userAgent.indexOf("MSIE 6.0")>0 || navigator.userAgent.indexOf("MSIE 7.0")>0) {
-			alert('您使用的 IE 浏览器版本过低, 推荐使用 Chrome 浏览器或 IE8 及以上版本浏览器.');
-		}
-	}
-	// jssdk config 对象
-	jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} || {};
-	
-	// 是否启用调试
-	jssdkconfig.debug = false;
-	
-	jssdkconfig.jsApiList = [
-		'checkJsApi',
-		'onMenuShareTimeline',
-		'onMenuShareAppMessage',
-		'onMenuShareQQ',
-		'onMenuShareWeibo',
-		'hideMenuItems',
-		'showMenuItems',
-		'hideAllNonBaseMenuItem',
-		'showAllNonBaseMenuItem',
-		'translateVoice',
-		'startRecord',
-		'stopRecord',
-		'onRecordEnd',
-		'playVoice',
-		'pauseVoice',
-		'stopVoice',
-		'uploadVoice',
-		'downloadVoice',
-		'chooseImage',
-		'previewImage',
-		'uploadImage',
-		'downloadImage',
-		'getNetworkType',
-		'openLocation',
-		'getLocation'
-	];
-
-	</script>
+<link type="text/css" rel="stylesheet" href="{OSSURL}public/mobile/css/mKtdt.css?v=4.85" />
+<link type="text/css" rel="stylesheet" href="{OSSURL}public/mobile/css/jquery-emoji.css?v=4.85" />
+<link type="text/css" rel="stylesheet" href="{OSSURL}public/mobile/css/greenStyle.css?v=4.80120" />
+{php echo register_jssdk();}
+<script type="text/javascript" src="{OSSURL}public/mobile/js/jquery-1.11.3.min.js?v=4.8"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="{OSSURL}public/mobile/js/PromptBoxUtil.js?v=4.80309"></script>
+<script type="text/javascript" src="{OSSURL}public/mobile/js/jquery.emoji.js?v=4.8"></script>
 </head>
 <body>
 <div class="all allBg">
@@ -100,136 +63,49 @@
 		    </div>
 		      <div class="textBox">
 			    <span class="r">
-				  <input id="title" type="text" placeholder="标题...">
+				  <input id="title" type="text" placeholder="文章标题...">
 			    </span>
 			  </div>
 		      <div class="textInfo">
-			    <textarea id="content" type="text" name="content" cols rows placeholder="内容..."></textarea>
+			    <textarea id="content" type="text" name="content" cols rows placeholder="详细内容..."></textarea>
 			  </div>
-			  <div id="imageBox" class="imageBox" style="display: block;">
-			     <div id ="imageBoxBody">
-			        <div id="DivFixedPosition"></div>
-					<div class ="imagePage">
-						<div class="imageTotalBox">
-							<img alt="image" id="addImages" onclick ="wxChooseImage()" src="{$MODOLE_URL}/img/insertImage.png" class="addImages" style="-webkit-touch-callout: none; -webkit-user-select: none;">		
-							<div class="imageTotal">(0/9)</div> 
-						</div>
-					</div>
-				 </div>
+			  <div id="imageBox" class="imageBox">
 			  </div>
 			<div id="pic" class="pic parent"></div>
 			<div class="blackBg" onclick="closeBox();"></div>
 			<div class="selectList">
 			  <div class="single" id="bjList">
-			    <ul>
-				   <li onclick="isSelect(this);">班级名字</li>
-				   <li onclick="isSelect(this);">班级名字</li>
-				   <li onclick="isSelect(this);">班级名字</li>
-				   <li onclick="isSelect(this);">班级名字</li>
-			    </ul>
-			   </div>
+				<ul>
+                    {if !empty($teachers['bj_id1'])}<li onclick="isSelect(this);"><span class="le">{$name1}</span><input type=hidden value="{$bjid1}" /></li>{/if}
+					{if !empty($teachers['bj_id2'])}<li onclick="isSelect(this);"><span class="le">{$name2}</span><input type=hidden value="{$bjid2}" /></li>{/if}
+					{if !empty($teachers['bj_id3'])}<li onclick="isSelect(this);"><span class="le">{$name3}</span><input type=hidden value="{$bjid3}" /></li>{/if}
+	            </ul> 
+			  </div>
 		    </div>
-		    <div class="sendParam sendParam_wot pr" onclick="showSelectBox('bjList')">
+		    <div class="sendParam sendParam_wot pr" onclick="showSelectBox('bjList')" >
 			  <span class="locationCon address f15" closestatus="0">
 			      <i class="iconloc bj_icon_background-position float_left"></i>班级
 			  </span>
 			  <span class="sendSelectParamOperBtn pa address f15 c9" closestatus="0" id="bjListShow"></span>
-		      <input id="bjListValue" name="bjListValue" type="hidden" value="">
+		      <input id="bjListValue" name="bjListValue" type="hidden">
 			  <span class="sendParamOperBtn pa address f15 c9" closestatus="0">
 			       <i class="iconloc fx_icon_background-position float_left"></i>
 			  </span>
 	        </div>
 </div>
-<!-- 提示框 -->
-<script type="text/javascript" src="{MODULE_URL}public/mobile/js/PromptBoxUtil.js?v=4.80309"></script>
-<!-- 图片播放器 -->
+<!-- yinru -->
 <script type="text/javascript">
 /**
  * 课堂动态新增页面
  */
-var ctx=$("#ctx").val();
-var commonUrl_loadingPage = $("#commonUrl_loadingPage").val();
-var commonUrl_loadingData = $("#commonUrl_loadingData").val();
-var campusid = $("#campusid").val();
-var userid = $("#userid").val();
-var orgcode = $("#orgcode").val();
-var COMMON_QUERY_CLASS = $("#COMMON_QUERY_CLASS").val();
 var PB = new PromptBox();
-var weixinMediaId=$("#weixinMediaId").val();
-var vedioUrl="";
-var thumbnailUrl="";
-//页面加载时执行的sql
-$(function(){
-	if(weixinMediaId!=null && weixinMediaId!='' && weixinMediaId!=undefined){
-		callWeiXinGetMediaApi();
-	}else{
-		showBox('image');
-	}
-	getBjList();
- });
-
-function sendPhoto(){
-	var content = $("#content").val();
-	var title = $("#title").val();
-	var photoUrlArray = new Array();
-	$(".boxImages").each(function() {
-		if($(this).hasClass("baseUploadImg")){
-			photoUrlArray.push($(this).attr("src"));
-		}
-	});
-	if(title=='' || title.length>50){
-		PB.prompt("标题必填，且字数小于50字！");
-		return;
-	}
-	if(photoUrlArray.length==0 && content==''){
-		PB.prompt("请填写内容或者上传图片！");
-		return;
-	}
-	var bjid =  $("#bjListValue").val(); 
-	if(bjid == undefined || bjid == null || bjid == "" ){
-		PB.prompt("请选择班级！");
-		return;
-	}
-	var photoUrls="";
-	if(vedioUrl!=null && vedioUrl!=''){
-		//视频
-		photoUrls=vedioUrl;
-	}else{
-		photoUrls=images.serverId.join(',');
-	}
-	if (confirm("确定保存?")) {
-		PB.prompt("信息发布中，请稍等~","forever");
-		var url = commonUrl_loadingData;
-		var submitData = {
-			title : $("#title").val();
-			content : $("#content").val();
-			appid:2071033,
-			bjid : bjid,
-			bjid_ch : $('#bjListShow').html(),
-			publisherid : userid,
-			wlzytype:1,
-			photoUrls : photoUrls,
-			thumbnailUrl:thumbnailUrl
-		};
-		$.post(url, submitData, function(data) {
-			var datas = eval(data);
-			if(datas != null && datas!=undefined){
-				if (datas === "SUCCESS") {
-					PB.prompt("课堂动态发布成功！");
-					location.href = commonUrl_loadingPage+"&appid=2071032";
-				} else {
-					PB.prompt("课堂动态发布失败！");
-					console.log(datas);
-				}
-			}
-			
-		});
-	}
-}
 
 function cancel(){
-	window.location.href = "{php echo $this->createMobileUrl('fabu', array('schoolid' => $schoolid), true)}"
+	history.go(-1);
 }
+$(function(){
+	createImageBox();
+ });
 
 function showSelectBox(obj){
 	if($("#"+obj).find("ul").children().length > 0){
@@ -302,69 +178,53 @@ function saveSelected(obj){
 	$("#"+boxName+"Value").val(selectedValue.val());
 }
 
-//获取班级list
-function getBjList(){
-	var url = commonUrl_loadingData;
-	var submitData = {
-		appid:COMMON_QUERY_CLASS,
-		api:COMMON_QUERY_CLASS,
-		userid:userid
-	};
-	$.post(url, submitData,function(datas) {
-		var result = typeof datas === "object" ? datas : JSON.parse(datas);
-		if(result.ret.code==="200"){
-			createBjList(result.data.bjList);
-		}else{
-			console.log(result.ret.code+":"+result.ret.msg);
-		}
-	});
-}
-
-function createBjList(bjData){
-	var bjList = new Array();
-	bjList.push('<ul>');
-	for(var i=0;i<bjData.length;i++){
-		bjList.push('<li onclick="isSelect(this);">');
-		bjList.push('<span class="le">'+bjData[i].bj+'</span>');
-		bjList.push('<input type=hidden value="'+bjData[i].id+'" />');
+function sendPhoto(){
+	var content = $("#content").val();
+	var title = $("#title").val();
+//	var photoUrlArray = new Array();
+//	$(".boxImages").each(function() {
+//		if($(this).hasClass("baseUploadImg")){
+//			photoUrlArray.push($(this).attr("src"));
+//		}
+//	});
+	if(title=='' || title.length>30){
+		PB.prompt("标题必填，且字数小于30字！");
+		return false;
 	}
-	bjList.push('</ul>');
-	$("#bjList").html(bjList.join(''));
-	if(bjData=='' || bjData == null || bjData.length===0){
-		PB.prompt("没有班级！");
-		cancel();
-	}else{
-		$('#bjListShow').html(bjData[0].bj);
-		$('#bjListValue').val(bjData[0].id);
+	if(content==''){
+		PB.prompt("文字内容不能为空");
+		return false;
 	}
-}
+	var bjid =  $("#bjListValue").val(); 
+	if(bjid == undefined || bjid == null || bjid == "" ){
+		PB.prompt("请选择班级！");
+		return false;
+	}
+	var photoUrls = images.serverId.join(',');
 
-function callWeiXinGetMediaApi(){
-	var weixinMediaId=$("#weixinMediaId").val();
-	if(weixinMediaId!=null && weixinMediaId!='' && weixinMediaId!=undefined){
-		//视频
-		PB.prompt("下载视频中，请稍等~","forever");
-		var url = commonUrl_loadingData;
+	if (confirm("确定发布?")) {
+		PB.prompt("信息发布中，请稍等~","forever");
 		var submitData = {
-			appid:ApiParamUtil.COMMON_WEIXIN_MEDIAGET,
-			weixinMediaId : weixinMediaId
+			weid:"{$weid}",
+			bj_id : bjid,
+			openid : "{$openid}",
+			schoolid : "{$schoolid}",
+			title : title,
+			content : content,
+			tid:"{$it['tid']}",
+			tname:"{$isbzr['tname']}",
+			photoUrls : photoUrls,
 		};
-		$.post(url, submitData, function(datas) {
-			var result = typeof datas === "object" ? datas : JSON.parse(datas);
-			if(result.ret.code==="200"){
-				vedioUrl=result.data.url;
-				thumbnailUrl=result.data.picUrl;
-				showVedioBox(vedioUrl,thumbnailUrl);
-				PB.prompt("下载视频成功！");
-			}else{
-				console.log(result.ret.code+":"+result.ret.msg);
-				PB.prompt(result.ret.msg,3000);
-				
-			}
-			
-		});
+	    $.post("{php echo $this->createMobileUrl('dongtaiajax',array('op'=>'fabu'))}",submitData,function(data){
+
+            if(data.result){
+                PB.prompt(data.msg);
+				location.href = "{php echo $this->createMobileUrl('noticelist', array('schoolid' => $schoolid), true)}";
+            }else{
+				PB.prompt(data.msg);
+            }
+		},'json'); 		
 	}
-	
 }
 </script>
 </body>
