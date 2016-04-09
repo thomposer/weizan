@@ -1001,9 +1001,15 @@ class WeiXinAccount extends WeAccount {
 			return $token;
 		}
 		$url = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token={$token}&type={$type}";
-		$data = array(
-			'media' => '@'. ATTACHMENT_ROOT . ltrim($path, '/')
-		);
+		if(class_exists('CURLFile')) {
+			$data = array(
+				'media' => new CURLFile(ATTACHMENT_ROOT . ltrim($path, '/'))
+			);
+		} else {
+			$data = array(
+				'media' => '@' . ATTACHMENT_ROOT . ltrim($path, '/')
+			);
+		}
 		$response = ihttp_request($url, $data);
 		if(is_error($response)) {
 			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
@@ -1081,6 +1087,8 @@ class WeiXinAccount extends WeAccount {
 		}
 		return $result['media_id'];
 	}
+
+
 	
 	public function fansSendAll($group, $msgtype, $media_id) {
 		$types = array('text' => 'text', 'image' => 'image', 'news' => 'mpnews', 'voice' => 'voice', 'video' => 'mpvideo', 'wxcard' => 'wxcard');
@@ -1285,6 +1293,8 @@ class WeiXinAccount extends WeAccount {
 		return $result;
 	}
 
+
+
 	
 	public function fansSendPreview($wxname, $content, $msgtype) {
 		$types = array('text' => 'text', 'image' => 'image', 'news' => 'mpnews', 'voice' => 'voice', 'video' => 'mpvideo', 'wxcard' => 'wxcard');
@@ -1370,15 +1380,17 @@ class WeiXinAccount extends WeAccount {
 			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
 		}
 		$summary = @json_decode($response['content'], true);
-		if(empty($summary)) {
-			return error(-1, "接口调用失败, 元数据: {$response['meta']}");
-		} elseif(!empty($summary['errcode'])) {
+		if(empty($summary) || !empty($summary['errcode'])) {
+			$cache = array(
+				'data' => $result,
+				'expire' => strtotime(date('Y-m-d')) + 86399,
+			);
+			cache_write($cachekey, $cache);
 			return error(-1, "访问微信接口错误, 错误代码: {$summary['errcode']}, 错误信息: {$summary['errmsg']},信息详情：{$this->error_code($summary['errcode'])}");
 		}
-		
 		$url = "https://api.weixin.qq.com/datacube/getusercumulate?access_token={$token}";
 		$response = ihttp_request($url, '{"begin_date": "'.date('Y-m-d', strtotime('-7 days')).'", "end_date": "'.date('Y-m-d', strtotime('-1 days')).'"}');
-		
+	
 		if(is_error($response)) {
 			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
 		}

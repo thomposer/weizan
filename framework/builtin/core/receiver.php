@@ -74,9 +74,9 @@ class CoreModuleReceiver extends WeModuleReceiver {
 				}
 				$userinfo['avatar'] = $userinfo['headimgurl'];
 				$fans = array(
-						'unionid' => $userinfo['unionid'],
-						'nickname' => $userinfo['nickname'],
-						'tag' => base64_encode(iserializer($userinfo)),
+					'unionid' => $userinfo['unionid'],
+					'nickname' => $userinfo['nickname'],
+					'tag' => base64_encode(iserializer($userinfo)),
 				);
 				pdo_update('mc_mapping_fans', $fans, array('openid' => $this->message['from']));
 				

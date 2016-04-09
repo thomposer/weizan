@@ -34,10 +34,10 @@
 	</div>
 	<div class="panel-body">
 		<div class="account-stat-num row">
-			<div>新关注人数<span>{$yesterday_stat['new']}</span></div>
-			<div>取消关注人数<span>{$yesterday_stat['cancel']}</span></div>
-			<div>净增关注人数<span>{php echo intval($yesterday_stat['new']) - intval($yesterday_stat['cancel'])}</span></div>
-			<div>累积关注人数<span>{$yesterday_stat['cumulate']}</span></div>
+			<div>昨日新关注<span>{$yesterday_stat['new']}</span></div>
+			<div>昨日取消关注<span>{$yesterday_stat['cancel']}</span></div>
+			<div>昨日净增关注<span>{php echo intval($yesterday_stat['new']) - intval($yesterday_stat['cancel'])}</span></div>
+			<div>累积关注<span>{$yesterday_stat['cumulate']}</span></div>
 		</div>
 	</div>
 </div>
@@ -47,10 +47,10 @@
 	</div>
 	<div class="panel-body">
 		<div class="account-stat-num row">
-			<div>新关注人数<span>{php echo intval($today_stat['new'])}</span></div>
-			<div>取消关注人数<span>{php echo intval($today_stat['cancel'])}</span></div>
-			<div>净增关注人数<span>{php echo intval($today_stat['new']) - intval($today_stat['cancel'])}</span></div>
-			<div>累积关注人数<span>{$today_stat['cumulate']}</span></div>
+			<div>今日新关注<span>{php echo intval($today_stat['new'])}</span></div>
+			<div>今日取消关注<span>{php echo intval($today_stat['cancel'])}</span></div>
+			<div>今日净增关注<span>{php echo intval($today_stat['new']) - intval($today_stat['cancel'])}</span></div>
+			<div>累积关注<span>{$today_stat['cumulate']}</span></div>
 		</div>
 	</div>
 </div>

@@ -1,9 +1,5 @@
 {template 'common/header'}
-<ul class="nav nav-tabs">
-	<li {if $operation == 'post'}class="active"{/if}><a href="{php echo $this->createWebUrl('stores', array('op' => 'post'))}">添加商家</a></li>
-	<li {if $operation == 'display' || empty($operation)}class="active"{/if}><a href="{php echo $this->createWebUrl('stores', array('op' => 'display'))}">管理商家</a></li>
-    <li {if $operation == 'check' || empty($operation)}class="active"{/if}><a href="{php echo $this->createWebUrl('stores', array('op' => 'check'))}">入驻商家</a></li>
-</ul>
+{php echo $this -> set_tabbar($action);}
 <script language='javascript'>
     function fetchChildCategory(cid) {
         var html = '<option value="0">请选择二级分类</option>';
@@ -18,8 +14,14 @@
     }
 </script>
 {if $operation == 'display'}
-<link rel="stylesheet" type="text/css" href="{RES}/themes/css/main.css?v=1" />
+<link rel="stylesheet" type="text/css" href="{RES}/themes/css/main.css?v=2" />
 <div class="main">
+    <!--<div class="panel panel-default">-->
+        <!--<div class="panel-body">-->
+            <!--<a class="btn btn-default" href="{php echo $this->createWebUrl('stores', array('op' => 'post'))}"><i class="fa fa-plus"></i>添加商家</a>-->
+            <!--<a class="btn btn-default" href="{php echo $this->createWebUrl('stores', array('op' => 'check'))}"><i class="fa fa-list"></i>入驻商家管理</a>-->
+        <!--</div>-->
+    <!--</div>-->
     <div class="panel panel-default">
         <div class="panel-heading">
             数据概览
@@ -31,13 +33,12 @@
                 <div>待审核商家<span><a href="{php echo $this->createWebUrl('stores', array('op' => 'check'))}">{$check_shop_count2}</a></span></div>
                 <div>待审核留言<span><a href="{php echo $this->createWebUrl('feedback', array('op' => 'display'))}">{$check_feedback_count}</a></span></div>
                 <div>已过期商家<span><a href="{php echo $this->createWebUrl('stores', array('op' => 'display', 'type' => 3))}">{$endcount}</a></span></div>
-
-
             </div>
         </div>
     </div>
-    <div class="panel panel-info">
-        <div class="panel-heading">筛选</div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><a class="btn btn-success" href="{php echo $this->createWebUrl('stores', array('op' => 'post'))}"><i class="fa fa-plus"></i>添加商家</a>
+            <a class="btn btn-default" href="{php echo $this->createWebUrl('stores', array('op' => 'check'))}"><i class="fa fa-list"></i>入驻商家管理</a></div>
         <div class="panel-body">
             <form action="./index.php" method="get" class="form-horizontal" role="form">
                 <input type="hidden" name="c" value="site" />
@@ -72,7 +73,9 @@
                             {/if}
                         </select>
                     </div>
-                    <div class="col-sm-3 col-lg-2"><button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button></div>
+                    <div class="col-sm-3 col-lg-1"><button class="btn btn-success"><i class="fa fa-search"></i> 搜索
+                    </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -134,8 +137,8 @@
                             <label data='{$item['status']}' class='label label-default {if $item['status']==1}label-info{/if}' onclick="setProperty(this,{$item['id']},'status')">显示</label>
                         </td>
                         <td style="text-align: right;">
-                            <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('news', array('op' => 'display', 'storeid' => $item['id']))}" title="新闻"><i class="fa fa-file-text-o"> ({if !empty($news[$item['id']]['count'])}<font color="green">{$news[$item['id']]['count']}</font>{else}0{/if})</i></a>
-                            <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('feedback', array('op' => 'display', 'storeid' => $item['id']))}" title="留言信息"><i class="fa fa-pencil"> ({if !empty($feedback[$item['id']]['count'])}<font color="green">{$feedback[$item['id']]['count']}</font>{else}0{/if})</i></a>
+                            <a href="{php echo $this->createWebUrl('news', array('op' => 'display', 'storeid' => $item['id']))}" title="新闻"><span class="badge">{if !empty($news[$item['id']]['count'])}{$news[$item['id']]['count']}{else}0{/if}</span></a> |
+                            <a href="{php echo $this->createWebUrl('feedback', array('op' => 'display', 'storeid' => $item['id']))}" title="留言信息"><span class="badge">{if !empty($feedback[$item['id']]['count'])}{$feedback[$item['id']]['count']}{else}0{/if}</span></a></span>
                         </td>
                         <td style="text-align: right;">
                             <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('stores', array('op' => 'post', 'id' => $item['id']))}" title="编辑"><i class="fa fa-pencil"></i></a>
@@ -255,11 +258,39 @@
                         </select>
                     </div>
                 </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">区域</label>
+
+                        <div class="col-sm-4">
+                            <select class="form-control"  name="aid" autocomplete="off">
+                                <option value="0">请选择区域</option>
+                                {loop $areas $row}
+                                {if $row['parentid'] == 0}
+                                <option value="{$row['id']}" {if $row['id'] == $item['aid']}
+                                selected="selected"{/if}>{$row['name']}</option>
+                                {/if}
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">会员折扣</label>
                     <div class="col-sm-9">
+                        <input type="text" name="discount" class="form-control" value="{if empty($item['discount'])}9.0{else}{$item['discount']}{/if}" />
+                        <span class="help-block">不填为不显示</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">会员折扣信息</label>
+                    <div class="col-sm-9">
                         <input type="text" name="discounts" class="form-control" value="{if empty($item['discounts'])}会员优惠详见店内{else}{$item['discounts']}{/if}" />
                         <span class="help-block">不填为不显示</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">简介</label>
+                    <div class="col-sm-9">
+                        <textarea name="content" class="form-control">{$item['content']}</textarea>
                     </div>
                 </div>
                 <div class="form-group">
@@ -492,7 +523,7 @@
             </div>
         </div>
         <div class="form-group col-sm-12">
-            <input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1" />
+            <input type="submit" name="submit" value="保存设置" class="btn btn-primary col-lg-1" />
             <input type="hidden" name="token" value="{$_W['token']}" />
         </div>
 	</form>
@@ -648,10 +679,18 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商家LOGO</label>
+                    <div class="col-sm-9">
+                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                            <div class="fileupload-preview thumbnail">{if $item['logo']}<img src="{php echo tomedia($item['logo']);}" style="max-width: 540px"/>{/if}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">营业执照</label>
                     <div class="col-sm-9">
                         <div class="fileupload fileupload-new" data-provides="fileupload">
-                            <div class="fileupload-preview thumbnail">{if $item['businesslicense']}<img src="{$_W['attachurl']}{$item['businesslicense']}" style="max-width: 540px"/>{/if}</div>
+                            <div class="fileupload-preview thumbnail">{if $item['businesslicense']}<img src="{php echo tomedia($item['businesslicense']);}" style="max-width: 540px"/>{/if}</div>
                         </div>
                     </div>
                 </div>

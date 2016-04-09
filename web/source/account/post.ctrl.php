@@ -110,6 +110,10 @@ $headimgsrc = tomedia('headimg_'.$_W['acid'].'.jpg');
 $account = $uniaccount = array();
 $uniaccount = pdo_fetch("SELECT * FROM ".tablename('uni_account')." WHERE uniacid = :uniacid", array(':uniacid' => $uniacid));
 $acid = !empty($acid) ? $acid : $uniaccount['default_acid'];
+$permission = pdo_get('account_wechats', array('uniacid' => $uniacid, 'acid' => $acid), array('acid'));
+if(empty($permission)) {
+	message('没有该公众号操作权限！', url('account/display'), 'error');
+}
 $account = account_fetch($acid);
 if ($_W['setting']['platform']['authstate']) {
 	load()->classs('weixin.platform');

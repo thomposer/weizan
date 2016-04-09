@@ -6,7 +6,7 @@
 <div class="clearfix">
 	<div class="clearfix menu">
 		{if empty($permission)}
-		<div class="alert alert-danger">您没有操作权限.请联系公众号管理员</div>
+		<div class="alert alert-danger">您没有操作权限.请确定是否是认证服务号或者对接是否成功</div>
 		{else}
 			{loop $permission $row}
 				<h5 class="page-header">{$row['title']}</h5>
@@ -20,6 +20,24 @@
 				</div>
 			{/loop}
 		{/if}
+	</div>
+</div>
+<!-- 登陆二维码 -->
+<div class="modal fade" id="login-qrcode-modal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">扫描登陆二维码</h4>
+			</div>
+			<div class="modal-body" style="text-align:center;">
+				<img style="-webkit-user-select: none" src="{php echo url('utility/wxcode/qrcode', array('text' => murl('entry', array('m' => 'paycenter', 'do' => 'login'), true, true)));}">
+				<!--<span>{php echo murl('entry', array('m' => 'paycenter', 'do' => 'login'), true, true);}</span>-->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			</div>
+		</div>
 	</div>
 </div>
 

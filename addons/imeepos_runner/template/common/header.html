@@ -1,32 +1,29 @@
 {template 'common/header-base'}
 	<div class="navbar navbar-inverse navbar-static-top" role="navigation" style="position:static;">
 		<div class="container-fluid">
+			{if defined('IN_SOLUTION')}
+			<ul class="nav navbar-nav">
+				{php global $solution,$solutions;}
+				{if $_W['role'] != 'operator'}
+				<li><a href="{url 'home/welcome/ext'}"><i class="fa fa-reply-all"></i>返回公众号功能管理</a></li>
+				{/if}
+				{loop $solutions $row}
+				<li{if $row['name'] == $solution['name']} class="active"{/if}><a href="{url 'home/welcome/solution' array('m' => $row['name'])}"><i class="fa fa-cog"></i>{$row['title']}</a></li>
+				{/loop}
+			</ul>
+			{else}
 			<ul class="nav navbar-nav">
 				<li><a href="./?refresh"><i class="fa fa-reply-all"></i>返回系统</a></li>
-				{php global $top_nav;}
-				{loop $top_nav $nav}
-					{if !empty($_W['isfounder']) || empty($_W['setting']['permurls']['sections']) || in_array($nav['name'], $_W['setting']['permurls']['sections'])}<li{if FRAME == $nav['name']} class="active"{/if}><a href="{php echo url('home/welcome/' . $nav['name']);}"><i class="{$nav['append_title']}"></i>{$nav['title']}</a></li>{/if}
-				{/loop}
-				<li {if $action == 'emulator'}class="active"{/if}>
-					<a href="{php echo url('utility/emulator');}" target="_blank"><i class="fa fa-mobile"></i> 模拟测试</a>
-				</li>
+				{if !empty($_W['isfounder']) || empty($_W['setting']['permurls']['sections']) || in_array('platform', $_W['setting']['permurls']['sections'])}<li{if FRAME == 'platform'} class="active"{/if}><a href="{url 'home/welcome/platform'}"><i class="fa fa-cog"></i>基础设置</a></li>{/if}
+				{if !empty($_W['isfounder']) || empty($_W['setting']['permurls']['sections']) || in_array('site', $_W['setting']['permurls']['sections'])}<li{if FRAME == 'site'} class="active"{/if}><a href="{url 'home/welcome/site'}"><i class="fa fa-life-bouy"></i>微站功能</a></li>{/if}
+				{if !empty($_W['isfounder']) || empty($_W['setting']['permurls']['sections']) || in_array('mc', $_W['setting']['permurls']['sections'])}<li{if FRAME == 'mc'} class="active"{/if}><a href="{url 'home/welcome/mc'}"><i class="fa fa-gift"></i>粉丝营销</a></li>{/if}
+				{if !empty($_W['isfounder']) || empty($_W['setting']['permurls']['sections']) || in_array('setting', $_W['setting']['permurls']['sections'])}<li{if FRAME == 'setting'} class="active"{/if}><a href="{url 'home/welcome/setting'}"><i class="fa fa-umbrella"></i>功能选项</a></li>{/if}
+				{if !empty($_W['isfounder']) || empty($_W['setting']['permurls']['sections']) || in_array('ext', $_W['setting']['permurls']['sections'])}<li{if FRAME == 'ext'} class="active"{/if}><a href="{url 'home/welcome/ext'}"><i class="fa fa-cubes"></i>扩展功能</a></li>{/if}
+				{if FRAME == 'solution'}<li class="active"><a href="{url 'home/welcome/solution' array('m' => $m)}"><i class="fa fa-comments"></i>行业功能 - {$solution['title']}</a></li>{/if}
+				
 			</ul>
+			{/if}
 			<ul class="nav navbar-nav navbar-right">
-				<li class="dropdown topbar-notice">
-					<a type="button" data-toggle="dropdown">
-						<i class="fa fa-bell"></i>
-						<span class="badge" id="notice-total">0</span>
-					</a>
-					<div class="dropdown-menu" aria-labelledby="dLabel">
-						<div class="topbar-notice-panel">
-							<div class="topbar-notice-arrow"></div>
-							<div class="topbar-notice-head">系统公告</div>
-							<div class="topbar-notice-body">
-								<ul id="notice-container"></ul>
-							</div>
-						</div>
-					</div>
-				</li>
 				<li class="dropdown">
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" style="display:block; max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; "><i class="fa fa-group"></i>{$_W['account']['name']} <b class="caret"></b></a>
 					<ul class="dropdown-menu">
@@ -41,7 +38,7 @@
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" style="display:block; max-width:185px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; "><i class="fa fa-user"></i>{$_W['user']['username']} ({if $_W['role'] == 'founder'}系统管理员{elseif $_W['role'] == 'manager'}公众号管理员{else}公众号操作员{/if}) <b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li><a href="{url 'user/profile/profile'}" target="_blank"><i class="fa fa-weixin fa-fw"></i> 我的账号</a></li>
-						{if $_W['role'] == 'founder'}
+						{if $_W['role'] != 'operator'}
 						<li class="divider"></li>
 						<li><a href="{url 'system/welcome'}" target="_blank"><i class="fa fa-sitemap fa-fw"></i> 系统选项</a></li>
 						<li><a href="{url 'system/welcome'}" target="_blank"><i class="fa fa-cloud-download fa-fw"></i> 自动更新</a></li>
@@ -54,25 +51,7 @@
 			</ul>
 		</div>
 	</div>
-	{if empty($_COOKIE['check_setmeal']) && !empty($_W['account']['endtime']) && ($_W['account']['endtime'] - TIMESTAMP < (6*86400))}
-		<div class="upgrade-tips" id="setmeal-tips">
-			<a href="{php echo url('user/edit', array('uid' => $_W['account']['uid']));}" target="_blank">
-				您的服务有效期限：{php echo date('Y-m-d', $_W['account']['starttime']);} ~ {php echo date('Y-m-d', $_W['account']['endtime']);}.
-				{if $_W['account']['endtime'] < TIMESTAMP}
-				目前已到期，请联系管理员续费
-				{else}
-				将在{php echo ($_W['account']['endtime'] - strtotime(date('Y-m-d')))/86400}天后到期，请及时付费
-				{/if}
-			</a><span class="tips-close" style="background:#d03e14;" onclick="check_setmeal_hide();"><i class="fa fa-times-circle"></i></span>
-		</div>
-		<script>
-			function check_setmeal_hide() {
-				util.cookie.set('check_setmeal', 1, 1800);
-				$('#setmeal-tips').hide();
-				return false;
-			}
-		</script>
-	{/if}
+	
 	<div class="container-fluid">
 		{if defined('IN_MESSAGE')}
 		<div class="jumbotron clearfix alert alert-{$label}">
@@ -108,13 +87,6 @@
 					<div id="search-menu">
 						<input class="form-control input-lg" style="border-radius:0; font-size:14px; height:43px;" type="text" placeholder="输入菜单名称可快速查找">
 					</div>
-					{if $GLOBALS['ext_type'] > 0}
-						<div class="btn-group">
-							<button class="btn {if $GLOBALS['ext_type'] == 1}btn-primary{else}btn-default{/if} ext-type" data-id="1">默认</button>
-							<button class="btn {if $GLOBALS['ext_type'] == 2}btn-primary{else}btn-default{/if} ext-type" data-id="2">系统</button>
-							<button class="btn {if $GLOBALS['ext_type'] == 3}btn-primary{else}btn-default{/if} ext-type" data-id="3">复合</button>
-						</div>
-					{/if}
 					{loop $frames $k $frame}
 					<div class="panel panel-default">
 						<div class="panel-heading">
@@ -123,15 +95,15 @@
 								<i class="fa fa-chevron-circle-down"></i>
 							</a>
 						</div>
-						<ul class="list-group collapse in" id="frame-{$k}">
+						<ul class="list-group collapse {if $frame['active']}in{/if}" id="frame-{$k}">
 							{loop $frame['items'] $link}
 							{if !empty($link['append'])}
-							<li class="list-group-item {$link['active']}" onclick="window.location.href = '{$link['url']}';" style="cursor:pointer; overflow:hidden;" kw="{$link['title']}">
-								<a class="pull-right" href="{$link['append']['url']}">{$link['append']['title']}</a>
+							<li class="list-group-item{$link['active']}" onclick="window.location.href = '{$link['url']}';" style="cursor:pointer;" kw="{$link['title']}">
 								{$link['title']}
+								<a class="pull-right" href="{$link['append']['url']}">{$link['append']['title']}</a>
 							</li>
 							{else}
-							<a class="list-group-item {$link['active']}" href="{$link['url']}" kw="{$link['title']}">{$link['title']}</a>
+							<a class="list-group-item{$link['active']}" href="{$link['url']}" kw="{$link['title']}">{$link['title']}</a>
 							{/if}
 							{/loop}
 						</ul>
@@ -139,14 +111,6 @@
 					{/loop}
 					<script type="text/javascript">
 						require(['bootstrap'], function(){
-							$('.ext-type').click(function(){
-								var id = $(this).data('id');
-								util.cookie.del('ext_type');
-								util.cookie.set('ext_type', id, 7*86400);
-								location.reload();
-								return false;
-							});
-
 							$('#search-menu input').keyup(function() {
 								var a = $(this).val();
 								$('.big-menu .list-group-item, .big-menu .panel-heading').hide();
@@ -165,31 +129,27 @@
 					</script>
 				</div>
 				<div class="col-xs-12 col-sm-9 col-lg-10">
+				<style>.topNav{border-bottom-color: rgb(0, 0, 0);border-bottom-width: 0.1em;border-bottom-style: inset;}</style>
 					{if CRUMBS_NAV == 1}
-						{php global $frames_nav,$module_types;global $module;global $ptr_title;}
-						{php $frames = empty($frames_nav) ? $GLOBALS['frames_nav'] : $frames_nav; _calc_current_frames2($frames_nav);}
+						{php global $module_types;global $module;global $ptr_title;}
+						{php $frames = empty($frames) ? $GLOBALS['frames'] : $frames; _calc_current_frames($frames);}
 						<div class="navbar navbar-default navbar-static-top">
-						<div class="container-fluid" style="background-color: rgb(238, 238, 238);padding:0px;margin:0px;">
-							<div class="btn-group">
-								{loop $frames_nav $k $frame}
-								  	<div class="btn-group">
-								  		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-									      	{$frame['title']}
-									      	<span class="caret"></span>
-									    </button>
-									    <ul class="dropdown-menu">
-									    {loop $frame['items'] $link}
-									      <li class="{$link['active']}" ><a href="{$link['url']}" kw="{$link['title']}">{$link['title']}</a></li>
-										{/loop}
-									    </ul>
-								  	</div>
-								{/loop}
-							</div>
-							<script language='javascript'>
-							    $(function(){
-							        $(".breadcrumb").remove();
-							    })
-							</script>
+						<div class="container-fluid">
+						<ul class="nav navbar-nav">
+							<li>
+					            <a href="{php echo url('home/welcome/ext',array('m'=>'imeepos_runner'))}"><i class='fa fa-home'></i>小明跑腿</a> 
+					        </li>
+						    {loop $frames $k $frame}
+						    <li class="dropdown {$frame['active']}">
+						        <a href='javascript:;' class="dropdown-toggle" data-toggle="dropdown">{$frame['title']}<i class="fa fa-angle-down"></i></a>
+						        <ul class="dropdown-menu">
+						        {loop $frame['items'] $link}
+						            <li class="{$link['active']}" ><a href="{$link['url']}" kw="{$link['title']}">{$link['title']}</a></li>
+						        {/loop}
+						        </ul>
+						    </li>
+							{/loop}
+						</ul>
 						</div>
 						</div>
 					{elseif CRUMBS_NAV == 2}
@@ -205,7 +165,6 @@
 						</ul>
 					{/if}
 			{else}
-				<div class="col-xs-12 col-sm-12 col-lg-12">
+				<div>
 			{/if}
-			
 		{/if}

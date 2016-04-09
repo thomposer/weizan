@@ -1,0 +1,46 @@
+{template 'common/header'}
+{template 'web/task/navs'}
+{php load()->func('tpl')}
+<style>
+.map{
+	width:100%;
+	height:800px;
+}
+</style>
+<div class="panel">
+	<div class="panel-heading">
+		地图监控
+	</div>
+	<div class="panel-body">
+		<div class="form-controll">
+			<div class="col-sm-10 col-xs-12">
+				{php echo tpl_form_field_district('city',array())}
+			</div>
+		</div>
+		<div class="map" id="map"></div>
+	</div>
+</div>
+
+<script>
+require(['jquery','map','district'],function($,BMap,district){
+	district.render('city');
+	var val = {};
+	if(!val.lng) {
+		val.lng = 116.403851;
+	}
+	if(!val.lat) {
+		val.lat = 39.915177;
+	}
+	var point = new BMap.Point(val.lng, val.lat);
+	
+	map = util.map.instance = new BMap.Map('map');
+	map.centerAndZoom(point, 12);
+	map.enableScrollWheelZoom();
+	map.enableDragging();
+	map.enableContinuousZoom();
+	map.addControl(new BMap.NavigationControl());
+	map.addControl(new BMap.OverviewMapControl());
+	
+});
+</script>
+{template 'common/footer'}

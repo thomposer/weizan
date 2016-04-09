@@ -17,6 +17,7 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
 {
     //模块标识
     public $modulename = 'weisrc_businesscenter';
+    public $cur_tpl = 'style1';
     public $_appid = '';
     public $_appsecret = '';
     public $_accountlevel = '';
@@ -44,7 +45,18 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
     public $table_slide = "weisrc_businesscenter_slide";
     public $table_setting = "weisrc_businesscenter_setting";
     public $table_news = "weisrc_businesscenter_news";
+    public $table_area = "weisrc_businesscenter_area";
 
+    public $actions_titles = array(
+        'stores' => '商家管理',
+        'feedback' => '留言管理',
+        'category' => '分类管理',
+        'area' => '区域管理',
+        'slide' => '广告管理',
+        'news' => '优惠资讯',
+        'template' => '模版管理',
+        'setting' => '系统设置'
+    );
 
     function __construct()
     {
@@ -78,25 +90,31 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
             $this->_appid = $_W['account']['key'];
             $this->_appsecret = $_W['account']['secret'];
         }
+
+        $template = pdo_fetch("SELECT * FROM " . tablename($this->table_template) . " WHERE weid = :weid", array(':weid' => $this->_weid));
+        if (!empty($template)) {
+            $this->cur_tpl = $template['template_name'];
+        }
     }
 
-    public function setUserInfo()
+    /*
+    ** 设置切换导航
+    */
+    public function set_tabbar($action, $storeid = 0)
     {
-        load()->model('mc');
-        $userinfo = mc_oauth_userinfo();
-        if (!is_error($userinfo) && !empty($userinfo) && is_array($userinfo) && !empty($userinfo['avatar'])) {
-            $headimgurl = $userinfo['avatar'];
-            $gender = $userinfo['sex'];
-            $nickname = $userinfo['nickname'];
-            $openid = $userinfo['openid'];
+        $actions_titles = $this->actions_titles;
+        $html = '<ul class="nav nav-tabs">';
+        foreach ($actions_titles as $key => $value) {
+            if ($storeid == 0) {
+                $url = $this->createWebUrl($key, array('op' => 'display'));
+            } else {
+                $url = $this->createWebUrl($key, array('op' => 'display', 'storeid' => $storeid));
+            }
 
-            $time = TIMESTAMP + 3600 * 24;
-            setcookie($this->_auth2_headimgurl, $headimgurl, $time);
-            setcookie($this->_auth2_nickname, $nickname, $time);
-            setcookie($this->_auth2_openid, $openid, $time);
-            setcookie($this->_auth2_sex, $gender, $time);
+            $html .= '<li class="' . ($key == $action ? 'active' : '') . '"><a href="' . $url . '">' . $value . '</a></li>';
         }
-        return $userinfo;
+        $html .= '</ul>';
+        return $html;
     }
 
     //网站入口
@@ -119,7 +137,9 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
         }
 
         //幻灯片
-        $slide = pdo_fetchall("SELECT * FROM " . tablename($this->table_slide) . " WHERE weid = :weid AND storeid=0 AND status=1 ORDER BY displayorder DESC,id DESC LIMIT 6", array(':weid' => $weid));
+        $slide = pdo_fetchall("SELECT * FROM " . tablename($this->table_slide) . " WHERE weid = :weid AND storeid=0 AND position=1 AND status=1 AND :time > starttime AND :time < endtime ORDER BY
+ displayorder DESC,id DESC LIMIT 6", array(':weid' => $weid, ':time' => TIMESTAMP));
+
         //一级分类
         $category = pdo_fetchall("SELECT * FROM " . tablename($this->table_category) . " WHERE weid = :weid AND parentid=0  ORDER BY displayorder DESC", array(':weid' => $weid));
         //推荐分类
@@ -135,7 +155,7 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
         $share_desc = empty($setting['share_desc']) ? $setting['title'] : $setting['share_desc'];
         $share_url = empty($setting['share_url']) ? $_W['siteroot'] . 'app/' . $this->createMobileUrl('index', array(), true) : $setting['share_url'];
 
-        include $this->template('index');
+        include $this->template($this->cur_tpl . '/index');
     }
 
     public function doMobileList()
@@ -157,6 +177,7 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
         }
 
         $cid = intval($_GPC['cid']);
+        $aid = intval($_GPC['aid']);
         $lat = trim($_GPC['lat']);
         $lng = trim($_GPC['lng']);
         $isposition = 0;
@@ -201,15 +222,20 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
             }
         }
 
+        $areas = pdo_fetchall("SELECT * FROM " . tablename($this->table_area) . " WHERE 1=1 AND weid=:weid ORDER BY displayorder DESC, id DESC", array(':weid' => $weid), 'id');
+        if ($aid != 0) {
+            $cur_area = pdo_fetch("SELECT * FROM " . tablename($this->table_area) . " WHERE 1=1 AND id=:id AND weid=:weid", array(':weid' => $weid, ':id' => $aid));
+
+            $condition_store .= " AND aid = {$aid} ";
+        }
+
         //#share
         $setting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " WHERE weid = :weid ", array(':weid' => $weid));
 
         $pindex = max(1, intval($_GPC['page']));
         $psize = empty($setting) ? 5 : intval($setting['pagesize']);
-
         //商家列表 //搜索处理
         $keyword = trim($_GPC['keyword']);
-
         $orderStr = " top DESC,displayorder DESC,status DESC,id DESC ";
 
         if (!empty($keyword)) {
@@ -233,7 +259,7 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
         $share_title = empty($setting['share_title']) ? $setting['title'] : $setting['share_title'];
         $share_desc = empty($setting['share_desc']) ? $setting['title'] : $setting['share_desc'];
         $share_url = empty($setting['share_url']) ? $_W['siteroot'] . 'app/' . $this->createMobileUrl('list') : $setting['share_url'];
-        include $this->template('list');
+        include $this->template($this->cur_tpl . '/list');
     }
 
     public function doMobileNews()
@@ -278,7 +304,7 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
                 $no_more_data = 1;
             }
         }
-        include $this->template('news');
+        include $this->template($this->cur_tpl . '/news');
     }
 
     public function doMobileNewsDetail()
@@ -299,7 +325,7 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
             }
         }
 
-        include $this->template('news_detail');
+        include $this->template($this->cur_tpl . '/news_detail');
     }
 
     public function doMobileGetMoreAll()
@@ -307,6 +333,7 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
         global $_GPC, $_W;
         $weid = $this->_weid;
         $cid = intval($_GPC['cid']); //类别
+        $aid = intval($_GPC['aid']); //类别
 
         $curlat = $_GPC['curlat'];
         $curlng = $_GPC['curlng'];
@@ -327,6 +354,10 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
             }
         }
 
+        if (!empty($aid)) {
+            $condition = " AND aid={$aid} ";
+        }
+
         //商家列表
         $stores = pdo_fetchall("SELECT *,(lat-:lat) * (lat-:lat) + (lng-:lng) * (lng-:lng) as dist FROM " . tablename($this->table_stores) . " WHERE weid = :weid AND status=1 {$condition} ORDER BY top DESC, displayorder DESC, dist,status DESC,id DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':weid' => $weid, ':lat' => $curlat, ':lng' => $curlng));
 
@@ -345,31 +376,51 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
                 $logo = $_W['attachurl'] . $value['logo'];
             }
             $level = $level_star[$value['level']];
+            $error_img = " onerror=\"this.src='" . RES . "/themes/images/nopic.jpeg'\"";
 
-            if (!empty($value['discounts'])) {
-                $discounts = '<section class="tn-Powered-by-XIUMI line"></section>
+            if ($this->cur_tpl == 'style1') {
+                if (!empty($value['discounts'])) {
+                    $discounts = '<section class="tn-Powered-by-XIUMI line"></section>
                     <p class="VIPzhekou"><span style="color:#50849C;font-size: 15px;">会员折扣：</span><span style="color:rgb(255, 129, 36);text-shadow: 0px -1px 0px rgba(255, 255, 255, 0.5);font-size: 13px;">' . $value['discounts'] . '</span></p>
                     <section class="tn-Powered-by-XIUMI line"></section>';
-            }
+                }
 
-            $error_img = " onerror=\"this.src='" . RES . "/themes/images/nopic.jpeg'\"";
-            $result_str .= '<div class="J-wsq-shoplist">
+                $result_str .= '<div class="J-wsq-shoplist">
                 <a href="' . $this->createMobileurl('shop', array('id' => $value['id'])) . '" style="overflow:hidden;">
                     <img src="' . $logo . '" ' . $error_img . '>
                     <p class="tt">' . $value['title'] . '</p>
                     <p class="address">' . $value['address'] . '</p>
-                    <p class="address">' . $this->getDistance($curlat, $curlng, $value['lat'], $value['lng']) . ' Km</p>
+                    <p class="address">' . $this->getDistance($curlat, $curlng, $value['lat'], $value['lng']) . ' km</p>
                 </a>
                 <p class="bar_box">
                     <a href="' . $this->createMobileurl('shop', array('id' => $value['id'])) . '"><i class="icon-login"></i>详情</a>
                     <a href="http://api.map.baidu.com/marker?location=' . $value['lat'] . ',' . $value['lng'] . '&title=' . $value['title'] . '&name=' . $value['title'] . '&content=' . $value['address'] . '&output=html&src=wzj|wzj"><i
                         class="icon-location-2"></i>导航</a><a href="tel:' . $value['tel'] . '"><i class="icon-phone-3"></i>预定</a>
                 </p>';
-            if ($value['top'] == 1) {
-                $result_str .= '<em class="tj_b"></em>';
+                if ($value['top'] == 1) {
+                    $result_str .= '<em class="tj_b"></em>';
+                }
+                $result_str .= '</div>';
+            } else if ($this->cur_tpl == 'style2') {
+                $result_str .= '<a href="' . $this->createMobileurl('shop', array('id' => $value['id'])) . '">';
+                $result_str .= '<div class="main01">';
+                $result_str .= '<div class="main1">';
+                $result_str .= '<div class="list00" style="position:relative">';
+                $result_str .= '<h3><span class="fr" style="color:#ccc;">' . $this->getDistance($curlat, $curlng, $value['lat'], $value['lng']) . 'km</span>' . $value['title'] . '</h3>';
+                $result_str .= '<p>'.$value['content'].'</p>';
+                if (!empty($value['discount'])) {
+                    $result_str .= '<span class="fl  red">'.$value['discount'].'折</span>';
+                }
+                $result_str .= '</div>';
+                $result_str .= '<div class="box2 d">';
+                $result_str .= '<img src="' . $logo . '" ' . $error_img . '  class="f">';
+                if ($value['top'] == 1) {
+                    $result_str .= '<div class="qing"></div>';
+                }
+                $result_str .= '</div></div></div></a>';
             }
-            $result_str .= '</div>';
         }
+
         if ($result_str == '') {
             echo json_encode(0);
         } else {
@@ -426,6 +477,7 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
     {
         global $_GPC, $_W;
         load()->func('tpl');
+        load()->func('file');
         $weid = $this->_weid;
         $fromuser = $this->_fromuser;
 
@@ -445,22 +497,8 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
             }
         }
 
-        if (empty($fromuser)) {
-            //message('会话已过期，请重新发送关键字进入系统!');
-        }
-
         //基本信息
         $setting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " WHERE weid = :weid ", array(':weid' => $weid));
-        //#share
-        if (strpos($setting['share_image'], 'http') === false) {
-            $share_image = $_W['attachurl'] . $setting['share_image'];
-        } else {
-            $share_image = $setting['share_image'];
-        }
-        $share_title = empty($setting['share_title']) ? $setting['title'] : $setting['share_title'];
-        $share_desc = empty($setting['share_desc']) ? $setting['title'] : $setting['share_desc'];
-        $share_url = empty($setting['share_url']) ? $_W['siteroot'] . 'app/' . $this->createMobileUrl('settled') : $setting['share_url'];
-
         if (!empty($setting) && $setting['settled'] == 0) {
             message("商家没有开启入驻功能！");
         }
@@ -539,15 +577,19 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
             }
 
             if (!empty($_FILES['fileToUpload']['tmp_name'])) {
-                load()->func('file');
-                file_delete($_GPC['file_old']);
                 $upload = file_upload($_FILES['fileToUpload']);
                 if (is_error($upload)) {
                     message($upload['message']);
                 }
                 $data['businesslicense'] = $upload['path'];
-            } else {
-                //message('营业执照必须上传!');
+            }
+
+            if (!empty($_FILES['fileToUpload2']['tmp_name'])) {
+                $upload2 = file_upload($_FILES['fileToUpload2']);
+                if (is_error($upload2)) {
+                    message($upload2['message']);
+                }
+                $data['logo'] = $upload2['path'];
             }
 
             if (empty($item)) { //新增
@@ -558,7 +600,13 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
                 message('您已经提交过申请！', $this->createMobileurl('index'));
             }
         }
-        include $this->template('settled');
+
+        //#share
+        $share_image = tomedia($setting['share_image']);
+        $share_title = empty($setting['share_title']) ? $setting['title'] : $setting['share_title'];
+        $share_desc = empty($setting['share_desc']) ? $setting['title'] : $setting['share_desc'];
+        $share_url = empty($setting['share_url']) ? $_W['siteroot'] . 'app/' . $this->createMobileUrl('settled') : $setting['share_url'];
+        include $this->template($this->cur_tpl . '/settled');
     }
 
     public function domobileversion()
@@ -657,12 +705,118 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
             }
         }
 
+        $feedbacklist = pdo_fetchall("SELECT *,date_format(FROM_UNIXTIME(dateline),'%Y-%m-%d') as date FROM " . tablename($this->table_feedback) . "  WHERE
+weid= :weid AND storeid=:storeid AND status=1 ORDER BY displayorder DESC,id DESC LIMIT 10", array(':weid' =>
+            $_W['uniacid'], ':storeid' => $id));
+
         //#share
         $share_image = tomedia($stores['logo']);
         $share_title = empty($stores['share_title']) ? $stores['title'] : $stores['share_title'];
         $share_desc = empty($stores['share_desc']) ? $stores['title'] : $stores['share_desc'];
         $share_url = empty($stores['share_url']) ? $_W['siteroot'] . 'app/' . $this->createMobileUrl('shop', array('id' => $stores['id'])) : $stores['share_url'];
-        include $this->template('shop');
+        include $this->template($this->cur_tpl . '/shop');
+    }
+
+    public function doMobileSearch()
+    {
+        global $_GPC, $_W;
+        $weid = $this->_weid;
+        $fromuser = $this->_fromuser;
+        $title = "微商圈";
+
+        if (isset($_COOKIE[$this->_auth2_openid])) {
+            $from_user = $_COOKIE[$this->_auth2_openid];
+            $nickname = $_COOKIE[$this->_auth2_nickname];
+            $headimgurl = $_COOKIE[$this->_auth2_headimgurl];
+        } else {
+            $userinfo = $this->setUserInfo();
+            if (!empty($userinfo)) {
+                $from_user = $userinfo["openid"];
+                $nickname = $userinfo["nickname"];
+                $headimgurl = $userinfo["headimgurl"];
+            }
+        }
+
+        $setting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " WHERE weid = :weid ", array(':weid' => $_W['uniacid']));
+
+        //#share
+        $share_image = tomedia($stores['logo']);
+        $share_title = empty($stores['share_title']) ? $stores['title'] : $stores['share_title'];
+        $share_desc = empty($stores['share_desc']) ? $stores['title'] : $stores['share_desc'];
+        $share_url = empty($stores['share_url']) ? $_W['siteroot'] . 'app/' . $this->createMobileUrl('shop', array('id' => $stores['id'])) : $stores['share_url'];
+        include $this->template($this->cur_tpl . '/search');
+    }
+
+
+
+    public function doMobileProduct()
+    {
+        global $_GPC, $_W;
+        $weid = $this->_weid;
+        $fromuser = $this->_fromuser;
+        $title = "微商圈";
+
+        if (isset($_COOKIE[$this->_auth2_openid])) {
+            $from_user = $_COOKIE[$this->_auth2_openid];
+            $nickname = $_COOKIE[$this->_auth2_nickname];
+            $headimgurl = $_COOKIE[$this->_auth2_headimgurl];
+        } else {
+            $userinfo = $this->setUserInfo();
+            if (!empty($userinfo)) {
+                $from_user = $userinfo["openid"];
+                $nickname = $userinfo["nickname"];
+                $headimgurl = $userinfo["headimgurl"];
+            }
+        }
+
+        $id = intval($_GPC['id']);
+        if (empty($id)) {
+            message('没有相关数据!');
+        }
+
+        $level_star = array(
+            '1' => '★',
+            '2' => '★★',
+            '3' => '★★★',
+            '4' => '★★★★',
+            '5' => '★★★★★'
+        );
+
+        $stores = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE weid = :weid AND status<>0 AND id=:id", array(':weid' => $weid, ':id' => $id));
+
+        $pcate = pdo_fetch("SELECT * FROM " . tablename($this->table_category) . " WHERE weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $stores['pcate']));
+        $ccate = pdo_fetch("SELECT * FROM " . tablename($this->table_category) . " WHERE weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $stores['ccate']));
+        $setting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " WHERE weid = :weid ", array(':weid' => $_W['uniacid']));
+
+        $cityid = $stores['cityid'];
+        if (!empty($cityid)) {
+            $city = pdo_fetch("SELECT * FROM " . tablename($this->table_city) . " WHERE weid = :weid AND id=:id ORDER BY displayorder DESC LIMIT 1", array(':weid' => $weid, ':id' => $cityid));
+
+            $showcity = '';
+            if (!empty($setting['showcity'])) {
+                $showcity = '<a href="' . $this->createMobileUrl('shop', array('do' => 'citylist', 'cityid' => $cityid)) . '" style="display: inline;background:none;">' . $city['name'] . '</a>&gt;';
+                $pcateurl = $this->createMobileUrl('shop', array('do' => 'list', 'cityid' => $cityid, 'cid' => $pcate['id']));
+            }
+
+            $page_nave = $showcity . '<a href="' . $pcateurl . '" style="display: inline;background:none;">' . $pcate['name'] . '</a>&gt;<a href="#" style="display: inline;background:none;">' . $ccate['name'] . '</a>';
+        }
+
+        //幻灯片
+        $slide = pdo_fetchall("SELECT * FROM " . tablename($this->table_slide) . " WHERE weid = :weid AND storeid=:storeid AND status=1 ORDER BY displayorder DESC", array(':weid' => $weid, ':storeid' => $id));
+
+        if (empty($nickname)) {
+            if (!empty($_W['fans']['from_user'])) {
+                $user = fans_search($_W['fans']['from_user']);
+                $nickname = $user['nickname'];
+            }
+        }
+
+        //#share
+        $share_image = tomedia($stores['logo']);
+        $share_title = empty($stores['share_title']) ? $stores['title'] : $stores['share_title'];
+        $share_desc = empty($stores['share_desc']) ? $stores['title'] : $stores['share_desc'];
+        $share_url = empty($stores['share_url']) ? $_W['siteroot'] . 'app/' . $this->createMobileUrl('shop', array('id' => $stores['id'])) : $stores['share_url'];
+        include $this->template('product');
     }
 
     //留言
@@ -677,6 +831,12 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
         if (isset($_COOKIE[$this->_auth2_openid])) {
             $fromuser = $_COOKIE[$this->_auth2_openid];
             $nickname = $_COOKIE[$this->_auth2_nickname];
+        }
+
+        if (isset($_GPC['anonymous'])) {
+            if ($_GPC['anonymous'] == 1) {
+                $nickname = '';
+            }
         }
 
         $data = array(
@@ -709,9 +869,11 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
 //            die(json_encode($result));
         }
 
-        if (empty($data['nickname'])) {
-            $result['msg'] = '请输入昵称.';
-            die(json_encode($result));
+        if (!isset($_GPC['anonymous'])) {
+            if (empty($data['nickname'])) {
+                $result['msg'] = '请输入昵称.';
+                die(json_encode($result));
+            }
         }
 
         if (empty($data['content'])) {
@@ -771,59 +933,153 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
         return round($s, $decimal);
     }
 
+    public $table_template = "weisrc_businesscenter_template";
+    public function doWebTemplate()
+    {
+        global $_W, $_GPC;
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+        $action = 'template';
+        $tpl = dir(IA_ROOT . '/addons/weisrc_businesscenter/template/mobile/');
+        $tpl->handle;
+        $templates = array();
+        while ($entry = $tpl->read()) {
+            if (preg_match("/^[a-zA-Z0-9]+$/", $entry) && $entry != 'common' && $entry != 'photo') {
+                array_push($templates, $entry);
+            }
+        }
+        $tpl->close();
+        $template = pdo_fetch("SELECT * FROM " . tablename($this->table_template) . " WHERE weid = :weid", array(':weid' => $_W['uniacid']));
+
+        if (empty($template)) {
+            $templatename = 'style1';
+        } else {
+            $templatename = $template['template_name'];
+        }
+
+        if (!empty($_GPC['templatename'])) {
+
+            $data = array(
+                'weid' => $_W['uniacid'],
+                'template_name' => trim($_GPC['templatename']),
+            );
+
+            if (empty($template)) {
+                pdo_insert($this->table_template, $data);
+            } else {
+                pdo_update($this->table_template, $data, array('weid' => $_W['uniacid']));
+            }
+            message('操作成功', $this->createWebUrl('template'), 'success');
+        }
+        include $this->template('template');
+    }
+
     //幻灯片
     public function doWebSlide()
     {
         global $_W, $_GPC;
-        checklogin();
         load()->func('tpl');
         $modulename = $this->modulename;
+        $action = 'slide';
         $storeid = intval($_GPC['storeid']);
         $condition = '';
 
-        $photos = pdo_fetchall("SELECT * FROM " . tablename($this->table_slide) . " WHERE weid = :weid AND storeid=:storeid {$condition} ORDER BY displayorder DESC,id DESC", array(':weid' => $_W['uniacid'], ':storeid' => $storeid));
-        if (checksubmit('submit')) {
-            if (!empty($_GPC['attachment-new'])) {
-                foreach ($_GPC['attachment-new'] as $index => $row) {
-                    if (empty($row)) {
-                        continue;
-                    }
-                    $data = array(
-                        'weid' => $_W['uniacid'],
-                        //'cityid' => $cityid,
-                        'title' => $_GPC['title-new'][$index],
-                        'description' => $_GPC['description-new'][$index],
-                        'storeid' => $storeid,
-                        'attachment' => $_GPC['attachment-new'][$index],
-                        'url' => $_GPC['url-new'][$index],
-                        'isfirst' => intval($_GPC['isfirst-new'][$index]),
-                        'displayorder' => $_GPC['displayorder-new'][$index],
-                        'status' => $_GPC['status-new'][$index],
-                    );
-                    pdo_insert($this->table_slide, $data);
-                }
-            }
-            if (!empty($_GPC['attachment'])) {
-                foreach ($_GPC['attachment'] as $index => $row) {
-                    if (empty($row)) {
-                        continue;
-                    }
-                    $data = array(
-                        'weid' => $_W['uniacid'],
-                        'title' => $_GPC['title'][$index],
-                        'description' => $_GPC['description'][$index],
-                        'attachment' => $_GPC['attachment'][$index],
-                        'url' => $_GPC['url'][$index],
-                        'isfirst' => intval($_GPC['isfirst'][$index]),
-                        'displayorder' => $_GPC['displayorder'][$index],
-                        'status' => $_GPC['status'][$index],
-                    );
-                    pdo_update($this->table_slide, $data, array('id' => $index));
-                }
-            }
-            message('幻灯片更新成功！', $this->createWebUrl('slide', array('storeid' => $storeid)));
+        $url = $this->createWebUrl('slide', array('op' => 'display'));
+        if ($storeid != 0) {
+            $url = $this->createWebUrl('slide', array('op' => 'display', 'storeid' => $storeid));
         }
+
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+        if ($operation == 'post') {
+            $id = intval($_GPC['id']);
+            if (!empty($id)) {
+                $item = pdo_fetch("SELECT * FROM " . tablename($this->table_slide) . " WHERE id = :id", array(':id' => $id));
+                if (empty($item)) {
+                    message('抱歉，广告不存在或是已经删除！', '', 'error');
+                }
+            }
+
+            if (!empty($item)) {
+                $thumb = tomedia($item['attachment']);
+                if (empty($item['starttime'])) {
+                    $item["starttime"] = TIMESTAMP;
+                    $item["endtime"] = TIMESTAMP;
+                }
+            } else {
+                $item = array(
+                    "status" => 1,
+                    "starttime" => TIMESTAMP,
+                    "endtime" => strtotime(date("Y-m-d H:i", TIMESTAMP + 30 * 86400))
+                );
+            }
+
+            if (checksubmit('submit')) {
+                $data = array(
+                    'weid' => intval($this->_weid),
+					'storeid'=>trim($_GPC['storeid']),
+                    'title' => trim($_GPC['title']),
+                    'attachment' => $_GPC['attachment'],
+                    'url' => $_GPC['url'],
+                    'position' => intval($_GPC['position']),
+                    'starttime' => strtotime($_GPC['datelimit']['start']),
+                    'endtime' => strtotime($_GPC['datelimit']['end']),
+                    'status' => intval($_GPC['status']),
+                    'displayorder' => intval($_GPC['displayorder']),
+                    'dateline' => TIMESTAMP,
+                );
+
+                if (empty($id)) {
+                    pdo_insert($this->table_slide, $data);
+                } else {
+                    unset($data['dateline']);
+                    pdo_update($this->table_slide, $data, array('id' => $id));
+                }
+                message('数据更新成功！', $url, 'success');
+            }
+        } elseif ($operation == 'display') {
+            if (!empty($_GPC['displayorder'])) {
+                foreach ($_GPC['displayorder'] as $id => $displayorder) {
+                    pdo_update($this->table_slide, array('displayorder' => $displayorder), array('id' => $id));
+                }
+                message('排序更新成功！', $url, 'success');
+            }
+
+            $strwhere = '';
+
+            $pindex = max(1, intval($_GPC['page']));
+            $psize = 10;
+            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_slide) . " WHERE weid = :weid AND storeid=:storeid $strwhere ORDER BY status DESC, displayorder DESC, id DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':weid' =>
+                $this->_weid, ':storeid' => $storeid));
+
+            if (!empty($list)) {
+                $total = pdo_fetchcolumn('SELECT COUNT(1) FROM ' . tablename($this->table_slide) . " WHERE weid = :weid AND storeid=:storeid $strwhere", array(':weid' => $this->_weid, ':storeid' => $storeid));
+                $pager = pagination($total, $pindex, $psize);
+            }
+        } elseif ($operation == 'delete') {
+            $id = intval($_GPC['id']);
+            $row = pdo_fetch("SELECT * FROM " . tablename($this->table_slide) . " WHERE id = :id", array(':id' => $id));
+            if (empty($row)) {
+                message('抱歉，数据不存在或是已经被删除！');
+            }
+
+            pdo_delete($this->table_slide, array('id' => $id));
+            message('删除成功！', $this->createWebUrl('slide', array('op' => 'display')), 'success');
+        }
+
         include $this->template('slide');
+    }
+
+    public function doWebSetSlideProperty()
+    {
+        global $_GPC, $_W;
+        $id = intval($_GPC['id']);
+        $type = $_GPC['type'];
+        $data = intval($_GPC['data']);
+        empty($data) ? ($data = 1) : $data = 0;
+        if (!in_array($type, array('status'))) {
+            die(json_encode(array("result" => 0)));
+        }
+        pdo_update($this->table_slide, array($type => $data), array("id" => $id, "weid" => $_W['uniacid']));
+        die(json_encode(array("result" => 1, "data" => $data)));
     }
 
     public function insert_default_category($name, $logo, $parent_name = '', $isfirst = 0)
@@ -977,6 +1233,85 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
         include $this->template('category');
     }
 
+    public function doWebArea()
+    {
+        global $_GPC, $_W;
+        checklogin();
+        load()->func('tpl');
+        $action = 'area';
+        $title = '区域管理';
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+
+        if ($operation == 'display') {
+            if (!empty($_GPC['displayorder'])) {
+                foreach ($_GPC['displayorder'] as $id => $displayorder) {
+                    pdo_update($this->table_area, array('displayorder' => $displayorder), array('id' => $id));
+                }
+                message('更新排序成功！', $this->createWebUrl('area', array('op' => 'display')), 'success');
+            }
+
+            $children = array();
+            $area = pdo_fetchall("SELECT * FROM " . tablename($this->table_area) . " WHERE weid = '{$_W['uniacid']}' ORDER BY parentid DESC, displayorder DESC");
+            foreach ($area as $index => $row) {
+                if (!empty($row['parentid'])) {
+                    $children[$row['parentid']][] = $row;
+                    unset($area[$index]);
+                }
+            }
+        } elseif ($operation == 'post') {
+            $parentid = intval($_GPC['parentid']);
+            $id = intval($_GPC['id']);
+            if (!empty($id)) {
+                $item = pdo_fetch("SELECT * FROM " . tablename($this->table_area) . " WHERE id = '$id'");
+            } else {
+                $item = array(
+                    'displayorder' => 0,
+                );
+            }
+
+            if (!empty($item)) {
+
+            }
+
+            if (!empty($parentid)) {
+                $parent = pdo_fetch("SELECT id, name FROM " . tablename($this->table_area) . " WHERE id = '$parentid' ORDER BY displayorder DESC,id DESC");
+                if (empty($parent)) {
+                    message('抱歉，上级分类不存在或是已经被删除！', $this->createWebUrl('post'), 'error');
+                }
+            }
+            if (checksubmit('submit')) {
+                if (empty($_GPC['catename'])) {
+                    message('抱歉，请输入分类名称！');
+                }
+
+                $data = array(
+                    'weid' => $_W['uniacid'],
+                    'name' => $_GPC['catename'],
+                    'displayorder' => intval($_GPC['displayorder']),
+                    'parentid' => intval($parentid),
+                );
+
+                if (!empty($id)) {
+                    unset($data['parentid']);
+                    pdo_update($this->table_area, $data, array('id' => $id));
+                } else {
+                    pdo_insert($this->table_area, $data);
+                    $id = pdo_insertid();
+                }
+                message('更新分类成功！', $this->createWebUrl('area', array('op' => 'display')), 'success');
+            }
+        } elseif ($operation == 'delete') {
+            $id = intval($_GPC['id']);
+            $item = pdo_fetch("SELECT id, parentid FROM " . tablename($this->table_area) . " WHERE id = '$id'");
+            if (empty($item)) {
+                message('抱歉，分类不存在或是已经被删除！', $this->createWebUrl('area', array('op' => 'display')), 'error');
+            }
+            pdo_delete($this->table_area, array('id' => $id, 'parentid' => $id), 'OR');
+            message('分类删除成功！', $this->createWebUrl('area', array('op' => 'display')), 'success');
+        }
+        include $this->template('area');
+    }
+
     public function doWebCity()
     {
         global $_GPC, $_W;
@@ -1064,6 +1399,7 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
         global $_W, $_GPC;
         load()->func('tpl');
         $modulename = $this->modulename;
+        $action = 'stores';
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
 
         $children = array();
@@ -1078,6 +1414,7 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
         } else {
             message('请先添加分类！', $this->createWebUrl('category', array('op' => 'post')), 'success');
         }
+        $areas = pdo_fetchall("SELECT * FROM " . tablename($this->table_area) . " WHERE weid = '{$_W['uniacid']}' ORDER BY parentid ASC, displayorder DESC", array(), 'id');
 
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
         if ($operation == 'post') {
@@ -1085,8 +1422,20 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
             if (!empty($id)) {
                 $item = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE id = :id", array(':id' => $id));
                 if (empty($item)) {
+                    $item['vip_start'] = TIMESTAMP;
+                    $item['vip_end'] = TIMESTAMP;
                     message('抱歉，商家不存在或是已经删除！', '', 'error');
+                } else {
+                    if (empty($item['vip_start'])) {
+                        $item['vip_start'] = TIMESTAMP;
+                    }
+                    if (empty($item['vip_end'])) {
+                        $item['vip_end'] = TIMESTAMP;
+                    }
                 }
+            } else {
+                $item['vip_start'] = TIMESTAMP;
+                $item['vip_end'] = TIMESTAMP;
             }
 
             if (!empty($item)) {
@@ -1101,12 +1450,15 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
                     'displayorder' => intval($_GPC['displayorder']),
                     'title' => trim($_GPC['title']),
                     'description' => trim($_GPC['description']),
+                    'content' => trim($_GPC['content']),
                     'pcate' => intval($_GPC['pcate']),
+                    'aid' => intval($_GPC['aid']),
                     'ccate' => intval($_GPC['ccate']),
                     'hours' => trim($_GPC['hours']),
                     'starttime' => $_GPC['starttime'],
                     'endtime' => $_GPC['endtime'],
                     'services' => trim($_GPC['services']),
+                    'discount' => trim($_GPC['discount']),
                     'discounts' => trim($_GPC['discounts']),
                     'qrcode_url' => trim($_GPC['qrcode_url']),
                     'qrcode_description' => trim($_GPC['qrcode_description']),
@@ -1149,9 +1501,7 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
                     $data['logo'] = $_GPC['logo'];
                 }
 
-                if (!empty($_GPC['qrcode'])) {
-                    $data['qrcode'] = $_GPC['qrcode'];
-                }
+                $data['qrcode'] = $_GPC['qrcode'];
 
                 if (empty($data['title'])) {
                     message('请输入商家名称！');
@@ -1288,12 +1638,13 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
     public function doWebNews()
     {
         global $_W, $_GPC;
-        checklogin();
         load()->func('tpl');
         $modulename = $this->modulename;
-        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+        $action = 'news';
+
         $storeid = intval($_GPC['storeid']);
 
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
         if ($operation == 'post') {
             $id = intval($_GPC['id']);
             $item = pdo_fetch("SELECT * FROM " . tablename($this->modulename . '_news') . " WHERE id = :id", array(':id' => $id));
@@ -1443,8 +1794,8 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
     public function doWebFeedback()
     {
         global $_W, $_GPC;
-        checklogin();
         $modulename = $this->modulename;
+        $action = 'feedback';
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
         $storeid = intval($_GPC['storeid']);
 
@@ -1636,7 +1987,7 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
             } else {
                 $item['attachment'] = $_GPC['attachment'];
             }
-            file_delete($item['attachment']);
+
         }
         message('删除成功！', referer(), 'success');
     }
@@ -1644,8 +1995,8 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
     public function doWebSetting()
     {
         global $_W, $_GPC;
-
         load()->func('tpl');
+        $action = 'setting';
 
         $weid = $_W['uniacid'];
         $setting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " WHERE weid = :weid ", array(':weid' => $_W['uniacid']));
@@ -1707,7 +2058,7 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
             if (!empty($_GPC['share_image'])) {
                 $data['share_image'] = $_GPC['share_image'];
                 load()->func('file');
-                file_delete($_GPC['share_image-old']);
+
             }
 
             if (empty($setting)) {
@@ -1807,10 +2158,28 @@ class weisrc_businesscenterModuleSite extends WeModuleSite
             }
 
             $this->thumn($oldfile, $width, $height, $folder . $thum);
-            file_delete($file['path']);
 
             $result['message'] = '上传成功！';
             exit(json_encode($result));
         }
+    }
+
+    public function setUserInfo()
+    {
+        load()->model('mc');
+        $userinfo = mc_oauth_userinfo();
+        if (!is_error($userinfo) && !empty($userinfo) && is_array($userinfo) && !empty($userinfo['avatar'])) {
+            $headimgurl = $userinfo['avatar'];
+            $gender = $userinfo['sex'];
+            $nickname = $userinfo['nickname'];
+            $openid = $userinfo['openid'];
+
+            $time = TIMESTAMP + 3600 * 24;
+            setcookie($this->_auth2_headimgurl, $headimgurl, $time);
+            setcookie($this->_auth2_nickname, $nickname, $time);
+            setcookie($this->_auth2_openid, $openid, $time);
+            setcookie($this->_auth2_sex, $gender, $time);
+        }
+        return $userinfo;
     }
 }

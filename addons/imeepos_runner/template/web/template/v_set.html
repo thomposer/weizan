@@ -1,0 +1,33 @@
+{template 'common/header'}
+{template 'web/template/navs'}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		跑腿认证设置
+	</div>
+	<div class="panel-body">
+	<form action="" method="post"  class="form-horizontal" role="form" enctype="multipart/form-data" id="form1">
+		<div class="form-group">
+			<div class="col-sm-10 col-xs-12">
+				<div class="input-group">
+				<div class="input-group-addon">认证费用</div>
+				<input type="text" name="runner_money" class="form-control" value="{$settings['runner_money']}" />
+				<div class="input-group-addon">元，认证通过赠送</div>
+				<input type="text" name="start_num" class="form-control" value="{$settings['start_num']}" />
+				<div class="input-group-addon">信誉，每点信誉</div>
+				<input type="text" name="one_money" class="form-control" value="{$settings['one_money']}" />
+				<div class="input-group-addon">元，放弃订单扣除</div>
+				<input type="text" name="giveup_num" class="form-control" value="{$settings['giveup_num']}" />
+				<div class="input-group-addon">信誉</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-md-offset-2 col-lg-offset-1 col-xs-12 col-sm-10 col-md-10 col-lg-11">
+				<input name="submit" type="submit" value="提交" class="btn btn-primary span3" />
+				<input type="hidden" name="token" value="{$_W['token']}" />
+			</div>
+		</div>
+	</form>
+	</div>
+	
+{template 'common/footer'}

@@ -260,7 +260,10 @@
 			<tbody>
 			{loop $category $row}
 				<tr>
-					<td class="text-center"><input type="text" class="form-control" name="displayorder[{$row['id']}]" value="{$row['displayorder']}"></td>
+					<td class="text-center">
+						<input type="text" class="form-control" name="displayorder[{$row['id']}][displayorder]}]" value="{$row['displayorder']}">
+						<input type="hidden" class="form-control" name="displayorder[{$row['id']}][nid]" value="{$row['nid']}">
+					</td>
 					<td class="text-left"><div style="height:30px;line-height:30px">{$row['name']}&nbsp;&nbsp;{if empty($row['parentid'])}<a href="{php echo url('site/category/post', array('parentid' => $row['id']))}" title="添加子分类"><i class="fa fa-plus"></i> 添加子分类</a>{/if}</div></td>
 					<td class="text-center">{php echo $row['nid'] ? '是' : '否'}</td>
 					<td class="text-right" style="position:relative;">
@@ -272,7 +275,10 @@
 				</tr>
 				{loop $children[$row['id']] $row}
 				<tr>
-					<td class="text-center"><input type="text" class="form-control" name="displayorder[{$row['id']}]" value="{$row['displayorder']}"></td>
+					<td class="text-center">
+						<input type="text" class="form-control" name="displayorder[{$row['id']}][displayorder]" value="{$row['displayorder']}">
+						<input type="hidden" class="form-control" name="displayorder[{$row['id']}][nid]" value="{$row['nid']}">
+					</td>
 					<td class="text-left"><div style="padding-left:50px;height:30px;line-height:30px;background:url('./resource/images/bg_repno.gif') no-repeat -245px -545px;">{$row['name']}&nbsp;&nbsp;{if empty($row['parentid'])}<a href="{php echo url('category', array('foo' => 'post', 'parentid' => $row['id']))}"><i class="fa fa-plus" title="添加子分类"></i></a>{/if}</div></td>
 					<td class="text-center">{php echo $row['enabled'] ? '是' : '否'}</td>
 					<td class="text-right" style="position:relative;">

@@ -158,19 +158,19 @@
 		          ) ) );
 		    
         }else{
-			if($subjectId == 2 && $item['mom'] == 0){
+			if($subjectId == 2 && $item['mom'] == '0'){
 				$temp = array( 
 				    'mom' => $_GPC ['openid'],
 					'muid'=> $_GPC['uid']
 				    );
 			}
-			if($subjectId == 3 && $item['dad'] == 0){
+			if($subjectId == 3 && $item['dad'] == '0'){
 				$temp = array(
 				    'dad' => $_GPC ['openid'],
 					'duid'=> $_GPC['uid']
 				    );
 			}
-			if($subjectId == 4 && $item['own'] == 0){
+			if($subjectId == 4 && $item['own'] == '0'){
 				$temp = array(
 				    'own' => $_GPC ['openid'],
 					'ouid'=> $_GPC['uid']
@@ -580,15 +580,7 @@
 				 ':uid' => $_GPC ['uid'],
 				 ':sid' => $_GPC ['sid']
 				 ));				 
-				 
-		if ((time() - $time['createtime']) <  50) {
-                  die ( json_encode ( array (
-                    'result' => false,
-                    'msg' => '您的操作太频繁了，请待会再试！' 
-		               ) ) );
-		}		 
-		 			  
-				  
+		  
 		if (empty($_GPC['openid'])) {
                   die ( json_encode ( array (
                     'result' => false,

@@ -14,18 +14,11 @@
 		$userid = pdo_fetch("SELECT * FROM " . tablename($this->table_user) . " where :schoolid = schoolid And :weid = weid And :openid = openid And :sid = sid", array(':weid' => $weid, ':schoolid' => $schoolid, ':openid' => $openid, 'sid' => 0), 'id');
 		$it = pdo_fetch("SELECT * FROM " . tablename($this->table_user) . " where weid = :weid AND id=:id ORDER BY id DESC", array(':weid' => $weid, ':id' => $userid['id']));	
 		$school = pdo_fetch("SELECT * FROM " . tablename($this->table_index) . " where weid = :weid AND id=:id ORDER BY ssort DESC", array(':weid' => $weid, ':id' => $schoolid));
-				
+		$bzj = pdo_fetch("SELECT * FROM " . tablename($this->table_classify) . " where weid = :weid And schoolid = :schoolid And tid = :tid", array(':weid' => $weid, ':schoolid' => $schoolid, ':tid' => $it['tid']));		
 		
 		
 		$category = pdo_fetchall("SELECT * FROM " . tablename($this->table_classify) . " WHERE weid =  '{$_W['uniacid']}' AND schoolid ={$schoolid} ORDER BY sid ASC, ssort DESC", array(':weid' => $_W['uniacid'], ':schoolid' => $schoolid), 'sid');
-        if (!empty($category)) {
-            $children = '';
-            foreach ($category as $cid => $cate) {
-                if (!empty($cate['parentid'])) {
-                    $children[$cate['parentid']][$cate['id']] = array($cate['id'], $cate['name']);
-                }
-            }
-        }
+
 		
         if(!empty($userid['id'])){
             

@@ -1,0 +1,11 @@
+<ul class="nav nav-tabs">
+	<li {if $_GPC['do']=="task"}class="active"{/if}>
+		<a href="{php echo $this->createWebUrl('task')}">任务管理</a>
+	</li>
+	<li {if $_GPC['do']=="v"}class="active"{/if}>
+		<a href="{php echo $this->createWebUrl('v')}">认证管理</a>
+	</li>
+	<li {if $_GPC['do']=="runner"}class="active"{/if}>
+		<a href="{php echo $this->createWebUrl('runner')}">监控</a>
+	</li>
+</ul>

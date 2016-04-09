@@ -1,0 +1,63 @@
+{template 'common/header'}
+<div class="main">
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="javascript:;">参数设置</a></li>
+        <li>【修改触发关键词后须重新保存当前设置】</li>
+	</ul>
+	
+    <form class="form-horizontal form" id="form2" action="" method="post">
+        <div class="panel panel-default">
+            <div class="panel-body">
+            	<label class="col-sm-4 control-label">使用说明</label>
+             	<div class="col-sm-4">
+                	1，设置好回复规则和关键词（推荐设置成一样，词语不限）<br />
+                    2，保存当前页信息后进行微信体验<br />
+                    3，每次更新微赞后需要重新保存一次当前页信息
+                 </div>
+            </div>         
+            <div class="panel-body">
+            	<label class="col-sm-4 control-label">自动接入</label>
+             	<div class="col-sm-4">
+                	<input type="checkbox" value="Y" {if $this->module['config']['autorobot_flag'] == 'Y'}checked="checked"{/if} name="autorobot_flag" />&nbsp;自动接入时不必解发关键词（只要无匹配的关键词即自动接入）
+                 </div>
+            </div>         
+            <div class="panel-body">
+            	<label class="col-sm-4 control-label">图灵API-Key</label>
+             	<div class="col-sm-4">
+                	<input type="text" value="{php echo $this->module['config']['autorobot_key']}" class="form-control" name="autorobot_key">
+	             <br /><a href="http://www.tuling123.com" target="_blank">获取地址</a>
+                 </div>
+            </div> 
+            <div class="panel-body">
+            	<label class="col-sm-4 control-label">自动接入时的欢迎语</label>
+             	<div class="col-sm-4">
+                	<textarea name="autorobot_welcome" cols="75" rows="3">{php echo $this->module['config']['autorobot_welcome']}</textarea>
+                 <br />如：想和我聊点什么呢？
+                 </div>
+            </div>  
+            <div class="panel-body">
+            	<label class="col-sm-4 control-label">退出聊天命令</label>
+             	<div class="col-sm-4">
+                	<input type="text" value="{php echo $this->module['config']['autorobot_close']}" class="form-control" name="autorobot_close">
+                 <br />注意：不能和触发关键字冲突！
+                 </div>
+            </div> 
+            <div class="panel-body">
+            	<label class="col-sm-4 control-label">退出聊天时的恭送语</label>
+             	<div class="col-sm-4">
+                	<textarea name="autorobot_close_bf" cols="75" rows="3">{php echo $this->module['config']['autorobot_close_bf']}</textarea>
+                 <br />如：欢迎再次光临哦！
+                 </div>
+            </div>                         
+                        
+                                                                                   
+        </div>
+  
+  
+        <div class="form-group col-sm-12">
+            <input name="token" type="hidden" value="{$_W['token']}" />
+            <input type="submit" class="btn btn-primary col-lg-1" name="submit" value="提交" />
+        </div>
+    </form>     
+</div>
+{template 'common/footer'}

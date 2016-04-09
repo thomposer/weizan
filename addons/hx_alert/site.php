@@ -1,6 +1,9 @@
 <?php
 
 /**
+ * 贺卡模块微站定义
+ *
+ * @author 超级无聊
  * @url
  */
 defined('IN_IA') or exit('Access Denied');

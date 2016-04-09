@@ -126,7 +126,7 @@
 					<img src="{$member[$item['uid']]['avatar']}" width="50"  onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$member[$item['uid']]['nickname']} </br>
 					<a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('assess', array('id' => $item['id'], 'op' => 'jiebang', 'schoolid' => $schoolid))}" onclick="return confirm('此操作不可恢复，确认解绑？');return false;" title="解绑"><i class="fa fa-times"></i>解绑</a>
 					{else}
-					绑定码:{$item['code']}
+					<span title="{$item['code']}">绑定码:{$item['code']}</span>
 					{/if}
 					</td>
 					

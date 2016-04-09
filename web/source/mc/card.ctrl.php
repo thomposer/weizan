@@ -10,7 +10,6 @@ $dos = array('display', 'manage', 'delete', 'coupon', 'submit', 'modal', 'record
 $do = in_array($do, $dos) ? $do : 'other';
 load()->model('mc');
 $setting = pdo_fetch("SELECT * FROM ".tablename('mc_card')." WHERE uniacid = '{$_W['uniacid']}'");
-
 if($do == 'ajax') {
 	$op = trim($_GPC['op']);
 	$sql = 'SELECT `uniacid` FROM ' . tablename('mc_card') . " WHERE `uniacid` = :uniacid";
@@ -58,7 +57,7 @@ if($do == 'editor') {
 		}
 		$html = htmlspecialchars_decode($_GPC['wapeditor']['html'], ENT_QUOTES);
 		$html = str_replace(array("{\$_W['uniacid']}", "{\$_W['acid']}"), array($_W['uniacid'], $_W['acid']), $html);
-		
+
 		$basic = $params[0]['params'];
 		$activity = $params[1]['params'];
 		$nums = $params[2]['params'];
@@ -73,6 +72,7 @@ if($do == 'editor') {
 				}
 			}
 		}
+
 		if($basic['background']['type'] == 'system') {
 			$image = pathinfo($basic['background']['image']);
 			$basic['background']['image'] = $image['filename'];
@@ -107,6 +107,7 @@ if($do == 'editor') {
 			'params' => json_encode($params),
 			'html' => $html
 		);
+
 		if($update['discount_type'] != 0 && !empty($activity['discounts'])) {
 			$update['discount'] = array();
 			foreach($activity['discounts'] as $discount) {
@@ -152,7 +153,8 @@ if($do == 'editor') {
 		if (!empty($setting)) {
 			pdo_update('mc_card', $update, array('uniacid' => $_W['uniacid']));
 		} else {
-			$data['uniacid'] = $_W['uniacid'];
+			$update['status'] = '1';
+			$update['uniacid'] = $_W['uniacid'];
 			pdo_insert('mc_card', $update);
 		}
 		message('会员卡设置成功！', url('mc/card/editor'), 'success');
@@ -576,7 +578,7 @@ if ($do == 'sign') {
 	uni_user_permission_check('mc_card_other');
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 10;
-	$list = pdo_fetchall("SELECT * FROM ". tablename('mc_card_sign_record'). " WHERE uniacid = :uniacid ORDER BY id DESC LIMIT " . ($pindex - 1)*$psize. ','. $psize, array('uniacid' => $_W['uniacid']));
+	$list = pdo_fetchall("SELECT * FROM ". tablename('mc_card_sign_record'). " WHERE uniacid = :uniacid ORDER BY id DESC LIMIT " . ($pindex - 1)*$psize. ','. $psize, array(':uniacid' => $_W['uniacid']));
 	foreach ($list as $key => &$value){
 		$value['addtime'] = date('Y-m-d H:i:s', $value['addtime']);
 		$value['realname'] = pdo_fetchcolumn("SELECT realname FROM ". tablename('mc_members'). ' WHERE uniacid = :uniacid AND uid = :uid', array(':uniacid' => $_W['uniacid'], ':uid' => $value['uid']));

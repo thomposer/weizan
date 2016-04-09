@@ -1,4 +1,5 @@
 {template 'common/header'}
+{php echo $this -> set_tabbar($action);}
 <style>
      .item_box img{
          width: 100%;
@@ -13,7 +14,7 @@
 	<input type="hidden" name="id" value="{$setting['id']}" />
     <div class="panel panel-default">
         <div class="panel-heading">
-            商家信息
+            系统设置
         </div>
         <div class="panel-body">
             <ul class="nav nav-tabs" id="myTab">
@@ -103,13 +104,13 @@
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">导航名称一</label>
                     <div class="col-sm-9">
-                        <input type="text" name="menuname1" class="form-control" value="{if empty($setting) || empty($setting['menuname1'])}优惠资讯{else}{$setting['menuname1']}{/if}" />
+                        <input type="text" name="menuname1" class="form-control" value="{if empty($setting) || empty($setting['menuname1'])}餐厅{else}{$setting['menuname1']}{/if}" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">导航链接一</label>
                     <div class="col-sm-9">
-                        <input type="text" name="menulink1" class="form-control" value="{if empty($setting) || empty($setting['menulink1'])}{php echo $this->createMobileurl('news')}{else}{$setting['menulink1']}{/if}" />
+                        <input type="text" name="menulink1" class="form-control" value="{if empty($setting) || empty($setting['menulink1'])}#{else}{$setting['menulink1']}{/if}" />
                     </div>
                 </div>
                 <div class="form-group">

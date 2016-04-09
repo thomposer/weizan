@@ -1,7 +1,7 @@
 <?php
 /**
- * [WEIZAN System] Copyright (c) 2015 012WZ.COM
- * WeiZan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -23,16 +23,25 @@ if ($do == 'post') {
 			'unchangeable' => intval($_GPC['unchangeable']),
 			'showinregister' => intval($_GPC['showinregister']),
 			'required' => intval($_GPC['required']),
+			'field' => trim($_GPC['field']),
+			'field_length' => intval($_GPC['length'])
 		);
+		$length = intval($_GPC['length']);
 		if (empty($id)) {
-			$data['field'] = trim($_GPC['field']);
 			pdo_insert('profile_fields', $data);
+			if (!pdo_fieldexists('users_profile', $data['field'])) {
+				pdo_query("ALTER TABLE ". tablename('users_profile'). " ADD `". $data['field']."` varchar({$length}) NOT NULL default '';");
+			}
 		} else {
+			if (!pdo_fieldexists('users_profile', $data['field'])) {
+				pdo_query("ALTER TABLE ". tablename('users_profile'). " ADD `". $data['field']."` varchar({$length}) NOT NULL default '';");
+			} else {
+				pdo_query("ALTER TABLE ". tablename('users_profile'). " CHANGE `". $data['field']. "` `". $data['field']."` varchar({$length}) NOT NULL default ''");
+			}
 			pdo_update('profile_fields', $data, array('id' => $id));
 		}
 		message('更新粉丝字段成功！', url('user/fields'));
 	}
-
 	if (!empty($id)) {
 		$item = pdo_fetch("SELECT * FROM ".tablename('profile_fields')." WHERE id = :id", array(':id' => $id));
 	}

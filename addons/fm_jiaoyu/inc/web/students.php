@@ -112,7 +112,7 @@
 			       );
 			   
 			pdo_update($this->table_students, $temp, array('id' => $id));
-            pdo_delete($this->table_user, array('sid' => $id, 'openid' => $openid));
+            pdo_delete($this->table_user, array('sid' => $id, 'openid' => $openid, 'tid' => 0, 'pard' => 4));
             message('解绑成功！', referer(), 'success');
         } elseif ($operation == 'mom') {
             $id = intval($_GPC['id']);
@@ -128,7 +128,7 @@
 			       );
 			
 			pdo_update($this->table_students, $temp, array('id' => $id));
-            pdo_delete($this->table_user, array('sid' => $id, 'openid' => $openid));
+            pdo_delete($this->table_user, array('sid' => $id, 'openid' => $openid, 'tid' => 0, 'pard' => 2));
             message('解绑成功！', referer(), 'success');
         } elseif ($operation == 'dad') {
             $id = intval($_GPC['id']);
@@ -144,7 +144,7 @@
 			       );
 			
 			pdo_update($this->table_students, $temp, array('id' => $id));
-            pdo_delete($this->table_user, array('sid' => $id, 'openid' => $openid));
+            pdo_delete($this->table_user, array('sid' => $id, 'openid' => $openid, 'tid' => 0, 'pard' => 3));
             message('解绑成功！', referer(), 'success');
         } elseif ($operation == 'deleteall') {
             $rowcount = 0;

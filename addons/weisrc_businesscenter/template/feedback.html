@@ -1,74 +1,24 @@
 {template 'common/header'}
-<ul class="nav nav-tabs">
-    <li><a href="{php echo $this->createWebUrl('stores', array('op' => 'display', 'storeid' => $storeid))}">返回商家管理</a></li>
+{php echo $this -> set_tabbar($action, $storeid);}
+{if $operation == 'display'}
+<div class="main">
     {if $storeid!=0}
-	<li {if $operation == 'post'}class="active"{/if}><a href="{php echo $this->createWebUrl('feedback', array('op' => 'post', 'storeid' => $storeid))}">添加留言</a></li>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <a class="btn btn-default" href="{php echo $this->createWebUrl('feedback', array('op' => 'post', 'storeid' => $storeid))}"><i class="fa fa-plus"></i>添加留言</a>
+        </div>
+    </div>
     {/if}
-	<li {if $operation == 'display' || empty($operation)}class="active"{/if}><a href="{php echo $this->createWebUrl('feedback', array('op' => 'display', 'storeid' => $storeid))}">管理留言</a></li>
-</ul>
-{if $operation == 'post'}
-<div class="main">
-    <div style="padding-top: 15px;"></div>
-	<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
-		<input type="hidden" name="id" value="{$item['id']}" />
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                留言编辑
-            </div>
-            <div class="panel-body">
-                <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">昵称</label>
-                    <div class="col-sm-9">
-                        <input type="text" name="nickname" class="form-control" value="{$item['nickname']}" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">留言信息</label>
-                    <div class="col-sm-9">
-                        <textarea name="content" class="form-control">{$item['content']}</textarea>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">时间</label>
-                    <div class="col-sm-9">
-                        <input class="datepicker form-control" id="datepicker_dateline" name="dateline" type="text" value="{php echo date('Y-m-d H:i', $item['dateline'])}" readonly/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
-                    <div class="col-sm-9">
-                        <label for="status1" class="radio-inline"><input type="radio" name="status" value="1" id="status1" {if empty($item) || $item['status'] == 1}checked="true"{/if} /> 已审核</label>
-                        <label for="status2" class="radio-inline"><input type="radio" name="status" value="0" id="status2"  {if !empty($item) && $item['status'] == 0}checked="true"{/if} /> 未审核</label>
-                        <span class="help-block"></span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
-                    <div class="col-sm-9">
-                        <input type="text" name="displayorder" class="form-control" value="{if empty($item) || empty($item['displayorder'])}0{else}{$item['displayorder']}{/if}" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="form-group col-sm-12">
-            <input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1" />
-            <input type="hidden" name="token" value="{$_W['token']}" />
-        </div>
-	</form>
-</div>
-{elseif $operation == 'display'}
-<div class="main">
 <div class="panel panel-default">
     <form action="" method="post" class="form-horizontal form">
         <div class="table-responsive panel-body">
-            <div style="padding-top: 15px;"></div>
             <table class="table table-hover">
                 <thead class="navbar-inner">
                 <tr>
                     <th class='with-checkbox' style="width: 5%;"><input type="checkbox" class="check_all" /></th>
                     <th style="width:10%;">显示顺序</th>
                     <th style="width:20%;">用户</th>
-                    <th style="width:30%;">信息</th>
+                    <th style="width:30%;">内容</th>
                     <th style="width:10%;">状态</th>
                     <th style="width:15%;">时间</th>
                     <th style="width:10%;text-align: right">编辑/删除</th>
@@ -172,6 +122,55 @@
 
     });
 </script>
+    {elseif $operation == 'post'}
+    <div class="main">
+        <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="{$item['id']}" />
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    留言编辑
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">昵称</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="nickname" class="form-control" value="{$item['nickname']}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">留言信息</label>
+                        <div class="col-sm-9">
+                            <textarea name="content" class="form-control">{$item['content']}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">时间</label>
+                        <div class="col-sm-9">
+                            <input class="datepicker form-control" id="datepicker_dateline" name="dateline" type="text" value="{php echo date('Y-m-d H:i', $item['dateline'])}" readonly/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
+                        <div class="col-sm-9">
+                            <label for="status1" class="radio-inline"><input type="radio" name="status" value="1" id="status1" {if empty($item) || $item['status'] == 1}checked="true"{/if} /> 已审核</label>
+                            <label for="status2" class="radio-inline"><input type="radio" name="status" value="0" id="status2"  {if !empty($item) && $item['status'] == 0}checked="true"{/if} /> 未审核</label>
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="displayorder" class="form-control" value="{if empty($item) || empty($item['displayorder'])}0{else}{$item['displayorder']}{/if}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1" />
+                <input type="hidden" name="token" value="{$_W['token']}" />
+            </div>
+        </form>
+    </div>
 {elseif $operation == 'check'}
 <div class="main">
     <form action="" method="post" class="form-horizontal form" onsubmit="return formcheck(this)">

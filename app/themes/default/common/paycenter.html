@@ -289,7 +289,11 @@
 			$('.bs-example-modal-lg').modal('show');
 		});
 		var cards_str = '{$cards_str}';
-		cards_str = $.parseJSON(cards_str);
+		if (cards_str) {
+			cards_str = $.parseJSON(cards_str);
+		} else {
+			cards_str = {};
+		}
 		$('#wq_card .form-group').click(function(){
 			var status = $(this).find('.fa').hasClass('text-danger');
 			$(this).siblings().find('.fa').removeClass('text-danger');

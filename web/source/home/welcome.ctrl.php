@@ -1,14 +1,13 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
-$dos = array('platform', 'site', 'mc', 'setting', 'ext', 'solution', 'members', 'fournet');
+$dos = array('platform', 'site', 'mc', 'setting', 'ext', 'solution', 'members', 'fournet', 'replystatistics');
 $do = in_array($do, $dos) ? $do : $do;
 $title = array('platform'=>'公众平台','site'=>'微站功能','mc'=>'会员及会员营销','setting'=>'功能选项','ext'=>'扩展功能','solution'=>'行业功能','members'=>'会员续费','fournet'=>'四网融合');
 $_W['page']['title'] = $title[$do];
-
 define('FRAME', $do);
 $frames = buildframes(array(FRAME), $_GPC['m']);
 $frames = $frames[FRAME];
@@ -47,49 +46,18 @@ if($do != 'solution') {
 }
 
 if($do == 'platform') {
+	uni_update_week_stat();
 	$title = '平台相关数据';
-	$sysmodules = system_modules();
-	$modules_other = array_diff(array_keys($modules), $sysmodules);
-	$settings = uni_setting($_W['uniacid'], array('stat'));
-	$day_num = !empty($settings['stat']['msg_maxday']) ? $settings['stat']['msg_maxday'] : 30;
-	if($_W['ispost']) {
-		$m_name = trim($_GPC['m_name']);
-		$starttime = strtotime("-{$day_num} day");
-		$endtime = time();
-		$data_hit = pdo_fetchall("SELECT * FROM ".tablename('stat_msg_history')." WHERE uniacid = :uniacid AND module = :module AND createtime >= :starttime AND createtime <= :endtime", array(':uniacid' => $_W['uniacid'], ':module' => $m_name, ':starttime' => $starttime, ':endtime' => $endtime));
-		
-		for($i = $day_num; $i >= 0; $i--){
-			$key = date('m-d', strtotime('-' . $i . 'day'));
-			$days[] = $key;
-			$datasets[$key] = 0;
-		}
-		
-		foreach($data_hit as $da) {
-			$key1 = date('m-d', $da['createtime']);
-			if(in_array($key1, $days)) {
-				$datasets[$key1]++;
-			}
-		}
-		
-		$todaytimestamp = strtotime(date('Y-m-d'));
-		$monthtimestamp = strtotime(date('Y-m'));
-		$stat['month'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('stat_msg_history')." WHERE uniacid = :uniacid AND module = :module AND createtime >= '$monthtimestamp'", array(':uniacid' => $_W['uniacid'], ':module' => $m_name));
-		$stat['today'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('stat_msg_history')." WHERE uniacid = :uniacid AND module = :module AND createtime >= '$todaytimestamp'", array(':uniacid' => $_W['uniacid'], ':module' => $m_name));
-		$stat['rule'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('rule')." WHERE uniacid = :uniacid AND module = :module", array(':uniacid' => $_W['uniacid'], ':module' => $m_name));
-		$stat['m_name'] = $m_name;
-		
-		exit(json_encode(array('key' => $days, 'value' => array_values($datasets), 'stat' => $stat)));
-	}
-
 	$yesterday = date('Ymd', strtotime('-1 days'));
 	$yesterday_stat = pdo_get('stat_fans', array('date' => $yesterday, 'uniacid' => $_W['uniacid']));
 	$today_stat = pdo_get('stat_fans', array('date' => date('Ymd'), 'uniacid' => $_W['uniacid']));
-	
 		$today_add_num = intval($today_stat['new']);
 	$today_cancel_num = intval($today_stat['cancel']);
 	$today_jing_num = $today_add_num - $today_cancel_num;
 	$today_total_num = intval($today_jing_num) + intval($yesterday_stat['cumulate']);
-	
+	if($today_total_num < 0) {
+		$today_total_num = 0;
+	}	
 		load()->model('reply');
 	$cfg = $modules['userapi']['config'];
 	$ds = reply_search("`uniacid` = 0 AND module = 'userapi' AND `status`=1");
@@ -97,6 +65,7 @@ if($do == 'platform') {
 	foreach($ds as $row) {
 		$apis[$row['id']] = $row; 
 	}
+	
 	$ds = array();
 	foreach($apis as $row) {
 		$reply = pdo_fetch('SELECT * FROM ' . tablename('userapi_reply') . ' WHERE `rid`=:rid', array(':rid' => $row['id']));
@@ -273,4 +242,35 @@ if($do == 'ext') {
 	}
 }
 
+if(!in_array($do, $dos)) {
+	$title = '';
+}
+if($do == 'replystatistics') {
+	if($_W['ispost'] && $_W['isajax']) {
+		$settings = uni_setting($_W['uniacid'], array('stat'));
+		$day_num = @$settings['stat']['msg_maxday'] ? $settings['stat']['msg_maxday'] : 30;
+		$m_name = trim($_GPC['m_name']);
+		$starttime = strtotime("-{$day_num} day");
+		$endtime = time();
+		$data_hit = pdo_fetchall("SELECT * FROM ".tablename('stat_msg_history')." WHERE uniacid = :uniacid AND module = :module AND createtime >= :starttime AND createtime <= :endtime", array(':uniacid' => $_W['uniacid'], ':module' => $m_name, ':starttime' => $starttime, ':endtime' => $endtime));
+		for($i = $day_num; $i >= 0; $i--){
+			$key = date('m-d', strtotime('-' . $i . 'day'));
+			$days[] = $key;
+			$datasets[$key] = 0;
+		}
+		foreach($data_hit as $da) {
+			$key1 = date('m-d', $da['createtime']);
+			if(in_array($key1, $days)) {
+					$datasets[$key1]++;
+			}
+		}
+		$todaytimestamp = strtotime(date('Y-m-d'));
+		$monthtimestamp = strtotime(date('Y-m'));
+		$stat['month'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('stat_msg_history')." WHERE uniacid = :uniacid AND module = :module AND createtime >= '$monthtimestamp'", array(':uniacid' => $_W['uniacid'], ':module' => $m_name));
+		$stat['today'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('stat_msg_history')." WHERE uniacid = :uniacid AND module = :module AND createtime >= '$todaytimestamp'", array(':uniacid' => $_W['uniacid'], ':module' => $m_name));
+		$stat['rule'] = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('rule')." WHERE uniacid = :uniacid AND module = :module", array(':uniacid' => $_W['uniacid'], ':module' => $m_name));
+		$stat['m_name'] = $m_name;
+		exit(json_encode(array('key' => $days, 'value' => array_values($datasets), 'stat' => $stat)));
+	}
+}
 template('home/welcome');

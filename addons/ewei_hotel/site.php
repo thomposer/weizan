@@ -111,11 +111,14 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 	{
 		global $_GPC, $_W;
 		$weid = $this->_weid;
+
 		$from_user = $this->_from_user;
+
 		$set = $this->_set_info;
 		$hid = $_GPC['hid'];
 		$user_info = pdo_fetch("SELECT * FROM " . tablename('hotel2_member') . " WHERE from_user = :from_user AND weid = :weid limit 1", array(':from_user' => $from_user, ':weid' => $weid));
 		//独立用户
+
 		if ($set['user'] == 2) {
 			if (empty($user_info['id'])) {
 				//用户不存在
@@ -146,6 +149,7 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 				$member = array();
 				$member['weid'] = $weid;
 				$member['from_user'] = $from_user;
+
 				$member['createtime'] = time();
 				$member['isauto'] = 1;
 				$member['status'] = 1;
@@ -454,6 +458,7 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 		}
 
 		$search_array = $this->getSearchArray();
+
 		if (!$search_array || empty($search_array['btime']) || empty($search_array['day'])) {
 			$url = $this->createMobileUrl('index');
 			header("Location: $url");
@@ -571,8 +576,8 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 			$this_price = $old_price = $room['oprice'] ;
 		}
 		$totalprice =  $old_price * $days;
-       //$room_score=$room['score'];
-        //var_dump($room_score);
+		//$room_score=$room['score'];
+		//var_dump($room_score);
 
 		if ($price_list) {
 			//价格表中存在
@@ -645,7 +650,11 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 
 			$insert[$pricefield] = $this_price;
 			$insert['sum_price'] = $totalprice * $insert['nums'];
-
+			pdo_query('UPDATE '. tablename('hotel2_order'). " SET status = '-1' WHERE time <  :time AND weid = '{$_W['uniacid']}' AND paystatus = '0' AND status <> '1' AND status <> '3'", array(':time' => time() - 86400));
+			$order_exist = pdo_fetch("SELECT * FROM ". tablename('hotel2_order'). " WHERE hotelid = :hotelid AND roomid = :roomid AND openid = :openid AND status = '0'", array(':hotelid' => $insert['hotelid'], ':roomid' => $insert['roomid'], ':openid' => $insert['openid']));
+			if ($order_exist) {
+				die(json_encode(array('result' => 0, 'error' => "您有未完成订单，不能重复下单")));
+			}
 			pdo_insert('hotel2_order', $insert);
 			$order_id = pdo_insertid();
 
@@ -1064,11 +1073,11 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 
 			$params = array();
 			$params[':hotelid'] = $hid;
-			
+
 			$params[':id'] = $id;
 			$item = pdo_fetch($sql, $params);
 			//var_dump($item);
-            
+
 			//计算价格
 			//   //显示会员价还是普通价
 
@@ -1356,6 +1365,7 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 			header("Location: $url");
 		}
 		$ac = $_GPC['ac'];
+		pdo_query('UPDATE '. tablename('hotel2_order'). " SET status = '-1' WHERE time <  :time AND weid = '{$_W['uniacid']}' AND paystatus = '0' AND status <> '1' AND status <> '3'", array(':time' => time() - 86400));
 		if ($ac == "getDate") {
 			$pindex = max(1, intval($_GPC['page']));
 			$psize = 10;
@@ -1402,10 +1412,8 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 		global $_GPC, $_W;
 		$weid = $this->_weid;
 		$id = $_GPC['id'];
-		var_dump($id);
 		$this->check_login();
 		if (empty($id)) {
-			
 			$url = $this->createMobileUrl('orderlist');
 			header("Location: $url");
 		}
@@ -1417,21 +1425,21 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 		}
 		$sql = "SELECT o.*, h.title, h.address, h.phone, h.thumb";
 		$sql .= " FROM " .tablename('hotel2_order') ." AS o";
-	    $sql .= " LEFT JOIN " .tablename('hotel2') ." AS h ON o.hotelid = h.id";
-	  
-		
+		$sql .= " LEFT JOIN " .tablename('hotel2') ." AS h ON o.hotelid = h.id";
+
+
 		$sql .= " WHERE 1 = 1";
 		$sql .= " AND o.id = :id";
 		$sql .= " AND o.memberid = :memberid";
 		$sql .= " AND o.weid = :weid";
 		//$sql .="  LEFT JOIN ".tablename('hotel2_room')."AS r ON r.id =o.roomid ";
-        //$sql .= " AND r.wid = o.weid";
+		//$sql .= " AND r.wid = o.weid";
 		$params = array();
 		$params[':memberid'] = $memberid;
 		$params[':weid'] = $weid;
 		$params[':id'] = $id;
 		$sql .= " LIMIT 1";
-		
+
 		$item = pdo_fetch($sql, $params);
 		//var_dump($sql);
 		//echo "<pre>";
@@ -1445,11 +1453,10 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 		//svar_dump($ITEM);
 		if(!empty($ITEM['score']))
 		{
-			
-			 pdo_fetch("UPDATE " . tablename('hotel2_member') . " SET score = (score + " .$ITEM['score'] . ") WHERE weid = '" . $room_weid . "' ");
+			pdo_fetch("UPDATE " . tablename('hotel2_member') . " SET score = (score + " .$ITEM['score'] . ") WHERE weid = '" . $room_weid . "' ");
 		}
-					
-		
+
+
 		if ($this->_set_info['is_unify'] == 1) {
 			$tel = $this->_set_info['tel'];
 		} else {
@@ -1465,9 +1472,51 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 		$params['fee'] = $item['sum_price'];
 		$params['title'] = $_W['account']['name'] . "酒店订单{$item['ordersn']}";
 
+//		$log = pdo_get('core_paylog', array('uniacid' => $_W['uniacid'], 'module' => $params['module'], 'tid' => $params['tid']));
+//		if (empty($log)) {
+//			$log = array(
+//				'uniacid' => $_W['uniacid'],
+//				'acid' => $_W['acid'],
+//				'openid' => $_W['member']['uid'],
+//				'module' => $this->module['name'],
+//				'tid' => $params['tid'],
+//				'fee' => $params['fee'],
+//				'card_fee' => $params['fee'],
+//				'status' => '0',
+//				'is_usecard' => '0',
+//			);
+//			print_r($log);exit;
+//			pdo_insert('core_paylog', $log);
+//		}
 		// 设置分享信息
 		$shareDesc = $item['address'];
 		$shareThumb = tomedia($item['thumb']);
+
+		$setting = uni_setting($_W['uniacid'], array('payment', 'creditbehaviors'));
+//		print_r($setting['payment']['card']['switch']);die;
+		if($setting['payment']['card']['switch'] == 3 && $_W['member']['uid']) {
+			//获取微赞卡券
+			$cards = array();
+			if(!empty($params['module'])) {
+				$cards = pdo_fetchall('SELECT a.id,a.couponid,b.type,b.title,b.discount,b.condition,b.starttime,b.endtime FROM ' . tablename('activity_coupon_modules') . ' AS a LEFT JOIN ' . tablename('activity_coupon') . ' AS b ON a.couponid = b.couponid WHERE a.uniacid = :uniacid AND a.module = :modu AND b.condition <= :condition AND b.starttime <= :time AND b.endtime >= :time  ORDER BY a.id DESC', array(':uniacid' => $_W['uniacid'], ':modu' => $params['module'], ':time' => TIMESTAMP, ':condition' => $params['fee']), 'couponid');
+				if(!empty($cards)) {
+					foreach($cards as $key => &$card) {
+						$has = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('activity_coupon_record') . ' WHERE uid = :uid AND uniacid = :aid AND couponid = :cid AND status = 1' . $condition, array(':uid' => $_W['member']['uid'], ':aid' => $_W['uniacid'], ':cid' => $card['couponid']));
+						if($has > 0){
+							if($card['type'] == '1') {
+								$card['fee'] = sprintf("%.2f", ($params['fee'] * $card['discount']));
+								$card['discount_cn'] = sprintf("%.2f", $params['fee'] * (1 - $card['discount']));
+							} elseif($card['type'] == '2') {
+								$card['fee'] = sprintf("%.2f", ($params['fee'] -  $card['discount']));
+								$card['discount_cn'] = $card['discount'];
+							}
+						} else {
+							unset($cards[$key]);
+						}
+					}
+				}
+			}
+		}
 
 		include $this->template('orderdetail');
 	}
@@ -1500,16 +1549,15 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 		//立即支付
 		$orderid = intval($_GPC['id']);
 		$order = pdo_fetch("SELECT * FROM " . tablename('hotel2_order') . " WHERE id = :id", array(':id' => $orderid));
-		if ($order['paystatus'] != '0' && $order['paytype'] != '1' && $order['paytype'] != '2') {
-			message('抱歉，您的订单已付款或是被关闭！', $this->createMobileUrl('orderdetail',array("id"=>$order['id'])), 'error');
-		}
+
+		message('抱歉，您的订单已付款或是被关闭！', $this->createMobileUrl('orderdetail',array("id"=>$order['id'])), 'error');
+
 		$params['ordersn'] = $order['ordersn'];
 		$params['tid'] = $orderid;
 		$params['user'] = $_W['fans']['from_user'];
 		$params['fee'] = $order['sum_price'];
 		$params['title'] = $_W['account']['name'] . "酒店订单{$order['ordersn']}";
 		$this->pay($params);
-
 	}
 
 	public function payResult($params) {
@@ -1529,7 +1577,7 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 			pdo_update('hotel2_room_price', array('num' => $day['num'] - $order['nums']), array('id' => $day['id']));
 			$starttime += 86400;
 		}
-		
+
 		if ($setInfo['email']) {
 			$body = "<h3>酒店订单</h3> <br />";
 			$body .= '订单编号：' . $order['ordersn'] . '<br />';
@@ -1579,12 +1627,12 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 
 		if ($params['from'] == 'return') {
 			$roomid = $order['roomid'];
-			$room = pdo_fetch("SELECT score FROM " . tablename('hotel2_room') . " WHERE id = {$roomid} AND weid = {$weid} LIMIT 1");
+			$room = pdo_fetch("SELECT * FROM " . tablename('hotel2_room') . " WHERE id = {$roomid} AND weid = {$weid} LIMIT 1");
 			$score = intval($room['score']);
-			
+
 			if ($score) {
 				$from_user = $this->_from_user;
-			 pdo_fetch("UPDATE " . tablename('hotel2_member') . " SET score = (score + " . $score . ") WHERE from_user = '" . $from_user . "' AND weid = " . $weid . "");
+				pdo_fetch("UPDATE " . tablename('hotel2_member') . " SET score = (score + " . $score . ") WHERE from_user = '" . $from_user . "' AND weid = " . $weid . "");
 
 				//会员送积分
 				if ($params['result'] == 'success' && $_SESSION['ewei_hotel_pay_result'] != $params['tid']) {
@@ -1603,7 +1651,7 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 					}
 				}
 			}
-			message('支付成功！', '../../app/' . $this->createMobileUrl('orderdetail', array("id" => $order['id'])), 'success');
+			message('支付成功！', '../../app/' . $this->createMobileUrl('detail', array('hid' => $room['hotelid'])), 'success');
 		}
 	}
 
@@ -1871,7 +1919,7 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 				$psize = 10;
 
 				$sql = 'SELECT * FROM ' . tablename('hotel2') . $where . ' ORDER BY `displayorder` DESC LIMIT ' .
-						($pindex - 1) * $psize . ',' . $psize;
+					($pindex - 1) * $psize . ',' . $psize;
 				$list = pdo_fetchall($sql, $params);
 				foreach ($list as &$row) {
 					$row['level'] = $this->_hotel_level_config[$row['level']];
@@ -2774,10 +2822,12 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 
 			$pindex = max(1, intval($_GPC['page']));
 			$psize = 20;
+			pdo_query('UPDATE '. tablename('hotel2_order'). " SET status = '-1' WHERE time <  :time AND weid = '{$_W['uniacid']}' AND paystatus = '0' AND status <> '1' AND status <> '3'", array(':time' => time() - 86400));
 			$list = pdo_fetchall("SELECT o.*,h.title as hoteltitle,r.title as roomtitle FROM " . tablename('hotel2_order') . " o left join " . tablename('hotel2') .
 				"h on o.hotelid=h.id left join " . tablename("hotel2_room") . " r on r.id = o.roomid  WHERE o.weid = '{$_W['uniacid']}' $condition ORDER BY o.id DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, $params);
 			$lists = pdo_fetchall("SELECT o.*,h.title as hoteltitle,r.title as roomtitle FROM " . tablename('hotel2_order') . " o left join " . tablename('hotel2') .
 				"h on o.hotelid=h.id left join " . tablename("hotel2_room") . " r on r.id = o.roomid  WHERE o.weid = '{$_W['uniacid']}' $condition ORDER BY o.id DESC" . ',' . $psize, $params);
+
 			$total = pdo_fetchcolumn('SELECT COUNT(*) FROM  ' . tablename('hotel2_order') . " o left join " . tablename('hotel2') .
 				"h on o.hotelid=h.id left join " . tablename("hotel2_room") . " r on r.id = o.roomid  WHERE o.weid = '{$_W['uniacid']}' $condition", $params);
 			if ($_GPC['export'] != '') {
@@ -2876,7 +2926,7 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 		$op = $_GPC['op'];
 		if ($op == 'edit') {
 			$id = intval($_GPC['id']);
-			
+
 			if (!empty($id)) {
 				$item = pdo_fetch("SELECT * FROM " . tablename('hotel2_member') . " WHERE id = :id", array(':id' => $id));
 				if (empty($item)) {
@@ -2894,13 +2944,12 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 					'isauto' => $_GPC['isauto'],
 					'status' => $_GPC['status'],
 				);
-				
+
 				if (!empty($_GPC['password'])) {
 					$data['salt'] = random(8);
 					$data['password'] = hotel_member_hash($_GPC['password'], $data['salt']);
 					//$data['password'] = md5($_GPC['password']);
 				}
-
 				if (empty($id)) {
 					$c = pdo_fetchcolumn("select count(*) from " . tablename('hotel2_member') . " where username=:username ", array(":username" => $data['username']));
 					if ($c > 0) {

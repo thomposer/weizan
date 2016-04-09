@@ -225,23 +225,8 @@ if($do == 'upgrade') {
 	if (is_error($info)) {
 		message($info['message'], referer(), 'error');
 	}
-
-	$upgrade_info = cloud_t_upgradeinfo($id);
-
-	if (is_error($upgrade_info)) {
-		message($upgrade_info['message'], referer(), 'error');
-	}
-	if ($_W['isajax']) {
-		message($upgrade_info, '', 'ajax');
-	}
-
-	if (!is_error($info)) {
-		if (empty($_GPC['flag'])) {
-			if (intval($_GPC['branch']) > $upgrade_info['version']['branch_id']) {
-				header('location: ' . url('cloud/redirect/buybranch', array('m' => $id, 'branch' => intval($_GPC['branch']), 'type' => 'theme', 'is_upgrade' => 1)));
-				exit;
-			}
-
+	if(!is_error($info)) {
+		if(empty($_GPC['flag'])) {
 						load()->func('file');
 			rmdirs(IA_ROOT . '/app/themes/' . $id, true);
 			header('Location: ' . url('cloud/process', array('t' => $id, 'is_upgrade' => 1)));

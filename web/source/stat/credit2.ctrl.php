@@ -17,9 +17,12 @@ $num = ($endtime + 1 - $starttime) / 86400;
 if($do == 'index') {
 	$clerks = pdo_getall('activity_clerks', array('uniacid' => $_W['uniacid']), array('id', 'name'), 'id');
 	$stores = pdo_getall('activity_stores', array('uniacid' => $_W['uniacid']), array('id', 'business_name', 'branch_name'), 'id');
-
 	$condition = ' WHERE uniacid = :uniacid AND credittype = :credittype AND createtime >= :starttime AND createtime <= :endtime';
 	$params = array(':uniacid' => $_W['uniacid'], ':credittype' => 'credit2', ':starttime' => $starttime, ':endtime' => $endtime);
+	if(intval($_W['user']['clerk_type']) == ACCOUNT_OPERATE_CLERK) {
+		$condition .= ' AND clerk_id = :clerk_id';
+		$params[':clerk_id'] = $_W['user']['clerk_id'];
+	}
 	$num = intval($_GPC['num']);
 	if($num > 0) {
 		if($num == 1) {

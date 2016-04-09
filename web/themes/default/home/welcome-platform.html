@@ -51,10 +51,10 @@
 	</div>
 	<div class="account-stat">
 		<div class="account-stat-btn">
-			<div>新关注人数<span>{$today_add_num}</span></div>
-			<div>取消关注人数<span>{$today_cancel_num}</span></div>
-			<div>净增关注人数<span>{$today_jing_num}</span></div>
-			<div>累积关注人数<span>{$today_total_num}</span></div>
+			<div>今日新关注<span>{$today_add_num}</span></div>
+			<div>今日取消关注<span>{$today_cancel_num}</span></div>
+			<div>今日净增关注<span>{$today_jing_num}</span></div>
+			<div>累积关注<span>{$today_total_num}</span></div>
 		</div>
 	</div>
 </div>
@@ -64,10 +64,10 @@
 	</div>
 	<div class="account-stat">
 		<div class="account-stat-btn">
-			<div>新关注人数<span>{$yesterday_stat['new']}</span></div>
-			<div>取消关注人数<span>{$yesterday_stat['cancel']}</span></div>
-			<div>净增关注人数<span>{php echo intval($yesterday_stat['new']) - intval($yesterday_stat['cancel'])}</span></div>
-			<div>累积关注人数<span>{$yesterday_stat['cumulate']}</span></div>
+			<div>昨日新关注<span>{$yesterday_stat['new']}</span></div>
+			<div>昨日取消关注<span>{$yesterday_stat['cancel']}</span></div>
+			<div>昨日净增关注<span>{php echo intval($yesterday_stat['new']) - intval($yesterday_stat['cancel'])}</span></div>
+			<div>累积关注<span>{$yesterday_stat['cumulate']}</span></div>
 		</div>
 	</div>
 </div>
@@ -257,10 +257,9 @@
 		var show_url = "{php echo url('platform/reply/display')}m=";
 		var add_url = "{php echo url('platform/reply/post')}m=";
 		var data = null;
-		
-		$.post(location.href, {'m_name' : 'basic'}, function(data){
+		var replystatistics_url = "{php echo url('home/welcome/replystatistics')}";
+		$.post(replystatistics_url, {'m_name' : 'basic'}, function(data){
 			data = $.parseJSON(data);
-			
 			$("#rule").html(data.stat.rule);
 			$("#today").html(data.stat.today);
 			$("#month").html(data.stat.month);
@@ -288,21 +287,29 @@
 			$('.nav.nav-btns li').removeClass('active');
 			$(this).toggleClass('active');
 			var m_name = $(this).attr('id');
-			
-			$.post(location.href, {'m_name' : m_name}, function(data){
+
+			$.post(replystatistics_url, {'m_name' : m_name}, function(data){
 				data = $.parseJSON(data);
-				
 				$("#rule").html(data.stat.rule);
 				$("#today").html(data.stat.today);
 				$("#month").html(data.stat.month);
-				
 				$('#show').attr('href', show_url + data.stat.m_name);
 				$('#add').attr('href', add_url + data.stat.m_name);
-
- 				 for(var i = 0; i <= day_num; i++) {
- 					obj.datasets[0].points[i].value = data.value[i];
-				 }
- 				obj.update();
+				lineChartData = {
+					labels : data.key,
+					datasets : [
+						{
+							fillColor : "rgba(36,165,222,0.1)",
+							strokeColor : "rgba(36,165,222,1)",
+							pointColor : "rgba(36,165,222,1)",
+							pointStrokeColor : "#fff",
+							pointHighlightFill : "#fff",
+							pointHighlightStroke : "rgba(36,165,222,1)",
+							data : data.value
+						}
+					]
+				}
+				obj = myLine.Line(lineChartData, {responsive: true});
 			});
 		});
  	});

@@ -14,7 +14,14 @@ function file_write($filename, $data) {
 	@chmod($filename, $_W['config']['setting']['filemode']);
 	return is_file($filename);
 }
-
+function file_read($filename) {
+	global $_W;
+	$filename = ATTACHMENT_ROOT . '/' . $filename;
+	if (!is_file($filename)) {
+		return false;
+	}
+	return file_get_contents($filename);
+}
 
 function file_move($filename, $dest) {
 	global $_W;
@@ -297,8 +304,11 @@ function file_remote_delete($file) {
 		require_once IA_ROOT . '/framework/library/qiniu/autoload.php';
 		$auth = new Qiniu\Auth($_W['setting']['remote']['qiniu']['accesskey'], $_W['setting']['remote']['qiniu']['secretkey']);
 		$bucketMgr = new Qiniu\Storage\BucketManager($auth);
-		$err = $bucketMgr->delete($_W['setting']['remote']['qiniu']['bucket'], $file);
-		if ($err !== 'null') {
+		$error = $bucketMgr->delete($_W['setting']['remote']['qiniu']['bucket'], $file);
+		if ($error instanceof Qiniu\Http\Error) {
+			if ($error->code() == 612) {
+				return true;
+			}
 			return error(1, '删除七牛远程文件失败');
 		} else {
 			return true;

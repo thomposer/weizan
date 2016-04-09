@@ -1,11 +1,12 @@
 {template 'common/header'}
-<ul class="nav nav-tabs">
-    <li><a href="{php echo $this->createWebUrl('stores', array('op' => 'display', 'storeid' => $storeid))}">返回商家管理</a></li>
-	<li {if $operation == 'post'}class="active"{/if}><a href="{php echo $this->createWebUrl('news', array('op' => 'post', 'storeid' => $storeid))}">添加优惠资讯</a></li>
-	<li {if $operation == 'display' || empty($operation)}class="active"{/if}><a href="{php echo $this->createWebUrl('news', array('op' => 'display', 'storeid' => $storeid))}">管理优惠资讯</a></li>
-</ul>
+{php echo $this -> set_tabbar($action, $storeid);}
 {if $operation == 'display'}
 <div class="main">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <a class="btn btn-default" href="{php echo $this->createWebUrl('news', array('op' => 'post', 'storeid' => $storeid))}"><i class="fa fa-plus"></i>添加优惠资讯</a>
+        </div>
+    </div>
 <div class="panel panel-default">
     <form action="" method="post" class="form-horizontal form">
         <div class="table-responsive panel-body">

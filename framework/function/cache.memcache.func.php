@@ -54,11 +54,12 @@ function cache_write($key, $value, $ttl = 0) {
 	if (is_error($memcache)) {
 		return $memcache;
 	}
+	$record = array();
+	$record['key'] = $key;
+	$record['value'] = iserializer($value);
+	pdo_insert('core_cache', $record, true);
+	
 	if ($memcache->set(cache_prefix($key), $value, MEMCACHE_COMPRESSED, $ttl)) {
-		$record = array();
-		$record['key'] = $key;
-		$record['value'] = iserializer($value);
-		pdo_insert('core_cache', $record, true);
 		return true;
 	} else {
 		return false;

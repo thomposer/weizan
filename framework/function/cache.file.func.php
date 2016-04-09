@@ -1,38 +1,45 @@
 <?php 
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
+load()->func('file');
+define('CACHE_FILE_PATH', IA_ROOT . '/data/cache/');
 
-
-
-function cache_get($file, $dir = '', $include = true) {
-	$file = $dir ? "{$GLOBALS['config']['cache']['dir']}/{$dir}/{$file}" : "{$GLOBALS['config']['cache']['dir']}/{$file}";
-	if (!is_file($file)) {
+function cache_read($key, $dir = '', $include = true) {
+	$key = str_replace(':', '@', $key);
+	$key = CACHE_FILE_PATH . $key;
+	if (!is_file($key)) {
 		return array();
 	}
-	return $include ? include $file : file_get_contents($file);
+	return $include ? include $key : file_get_contents($key);
 }
 
-
-function cache_set($file, $data, $dir = '') {
-	if (!is_string($data)) {
-		$data = "<?php \r\ndefined('CURRENT_VERSION') or exit('Access Denied');\r\nreturn " . var_export($data, true) . ';';
+function cache_write($key, $data, $dir = '') {
+	global $_W;
+	if (empty($key) || !isset($data)) {
+		return false;
 	}
-	$file = $dir ? "{$GLOBALS['config']['cache']['dir']}/{$dir}/{$file}" : "{$GLOBALS['config']['cache']['dir']}/{$file}";
-	return file_write($file, $data);
+	$key = str_replace(':', '@', $key);
+	if (!is_string($data)) {
+		$data = "<?php \r\ndefined('IN_IA') or exit('Access Denied');\r\nreturn " . var_export($data, true) . ';';
+	}
+	$key = CACHE_FILE_PATH . $key;
+	mkdirs(dirname($key));
+	file_put_contents($key, $data);
+	@chmod($key, $_W['config']['setting']['filemode']);
+	return is_file($key);
 }
 
-
-function cache_delete($file, $dir = '') {
-	$file = $dir ? "{$GLOBALS['config']['cache']['dir']}/{$dir}/{$file}" : "{$GLOBALS['config']['cache']['dir']}/{$file}";
-	@unlink($file);
+function cache_delete($key, $dir = '') {
+	$key = str_replace(':', '@', $key);
+	$key = CACHE_FILE_PATH . $key;
+	return file_delete($key);
 }
 
 
 function cache_clean($dir = '') {
-	$dir = $dir ? "{$GLOBALS['config']['cache']['dir']}/{$dir}" : "{$GLOBALS['config']['cache']['dir']}";
-	rmdirs($dir, true);
+	return rmdirs(CACHE_FILE_PATH, true);
 }

@@ -450,6 +450,7 @@ if (!function_exists('uni_setting')) {
 	}
 }
 
+
 function uni_account_default($uniacid = 0) {
 	global $_W;
 	$uniacid = empty($uniacid) ? $_W['uniacid'] : intval($uniacid);
@@ -569,11 +570,6 @@ function uni_user_module_permission_check($action = '', $module_name = '') {
 
 function uni_update_week_stat() {
 	global $_W;
-	$cachekey = "stat:todaylock:{$_W['uniacid']}";
-	$cache = cache_load($cachekey);
-	if (!empty($cache) && $cache['expire'] > TIMESTAMP) {
-		return true;
-	}
 	$seven_days = array(
 		date('Ymd', strtotime('-1 days')),
 		date('Ymd', strtotime('-2 days')),
@@ -589,7 +585,9 @@ function uni_update_week_stat() {
 		if($_W['account']['level'] == ACCOUNT_SUBSCRIPTION_VERIFY || $_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
 			$account_obj = WeAccount::create();
 			$weixin_stat = $account_obj->getFansStat();
-			if(!is_error($weixin_stat) && !empty($weixin_stat)) {
+			if(is_error($weixin_stat) || empty($weixin_stat)) {
+				return error(-1, '调用微信接口错误');
+			} else {
 				$update_stat = array();
 				$update_stat = array(
 					'uniacid' => $_W['uniacid'],
@@ -609,11 +607,10 @@ function uni_update_week_stat() {
 		}
 		if(empty($arr[$sevens])) {
 			pdo_insert('stat_fans', $update_stat);
-		} elseif (empty($arr[$sevens]['cumulate'])) {
+		} elseif (empty($arr[$sevens]['cumulate']) || $arr[$sevens]['cumulate'] < 0) {
 			pdo_update('stat_fans', $update_stat, array('id' => $arr[$sevens]['id']));
 		}
 	}
-	cache_write($cachekey, array('expire' => strtotime(date('Y-m-d')) + 86399));
 	return true;
 }
 

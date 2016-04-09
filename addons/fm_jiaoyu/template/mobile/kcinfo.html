@@ -67,11 +67,11 @@
             <dt>课程表</dt>
             <div>
 			{loop $list $item}
-                      <dd class="{if $item['date'] > TIMESTAMP}click{/if}">第<span>{$item['nub']}</span>节<br/>{php echo date('m/d',$item['date'])}</dd>           
+                      <dd class="{if $item['date'] > TIMESTAMP}click{/if}">第<span>{$item['nub']}</span>课<br/>{php echo date('m月d',$item['date'])}</br>{if !empty($category[$item['sd_id']])}{$category[$item['sd_id']]['sname']}{/if}</dd>           
 			{/loop}
                                 <div style="clear:both"></div>
             </div>
-
+        </dl>
         <!--section class="mask" style="display:none">
             <div class="dialog" id="dialog_fisrt">
                 <div class="dialog_close"></div>

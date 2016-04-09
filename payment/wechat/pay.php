@@ -68,8 +68,8 @@ $row = pdo_fetch($sql, array(':acid' => $wechat['account']));
 $wechat['appid'] = $row['key'];
 $wechat['secret'] = $row['secret'];
 $params = array(
-	'tid' => $log['plid'],
-	'fee' => $log['fee'],
+	'tid' => $log['tid'],
+	'fee' => $log['card_fee'],
 	'user' => $log['openid'],
 	'title' => $params['title'],
 	'uniontid' => $log['uniontid'],

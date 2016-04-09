@@ -239,9 +239,9 @@ class WeiZan {
 				echo json_encode(array('resp' => $resp, 'process' => $process));
 				exit();
 			}
-			ob_start();
 			echo $resp;
-			ob_start();
+			ob_flush();
+			flush();
 			$this->receive($hitParam, $hitKeyword, $response);
 			ob_end_clean();
 			exit();

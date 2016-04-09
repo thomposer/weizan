@@ -134,38 +134,43 @@ if ($do == 'display') {
 		}
 	}
 	$pindex = max(1, intval($_GPC['page']));
-	$psize = 20;
-	$condition = ' WHERE `uniacid`=:uniacid AND `acid`=:acid';
+	$psize = 50;
+	$condition = " WHERE `uniacid` = :uniacid AND `acid` = :acid";
 	$pars = array();
 	$pars[':uniacid'] = $_W['uniacid'];
 	$pars[':acid'] = $_W['acid'];
+	
 	if($_GPC['type'] == 'bind') {
-		$condition .= ' AND `uid`>0';
+		$condition .= ' AND `uid` > 0';
 		$type = 'bind';
-	}
-	if($_GPC['type'] == 'unbind') {
-		$condition .= ' AND `uid`=0';
+	} elseif($_GPC['type'] == 'unbind') {
+		$condition .= ' AND `uid` = 0';
 		$type = 'unbind';
 	}
 	$nickname = trim($_GPC['nickname']);
 	if(!empty($nickname)) {
-		$condition .= " AND ((nickname LIKE '%{$nickname}%') OR (`openid`='{$nickname}'))";
+		$condition .= " AND ((nickname LIKE '%{$nickname}%') OR (`openid` = '{$nickname}'))";
 	}
-	$starttime = empty($_GPC['time']['start']) ? strtotime('-60 days') : strtotime($_GPC['time']['start']);
-	$endtime = empty($_GPC['time']['end']) ? TIMESTAMP + 86399 : strtotime($_GPC['time']['end']) + 86399;
+	if (!empty($_GPC['time']['start'])) {
+		$starttime = strtotime($_GPC['time']['start']);
+		$endtime = strtotime($_GPC['time']['end']) + 86399;
+		$pars[':starttime'] = $starttime;
+		$pars[':endtime'] = $endtime;
+	}
 	$follow = intval($_GPC['follow']) ? intval($_GPC['follow']) : 1;
-	if(!$follow) {
+	if($follow == 1) {
 		$orderby = ' ORDER BY followtime DESC';
-		$condition .= ' AND ((followtime >= :starttime AND followtime <= :endtime) OR (unfollowtime >= :starttime AND unfollowtime <= :endtime))';
-	} elseif($follow == 1) {
-		$orderby = ' ORDER BY followtime DESC';
-		$condition .= ' AND follow = 1 AND followtime >= :starttime AND followtime <= :endtime';
-	} elseif($follow == 2) {
+		$condition .= ' AND follow = 1';
+		if (!empty($starttime)) {
+			$condition .= ' AND followtime >= :starttime AND followtime <= :endtime';
+		}
+	} elseif ($follow == 2) {
 		$orderby = ' ORDER BY unfollowtime DESC';
-		$condition .= ' AND follow = 0 AND unfollowtime >= :starttime AND unfollowtime <= :endtime';
+		$condition .= ' AND follow = 0';
+		if (!empty($starttime)) {
+			$condition .= ' AND followtime >= :starttime AND followtime <= :endtime';
+		}
 	}
-	$pars[':starttime'] = $starttime;
-	$pars[':endtime'] = $endtime;
 	$fans_group = pdo_fetch('SELECT * FROM ' . tablename('mc_fans_groups') . ' WHERE uniacid = :uniacid AND acid = :acid', array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid']));
 	$fans_group = iunserializer($fans_group['groups']);
 	$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('mc_mapping_fans').$condition, $pars);
@@ -220,8 +225,7 @@ if ($do == 'display') {
 		}
 	}
 	$pager = pagination($total, $pindex, $psize);
-	$fans['follow'] = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . ' WHERE uniacid = :uniacid AND follow = 1 AND acid = :acid AND followtime >= :starttime AND followtime <= :endtime', array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid'], ':starttime' => $starttime, ':endtime' => $endtime));
-	$fans['unfollow'] = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . ' WHERE uniacid = :uniacid AND unfollowtime <> 0 AND follow <> 1 AND acid = :acid AND unfollowtime >= :starttime AND unfollowtime <= :endtime', array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid'], ':starttime' => $starttime, ':endtime' => $endtime));
+	$fans['total'] = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . ' WHERE uniacid = :uniacid AND acid = :acid AND follow = 1', array(':uniacid' => $_W['uniacid'], ':acid' => $_W['acid']));
 }
 
 if($do == 'view') {

@@ -8,7 +8,9 @@
 				&nbsp;&nbsp;{$_W['setting']['copyright']['statcode']}
 			</div>
 		{/if}
-		{data func="site_quickmenu"}{/data}
+		{if (($_GPC['a'] != 'card' || $_GPC['c'] != 'mc') && ($_GPC['a'] != 'token' || $_GPC['c'] != 'activity') && ($_GPC['a'] != 'goods' || $_GPC['c'] != 'activity') && ($_GPC['a'] != 'coupon' || $_GPC['c'] != 'activity') && $_GPC['m'] != 'paycenter')}
+			{data func="site_quickmenu"}{/data}
+		{/if}
 		<script>require(['bootstrap']);</script>
 	</div>
 	<style>
@@ -35,11 +37,8 @@
 	}
 ?>
 	<script type="text/javascript">
-	
 	wx.config(jssdkconfig);
-	
 	var $_share = {php echo json_encode($_share);};
-	
 	if(typeof sharedata == 'undefined'){
 		sharedata = $_share;
 	} else {
@@ -48,39 +47,20 @@
 		sharedata['link'] = sharedata['link'] || $_share['link'];
 		sharedata['imgUrl'] = sharedata['imgUrl'] || $_share['imgUrl'];
 	}
-
-	function tomedia(src) {
-		if(typeof src != 'string')
-			return '';
-		if(src.indexOf('http://') == 0 || src.indexOf('https://') == 0) {
-			return src;
-		} else if(src.indexOf('../addons') == 0 || src.indexOf('../attachment') == 0) {
-			src=src.substr(3);
-			return window.sysinfo.siteroot + src;
-		} else if(src.indexOf('./resource') == 0) {
-			src=src.substr(2);
-			return window.sysinfo.siteroot + 'app/' + src;
-		} else if(src.indexOf('images/') == 0) {
-			return window.sysinfo.attachurl+ src;
-		}
-	}
-	
 	if(sharedata.imgUrl == ''){
 		var _share_img = $('body img:eq(0)').attr("src");
 		if(_share_img == ""){
 			sharedata['imgUrl'] = window.sysinfo.attachurl + 'images/global/wechat_share.png';
 		} else {
-			sharedata['imgUrl'] = tomedia(_share_img);
+			sharedata['imgUrl'] = util.tomedia(_share_img);
 		}
 	}
-	
 	if(sharedata.desc == ''){
-		var _share_content = _removeHTMLTag($('body').html());
+		var _share_content = util.removeHTMLTag($('body').html());
 		if(typeof _share_content == 'string'){
 			sharedata.desc = _share_content.replace($_share['title'], '')
 		}
 	}
-	
 	wx.ready(function () {
 		wx.onMenuShareAppMessage(sharedata);
 		wx.onMenuShareTimeline(sharedata);
@@ -110,8 +90,6 @@
 			$('body').css("padding-bottom", "0");
 		}
 	});
-
-
 	</script>
 </body>
 </html>

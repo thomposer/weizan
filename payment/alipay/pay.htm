@@ -87,10 +87,6 @@
 		var iframe = document.getElementById('alipayFrame');
 		iframe.src = _AP.decode(param);
 	}
-	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-		WeixinJSBridge.call('hideToolbar');
-		WeixinJSBridge.call('showOptionMenu');
-	});
 </script>
 </body>
 </html>

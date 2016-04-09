@@ -11,9 +11,9 @@ $do = in_array($do, array('display', 'post', 'delete', 'fetch', 'check')) ? $do 
 if ($do == 'display') {
 	if (!empty($_GPC['displayorder'])) {
 		foreach ($_GPC['displayorder'] as $id => $displayorder) {
-			$update = array('displayorder' => $displayorder);
+			$update = array('displayorder' => $displayorder['displayorder']);
 			pdo_update('site_category', $update, array('id' => $id));
-						pdo_update('site_nav', $update, array('uniacid' => $_W['uniacid'], 'categoryid' => $id));
+						pdo_update('site_nav', $update, array('uniacid' => $_W['uniacid'], 'id' => $displayorder['nid']));
 		}
 		message('分类排序更新成功！', 'refresh', 'success');
 	}

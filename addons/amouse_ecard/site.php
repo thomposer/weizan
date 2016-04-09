@@ -229,31 +229,81 @@ class Amouse_ecardModuleSite extends WeModuleSite{
     }
 
     //上传图片
-    function tpl_form_field_icon_image($name, $value){
-        $thumb = empty($value) ? 'images/global/nopic.jpg' : $value;
-        $thumb = tomedia($thumb);
-        $html = <<<EOF
-<input type="hidden" name="$name" value="$value"  autocomplete="off" readonly="readonly">
-<a class="upload-btn" href="#"><i class="ico-upload" onclick="appupload(this)"></i></a>
-<div class="row">
-<a class="sync-btn" href=""><label for="headUpload">
-<img width="120px" class="fillIn-avatar-thumbnail"  src="$thumb">
-</label></a>
-</div>
-<script>
-window.appupload = window.appupload || function(obj){
-require(['jquery', 'util'], function($, u){
-    u.image(obj, function(src){
-        $(obj).parent().prev().val(src);
-        $(obj).parent().next().find('img').attr('src',u.tomedia(src));
-    });
-});
+function tpl_form_field_icon_image($name, $value = '', $default = '', $options = array()) {
+	global $_W;
+	if (empty($default)) {
+		$default = 'images/global/nopic.jpg';
+	}
+	$val = $default;
+	if (!empty($value)) {
+		$val = tomedia($value);
+	}
+	if (!empty($options['global'])) {
+		$options['global'] = true;
+	} else {
+		$options['global'] = false;
+	}
+	if (empty($options['class_extra'])) {
+		$options['class_extra'] = '';
+	}
+	if (isset($options['dest_dir']) && !empty($options['dest_dir'])) {
+		if (!preg_match('/^\w+([\/]\w+)?$/i', $options['dest_dir'])) {
+			exit('图片上传目录错误,只能指定最多两级目录,如: "WZ_store","WZ_store/d1"');
+		}
+	}
+	$options['direct'] = true;
+	$options['multiple'] = false;
+	if (isset($options['thumb'])) {
+		$options['thumb'] = !empty($options['thumb']);
+	}
+	$s = '';
+	if (!defined('TPL_INIT_IMAGE')) {
+		$s = '
+		<script type="text/javascript">
+			function showImageDialog(elm, opts, options) {
+				require(["util"], function(util){
+					var btn = $(elm);
+					var ipt = btn.parent().prev();
+					var val = ipt.val();
+					var img = ipt.parent().next().children();
+					options = '.str_replace('"', '\'', json_encode($options)).';
+					util.image(val, function(url){
+						if(url.url){
+							if(img.length > 0){
+								img.get(0).src = url.url;
+							}
+							ipt.val(url.attachment);
+							ipt.attr("filename",url.filename);
+							ipt.attr("url",url.url);
+						}
+						if(url.media_id){
+							if(img.length > 0){
+								img.get(0).src = "";
+							}
+							ipt.val(url.media_id);
+						}
+					}, null, options);
+				});
+			}
+			function deleteImage(elm){
+				require(["jquery"], function($){
+					$(elm).prev().attr("src", "./resource/images/nopic.jpg");
+					$(elm).parent().prev().find("input").val("");
+				});
+			}
+		</script>';
+		define('TPL_INIT_IMAGE', true);
+	}
+	$s .= '
+		<div class="ico">
+		<input type="hidden" name="' . $name . '" value="' . $value . '"' . ($options['extras']['text'] ? $options['extras']['text'] : '') . '  autocomplete="off" readonly="readonly">
+		<a class="upload-btn" href="#"><i class="ico-upload" onclick="showImageDialog(this);"></i></a>
+		</div>
+		<div class="ico row">
+			<img width="120px" class="sync-btn fillIn-avatar-thumbnail" src="' . $val . '" onerror="this.src=\'' . $default . '\'; this.title=\'图片未找到.\'"  ' . ($options['extras']['image'] ? $options['extras']['image'] : '') . ' />
+		</div>';
+	return $s;
 }
-</script>
-EOF;
-        return $html;
-    }
-
 
 
     //后台管理程序 web文件夹下

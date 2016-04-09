@@ -95,6 +95,9 @@
 	<div class="alert alert-info">
 		如果您的公众号类型为："认证订阅号" 或 "认证服务号",您可以使用粉丝分组功能。点击这里 <a href="{php echo url('mc/fangroup')}">"同步粉丝分组"</a>
 	</div>
+	<div class="alert alert-info">
+		粉丝共:<strong class="text-danger">{$fans['total']}</strong>人<br>
+	</div>
 	<div class="panel panel-info">
 		<div class="panel-heading">筛选</div>
 		<div class="panel-body">
@@ -135,7 +138,7 @@
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">关注/取消关注时间</label>
 					<div class="col-sm-9 col-md-8 col-lg-8 col-xs-12">
-						{php echo tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d', $starttime),'endtime'=>date('Y-m-d', $endtime)));}
+						{php echo tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d', $starttime ? $starttime : strtotime('now - 6days')),'endtime'=>date('Y-m-d', $endtime ? $endtime : strtotime('now'))));}
 					</div>
 					<div class="pull-right col-xs-12 col-sm-3 col-md-2 col-lg-2">
 						<button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
@@ -143,9 +146,6 @@
 				</div>
 			</form>
 		</div>
-	</div>
-	<div class="alert alert-info">
-		<i class="fa fa-info-circle"></i>当前搜索时间段:关注人数:<strong class="text-danger">{$fans['follow']}</strong>。取消关注人数:<strong class="text-danger">{$fans['unfollow']}</strong>。<br>
 	</div>
 	<form action="?{$_SERVER['QUERY_STRING']}" method="post" id="form1">
 	<div class="panel panel-default">

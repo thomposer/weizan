@@ -24,7 +24,7 @@ function clerk_permission_list() {
 			'permission' => 'mc_manage',
 			'items' => array(
 				array(
-					'title' => '会员积分修改',
+					'title' => '积分充值',
 					'permission' => 'mc_credit1',
 					'icon' => 'fa fa-money',
 					'type' => 'modal',
@@ -32,7 +32,7 @@ function clerk_permission_list() {
 					'data' => 'credit1',
 				),
 				array(
-					'title' => '会员余额修改',
+					'title' => '余额充值',
 					'permission' => 'mc_credit2',
 					'icon' => 'fa fa-cny',
 					'type' => 'modal',
@@ -63,14 +63,14 @@ function clerk_permission_list() {
 			'permission' => 'stat_manage',
 			'items' => array(
 				array(
-					'title' => '会员积分统计',
+					'title' => '积分统计',
 					'permission' => 'stat_credit1',
 					'icon' => 'fa fa-bar-chart',
 					'type' => 'url',
 					'url' => './index.php?c=stat&a=credit1'
 				),
 				array(
-					'title' => '会员余额统计',
+					'title' => '余额统计',
 					'permission' => 'stat_credit2',
 					'icon' => 'fa fa-bar-chart',
 					'type' => 'url',
@@ -84,11 +84,18 @@ function clerk_permission_list() {
 					'url' => './index.php?c=stat&a=cash'
 				),
 				array(
-					'title' => '会员卡领卡统计',
+					'title' => '会员卡统计',
 					'permission' => 'stat_card',
 					'icon' => 'fa fa-bar-chart',
 					'type' => 'url',
 					'url' => './index.php?c=stat&a=card'
+				),
+				array(
+					'title' => '收银台收款统计',
+					'permission' => 'stat_paycenter',
+					'icon' => 'fa fa-bar-chart',
+					'type' => 'url',
+					'url' => './index.php?c=stat&a=paycenter'
 				),
 			)
 		),
@@ -124,6 +131,20 @@ function clerk_permission_list() {
 					'icon' => 'fa fa-money',
 					'type' => 'url',
 					'url' => './index.php?c=wechat&a=consume'
+				)
+			)
+		),
+
+		'paycenter' => array(
+			'title' => '收银台',
+			'permission' => 'paycenter_manage',
+			'items' => array(
+				array(
+					'title' => '微信刷卡收款',
+					'permission' => 'paycenter_wxmicro_pay',
+					'icon' => 'fa fa-money',
+					'type' => 'url',
+					'url' => './index.php?c=paycenter&a=wxmicro&do=pay'
 				)
 			)
 		),

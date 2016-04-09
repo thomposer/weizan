@@ -1,7 +1,7 @@
 <?php
 class ShowApiSdk{
-	static $showapi_appid = '2562';
-	static $showapi_sign = 'a2b24d2ad58f4480af0b5ae048e0a9c2';
+    static $showapi_appid = '9958';
+    static $showapi_sign = '9fc7866fc5f14196859b38002f42b24f';
 	static function createSign ($paramArr) {
 		$sign = "";
 		ksort($paramArr);

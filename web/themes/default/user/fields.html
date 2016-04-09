@@ -5,7 +5,6 @@
 	<li class="active">字段管理</li>
 </ol>
 <ul class="nav nav-tabs">
-	<li><a href="{php echo url('user/registerset');}">注册选项</a></li>
 	<li {if $do == 'display'}class="active"{/if}><a href="{url 'user/fields'}">字段管理</a></li>
 	<li {if empty($id) && $do == 'post'}class="active"{/if}><a href="{url 'user/fields/post'}">添加字段</a></li>
 	{if !empty($id) && $do == 'post'}<li class="active"><a href="{php echo url('user/fields/post', array('id' => $id));}">编辑字段</a></li>{/if}
@@ -61,7 +60,17 @@
 		<div class="form-group">
 			<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">字段</label>
 			<div class="col-sm-10 col-xs-12">
-				<input type="text" class="form-control" name="field"  value="{$item['field']}" {if !empty($item['field'])}disabled{/if}>
+				<input type="text" class="form-control" name="field"  value="{$item['field']}" {if !empty($item['field'])}readonly{/if}>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">字段长度</label>
+			<div class="col-sm-10 col-xs-12">
+				<select class="form-control" name="length" >
+					<option value="64" {if $item['field_length'] == 64}selected{/if}>64</option>
+					<option value="128" {if $item['field_length'] == 128}selected{/if}>128</option>
+					<option value="255" {if $item['field_length'] == 255}selected{/if}>255</option>
+				</select>
 			</div>
 		</div>
 		<div class="form-group">

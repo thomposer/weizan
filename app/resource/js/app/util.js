@@ -1,32 +1,39 @@
-define(['bootstrap', 'webuploader' ], function($, WebUploader){
+(function(window) {
 	var module = {};
-	
-	module.querystring = function(name){ 
-		var result = location.search.match(new RegExp("[\?\&]" + name+ "=([^\&]+)","i")); 
-		if (result == null || result.length < 1){ 
+
+	module.querystring = function(name){
+		var result = location.search.match(new RegExp("[\?\&]" + name+ "=([^\&]+)","i"));
+		if (result == null || result.length < 1){
 			return "";
 		}
-		return result[1]; 
+		return result[1];
 	}
-	
-	module.tomedia = function(src, local_path){
-		if(src.indexOf('http://') == 0 || src.indexOf('https://') == 0) {
-			return src;
-		} else if(src.indexOf('../addons') == 0 || src.indexOf('../attachment') == 0) {
-			src=src.substr(3);
-			return window.sysinfo.siteroot + src;
-		} else if(src.indexOf('./resource') == 0) {
-			src=src.substr(2);
-			return window.sysinfo.siteroot + 'app/' + src;
-		} else if(src.indexOf('images/') == 0) {
-			if(!local_path) {
-				return window.sysinfo.attachurl.src;
-			} else {
-				return window.sysinfo.attachurl_local.src;
-			}
+
+	module.tomedia = function(src, forcelocal){
+		if(!src) {
+			return '';
 		}
+		if(src.indexOf('./addons') == 0) {
+			return window.sysinfo.siteroot + src.replace('./', '');
+		}
+		if(src.indexOf(window.sysinfo.siteroot) != -1 && src.indexOf('/addons/') == -1) {
+			src = src.substr(src.indexOf('images/'));
+		}
+		if(src.indexOf('./resource') == 0) {
+			src = 'app/' + src.substr(2);
+		}
+		var t = src.toLowerCase();
+		if(t.indexOf('http://') != -1 || t.indexOf('https://') != -1 ) {
+			return src;
+		}
+		if(forcelocal || !window.sysinfo.attachurl_remote) {
+			src = window.sysinfo.attachurl_local + src;
+		} else {
+			src = window.sysinfo.attachurl_remote + src;
+		}
+		return src;
 	};
-	
+
 	module.dialog = function(title, content, footer, options) {
 		if(!options) {
 			options = {};
@@ -296,75 +303,77 @@ define(['bootstrap', 'webuploader' ], function($, WebUploader){
 	};
 	
 	module.image = function(obj, callback, options) {
-		var content = 
-			'<div id="uploader" class="uploader app"> '+
-			'	<div class="queueList">'+
-			'		<div id="dndArea" class="placeholder">'+
-			'			<div id="filePicker"></div>'+
-			'		</div>'+
-			'	</div>'+
-			'</div>';
-		var footer = '<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>';
-		var modalobj = module.dialog('请上传图片', content, footer, {containerName: 'image-container'});
-		
-		modalobj.modal({'keyboard': false});
-		modalobj.find('button.btn-primary').off('click');
-		modalobj.find('button.btn-primary').on('click', function(){
-			modalobj.modal('hide');
-		});
-		var i = module.querystring('i');
-		var j = module.querystring('j');
-		
-		defaultOptions = {
-			pick: {
-				id: '#filePicker',
-				label: '点击选择图片',
-				multiple : false
-			},
-			auto: true,
-			swf: './resource/componets/webuploader/Uploader.swf',
-			server: './index.php?i='+i+'&j='+j+'&c=utility&a=file&do=upload&type=image',
-			chunked: false,
-			compress: false,
-			fileNumLimit: 1,
-			fileSizeLimit: 4 * 1024 * 1024,
-			fileSingleSizeLimit: 4 * 1024 * 1024
-		};
-		if (module.agent() == 'android') {
-			defaultOptions.sendAsBinary = true;
-		}
-		options = $.extend({}, defaultOptions, options);
-		
-		var uploader = WebUploader.create(options);
-		uploader.on( 'fileQueued', function( file ) {
-			module.loading();
-		});
-		uploader.on('uploadSuccess', function(file, result) {
-			if(result.error && result.error.message){
-				require(['util'], function(u){
-					module.loaded();
-					u.message(result.error.message);
-				});
-			} else {
-				if($.isFunction(callback)){
-					callback(result);
-				}
-				uploader.reset();
-				module.loaded();
+		require(['webuploader'], function(WebUploader){
+			var content = 
+				'<div id="uploader" class="uploader app"> '+
+				'	<div class="queueList">'+
+				'		<div id="dndArea" class="placeholder">'+
+				'			<div id="filePicker"></div>'+
+				'		</div>'+
+				'	</div>'+
+				'</div>';
+			var footer = '<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>';
+			var modalobj = module.dialog('请上传图片', content, footer, {containerName: 'image-container'});
+			
+			modalobj.modal({'keyboard': false});
+			modalobj.find('button.btn-primary').off('click');
+			modalobj.find('button.btn-primary').on('click', function(){
 				modalobj.modal('hide');
+			});
+			var i = module.querystring('i');
+			var j = module.querystring('j');
+			
+			defaultOptions = {
+				pick: {
+					id: '#filePicker',
+					label: '点击选择图片',
+					multiple : false
+				},
+				auto: true,
+				swf: './resource/componets/webuploader/Uploader.swf',
+				server: './index.php?i='+i+'&j='+j+'&c=utility&a=file&do=upload&type=image',
+				chunked: false,
+				compress: false,
+				fileNumLimit: 1,
+				fileSizeLimit: 4 * 1024 * 1024,
+				fileSingleSizeLimit: 4 * 1024 * 1024
+			};
+			if (module.agent() == 'android') {
+				defaultOptions.sendAsBinary = true;
 			}
+			options = $.extend({}, defaultOptions, options);
+			
+			var uploader = WebUploader.create(options);
+			uploader.on( 'fileQueued', function( file ) {
+				module.loading();
+			});
+			uploader.on('uploadSuccess', function(file, result) {
+				if(result.error && result.error.message){
+					require(['util'], function(u){
+						module.loaded();
+						u.message(result.error.message);
+					});
+				} else {
+					if($.isFunction(callback)){
+						callback(result);
+					}
+					uploader.reset();
+					module.loaded();
+					modalobj.modal('hide');
+				}
+			});
+			uploader.onError = function( code ) {
+				modalobj.modal('hide');
+				uploader.reset();
+				if(code == 'Q_EXCEED_SIZE_LIMIT'){
+					alert('错误信息: 图片大于 4M 无法上传.');
+					return
+				}
+				alert('错误信息: ' + code );
+			};
+			
+			return modalobj;
 		});
-		uploader.onError = function( code ) {
-			modalobj.modal('hide');
-			uploader.reset();
-			if(code == 'Q_EXCEED_SIZE_LIMIT'){
-				alert('错误信息: 图片大于 4M 无法上传.');
-				return
-			}
-			alert('错误信息: ' + code );
-		};
-		
-		return modalobj;
 	}; // end of image
 	
 	module.loading = function() {
@@ -449,6 +458,23 @@ define(['bootstrap', 'webuploader' ], function($, WebUploader){
 			return 'unknown'
 		}
 	};
-	return module;
-});
 
+	module.removeHTMLTag = function(str) {
+		if(typeof str == 'string'){
+			str = str.replace(/<script[^>]*?>[\s\S]*?<\/script>/g,'');
+			str = str.replace(/<style[^>]*?>[\s\S]*?<\/style>/g,'');
+			str = str.replace(/<\/?[^>]*>/g,'');
+			str = str.replace(/\s+/g,'');
+			str = str.replace(/&nbsp;/ig,'');
+			return str;
+		}
+	};
+
+	if (typeof define === "function" && define.amd) {
+		define(['bootstrap', 'webuploader'], function($){
+			return module;
+		});
+	} else {
+		window.util = module;
+	}
+})(window);

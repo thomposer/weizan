@@ -19,7 +19,7 @@
 		<input type="checkbox" name="flag" value="1" {if intval($setting['status'])==1} checked="checked" {/if} data="{$setting['id']}"/>
 	</div>
 </div>
-
+{if empty($setting) || $setting['status'] == 1}
 <form action="" method="post">
 	<div class="usercard shopNav" ng-controller="commonCtrl">
 		<div class="app clearfix" ng-controller="userCardCtrl">
@@ -79,6 +79,7 @@
 		</div>
 	</div>
 </form>
+{/if}
 {php echo tpl_ueditor('')}
 <script type="text/javascript">
 	$(function(){

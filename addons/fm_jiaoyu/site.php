@@ -5,6 +5,7 @@
  * @author 高贵血迹
  */
 defined ( 'IN_IA' ) or exit ( 'Access Denied' );
+define('OSSURL', '../addons/fm_jiaoyu/');
 class Fm_jiaoyuModuleSite extends WeModuleSite {
 	
 	// ===============================================

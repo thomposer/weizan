@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -11,7 +11,6 @@ $account = account_fetch($acid);
 if(empty($account)) {
 	message('公众号不存在或已被删除', '', 'error');
 }
-uni_update_week_stat();
 $_W['page']['title'] = $account['name'] . ' - 公众号详细信息';
 $starttime = $_GPC['datelimit']['start'] ? strtotime($_GPC['datelimit']['start']) : strtotime('-7day');
 $endtime = $_GPC['datelimit']['end'] ? strtotime($_GPC['datelimit']['end']) : strtotime(date('Ymd'));
@@ -24,6 +23,7 @@ if($_W['isajax']) {
 	$datasets = array();
 	$starttime = $_GPC['starttime'] ? date('Ymd', $_GPC['starttime']) : date('Ymd', strtotime('-7day'));
 	$endtime = $_GPC['endtime'] ? date('Ymd', $_GPC['endtime']) : date('Ymd');
+	$starttime = $starttime == $endtime ? date('Ymd', strtotime('-1 day', strtotime($starttime))): $starttime;
 	$stat = pdo_fetchall("SELECT * FROM ".tablename('stat_fans')." WHERE date >= '$starttime' AND date <= '$endtime' AND uniacid = '{$_W['uniacid']}' ORDER BY date ASC", array(), 'date');
 	for ($i = strtotime($starttime); $i <= strtotime($endtime); $i+=86400) {
 		$day = date('Ymd', $i);
@@ -43,5 +43,7 @@ $scroll = intval($_GPC['scroll']);
 $yesterday_stat = pdo_get('stat_fans', array('date' => $yesterday, 'uniacid' => $_W['uniacid']));
 $today_stat = pdo_get('stat_fans', array('date' => date('Ymd'), 'uniacid' => $_W['uniacid']));
 $today_stat['cumulate'] = intval($yesterday_stat['cumulate']) + intval($today_stat['new']) - intval($today_stat['cancel']);
-
+if($today_stat['cumulate'] < 0) {
+	$today_stat['cumulate'] = 0;
+}
 template('account/summary');

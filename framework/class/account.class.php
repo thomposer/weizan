@@ -1017,7 +1017,21 @@ abstract class WeModuleSite extends WeBase {
 
 		$sql = 'SELECT * FROM ' . tablename('core_paylog') . ' WHERE `uniacid`=:uniacid AND `module`=:module AND `tid`=:tid';
 		$log = pdo_fetch($sql, $pars);
-		if(!empty($log) && $log['status'] == '1') {
+		if (empty($log)) {
+			$log = array(
+				'uniacid' => $_W['uniacid'],
+				'acid' => $_W['acid'],
+				'openid' => $_W['member']['uid'],
+				'module' => $this->module['name'],
+				'tid' => $params['tid'],
+				'fee' => $params['fee'],
+				'card_fee' => $params['fee'],
+				'status' => '0',
+				'is_usecard' => '0',
+			);
+			pdo_insert('core_paylog', $log);
+		}
+		if($log['status'] == '1') {
 			message('这个订单已经支付成功, 不需要重复支付.');
 		}
 		$setting = uni_setting($_W['uniacid'], array('payment', 'creditbehaviors'));

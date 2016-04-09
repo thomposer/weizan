@@ -22,14 +22,6 @@
 		<script type="text/javascript" src="{OSSURL}public/mobile/js/swipe.js?{php echo time()}"></script>
 </head>
 <body>
-    <div class="saoma_info" id="saoma_info01" style="display:none;">
-	   <div>
-           <img src="{if !empty($category[$students['bj_id']])}{$_W['attachurl']}{$category[$students['bj_id']]['erwei']}{else}{OSSURL}public/mobile/img/ico_attention.png{/if}">
-		
-		   <p>{if !empty($category[$students['bj_id']]['erwei'])}长按可以识别加入班级微信群{else}您所在班级还未上传群二维码哦{/if}</p>
-		   <span id="span_cha">×</span>
-	   </div>
-    </div>
     <div class="user_info" id="user_info" style="display:none;">
 	   <div>
                     <ul>
@@ -73,12 +65,12 @@
                     <li class="li_gg"><a href="{php echo $this->createMobileUrl('snoticelist', array('schoolid' => $schoolid), true)}"><p>通知</p></a></li>
                     <li class="li_rank"><a href="{php echo $this->createMobileUrl('xsqj', array('schoolid' => $schoolid), true)}" id="rank"><p>请假</p></a></li>
                     <li class="li_qq"><a href="{if !empty($category[$students['bj_id']])}{$category[$students['bj_id']]['qun']}{else}#{/if}" id="A1"><p>Q群</p></a></li>
-                    <li class="li_weixin"><a href="#" id="saoma"><p>微群</p></a></li>
+                    <li class="li_weixin"><a href="{php echo $this->createMobileUrl('szuoyelist', array('schoolid' => $schoolid), true)}"><p>作业</p></a></li>
                 </ul>
         </div>
         <section class="user">
             <a href="{php echo $this->createMobileUrl('myinfo', array('schoolid' => $schoolid, 'sid' => $students['id']), true)}" class="my_inf">学生基本信息</a>
-            <a href="{php echo $this->createMobileUrl('myclass', array('schoolid' => $schoolid, 'bj_id' => $students['bj_id'], 'xq_id' => $students['xq_id']), true)}" class="my_count">学生在读班级</a>
+            <a href="{php echo $this->createMobileUrl('myclass', array('schoolid' => $schoolid, 'bj_id' => $students['bj_id'], 'xq_id' => $students['xq_id']), true)}" class="my_count">学生在读课程</a>
             <a href="{php echo $this->createMobileUrl('chaxun', array('schoolid' => $schoolid, 'mobile' => $students['mobile'], 's_name' => $students['s_name']), true)}" class="my_score">学生考试成绩</a>
             <a href="#" class="lianxi" id="scroll">我的联系方式</a>
 			<a href="{php echo $this->createMobileUrl('jiaoliu', array('schoolid' => $schoolid), true)}" class="feedback">给班主任留言</a>

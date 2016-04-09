@@ -1,0 +1,85 @@
+{template 'common/header'}
+{template 'web/template/navs'}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		帮我送-默认配送价格设置
+	</div>
+	<div class="panel-body">
+		<form action="" method="post" class="form-horizontal" role="form" id="form1" >
+			<div class="form-group">
+				<div class="col-sm-8 col-lg-9 col-xs-12">
+					<div class="input-group">
+						<div class="input-group-addon">起步价</div>
+						<input type="text" class="form-control" name ="start_fee" value="{$item['start_fee']}"/>
+						<div class="input-group-addon">元含</div>
+						<input type="text" class="form-control" name ="start_km" value="{$item['start_km']}" >
+						<div class="input-group-addon">公里以内</div>
+						<input type="text" class="form-control" name ="start_kg" value="{$item['start_kg']}">
+						<div class="input-group-addon">公斤以内</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-8 col-lg-9 col-xs-12">
+					<div class="input-group">
+						<div class="input-group-addon">正常服务时间，从</div>
+						<input type="text" class="form-control" name ="start_time" value="{$item['start_time']}"/>
+						<div class="input-group-addon">点</div>
+						<input type="text" class="form-control" name ="end_time" value="{$item['end_time']}" >
+						<div class="input-group-addon">点,超出每单加</div>
+						<input type="text" class="form-control" name ="time_fee" value="{$item['time_fee']}">
+						<div class="input-group-addon">%</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-sm-8 col-lg-9 col-xs-12">
+					<div class="input-group">
+						<div class="input-group-addon">每</div>
+						<input type="text" class="form-control" name="limit_km_km" value="{$item['limit_km_km']}"/>
+						<div class="input-group-addon">公里增加</div>
+						<input type="text" class="form-control" name="limit_km_fee" value="{$item['limit_km_fee']}"/>
+						<div class="input-group-addon">元</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-sm-8 col-lg-9 col-xs-12">
+					<div class="input-group">
+						<div class="input-group-addon">每</div>
+						<input type="text" class="form-control" name="limit_kg_kg" value="{$item['limit_kg_kg']}"/>
+						<div class="input-group-addon">公斤增加</div>
+						<input type="text" class="form-control" name="limit_kg_fee" value="{$item['limit_kg_fee']}"/>
+						<div class="input-group-addon">元</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-8 col-lg-9 col-xs-12">
+					<div class="input-group">
+						<div class="input-group-addon">每</div>
+						<input type="text" class="form-control" name="limit_fee_num" value="{$item['limit_fee_num']}"/>
+						<div class="input-group-addon">元增加</div>
+						<input type="text" class="form-control" name="limit_fee_fee" value="{$item['limit_fee_fee']}"/>
+						<div class="input-group-addon">元</div>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label"></label>
+				<div class="col-sm-8 col-lg-9 col-xs-12">
+					<input type="submit" class="btn btn-default" value="提交">
+					<input type="hidden" name="token" value="{$_W['token']}">
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="panel-footer">
+	
+	</div>
+</div>
+{template 'common/footer'}

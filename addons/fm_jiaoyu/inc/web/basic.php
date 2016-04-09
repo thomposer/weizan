@@ -24,6 +24,7 @@
 					'xxtongzhi' => trim($_GPC['xxtongzhi']),
 					'liuyan' => trim($_GPC['liuyan']),
 					'liuyanhf' => trim($_GPC['liuyanhf']),
+					'zuoye' => trim($_GPC['zuoye']),
 					'bjtz' => trim($_GPC['bjtz']),
                 );
 

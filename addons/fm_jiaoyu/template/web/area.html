@@ -1,10 +1,8 @@
 {template 'common/header'}
-<div class="panel panel-info">
-     <div class="panel-heading">区域设置</div>
-        <ul class="nav nav-tabs">
+ <ul class="nav nav-tabs">
           <li {if $operation == 'display'}class="active"{/if}><a href="{php echo $this->createWebUrl('area', array('op' => 'display'))}">管理区域</a></li>
-        </ul>
-</div>
+ </ul>
+
 {if $operation == 'post'}
 <div class="panel panel-info">
      <div class="panel-heading"><a class="btn btn-primary" href="{php echo $this->createWebUrl('area', array('op' => 'display'))}"><i class="fa fa-tasks"></i> 返回区域列表</a></div>

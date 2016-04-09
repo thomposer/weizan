@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -114,6 +114,7 @@ class RechargeModuleSite extends WeModuleSite {
 				if(!$setting['times_status']) {
 					message("会员卡未开启{$setting['times_text']}充值,请联系商家", referer(), 'error');
 				}
+
 				$setting['times'] = iunserializer($setting['times']);
 				if(empty($setting['times'][$fee])) {
 					message('充值金额错误,请联系商家', referer(), 'error');
@@ -289,6 +290,21 @@ class RechargeModuleSite extends WeModuleSite {
 		$setting = uni_setting($_W['uniacid'], array('payment', 'creditbehaviors'));
 		if(!is_array($setting['payment'])) {
 			message('没有有效的支付方式, 请联系网站管理员.');
+		}
+		$log = pdo_get('core_paylog', array('uniacid' => $_W['uniacid'], 'module' => $params['module'], 'tid' => $params['tid']));
+		if (empty($log)) {
+			$log = array(
+				'uniacid' => $_W['uniacid'],
+				'acid' => $_W['acid'],
+				'openid' => $_W['member']['uid'],
+				'module' => $this->module['name'],
+				'tid' => $params['tid'],
+				'fee' => $params['fee'],
+				'card_fee' => $params['fee'],
+				'status' => '0',
+				'is_usecard' => '0',
+			);
+			pdo_insert('core_paylog', $log);
 		}
 		$pay = $setting['payment'];
 		$pay['credit']['switch'] = false;
