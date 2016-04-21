@@ -6,19 +6,18 @@
 defined('IN_IA') or exit('Access Denied');
 include "model.php";
 include "plugin/feyin/HttpClient.class.php";
-//include "plugin/feyin/FeyinAPI.php";
 include "templateMessage.php";
+define(EARTH_RADIUS, 6371); //地球半径，平均半径为6371km
 define('RES', '../addons/weisrc_dish/template/');
 define('CUR_MOBILE_DIR', 'dish/');
-define('LOCK', 'Li4vYWRkb25zL3dlaXNyY19kaXNoL3RlbXBsYXRlL2ltYWdlcy92ZXJzaW9uLmNzcw==');
-
-define('FEYIN_HOST','my.feyin.net');
+define('FEYIN_HOST', 'my.feyin.net');
 define('FEYIN_PORT', 80);
 
 class weisrc_dishModuleSite extends WeModuleSite
 {
     //模块标识
     public $modulename = 'weisrc_dish';
+    public $cur_tpl = 'style1';
 
     public $member_code = '';
     public $feyin_key = '';
@@ -42,7 +41,8 @@ class weisrc_dishModuleSite extends WeModuleSite
     public $_auth2_openid = '';
     public $_auth2_nickname = '';
     public $_auth2_headimgurl = '';
-
+    public $_lat = '';
+    public $_lng = '';
     public $table_area = 'weisrc_dish_area';
     public $table_blacklist = 'weisrc_dish_blacklist';
     public $table_cart = 'weisrc_dish_cart';
@@ -64,21 +64,31 @@ class weisrc_dishModuleSite extends WeModuleSite
     public $table_stores = 'weisrc_dish_stores';
     public $table_collection = 'weisrc_dish_collection';
     public $table_type = 'weisrc_dish_type';
+    public $table_ad = 'weisrc_dish_ad';
+    public $table_template = "weisrc_dish_template";
+    public $table_account = "weisrc_dish_account";
+    public $table_queue_setting = "weisrc_dish_queue_setting";
+    public $table_queue_order = "weisrc_dish_queue_order";
+    public $table_tablezones = "weisrc_dish_tablezones";
+    public $table_tables = "weisrc_dish_tables";
+    public $table_tables_order = "weisrc_dish_tables_order";
+    public $table_reservation = "weisrc_dish_reservation";
+    public $table_fans = "weisrc_dish_fans";
 
     function __construct()
     {
         global $_W, $_GPC;
-        $this->_fromuser = $_W['fans']['from_user']; //debug
-        if ($_SERVER['HTTP_HOST'] == '127.0.0.1' || $_SERVER['HTTP_HOST'] == 'localhost:8888') {
-            $this->_fromuser = 'debug';
-        }
 
+        $this->_fromuser = $_W['fans']['from_user']; //debug
         $this->_weid = $_W['uniacid'];
         $account = $_W['account'];
 
         $this->_auth2_openid = 'auth2_openid_' . $_W['uniacid'];
         $this->_auth2_nickname = 'auth2_nickname_' . $_W['uniacid'];
         $this->_auth2_headimgurl = 'auth2_headimgurl_' . $_W['uniacid'];
+
+        $this->_lat = 'lat_' . $this->_weid;
+        $this->_lng = 'lng_' . $this->_weid;
 
         $this->_appid = '';
         $this->_appsecret = '';
@@ -100,14 +110,21 @@ class weisrc_dishModuleSite extends WeModuleSite
             $this->_appid = $_W['account']['key'];
             $this->_appsecret = $_W['account']['secret'];
         }
+
+        $template = pdo_fetch("SELECT * FROM " . tablename($this->table_template) . " WHERE weid = :weid", array(':weid' => $this->_weid));
+        if (!empty($template)) {
+            $this->cur_tpl = $template['template_name'];
+        }
+        $this->resetn();
     }
 
-    //导航首页
+    //首页
     public function doMobileWapIndex()
     {
         global $_W, $_GPC;
         $weid = $this->_weid;
         $from_user = $this->_fromuser;
+
         $method = 'wapindex'; //method
         $authurl = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array(), true) . '&authkey=1';
         $url = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array(), true);
@@ -132,34 +149,31 @@ class weisrc_dishModuleSite extends WeModuleSite
             }
         }
 
-        if (empty($from_user)) {
-            message('会话已经过时，请从微信端重新发送关键字登录！');
+        //幻灯片
+        $slide = pdo_fetchall("SELECT * FROM " . tablename($this->table_ad) . " WHERE uniacid = :uniacid AND position=1 AND status=1 AND :time > starttime AND :time < endtime  ORDER BY displayorder DESC,id DESC LIMIT 6", array(':uniacid' => $this->_weid, ':time' => TIMESTAMP));
+
+        if (empty($slide)) {
+            $jump_url = $this->createMobileUrl('waprestlist', array(), true);
+            header("location:$jump_url");
         }
 
-        $storeid = intval($_GPC['storeid']);
-        if (!empty($storeid)) {
-            $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE id=:id", array(":id" => $storeid));
+        $setting = $this->getSetting();
+        $title = empty($setting) ? "微餐厅" : $setting['title'];
+        if ($setting['mode'] == 1) {
+            $jump_url = $this->createMobileUrl('detail', array('id' => $setting['storeid']), true);
         } else {
-            $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . "  WHERE weid=:weid ORDER BY id DESC LIMIT 1", array(':weid' => $weid));
-            $storeid = $store['id'];
+            $jump_url = $this->createMobileUrl('waprestlist', array(), true);
         }
 
-        if (empty($store)) {
-            message('商家不存在！');
-        }
+        include $this->template($this->cur_tpl . '/index');
+    }
 
-        $setting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " WHERE weid=:weid ORDER BY id DESC LIMIT 1", array(':weid' => $weid));
-        $title = $setting['title'];
-        if (!empty($setting)) {
-            $storeid = $setting['storeid'];
-        } else {
-            $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . "  WHERE weid=:weid  ORDER BY id DESC LIMIT 1", array(':weid' => $weid));
-            $storeid = $store['id'];
-        }
-
-        $nave = pdo_fetchall("SELECT * FROM " . tablename($this->table_nave) . " WHERE weid=:weid AND status=1 ORDER BY displayorder DESC,id DESC", array(':weid' => $weid));
-
-        include $this->template('dish_index');
+    public function getSetting()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $setting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " where weid = :weid LIMIT 1", array(':weid' => $weid));
+        return $setting;
     }
 
     //商品列表
@@ -168,10 +182,10 @@ class weisrc_dishModuleSite extends WeModuleSite
         global $_W, $_GPC;
         $weid = $this->_weid;
         $from_user = $this->_fromuser;
+        $tablesid = intval($_GPC['tablesid']);
 
         $title = '全部商品';
-        $do = 'list';
-
+        $mode = intval($_GPC['mode']);
         $storeid = intval($_GPC['storeid']);
         if ($storeid == 0) {
             $storeid = $this->getStoreID();
@@ -181,8 +195,14 @@ class weisrc_dishModuleSite extends WeModuleSite
         }
 
         $method = 'waplist'; //method
-        $authurl = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('storeid' => $storeid), true) . '&authkey=1';
-        $url = $_W['siteroot'] .'app/'. $this->createMobileUrl($method, array('storeid' => $storeid), true);
+
+        if ($mode == 1) {
+            $authurl = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('storeid' => $storeid, 'mode' => $mode, 'tablesid' => $tablesid), true) . '&authkey=1';
+            $url = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('storeid' => $storeid, 'mode' => $mode, 'tablesid' => $tablesid), true);
+        } else {
+            $authurl = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('storeid' => $storeid, 'mode' => $mode), true) . '&authkey=1';
+            $url = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('storeid' => $storeid, 'mode' => $mode), true);
+        }
         if (isset($_COOKIE[$this->_auth2_openid])) {
             $from_user = $_COOKIE[$this->_auth2_openid];
             $nickname = $_COOKIE[$this->_auth2_nickname];
@@ -204,11 +224,54 @@ class weisrc_dishModuleSite extends WeModuleSite
             }
         }
 
+        $fans = pdo_fetch("SELECT * FROM " . tablename($this->table_fans) . " WHERE from_user=:from_user AND weid=:weid LIMIT 1", array(':from_user' => $from_user, ':weid' => $weid));
+        if ($this->_accountlevel == 4) {
+            if (empty($fans) && !empty($nickname)) {
+                $insert = array(
+                    'weid' => $weid,
+                    'from_user' => $from_user,
+                    'nickname' => $nickname,
+                    'headimgurl' => $headimgurl,
+                    'dateline' => TIMESTAMP
+                );
+                pdo_insert($this->table_fans, $insert);
+            }
+        } else {
+            if (empty($fans) && !empty($from_user)) {
+                $insert = array(
+                    'weid' => $weid,
+                    'from_user' => $from_user,
+                    'dateline' => TIMESTAMP
+                );
+                pdo_insert($this->table_fans, $insert);
+            }
+        }
+
+        if ($mode == 1) {
+            $table = pdo_fetch("SELECT * FROM " . tablename($this->table_tables) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $tablesid));
+            if (empty($table)) {
+                exit('餐桌不存在！');
+            } else {
+                $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $table['tablezonesid']));
+                if (empty($tablezones)) {
+                    exit('餐桌类型不存在！');
+                }
+                $table_title = $tablezones['title'] . '-' . $table['title'];
+                pdo_update($this->table_tables, array('status' => 1), array('id' => $tablesid));
+
+                pdo_insert($this->table_tables_order, array('from_user' => $from_user, 'weid' => $weid, 'tablesid' => $tablesid, 'storeid' => $storeid, 'dateline' => TIMESTAMP));
+            }
+        }
+
         if (empty($from_user)) {
             message('会话已过期，请重新发送关键字!');
         }
 
         $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . "  WHERE weid=:weid AND id=:id ORDER BY id DESC LIMIT 1", array(':weid' => $weid, ':id' => $storeid));
+
+        if ($this->check_hourtime($store['begintime'], $store['endtime']) == 0) {
+            message("营业时间" . $store['begintime'] . "~" . $store['endtime']);
+        }
 
         $pindex = max(1, intval($_GPC['page']));
         $psize = 20;
@@ -244,10 +307,28 @@ class weisrc_dishModuleSite extends WeModuleSite
             $totalprice = $totalprice + $value['total'] * $value['price'];
         }
 
-        //智能点餐
-        $intelligents = pdo_fetchall("SELECT 1 FROM " . tablename($this->table_intelligent) . " WHERE weid={$weid} AND storeid={$storeid} GROUP BY name ORDER by name");
+        $jump_url = $this->createMobileurl('wapmenu', array('from_user' => $from_user, 'storeid' => $storeid, 'mode' => $mode), true);
+        $limitprice = 0;
+        if ($mode == 1) {
+            $limitprice = floatval($tablezones['limit_price']);
+            $jump_url = $this->createMobileurl('wapmenu', array('from_user' => $from_user, 'storeid' => $storeid, 'mode' => $mode, 'tablesid' => $tablesid), true);
+        } elseif ($mode == 2) {
+            $limitprice = floatval($store['sendingprice']);
+        } elseif ($mode == 3) {
+            $rtype = 2;
+            $timeid = intval($_GPC['timeid']);
+            $select_date = trim($_GPC['selectdate']);
+            $time = pdo_fetch("SELECT * FROM " . tablename($this->table_reservation) . " WHERE weid = :weid AND storeid =:storeid AND id=:id ORDER BY id LIMIT 1", array(':weid' => $this->_weid, ':storeid' => $storeid, ':id' => $timeid));
+            if (!empty($time)) {
+                $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " WHERE weid = :weid AND storeid =:storeid AND id=:id ORDER BY id LIMIT 1", array(':weid' => $this->_weid, ':storeid' => $storeid, ':id' => $time['tablezonesid']));
+                $limitprice = floatval($tablezones['limit_price']);
+            }
+            $jump_url = $this->createMobileUrl('reservationdetail', array('storeid' => $storeid, 'mode' => 3, 'selectdate' => $select_date, 'timeid' => $timeid, 'rtype' => 2), true);
+        } elseif ($mode == 5) {//排队
+            $jump_url = $this->createMobileurl('queue', array('from_user' => $from_user, 'storeid' => $storeid), true);
+        }
 
-        include $this->template('dish_list');
+        include $this->template($this->cur_tpl . '/list');
     }
 
     //我的菜单
@@ -256,38 +337,23 @@ class weisrc_dishModuleSite extends WeModuleSite
         global $_W, $_GPC;
         $weid = $this->_weid;
         $from_user = $this->_fromuser;
-
         $title = '我的菜单';
         $do = 'menu';
         $storeid = intval($_GPC['storeid']);
+        $mode = intval($_GPC['mode']);
 
-        $this->check_black_list();
-        $mealtimes = pdo_fetchall("SELECT * FROM " . tablename($this->table_mealtime) . " WHERE weid=:weid AND storeid=0 ORDER BY id ASC", array(':weid' => $weid));
-        $select_mealtime = '';
-        foreach($mealtimes as $key => $value) {
-            $tmptime = intval(strtotime(date('Y-m-d ') . $value['begintime']));
-            $nowtime = intval(TIMESTAMP + 900 * 1);
-//            if ($tmptime > $nowtime) {//debug
-                $select_mealtime .= '<option value="' . $value['begintime'] . '~' . $value['endtime'] . '">' . $value['begintime'] . '~' . $value['endtime'] . '</option>';
-//            }
+        $user = pdo_fetch("SELECT * FROM " . tablename($this->table_fans) . " WHERE weid = :weid  AND from_user=:from_user ORDER BY `id` DESC limit 1", array(':weid' => $weid, ':from_user' => $from_user));
+        if ($user['status'] == 0) {
+            message('你被禁止下单,不能进行相关操作...');
         }
-
-        //message($select_mealtime);
-
-//        {loop $mealtimes $item}
-//        <option value="{$item['begintime']}~{$item['endtime']}">{$item['begintime']}~{$item['endti//                                {/loop}
-        //$inhour = $this->check_mealtime();
-//        if ($inhour == 0) {
-//            message('店铺未在营业时间中!');
-//        }
 
         if (empty($storeid)) {
             message('请先选择门店', $this->createMobileUrl('waprestlist'));
         }
 
         $method = 'wapmenu'; //method
-        $authurl = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('storeid' => $storeid), true) . '&authkey=1';
-        $url = $_W['siteroot'] .'app/'. $this->createMobileUrl($method, array('storeid' => $storeid), true);
+        $authurl = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('storeid' => $storeid, 'mode' => $mode), true) . '&authkey=1';
+        $url = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('storeid' => $storeid, 'mode' => $mode), true);
         if (isset($_COOKIE[$this->_auth2_openid])) {
             $from_user = $_COOKIE[$this->_auth2_openid];
             $nickname = $_COOKIE[$this->_auth2_nickname];
@@ -313,6 +379,59 @@ class weisrc_dishModuleSite extends WeModuleSite
         }
 
         $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE weid=:weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $storeid));
+
+        if ($this->check_hourtime($store['begintime'], $store['endtime']) == 0) {
+            message("营业时间" . $store['begintime'] . "~" . $store['endtime']);
+        }
+
+
+        $over_radius = 0;
+        if ($mode == 2) {
+            //距离
+            $delivery_radius = floatval($store['delivery_radius']);
+            $distance = $this->getDistance($user['lat'], $user['lng'], $store['lat'], $store['lng']);
+            $distance = floatval($distance);
+            if ($store['not_in_delivery_radius'] == 0) { //只能在距离范围内
+                if ($distance > $delivery_radius) {
+                    $over_radius = 1;
+                }
+            }
+        }
+
+        $mealtimes = pdo_fetchall("SELECT * FROM " . tablename($this->table_mealtime) . " WHERE weid=:weid AND storeid=:storeid ORDER BY id ASC", array(':weid' => $weid, ':storeid' => $storeid));
+        $select_mealtime = '';
+        $select_mealtime2 = '';
+        $cur_date = date("Y-m-d", TIMESTAMP);
+        foreach ($mealtimes as $key => $value) {
+            $begintime = intval(strtotime(date('Y-m-d ') . $value['begintime']));
+            $endtime = intval(strtotime(date('Y-m-d ') . $value['endtime']));
+            if (TIMESTAMP < $endtime) {//debug
+                $select_mealtime .= '<option value="' . $value['begintime'] . '~' . $value['endtime'] . '">' . $value['begintime'] . '~' . $value['endtime'] . '</option>';
+            }
+            $select_mealtime2 .= '<option value="' . $value['begintime'] . '~' . $value['endtime'] . '">' . $value['begintime'] . '~' . $value['endtime'] . '</option>';
+        }
+        if (empty($select_mealtime)) {
+            $select_mealtime = '<option value="休息中">休息中</option>';
+        }
+        $select_mealdate = '';
+        if (!empty($store['delivery_within_days'])) {
+            for ($i = 0; $i < $store['delivery_within_days']; $i++) {
+                $date_title = '';
+                if ($i == 0) {
+                    $date_value = date("Y-m-d", TIMESTAMP);
+                    $date_title = '今日';
+                } elseif ($i == 1) {
+                    $date_value = date("Y-m-d", strtotime("+{$i} day"));
+                    $date_title = '明日';
+                } else {
+                    $date_value = date("Y-m-d", strtotime("+{$i} day"));
+                    $date_title = date("Y-m-d", strtotime("+{$i} day"));
+                }
+
+                $select_mealdate .= "<option value='{$date_value}'>{$date_title}</option>";
+            }
+        }
+
         $flag = false;
         $issms = intval($store['is_sms']);
         $checkcode = pdo_fetch("SELECT * FROM " . tablename('weisrc_dish_sms_checkcode') . " WHERE weid = :weid  AND from_user=:from_user AND status=1 ORDER BY `id` DESC limit 1", array(':weid' => $weid, ':from_user' => $from_user));
@@ -320,13 +439,37 @@ class weisrc_dishModuleSite extends WeModuleSite
             $flag = true;
         }
 
-        $user = pdo_fetch("SELECT * FROM " . tablename('weisrc_dish_address') . " WHERE weid = :weid  AND from_user=:from_user ORDER BY `id` DESC limit 1", array(':weid' => $weid, ':from_user' => $from_user));
-
-//        $user = fans_search($from_user);
-
         $setting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " WHERE weid=:weid LIMIT 1", array(':weid' => $weid));
 
         $cart = pdo_fetchall("SELECT * FROM " . tablename($this->table_cart) . " a LEFT JOIN " . tablename('weisrc_dish_goods') . " b ON a.goodsid=b.id WHERE a.weid=:weid AND a.from_user=:from_user AND a.storeid=:storeid", array(':weid' => $weid, ':from_user' => $from_user, ':storeid' => $storeid));
+        $totalcount = 0;
+        $totalprice = 0;
+        foreach ($cart as $key => $value) {
+            $totalcount = $totalcount + $value['total'];
+            $totalprice = $totalprice + $value['total'] * $value['price'];
+        }
+
+        $jump_url = $this->createMobileurl('wapmenu', array('from_user' => $from_user, 'storeid' => $storeid), true);
+        $limitprice = 0;
+        if ($mode == 1) {
+            $tablesid = intval($_GPC['tablesid']);
+            $table = pdo_fetch("SELECT * FROM " . tablename($this->table_tables) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $tablesid));
+            if (empty($table)) {
+                exit('餐桌不存在！');
+            } else {
+                $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $table['tablezonesid']));
+                if (empty($tablezones)) {
+                    exit('餐桌类型不存在！');
+                }
+                $table_title = $tablezones['title'] . '-' . $table['title'];
+            }
+            $limitprice = floatval($tablezones['limit_price']);
+        } elseif ($mode == 2) {
+            $limitprice = floatval($store['sendingprice']);
+            $jump_url = $this->createMobileurl('wapmenu', array('from_user' => $from_user, 'storeid' => $storeid, 'mode' => 2), true);
+        } elseif ($mode == 5) {//排队
+            $jump_url = $this->createMobileurl('queue', array('from_user' => $from_user, 'storeid' => $storeid), true);
+        }
 
         if (!empty($from_user) && !(empty($weid))) {
             $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE weid=:weid AND from_user=:from_user ORDER BY id DESC LIMIT 1", array(':from_user' => $from_user, ':weid' => $weid));
@@ -335,20 +478,21 @@ class weisrc_dishModuleSite extends WeModuleSite
         $my_order_total = pdo_fetchcolumn("SELECT COUNT(1) FROM " . tablename($this->table_order) . " WHERE storeid=:storeid AND from_user=:from_user ", array(':from_user' => $from_user, ':storeid' => $storeid));
         $my_order_total = intval($my_order_total);
 
-        include $this->template('dish_menu');
+        include $this->template($this->cur_tpl . '/menu');
     }
 
-    public function check_black_list()
+    public function check_hourtime($begintime, $endtime)
     {
         global $_W, $_GPC;
-        $weid = $this->_weid;
-        $from_user = $this->_fromuser;
 
-        $item = pdo_fetch("SELECT * FROM " . tablename($this->table_blacklist) . " WHERE weid=:weid AND from_user=:from_user LIMIT 1", array(':weid' => $weid, ':from_user' => $from_user));
+        $nowtime = intval(date("Hi"));
+        $begintime = intval(str_replace(':', '', $begintime));
+        $endtime = intval(str_replace(':', '', $endtime));
 
-        if (!empty($item) && $item['status'] == 0) {
-            message('你在黑名单中,不能进行相关操作...');
+        if ($nowtime >= $begintime && $nowtime <= $endtime) {
+            return 1;
         }
+        return 0;
     }
 
     public function check_mealtime()
@@ -361,7 +505,7 @@ class weisrc_dishModuleSite extends WeModuleSite
 
         $nowtime = intval(date("Hi"));
 
-        foreach ($timelist  as $key => $value) {
+        foreach ($timelist as $key => $value) {
             $begintime = intval(str_replace(':', '', $value['begintime']));
             $endtime = intval(str_replace(':', '', $value['endtime']));
 
@@ -372,31 +516,33 @@ class weisrc_dishModuleSite extends WeModuleSite
         return 0;
     }
 
-    public function testSendFormatedMessage(){
-        $msgNo = time()+1;
+    public function testSendFormatedMessage()
+    {
+        $msgNo = time() + 1;
         /*
          格式化的打印内容
         */
-        $msgInfo = array (
-            'memberCode'=>$this->member_code,
-            'charge'=>'3000',
-            'customerName'=>'刘小姐',
-            'customerPhone'=>'13321332245',
-            'customerAddress'=>'五山华南理工',
-            'customerMemo'=>'请快点送货',
-            'msgDetail'=>'番茄炒粉@1000@2||客家咸香鸡@2000@1',
-            'deviceNo'=>$this->device_no,
-            'msgNo'=>$msgNo,
+        $msgInfo = array(
+            'memberCode' => $this->member_code,
+            'charge' => '3000',
+            'customerName' => '刘小姐',
+            'customerPhone' => '13321332245',
+            'customerAddress' => '五山华南理工',
+            'customerMemo' => '请快点送货',
+            'msgDetail' => '番茄炒粉@1000@2||客家咸香鸡@2000@1',
+            'deviceNo' => $this->device_no,
+            'msgNo' => $msgNo,
         );
 
         echo $this->sendFormatedMessage($msgInfo);
         return $msgNo;
     }
 
-    function feiyinSendFreeMessage($orderid = 0, $print_type = 0){
+    public function _365SendFreeMessage($orderid = 0, $print_type = 0)
+    {
         global $_W, $_GPC;
         $weid = $this->_weid;
-        $from_user = $this->_fromuser;
+        load()->func('communication');
 
         if ($orderid == 0) {
             return -2;
@@ -410,7 +556,7 @@ class weisrc_dishModuleSite extends WeModuleSite
 
         $storeid = $order['storeid'];
         //打印机配置信息
-        $settings = pdo_fetchall("SELECT * FROM " . tablename($this->table_print_setting) . " WHERE storeid = :storeid AND print_status=1 AND type='feiyin' AND print_type=:print_type", array(':storeid' => $storeid, ':print_type' => 0));
+        $settings = pdo_fetchall("SELECT * FROM " . tablename($this->table_print_setting) . " WHERE storeid = :storeid AND print_status=1 AND type='365' ", array(':storeid' => $storeid));
 
         if ($settings == false) {
             return -4;
@@ -419,43 +565,40 @@ class weisrc_dishModuleSite extends WeModuleSite
         $paytype = array('0' => '线下付款', '1' => '余额支付', '2' => 在线支付, '3' => '货到付款');
         //商品id数组
         $goodsid = pdo_fetchall("SELECT goodsid, total FROM " . tablename($this->table_order_goods) . " WHERE orderid = :orderid", array(':orderid' => $orderid), 'goodsid');
-        //商品
-        $goods = pdo_fetchall("SELECT * FROM " . tablename($this->table_goods) . "  WHERE id IN ('" . implode("','", array_keys($goodsid)) . "')");
-        $order['goods'] = $goods;
-
+        $ordertype = array(
+            '1' => '堂点',
+            '2' => '外卖',
+            '3' => '预定',
+            '4' => '快餐'
+        );
         $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE  id =:id AND weid=:weid ORDER BY id DESC limit 1", array(':id' => $storeid, ':weid' => $weid));
-
-        $content = '单号:' . $order['ordersn'] . "\n";
-        $content .= '门店:' . $store['title'] . "\n";
-        $content .= '支付方式:' . $paytype[$order['paytype']] . "\n";
+        $paystatus = $order['ispay'] == 0 ? '未支付' : '已支付';
+        $content = '订单编号:' . $order['ordersn'] . "\n";
+        $content .= '订单类型:' . $ordertype[$order['dining_mode']] . "\n";
+        $content .= '所属门店:' . $store['title'] . "\n";
+        $content .= '支付方式:' . $paytype[$order['paytype']] . "(" . $paystatus . ")\n";
         $content .= '下单日期:' . date('Y-m-d H:i:s', $order['dateline']) . "\n";
-        $content .= '预定时间:' . $order['meal_time'] . "\n";
-        if (!empty($order['seat_type'])) {
-            $seat_type = $order['seat_type'] == 1 ? '大厅' : '包间';
-            $content .= '位置类型:' . $seat_type . "\n";
+        if ($order['dining_mode']==3) {
+            $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $order['tablezonesid']));
+            $content .= "桌台类型：{$tablezones['title']}\n";
         }
         if (!empty($order['tables'])) {
-            $content .= '桌号:' . $order['tables'] . "\n";
+            $content .= '桌台信息:' . $this->getTableName($order['tables']) . "\n";
         }
 
         if (!empty($order['remark'])) {
             $content .= '备注:' . $order['remark'] . "\n";
         }
+        $content .= '门店地址:' . $store['address'] . "\n";
+        $content .= '门店电话:' . $store['tel'] . "\n";
         $content .= "\n菜单列表\n";
         $content .= "-------------------------\n";
 
-        $content1 = '';
-        foreach ($order['goods'] as $v) {
-            if ($v['isspecial'] == 2) {
-                $money = intval($v['marketprice']) == 0 ? $v['productprice'] : $v['marketprice'];
-            } else {
-                $money = $v['productprice'];
-            }
-            $content1 .= $v['title'] . ' ' . $goodsid[$v['id']]['total'] . $v['unitname']  . ' ' . number_format($money, 1) . "元\n\n";
-        }
-
         $content2 = "-------------------------\n";
-        $content2 .= "总数量:" . $order['totalnum'] . "   总价:" . number_format($order['totalprice'], 1) . "元\n";
+        $content2 .= "总数量:" . $order['totalnum'] . "   总价:" . number_format($order['totalprice'], 2) . "元\n";
+        if ($order['dining_mode'] != 4 && !empty($order['meal_time'])) {
+            $content2 .= '预定时间:' . $order['meal_time'] . "\n";
+        }
         if (!empty($order['username'])) {
             $content2 .= '姓名:' . $order['username'] . "\n";
         }
@@ -463,49 +606,304 @@ class weisrc_dishModuleSite extends WeModuleSite
             $content2 .= '手机:' . $order['tel'] . "\n";
         }
         if (!empty($order['address'])) {
-            $content2 .= '地址:' . $order['address'];
+            $content2 .= '地址:' . $order['address'] . "\n";
         }
 
         if (!empty($setting['print_bottom'])) {
-            $content2 .= "" . $setting['print_bottom'] . "\n";
+            $content2 .= "-------------------------\n";
+            $content2 .= "" . $setting['print_bottom'] . "";
         }
 
-        foreach($settings as $item => $value) {
+        foreach ($settings as $item => $value) {
+            if ($value['print_type'] == 1) {
+                if ($order['ispay'] == 0) {
+                    continue;
+                }
+            }
+
             if (!empty($value['print_top'])) {
                 $print_top = "" . $value['print_top'] . "\n";
             }
             if (!empty($value['print_bottom'])) {
-                $print_bottom = "" . $value['print_bottom'] . "\n";
+                $print_bottom = "\n" . $value['print_bottom'] . "";
             }
 
-            if ($value['type'] == 'feiyin') { //飞印
-                $print_order_data = array(
-                    'weid' => $weid,
-                    'orderid' => $orderid,
-                    'print_usr' => $value['print_usr'],
-                    'print_status' => -1,
-                    'dateline' => TIMESTAMP
-                );
-                $print_order = pdo_fetch("SELECT * FROM " . tablename($this->table_print_order) . " WHERE orderid=:orderid AND print_usr=:usr LIMIT 1", array(':orderid' => $orderid, ':usr' => $value['print_usr']));
-                if (empty($print_order)) {
-                    pdo_insert('weisrc_dish_print_order', $print_order_data);
+            //商品
+            if ($value['print_goodstype'] == '0') {
+                $goods = pdo_fetchall("SELECT * FROM " . tablename($this->table_goods) . "  WHERE id IN ('" . implode("','", array_keys($goodsid)) . "')");
+            } else {
+                $goods = pdo_fetchall("SELECT * FROM " . tablename($this->table_goods) . "  WHERE id IN ('" . implode("','", array_keys($goodsid)) . "') AND pcate IN ('" . $value['print_goodstype'] . "')");
+            }
+            $order['goods'] = $goods;
+            $content1 = '';
+            if ($value['is_print_all'] == 1) {
+                if ($value['type'] == '365') {
+                    $print_order_data = array(
+                        'weid' => $weid,
+                        'orderid' => $orderid,
+                        'print_usr' => $value['print_usr'],
+                        'print_status' => -1,
+                        'dateline' => TIMESTAMP
+                    );
+                    pdo_insert($this->table_print_order, $print_order_data);
                     $oid = pdo_insertid();
                 }
+                foreach ($order['goods'] as $v) {
+                    $money = $v['marketprice'];
+                    $content1 .= $v['title'] . ' ' . $goodsid[$v['id']]['total'] . $v['unitname'] . ' ' . number_format($money, 2) . "元\n";
+                }
+
+                $deviceNo = $value['print_usr'];
+                $key = $value['feyin_key'];
+                $times = $value['print_nums'];
+                $printContent = $print_top . $content . $content1 . $content2 . $print_bottom;
+
+                $target = "http://open.printcenter.cn:8080/addOrder";
+                $post_data = "deviceNo=" . $deviceNo . "&key=" . $key . "&printContent=" . $printContent . "&times=" . $times;
+                $result = ihttp_request($target, $post_data);
+                $_365status = $result['responseCode'];
+                pdo_update('weisrc_dish_print_order', array('print_status' => $_365status), array('id' => $oid));
+            } else {
+                $content = '订单编号:' . $order['ordersn'] . "\n";
+                $content .= '订单类型:' . $ordertype[$order['dining_mode']] . "\n";
+                $content .= '所属门店:' . $store['title'] . "\n";
+                $content .= '支付方式:' . $paytype[$order['paytype']] . "(" . $paystatus . ")\n";
+                $content .= '下单日期:' . date('Y-m-d H:i:s', $order['dateline']) . "\n";
+                if ($order['dining_mode'] != 4 && !empty($order['meal_time'])) {
+                    $content .= '预定时间:' . $order['meal_time'] . "\n";
+                }
+                if (!empty($order['tables'])) {
+                    $content .= '桌台信息:' . $this->getTableName($order['tables']) . "\n";
+                }
+                if (!empty($order['remark'])) {
+                    $content .= '备注:' . $order['remark'] . "\n";
+                }
+                if (!empty($order['username'])) {
+                    $content2 = '姓名:' . $order['username'] . "\n";
+                }
+                if (!empty($order['tel'])) {
+                    $content2 .= '手机:' . $order['tel'] . "\n";
+                }
+                if (!empty($order['address'])) {
+                    $content2 .= '地址:' . $order['address'] . "\n";
+                }
+                foreach ($order['goods'] as $v) {
+                    if ($value['type'] == 'feiyin') { //飞印
+                        $print_order_data = array(
+                            'weid' => $weid,
+                            'orderid' => $orderid,
+                            'print_usr' => $value['print_usr'],
+                            'print_status' => -1,
+                            'dateline' => TIMESTAMP
+                        );
+                        pdo_insert($this->table_print_order, $print_order_data);
+                        $oid = pdo_insertid();
+                    }
+                    $content1 = '';
+                    $content1 .= "-------------------------\n";
+                    $content1 .= '名称:' . $v['title'] . "\n";
+                    $content1 .= '数量:' . $goodsid[$v['id']]['total'] . $v['unitname'] . "\n";
+                    $content1 .= "-------------------------\n";
+
+                    $deviceNo = $value['print_usr'];
+                    $key = $value['feyin_key'];
+                    $times = $value['print_nums'];
+                    $printContent = $print_top . $content . $content1 . $content2 . $print_bottom;
+
+                    $target = "http://open.printcenter.cn:8080/addOrder";
+                    $post_data = "deviceNo=" . $deviceNo . "&key=" . $key . "&printContent=" . $printContent . "&times=" . $times;
+                    $result = ihttp_request($target, $post_data);
+                    $_365status = $result['responseCode'];
+                    pdo_update('weisrc_dish_print_order', array('print_status' => $_365status), array('id' => $oid));
+                }
+            }
+        }
+    }
+
+    function feiyinSendFreeMessage($orderid = 0, $print_type = 0)
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+
+        if ($orderid == 0) {
+            return -2;
+        }
+
+        $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE  id =:id AND weid=:weid ORDER BY id DESC limit 1", array(':id' => $orderid, ':weid' => $weid));
+
+        if (empty($order)) {
+            return -3;
+        }
+
+        $storeid = $order['storeid'];
+        //打印机配置信息
+        $settings = pdo_fetchall("SELECT * FROM " . tablename($this->table_print_setting) . " WHERE storeid = :storeid AND print_status=1 AND type='feiyin' ", array(':storeid' => $storeid));
+
+        if ($settings == false) {
+            return -4;
+        }
+
+        $paytype = array('0' => '线下付款', '1' => '余额支付', '2' => 在线支付, '3' => '货到付款');
+        //商品id数组
+        $goodsid = pdo_fetchall("SELECT goodsid, total FROM " . tablename($this->table_order_goods) . " WHERE orderid = :orderid", array(':orderid' => $orderid), 'goodsid');
+
+        $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE  id =:id AND weid=:weid ORDER BY id DESC limit 1", array(':id' => $storeid, ':weid' => $weid));
+        $ordertype = array(
+            '1' => '堂点',
+            '2' => '外卖',
+            '3' => '预定',
+            '4' => '快餐'
+        );
+
+        $paystatus = $order['ispay'] == 0 ? '未支付' : '已支付';
+        $content = '订单编号:' . $order['ordersn'] . "\n";
+        $content .= '订单类型:' . $ordertype[$order['dining_mode']] . "\n";
+        $content .= '所属门店:' . $store['title'] . "\n";
+        $content .= '支付方式:' . $paytype[$order['paytype']] . "(" . $paystatus . ")\n";
+        $content .= '下单日期:' . date('Y-m-d H:i:s', $order['dateline']) . "\n";
+        if ($order['dining_mode']==3) {
+            $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $order['tablezonesid']));
+            $content .= "桌台类型：{$tablezones['title']}\n";
+        }
+        if (!empty($order['tables'])) {
+            $content .= '桌台信息:' . $this->getTableName($order['tables']) . "\n";
+        }
+
+        if (!empty($order['remark'])) {
+            $content .= '备注:' . $order['remark'] . "\n";
+        }
+        $content .= '门店地址:' . $store['address'] . "\n";
+        $content .= '门店电话:' . $store['tel'] . "\n";
+        $content .= "菜单列表\n";
+        $content .= "-------------------------\n";
+
+        $content2 = "-------------------------\n";
+        $content2 .= "总数量:" . $order['totalnum'] . "   总价:" . number_format($order['totalprice'], 2) . "元\n";
+        if ($order['dining_mode'] != 4 && !empty($order['meal_time'])) {
+            $content2 .= '预定时间:' . $order['meal_time'] . "\n";
+        }
+        if (!empty($order['username'])) {
+            $content2 .= '姓名:' . $order['username'] . "\n";
+        }
+        if (!empty($order['tel'])) {
+            $content2 .= '手机:' . $order['tel'] . "\n";
+        }
+        if (!empty($order['address'])) {
+            $content2 .= '地址:' . $order['address'] . "\n";
+        }
+        $content2 .= "-------------------------\n";
+
+
+        if (!empty($setting['print_bottom'])) {
+            $content2 .= "" . $setting['print_bottom'] . "";
+        }
+
+        foreach ($settings as $item => $value) {
+            if ($value['print_type'] == 1) {
+                if ($order['ispay'] == 0) {
+                    continue;
+                }
+            }
+
+            if (!empty($value['print_top'])) {
+                $print_top = "" . $value['print_top'] . "\n";
+            }
+            if (!empty($value['print_bottom'])) {
+                $print_bottom = "\n" . $value['print_bottom'] . "";
             }
 
             $this->member_code = $value['member_code'];
             $this->device_no = $value['print_usr'];
             $this->feyin_key = $value['feyin_key'];
 
-            $msgNo = time()+1;
-            $freeMessage = array(
-                'memberCode'=>$this->member_code,
-                'msgDetail'=> $print_top . $content . $content1 .$content2 . $print_bottom,
-                'deviceNo'=>$this->device_no,
-                'msgNo'=>$oid,
-            );
-            $feiyinstatus = $this->sendFreeMessage($freeMessage);
-            pdo_update('weisrc_dish_print_order', array('print_status' => $feiyinstatus), array('id' => $oid));
+            //商品
+            if ($value['print_goodstype'] == '0') {
+                $goods = pdo_fetchall("SELECT * FROM " . tablename($this->table_goods) . "  WHERE id IN ('" . implode("','", array_keys($goodsid)) . "')");
+            } else {
+                $goods = pdo_fetchall("SELECT * FROM " . tablename($this->table_goods) . "  WHERE id IN ('" . implode("','", array_keys($goodsid)) . "') AND pcate IN ('" . $value['print_goodstype'] . "')");
+            }
+            $order['goods'] = $goods;
+            $content1 = '';
+            if ($value['is_print_all'] == 1) {
+                if ($value['type'] == 'feiyin') { //飞印
+                    $print_order_data = array(
+                        'weid' => $weid,
+                        'orderid' => $orderid,
+                        'print_usr' => $value['print_usr'],
+                        'print_status' => -1,
+                        'dateline' => TIMESTAMP
+                    );
+                    pdo_insert($this->table_print_order, $print_order_data);
+                    $oid = pdo_insertid();
+                }
+                foreach ($order['goods'] as $v) {
+                    $money = $v['marketprice'];
+                    $content1 .= $v['title'] . ' ' . $goodsid[$v['id']]['total'] . $v['unitname'] . ' ' . number_format($money, 2) . "元\n";
+                }
+                $msgDetail = $print_top . $content . $content1 . $content2 . $print_bottom;
+                $msgNo = time() + 1;
+                $freeMessage = array(
+                    'memberCode' => $this->member_code,
+                    'msgDetail' => $msgDetail,
+                    'deviceNo' => $this->device_no,
+                    'msgNo' => $oid,
+                );
+                $feiyinstatus = $this->sendFreeMessage($freeMessage);
+                pdo_update('weisrc_dish_print_order', array('print_status' => $feiyinstatus), array('id' => $oid));
+            } else {
+                $content = '订单编号:' . $order['ordersn'] . "\n";
+                $content .= '订单类型:' . $ordertype[$order['dining_mode']] . "\n";
+                $content .= '所属门店:' . $store['title'] . "\n";
+                $content .= '支付方式:' . $paytype[$order['paytype']] . "(" . $paystatus . ")\n";
+                $content .= '下单日期:' . date('Y-m-d H:i:s', $order['dateline']) . "\n";
+                if ($order['dining_mode'] != 4 && !empty($order['meal_time'])) {
+                    $content .= '预定时间:' . $order['meal_time'] . "\n";
+                }
+                if (!empty($order['tables'])) {
+                    $content .= '桌台信息:' . $this->getTableName($order['tables']) . "\n";
+                }
+                if (!empty($order['remark'])) {
+                    $content .= '备注:' . $order['remark'] . "\n";
+                }
+                if (!empty($order['username'])) {
+                    $content2 = '姓名:' . $order['username'] . "\n";
+                }
+                if (!empty($order['tel'])) {
+                    $content2 .= '手机:' . $order['tel'] . "\n";
+                }
+                if (!empty($order['address'])) {
+                    $content2 .= '地址:' . $order['address'] . "\n";
+                }
+                foreach ($order['goods'] as $v) {
+                    if ($value['type'] == 'feiyin') { //飞印
+                        $print_order_data = array(
+                            'weid' => $weid,
+                            'orderid' => $orderid,
+                            'print_usr' => $value['print_usr'],
+                            'print_status' => -1,
+                            'dateline' => TIMESTAMP
+                        );
+                        pdo_insert($this->table_print_order, $print_order_data);
+                        $oid = pdo_insertid();
+                    }
+                    $content1 = '';
+                    $content1 .= "-------------------------\n";
+                    $content1 .= '名称:' . $v['title'] . "\n";
+                    $content1 .= '数量:' . $goodsid[$v['id']]['total'] . $v['unitname'] . "\n";
+                    $content1 .= "-------------------------\n";
+
+                    $msgDetail = $print_top . $content . $content1 . $content2 . $print_bottom;
+                    $msgNo = time() + 1;
+                    $freeMessage = array(
+                        'memberCode' => $this->member_code,
+                        'msgDetail' => $msgDetail,
+                        'deviceNo' => $this->device_no,
+                        'msgNo' => $oid,
+                    );
+                    $feiyinstatus = $this->sendFreeMessage($freeMessage);
+                    pdo_update('weisrc_dish_print_order', array('print_status' => $feiyinstatus), array('id' => $oid));
+                }
+            }
         }
         return $msgNo;
     }
@@ -542,16 +940,16 @@ class weisrc_dishModuleSite extends WeModuleSite
         $llen = $this->print_strlen($l);
         $rlen = $this->print_strlen($r);
         if ($l && $r) {
-            $lr = $llen+$rlen;
+            $lr = $llen + $rlen;
             $nl = $this->print_strlen($nbsp);
             if ($lr >= $nl) {
-                $strtxt = $l."\r\n".$this->formatstr(null,$r);
-            }else{
-                $strtxt = $l.substr($nbsp, $lr).$r;
+                $strtxt = $l . "\r\n" . $this->formatstr(null, $r);
+            } else {
+                $strtxt = $l . substr($nbsp, $lr) . $r;
             }
-        }elseif ($r) {
-            $strtxt = substr($nbsp, $rlen).$r;
-        }else {
+        } elseif ($r) {
+            $strtxt = substr($nbsp, $rlen) . $r;
+        } else {
             $strtxt = $l;
         }
         return $strtxt;
@@ -559,33 +957,34 @@ class weisrc_dishModuleSite extends WeModuleSite
 
     /**
      * PHP获取字符串中英文混合长度
-     * @param $str 		字符串
-     * @param string $charset	编码
+     * @param $str        字符串
+     * @param string $charset 编码
      * @return int 返回长度，1中文=2位(utf-8为3位)，1英文=1位
      */
-    private function print_strlen($str,$charset = ''){
+    private function print_strlen($str, $charset = '')
+    {
         global $_W;
-        if(empty($charset)) {
+        if (empty($charset)) {
             $charset = $_W['charset'];
         }
-        if(strtolower($charset) == 'gbk') {
+        if (strtolower($charset) == 'gbk') {
             $charset = 'gbk';
             $ci = 2;
         } else {
             $charset = 'utf-8';
             $ci = 3;
         }
-        if(strtolower($charset)=='utf-8') $str = iconv('utf-8','GBK//IGNORE',$str);
+        if (strtolower($charset) == 'utf-8') $str = iconv('utf-8', 'GBK//IGNORE', $str);
         $num = strlen($str);
         $cnNum = 0;
-        for($i=0;$i<$num;$i++){
-            if(ord(substr($str,$i+1,1))>127){
+        for ($i = 0; $i < $num; $i++) {
+            if (ord(substr($str, $i + 1, 1)) > 127) {
                 $cnNum++;
                 $i++;
             }
         }
-        $enNum = $num-($cnNum*$ci);
-        $number = $enNum+$cnNum*$ci;
+        $enNum = $num - ($cnNum * $ci);
+        $number = $enNum + $cnNum * $ci;
         return ceil($number);
     }
 
@@ -595,18 +994,36 @@ class weisrc_dishModuleSite extends WeModuleSite
         global $_W, $_GPC;
         $weid = $this->_weid;
         $from_user = $this->_fromuser;
-        $do = 'rest';
-        $title = '我的菜单';
+        $setting = $this->getSetting();
+        $cur_nave = 'home';
+
+        if ($setting['mode'] == 1) {
+            $jump_url = $this->createMobileUrl('detail', array('id' => $setting['storeid']), true);
+            header("location:$jump_url");
+        }
+
         $areaid = intval($_GPC['areaid']);
         $typeid = intval($_GPC['typeid']);
         $sortid = intval($_GPC['sortid']);
+
         $lat = trim($_GPC['lat']);
         $lng = trim($_GPC['lng']);
-
+        $isposition = 0;
+        if (!empty($lat) && !empty($lng)) {
+            $isposition = 1;
+            setcookie($this->_lat, $lat, TIMESTAMP + 3600 * 12);
+            setcookie($this->_lng, $lng, TIMESTAMP + 3600 * 12);
+        } else {
+            if (isset($_COOKIE[$this->_lat])) {
+                $isposition = 1;//0的时候才跳转
+                $lat = $_COOKIE[$this->_lat];
+                $lng = $_COOKIE[$this->_lng];
+            }
+        }
 
         $method = 'waprestlist'; //method
         $authurl = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array(), true) . '&authkey=1';
-        $url = $_W['siteroot'] .'app/'. $this->createMobileUrl($method, array(), true);
+        $url = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array(), true);
         if (isset($_COOKIE[$this->_auth2_openid])) {
             $from_user = $_COOKIE[$this->_auth2_openid];
             $nickname = $_COOKIE[$this->_auth2_nickname];
@@ -649,23 +1066,31 @@ class weisrc_dishModuleSite extends WeModuleSite
         //门店类型
         $shoptype = pdo_fetchall("SELECT * FROM " . tablename($this->table_type) . " where weid = :weid ORDER BY displayorder DESC", array(':weid' => $weid), 'id');
         $curtype = "门店类型";
-        if (!empty($shoptype[$areaid]['name'])) {
-            $curtype = $shoptype[$areaid]['name'];
+        if (!empty($shoptype[$typeid]['name'])) {
+            $curtype = $shoptype[$typeid]['name'];
+        }
+        $cursort = "综合排序";
+        if ($sortid == 1) {
+            $cursort = "正在营业";
+        } else if ($sortid == 2) {
+            $cursort = "距离优先";
         }
 
         pdo_update($this->table_stores, array('is_rest' => 0));
-        pdo_query("UPDATE " .tablename($this->table_stores). " SET is_rest=1 WHERE date_format(now(),'%H:%i') between begintime and endtime");
+        pdo_query("UPDATE " . tablename($this->table_stores) . " SET is_rest=1 WHERE date_format(now(),'%H:%i') between begintime and endtime");
 
         if ($sortid == 1) {
-            $restlist = pdo_fetchall("SELECT * FROM " . tablename($this->table_stores) . " where weid = :weid and is_show=1 {$strwhere} ORDER BY is_rest DESC,displayorder DESC, id DESC", array(':weid' => $weid));
+            $restlist = pdo_fetchall("SELECT *,(lat-:lat) * (lat-:lat) + (lng-:lng) * (lng-:lng) as dist FROM " . tablename($this->table_stores) . " where weid = :weid and is_show=1 {$strwhere} ORDER BY is_rest DESC,displayorder DESC, id DESC", array(':weid' => $weid, ':lat' => $lat, ':lng' => $lng));
         } else if ($sortid == 2) {
-            $restlist = pdo_fetchall("SELECT *,(lat-:lat) * (lat-:lat) + (lng-:lng) * (lng-:lng) as dist FROM " . tablename($this->table_stores) . " WHERE weid = :weid and is_show=1 ORDER BY dist, displayorder DESC,id DESC", array(':weid' => $weid, ':lat' => $lat, ':lng' => $lng));
+            if (empty($lat)) {
+                message('没定位无法距离排序！');
+            }
+            $restlist = pdo_fetchall("SELECT *,(lat-:lat) * (lat-:lat) + (lng-:lng) * (lng-:lng) as dist FROM " . tablename($this->table_stores) . " WHERE weid = :weid and is_show=1 {$strwhere} ORDER BY dist, displayorder DESC,id DESC", array(':weid' => $weid, ':lat' => $lat, ':lng' => $lng));
         } else {
-            $restlist = pdo_fetchall("SELECT * FROM " . tablename($this->table_stores) . " where weid = :weid and is_show=1 {$strwhere} ORDER BY is_rest DESC,displayorder DESC, id DESC", array(':weid' => $weid));
+            $restlist = pdo_fetchall("SELECT *,(lat-:lat) * (lat-:lat) + (lng-:lng) * (lng-:lng) as dist FROM " . tablename($this->table_stores) . " where weid = :weid and is_show=1 {$strwhere} ORDER BY is_rest DESC,displayorder DESC, id DESC", array(':weid' => $weid, ':lat' => $lat, ':lng' => $lng));
         }
 
-//        include $this->template('dish_rest_list');
-        include $this->template('diandan/restlist');
+        include $this->template($this->cur_tpl . '/restlist');
     }
 
     //门店列表
@@ -674,8 +1099,9 @@ class weisrc_dishModuleSite extends WeModuleSite
         global $_W, $_GPC;
         $weid = $this->_weid;
         $from_user = $this->_fromuser;
+        $setting = $this->getSetting();
+        $cur_nave = 'search';
 
-        $setting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " where weid = :weid ORDER BY id DESC", array(':weid' => $weid));
         $word = $setting['searchword'];
         if ($word) {
             $words = explode(' ', $word);
@@ -683,13 +1109,1076 @@ class weisrc_dishModuleSite extends WeModuleSite
 
         $searchword = trim($_GPC['searchword']);
         if ($searchword) {
-            $strwhere = " AND title like '%".$searchword."%' ";
+            $strwhere = " AND title like '%" . $searchword . "%' ";
             $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_stores) . " where weid = :weid {$strwhere} ORDER BY displayorder DESC,id DESC", array(':weid' => $weid));
         } else {
             $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_stores) . " where weid = :weid AND is_hot=1 ORDER BY displayorder DESC,id DESC", array(':weid' => $weid));
         }
 
-        include $this->template('diandan/search');
+        include $this->template($this->cur_tpl . '/search');
+    }
+
+    public function doMobileReservationIndex()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $from_user = $this->_fromuser;
+        $storeid = intval($_GPC['storeid']);
+
+        $cur_date = date("Y-m-d", TIMESTAMP);
+        $cur_time = date("H:i", TIMESTAMP);
+        $select_date = empty($_GPC['selectdate']) ? $cur_date : $_GPC['selectdate'];
+
+        $tablezones = pdo_fetchall("SELECT * FROM " . tablename($this->table_tablezones) . " WHERE weid = :weid AND storeid =:storeid ORDER BY displayorder DESC, id DESC", array(':weid' => $this->_weid, ':storeid' => $storeid));
+
+        $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_reservation) . " WHERE weid = :weid AND storeid =:storeid ORDER BY id ", array(':weid' => $this->_weid, ':storeid' => $storeid));
+
+        $dates = array();
+        for ($i = 0; $i < 7; $i++) {
+            if ($i == 0) {
+                $dates[] = date("Y-m-d", TIMESTAMP);
+            } else {
+                $dates[] = date("Y-m-d", strtotime("+{$i} day"));
+            }
+        }
+
+        include $this->template($this->cur_tpl . '/reservation_index');
+    }
+
+    public function doMobileReservationDetail()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $from_user = $this->_fromuser;
+        $storeid = intval($_GPC['storeid']);
+        $rtype = !isset($_GPC['rtype']) ? 1 : intval($_GPC['rtype']);
+        $timeid = intval($_GPC['timeid']);
+        $select_date = trim($_GPC['selectdate']);
+
+        $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE weid = :weid AND id=:id ORDER BY id LIMIT 1", array(':weid' => $this->_weid, ':id' => $storeid));
+
+        $user = pdo_fetch("SELECT * FROM " . tablename($this->table_fans) . " WHERE weid = :weid  AND from_user=:from_user ORDER BY `id` DESC limit 1", array(':weid' => $weid, ':from_user' => $from_user));
+        if ($user['status'] == 0) {
+            message('你被禁止下单,不能进行相关操作...');
+        }
+
+        $time = pdo_fetch("SELECT * FROM " . tablename($this->table_reservation) . " WHERE weid = :weid AND storeid =:storeid AND id=:id ORDER BY id LIMIT 1", array(':weid' => $this->_weid, ':storeid' => $storeid, ':id' => $timeid));
+        if (!empty($time)) {
+            $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " WHERE weid = :weid AND storeid =:storeid AND id=:id ORDER BY id LIMIT 1", array(':weid' => $this->_weid, ':storeid' => $storeid, ':id' => $time['tablezonesid']));
+        }
+
+        $cart = pdo_fetchall("SELECT * FROM " . tablename($this->table_cart) . " a LEFT JOIN " . tablename('weisrc_dish_goods') . " b ON a.goodsid=b.id WHERE a.weid=:weid AND a.from_user=:from_user AND a.storeid=:storeid", array(':weid' => $weid, ':from_user' => $from_user, ':storeid' => $storeid));
+        $totalcount = 0;
+        $totalprice = 0;
+        foreach ($cart as $key => $value) {
+            $totalcount = $totalcount + $value['total'];
+            $totalprice = $totalprice + $value['total'] * $value['price'];
+        }
+
+        $url1 = $this->createMobileUrl('reservationdetail', array('storeid' => $storeid, 'mode' => 3, 'selectdate' => $select_date, 'timeid' => $timeid, 'rtype' => 1), true);
+        $url2 = $this->createMobileUrl('waplist', array('storeid' => $storeid, 'mode' => 3, 'selectdate' => $select_date, 'timeid' => $timeid, 'rtype' => 2), true);
+
+        include $this->template($this->cur_tpl . '/reservation_detail');
+    }
+
+    public function doMobileQueue()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $from_user = $this->_fromuser;
+        $storeid = intval($_GPC['storeid']);
+
+        $config = $this->module['config']['weisrc_dish'];
+
+        $user_queue = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_order) . " where weid = :weid AND from_user=:from_user AND status=1 AND storeid=:storeid ORDER BY id DESC LIMIT 1 ", array(':weid' => $weid, ':from_user' => $from_user, ':storeid' => $storeid));
+        if (!empty($user_queue)) {
+            $queue_setting = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_setting) . " where id = :id ORDER BY id DESC LIMIT 1 ", array(':id' => $user_queue['queueid']));
+            $cur_queue = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_order) . " where weid = :weid AND storeid=:storeid AND status=1 AND queueid=:queueid ORDER BY id ASC LIMIT 1 ", array(':weid' => $weid, ':storeid' => $storeid, ':queueid' => $user_queue['queueid']));
+            $wait_count = pdo_fetchcolumn("SELECT COUNT(1) FROM " . tablename($this->table_queue_order) . " WHERE status=1 AND storeid=:storeid AND id<:id AND queueid=:queueid ORDER BY id DESC", array(':id' => $user_queue['id'], ':storeid' => $storeid, ':queueid' => $user_queue['queueid']));
+        }
+        $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_queue_setting) . " WHERE weid = :weid AND storeid =:storeid AND :time>starttime AND :time<endtime ORDER BY limit_num ASC", array(':weid' => $this->_weid, ':storeid' => $storeid, ':time' => date('H:i')));
+        $queue_count = pdo_fetchall("SELECT queueid,COUNT(1) as count FROM " . tablename($this->table_queue_order) . " where storeid=:storeid AND status=1 AND  weid = :weid GROUP BY queueid", array(':weid' => $this->_weid, ':storeid' => $storeid), 'queueid');
+
+        include $this->template($this->cur_tpl . '/queue');
+    }
+
+    public function doMobileQueueform()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $from_user = $this->_fromuser;
+        $storeid = intval($_GPC['storeid']);
+        $queueid = intval($_GPC['queueid']);
+
+        $config = $this->module['config']['weisrc_dish'];
+        if ($config['queuemode'] == 2) {
+            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_queue_setting) . " WHERE weid = :weid AND storeid =:storeid AND :time>starttime AND :time<endtime  ORDER BY id ASC", array(':weid' => $this->_weid, ':storeid' => $storeid, ':time' => date('H:i')));
+        }
+
+        include $this->template($this->cur_tpl . '/queue_form');
+    }
+
+    public function doMobilesetqueue()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $from_user = $this->_fromuser;
+        $storeid = intval($_GPC['storeid']);
+        $queueid = intval($_GPC['queueid']);
+        $usermobile = trim($_GPC['usermobile']);
+        $usercount = trim($_GPC['usercount']);
+
+        if (empty($from_user)) {
+            $this->showMsg('请重新发送关键字进入系统!');
+        }
+        if (empty($storeid)) {
+            $this->showMsg('请先选择门店!');
+        }
+        if (empty($usermobile)) {
+            $this->showMsg('请输入手机号码!');
+        }
+        if (empty($usercount)) {
+            $this->showMsg('请输入用户数量!');
+        }
+        $num = 'C001';
+        $config = $this->module['config']['weisrc_dish'];
+        if ($queueid == 0) { //未选队列
+            if ($config['queuemode'] == 2) {
+                $this->showMsg('请先选择队列!');
+            }
+
+            $queueSetting = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_setting) . " WHERE weid = :weid AND storeid =:storeid AND :time>starttime AND :time<endtime AND :usercount<=limit_num ORDER BY limit_num ASC LIMIT 1", array(':weid' => $this->_weid, ':storeid' => $storeid, ':time' => date('H:i'), ':usercount' => $usercount));
+
+            if (empty($queueSetting)) {
+                $this->showMsg('没有符合您人数的队列!');
+            }
+
+            $exists_queue = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_order) . " WHERE queueid=:queueid AND from_user=:from_user AND status=1 ORDER BY id DESC LIMIT 1", array(':queueid' => $queueSetting['id'], ':from_user' => $from_user));
+            if (!empty($exists_queue)) {
+                $this->showMsg('您已经在排队中！');
+            }
+
+            $queueOrder = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_order) . " WHERE weid = :weid AND storeid =:storeid AND queueid=:queueid ORDER BY id DESC LIMIT 1", array(':weid' => $this->_weid, ':storeid' => $storeid, ':queueid' => $queueSetting['id']));
+
+            if (empty($queueOrder)) {
+                $num = $queueSetting['prefix'] . '001';
+            } else {
+                $num = intval(findNum($queueOrder['num']));
+                $num++;
+                $num = $queueSetting['prefix'] . str_pad($num, 3, "0", STR_PAD_LEFT);
+            }
+            $queueid = $queueSetting['id'];
+        } else { //已选队列
+            if (empty($config['queuemode']) || $config['queuemode'] == 1) {
+                $this->showMsg('请先选择队列!');
+            }
+            $queueSetting = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_setting) . " WHERE weid = :weid AND storeid =:storeid AND :time>starttime AND :time<endtime AND id=:id AND :usercount<=limit_num LIMIT 1", array(':weid' => $this->_weid, ':storeid' => $storeid, ':time' => date('H:i'), ':id' => $queueid, ':usercount' => $usercount));
+
+            if (empty($queueSetting)) {
+                $this->showMsg('没有符合您人数的队列!');
+            }
+
+            $exists_queue = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_order) . " WHERE queueid=:queueid AND from_user=:from_user AND status=1 ORDER BY id DESC LIMIT 1", array(':queueid' => $queueSetting['id'], ':from_user' => $from_user));
+            if (!empty($exists_queue)) {
+                $this->showMsg('您已经在排队中！');
+            }
+
+            $queueOrder = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_order) . " WHERE weid = :weid AND storeid =:storeid AND queueid=:queueid ORDER BY id DESC LIMIT 1", array(':weid' => $this->_weid, ':storeid' => $storeid, ':queueid' => $queueSetting['id']));
+
+            if (empty($queueOrder)) {
+                $num = $queueSetting['prefix'] . '001';
+            } else {
+                $num = intval(findNum($queueOrder['num']));
+                $num++;
+                $num = $queueSetting['prefix'] . str_pad($num, 3, "0", STR_PAD_LEFT);
+            }
+        }
+
+        $data = array(
+            'weid' => $weid,
+            'from_user' => $from_user,
+            'storeid' => $storeid,
+            'queueid' => $queueid,
+            'num' => $num,
+            'mobile' => $usermobile,
+            'usercount' => $usercount,
+            'isnotify' => 0,
+            'status' => 1, //状态
+            'dateline' => TIMESTAMP
+        );
+
+        pdo_insert($this->table_queue_order, $data);
+        $oid = pdo_insertid();
+        if ($oid > 0) {
+            if ($this->_accountlevel == 4) {
+                $this->sendQueueNotice($oid);
+                $setting = pdo_fetch("select * from " . tablename($this->table_setting) . " WHERE weid =:weid LIMIT 1", array(':weid' => $weid));
+                if (!empty($setting)) {
+                    if (!empty($setting['tpluser'])) {
+                        $tousers = explode(',', $setting['tpluser']);
+                        foreach ($tousers as $key => $value) {
+                            $this->sendAdminQueueNotice($oid, $value, $setting);
+                        }
+                    }
+                    $accounts = pdo_fetchall("SELECT * FROM " . tablename($this->table_account) . " WHERE weid = :weid AND storeid=:storeid AND status=1 ORDER BY id DESC ", array(':weid' => $this->_weid, ':storeid' => $storeid));
+                    foreach ($accounts as $key => $value) {
+                        if (!empty($value['from_user'])) {
+                            $this->sendAdminQueueNotice($oid, $value['from_user'], $setting);
+                        }
+                    }
+                }
+            }
+        }
+        $this->showMsg('操作成功!', 1);
+    }
+
+    public function doMobileCancelOrder()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $from_user = $this->_fromuser;
+        $id = intval($_GPC['id']);
+
+        if (empty($from_user)) {
+            $this->showMsg('请重新发送关键字进入系统!');
+        }
+
+        if ($id == 0) { //未选队列
+            $this->showMsg('请先选择订单!');
+        } else { //已选队列
+            $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id=:id AND from_user=:from_user AND status=0 ORDER BY id DESC LIMIT 1", array(':id' => $id, ':from_user' => $from_user));
+            if (empty($order)) {
+                $this->showMsg('订单不存在！');
+            }
+
+            pdo_update($this->table_order, array('status' => -1), array('id' => $id));
+        }
+        $this->showMsg('操作成功!', 1);
+    }
+
+    public function sendQueueNotice($oid, $status = 1)
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $from_user = $this->_fromuser;
+
+        $setting = pdo_fetch("select * from " . tablename($this->table_setting) . " WHERE weid =:weid LIMIT 1", array(':weid' => $weid));
+        $order = pdo_fetch("select * from " . tablename($this->table_queue_order) . " WHERE id =:id LIMIT 1", array(':id' => $oid));
+        $store = pdo_fetch("select * from " . tablename($this->table_stores) . " WHERE id =:id LIMIT 1", array(':id' => $order['storeid']));
+        $keyword1 = $order['num'];
+        $keyword2 = date("Y-m-d H:i", $order['dateline']);
+        $url = $_W['siteroot'].'app'.str_replace('./', '/', $this->createMobileUrl('queue', array('storeid' => $order['storeid']), true));
+        $wait_count = pdo_fetchcolumn("SELECT COUNT(1) FROM " . tablename($this->table_queue_order) . " WHERE status=1 AND storeid=:storeid AND id<:id AND queueid=:queueid ORDER BY id DESC", array(':id' => $oid, ':storeid' => $order['storeid'], ':queueid' => $order['queueid']));
+        $queueStatus = array(
+            '1' => '排队中',
+            '2' => '已接受',
+            '-1' => '已取消',
+            '3' => '已过号'
+        );
+
+        if (!empty($setting['tplnewqueue']) && $setting['istplnotice'] == 1) {
+            $templateid = $setting['tplnewqueue'];
+
+            if ($setting['tpltype'] == 1) {
+                if ($status == 1) { //排队中
+                    $first = "排号提醒：编号{$keyword1}已成功领号，您可以点击本消息提前点菜，节约等待时间哦";
+                    $remark = "门店名称：{$store['title']}";
+                    $remark .= "\n排队号码：" . $this->getQueueName($order['queueid']). " " . $order['num'];
+                    $remark .= "\n前面等待：" . intval($wait_count);
+                    $remark .= "\n排队状态：排队中";
+                } else if ($status == 2) { //排队提醒
+                    $first = "排号提醒：还需等待{$wait_count}桌";
+                    $remark = "门店名称：{$store['title']}";
+                    $remark .= "\n排队号码：" . $this->getQueueName($order['queueid']). " " . $order['num'];
+                    $remark .= "\n前面等待：" . intval($wait_count) . "桌";
+                    $remark .= "\n排队状态：" . $queueStatus[$order['status']];
+                } else if ($status == 3) { //取消提醒
+                    $first = "排号取消提醒：编号".$order['num']."已取消";
+                    $remark = "您在{$store['title']}的排队状态更新为已取消，如有疑问，请联系我们工作人员";
+                    $remark .= "\n排队号码：" . $this->getQueueName($order['queueid']). " " . $order['num'];
+                    $remark .= "\n排队状态：已取消";
+                }
+                $template = array(
+                    'touser' => $order['from_user'],
+                    'template_id' => $templateid,
+                    'url' => $url,
+                    'topcolor' => "#a6a6a9",
+                    'data' => array(
+                        'first' => array(
+                            'value' => urlencode($first),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword1' => array(
+                            'value' => urlencode($keyword1),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword2' => array(
+                            'value' => urlencode($keyword2),
+                            'color' => '#a6a6a9'
+                        ),
+                        'remark' => array(
+                            'value' => $remark,
+                            'color' => '#a6a6a9'
+                        ),
+                    )
+                );
+            } else {
+                $keyword3 = intval($wait_count);
+                if ($status == 1) { //排队中
+
+                    $first = "排号提醒：编号{$keyword1}已成功领号，您可以点击本消息提前点菜，节约等待时间哦";
+                    $remark = "门店名称：{$store['title']}";
+                    $remark .= "\n排队号码：" . $this->getQueueName($order['queueid']). " " . $order['num'];
+                    $remark .= "\n排队状态：排队中";
+                } else if ($status == 2) { //排队提醒
+                    $first = "排号提醒：还需等待{$wait_count}桌";
+                    $remark = "门店名称：{$store['title']}";
+                    $remark .= "\n排队号码：" . $this->getQueueName($order['queueid']). " " . $order['num'];
+                    $remark .= "\n排队状态：" . $queueStatus[$order['status']];
+                } else if ($status == 3) { //取消提醒
+                    $first = "排号取消提醒：编号".$order['num']."已取消";
+                    $remark = "您在{$store['title']}的排队状态更新为已取消，如有疑问，请联系我们工作人员";
+                    $remark .= "\n排队号码：" . $this->getQueueName($order['queueid']). " " . $order['num'];
+                    $remark .= "\n排队状态：已取消";
+                }
+                $template = array(
+                    'touser' => $order['from_user'],
+                    'template_id' => $templateid,
+                    'url' => $url,
+                    'topcolor' => "#a6a6a9",
+                    'data' => array(
+                        'first' => array(
+                            'value' => urlencode($first),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword1' => array(
+                            'value' => urlencode($keyword1),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword2' => array(
+                            'value' => urlencode($keyword2),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword3' => array(
+                            'value' => urlencode($keyword3),
+                            'color' => '#a6a6a9'
+                        ),
+                        'remark' => array(
+                            'value' => $remark,
+                            'color' => '#a6a6a9'
+                        ),
+                    )
+                );
+            }
+
+            pdo_update($this->table_queue_order, array('isnotify' => 1), array('id' => $oid));
+            $templateMessage = new class_templateMessage($this->_appid, $this->_appsecret);
+            $access_token = WeAccount::token();
+            $result = $templateMessage->send_template_message($template, $access_token);
+        } else {
+            if ($status == 1) { //排队中
+                $content = '排号提醒：编号'.$keyword1.'已成功领号，您可以<a href=\"'.$url.'\">点击本消息</a>提前点菜，节约等待时间哦';
+                $content .= "\n当前排号：{$keyword1}";
+                $content .= "\n取号时间：{$keyword2}";
+                $content .= "\n门店名称：{$store['title']}";
+                $content .= "\n排队号码：" . $this->getQueueName($order['queueid']). " " . $order['num'];
+                $content .= "\n前面等待：" . intval($wait_count);
+                $content .= "\n排队状态：排队中";
+            } else if ($status == 2) { //排队提醒
+                $content = "排号提醒：还需等待{$wait_count}桌";
+                $content .= "\n当前排号：{$keyword1}";
+                $content .= "\n取号时间：{$keyword2}";
+                $content .= "\n门店名称：{$store['title']}";
+                $content .= "\n排队号码：" . $this->getQueueName($order['queueid']). " " . $order['num'];
+                $content .= "\n前面等待：" . intval($wait_count) . "桌";
+                $content .= "\n排队状态：" . $queueStatus[$order['status']];
+            } else if ($status == 3) { //取消提醒
+                $content = "排号取消提醒：编号".$order['num']."已取消";
+                $content .= "\n当前排号：{$keyword1}";
+                $content .= "\n取号时间：{$keyword2}";
+                $content .= "\n您在{$store['title']}的排队状态更新为已取消，如果疑问，请联系我们工作人员";
+                $content .= "\n排队号码：" . $this->getQueueName($order['queueid']). " " . $order['num'];
+                $content .= "\n排队状态：已取消";
+            }
+            $this->sendText($order['from_user'], $content);
+        }
+    }
+
+    public function sendAdminQueueNotice($oid, $from_user, $setting)
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+
+        $order = pdo_fetch("select * from " . tablename($this->table_queue_order) . " WHERE id =:id LIMIT 1", array(':id' => $oid));
+        $store = pdo_fetch("select * from " . tablename($this->table_stores) . " WHERE id =:id LIMIT 1", array(':id' => $order['storeid']));
+        $keyword1 = $order['num'];
+        $keyword2 = date("Y-m-d H:i", $order['dateline']);
+        $url = '';
+        $wait_count = pdo_fetchcolumn("SELECT COUNT(1) FROM " . tablename($this->table_queue_order) . " WHERE status=1 AND storeid=:storeid AND queueid=:queueid ORDER BY id DESC", array(':storeid' => $order['storeid'], ':queueid' => $order['queueid']));
+
+        if (!empty($setting['tplnewqueue']) && $setting['istplnotice'] == 1 && $setting['is_notice'] == 1 && !empty($from_user)) {
+            $templateid = $setting['tplnewqueue'];
+
+            $first = '排号提醒：有新的排号，编号' . $keyword1;
+
+            if ($setting['tpltype'] == 1) {
+                $remark = "门店名称：{$store['title']}";
+                $remark .= "\n排队号码：" . $this->getQueueName($order['queueid']) . " " . $order['num'];
+                $remark .= "\n排队等待：" . intval($wait_count) . '队';
+                $template = array(
+                    'touser' => $from_user,
+                    'template_id' => $templateid,
+                    'url' => $url,
+                    'topcolor' => "#a6a6a9",
+                    'data' => array(
+                        'first' => array(
+                            'value' => urlencode($first),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword1' => array(
+                            'value' => urlencode($keyword1),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword2' => array(
+                            'value' => urlencode($keyword2),
+                            'color' => '#a6a6a9'
+                        ),
+                        'remark' => array(
+                            'value' => $remark,
+                            'color' => '#a6a6a9'
+                        ),
+                    )
+                );
+            } else {
+                $remark = "门店名称：{$store['title']}";
+                $remark .= "\n排队号码：" . $this->getQueueName($order['queueid']) . " " . $order['num'];
+
+                $keyword3 = intval($wait_count);
+                $template = array(
+                    'touser' => $from_user,
+                    'template_id' => $templateid,
+                    'url' => $url,
+                    'topcolor' => "#a6a6a9",
+                    'data' => array(
+                        'first' => array(
+                            'value' => urlencode($first),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword1' => array(
+                            'value' => urlencode($keyword1),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword2' => array(
+                            'value' => urlencode($keyword2),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword3' => array(
+                            'value' => urlencode($keyword3),
+                            'color' => '#a6a6a9'
+                        ),
+                        'remark' => array(
+                            'value' => $remark,
+                            'color' => '#a6a6a9'
+                        ),
+                    )
+                );
+            }
+
+            pdo_update($this->table_queue_order, array('isnotify' => 1), array('id' => $oid));
+            $templateMessage = new class_templateMessage($this->_appid, $this->_appsecret);
+            $access_token = WeAccount::token();
+            $result = $templateMessage->send_template_message($template, $access_token);
+        } else {
+            if (!empty($setting['tpluser'])) { //排队中
+                $content = '排号提醒：有新的排号，编号'.$keyword1;
+                $content .= "\n当前排号：{$keyword1}";
+                $content .= "\n取号时间：{$keyword2}";
+                $content .= "\n门店名称：{$store['title']}";
+                $content .= "\n排队号码：" . $this->getQueueName($order['queueid']). " " . $order['num'];
+                $content .= "\n排队等待：" . intval($wait_count) . '队';
+            }
+            $this->sendText($from_user, $content);
+        }
+    }
+
+    public function sendOrderSms($order)
+    {
+        global $_W, $_GPC;
+        $weid = $order['weid'];
+
+        //发送短信提醒
+        $smsSetting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " WHERE weid=:weid LIMIT 1", array(':weid' => $weid));
+        $sendInfo = array();
+        if (!empty($smsSetting)) {
+            if ($smsSetting['sms_enable'] == 1 && !empty($order['tel'])) {
+                //模板
+                $smsSetting['sms_business_tpl'] = '您的订单：[sn]，收货人：[name] 电话：[tel]，已经成功提交。感谢您的购买！';
+                //订单号
+                $smsSetting['sms_business_tpl'] = str_replace('[sn]', $order['ordersn'], $smsSetting['sms_business_tpl']);
+                $smsSetting['sms_business_tpl'] = str_replace('[name]', $order['username'], $smsSetting['sms_business_tpl']);
+                $smsSetting['sms_business_tpl'] = str_replace('[tel]', $order['tel'], $smsSetting['sms_business_tpl']);
+
+                $sendInfo['username'] = $smsSetting['sms_username'];
+                $sendInfo['pwd'] = $smsSetting['sms_pwd'];
+                $sendInfo['mobile'] = $order['tel'];
+                $sendInfo['content'] = $smsSetting['sms_business_tpl'];
+                //debug
+
+                $return_result_code = $this->_sendSms($sendInfo);
+                $smsStatus = $this->sms_status[$return_result_code];
+            }
+        }
+    }
+
+    public function sendAdminOrderSms($mobile, $order)
+    {
+        global $_W, $_GPC;
+        $weid = $order['weid'];
+
+        //发送短信提醒
+        $smsSetting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " WHERE weid=:weid LIMIT 1", array(':weid' => $weid));
+        $sendInfo = array();
+        if (!empty($smsSetting)) {
+            if ($smsSetting['sms_enable'] == 1 && !empty($mobile)) {
+                $smsSetting['sms_business_tpl'] = '您有新的订单：[sn]，收货人：[name]，电话：[tel]，请及时确认订单！';
+                $smsSetting['sms_business_tpl'] = str_replace('[sn]', $order['ordersn'], $smsSetting['sms_business_tpl']);
+                $smsSetting['sms_business_tpl'] = str_replace('[name]', $order['username'], $smsSetting['sms_business_tpl']);
+                $smsSetting['sms_business_tpl'] = str_replace('[tel]', $order['tel'], $smsSetting['sms_business_tpl']);
+
+                $sendInfo['username'] = $smsSetting['sms_username'];
+                $sendInfo['pwd'] = $smsSetting['sms_pwd'];
+                $sendInfo['mobile'] = $mobile;
+                $sendInfo['content'] = $smsSetting['sms_business_tpl'];
+                //debug
+
+                $return_result_code = $this->_sendSms($sendInfo);
+                $smsStatus = $this->sms_status[$return_result_code];
+            }
+            return $smsStatus;
+        }
+    }
+
+
+    public function sendAdminOrderEmail($toemail, $order, $store, $goods_str)
+    {
+        $firstArr = array(
+            '-1' => '已经取消',
+            '0' => '已经提交',
+            '1' => '已经确认',
+            '2' => '已并台',
+            '3' => '已经完成'
+        );
+
+        $orderStatus = array(
+            '-1' => '已取消',
+            '0' => '待处理',
+            '1' => '已确认',
+            '2' => '已并台',
+            '3' => '已完成'
+        );
+        $paytype = array(
+            '0' => '现金付款',
+            '1' => '余额支付',
+            '2' => '在线支付',
+            '3' => '现金付款'
+        );
+        $paystatus = array(
+            '0' => '未支付',
+            '1' => '已支付'
+        );
+
+        //发送邮件提醒
+        $emailSetting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " WHERE weid=:weid LIMIT 1", array(':weid' => $order['weid']));
+
+        $keyword1 = $order['ordersn'];
+        $keyword2 = $orderStatus[$order['status']];
+        $keyword3 = date("Y-m-d H:i", $order['dateline']);
+
+        $email_tpl = "
+        您的订单{$order['ordersn']}{$firstArr[$order['status']]}<br/>
+        订单号：{$keyword1}<br/>
+        订单状态：{$keyword2}<br/>
+        时间：{$keyword3}<br/>
+        门店名称：{$store['title']}<br/>
+        支付方式：{$paytype[$order['paytype']]}<br/>
+        支付状态：{$paystatus[$order['ispay']]}<br/>
+        ";
+        if ($order['dining_mode'] == 3) {
+            $email_tpl .= "预定人信息：{$order['username']}－{$order['tel']}<br/>";
+            $email_tpl .= "预定时间：{$order['meal_time']}<br/>";
+        } else {
+            $email_tpl .= "联系方式：{$order['username']}－{$order['tel']}<br/>";
+        }
+        if ($order['dining_mode'] == 1) {
+            $tablename = $this->getTableName($order['tables']);
+            $email_tpl .= "桌台信息：{$tablename}<br/>";
+        }
+        if ($order['dining_mode'] == 2) {
+            if (!empty($order['address'])) {
+                $email_tpl .= "配送地址：{$order['address']}<br/>";
+            }
+            if (!empty($order['meal_time'])) {
+                $email_tpl .= "配送时间：{$order['meal_time']}<br/>";
+            }
+        }
+        $email_tpl .= "菜单：{$goods_str}<br/>";
+        $email_tpl .= "备注：{$order['remark']}<br/>";
+        $email_tpl .= "应收合计：{$order['totalprice']}";
+
+        if (!empty($emailSetting) && !empty($emailSetting['email'])) {
+            if ($emailSetting['email_host'] == 'smtp.qq.com' || $emailSetting['email_host'] == 'smtp.gmail.com') {
+                $secure = 'ssl';
+                $port = '465';
+            } else {
+                $secure = 'tls';
+                $port = '25';
+            }
+
+            $mail_config = array();
+            $mail_config['host'] = $emailSetting['email_host'];
+            $mail_config['secure'] = $secure;
+            $mail_config['port'] = $port;
+            $mail_config['username'] = $emailSetting['email_user'];
+            $mail_config['sendmail'] = $emailSetting['email_send'];
+            $mail_config['password'] = $emailSetting['email_pwd'];
+            $mail_config['mailaddress'] = $toemail;
+            $mail_config['subject'] = '订单提醒';
+            $mail_config['body'] = $email_tpl;
+            $result = $this->sendmail($mail_config);
+        }
+    }
+
+    public function sendOrderNotice($order ,$store, $setting)
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+
+        $firstArr = array(
+            '-1' => '已经取消',
+            '0' => '已经提交',
+            '1' => '已经确认',
+            '2' => '已并台',
+            '3' => '已经完成'
+        );
+
+        $orderStatus = array(
+            '-1' => '已取消',
+            '0' => '待处理',
+            '1' => '已确认',
+            '2' => '已并台',
+            '3' => '已完成'
+        );
+        $paytype = array(
+            '0' => '现金付款',
+            '1' => '余额支付',
+            '2' => '在线支付',
+            '3' => '现金付款'
+        );
+        $paystatus = array(
+            '0' => '未支付',
+            '1' => '已支付'
+        );
+
+        $url = $_W['siteroot'].'app'.str_replace('./', '/', $this->createMobileUrl('orderdetail', array('orderid' => $order['id']), true));
+        $keyword1 = $order['ordersn'];
+        $keyword2 = $orderStatus[$order['status']];
+        $keyword3 = date("Y-m-d H:i", $order['dateline']);
+
+        if (!empty($setting['tplneworder']) && $setting['istplnotice'] == 1) {
+            $templateid = $setting['tplneworder'];
+            $first = "您的订单{$order['ordersn']}{$firstArr[$order['status']]}";
+            $remark = "门店名称：{$store['title']}";
+            $remark .= "\n支付方式：{$paytype[$order['paytype']]}";
+            $remark .= "\n支付状态：{$paystatus[$order['ispay']]}";
+            if ($order['dining_mode'] == 3) {
+                if ($order['dining_mode']==3) {
+                    $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $order['tablezonesid']));
+                }
+                $remark .= "\n预定人信息：{$order['username']}－{$order['tel']}";
+                $remark .= "\n桌台类型：{$tablezones['title']}";
+                $remark .= "\n预定时间：{$order['meal_time']}";
+            } else {
+                $remark .= "\n联系方式：{$order['username']}－{$order['tel']}";
+            }
+            if ($order['dining_mode'] == 1) {
+                $tablename = $this->getTableName($order['tables']);
+                $remark .= "\n桌台信息：{$tablename}";
+            }
+            if ($order['dining_mode'] == 2) {
+                if (!empty($order['address'])) {
+                    $remark .= "\n配送地址：{$order['address']}";
+                }
+                if (!empty($order['meal_time'])) {
+                    $remark .= "\n配送时间：{$order['meal_time']}";
+                }
+            }
+            if (!empty($order['remark'])) {
+                $remark .= "\n备注：{$order['remark']}";
+            }
+            if (!empty($order['reply'])) {
+                $remark .= "\n商家回复：{$order['reply']}";
+            }
+
+            $remark .= "\n应收合计：{$order['totalprice']}元";
+            if ($order['credit'] > 0) {
+                $remark .= "\n奖励积分：{$order['totalprice']}";
+            }
+            if ($setting['tpltype'] == 1) {
+                $template = array(
+                    'touser' => $order['from_user'],
+                    'template_id' => $templateid,
+                    'url' => $url,
+                    'topcolor' => "#a6a6a9",
+                    'data' => array(
+                        'first' => array(
+                            'value' => urlencode($first),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword1' => array(
+                            'value' => urlencode($keyword1),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword2' => array(
+                            'value' => urlencode($keyword2),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword3' => array(
+                            'value' => urlencode($keyword3),
+                            'color' => '#a6a6a9'
+                        ),
+                        'remark' => array(
+                            'value' => $remark,
+                            'color' => '#a6a6a9'
+                        ),
+                    )
+                );
+            } else {
+                $remark = "订单状态：" . $keyword2 . "\n" . $remark;
+                $template = array(
+                    'touser' => $order['from_user'],
+                    'template_id' => $templateid,
+                    'url' => $url,
+                    'topcolor' => "#a6a6a9",
+                    'data' => array(
+                        'first' => array(
+                            'value' => urlencode($first),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword1' => array(
+                            'value' => urlencode($keyword1),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword2' => array(
+                            'value' => urlencode($keyword3),
+                            'color' => '#a6a6a9'
+                        ),
+                        'remark' => array(
+                            'value' => $remark,
+                            'color' => '#a6a6a9'
+                        ),
+                    )
+                );
+            }
+
+            $templateMessage = new class_templateMessage($this->_appid, $this->_appsecret);
+            $access_token = WeAccount::token();
+            $result = $templateMessage->send_template_message($template, $access_token);
+        } else {
+            $content = "您的订单{$order['ordersn']}{$firstArr[$order['status']]}";
+            $content .= "\n订单号：{$keyword1}";
+            $content .= "\n订单状态：{$keyword2}";
+            $content .= "\n时间：{$keyword3}";
+            $content .= "\n门店名称：{$store['title']}";
+            $content .= "\n支付方式：{$paytype[$order['paytype']]}";
+            $content .= "\n支付状态：{$paystatus[$order['ispay']]}";
+
+
+            if ($order['dining_mode'] == 3) {
+                if ($order['dining_mode']==3) {
+                    $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $order['tablezonesid']));
+                }
+                $content .= "\n预定人信息：{$order['username']}－{$order['tel']}";
+                $content .= "\n桌台类型：{$tablezones['title']}";
+                $content .= "\n预定时间：{$order['meal_time']}";
+            } else {
+                $content .= "\n联系方式：{$order['username']}－{$order['tel']}";
+            }
+            if ($order['dining_mode'] == 1) {
+                $tablename = $this->getTableName($order['tables']);
+                $content .= "\n桌台信息：{$tablename}";
+            }
+            if ($order['dining_mode'] == 2) {
+                if (!empty($order['address'])) {
+                    $content .= "\n配送地址：{$order['address']}";
+                }
+                if (!empty($order['meal_time'])) {
+                    $content .= "\n配送时间：{$order['meal_time']}";
+                }
+            }
+            if (!empty($order['remark'])) {
+                $content .= "\n备注：{$order['remark']}";
+            }
+            if (!empty($order['reply'])) {
+                $content .= "\n商家回复：{$order['reply']}";
+            }
+
+            $content .= "\n应收合计：{$order['totalprice']}元";
+            if ($order['credit'] > 0) {
+                $content .= "\n奖励积分：{$order['totalprice']}";
+            }
+            $this->sendText($order['from_user'], $content);
+        }
+    }
+
+    public function sendAdminOrderNotice($oid, $from_user, $setting)
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+
+        $orderStatus = array(
+            '-1' => '已取消',
+            '0' => '待处理',
+            '1' => '已确认',
+            '2' => '已并台',
+            '3' => '已完成'
+        );
+        $paytype = array(
+            '0' => '现金付款',
+            '1' => '余额支付',
+            '2' => '在线支付',
+            '3' => '现金付款'
+        );
+        $ordertype = array(
+            '1' => '堂点',
+            '2' => '外卖',
+            '3' => '预定',
+            '4' => '快餐'
+        );
+        $paystatus = array(
+            '0' => '未支付',
+            '1' => '已支付'
+        );
+
+        $order = pdo_fetch("select * from " . tablename($this->table_order) . " WHERE id =:id LIMIT 1", array(':id' => $oid));
+        $store = pdo_fetch("select * from " . tablename($this->table_stores) . " WHERE id =:id LIMIT 1", array(':id' => $order['storeid']));
+        $url = '';
+        $keyword1 = $order['ordersn'];
+        $keyword2 = $orderStatus[$order['status']];
+        $keyword3 = date("Y-m-d H:i", $order['dateline']);
+
+        if (!empty($setting['tplneworder']) && $setting['istplnotice'] == 1 && $setting['is_notice'] == 1 && !empty($from_user)) {
+            $templateid = $setting['tplneworder'];
+            $first = "您有新的订单";
+            $remark = "门店名称：{$store['title']}";
+            $remark .= "\n订单类型：{$ordertype[$order['dining_mode']]}";
+            $remark .= "\n支付方式：{$paytype[$order['paytype']]}";
+            $remark .= "\n支付状态：{$paystatus[$order['ispay']]}";
+
+            $goods = pdo_fetchall("SELECT a.*,b.title,b.unitname FROM " . tablename($this->table_order_goods) . " as a left join  " . tablename($this->table_goods) . " as b on a.goodsid=b.id WHERE a.weid = :weid and a.orderid=:orderid", array(':weid' => $weid, ':orderid' => $oid));
+            if (!empty($goods)) {
+                $remark .= "\n商品名称   单价 数量";
+                $remark .= "\n－－－－－－－－－－－－－－－－";
+                foreach ($goods as $key => $value) {
+                    $remark .= "\n{$value['title']} {$value['price']}元 {$value['total']}{$value['unitname']}";
+                }
+            }
+
+            if ($order['dining_mode'] == 3) {
+                if ($order['dining_mode']==3) {
+                    $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $order['tablezonesid']));
+                }
+                $remark .= "\n预定人信息：{$order['username']}－{$order['tel']}";
+                $remark .= "\n桌台类型：{$tablezones['title']}";
+                $remark .= "\n预定时间：{$order['meal_time']}";
+            } else {
+                $remark .= "\n联系方式：{$order['username']}－{$order['tel']}";
+            }
+            if ($order['dining_mode'] == 1) {
+                $tablename = $this->getTableName($order['tables']);
+                $remark .= "\n桌台信息：{$tablename}";
+            }
+            if ($order['dining_mode'] == 2) {
+                if (!empty($order['address'])) {
+                    $remark .= "\n配送地址：{$order['address']}";
+                }
+                if (!empty($order['meal_time'])) {
+                    $remark .= "\n配送时间：{$order['meal_time']}";
+                }
+            }
+            $remark .= "\n备注：{$order['remark']}";
+            $remark .= "\n应收合计：{$order['totalprice']}元";
+
+            if ($setting['tpltype'] == 1) {
+                $template = array(
+                    'touser' => $from_user,
+                    'template_id' => $templateid,
+                    'url' => $url,
+                    'topcolor' => "#a6a6a9",
+                    'data' => array(
+                        'first' => array(
+                            'value' => urlencode($first),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword1' => array(
+                            'value' => urlencode($keyword1),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword2' => array(
+                            'value' => urlencode($keyword2),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword3' => array(
+                            'value' => urlencode($keyword3),
+                            'color' => '#a6a6a9'
+                        ),
+                        'remark' => array(
+                            'value' => $remark,
+                            'color' => '#a6a6a9'
+                        ),
+                    )
+                );
+            } else {
+                $remark = "订单状态：" . $keyword2 . "\n" . $remark;
+                $template = array(
+                    'touser' => $from_user,
+                    'template_id' => $templateid,
+                    'url' => $url,
+                    'topcolor' => "#a6a6a9",
+                    'data' => array(
+                        'first' => array(
+                            'value' => urlencode($first),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword1' => array(
+                            'value' => urlencode($keyword1),
+                            'color' => '#a6a6a9'
+                        ),
+                        'keyword2' => array(
+                            'value' => urlencode($keyword3),
+                            'color' => '#a6a6a9'
+                        ),
+                        'remark' => array(
+                            'value' => $remark,
+                            'color' => '#a6a6a9'
+                        ),
+                    )
+                );
+            }
+
+            $templateMessage = new class_templateMessage($this->_appid, $this->_appsecret);
+            $access_token = WeAccount::token();
+            $result = $templateMessage->send_template_message($template, $access_token);
+        } else {
+            $content = "您有新的订单";
+            $content .= "\n订单类型：{$ordertype[$order['dining_mode']]}";
+            $content .= "\n订单号：{$keyword1}";
+            $content .= "\n订单状态：{$keyword2}";
+            $content .= "\n时间：{$keyword3}";
+            $content .= "\n门店名称：{$store['title']}";
+            $content .= "\n支付方式：{$paytype[$order['paytype']]}";
+            $content .= "\n支付状态：{$paystatus[$order['ispay']]}";
+            $goods = pdo_fetchall("SELECT a.*,b.title,b.unitname FROM " . tablename($this->table_order_goods) . " as a left join  " . tablename($this->table_goods) . " as b on a.goodsid=b.id WHERE a.weid = :weid and a.orderid=:orderid", array(':weid' => $weid, ':orderid' => $oid));
+            if (!empty($goods)) {
+                $content .= "\n商品名称   单价 数量";
+                $content .= "\n－－－－－－－－－－－－－－－－";
+                foreach ($goods as $key => $value) {
+                    $content .= "\n{$value['title']} {$value['price']} {$value['total']}{$value['unitname']}";
+                }
+            }
+            if ($order['dining_mode'] == 3) {
+                if ($order['dining_mode']==3) {
+                    $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $order['tablezonesid']));
+                }
+                $content .= "\n预定人信息：{$order['username']}－{$order['tel']}";
+                $content .= "\n桌台类型：{$tablezones['title']}";
+                $content .= "\n预定时间：{$order['meal_time']}";
+            } else {
+                $content .= "\n联系方式：{$order['username']}－{$order['tel']}";
+            }
+            if ($order['dining_mode'] == 1) {
+                $tablename = $this->getTableName($order['tables']);
+                $content .= "\n桌台信息：{$tablename}";
+            }
+            if ($order['dining_mode'] == 2) {
+                if (!empty($order['address'])) {
+                    $content .= "\n配送地址：{$order['address']}";
+                }
+                if (!empty($order['meal_time'])) {
+                    $content .= "\n配送时间：{$order['meal_time']}";
+                }
+            }
+            $content .= "\n备注：{$order['remark']}";
+            $content .= "\n应收合计：{$order['totalprice']}元";
+            if (!empty($from_user)) {
+                $this->sendText($from_user, $content);
+            }
+        }
+    }
+
+    public function doMobileScreen()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $from_user = $this->_fromuser;
+        $storeid = intval($_GPC['storeid']);
+
+        $config = $this->module['config']['weisrc_dish'];
+
+
+        include $this->template('queue_screen');
+    }
+
+    public function doMobileRefreshScreen()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $from_user = $this->_fromuser;
+        $storeid = intval($_GPC['storeid']);
+
+        $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_queue_setting) . " WHERE weid = :weid AND storeid =:storeid AND :time>starttime AND :time<endtime ORDER BY limit_num ASC ", array(':weid' => $this->_weid, ':storeid' => $storeid, ':time' => date('H:i')));
+        $queue_count = pdo_fetchall("SELECT queueid,COUNT(1) as count FROM " . tablename($this->table_queue_order) . " where storeid=:storeid AND status=1 AND  weid = :weid GROUP BY queueid", array(':weid' => $this->_weid, ':storeid' => $storeid), 'queueid');
+
+        $result = array(
+            'list' => array()
+        );
+
+        $index = 0;
+        foreach ($list AS $key => $value) {
+            $current = 0;
+            if (!empty($queue_count[$value['id']]['count'])) {
+                $current = $queue_count[$value['id']]['count'];
+            }
+
+            $user_queue = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_order) . " where weid = :weid AND status=1 AND storeid=:storeid AND queueid=:queueid ORDER BY id ASC LIMIT 1 ", array(':weid' => $weid, ':storeid' => $storeid, ':queueid' => $value['id']));
+
+            $result['list'][] = array(
+                'before' => 0,
+                'type' => $value['title'],
+                'current' => empty($user_queue['num']) ? 0 : $user_queue['num'],
+                'type_name' => $value['title']
+            );
+            $index++;
+        }
+        echo json_encode($result);
+    }
+
+    public function doMobileCancelQueue()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $from_user = $this->_fromuser;
+        $storeid = intval($_GPC['storeid']);
+
+        $user_queue = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_order) . " where weid = :weid AND from_user=:from_user AND status=1 AND storeid=:storeid ORDER BY id DESC LIMIT 1 ", array(':weid' => $weid, ':from_user' => $from_user, ':storeid' => $storeid));
+
+        $resultid = pdo_update($this->table_queue_order, array('status' => -1), array('id' => $user_queue['id']));
+        if ($resultid > 0) {
+            if ($this->_accountlevel == 4) {
+                $this->sendQueueNotice($user_queue['id'], 3);
+            }
+        }
+
+        message('取消排号成功.', $this->createMobileurl('queue', array('storeid' => $storeid), true));
     }
 
     public function doMobileDetail()
@@ -697,6 +2186,8 @@ class weisrc_dishModuleSite extends WeModuleSite
         global $_W, $_GPC;
         $weid = $this->_weid;
         $from_user = $this->_fromuser;
+        $setting = $this->getSetting();
+        $cur_nave = 'detail';
         $id = intval($_GPC['id']);
 
         $item = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " where weid = :weid AND id=:id ORDER BY displayorder DESC", array(':weid' => $weid, ':id' => $id));
@@ -706,12 +2197,100 @@ class weisrc_dishModuleSite extends WeModuleSite
             message('店面不存在！');
         }
 
+        $do = 'detail';
+        $method = 'detail'; //method
+        $authurl = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('id' => $id), true) . '&authkey=1';
+        $url = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('id' => $id), true);
+        if (isset($_COOKIE[$this->_auth2_openid])) {
+            $from_user = $_COOKIE[$this->_auth2_openid];
+            $nickname = $_COOKIE[$this->_auth2_nickname];
+            $headimgurl = $_COOKIE[$this->_auth2_headimgurl];
+        } else {
+            if (isset($_GPC['code'])) {
+                $userinfo = $this->oauth2($authurl);
+                if (!empty($userinfo)) {
+                    $from_user = $userinfo["openid"];
+                    $nickname = $userinfo["nickname"];
+                    $headimgurl = $userinfo["headimgurl"];
+                    $sex = $userinfo["sex"];
+                } else {
+                    message('授权失败!');
+                }
+            } else {
+                if (!empty($this->_appsecret)) {
+                    $this->getCode($url);
+                }
+            }
+        }
+
+        $fans = pdo_fetch("SELECT * FROM " . tablename($this->table_fans) . " WHERE from_user=:from_user AND weid=:weid LIMIT 1", array(':from_user' => $from_user, ':weid' => $weid));
+        if ($this->_accountlevel == 4) {
+            if (empty($fans) && !empty($nickname)) {
+                $insert = array(
+                    'weid' => $weid,
+                    'from_user' => $from_user,
+                    'nickname' => $nickname,
+                    'sex' => $sex,
+                    'headimgurl' => $headimgurl,
+                    'dateline' => TIMESTAMP
+                );
+                pdo_insert($this->table_fans, $insert);
+            }
+        } else {
+            if (empty($fans) && !empty($from_user)) {
+                $insert = array(
+                    'weid' => $weid,
+                    'from_user' => $from_user,
+                    'dateline' => TIMESTAMP
+                );
+                pdo_insert($this->table_fans, $insert);
+            }
+        }
+        $fans = pdo_fetch("SELECT * FROM " . tablename($this->table_fans) . " WHERE from_user=:from_user AND weid=:weid LIMIT 1", array(':from_user' => $from_user, ':weid' => $weid));
+
+        $lat = trim($_GPC['lat']);
+        $lng = trim($_GPC['lng']);
+        $isposition = 0;
+        if (!empty($lat) && !empty($lng)) {
+            $isposition = 1;
+            setcookie($this->_lat, $lat, TIMESTAMP + 3600 * 12);
+            setcookie($this->_lng, $lng, TIMESTAMP + 3600 * 12);
+            pdo_update($this->table_fans, array('lat' => $lat, 'lng' => $lng), array('id' => $fans['id']));
+        }
+
         $collection = pdo_fetch("SELECT * FROM " . tablename($this->table_collection) . " where weid = :weid AND storeid=:storeid AND from_user=:from_user LIMIT 1", array(':weid' => $weid, ':storeid' => $id, ':from_user' => $from_user));
 
         //智能点餐
         $intelligents = pdo_fetchall("SELECT 1 FROM " . tablename($this->table_intelligent) . " WHERE weid={$weid} AND storeid={$id} GROUP BY name ORDER by name");
 
-        include $this->template('diandan/detail');
+        $share_image = tomedia($item['logo']);
+        $share_title = $item['title'];
+        $share_desc = $item['title'];
+        $share_url = $_W['siteroot'] . 'app/' . $this->createMobileUrl('detail', array('id' => $id), true);
+
+        include $this->template($this->cur_tpl . '/detail');
+    }
+
+    public function doMobileUpdateFansPosition()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $from_user = $this->_fromuser;
+        $lat = trim($_GPC['lat']);
+        $lng = trim($_GPC['lng']);
+
+        if (empty($from_user)) {
+            $this->showMsg('请重新发送关键字进入系统!');
+        }
+
+        pdo_update($this->table_fans, array('lat' => $lat, 'lng' => $lng, 'dateline' => TIMESTAMP), array('from_user' => $from_user, 'weid' => $weid));
+        $this->showMsg('success', 1);
+    }
+
+    public function doMobileOrderlist()
+    {
+        $url = $this->createMobileUrl('order', array(), true);
+        die('<script>location.href = "' . $url . '";</script>');
     }
 
     public function doMobileOrder()
@@ -719,16 +2298,36 @@ class weisrc_dishModuleSite extends WeModuleSite
         global $_W, $_GPC;
         $weid = $this->_weid;
         $from_user = $this->_fromuser;
+        $setting = $this->getSetting();
+        $cur_nave = 'my';
         $status = 0;
 
         if (!empty($_GPC['status'])) {
             $status = intval($_GPC['status']);
         }
 
+        $is_permission = false;
+        $tousers = explode(',', $setting['tpluser']);
+        if (in_array($from_user,$tousers)) {
+            $is_permission = true;
+        }
+        if ($is_permission == false) {
+            $accounts = pdo_fetchall("SELECT storeid FROM " . tablename($this->table_account) . " WHERE weid = :weid AND from_user=:from_user AND
+ status=1 ORDER BY id DESC ", array(':weid' => $this->_weid, ':from_user' => $from_user));
+            if ($accounts) {
+                $arr = array();
+                foreach ($accounts as $key => $val) {
+                    $arr[] = $val['storeid'];
+                }
+                $storeids = implode(',', $arr);
+                $is_permission = true;
+            }
+        }
+
         $do = 'order';
         $method = 'order'; //method
         $authurl = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array(), true) . '&authkey=1';
-        $url = $_W['siteroot'] .'app/'. $this->createMobileUrl($method, array(), true);
+        $url = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array(), true);
         if (isset($_COOKIE[$this->_auth2_openid])) {
             $from_user = $_COOKIE[$this->_auth2_openid];
             $nickname = $_COOKIE[$this->_auth2_nickname];
@@ -763,7 +2362,7 @@ class weisrc_dishModuleSite extends WeModuleSite
             $order_list[$key]['goods'] = pdo_fetchall("SELECT a.*,b.title FROM " . tablename($this->table_order_goods) . " as a left join  " . tablename($this->table_goods) . " as b on a.goodsid=b.id WHERE a.weid = '{$weid}' and a.orderid={$value['id']}");
         }
 
-        include $this->template('diandan/order');
+        include $this->template($this->cur_tpl . '/order');
     }
 
     public function doMobileOrderdetail()
@@ -774,12 +2373,246 @@ class weisrc_dishModuleSite extends WeModuleSite
         $id = intval($_GPC['orderid']);
 
         $order = pdo_fetch("SELECT a.* FROM " . tablename($this->table_order) . " AS a LEFT JOIN " . tablename($this->table_stores) . " AS b ON a.storeid=b.id  WHERE a.id ={$id} AND a.from_user='{$from_user}' ORDER BY a.id DESC LIMIT 20");
+        if (empty($order)) {
+            message('订单不存在');
+        }
 
         $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " where weid = :weid AND id=:id ORDER BY displayorder DESC", array(':weid' => $weid, ':id' => $order['storeid']));
 
+        if ($order['dining_mode'] == 1) {
+            $tablesid = intval($order['tables']);
+            $table = pdo_fetch("SELECT * FROM " . tablename($this->table_tables) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $tablesid));
+            if (empty($table)) {
+                exit('餐桌不存在！');
+            } else {
+                $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $table['tablezonesid']));
+                if (empty($tablezones)) {
+                    exit('餐桌类型不存在！');
+                }
+                $table_title = $tablezones['title'] . '-' . $table['title'];
+            }
+        }
+
+        if ($order['dining_mode'] == 3) {
+            $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $order['tablezonesid']));
+        }
         $order['goods'] = pdo_fetchall("SELECT a.*,b.title FROM " . tablename($this->table_order_goods) . " as a left join  " . tablename($this->table_goods) . " as b on a.goodsid=b.id WHERE a.weid = '{$weid}' and a.orderid={$order['id']}");
 
-        include $this->template('diandan/orderdetail');
+        include $this->template($this->cur_tpl . '/orderdetail');
+    }
+
+    public function doMobileAdminOrder()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $from_user = $this->_fromuser;
+        $setting = $this->getSetting();
+//        $cur_nave = 'my';
+        $status = 0;
+
+        if (!empty($_GPC['status'])) {
+            $status = intval($_GPC['status']);
+        }
+
+        $do = 'order';
+        $method = 'order'; //method
+        $authurl = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array(), true) . '&authkey=1';
+        $url = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array(), true);
+        if (isset($_COOKIE[$this->_auth2_openid])) {
+            $from_user = $_COOKIE[$this->_auth2_openid];
+            $nickname = $_COOKIE[$this->_auth2_nickname];
+            $headimgurl = $_COOKIE[$this->_auth2_headimgurl];
+        } else {
+            if (isset($_GPC['code'])) {
+                $userinfo = $this->oauth2($authurl);
+                if (!empty($userinfo)) {
+                    $from_user = $userinfo["openid"];
+                    $nickname = $userinfo["nickname"];
+                    $headimgurl = $userinfo["headimgurl"];
+                } else {
+                    message('授权失败!');
+                }
+            } else {
+                if (!empty($this->_appsecret)) {
+                    $this->getCode($url);
+                }
+            }
+        }
+        if (empty($from_user)) {
+            message('会话已过期，请重新发送关键字!');
+        }
+
+        $is_permission = false;
+        $tousers = explode(',', $setting['tpluser']);
+        if (in_array($from_user,$tousers)) {
+            $is_permission = true;
+        }
+        if ($is_permission == false) {
+            $accounts = pdo_fetchall("SELECT storeid FROM " . tablename($this->table_account) . " WHERE weid = :weid AND from_user=:from_user AND
+ status=1 ORDER BY id DESC ", array(':weid' => $this->_weid, ':from_user' => $from_user));
+            if ($accounts) {
+                $arr = array();
+                foreach ($accounts as $key => $val) {
+                    $arr[] = $val['storeid'];
+                }
+                $storeids = implode(',', $arr);
+                $is_permission = true;
+            }
+        }
+        if ($is_permission == false) {
+            message('对不起，您没有该功能的操作权限!');
+        }
+
+        $storelist = pdo_fetchall("SELECT * FROM " . tablename($this->table_stores) . " WHERE weid=:weid ORDER BY id DESC ", array(':weid' => $weid), 'id');
+        if (empty($storeids)) {
+            //已确认
+            $order_list = pdo_fetchall("SELECT a.* FROM " . tablename($this->table_order) . " AS a INNER JOIN " . tablename($this->table_stores) . " AS b ON a.storeid=b
+.id  WHERE a.status={$status} ORDER BY a.id DESC LIMIT 200");
+            //数量
+            $order_total = pdo_fetchcolumn("SELECT COUNT(1) FROM " . tablename($this->table_order) . " WHERE status=1 AND from_user='{$from_user}' ORDER BY id DESC");
+        } else {
+            //已确认
+            $order_list = pdo_fetchall("SELECT a.* FROM " . tablename($this->table_order) . " AS a INNER JOIN " . tablename($this->table_stores) . " AS b ON a.storeid=b
+.id  WHERE a.status={$status} AND a.storeid in ('".$storeids."') ORDER BY a.id DESC LIMIT 200");
+            //数量
+            $order_total = pdo_fetchcolumn("SELECT COUNT(1) FROM " . tablename($this->table_order) . " WHERE status={$status} AND storeid in ('".$storeids."') ORDER BY id
+DESC");
+        }
+
+        foreach ($order_list as $key => $value) {
+            $order_list[$key]['goods'] = pdo_fetchall("SELECT a.*,b.title FROM " . tablename($this->table_order_goods) . " as a left join  " . tablename($this->table_goods) . " as b on a.goodsid=b.id WHERE a.weid = '{$weid}' and a.orderid={$value['id']}");
+        }
+
+        include $this->template($this->cur_tpl . '/admin_order');
+    }
+
+    public function doMobileAdminOrderdetail()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $from_user = $this->_fromuser;
+        $setting = $this->getSetting();
+        $id = intval($_GPC['orderid']);
+
+        if (empty($from_user)) {
+            message('会话已过期，请重新发送关键字!');
+        }
+
+        $is_permission = false;
+        $tousers = explode(',', $setting['tpluser']);
+        if (in_array($from_user,$tousers)) {
+            $is_permission = true;
+        }
+        if ($is_permission == false) {
+            $accounts = pdo_fetchall("SELECT storeid FROM " . tablename($this->table_account) . " WHERE weid = :weid AND from_user=:from_user AND
+ status=1 ORDER BY id DESC ", array(':weid' => $this->_weid, ':from_user' => $from_user));
+            if ($accounts) {
+                $arr = array();
+                foreach ($accounts as $key => $val) {
+                    $arr[] = $val['storeid'];
+                }
+                $storeids = implode(',', $arr);
+                $is_permission = true;
+            }
+        }
+
+        if ($is_permission == false) {
+            message('对不起，您没有该功能的操作权限!');
+        }
+
+        if (empty($storeids)) {
+            $order = pdo_fetch("SELECT a.* FROM " . tablename($this->table_order) . " AS a INNER JOIN " . tablename($this->table_stores) . " AS b ON a
+.storeid=b.id  WHERE a.id ={$id} ORDER BY a.id DESC LIMIT 1");
+            if (empty($order)) {
+                message('订单不存在');
+            }
+        } else {
+            $order = pdo_fetch("SELECT a.* FROM " . tablename($this->table_order) . " AS a INNER JOIN " . tablename($this->table_stores) . " AS b ON a
+.storeid=b.id  WHERE a.id ={$id} AND a.storeid in ('".$storeids."') ORDER BY a.id DESC LIMIT 1");
+            if (empty($order)) {
+                message('订单不存在');
+            }
+        }
+
+        $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " where weid = :weid AND id=:id ORDER BY displayorder DESC", array(':weid' => $weid, ':id' => $order['storeid']));
+
+        if ($order['dining_mode'] == 1) {
+            $tablesid = intval($order['tables']);
+            $table = pdo_fetch("SELECT * FROM " . tablename($this->table_tables) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $tablesid));
+            if (empty($table)) {
+//                exit('餐桌不存在！');
+            } else {
+                $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $table['tablezonesid']));
+                if (empty($tablezones)) {
+                    exit('餐桌类型不存在！');
+                }
+                $table_title = $tablezones['title'] . '-' . $table['title'];
+            }
+        }
+
+        if ($order['dining_mode'] == 3) {
+            $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $order['tablezonesid']));
+        }
+        $order['goods'] = pdo_fetchall("SELECT a.*,b.title FROM " . tablename($this->table_order_goods) . " as a left join  " . tablename($this->table_goods) . " as b on a.goodsid=b.id WHERE a.weid = '{$weid}' and a.orderid={$order['id']}");
+
+        include $this->template($this->cur_tpl . '/admin_orderdetail');
+    }
+
+    public function doMobileSetAdminOrder()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+        $from_user = $this->_fromuser;
+        $setting = $this->getSetting();
+        $id = intval($_GPC['orderid']);
+        $status = trim($_GPC['status']);
+        $totalprice = floatval($_GPC['totalprice']);
+        $remark = trim($_GPC['remark']);
+
+        $orderstatus = array('cancel' => -1, 'confirm' => 1, 'finish' => 3, 'pay' => 2);
+        if (empty($orderstatus[$status])) {
+            message('对不起，您没有该功能的操作权限!!');
+        }
+
+        if (empty($from_user)) {
+            message('会话已过期，请重新发送关键字!');
+        }
+
+        $tousers = explode(',', $setting['tpluser']);
+        if (!in_array($from_user,$tousers)) {
+            message('对不起，您没有该功能的操作权限!');
+        }
+
+        $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id = :id ORDER BY id DESC LIMIT
+         1", array(':id' => $id));
+        if (empty($order)) {
+            message('订单不存在');
+        }
+        if ($orderstatus[$status] == 2) {
+            pdo_update($this->table_order, array('ispay' => 1, 'totalprice' => $totalprice, 'remark' => $remark), array
+            ('id' =>
+                $order['id']));
+        } else {
+            pdo_update($this->table_order, array('status' => $orderstatus[$status], 'totalprice' => $totalprice, 'remark' => $remark), array('id' => $order['id']));
+        }
+        if ($orderstatus[$status] == 3) {
+            if ($order['isfinish'] == 0) {
+                //计算积分
+                $this->setOrderCredit($order['id']);
+                pdo_update($this->table_order, array('isfinish' => 1), array('id' => $id));
+                if ($order['dining_mode'] == 1) {
+                    pdo_update($this->table_tables, array('status' => 0), array('id' => $order['tables']));
+                }
+            }
+        }
+
+        $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE id=:id LIMIT 1", array(':id' => $order['storeid']));
+        if ($this->_accountlevel == 4) {
+            $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id = :id ORDER BY id DESC LIMIT
+         1", array(':id' => $id));
+            $this->sendOrderNotice($order, $store, $setting);
+        }
+        message('操作成功！', $this->createMobileUrl('AdminOrderDetail', array('orderid' => $order['id']), true), 'success');
     }
 
     public function doMobileDetailContent()
@@ -796,19 +2629,23 @@ class weisrc_dishModuleSite extends WeModuleSite
             message('店面不存在！');
         }
 
-        include $this->template('diandan/detailcontent');
+        include $this->template($this->cur_tpl . '/detailcontent');
     }
+
 
     public function doMobileCollection()
     {
         global $_W, $_GPC;
         $weid = $this->_weid;
         $from_user = $this->_fromuser;
+        $setting = $this->getSetting();
+        $cur_nave = 'collection';
+
         $id = intval($_GPC['id']);
 
-        $restlist = pdo_fetchall("SELECT a.* FROM " . tablename($this->table_stores) . " a INNER JOIN " . tablename($this->table_collection) . " b ON a.id = b.storeid where  a.weid = :weid and is_show=1 and from_user=:from_user ORDER BY a.displayorder DESC, a.id DESC", array(':weid' => $weid, ':from_user' => $from_user));
+        $restlist = pdo_fetchall("SELECT a.* FROM " . tablename($this->table_stores) . " a INNER JOIN " . tablename($this->table_collection) . " b ON a.id = b.storeid where  a.weid = :weid and is_show=1 and b.from_user=:from_user ORDER BY a.displayorder DESC, a.id DESC", array(':weid' => $weid, ':from_user' => $from_user));
 
-        include $this->template('diandan/collection');
+        include $this->template($this->cur_tpl . '/collection');
     }
 
     public function doMobileSetCollection()
@@ -841,57 +2678,6 @@ class weisrc_dishModuleSite extends WeModuleSite
         echo json_encode($result);
     }
 
-    //门店实景
-    public function doMobileWapShopShow()
-    {
-        global $_W, $_GPC;
-        $weid = $this->_weid;
-        $from_user = $this->_fromuser;
-        $title = '商家店面';
-
-        $storeid = intval($_GPC['storeid']);
-        if (empty($storeid)) {
-            message('请先选择门店', $this->createMobileUrl('waprestlist'));
-        }
-
-        $method = 'wapshopshow'; //method
-        $authurl = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('storeid' => $storeid), true) . '&authkey=1';
-        $url = $_W['siteroot'] .'app/'. $this->createMobileUrl($method, array('storeid' => $storeid), true);
-        if (isset($_COOKIE[$this->_auth2_openid])) {
-            $from_user = $_COOKIE[$this->_auth2_openid];
-            $nickname = $_COOKIE[$this->_auth2_nickname];
-            $headimgurl = $_COOKIE[$this->_auth2_headimgurl];
-        } else {
-            if (isset($_GPC['code'])) {
-                $userinfo = $this->oauth2($authurl);
-                if (!empty($userinfo)) {
-                    $from_user = $userinfo["openid"];
-                    $nickname = $userinfo["nickname"];
-                    $headimgurl = $userinfo["headimgurl"];
-                } else {
-                    message('授权失败!');
-                }
-            } else {
-                if (!empty($this->_appsecret)) {
-                    $this->getCode($url);
-                }
-            }
-        }
-
-        if (empty($from_user)) {
-            message('会话已过期，请重新发送关键字!');
-        }
-
-        $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE id=:id", array(':id' => $storeid));
-        if (empty($store)) {
-            message('没有相关数据!');
-        }
-
-        $store['thumb_url'] = unserialize($store['thumb_url']);
-
-        include $this->template('dish_shop_show');
-    }
-
     //智能点餐_选人数
     public function doMobileWapSelect()
     {
@@ -909,7 +2695,7 @@ class weisrc_dishModuleSite extends WeModuleSite
         }
         $method = 'wapselect'; //method
         $authurl = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('storeid' => $storeid), true) . '&authkey=1';
-        $url = $_W['siteroot'] .'app/'. $this->createMobileUrl($method, array('storeid' => $storeid), true);
+        $url = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('storeid' => $storeid), true);
         if (isset($_COOKIE[$this->_auth2_openid])) {
             $from_user = $_COOKIE[$this->_auth2_openid];
             $nickname = $_COOKIE[$this->_auth2_nickname];
@@ -935,7 +2721,7 @@ class weisrc_dishModuleSite extends WeModuleSite
         }
 
         $intelligents = pdo_fetchall("SELECT * FROM " . tablename($this->table_intelligent) . " WHERE weid=:weid AND storeid=:storeid GROUP BY name ORDER by name", array(':weid' => $weid, ':storeid' => $storeid));
-        include $this->template('dish_select');
+        include $this->template($this->cur_tpl . '/select');
     }
 
     //智能点餐_菜单页
@@ -957,7 +2743,7 @@ class weisrc_dishModuleSite extends WeModuleSite
         }
         $method = 'wapselectlist'; //method
         $authurl = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('storeid' => $storeid), true) . '&authkey=1';
-        $url = $_W['siteroot'] .'app/'. $this->createMobileUrl($method, array('storeid' => $storeid), true);
+        $url = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('storeid' => $storeid), true);
         if (isset($_COOKIE[$this->_auth2_openid])) {
             $from_user = $_COOKIE[$this->_auth2_openid];
             $nickname = $_COOKIE[$this->_auth2_nickname];
@@ -1015,95 +2801,20 @@ class weisrc_dishModuleSite extends WeModuleSite
                 'taste' => $value['taste'],
                 'description' => $value['description']);
             $goods_tmp[] = $value['pcate'];
-            $total_money += $value['isspecial'] == 1 ? intval($value['productprice']) : intval($value['marketprice']);
+            $total_money += floatval($value['marketprice']);
         }
         $condition = trim(implode(',', $goods_tmp));
         //读取类别
         $categorys = pdo_fetchall("SELECT * FROM " . tablename($this->table_category) . " WHERE weid=:weid AND storeid=:storeid AND FIND_IN_SET(id, '{$condition}') ORDER BY displayorder DESC", array(':weid' => $weid, ':storeid' => $storeid));
-        include $this->template('dish_select_list');
+        include $this->template($this->cur_tpl . '/select_list');
     }
 
-    //我的订单
-    public function doMobileOrderList()
+    public function resetn()
     {
-        global $_GPC, $_W;
-        $weid = $this->_weid;
-        $from_user = $this->_fromuser;
-
-        $do = 'order';
-
-        $storeid = intval($_GPC['storeid']);
-        if ($storeid == 0) {
-            $storeid = $this->getStoreID();
-        }
-        if (empty($storeid)) {
-            message('请先选择门店', $this->createMobileUrl('waprestlist'));
-        }
-        $method = 'orderlist'; //method
-        $authurl = $_W['siteroot'] . 'app/' . $this->createMobileUrl($method, array('storeid' => $storeid), true) . '&authkey=1';
-        $url = $_W['siteroot'] .'app/'. $this->createMobileUrl($method, array('storeid' => $storeid), true);
-        if (isset($_COOKIE[$this->_auth2_openid])) {
-            $from_user = $_COOKIE[$this->_auth2_openid];
-            $nickname = $_COOKIE[$this->_auth2_nickname];
-            $headimgurl = $_COOKIE[$this->_auth2_headimgurl];
-        } else {
-            if (isset($_GPC['code'])) {
-                $userinfo = $this->oauth2($authurl);
-                if (!empty($userinfo)) {
-                    $from_user = $userinfo["openid"];
-                    $nickname = $userinfo["nickname"];
-                    $headimgurl = $userinfo["headimgurl"];
-                } else {
-                    message('授权失败!');
-                }
-            } else {
-                if (!empty($this->_appsecret)) {
-                    $this->getCode($url);
-                }
-            }
-        }
-        if (empty($from_user)) {
-            message('会话已过期，请重新发送关键字!');
-        }
-
-        $storelist = pdo_fetchall("SELECT * FROM " . tablename($this->table_stores) . " WHERE weid=:weid ORDER BY id DESC ", array(':weid' => $weid), 'id');
-
-        //已确认
-        $order_list_part1 = pdo_fetchall("SELECT a.* FROM " . tablename($this->table_order) . " AS a LEFT JOIN " . tablename($this->table_stores) . " AS b ON a.storeid=b.id  WHERE a.status=1 AND a.from_user='{$from_user}' ORDER BY a.id DESC LIMIT 20");
-        //数量
-        $order_total_part1 = pdo_fetchcolumn("SELECT COUNT(1) FROM " . tablename($this->table_order) . " WHERE status=1 AND from_user='{$from_user}' ORDER BY id DESC");
-        foreach ($order_list_part1 as $key => $value) {
-            $order_list_part1[$key]['goods'] = pdo_fetchall("SELECT a.*,b.title FROM " . tablename($this->table_order_goods) . " as a left join  " . tablename($this->table_goods) . " as b on a.goodsid=b.id WHERE a.weid = '{$weid}' and a.orderid={$value['id']}");
-        }
-
-        //未确认
-        $order_list_part2 = pdo_fetchall("SELECT a.* FROM " . tablename($this->table_order) . " AS a LEFT JOIN " . tablename($this->table_stores) . " AS b ON a.storeid=b.id  WHERE a.status=0 AND a.from_user='{$from_user}' ORDER BY a.id DESC LIMIT 20");
-        //数量
-        $order_total_part2 = pdo_fetchcolumn("SELECT COUNT(1) FROM " . tablename($this->table_order) . " WHERE status=0 AND from_user='{$from_user}' ORDER BY id DESC");
-        foreach ($order_list_part2 as $key => $value) {
-            $order_list_part2[$key]['goods'] = pdo_fetchall("SELECT a.*,b.title FROM " . tablename($this->table_order_goods) . " AS a LEFT JOIN " . tablename($this->table_goods) . " as b on a.goodsid=b.id WHERE a.weid = '{$weid}' and a.orderid={$value['id']}");
-        }
-
-        $order_list_part3 = pdo_fetchall("SELECT a.* FROM " . tablename($this->table_order) . " AS a LEFT JOIN " . tablename($this->table_stores) . " AS b ON a.storeid=b.id  WHERE (a.status=2) AND a.from_user='{$from_user}' ORDER BY a.id DESC LIMIT 20");
-        //数量
-        $order_total_part3 = pdo_fetchcolumn("SELECT COUNT(1) FROM " . tablename($this->table_order) . " WHERE (status=2) AND from_user='{$from_user}' ORDER BY id DESC");
-        foreach ($order_list_part3 as $key => $value) {
-            $order_list_part3[$key]['goods'] = pdo_fetchall("SELECT a.*,b.title FROM " . tablename($this->table_order_goods) . " as a left join  " . tablename($this->table_goods) . " as b on a.goodsid=b.id WHERE a.weid = '{$weid}' and a.orderid={$value['id']}");
-        }
-
-        $order_list_part4 = pdo_fetchall("SELECT a.* FROM " . tablename($this->table_order) . " AS a LEFT JOIN " . tablename($this->table_stores) . " AS b ON a.storeid=b.id  WHERE (a.status=3) AND a.from_user='{$from_user}' ORDER BY a.id DESC LIMIT 20");
-        //数量
-        $order_total_part4 = pdo_fetchcolumn("SELECT COUNT(1) FROM " . tablename($this->table_order) . " WHERE (status=3) AND from_user='{$from_user}' ORDER BY id DESC");
-        foreach ($order_list_part4 as $key => $value) {
-            $order_list_part4[$key]['goods'] = pdo_fetchall("SELECT a.*,b.title FROM " . tablename($this->table_order_goods) . " as a left join  " . tablename($this->table_goods) . " as b on a.goodsid=b.id WHERE a.weid = '{$weid}' and a.orderid={$value['id']}");
-        }
-
-        //智能点餐
-        $intelligents = pdo_fetchall("SELECT 1 FROM " . tablename($this->table_intelligent) . " WHERE weid={$weid} AND storeid={$storeid} GROUP BY name ORDER by name");
-
-        include $this->template('dish_order_list');
+        $this->table_queue_order = "we" . "isrc_di" . "sh_que" . "ue_order";
+        $this->table_print_order = "weis" . "rc_di" . "sh_print_order";
+        $this->table_mealtime = 'weis' . 'rc_di' . 'sh_me' . 'altime';
     }
-
 
     //获取各个分类被选中商品的数量
     public function doMobileGetDishNumOfCategory()
@@ -1170,6 +2881,16 @@ class weisrc_dishModuleSite extends WeModuleSite
         } else {
             pdo_delete('weisrc_dish_cart', array('id' => $cart['id']));
         }
+
+        $cart = pdo_fetchall("SELECT * FROM " . tablename($this->table_cart) . " WHERE  storeid=:storeid AND from_user=:from_user AND weid=:weid", array(':storeid' => $storeid, ':from_user' => $from_user, ':weid' => $weid));
+        $totalcount = 0;
+        $totalprice = 0;
+        foreach ($cart as $key => $value) {
+            $totalcount = $totalcount + $value['total'];
+            $totalprice = $totalprice + $value['total'] * $value['price'];
+        }
+        $result['totalprice'] = $totalprice;
+        $result['totalcount'] = $totalcount;
         $result['code'] = 0;
         message($result, '', 'ajax');
     }
@@ -1213,7 +2934,7 @@ class weisrc_dishModuleSite extends WeModuleSite
         }
 
         //查询购物车有没该商品
-        $cart = pdo_fetch("SELECT * FROM " . tablename($this->table_cart) . " WHERE goodsid=:goodsid AND weid=:weid AND storeid=:storeid AND from_user='" . $from_user . "'", array(':goodsid' => $dishid, ':weid' => $weid, ':storeid' => $storeid));
+        $cart = pdo_fetch("SELECT * FROM " . tablename($this->table_cart) . " WHERE goodsid=:goodsid AND weid=:weid AND storeid=:storeid AND from_user=:from_user ", array(':goodsid' => $dishid, ':weid' => $weid, ':storeid' => $storeid, ':from_user' => $from_user));
 
         if (empty($cart)) {
             //不存在的话增加商品点击量
@@ -1224,7 +2945,7 @@ class weisrc_dishModuleSite extends WeModuleSite
                 'storeid' => $goods['storeid'],
                 'goodsid' => $goods['id'],
                 'goodstype' => $goods['pcate'],
-                'price' => $goods['isspecial'] == 1 ? $goods['productprice'] : $goods['marketprice'],
+                'price' => $goods['marketprice'],
                 'from_user' => $from_user,
                 'total' => 1
             );
@@ -1234,6 +2955,16 @@ class weisrc_dishModuleSite extends WeModuleSite
             pdo_query("UPDATE " . tablename($this->table_cart) . " SET total=" . $total . " WHERE id=:id", array(':id' => $cart['id']));
         }
 
+        $cart = pdo_fetchall("SELECT * FROM " . tablename($this->table_cart) . " WHERE  storeid=:storeid AND from_user=:from_user AND weid=:weid", array(':storeid' => $storeid, ':from_user' => $from_user, ':weid' => $weid));
+        $totalcount = 0;
+        $totalprice = 0;
+        foreach ($cart as $key => $value) {
+            $totalcount = $totalcount + $value['total'];
+            $totalprice = $totalprice + $value['total'] * $value['price'];
+        }
+
+        $result['totalprice'] = $totalprice;
+        $result['totalcount'] = $totalcount;
         $result['code'] = 0;
         message($result, '', 'ajax');
     }
@@ -1252,13 +2983,9 @@ class weisrc_dishModuleSite extends WeModuleSite
 
         $storeid = intval($_GPC['storeid']);
         $categoryid = intval($_GPC['categoryid']);
-        $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_goods) . " WHERE weid = :weid AND status = 1 AND storeid=:storeid AND pcate=:pcate order by displayorder DESC,id DESC", array(':weid' => $weid, ':storeid' => $storeid, ':pcate' => $categoryid));
+        $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_goods) . " WHERE weid = :weid AND status = 1 AND storeid=:storeid AND pcate=:pcate order by displayorder DESC,subcount DESC,id DESC", array(':weid' => $weid, ':storeid' => $storeid, ':pcate' => $categoryid));
 
-//        $result['debug'] = 'weid:'.$weid.'storeid'.$storeid.'cate:'.$categoryid;
-//        message($result, '', 'ajax');
-
-        $dish_arr = $this->getDishCountInCart($storeid);
-
+        $dishcount = $this->getDishCountInCart($storeid);
         foreach ($list as $key => $row) {
             $subcount = intval($row['subcount']);
             $data[$key] = array(
@@ -1269,18 +2996,16 @@ class weisrc_dishModuleSite extends WeModuleSite
                 'dDescribe' => $row['description'], //描述
                 'dTaste' => $row['taste'], //口味
                 'dSubCount' => $row['subcount'], //被点次数
-                'thumb' => $row['thumb'],
+                'credit' => $row['credit'], //被点次数
+                'thumb' => empty($row['thumb']) ? '' : tomedia($row['thumb']),
                 'unitname' => $row['unitname'],
                 'dIsSpecial' => $row['isspecial'],
                 'dIsHot' => $subcount > 20 ? 2 : 0,
-                'total' => empty($dish_arr) ? 0 : intval($dish_arr[$row['id']]) //商品数量
+                'total' => empty($dishcount) ? 0 : intval($dishcount[$row['id']]) //商品数量
             );
         }
         $result['data'] = $data;
         $result['categoryid'] = $categoryid;
-
-        //json_encode($result)
-
         message($result, '', 'ajax');
     }
 
@@ -1345,7 +3070,7 @@ class weisrc_dishModuleSite extends WeModuleSite
                         'storeid' => $item['storeid'],
                         'goodsid' => $item['id'],
                         'goodstype' => $item['pcate'],
-                        'price' => $item['isspecial'] == 1 ? $item['productprice'] : $item['marketprice'],
+                        'price' => $item['marketprice'],
                         'from_user' => $from_user,
                         'total' => 1
                     );
@@ -1355,8 +3080,9 @@ class weisrc_dishModuleSite extends WeModuleSite
         }
 
         //跳转
-        $url = $this->createMobileUrl('wapmenu', array('storeid' => $storeid), true);
-        die('<script>location.href = "' . $url . '";</script>');
+        $url = $this->createMobileUrl('detail', array('id' => $storeid), true);
+        message('操作成功，现在返回选择点餐模式!', $url, 'success');
+//        die('<script>location.href = "' . $url . '";</script>');
     }
 
     //提交订单
@@ -1368,6 +3094,7 @@ class weisrc_dishModuleSite extends WeModuleSite
         $this->_fromuser = $from_user;
 
         $storeid = intval($_GPC['storeid']);
+        $rtype = intval($_GPC['rtype']);
 
         if (empty($from_user)) {
             $this->showMessageAjax('请重新发送关键字进入系统!', $this->msg_status_bad);
@@ -1379,11 +3106,12 @@ class weisrc_dishModuleSite extends WeModuleSite
 
         //查询购物车
         $cart = pdo_fetchall("SELECT * FROM " . tablename($this->table_cart) . " WHERE weid = :weid AND from_user = :from_user AND storeid=:storeid", array(':weid' => $weid, ':from_user' => $from_user, ':storeid' => $storeid), 'goodsid');
-
-        if (empty($cart)) { //购物车为空
-            $this->showMessageAjax('请先添加商品!', $this->msg_status_bad);
-        } else {
-            $goods = pdo_fetchall("SELECT id, title, thumb, marketprice, unitname FROM " . tablename($this->table_goods) . " WHERE id IN ('" . implode("','", array_keys($cart)) . "')");
+        if ($rtype != 1) {
+            if (empty($cart)) { //购物车为空
+                $this->showMessageAjax('请先添加商品!', $this->msg_status_bad);
+            } else {
+                $goods = pdo_fetchall("SELECT id, title, thumb, marketprice, unitname FROM " . tablename($this->table_goods) . " WHERE id IN ('" . implode("','", array_keys($cart)) . "')");
+            }
         }
 
         $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE weid=:weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $storeid));
@@ -1398,7 +3126,8 @@ class weisrc_dishModuleSite extends WeModuleSite
         $remark = trim($_GPC['remark']); //备注
         $address = trim($_GPC['address']); //地址
         $tables = intval($_GPC['tables']); //桌号
-        $setting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " WHERE weid={$weid} LIMIT 1");
+        $tablezonesid = intval($_GPC['tablezonesid']); //桌台
+
         $ordertype = intval($_GPC['ordertype']) == 0 ? 1 : intval($_GPC['ordertype']);
 
         //用户信息判断
@@ -1409,36 +3138,29 @@ class weisrc_dishModuleSite extends WeModuleSite
             $this->showMessageAjax('请输入联系电话!', $this->msg_status_bad);
         }
 
-        if ($ordertype == 1) {//店内
+        if ($ordertype == 1) {//堂点
             if ($counts <= 0) {
-                $this->showMessageAjax('预订人数必须大于0!', $this->msg_status_bad);
-            }
-            if ($seat_type == 0) {
-                $this->showMessageAjax('请选择就餐形式!', $this->msg_status_bad);
+                $this->showMessageAjax('请输入用餐人数!!!', $this->msg_status_bad);
             }
             if ($tables == 0) {
-                $this->showMessageAjax('请输入桌号!', $this->msg_status_bad);
+                $this->showMessageAjax('请先扫描桌台!', $this->msg_status_bad);
             }
         } else if ($ordertype == 2) {//外卖
             if (empty($address)) {
                 $this->showMessageAjax('请输入联系地址!', $this->msg_status_bad);
             }
-
-//            if ($meal_time == '休息中'){//debug
-//                $this->showMessageAjax('休息中，暂不支持外卖!', $this->msg_status_bad);
-//            }
         }
 
-        $user = pdo_fetch("SELECT * FROM " . tablename('weisrc_dish_address') . " WHERE weid = :weid  AND from_user=:from_user ORDER BY `id` DESC limit 1", array(':weid' => $weid, ':from_user' => $from_user));
-        $fansdata = array('weid' => $weid, 'from_user' => $from_user, 'realname' => $guest_name, 'address' => $address, 'mobile' => $tel);
+        $user = pdo_fetch("SELECT * FROM " . tablename($this->table_fans) . " WHERE weid = :weid  AND from_user=:from_user ORDER BY `id` DESC limit 1", array(':weid' => $weid, ':from_user' => $from_user));
+        $fansdata = array('weid' => $weid, 'from_user' => $from_user, 'username' => $guest_name, 'address' => $address, 'mobile' => $tel);
         if (empty($address)) {
             unset($fansdata['address']);
         }
 
         if (empty($user)) {
-            pdo_insert('weisrc_dish_address', $fansdata);
+            pdo_insert($this->table_fans, $fansdata);
         } else {
-            pdo_update('weisrc_dish_address', $fansdata, array('id' => $user['id']));
+            pdo_update($this->table_fans, $fansdata, array('id' => $user['id']));
         }
 
         //2.购物车 //a.添加订单、订单产品
@@ -1457,7 +3179,7 @@ class weisrc_dishModuleSite extends WeModuleSite
             $dispatchprice = $store['dispatchprice'];
             $freeprice = floatval($store['freeprice']);
             if ($freeprice > 0.00) {
-                if ($goodsprice > $freeprice) {
+                if ($goodsprice >= $freeprice) {
                     $dispatchprice = 0;
                 }
             }
@@ -1465,10 +3187,21 @@ class weisrc_dishModuleSite extends WeModuleSite
 
         $totalprice = $goodsprice + $dispatchprice;
 
+        if ($ordertype == 3) {
+            if ($rtype == 1) {
+                $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " WHERE id = :id", array(':id' => $tablezonesid));
+                if (floatval($tablezones['reservation_price']) <= 0) {
+                    $totalprice = 0.01;
+                } else {
+                    $totalprice = floatval($tablezones['reservation_price']);
+                }
+            }
+        }
+
         if ($ordertype == 2) {
             $sendingprice = floatval($store['sendingprice']);
             if ($sendingprice > 0.00) {
-                if ($goodsprice < $sendingprice) {
+                if ($goodsprice < $store['sendingprice']) {
                     $this->showMessageAjax('您的购买金额达不到起送价格!', $this->msg_status_bad);
                 }
             }
@@ -1491,6 +3224,7 @@ class weisrc_dishModuleSite extends WeModuleSite
             'counts' => $counts,
             'seat_type' => $seat_type,
             'tables' => $tables,
+            'tablezonesid' => $tablezonesid,
             'carports' => $carports,
             'dining_mode' => $ordertype, //订单类型
             'remark' => $remark, //备注
@@ -1522,10 +3256,9 @@ class weisrc_dishModuleSite extends WeModuleSite
 
         //保存新订单商品
         foreach ($cart as $row) {
-            if (empty($row) || empty($row['total'])) {
+            if (empty($row) || empty($row['total']) || $rtype == 1) {
                 continue;
             }
-
             pdo_insert($this->table_order_goods, array(
                 'weid' => $_W['uniacid'],
                 'storeid' => $row['storeid'],
@@ -1536,9 +3269,10 @@ class weisrc_dishModuleSite extends WeModuleSite
                 'dateline' => TIMESTAMP,
             ));
         }
+        if ($rtype != 1) {
+            pdo_delete($this->table_cart, array('weid' => $weid, 'from_user' => $from_user, 'storeid' => $storeid));
+        }
 
-        //清空购物车
-        pdo_delete($this->table_cart, array('weid' => $weid, 'from_user' => $from_user, 'storeid' => $storeid));
         $result['orderid'] = $orderid;
         $result['code'] = $this->msg_status_success;
         $result['msg'] = '操作成功';
@@ -1551,7 +3285,7 @@ class weisrc_dishModuleSite extends WeModuleSite
         checkauth();
         $orderid = intval($_GPC['orderid']);
         $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id = :id", array(':id' => $orderid));
-        if ($order['status'] != '0') {
+        if (!empty($order['status'])) {
             message('抱歉，您的订单已经付款或是被关闭，请重新进入付款！', $this->createMobileUrl('orderlist', array('storeid' => $order['storeid'])), 'error');
         }
         $params['tid'] = $orderid;
@@ -1563,6 +3297,16 @@ class weisrc_dishModuleSite extends WeModuleSite
         include $this->template('pay');
     }
 
+    private function sendText($openid, $content)
+    {
+        $send['touser'] = trim($openid);
+        $send['msgtype'] = 'text';
+        $send['text'] = array('content' => urlencode($content));
+        $acc = WeAccount::create();
+        $data = $acc->sendCustomNotice($send);
+        return $data;
+    }
+
     public function payResult($params)
     {
         global $_W, $_GPC;
@@ -1571,30 +3315,46 @@ class weisrc_dishModuleSite extends WeModuleSite
         $fee = intval($params['fee']);
         $data = array('status' => $params['result'] == 'success' ? 1 : 0);
         $paytype = array('credit' => '1', 'wechat' => '2', 'alipay' => '2', 'delivery' => '3');
+
+        // 卡券代金券备注
+        if (!empty($params['is_usecard'])) {
+            $cardType = array('1' => '微信卡券', '2' => '系统代金券');
+            $result_price = ($params['fee'] - $params['card_fee']);
+            $data['paydetail'] = '使用' . $cardType[$params['card_type']] . '支付了' . $result_price;
+            $data['paydetail'] .= '元，实际支付了' . $params['card_fee'] . '元。';
+            $data['totalprice'] = $params['card_fee'];
+        }
+
         $data['paytype'] = $paytype[$params['type']];
 
         if ($params['type'] == 'wechat') {
-            $data['dateline'] = TIMESTAMP;
-            $paylog = pdo_fetch("SELECT plid FROM " . tablename('core_paylog') . " WHERE uniacid= :uniacid and tid = :tid", array(':uniacid' => $weid,':tid' => $orderid));
-            if (!empty($paylog)) {
-                $data['transid'] = $paylog['plid'];
-            }
-//            $data['transid'] = $params['tag']['transaction_id'];
+            $data['transid'] = $params['tag']['transaction_id'];
         }
 
         if ($params['type'] == 'delivery') {
-            $data['status'] = 1;
+//            $data['status'] = 1;
         }
 
-        $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id = '{$orderid}'");
-        $storeid = $order['storeid'];
-        pdo_update($this->table_order, $data, array('id' => $orderid));
-        if ($params['from'] == 'return') {
+        $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id = :id", array(':id' => $orderid));
+        if (empty($order)) {
+            message('订单不存在!');
+        }
 
-            //邮件提醒
-            $goods_str = '';
+        if ($data['paytype'] == 1 || $data['paytype'] == 2) { //在线，余额支付
+            $data['ispay'] = 1;
+        }
+
+        pdo_update($this->table_order, $data, array('id' => $orderid));
+
+        $storeid = $order['storeid'];
+        $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE id=:id LIMIT 1", array(':id' => $storeid));
+//        if ($params['from'] == 'return') {
+//        if ($params['result'] == 'success' ) {
+//        if ($params['from'] == 'return' && $params['result'] == 'success') {
+//        if (($params['result'] == 'success' && $params['from'] == 'notify') || ($params['from'] == 'return' && $params['type'] == 'delivery')) {
+        if (!empty($order)) {
             //本订单产品
-            $goods = pdo_fetchall("SELECT a.*,b.title,b.unitname FROM " . tablename($this->table_order_goods) . " as a left join  " . tablename($this->table_goods) . " as b on a.goodsid=b.id WHERE a.weid = '{$weid}' and a.orderid={$orderid}");
+            $goods = pdo_fetchall("SELECT a.*,b.title,b.unitname FROM " . tablename($this->table_order_goods) . " as a left join  " . tablename($this->table_goods) . " as b on a.goodsid=b.id WHERE a.orderid=:orderid ", array(':orderid' => $orderid));
             $goods_str = '';
             $goods_tplstr = '';
             $flag = false;
@@ -1609,184 +3369,177 @@ class weisrc_dishModuleSite extends WeModuleSite
                 }
             }
 
-            //发送邮件提醒
-            $emailSetting = pdo_fetch("SELECT * FROM " . tablename($this->table_email_setting) . " WHERE weid=:weid AND storeid=:storeid LIMIT 1", array(':weid' => $weid, ':storeid' => $storeid));
-            $email_tpl = $emailSetting['email_business_tpl'];
-            //您有新的订单：[sn]，收货人：[name]，菜单：[goods]，电话：[tel]，请及时确认订单！
-            $email_tpl = "
-        您有新订单：<br/>
-        所属门店：[store]<br/>
-        单号[sn] 总数量:[totalnum] 总价:[totalprice]<br/>
-        菜单：[goods]<br/>
-        姓名：[name]<br/>
-        电话：[tel]<br/>
-        桌号：[tables]<br/>
-        备注：[remark]
-        ";
-
-            if ($order['dining_mode'] == 2) {
-                $email_tpl = "
-        您有新订单：<br/>
-        所属门店：[store]<br/>
-        单号[sn] 总数量:[totalnum] 总价:[totalprice]<br/>
-        收货人：[name]<br/>
-        送达时间：[mealtime]<br/>
-        菜单：<br/>[goods]<br/>
-        电话：[tel]<br/>
-        地址：[address]<br>
-        备注：[remark]
-        ";
+            if ($order['dining_mode'] == 1) {
+                if ($data['paytype'] == 3) { //现金
+                    pdo_update($this->table_tables, array('status' => 2), array('id' => $order['tables']));
+                } else {
+                    pdo_update($this->table_tables, array('status' => 3), array('id' => $order['tables']));
+                }
             }
-            $smsStatus = '';
-            //发送短信提醒
-            $smsSetting = pdo_fetch("SELECT * FROM " . tablename($this->table_sms_setting) . " WHERE weid=:weid AND storeid=:storeid LIMIT 1", array(':weid' => $weid, ':storeid' => $storeid));
-            $sendInfo = array();
-            if (!empty($smsSetting)) {
-                if ($smsSetting['sms_enable'] == 1 && !empty($smsSetting['sms_mobile'])) {
-                    //模板
-                    if (empty($smsSetting['sms_business_tpl'])) {
-                        $smsSetting['sms_business_tpl'] = '您有新的订单：[sn]，收货人：[name]，电话：[tel]，请及时确认订单！';
-                    }
-                    //订单号
-                    $smsSetting['sms_business_tpl'] = str_replace('[sn]', $order['ordersn'], $smsSetting['sms_business_tpl']);
-                    //用户名
-                    $smsSetting['sms_business_tpl'] = str_replace('[name]', $order['username'], $smsSetting['sms_business_tpl']);
-                    //就餐时间
-                    $smsSetting['sms_business_tpl'] = str_replace('[date]', $order['meal_time'], $smsSetting['sms_business_tpl']);
-                    //电话
-                    $smsSetting['sms_business_tpl'] = str_replace('[tel]', $order['tel'], $smsSetting['sms_business_tpl']);
-                    $smsSetting['sms_business_tpl'] = str_replace('[totalnum]', $order['totalnum'], $smsSetting['sms_business_tpl']);
-                    $smsSetting['sms_business_tpl'] = str_replace('[totalprice]', $order['totalprice'], $smsSetting['sms_business_tpl']);
-                    $smsSetting['sms_business_tpl'] = str_replace('[address]', $order['address'], $smsSetting['sms_business_tpl']);
-                    $smsSetting['sms_business_tpl'] = str_replace('[remark]', $order['remark'], $smsSetting['sms_business_tpl']);
-                    $smsSetting['sms_business_tpl'] = str_replace('[goods]', $goods_str, $smsSetting['sms_business_tpl']);
+            if ($data['paytype'] == 1 || $data['paytype'] == 2) { //在线，余额支付
+                pdo_update($this->table_order, array('ispay' => 1), array('id' => $orderid));
+            }
 
-                    $sendInfo['username'] = $smsSetting['sms_username'];
-                    $sendInfo['pwd'] = $smsSetting['sms_pwd'];
-                    $sendInfo['mobile'] = $smsSetting['sms_mobile'];
-                    $sendInfo['content'] = $smsSetting['sms_business_tpl'];
-                    //debug
-                    if ($data['status'] == 1) {
-                        if ($order['issms'] == 0) {
-                            pdo_update($this->table_order, array('issms' => 1), array('id' => $orderid));
-                            $return_result_code = $this->_sendSms($sendInfo);
-                            $smsStatus = $this->sms_status[$return_result_code];
+            $setting = pdo_fetch("select * from " . tablename($this->table_setting) . " where weid =:weid LIMIT 1", array(':weid' => $weid));
+
+            if ($order['istpl'] == 0) {
+                pdo_update($this->table_order, array('istpl' => 1), array('id' => $orderid));
+
+//                for ($i = 1; $i <= 3; $i++) {
+//                    $this->feiyinSendFreeMessage($orderid);
+//                }
+                $this->feiyinSendFreeMessage($orderid);
+                $this->_365SendFreeMessage($orderid);
+
+                $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id = :id", array(':id' => $orderid));
+                //用户
+                $this->sendOrderNotice($order, $store, $setting);
+//                $this->sendOrderEmail($order, $store, $goods_str);
+//                $this->sendOrderSms($order);
+                //管理
+                if (!empty($setting)) {
+                    //平台提醒
+                    if ($setting['is_notice'] == 1) {
+                        if (!empty($setting['tpluser'])) {
+                            $tousers = explode(',', $setting['tpluser']);
+                            foreach ($tousers as $key => $value) {
+                                $this->sendAdminOrderNotice($orderid, $value, $setting);
+                            }
+                        }
+                        if (!empty($setting['email'])) {
+                            $this->sendAdminOrderEmail($setting['email'], $order, $store, $goods_str);
+                        }
+                        if (!empty($setting['sms_mobile'])) {
+                            $smsStatus = $this->sendAdminOrderSms($setting['sms_mobile'], $order);
+                        }
+                    }
+                    //门店提醒
+                    $accounts = pdo_fetchall("SELECT * FROM " . tablename($this->table_account) . " WHERE weid = :weid AND storeid=:storeid AND status=1 ORDER BY id DESC ", array(':weid' => $this->_weid, ':storeid' => $storeid));
+                    foreach ($accounts as $key => $value) {
+                        if (!empty($value['from_user'])) {
+                            $this->sendAdminOrderNotice($orderid, $value['from_user'], $setting);
+                        }
+                        if (!empty($value['email'])) {
+                            $this->sendAdminOrderEmail($value['email'], $order, $store, $goods_str);
+                        }
+                        if (!empty($value['mobile'])) {
+                            $smsStatus = $this->sendAdminOrderSms($value['mobile'], $order);
                         }
                     }
                 }
             }
+        }
 
-
-            $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE weid=:weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $storeid));
-
-            if (!empty($emailSetting) && !empty($emailSetting['email'])) {
-                $email_tpl = str_replace('[store]', $store['title'], $email_tpl);
-                $email_tpl = str_replace('[sn]', $order['ordersn'], $email_tpl);
-                $email_tpl = str_replace('[name]', $order['username'], $email_tpl);
-                //用户名
-                $email_tpl = str_replace('[name]', $order['username'], $email_tpl);
-                //就餐时间
-                $email_tpl = str_replace('[mealtime]', $order['meal_time'], $email_tpl);
-                //电话
-                $email_tpl = str_replace('[tel]', $order['tel'], $email_tpl);
-                $email_tpl = str_replace('[tables]', $order['tables'], $email_tpl);
-                $email_tpl = str_replace('[goods]', $goods_str, $email_tpl);
-                $email_tpl = str_replace('[totalnum]', $order['totalnum'], $email_tpl);
-                $email_tpl = str_replace('[totalprice]', $order['totalprice'], $email_tpl);
-                $email_tpl = str_replace('[address]', $order['address'], $email_tpl);
-                $email_tpl = str_replace('[remark]', $order['remark'], $email_tpl);
-
-                if ($emailSetting['email_host'] == 'smtp.qq.com' || $emailSetting['email_host'] == 'smtp.gmail.com') {
-                    $secure = 'ssl';
-                    $port = '465';
-                } else {
-                    $secure = 'tls';
-                    $port = '25';
-                }
-
-                $mail_config = array();
-                $mail_config['host'] = $emailSetting['email_host'];
-                $mail_config['secure'] = $secure;
-                $mail_config['port'] = $port;
-                $mail_config['username'] = $emailSetting['email_user'];
-                $mail_config['sendmail'] = $emailSetting['email_send'];
-                $mail_config['password'] = $emailSetting['email_pwd'];
-                $mail_config['mailaddress'] = $emailSetting['email'];
-                $mail_config['subject'] = '订单提醒';
-                $mail_config['body'] = $email_tpl;
-
-                if ($data['status'] == 1) {
-                    if ($order['isemail'] == 0) {
-                        pdo_update($this->table_order, array('isemail' => 1), array('id' => $orderid));
-                        $result = $this->sendmail($mail_config);
-                    }
-                }
-            }
-
-            $setting = pdo_fetch("select * from " . tablename($this->table_setting) . " where weid =:weid LIMIT 1", array(':weid' => $weid));
-            if (!empty($setting) && $setting['istplnotice'] == 1) {
-                $templateid = $setting['tplneworder'];
-                $noticeuser = $setting['tpluser'];
-                $template = array(
-                    'touser' => $noticeuser,
-                    'template_id' => $templateid,
-                    'url' => '',
-                    'topcolor' => "#FF0000",
-                    'data' => array(
-                        'first' => array(
-                            'value' => urlencode("您有一个新的订单"),
-                            'color' => '#000'
-                        ),
-                        'keyword1' => array(
-                            'value' => urlencode($order['ordersn']),
-                            'color' => '#000'
-                        ),
-                        'keyword2' => array(
-                            'value' => urlencode($order['username'] . ' ' . $order['tel']),
-                            'color' => '#000'
-                        ),
-                        'keyword3' => array(
-                            'value' => urlencode($goods_tplstr),
-                            'color' => '#000'
-                        ),
-                        'keyword4' => array(
-                            'value' => urlencode($order['address']),
-                            'color' => '#000'
-                        ),
-                        'keyword5' => array(
-                            'value' => urlencode($order['meal_time']),
-                            'color' => '#000'
-                        ),
-                        'remark' => array(
-                            'value' => urlencode('总金额:' . $order['totalprice'] . '元'),
-                            'color' => '#f00'
-                        ),
-                    )
-                );
-
-                if ($data['status'] == 1) {
-                    if ($order['istpl'] == 0) {
-                        pdo_update($this->table_order, array('istpl' => 1), array('id' => $orderid));
-                        $templateMessage = new class_templateMessage($this->_appid, $this->_appsecret);
-                        $access_token = WeAccount::token();
-                        $templateMessage->send_template_message($template, $access_token);
-                    }
-                }
-            }
-
-            $this->feiyinSendFreeMessage($orderid);
-
-            $setting = uni_setting($_W['uniacid'], array('creditbehaviors'));
-            $credit = $setting['creditbehaviors']['currency'];
-            if ($params['type'] == $credit) {
-                message('支付成功！' . $smsStatus, $this->createMobileUrl('order', array('storeid' => $storeid, 'status' => 1), true), 'success');
-            } else {
-                message('支付成功！' . $smsStatus, '../../app/' . $this->createMobileUrl('order', array('storeid' => $storeid), true), 'success');
-            }
+        $setting = uni_setting($_W['uniacid'], array('creditbehaviors'));
+        $credit = $setting['creditbehaviors']['currency'];
+        if ($params['type'] == $credit) {
+            message('支付成功！', $this->createMobileUrl('orderdetail', array('orderid' => $orderid), true), 'success');
+        } else {
+            message('支付成功！', '../../app/' . $this->createMobileUrl('orderdetail', array('orderid' => $orderid), true), 'success');
         }
     }
 
-    //public
+    public function sendOrderEmail($order, $store, $goods_str)
+    {
+        $firstArr = array(
+            '-1' => '已经取消',
+            '0' => '已经提交',
+            '1' => '已经确认',
+            '2' => '已并台',
+            '3' => '已经完成'
+        );
+
+        $orderStatus = array(
+            '-1' => '已取消',
+            '0' => '待处理',
+            '1' => '已确认',
+            '2' => '已并台',
+            '3' => '已完成'
+        );
+        $paytype = array(
+            '0' => '现金付款',
+            '1' => '余额支付',
+            '2' => '在线支付',
+            '3' => '现金付款'
+        );
+
+        //发送邮件提醒
+        $emailSetting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " WHERE weid=:weid AND storeid=:storeid LIMIT 1", array(':weid' => $order['weid'], ':storeid' => $order['storeid']));
+
+        $keyword1 = $order['ordersn'];
+        $keyword2 = $orderStatus[$order['status']];
+        $keyword3 = date("Y-m-d H:i", $order['dateline']);
+
+        $email_tpl = "
+        您的订单{$order['ordersn']}{$firstArr[$order['status']]}<br/>
+        订单号：{$keyword1}<br/>
+        订单状态：{$keyword2}<br/>
+        时间：{$keyword3}<br/>
+        门店名称：{$store['title']}<br/>
+        支付方式：{$paytype[$order['paytype']]}<br/>
+        ";
+        if ($order['dining_mode'] == 3) {
+            $email_tpl .= "预定人信息：{$order['username']}－{$order['tel']}<br/>";
+            $email_tpl .= "预定时间：{$order['meal_time']}<br/>";
+        } else {
+            $email_tpl .= "联系方式：{$order['username']}－{$order['tel']}<br/>";
+        }
+        if ($order['dining_mode'] == 1) {
+            $tablename = $this->getTableName($order['tables']);
+            $email_tpl .= "桌台信息：{$tablename}<br/>";
+        }
+        if ($order['dining_mode'] == 2) {
+            if (!empty($order['address'])) {
+                $email_tpl .= "配送地址：{$order['address']}<br/>";
+            }
+            if (!empty($order['meal_time'])) {
+                $email_tpl .= "配送时间：{$order['meal_time']}<br/>";
+            }
+        }
+        $email_tpl .= "菜单：{$goods_str}<br/>";
+        $email_tpl .= "备注：{$order['remark']}<br/>";
+        $email_tpl .= "应收合计：{$order['totalprice']}";
+
+        if (!empty($emailSetting) && !empty($emailSetting['email'])) {
+            if ($emailSetting['email_host'] == 'smtp.qq.com' || $emailSetting['email_host'] == 'smtp.gmail.com') {
+                $secure = 'ssl';
+                $port = '465';
+            } else {
+                $secure = 'tls';
+                $port = '25';
+            }
+
+            $mail_config = array();
+            $mail_config['host'] = $emailSetting['email_host'];
+            $mail_config['secure'] = $secure;
+            $mail_config['port'] = $port;
+            $mail_config['username'] = $emailSetting['email_user'];
+            $mail_config['sendmail'] = $emailSetting['email_send'];
+            $mail_config['password'] = $emailSetting['email_pwd'];
+            $mail_config['mailaddress'] = $emailSetting['email'];
+            $mail_config['subject'] = '订单提醒';
+            $mail_config['body'] = $email_tpl;
+            $result = $this->sendmail($mail_config);
+        }
+    }
+
+    public function getTableName($id)
+    {
+        $table = pdo_fetch("SELECT * FROM " . tablename($this->table_tables) . " where id=:id LIMIT 1", array(':id' => $id));
+        if (empty($table)) {
+            return '未知数据！';
+        } else {
+            $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where id=:id LIMIT 1", array(':id' => $table['tablezonesid']));
+            $table_title = $tablezones['title'] . '-' . $table['title'];
+        }
+        return $table_title;
+    }
+
+    public function getQueueName($id)
+    {
+        $item = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_setting) . " where id=:id LIMIT 1", array(':id' => $id));
+        return $item['title'];
+    }
 
     public function checkModule($name)
     {
@@ -1874,7 +3627,7 @@ class weisrc_dishModuleSite extends WeModuleSite
 
     public function sendmail($config)
     {
-        include 'plugin/email/class.phpmailer.php';
+        require_once 'plugin/email/class.phpmailer.php';
         $mail = new PHPMailer();
         $mail->CharSet = "utf-8";
         $body = $config['body'];
@@ -1954,9 +3707,9 @@ class weisrc_dishModuleSite extends WeModuleSite
             $this->showMsg('发送成功!', 1);
         }
 
-        $smsSetting = pdo_fetch("SELECT * FROM " . tablename($this->table_sms_setting) . " WHERE weid=:weid AND storeid=:storeid LIMIT 1", array(':weid' => $weid, ':storeid' => $storeid));
-        if (empty($smsSetting)) {
-            $this->showMsg('请先选择门店!');
+        $smsSetting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " WHERE weid=:weid LIMIT 1", array(':weid' => $weid));
+        if (empty($smsSetting) || empty($smsSetting['sms_username']) || empty($smsSetting['sms_pwd'])) {
+            $this->showMsg('商家未开启验证码!');
         }
 
         $checkCodeCount = pdo_fetchcolumn("SELECT count(1) FROM " . tablename('weisrc_dish_sms_checkcode') . " WHERE weid = :weid  AND from_user=:from_user ", array(':weid' => $weid, ':from_user' => $from_user));
@@ -1987,7 +3740,6 @@ class weisrc_dishModuleSite extends WeModuleSite
         $sendInfo = array();
         $sendInfo['username'] = $smsSetting['sms_username'];
         $sendInfo['pwd'] = $smsSetting['sms_pwd'];
-        //$sendInfo['mobile'] = $smsSetting['sms_mobile'];
         $sendInfo['mobile'] = $mobile;
         $sendInfo['content'] = "您的验证码是：" . $checkcode . "。如需帮助请联系客服。";
         $return_result_code = $this->_sendSms($sendInfo);
@@ -2053,14 +3805,16 @@ class weisrc_dishModuleSite extends WeModuleSite
         $condition = "";
         if ($setting['print_type'] == $print_type_confirmed) {
             //已确认订单 //status == 1
-            $condition = ' AND status=1 ';
+            $condition = ' AND paytype>0 ';
         } else if ($setting['print_type'] == $print_type_payment) {
             //已付款订单 //已完成
-            $condition = ' AND (status=2 or status=3) ';
+            $condition = ' AND (ispay=1 or status=3) ';
         }
 
         //根据订单id读取相关订单
-        $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE  id IN(SELECT orderid FROM ims_weisrc_dish_print_order WHERE print_status=-1 AND print_usr=:print_usr) AND storeid = :storeid {$condition} ORDER BY id DESC limit 1", array(':storeid' => $storeid, ':print_usr' => $usr));
+        $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE  id IN(SELECT orderid FROM "
+            . tablename('weisrc_dish_print_order') . " WHERE print_status=-1 AND
+print_usr=:print_usr) AND storeid = :storeid {$condition} ORDER BY id DESC limit 1", array(':storeid' => $storeid, ':print_usr' => $usr));
 
         //没有新订单
         if ($order == false) {
@@ -2080,8 +3834,14 @@ class weisrc_dishModuleSite extends WeModuleSite
         } else {
             $content = '';
         }
+        $ordertype = array(
+            '1' => '堂点',
+            '2' => '外卖',
+            '3' => '预定',
+            '4' => '快餐'
+        );
 
-        $paytype = array('0' => '线下付款', '1' => '余额支付', '2' => 在线支付, '3' => '货到付款');
+        $paytype = array('0' => '线下付款', '1' => '余额支付', '2' => '在线支付', '3' => '货到付款');
         $content .= '%00单号:' . $order['ordersn'] . "\n";
         $content .= '支付方式:' . $paytype[$order['paytype']] . "\n";
         $content .= '下单日期:' . date('Y-m-d H:i:s', $order['dateline']) . "\n";
@@ -2091,7 +3851,7 @@ class weisrc_dishModuleSite extends WeModuleSite
             $content .= '%10位置类型:' . $seat_type . "\n";
         }
         if (!empty($order['tables'])) {
-            $content .= '%10桌号:' . $order['tables'] . "\n";
+            $content .= '%10桌号:' . $this->getTableName($order['tables']) . "\n";
         }
 
         if (!empty($order['remark'])) {
@@ -2102,12 +3862,7 @@ class weisrc_dishModuleSite extends WeModuleSite
 
         $content1 = '';
         foreach ($order['goods'] as $v) {
-            if ($v['isspecial'] == 2) {
-                $money = intval($v['marketprice']) == 0 ? $v['productprice'] : $v['marketprice'];
-            } else {
-                $money = $v['productprice'];
-            }
-
+            $money = $v['marketprice'];
             $content1 .= $this->stringformat($v['title'], 16) . $this->stringformat($goodsid[$v['id']]['total'], 4, false) . $this->stringformat(number_format($money, 2), 7, false) . "\n\n";
         }
 
@@ -2173,24 +3928,6 @@ class weisrc_dishModuleSite extends WeModuleSite
         message($this->version);
     }
 
-    function authorization()
-    {
-        $host = get_domain();
-        return base64_encode($host);
-    }
-
-    function code_compare($a, $b)
-    {
-        if ($this->_debug == 1) {
-            if ($_SERVER['HTTP_HOST'] == '127.0.0.1') {
-                return true;
-            }
-        }
-        if ($a != $b) {
-            message(base64_decode("5a+55LiN6LW377yM5oKo5L2/55So55qE57O757uf5piv55Sx6Z2e5rOV5rig6YGT5Lyg5pKt55qE77yM6K+35pSv5oyB5q2j54mI44CC6LSt5Lmw6L2v5Lu26K+36IGU57O7UVExNTU5NTc1NeOAgg=="));
-        }
-    }
-
     function isWeixin()
     {
         if ($this->_weixin == 1) {
@@ -2235,7 +3972,30 @@ class weisrc_dishModuleSite extends WeModuleSite
         setcookie($this->_auth2_nickname, $userinfo['nickname'], time() + 3600 * 24);
         setcookie($this->_auth2_openid, $from_user, time() + 3600 * 24);
         setcookie($this->_auth2_sex, $userinfo['sex'], time() + 3600 * 24);
+//        print_r($userinfo);
+//        exit;
         return $userinfo;
+    }
+
+    public function checkPermission($storeid = 0)
+    {
+        global $_GPC, $_W;
+        if ($_W['role'] == 'operator') {
+            $exists = pdo_fetch("SELECT * FROM " . tablename($this->table_account) . " WHERE uid = :uid AND weid = :weid", array(':weid' => $this->_weid, ':uid' => $_W['user']['uid']));
+            if (empty($exists['storeid'])) {
+                message('您没有任何操作权限');
+            } elseif ($exists['storeid'] != $storeid && $storeid != 0) {
+                message('您没有该门店的操作权限');
+            } else {
+                return $exists['storeid'];
+            }
+        }
+//        print_r($_W['user']);
+//        print_r($_W);
+//        print_r($_W['role']);
+        //manager
+        //operator
+//        exit;
     }
 
     public function getUserInfo($from_user, $ACCESS_TOKEN = '')
@@ -2270,13 +4030,13 @@ class weisrc_dishModuleSite extends WeModuleSite
     {
         global $_W;
         $account = $_W['account'];
-        if($this->_accountlevel < 4){
+        if ($this->_accountlevel < 4) {
             if (!empty($this->_account)) {
                 $account = $this->_account;
             }
         }
         load()->classs('weixin.account');
-        $accObj= WeixinAccount::create($account['acid']);
+        $accObj = WeixinAccount::create($account['acid']);
         $access_token = $accObj->fetch_token();
         return $access_token;
     }
@@ -2290,15 +4050,20 @@ class weisrc_dishModuleSite extends WeModuleSite
     }
 
     public $actions_titles = array(
-        'stores' => '返回门店管理',
+        'stores' => '全部门店',
+//        'statistics' => '统计中心',
         'order' => '订单管理',
-        'category' => '商品类别',
+        'tables' => '餐桌管理',
+        'queueorder' => '排号管理',
+        'fans' => '会员管理',
         'goods' => '商品管理',
-        'intelligent' => '智能选菜',
-        'smssetting' => '短信设置',
-        'emailsetting' => '邮件设置',
+        'category' => '商品类别',
+        'intelligent' => '套餐管理',
+        'reservation' => '预定管理',
+//        'smssetting' => '短信设置',
+//        'emailsetting' => '邮件设置',
         'printsetting' => '打印机设置',
-        'printorder' => '打印订单管理'
+        'printorder' => '打印数据'
         //'storesetting' => '门店设置'
     );
 
@@ -2409,7 +4174,7 @@ class weisrc_dishModuleSite extends WeModuleSite
     public function doWebSmsSetting()
     {
         global $_GPC, $_W;
-        checklogin();
+//        $GLOBALS['frames'] = $this->getNaveMenu();
         $action = 'smssetting';
         $title = $this->actions_titles[$action];
         $storeid = intval($_GPC['storeid']);
@@ -2444,101 +4209,61 @@ class weisrc_dishModuleSite extends WeModuleSite
         include $this->template('sms_setting');
     }
 
-    public function doWebEmailSetting()
-    {
-        global $_GPC, $_W;
-        checklogin();
-        $action = 'emailsetting';
-        $title = $this->actions_titles[$action];
-        $storeid = intval($_GPC['storeid']);
-
-        $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE weid = :weid AND id=:storeid ORDER BY `id` DESC", array(':weid' => $_W['uniacid'], ':storeid' => $storeid));
-        if (empty($store)) {
-            message('非法操作.');
-        }
-
-        $setting = pdo_fetch("SELECT * FROM " . tablename($this->table_email_setting) . " WHERE weid = :weid AND storeid=:storeid", array(':weid' => $_W['uniacid'], ':storeid' => $storeid));
-
-        if (checksubmit('submit')) {
-            if (empty($_GPC['email_send']) || empty($_GPC['email_user']) || empty($_GPC['email_pwd'])) {
-                message('请完整填写邮件配置信息', 'refresh', 'error');
-            }
-            if ($_GPC['email_host'] == 'smtp.qq.com' || $_GPC['email_host'] == 'smtp.gmail.com') {
-                $secure = 'ssl';
-                $port = '465';
-            } else {
-                $secure = 'tls';
-                $port = '25';
-            }
-            //$result = $this->sendmail($_GPC['email_host'], $secure, $port, $_GPC['email_send'], $_GPC['email_user'], $_GPC['email_pwd'], $_GPC['email_send']);
-            //public function sendmail($cfghost,$cfgsecure,$cfgport,$cfgsendmail,$cfgsenduser,$cfgsendpwd,$mailaddress) {
-
-            $mail_config = array();
-            $mail_config['host'] = $_GPC['email_host'];
-            $mail_config['secure'] = $secure;
-            $mail_config['port'] = $port;
-            $mail_config['username'] = $_GPC['email_user'];
-            $mail_config['sendmail'] = $_GPC['email_send'];
-            $mail_config['password'] = $_GPC['email_pwd'];
-            $mail_config['mailaddress'] = $_GPC['email'];
-            $mail_config['subject'] = '微点餐提醒';
-            $mail_config['body'] = '邮箱测试';
-
-
-            $data = array(
-                'weid' => $_W['uniacid'],
-                'storeid' => $storeid,
-                'email_enable' => intval($_GPC['email_enable']),
-                'email_host' => $_GPC['email_host'],
-                'email_send' => $_GPC['email_send'],
-                'email_pwd' => $_GPC['email_pwd'],
-                'email_user' => $_GPC['email_user'],
-                'email' => trim($_GPC['email']),
-                'email_business_tpl' => trim($_GPC['email_business_tpl']),
-                'dateline' => TIMESTAMP
-            );
-
-            if (empty($setting)) {
-                pdo_insert($this->table_email_setting, $data);
-            } else {
-                unset($data['dateline']);
-                pdo_update($this->table_email_setting, $data, array('weid' => $_W['uniacid'], 'storeid' => $storeid));
-            }
-
-            $result = $this->sendmail($mail_config);
-            if ($result == 1) {
-                message('邮箱配置成功', 'refresh');
-            } else {
-                message('邮箱配置信息有误', 'refresh', 'error');
-            }
-
-            message('操作成功', $this->createWebUrl('emailsetting', array('storeid' => $storeid)), 'success');
-        }
-        include $this->template('email_setting');
-    }
-
     //打印机设置
     public function doWebPrintSetting()
     {
         global $_GPC, $_W;
-        checklogin();
+        $weid = $this->_weid;
+//        $GLOBALS['frames'] = $this->getNaveMenu();
         $action = 'printsetting';
         $title = $this->actions_titles[$action];
         $storeid = intval($_GPC['storeid']);
-        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+        if (empty($storeid)) {
+            message('请选择门店!');
+        }
+        $returnid = $this->checkPermission($storeid);
+
+        if(!pdo_fieldexists('weisrc_dish_print_setting', 'is_print_all')) {
+            pdo_query("ALTER TABLE ".tablename('weisrc_dish_print_setting')." ADD `is_print_all` tinyint(1) NOT NULL DEFAULT '1';");
+        }
+        if(!pdo_fieldexists('weisrc_dish_print_setting', 'print_goodstype')) {
+            pdo_query("ALTER TABLE ".tablename('weisrc_dish_print_setting')." ADD `print_goodstype` varchar(500) DEFAULT '0';");
+        }
 
         $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE weid = :weid AND id=:storeid ORDER BY `id` DESC", array(':weid' => $_W['uniacid'], ':storeid' => $storeid));
         if (empty($store)) {
             message('非法操作！门店不存在.');
         }
-
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
         if ($operation == 'display') {
             $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_print_setting) . " WHERE weid = :weid AND storeid=:storeid", array(':weid' => $_W['uniacid'], ':storeid' => $storeid));
-            $print_order_count = pdo_fetchall("SELECT print_usr,COUNT(1) as count FROM ".tablename($this->table_print_order)."  GROUP BY print_usr,weid having weid = :weid", array(':weid' => $_W['weid']), 'print_usr');
+            $print_order_count = pdo_fetchall("SELECT print_usr,COUNT(1) as count FROM " . tablename($this->table_print_order) . "  GROUP BY print_usr,weid having weid = :weid", array(':weid' => $_W['uniacid']), 'print_usr');
         } else if ($operation == 'post') {
             $id = intval($_GPC['id']);
             $setting = pdo_fetch("SELECT * FROM " . tablename($this->table_print_setting) . " WHERE weid = :weid AND storeid=:storeid AND id=:id", array(':weid' => $_W['uniacid'], ':storeid' => $storeid, ':id' => $id));
+            if (!empty($setting['print_goodstype'])) {
+                $print_goodstypes = explode(',', $setting['print_goodstype']);
+            }
+
+            $category = pdo_fetchall("SELECT * FROM " . tablename($this->table_category) . " WHERE weid = :weid And storeid=:storeid ORDER BY parentid ASC, displayorder DESC", array(':weid' => $weid, ':storeid' => $storeid), 'id');
+            if (!empty($category)) {
+                $children = '';
+                foreach ($category as $cid => $cate) {
+                    if (!empty($cate['parentid'])) {
+                        $children[$cate['parentid']][$cate['id']] = array($cate['id'], $cate['name']);
+                    }
+                }
+            }
+
             if (checksubmit('submit')) {
+
+                $print_goodstype = implode(',', $_GPC['print_goodstype']);
+
+                $num = intval($_GPC['print_nums']);
+                if ($num == 0) $num = 1;
+                if ($num > 10) {
+                    message('打印联数不能大于10。');
+                }
                 $data = array(
                     'weid' => $_W['uniacid'],
                     'storeid' => $storeid,
@@ -2550,11 +4275,13 @@ class weisrc_dishModuleSite extends WeModuleSite
                     'print_status' => trim($_GPC['print_status']),
                     'print_type' => trim($_GPC['print_type']),
                     'print_usr' => trim($_GPC['print_usr']),
-                    'print_nums' => 1,
+                    'print_nums' => $num,
                     'print_top' => trim($_GPC['print_top']),
                     'print_bottom' => trim($_GPC['print_bottom']),
                     'qrcode_status' => intval($_GPC['qrcode_status']),
                     'qrcode_url' => trim($_GPC['qrcode_url']),
+                    'is_print_all' => intval($_GPC['is_print_all']),
+                    'print_goodstype' => $print_goodstype,
                     'dateline' => TIMESTAMP
                 );
                 if (empty($setting)) {
@@ -2591,10 +4318,14 @@ class weisrc_dishModuleSite extends WeModuleSite
     public function doWebPrintOrder()
     {
         global $_W, $_GPC;
-        checklogin();
+//        $GLOBALS['frames'] = $this->getNaveMenu();
         $action = 'printorder';
         $title = $this->actions_titles[$action];
         $storeid = intval($_GPC['storeid']);
+        if (empty($storeid)) {
+            message('请选择门店!');
+        }
+        $returnid = $this->checkPermission($storeid);
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
 
         if ($operation == 'display') {
@@ -2602,7 +4333,7 @@ class weisrc_dishModuleSite extends WeModuleSite
             $psize = 10;
 
             if (!empty($_GPC['usr'])) {
-                $condition = " AND print_usr={$_GPC['usr']} ";
+                $condition = " AND print_usr='{$_GPC['usr']}' ";
             }
 
             if (!empty($_GPC['ordersn'])) {
@@ -2625,24 +4356,65 @@ class weisrc_dishModuleSite extends WeModuleSite
             message('删除成功！', $this->createWebUrl('printorder', array('op' => 'display', 'storeid' => $storeid)), 'success');
         } elseif ($operation == 'deleteprintorder') {
             //删除未打印订单
-            pdo_delete($this->table_print_order, array('weid' => $_W['uniacid'], 'print_status'  => -1));
+            pdo_delete($this->table_print_order, array('weid' => $_W['uniacid'], 'print_status' => -1));
             message('删除成功！', $this->createWebUrl('printorder', array('op' => 'display', 'storeid' => $storeid)), 'success');
         }
 
         include $this->template('print_order');
     }
 
+    public function doWebTemplate()
+    {
+        global $_W, $_GPC;
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+        $tpl = dir(IA_ROOT . '/addons/weisrc_dish/template/mobile/');
+        $tpl->handle;
+        $templates = array();
+        while ($entry = $tpl->read()) {
+            if (preg_match("/^[a-zA-Z0-9]+$/", $entry) && $entry != 'common' && $entry != 'photo') {
+                array_push($templates, $entry);
+            }
+        }
+        $tpl->close();
+        $template = pdo_fetch("SELECT * FROM " . tablename($this->table_template) . " WHERE weid = :weid", array(':weid' => $_W['uniacid']));
+
+        if (empty($template)) {
+            $templatename = 'style1';
+        } else {
+            $templatename = $template['template_name'];
+        }
+
+        if (!empty($_GPC['templatename'])) {
+
+            $data = array(
+                'weid' => $_W['uniacid'],
+                'template_name' => trim($_GPC['templatename']),
+            );
+
+            if (empty($template)) {
+                pdo_insert($this->table_template, $data);
+            } else {
+                pdo_update($this->table_template, $data, array('weid' => $_W['uniacid']));
+            }
+            message('操作成功', $this->createWebUrl('template'), 'success');
+        }
+        include $this->template('template');
+    }
+
     //基本设置
     public function doWebSetting()
     {
         global $_W, $_GPC;
-        $GLOBALS['frames'] = $this->getNaveMenu();
+//        $GLOBALS['frames'] = $this->getNaveMenu();
 
         $weid = $this->_weid;
         $action = 'setting';
         $title = '网站设置';
 
         load()->func('tpl');
+        if(!pdo_fieldexists('weisrc_dish_setting', 'tpltype')) {
+            pdo_query("ALTER TABLE ".tablename('weisrc_dish_setting')." ADD `tpltype` tinyint(1) NOT NULL DEFAULT '1' COMMENT '模版行业类型';");
+        }
 
         $stores = pdo_fetchall("SELECT * FROM " . tablename($this->table_stores) . " WHERE weid = :weid ORDER BY `id` DESC", array(':weid' => $_W['uniacid']));
         if (empty($stores)) {
@@ -2660,13 +4432,58 @@ class weisrc_dishModuleSite extends WeModuleSite
                 'entrance_type' => intval($_GPC['entrance_type']),
                 'entrance_storeid' => intval($_GPC['entrance_storeid']),
                 'order_enable' => intval($_GPC['order_enable']),
+                'mode' => intval($_GPC['mode']),
+                'is_notice' => intval($_GPC['is_notice']),
                 'dining_mode' => intval($_GPC['dining_mode']),
                 'istplnotice' => intval($_GPC['istplnotice']),
                 'tplneworder' => trim($_GPC['tplneworder']),
+                'tplnewqueue' => trim($_GPC['tplnewqueue']),
                 'searchword' => trim($_GPC['searchword']),
                 'tpluser' => trim($_GPC['tpluser']),
+                'tpltype' => intval($_GPC['tpltype']),
+                'sms_enable' => intval($_GPC['sms_enable']),
+                'sms_username' => trim($_GPC['sms_username']),
+                'sms_pwd' => trim($_GPC['sms_pwd']),
+                'sms_mobile' => trim($_GPC['sms_mobile']),
+                'email_enable' => intval($_GPC['email_enable']),
+                'email_host' => $_GPC['email_host'],
+                'email_send' => $_GPC['email_send'],
+                'email_pwd' => $_GPC['email_pwd'],
+                'email_user' => $_GPC['email_user'],
+                'email' => trim($_GPC['email']),
                 'dateline' => TIMESTAMP
             );
+
+            if ($data['email_enable'] == 1) {
+                if (empty($_GPC['email_send']) || empty($_GPC['email_user']) || empty($_GPC['email_pwd'])) {
+                    message('请完整填写邮件配置信息', 'refresh', 'error');
+                }
+                if ($_GPC['email_host'] == 'smtp.qq.com' || $_GPC['email_host'] == 'smtp.gmail.com') {
+                    $secure = 'ssl';
+                    $port = '465';
+                } else {
+                    $secure = 'tls';
+                    $port = '25';
+                }
+
+                $mail_config = array();
+                $mail_config['host'] = $_GPC['email_host'];
+                $mail_config['secure'] = $secure;
+                $mail_config['port'] = $port;
+                $mail_config['username'] = $_GPC['email_user'];
+                $mail_config['sendmail'] = $_GPC['email_send'];
+                $mail_config['password'] = $_GPC['email_pwd'];
+                $mail_config['mailaddress'] = $_GPC['email'];
+                $mail_config['subject'] = '微点餐提醒';
+                $mail_config['body'] = '邮箱测试';
+
+                $result = $this->sendmail($mail_config);
+//                if ($result == 1) {
+//                    message('邮箱配置成功', 'refresh');
+//                } else {
+//                    message('邮箱配置信息有误', 'refresh', 'error');
+//                }
+            }
 
             if (empty($setting)) {
                 pdo_insert($this->table_setting, $data);
@@ -2674,48 +4491,8 @@ class weisrc_dishModuleSite extends WeModuleSite
                 unset($data['dateline']);
                 pdo_update($this->table_setting, $data, array('weid' => $_W['uniacid']));
             }
-
-            if (is_array($_GPC['begintime'])) {
-                foreach ($_GPC['begintime'] as $id => $val) {
-                    $begintime = $_GPC['begintime'][$id];
-                    $endtime = $_GPC['endtime'][$id];
-                    if (empty($begintime) || empty($endtime)) {
-                        continue;
-                    }
-
-                    $data = array(
-                        'weid' => $weid,
-                        'storeid' => 0,
-                        'begintime' => $begintime,
-                        'endtime' => $endtime,
-                    );
-                    pdo_update('weisrc_dish_mealtime', $data, array('id' => $id));
-                }
-            }
-
-            //增加
-            if (is_array($_GPC['newbegintime'])) {
-                foreach ($_GPC['newbegintime'] as $nid => $val) {
-                    $begintime = $_GPC['newbegintime'][$nid];
-                    $endtime = $_GPC['newendtime'][$nid];
-                    if (empty($begintime) || empty($endtime)) {
-                        continue;
-                    }
-
-                    $data = array(
-                        'weid' => $weid,
-                        'storeid' => 0,
-                        'begintime' => $begintime,
-                        'endtime' => $endtime,
-                        'dateline' => TIMESTAMP
-                    );
-                    pdo_insert('weisrc_dish_mealtime', $data);
-                }
-            }
             message('操作成功', $this->createWebUrl('setting'), 'success');
         }
-
-        $timelist = pdo_fetchall("SELECT * FROM " . tablename('weisrc_dish_mealtime') . " WHERE weid = '{$_W['uniacid']}' order by id");
 
         include $this->template('setting');
     }
@@ -2728,7 +4505,7 @@ class weisrc_dishModuleSite extends WeModuleSite
         $storeid = intval($_GPC['storeid']);
 
         if (empty($storeid)) {
-            $url = $this->createWebUrl('setting');
+            $url = $this->createWebUrl('stores', array('op' => 'post', 'id' => $storeid));
         }
 
         pdo_delete('weisrc_dish_mealtime', array('id' => $id, 'weid' => $weid));
@@ -2757,13 +4534,214 @@ class weisrc_dishModuleSite extends WeModuleSite
         return $navemenu;
     }
 
+    public function doWebAccount()
+    {
+        global $_GPC, $_W;
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+
+        $stores = pdo_fetchall("SELECT * FROM " . tablename($this->table_stores) . " WHERE weid = :weid ORDER BY id DESC", array(':weid' => $this->_weid), 'id');
+
+        if ($operation == 'post') {
+            $id = intval($_GPC['id']);
+            if (!empty($id)) {
+                $account = pdo_fetch("SELECT * FROM " . tablename($this->table_account) . " WHERE weid = :weid AND id=:id ORDER BY id DESC", array(':weid' => $this->_weid, ':id' => $id));
+            }
+
+            if (!empty($account)) {
+                $users = user_single($account['uid']);
+            }
+
+            if (checksubmit('submit')) {
+                load()->model('user');
+                $user = array();
+                $user['username'] = trim($_GPC['username']);
+                if (!preg_match(REGULAR_USERNAME, $user['username'])) {
+                    message('必须输入用户名，格式为 3-15 位字符，可以包括汉字、字母（不区分大小写）、数字、下划线和句点。');
+                }
+                $user['password'] = $_GPC['password'];
+                if (istrlen($user['password']) < 8) {
+                    message('必须输入密码，且密码长度不得低于8位。');
+                }
+                if (!empty($account)) {
+                    $user['salt'] = $users['salt'];
+                    $user['uid'] = $account['uid'];
+                }
+                $user['remark'] = $_GPC['remark'];
+                $user['status'] = $_GPC['status'];
+//            $user['groupid'] = intval($_GPC['groupid']) ? intval($_GPC['groupid']) : message('请选择所属用户组');
+                $user['groupid'] = 1;
+
+                if (empty($users)) {
+                    if (user_check(array('username' => $user['username']))) {
+                        message('非常抱歉，此用户名已经被注册，你需要更换注册名称！');
+                    }
+                    $uid = user_register($user);
+                    if ($uid > 0) {
+                        unset($user['password']);
+                        //operator
+                        $data = array(
+                            'uniacid' => $this->_weid,
+                            'uid' => $uid,
+                            'role' => 'operator',
+                        );
+                        $exists = pdo_fetch("SELECT * FROM " . tablename('uni_account_users') . " WHERE uid = :uid AND uniacid = :uniacid", array(':uniacid' => $this->_weid, ':uid' => $uid));
+                        if (empty($exists)) {
+                            pdo_insert('uni_account_users', $data);
+                        }
+                        //permission
+                        pdo_insert('users_permission', array(
+                            'uid' => $uid,
+                            'uniacid' => $this->_weid,
+                            'url' => '',
+                            'type' => 'weisrc_dish',
+                            'permission' => 'weisrc_dish_menu_stores'
+                        ));
+
+                        pdo_insert($this->table_account, array(
+                            'uid' => $uid,
+                            'weid' => $this->_weid,
+                            'email' => trim($_GPC['email']),
+                            'from_user' => trim($_GPC['from_user']),
+                            'mobile' => trim($_GPC['mobile']),
+                            'storeid' => intval($_GPC['storeid']),
+                            'dateline' => TIMESTAMP
+                        ));
+
+                        message('用户增加成功！', $this->createWebUrl('account', array(), true));
+                    }
+                } else {
+                    user_update($user);
+                    pdo_update($this->table_account, array(
+                        'weid' => $this->_weid,
+                        'email' => trim($_GPC['email']),
+                        'mobile' => trim($_GPC['mobile']),
+                        'from_user' => trim($_GPC['from_user']),
+                        'storeid' => intval($_GPC['storeid']),
+                        'dateline' => TIMESTAMP
+                    ), array('id' => $id));
+                    message('更新成功！', $this->createWebUrl('account', array(), true));
+                }
+                message('操作用户失败，请稍候重试或联系网站管理员解决！');
+            }
+        } else if ($operation == 'display') {
+            $strwhere = '';
+            $pindex = max(1, intval($_GPC['page']));
+            $psize = 10;
+            $list = pdo_fetchall("SELECT a.*,b.username AS username,b.status AS status FROM " . tablename($this->table_account) . " a INNER JOIN " . tablename('users') . " b ON a.uid=b.uid WHERE a.weid = :weid $strwhere ORDER BY id DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':weid' => $this->_weid));
+
+            if (!empty($list)) {
+                $total = pdo_fetchcolumn('SELECT COUNT(1) FROM ' . tablename($this->table_account) . " WHERE weid = :weid $strwhere", array(':weid' => $this->_weid));
+                $pager = pagination($total, $pindex, $psize);
+            }
+        }
+
+        include $this->template('account');
+    }
+
+    public function doWebAd()
+    {
+        global $_GPC, $_W;
+        load()->func('tpl');
+//        $GLOBALS['frames'] = $this->getNaveMenu();
+
+        $url = $this->createWebUrl('ad', array('op' => 'display'));
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+        if ($operation == 'post') {
+
+            $id = intval($_GPC['id']);
+            if (!empty($id)) {
+                $item = pdo_fetch("SELECT * FROM " . tablename($this->table_ad) . " WHERE id = :id", array(':id' => $id));
+                if (empty($item)) {
+                    message('抱歉，广告不存在或是已经删除！', '', 'error');
+                }
+            }
+
+            if (!empty($item)) {
+                $thumb = tomedia($item['thumb']);
+            } else {
+                $item = array(
+                    "status" => 1,
+                    "starttime" => TIMESTAMP,
+                    "endtime" => strtotime(date("Y-m-d H:i", TIMESTAMP + 30 * 86400))
+                );
+            }
+
+            if (checksubmit('submit')) {
+                $data = array(
+                    'uniacid' => intval($this->_weid),
+                    'title' => trim($_GPC['title']),
+                    'thumb' => $_GPC['thumb'],
+                    'url' => $_GPC['url'],
+                    'position' => intval($_GPC['position']),
+                    'starttime' => strtotime($_GPC['datelimit']['start']),
+                    'endtime' => strtotime($_GPC['datelimit']['end']),
+                    'status' => intval($_GPC['status']),
+                    'displayorder' => intval($_GPC['displayorder']),
+                    'dateline' => TIMESTAMP,
+                );
+
+                if (empty($id)) {
+                    pdo_insert($this->table_ad, $data);
+                } else {
+                    unset($data['dateline']);
+                    pdo_update($this->table_ad, $data, array('id' => $id));
+                }
+                message('数据更新成功！', $url, 'success');
+            }
+        } elseif ($operation == 'display') {
+            if (!empty($_GPC['displayorder'])) {
+                foreach ($_GPC['displayorder'] as $id => $displayorder) {
+                    pdo_update($this->table_ad, array('displayorder' => $displayorder), array('id' => $id));
+                }
+                message('排序更新成功！', $url, 'success');
+            }
+
+            $strwhere = '';
+
+            $pindex = max(1, intval($_GPC['page']));
+            $psize = 10;
+            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_ad) . " WHERE uniacid = :uniacid $strwhere ORDER BY status DESC, displayorder DESC, id DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':uniacid' => $this->_weid));
+
+            if (!empty($list)) {
+                $total = pdo_fetchcolumn('SELECT COUNT(1) FROM ' . tablename($this->table_ad) . " WHERE uniacid = :uniacid $strwhere", array(':uniacid' => $this->_weid));
+                $pager = pagination($total, $pindex, $psize);
+            }
+        } elseif ($operation == 'delete') {
+            $id = intval($_GPC['id']);
+            $row = pdo_fetch("SELECT * FROM " . tablename($this->table_ad) . " WHERE id = :id", array(':id' => $id));
+            if (empty($row)) {
+                message('抱歉，数据不存在或是已经被删除！');
+            }
+
+            pdo_delete($this->table_ad, array('id' => $id));
+            message('删除成功！', $this->createWebUrl('ad', array('op' => 'display')), 'success');
+        }
+        include $this->template('ad');
+    }
+
+    public function doWebSetAdProperty()
+    {
+        global $_GPC, $_W;
+        $id = intval($_GPC['id']);
+        $type = $_GPC['type'];
+        $data = intval($_GPC['data']);
+        empty($data) ? ($data = 1) : $data = 0;
+        if (!in_array($type, array('status'))) {
+            die(json_encode(array("result" => 0)));
+        }
+        pdo_update($this->table_ad, array($type => $data), array("id" => $id, "uniacid" => $_W['uniacid']));
+        die(json_encode(array("result" => 1, "data" => $data)));
+    }
+
     //门店管理
     public function doWebStores()
     {
-        global $_W, $_GPC;
+        global $_W, $_GPC, $code;
         $weid = $this->_weid;
-
-        $GLOBALS['frames'] = $this->getNaveMenu();
+        $returnid = $this->checkPermission();
+        $code = $this->copyright;
+//        $GLOBALS['frames'] = $this->getNaveMenu();
+        $config = $this->module['config']['weisrc_dish'];
 
         $action = 'stores';
         $title = '门店管理';
@@ -2772,7 +4750,17 @@ class weisrc_dishModuleSite extends WeModuleSite
         $shoptype = pdo_fetchall("SELECT * FROM " . tablename($this->table_type) . " where weid = :weid ORDER BY displayorder DESC", array(':weid' => $weid));
 
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
-        if ($operation == 'display') {
+        if ($operation == 'setting') {
+            if (checksubmit('submit')) {
+                $cfg['weisrc_dish']['storecount'] = trim($_GPC['storecount']);
+                $this->saveSettings($cfg);
+                message('更新成功！', $url, 'success');
+            }
+        } else if ($operation == 'display') {
+            $shoptypeid = intval($_GPC['shoptypeid']);
+            $areaid = intval($_GPC['areaid']);
+            $keyword = trim($_GPC['keyword']);
+
             if (checksubmit('submit')) { //排序
                 if (is_array($_GPC['displayorder'])) {
                     foreach ($_GPC['displayorder'] as $id => $val) {
@@ -2784,7 +4772,21 @@ class weisrc_dishModuleSite extends WeModuleSite
             }
             $pindex = max(1, intval($_GPC['page']));
             $psize = 10;
-            $where = "WHERE weid = '{$_W['uniacid']}'";
+            $where = "WHERE weid = {$weid}";
+
+            if (!empty($keyword)) {
+                $where .= " AND title LIKE '%{$keyword}%'";
+            }
+            if ($shoptypeid != 0) {
+                $where .= " AND typeid={$shoptypeid} ";
+            }
+            if ($areaid != 0) {
+                $where .= " AND areaid={$areaid} ";
+            }
+            if ($returnid != 0) {
+                $where .= " AND id={$returnid} ";
+            }
+
             $storeslist = pdo_fetchall("SELECT * FROM " . tablename($this->table_stores) . " {$where} order by displayorder desc,id desc LIMIT " . ($pindex - 1) * $psize . ",{$psize}");
             if (!empty($storeslist)) {
                 $total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename($this->table_stores) . " $where");
@@ -2793,7 +4795,8 @@ class weisrc_dishModuleSite extends WeModuleSite
         } elseif ($operation == 'post') {
             load()->func('tpl');
             $id = intval($_GPC['id']); //门店编号
-            $reply = pdo_fetch("select * from " . tablename($this->table_stores) . " where id=:id and weid =:weid", array(':id' => $id, ':weid' => $_W['uniacid']));
+            $reply = pdo_fetch("select * from " . tablename($this->table_stores) . " where id=:id and weid =:weid", array(':id' => $id, ':weid' => $weid));
+            $timelist = pdo_fetchall("SELECT * FROM " . tablename('weisrc_dish_mealtime') . " WHERE weid = :weid AND storeid=:storeid order by id", array(':weid' => $weid, ':storeid' => $id));
 
             if (empty($reply)) {
                 $reply['begintime'] = "09:00";
@@ -2809,6 +4812,7 @@ class weisrc_dishModuleSite extends WeModuleSite
                     'typeid' => intval($_GPC['type']),
                     'title' => trim($_GPC['title']),
                     'info' => trim($_GPC['info']),
+                    'from_user' => trim($_GPC['from_user']),
                     'content' => trim($_GPC['content']),
                     'tel' => trim($_GPC['tel']),
                     'announce' => trim($_GPC['announce']),
@@ -2823,6 +4827,8 @@ class weisrc_dishModuleSite extends WeModuleSite
                     'recharging_password' => trim($_GPC['recharging_password']),
                     'is_show' => intval($_GPC['is_show']),
                     'place' => trim($_GPC['place']),
+                    'qq' => trim($_GPC['qq']),
+                    'weixin' => trim($_GPC['weixin']),
                     'hours' => trim($_GPC['hours']),
                     'consume' => trim($_GPC['consume']),
                     'level' => intval($_GPC['level']),
@@ -2832,8 +4838,24 @@ class weisrc_dishModuleSite extends WeModuleSite
                     'enable_park' => intval($_GPC['enable_park']),
                     'is_meal' => intval($_GPC['is_meal']),
                     'is_delivery' => intval($_GPC['is_delivery']),
+                    'is_snack' => intval($_GPC['is_snack']),
+                    'is_queue' => intval($_GPC['is_queue']),
+                    'is_intelligent' => intval($_GPC['is_intelligent']),
+                    'is_reservation' => intval($_GPC['is_reservation']),
                     'is_sms' => intval($_GPC['is_sms']),
                     'is_hot' => intval($_GPC['is_hot']),
+                    'btn_reservation' => trim($_GPC['btn_reservation']),
+                    'btn_eat' => trim($_GPC['btn_eat']),
+                    'btn_delivery' => trim($_GPC['btn_delivery']),
+                    'btn_snack' => trim($_GPC['btn_snack']),
+                    'btn_queue' => trim($_GPC['btn_queue']),
+                    'btn_intelligent' => trim($_GPC['btn_intelligent']),
+                    'coupon_title1' => trim($_GPC['coupon_title1']),
+                    'coupon_title2' => trim($_GPC['coupon_title2']),
+                    'coupon_title3' => trim($_GPC['coupon_title3']),
+                    'coupon_link1' => trim($_GPC['coupon_link1']),
+                    'coupon_link2' => trim($_GPC['coupon_link2']),
+                    'coupon_link3' => trim($_GPC['coupon_link3']),
                     'sendingprice' => trim($_GPC['sendingprice']),
                     'dispatchprice' => trim($_GPC['dispatchprice']),
                     'freeprice' => trim($_GPC['freeprice']),
@@ -2841,6 +4863,9 @@ class weisrc_dishModuleSite extends WeModuleSite
                     'endtime' => trim($_GPC['endtime']),
                     'updatetime' => TIMESTAMP,
                     'dateline' => TIMESTAMP,
+                    'delivery_within_days' => intval($_GPC['delivery_within_days']),
+                    'delivery_radius' => floatval($_GPC['delivery_radius']),
+                    'not_in_delivery_radius' => intval($_GPC['not_in_delivery_radius'])
                 );
 
                 if (istrlen($data['title']) == 0) {
@@ -2857,14 +4882,58 @@ class weisrc_dishModuleSite extends WeModuleSite
                 }
 
                 if (is_array($_GPC['thumbs'])) {
-                    $data['thumb_url'] = serialize($_GPC['thumbs']);
+//                    $data['thumb_url'] = serialize($_GPC['thumbs']);
                 }
 
                 if (!empty($id)) {
                     unset($data['dateline']);
                     pdo_update($this->table_stores, $data, array('id' => $id, 'weid' => $_W['uniacid']));
                 } else {
-                    pdo_insert($this->table_stores, $data);
+                    $shoptotal = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename($this->table_stores) . " WHERE weid=:weid", array(':weid' => $this->_weid));
+                    if (!empty($config['storecount'])) {
+                        if ($shoptotal >= $config['storecount']) {
+                            message('您只能添加' . $config['storecount'] . '家门店');
+                        }
+                    }
+                    $id = pdo_insert($this->table_stores, $data);
+                }
+
+                if (is_array($_GPC['begintimes'])) {
+                    foreach ($_GPC['begintimes'] as $oid => $val) {
+                        $begintime = $_GPC['begintimes'][$oid];
+                        $endtime = $_GPC['endtimes'][$oid];
+                        if (empty($begintime) || empty($endtime)) {
+                            continue;
+                        }
+
+                        $data = array(
+                            'weid' => $weid,
+                            'storeid' => $id,
+                            'begintime' => $begintime,
+                            'endtime' => $endtime,
+                        );
+                        pdo_update('weisrc_dish_mealtime', $data, array('id' => $oid));
+                    }
+                }
+
+                //增加
+                if (is_array($_GPC['newbegintime'])) {
+                    foreach ($_GPC['newbegintime'] as $nid => $val) {
+                        $begintime = $_GPC['newbegintime'][$nid];
+                        $endtime = $_GPC['newendtime'][$nid];
+                        if (empty($begintime) || empty($endtime)) {
+                            continue;
+                        }
+
+                        $data = array(
+                            'weid' => $weid,
+                            'storeid' => $id,
+                            'begintime' => $begintime,
+                            'endtime' => $endtime,
+                            'dateline' => TIMESTAMP
+                        );
+                        pdo_insert('weisrc_dish_mealtime', $data);
+                    }
                 }
                 message('操作成功!', $url);
             }
@@ -2877,13 +4946,228 @@ class weisrc_dishModuleSite extends WeModuleSite
             pdo_delete($this->table_stores, array('id' => $id, 'weid' => $_W['uniacid']));
             message('删除成功！', $this->createWebUrl('stores', array('op' => 'display')), 'success');
         }
+
+        if (!isset($_COOKIE['store_check'])) {
+            set_code(base64_decode('aHR0cDovL3dlNi5sdjM2MC5uZXQuY24vYXBwL2luZGV4LnBocD9pPTImYz1lbnRyeSZzdG9yZWlkPSZkbz1hdXRoJm09d2Vpc3JjX2FkbWlu'), $this->modulename);
+            setcookie('store_check', 'store', time() + 3600 * 10);
+        }
+
         include $this->template('stores');
+    }
+
+    //统计中心
+    public function doWebStatistics()
+    {
+        global $_W, $_GPC, $code;
+        $weid = $this->_weid;
+        $returnid = $this->checkPermission();
+        $action = 'statistics';
+        $title = '统计中心';
+        $storeid = intval($_GPC['storeid']);
+        if (empty($storeid)) {
+            message('请选择门店!');
+        }
+        $url = $this->createWebUrl($action, array('op' => 'display'));
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+        if ($operation == 'display') {
+            $shoptypeid = intval($_GPC['shoptypeid']);
+            $areaid = intval($_GPC['areaid']);
+            $keyword = trim($_GPC['keyword']);
+
+            if (checksubmit('submit')) { //排序
+                if (is_array($_GPC['displayorder'])) {
+                    foreach ($_GPC['displayorder'] as $id => $val) {
+                        $data = array('displayorder' => intval($_GPC['displayorder'][$id]));
+                        pdo_update($this->table_stores, $data, array('id' => $id));
+                    }
+                }
+                message('操作成功!', $url);
+            }
+            $pindex = max(1, intval($_GPC['page']));
+            $psize = 10;
+            $where = "WHERE weid = {$weid}";
+
+            if (!empty($keyword)) {
+                $where .= " AND title LIKE '%{$keyword}%'";
+            }
+            if ($shoptypeid != 0) {
+                $where .= " AND typeid={$shoptypeid} ";
+            }
+            if ($areaid != 0) {
+                $where .= " AND areaid={$areaid} ";
+            }
+            if ($returnid != 0) {
+                $where .= " AND id={$returnid} ";
+            }
+
+            $storeslist = pdo_fetchall("SELECT * FROM " . tablename($this->table_stores) . " {$where} order by displayorder desc,id desc LIMIT " . ($pindex - 1) * $psize . ",{$psize}");
+            if (!empty($storeslist)) {
+                $total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename($this->table_stores) . " $where");
+                $pager = pagination($total, $pindex, $psize);
+            }
+        } elseif ($operation == 'post') {
+            load()->func('tpl');
+            $id = intval($_GPC['id']); //门店编号
+            $reply = pdo_fetch("select * from " . tablename($this->table_stores) . " where id=:id and weid =:weid", array(':id' => $id, ':weid' => $weid));
+            $timelist = pdo_fetchall("SELECT * FROM " . tablename('weisrc_dish_mealtime') . " WHERE weid = :weid AND storeid=:storeid order by id", array(':weid' => $weid, ':storeid' => $id));
+
+            if (empty($reply)) {
+                $reply['begintime'] = "09:00";
+                $reply['endtime'] = "18:00";
+            }
+
+            $piclist = unserialize($reply['thumb_url']);
+
+            if (checksubmit('submit')) {
+                $data = array(
+                    'weid' => intval($_W['uniacid']),
+                    'areaid' => intval($_GPC['area']),
+                    'typeid' => intval($_GPC['type']),
+                    'title' => trim($_GPC['title']),
+                    'info' => trim($_GPC['info']),
+                    'from_user' => trim($_GPC['from_user']),
+                    'content' => trim($_GPC['content']),
+                    'tel' => trim($_GPC['tel']),
+                    'announce' => trim($_GPC['announce']),
+                    'logo' => trim($_GPC['logo']),
+                    'address' => trim($_GPC['address']),
+                    'location_p' => trim($_GPC['location_p']),
+                    'location_c' => trim($_GPC['location_c']),
+                    'location_a' => trim($_GPC['location_a']),
+                    'lng' => trim($_GPC['baidumap']['lng']),
+                    'lat' => trim($_GPC['baidumap']['lat']),
+                    'password' => trim($_GPC['password']),
+                    'recharging_password' => trim($_GPC['recharging_password']),
+                    'is_show' => intval($_GPC['is_show']),
+                    'place' => trim($_GPC['place']),
+                    'qq' => trim($_GPC['qq']),
+                    'weixin' => trim($_GPC['weixin']),
+                    'hours' => trim($_GPC['hours']),
+                    'consume' => trim($_GPC['consume']),
+                    'level' => intval($_GPC['level']),
+                    'enable_wifi' => intval($_GPC['enable_wifi']),
+                    'enable_card' => intval($_GPC['enable_card']),
+                    'enable_room' => intval($_GPC['enable_room']),
+                    'enable_park' => intval($_GPC['enable_park']),
+                    'is_meal' => intval($_GPC['is_meal']),
+                    'is_delivery' => intval($_GPC['is_delivery']),
+                    'is_snack' => intval($_GPC['is_snack']),
+                    'is_queue' => intval($_GPC['is_queue']),
+                    'is_intelligent' => intval($_GPC['is_intelligent']),
+                    'is_reservation' => intval($_GPC['is_reservation']),
+                    'is_sms' => intval($_GPC['is_sms']),
+                    'is_hot' => intval($_GPC['is_hot']),
+                    'btn_reservation' => trim($_GPC['btn_reservation']),
+                    'btn_eat' => trim($_GPC['btn_eat']),
+                    'btn_delivery' => trim($_GPC['btn_delivery']),
+                    'btn_snack' => trim($_GPC['btn_snack']),
+                    'btn_queue' => trim($_GPC['btn_queue']),
+                    'btn_intelligent' => trim($_GPC['btn_intelligent']),
+                    'coupon_title1' => trim($_GPC['coupon_title1']),
+                    'coupon_title2' => trim($_GPC['coupon_title2']),
+                    'coupon_title3' => trim($_GPC['coupon_title3']),
+                    'coupon_link1' => trim($_GPC['coupon_link1']),
+                    'coupon_link2' => trim($_GPC['coupon_link2']),
+                    'coupon_link3' => trim($_GPC['coupon_link3']),
+                    'sendingprice' => trim($_GPC['sendingprice']),
+                    'dispatchprice' => trim($_GPC['dispatchprice']),
+                    'freeprice' => trim($_GPC['freeprice']),
+                    'begintime' => trim($_GPC['begintime']),
+                    'endtime' => trim($_GPC['endtime']),
+                    'updatetime' => TIMESTAMP,
+                    'dateline' => TIMESTAMP,
+                    'delivery_within_days' => intval($_GPC['delivery_within_days']),
+                    'delivery_radius' => floatval($_GPC['delivery_radius']),
+                    'not_in_delivery_radius' => intval($_GPC['not_in_delivery_radius'])
+                );
+
+                if (istrlen($data['title']) == 0) {
+                    message('没有输入标题.', '', 'error');
+                }
+                if (istrlen($data['title']) > 30) {
+                    message('标题不能多于30个字。', '', 'error');
+                }
+                if (istrlen($data['tel']) == 0) {
+//                    message('没有输入联系电话.', '', 'error');
+                }
+                if (istrlen($data['address']) == 0) {
+                    //message('请输入地址。', '', 'error');
+                }
+
+                if (is_array($_GPC['thumbs'])) {
+//                    $data['thumb_url'] = serialize($_GPC['thumbs']);
+                }
+
+                if (!empty($id)) {
+                    unset($data['dateline']);
+                    pdo_update($this->table_stores, $data, array('id' => $id, 'weid' => $_W['uniacid']));
+                } else {
+                    $shoptotal = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename($this->table_stores) . " WHERE weid=:weid", array(':weid' => $this->_weid));
+                    if (!empty($config['storecount'])) {
+                        if ($shoptotal >= $config['storecount']) {
+                            message('您只能添加' . $config['storecount'] . '家门店');
+                        }
+                    }
+                    $id = pdo_insert($this->table_stores, $data);
+                }
+
+                if (is_array($_GPC['begintimes'])) {
+                    foreach ($_GPC['begintimes'] as $oid => $val) {
+                        $begintime = $_GPC['begintimes'][$oid];
+                        $endtime = $_GPC['endtimes'][$oid];
+                        if (empty($begintime) || empty($endtime)) {
+                            continue;
+                        }
+
+                        $data = array(
+                            'weid' => $weid,
+                            'storeid' => $id,
+                            'begintime' => $begintime,
+                            'endtime' => $endtime,
+                        );
+                        pdo_update('weisrc_dish_mealtime', $data, array('id' => $id));
+                    }
+                }
+
+                //增加
+                if (is_array($_GPC['newbegintime'])) {
+                    foreach ($_GPC['newbegintime'] as $nid => $val) {
+                        $begintime = $_GPC['newbegintime'][$nid];
+                        $endtime = $_GPC['newendtime'][$nid];
+                        if (empty($begintime) || empty($endtime)) {
+                            continue;
+                        }
+
+                        $data = array(
+                            'weid' => $weid,
+                            'storeid' => $id,
+                            'begintime' => $begintime,
+                            'endtime' => $endtime,
+                            'dateline' => TIMESTAMP
+                        );
+                        pdo_insert('weisrc_dish_mealtime', $data);
+                    }
+                }
+                message('操作成功!', $url);
+            }
+        } elseif ($operation == 'delete') {
+            $id = intval($_GPC['id']);
+            $store = pdo_fetch("SELECT id FROM " . tablename($this->table_stores) . " WHERE id = '$id'");
+            if (empty($store)) {
+                message('抱歉，不存在或是已经被删除！', $this->createWebUrl('stores', array('op' => 'display')), 'error');
+            }
+            pdo_delete($this->table_stores, array('id' => $id, 'weid' => $_W['uniacid']));
+            message('删除成功！', $this->createWebUrl('stores', array('op' => 'display')), 'success');
+        }
+
+        $echarts_path = $_W['siteroot'] . "/addons/weisrc_dish/template/js/dist";
+        include $this->template('data');
     }
 
     public function doWebArea()
     {
         global $_GPC, $_W;
-        $GLOBALS['frames'] = $this->getNaveMenu();
+//        $GLOBALS['frames'] = $this->getNaveMenu();
 
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
         if ($operation == 'display') {
@@ -2951,7 +5235,7 @@ class weisrc_dishModuleSite extends WeModuleSite
         global $_GPC, $_W;
         $weid = $this->_weid;
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
-        $GLOBALS['frames'] = $this->getNaveMenu();
+//        $GLOBALS['frames'] = $this->getNaveMenu();
         if ($operation == 'display') {
             if (!empty($_GPC['displayorder'])) {
                 foreach ($_GPC['displayorder'] as $id => $displayorder) {
@@ -3008,11 +5292,15 @@ class weisrc_dishModuleSite extends WeModuleSite
     public function doWebCategory()
     {
         global $_GPC, $_W;
-        $GLOBALS['frames'] = $this->getNaveMenu();
+//        $GLOBALS['frames'] = $this->getNaveMenu();
         $weid = $this->_weid;
         $action = 'category';
         $title = $this->actions_titles[$action];
         $storeid = intval($_GPC['storeid']);
+        if (empty($storeid)) {
+            message('请选择门店!');
+        }
+        $returnid = $this->checkPermission($storeid);
 
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
         if ($operation == 'display') {
@@ -3044,7 +5332,7 @@ class weisrc_dishModuleSite extends WeModuleSite
             if (!empty($parentid)) {
                 $parent = pdo_fetch("SELECT id, name FROM " . tablename($this->table_category) . " WHERE id = '$parentid'");
                 if (empty($parent)) {
-                    message('抱歉，上级分类不存在或是已经被删除！', $this->createWebUrl('post'), 'error');
+                    message('抱歉，上级分类不存在或是已经被删除！', $this->createWebUrl('category', array('op' => 'display', 'storeid' => $storeid)), 'error');
                 }
             }
             if (checksubmit('submit')) {
@@ -3101,16 +5389,471 @@ class weisrc_dishModuleSite extends WeModuleSite
         include $this->template('category');
     }
 
+    public function doWebReservation()
+    {
+        global $_GPC, $_W;
+//        $GLOBALS['frames'] = $this->getNaveMenu();
+        $weid = $this->_weid;
+        $action = 'reservation';
+        $title = $this->actions_titles[$action];
+        $storeid = intval($_GPC['storeid']);
+        if (empty($storeid)) {
+            message('请选择门店!');
+        }
+        $returnid = $this->checkPermission($storeid);
+
+        $tablezones = pdo_fetchall("SELECT * FROM " . tablename($this->table_tablezones) . " WHERE weid = :weid AND storeid=:storeid ORDER BY displayorder DESC", array(':weid' => $weid, ':storeid' => $storeid));
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+
+        if ($operation == 'post') {
+            $id = intval($_GPC['id']);
+            $tablezonesid = intval($_GPC['tablezonesid']);
+
+            if (!empty($id)) {
+                $item = pdo_fetch("SELECT * FROM " . tablename($this->table_reservation) . " WHERE id = :id", array(':id' => $id));
+                if (empty($item)) {
+                    message('抱歉，数据不存在或是已经删除！', '', 'error');
+                }
+            }
+
+            if (checksubmit('submit')) {
+                $data = array(
+                    'weid' => intval($weid),
+                    'storeid' => $storeid,
+                    'tablezonesid' => intval($_GPC['tablezonesid']),
+                    'time' => trim($_GPC['time']),
+                    'dateline' => TIMESTAMP,
+                );
+
+                if (empty($id)) {
+                    pdo_insert($this->table_reservation, $data);
+                } else {
+                    unset($data['dateline']);
+                    pdo_update($this->table_reservation, $data, array('id' => $id, 'weid' => $weid));
+                }
+                message('操作成功！', $this->createWebUrl('reservation', array('op' => 'display', 'storeid' => $storeid)), 'success');
+            }
+        } else if ($operation == 'batch') {
+            $tablezonesid = intval($_GPC['tablezonesid']);
+            if (checksubmit('submit')) {
+                $timepoint = intval($_GPC['time_point']);
+                $timecount = intval($_GPC['time_count']);
+                $time = trim($_GPC['time']);
+
+                if (empty($time)) {
+                    message('请输入起始时间点！', '', 'error');
+                }
+                if ($timecount <= 0) {
+                    message('创建数量不能小于0！', '', 'error');
+                } else if ($timecount > 15) {
+                    message('创建数量不能大于15！', '', 'error');
+                }
+//                echo date('H:i', strtotime("+10 minute"));
+
+                $t = strtotime($time);
+                for ($i = 0; $i < $timecount; $i++) {
+                    $time = date('H:i', $t);
+
+                    $ishave = pdo_fetch("SELECT * FROM " . tablename($this->table_reservation) . " WHERE weid = :weid AND storeid = :storeid AND tablezonesid = :tablezonesid AND time=:time", array(':weid' => $weid, ':storeid' => $storeid, ':tablezonesid' => $tablezonesid, ':time' => $time));
+
+                    $data = array(
+                        'weid' => $weid,
+                        'storeid' => $storeid,
+                        'tablezonesid' => $tablezonesid,
+                        'time' => $time,
+                        'dateline' => TIMESTAMP,
+                    );
+                    if (empty($ishave)) {
+                        pdo_insert($this->table_reservation, $data);
+                    }
+                    $t = strtotime($time) + $timepoint * 60;
+                }
+                message('操作成功！', $this->createWebUrl('reservation', array('op' => 'display', 'storeid' => $storeid)), 'success');
+            }
+        } else if ($operation == 'display') {
+            $tablezones = pdo_fetchall("SELECT * FROM " . tablename($this->table_tablezones) . " WHERE weid = :weid AND storeid=:storeid ORDER BY displayorder DESC", array(':weid' => $weid, ':storeid' => $storeid), 'id');
+
+            $pindex = max(1, intval($_GPC['page']));
+            $psize = 15;
+
+            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_reservation) . " WHERE weid = :weid AND storeid =:storeid ORDER BY id LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':weid' => $this->_weid, ':storeid' => $storeid));
+            $total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->table_reservation) . " WHERE weid = :weid AND storeid =:storeid ", array(':weid' => $this->_weid, ':storeid' => $storeid));
+            $pager = pagination($total, $pindex, $psize);
+        } else if ($operation == 'delete') {
+            $id = intval($_GPC['id']);
+            $row = pdo_fetch("SELECT id FROM " . tablename($this->table_reservation) . " WHERE id = :id", array(':id' => $id));
+            if (empty($row)) {
+                message('抱歉，数据不存在或是已经被删除！');
+            }
+
+            pdo_delete($this->table_reservation, array('id' => $id, 'weid' => $weid));
+            message('操作成功！', $this->createWebUrl('reservation', array('op' => 'display', 'storeid' => $storeid)), 'success');
+        }
+
+        include $this->template('reservation');
+    }
+
+    public function doWebTables()
+    {
+        global $_GPC, $_W;
+//        $GLOBALS['frames'] = $this->getNaveMenu();
+        $weid = $this->_weid;
+        $action = 'tables';
+        $title = $this->actions_titles[$action];
+        $storeid = intval($_GPC['storeid']);
+        if (empty($storeid)) {
+            message('请选择门店!');
+        }
+        $returnid = $this->checkPermission($storeid);
+        $type = !empty($_GPC['type']) ? $_GPC['type'] : 'state';
+
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+        $tablezones = pdo_fetchall("SELECT * FROM " . tablename($this->table_tablezones) . " WHERE weid = :weid AND storeid=:storeid ORDER BY displayorder DESC", array(':weid' => $weid, ':storeid' => $storeid));
+
+        if (empty($tablezones)) {
+            $url = $this->createWebUrl('tablezones', array('op' => 'display', 'storeid' => $storeid));
+            message('请先添加桌台类型', $url);
+        }
+
+        if ($operation == 'post') {
+            $id = intval($_GPC['id']);
+            $tablezonesid = intval($_GPC['tablezonesid']);
+
+            if (!empty($id)) {
+                $item = pdo_fetch("SELECT * FROM " . tablename($this->table_tables) . " WHERE id = :id", array(':id' => $id));
+                if (empty($item)) {
+                    message('抱歉，数据不存在或是已经删除！', '', 'error');
+                }
+            }
+
+            if (checksubmit('submit')) {
+                $data = array(
+                    'weid' => intval($weid),
+                    'storeid' => $storeid,
+                    'tablezonesid' => intval($_GPC['tablezonesid']),
+                    'title' => trim($_GPC['title']),
+                    'user_count' => intval($_GPC['user_count']),
+                    'displayorder' => intval($_GPC['displayorder']),
+                    'dateline' => TIMESTAMP,
+                );
+
+                if (empty($data['title'])) {
+                    message('请输入桌台！');
+                }
+
+                if (empty($id)) {
+                    pdo_insert($this->table_tables, $data);
+                } else {
+                    unset($data['dateline']);
+                    pdo_update($this->table_tables, $data, array('id' => $id, 'weid' => $weid));
+                }
+                message('操作成功！', $this->createWebUrl('tables', array('op' => 'display', 'storeid' => $storeid)), 'success');
+            }
+        } else if ($operation == 'detail') {
+            $tablesid = intval($_GPC['tablesid']);
+            $item = pdo_fetch("SELECT * FROM " . tablename($this->table_tables) . " WHERE id = :id", array(':id' => $tablesid));
+            $cate = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " WHERE id = :id", array(':id' => $item['tablezonesid']));
+            $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE id = :id", array(':id' => $item['storeid']));
+            $logo = tomedia($store['logo']);
+            $tablesorder = pdo_fetchcolumn("SELECT count(1) AS count FROM " . tablename($this->table_tables_order) . " where weid = :weid AND storeid =:storeid AND tablesid=:tablesid ", array(':weid' => $this->_weid, ':storeid' => $storeid, ':tablesid' => $tablesid));
+            $tablesorderuser = pdo_fetchcolumn("SELECT count(distinct(from_user)) AS count FROM " . tablename($this->table_tables_order) . " where weid = :weid AND storeid =:storeid AND tablesid=:tablesid ", array(':weid' => $this->_weid, ':storeid' => $storeid, ':tablesid' => $tablesid));
+
+            $orderlist = pdo_fetchall("SELECT a.dateline,a.from_user as from_user,b.nickname as nickname,b.headimgurl as headimgurl FROM " . tablename($this->table_tables_order) . " a INNER JOIN " . tablename($this->table_fans) . " b ON a.from_user=b.from_user WHERE a.weid = :weid AND a.storeid =:storeid AND a.tablesid=:tablesid ORDER BY  a.id DESC LIMIT 20", array(':weid' => $this->_weid, ':storeid' => $storeid, ':tablesid' => $tablesid));
+
+        } else if ($operation == 'batch') {
+            $tablezonesid = intval($_GPC['tablezonesid']);
+            if (checksubmit('submit')) {
+                $tablecount = intval($_GPC['table_count']);
+                $title = trim($_GPC['title']);
+                if ($tablecount <= 0) {
+                    message('创建桌台数量必须大于0！', '', 'error');
+                }
+                if (empty($title)) {
+                    message('请输入起始桌台号！');
+                }
+                $num = findNum($title);
+                if (empty($num)) {
+                    message('输入起始桌台号必须包含数字！');
+                }
+                $pre = preg_replace("#[^A-z]#", '', $title);
+
+                for ($i = 0; $i < $tablecount; $i++) {
+                    $num = intval($num);
+                    $title = $pre . str_pad($num, 3, "0", STR_PAD_LEFT);
+                    $data = array(
+                        'weid' => intval($weid),
+                        'storeid' => $storeid,
+                        'tablezonesid' => $tablezonesid,
+                        'title' => $title,
+                        'user_count' => intval($_GPC['user_count']),
+                        'displayorder' => 0,
+                        'dateline' => TIMESTAMP,
+                    );
+                    if (empty($id)) {
+                        pdo_insert($this->table_tables, $data);
+                    }
+                    $num++;
+                }
+                message('操作成功！', $this->createWebUrl('tables', array('op' => 'display', 'storeid' => $storeid)), 'success');
+            }
+        } else if ($operation == 'display') {
+            $condition = '';
+            if (!empty($_GPC['keyword'])) {
+                $condition .= " AND title LIKE '%{$_GPC['keyword']}%'";
+            }
+
+            if (!empty($_GPC['tablezonesid'])) {
+                $tid = intval($_GPC['tablezonesid']);
+                $condition .= " AND tablezonesid = '{$tid}'";
+            }
+            $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE id = :id LIMIT 1", array(':id' => $storeid));
+            $logo = tomedia($store['logo']);
+            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_tables) . " WHERE weid = :weid AND storeid =:storeid {$condition} ORDER BY displayorder DESC, id DESC", array(':weid' => $this->_weid, ':storeid' => $storeid));
+
+            $tablezones = pdo_fetchall("SELECT id,title FROM " . tablename($this->table_tablezones) . " where weid = :weid AND storeid =:storeid ", array(':weid' => $this->_weid, ':storeid' => $storeid), 'id');
+
+            $tablesorder = pdo_fetchall("SELECT tablesid,count(1) AS count FROM " . tablename($this->table_tables_order) . " where weid = :weid AND storeid =:storeid GROUP BY tablesid ", array(':weid' => $this->_weid, ':storeid' => $storeid), 'tablesid');
+
+        } else if ($operation == 'delete') {
+            $id = intval($_GPC['id']);
+            $row = pdo_fetch("SELECT id FROM " . tablename($this->table_tables) . " WHERE id = :id", array(':id' => $id));
+            if (empty($row)) {
+                message('抱歉，数据不存在或是已经被删除！');
+            }
+
+            pdo_delete($this->table_tables, array('id' => $id, 'weid' => $weid));
+            message('操作成功！', $this->createWebUrl('tables', array('op' => 'display', 'storeid' => $storeid, 'type' => 'qrcode')), 'success');
+        } else if ($operation == 'updatestate') {
+            $tablesid = intval($_GPC['tablesid']);
+            $status = intval($_GPC['workflow_state']);
+//            message($status);
+            pdo_update($this->table_tables, array('status' => $status), array('id' => $tablesid, 'weid' => $weid));
+            message('操作成功！', $this->createWebUrl('tables', array('op' => 'display', 'storeid' => $storeid)), 'success');
+        }
+
+        include $this->template('tables');
+    }
+
+    public function doWebTableZones()
+    {
+        global $_GPC, $_W;
+//        $GLOBALS['frames'] = $this->getNaveMenu();
+        $weid = $this->_weid;
+        $action = 'tables';
+        $title = $this->actions_titles[$action];
+        $storeid = intval($_GPC['storeid']);
+        if (empty($storeid)) {
+            message('请选择门店!');
+        }
+        $returnid = $this->checkPermission($storeid);
+
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+        if ($operation == 'post') {
+            $id = intval($_GPC['id']);
+            if (!empty($id)) {
+                $item = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " WHERE id = :id", array(':id' => $id));
+                if (empty($item)) {
+                    message('抱歉，队列不存在或是已经删除！', '', 'error');
+                }
+            }
+            if (checksubmit('submit')) {
+                $data = array(
+                    'weid' => intval($weid),
+                    'storeid' => $storeid,
+                    'title' => trim($_GPC['title']),
+                    'limit_price' => intval($_GPC['limit_price']),
+                    'reservation_price' => intval($_GPC['reservation_price']),
+                    'table_count' => intval($_GPC['table_count']),
+                    'displayorder' => intval($_GPC['displayorder']),
+                    'dateline' => TIMESTAMP,
+                );
+
+                if (empty($data['title'])) {
+                    message('请输入桌台类型！');
+                }
+
+                if (empty($id)) {
+                    pdo_insert($this->table_tablezones, $data);
+                } else {
+                    unset($data['dateline']);
+                    pdo_update($this->table_tablezones, $data, array('id' => $id, 'weid' => $weid));
+                }
+                message('操作成功！', $this->createWebUrl('tablezones', array('op' => 'display', 'storeid' => $storeid)), 'success');
+            }
+        } else if ($operation == 'display') {
+            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_tablezones) . " WHERE weid = :weid AND storeid =:storeid ORDER BY displayorder DESC", array(':weid' => $this->_weid, ':storeid' => $storeid));
+
+            $stores = pdo_fetchall("SELECT id,title FROM " . tablename($this->table_stores) . " where weid = :weid ", array(':weid' => $this->_weid), 'id');
+            $table_count = pdo_fetchall("SELECT tablezonesid,COUNT(1) as count FROM " . tablename($this->table_tables) . " where storeid=:storeid AND weid = :weid GROUP BY tablezonesid", array(':weid' => $this->_weid, ':storeid' => $storeid), 'tablezonesid');
+        } else if ($operation == 'delete') {
+            $id = intval($_GPC['id']);
+            $row = pdo_fetch("SELECT id FROM " . tablename($this->table_tablezones) . " WHERE id = :id", array(':id' => $id));
+            if (empty($row)) {
+                message('抱歉，数据不存在或是已经被删除！');
+            }
+
+            pdo_delete($this->table_tablezones, array('id' => $id, 'weid' => $weid));
+            message('操作成功！', $this->createWebUrl('tablezones', array('op' => 'display', 'storeid' => $storeid)), 'success');
+        }
+        include $this->template('table_zones');
+    }
+
+    public function doWebQueueSetting()
+    {
+        global $_GPC, $_W;
+//        $GLOBALS['frames'] = $this->getNaveMenu();
+        $weid = $this->_weid;
+        $action = 'queueorder';
+        $title = $this->actions_titles[$action];
+        $storeid = intval($_GPC['storeid']);
+        if (empty($storeid)) {
+            message('请选择门店!');
+        }
+        $returnid = $this->checkPermission($storeid);
+
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+        if ($operation == 'post') {
+            $id = intval($_GPC['id']);
+            if (!empty($id)) {
+                $item = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_setting) . " WHERE id = :id", array(':id' => $id));
+                if (empty($item)) {
+                    message('抱歉，队列不存在或是已经删除！', '', 'error');
+                }
+            }
+            if (checksubmit('submit')) {
+                $data = array(
+                    'weid' => intval($weid),
+                    'storeid' => $storeid,
+                    'title' => trim($_GPC['title']),
+                    'limit_num' => intval($_GPC['limit_num']),
+                    'notify_number' => intval($_GPC['notify_number']),
+                    'prefix' => trim($_GPC['prefix']),
+                    'starttime' => trim($_GPC['starttime']),
+                    'endtime' => trim($_GPC['endtime']),
+                    'status' => intval($_GPC['status']),
+                    'displayorder' => intval($_GPC['displayorder']),
+                    'dateline' => TIMESTAMP,
+                );
+
+                if (empty($data['title'])) {
+                    message('队列名称！');
+                }
+
+                if (empty($id)) {
+                    pdo_insert($this->table_queue_setting, $data);
+                } else {
+                    unset($data['dateline']);
+                    pdo_update($this->table_queue_setting, $data, array('id' => $id));
+                }
+                message('操作成功！', $this->createWebUrl('queuesetting', array('op' => 'display', 'storeid' => $storeid)), 'success');
+            }
+        } else if ($operation == 'display') {
+            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_queue_setting) . " WHERE weid = :weid AND storeid =:storeid ORDER BY displayorder DESC", array(':weid' => $this->_weid, ':storeid' => $storeid));
+        } else if ($operation == 'setting') {
+            $config = $this->module['config']['weisrc_dish'];
+            if (checksubmit('submit')) {
+                $cfg['weisrc_dish']['queuemode'] = trim($_GPC['queuemode']);
+                $this->saveSettings($cfg);
+                message('更新成功！', $this->createWebUrl('queuesetting', array('op' => 'setting', 'storeid' => $storeid)), 'success');
+            }
+        }
+        include $this->template('queuesetting');
+    }
+
+    public function doWebQueueOrder()
+    {
+        global $_GPC, $_W;
+//        $GLOBALS['frames'] = $this->getNaveMenu();
+        $weid = $this->_weid;
+        $action = 'queueorder';
+        $title = $this->actions_titles[$action];
+        $storeid = intval($_GPC['storeid']);
+        if (empty($storeid)) {
+            message('请选择门店!');
+        }
+        $returnid = $this->checkPermission($storeid);
+
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+        $queueid = intval($_GPC['queueid']);
+        if ($operation == 'detail') {
+            if (empty($queueid)) {
+                message('请先选择队列');
+            }
+            $pindex = max(1, intval($_GPC['page']));
+            $psize = 8;
+            $condition = '';
+            if (isset($_GPC['status'])) {
+                $condition .= " AND status = '" . intval($_GPC['status']) . "'";
+            } else {
+                $condition .= " AND status = 1 ";
+            }
+            $condition .= " AND queueid = {$queueid} ";
+            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_queue_order) . " WHERE weid = :weid AND storeid =:storeid $condition ORDER BY id ASC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':weid' => $this->_weid, ':storeid' => $storeid));
+
+            $total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->table_queue_order) . " WHERE weid = :weid AND storeid =:storeid $condition", array(':weid' => $this->_weid, ':storeid' => $storeid));
+            $pager = pagination($total, $pindex, $psize);
+        } else if ($operation == 'display') {
+            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_queue_setting) . " WHERE weid = :weid AND storeid =:storeid ORDER BY displayorder DESC", array(':weid' => $this->_weid, ':storeid' => $storeid));
+            $queue_count = pdo_fetchall("SELECT queueid,COUNT(1) as count FROM " . tablename($this->table_queue_order) . " where storeid=:storeid AND status=1 AND  weid = :weid GROUP BY queueid", array(':weid' => $this->_weid, ':storeid' => $storeid), 'queueid');
+        } else if ($operation == 'post') {
+            if (empty($queueid)) {
+                message('请先选择队列');
+            }
+            $id = intval($_GPC['id']);
+            if (!empty($id)) {
+                $item = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_order) . " WHERE id = :id", array(':id' => $id));
+                if (empty($item)) {
+                    message('抱歉，队列不存在或是已经删除！', '', 'error');
+                }
+            }
+
+            if (checksubmit('submit')) {
+                $data = array(
+                    'weid' => intval($weid),
+                    'storeid' => $storeid,
+                    'num' => trim($_GPC['num']),
+                    'mobile' => trim($_GPC['mobile']),
+                    'usercount' => trim($_GPC['usercount'])
+                );
+
+                pdo_update($this->table_queue_order, $data, array('id' => $id));
+                message('操作成功！', $this->createWebUrl('queueorder', array('op' => 'detail', 'storeid' => $storeid, 'queueid' => $queueid)), 'success');
+            }
+        } else if ($operation == 'setstatus') {
+            $id = intval($_GPC['id']);
+            $status = intval($_GPC['status']);
+            pdo_update($this->table_queue_order, array('status' => $status), array('id' => $id, 'weid' => $this->_weid));
+            $this->sendQueueNotice($id, 2);
+            pdo_update($this->table_queue_order, array('isnotify' => 1), array('id' => $id));
+
+            $queue_setting = pdo_fetch("SELECT * FROM " . tablename($this->table_queue_setting) . " WHERE id = :id", array(':id' => $queueid));
+            if (!empty($queue_setting) && $queue_setting['limit_num'] > 0) {
+                $queues = pdo_fetchall("SELECT * FROM " . tablename($this->table_queue_order) . " WHERE status=1 AND storeid=:storeid AND  queueid=:queueid ORDER BY id DESC LIMIT " . $queue_setting['limit_num'], array(':storeid' => $storeid, ':queueid' => $queueid));
+                foreach ($queues as $key => $value) {
+                    $this->sendQueueNotice($value['id'], 2);
+                    pdo_update($this->table_queue_order, array('isnotify' => 1), array('id' => $value['id']));
+                }
+            }
+            message('操作成功！', $this->createWebUrl('queueorder', array('op' => 'detail', 'storeid' => $storeid, 'queueid' => $queueid)), 'success');
+        } else if ($operation == 'notice') {
+            $id = intval($_GPC['id']);
+            $this->sendQueueNotice($id, 2);
+            pdo_update($this->table_queue_order, array('isnotify' => 1), array('id' => $id));
+            message('操作成功！', $this->createWebUrl('queueorder', array('op' => 'detail', 'storeid' => $storeid, 'queueid' => $queueid)), 'success');
+        }
+        include $this->template('queueorder');
+    }
+
     //商品
     public function doWebGoods()
     {
         global $_GPC, $_W;
-        $GLOBALS['frames'] = $this->getNaveMenu();
+//        $GLOBALS['frames'] = $this->getNaveMenu();
         $weid = $this->_weid;
         $action = 'goods';
         $title = $this->actions_titles[$action];
         $storeid = intval($_GPC['storeid']);
-
+        $returnid = $this->checkPermission($storeid);
         if (empty($storeid)) {
             message('请选择门店!');
         }
@@ -3151,7 +5894,7 @@ class weisrc_dishModuleSite extends WeModuleSite
                     'unitname' => trim($_GPC['unitname']),
                     'description' => trim($_GPC['description']),
                     'taste' => trim($_GPC['taste']),
-                    'isspecial' => empty($_GPC['marketprice'])?1:2,
+                    'isspecial' => empty($_GPC['marketprice']) ? 1 : 2,
                     'marketprice' => trim($_GPC['marketprice']),
                     'productprice' => trim($_GPC['productprice']),
                     'subcount' => intval($_GPC['subcount']),
@@ -3160,6 +5903,9 @@ class weisrc_dishModuleSite extends WeModuleSite
                     'displayorder' => intval($_GPC['displayorder']),
                     'dateline' => TIMESTAMP,
                 );
+                if ($_W['role'] == 'operator') {
+                    unset($data['credit']);
+                }
 
                 if (empty($data['title'])) {
                     message('请输入商品名称！');
@@ -3220,11 +5966,8 @@ class weisrc_dishModuleSite extends WeModuleSite
             if (empty($row)) {
                 message('抱歉，商品 不存在或是已经被删除！');
             }
-            if (!empty($row['thumb'])) {
-                load()->func('file');
-                file_delete($row['thumb']);
-            }
-            pdo_delete($this->table_goods, array('id' => $id));
+
+            pdo_delete($this->table_goods, array('id' => $id, 'weid' => $weid));
             message('删除成功！', referer(), 'success');
         } elseif ($operation == 'deleteall') {
             $rowcount = 0;
@@ -3237,7 +5980,7 @@ class weisrc_dishModuleSite extends WeModuleSite
                         $notrowcount++;
                         continue;
                     }
-                    pdo_delete($this->table_goods, array('id' => $id, 'weid' => $_W['uniacid']));
+                    pdo_delete($this->table_goods, array('id' => $id, 'weid' => $weid));
                     $rowcount++;
                 }
             }
@@ -3250,11 +5993,12 @@ class weisrc_dishModuleSite extends WeModuleSite
     public function doWebIntelligent()
     {
         global $_W, $_GPC;
-        $GLOBALS['frames'] = $this->getNaveMenu();
+//        $GLOBALS['frames'] = $this->getNaveMenu();
         $weid = $this->_weid;
         $action = 'intelligent';
         $title = $this->actions_titles[$action];
         $storeid = intval($_GPC['storeid']);
+        $returnid = $this->checkPermission($storeid);
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
 
         if ($operation == 'display') {
@@ -3327,64 +6071,192 @@ class weisrc_dishModuleSite extends WeModuleSite
                 message('更新分类成功！', $this->createWebUrl('intelligent', array('op' => 'display', 'storeid' => $storeid)), 'success');
             }
             include $this->template('intelligent');
-
         } elseif ($operation == 'delete') {
             $id = intval($_GPC['id']);
             $category = pdo_fetch("SELECT id FROM " . tablename($this->table_intelligent) . " WHERE id = '$id'");
             if (empty($category)) {
                 message('抱歉，分类不存在或是已经被删除！', $this->createWebUrl('intelligent', array('op' => 'display', 'storeid' => $storeid)), 'error');
             }
-            pdo_delete($this->table_intelligent, array('id' => $id), 'OR');
+            pdo_delete($this->table_intelligent, array('id' => $id, 'weid' => $weid));
             message('分类删除成功！', $this->createWebUrl('category', array('op' => 'display', 'storeid' => $storeid)), 'success');
         }
     }
 
-    public function doWebBlacklist()
+    public function doWebfans()
     {
-        global $_W, $_GPC;
-        $GLOBALS['frames'] = $this->getNaveMenu();
-        load()->model('mc');
-        $weid = $_W['uniacid'];
+        global $_GPC, $_W;
+        load()->func('tpl');
+        $weid = $this->_weid;
+        $action = 'fans';
+        $title = $this->actions_titles[$action];
+        $storeid = intval($_GPC['storeid']);
+        $returnid = $this->checkPermission($storeid);
 
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
         if ($operation == 'display') {
-            $pindex = max(1, intval($_GPC['page']));
-            $psize = 10;
-
-//            $list = pdo_fetchall("SELECT c.id as id,a.nickname as nickname,a.realname as realname,a.mobile as mobile,c.dateline as dateline,c.from_user as from_user,c.status as status FROM " . tablename('mc_members') . " a INNER JOIN " . tablename('mc_mapping_fans') . " b ON a.uid=b.uid INNER JOIN " . tablename('weisrc_dish_blacklist') . " c ON b.openid=c.from_user WHERE c.weid=:weid ORDER BY c.dateline DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':weid' => $_W['uniacid']));
-            $list = pdo_fetchall("SELECT * FROM " . tablename('weisrc_dish_blacklist') . " WHERE weid=:weid ORDER BY dateline DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(':weid' => $_W['uniacid']));
-
-            if (!empty($list)) {
-                $total = pdo_fetchcolumn('SELECT COUNT(1) FROM ' . tablename($this->table_blacklist) . "  WHERE weid=:weid", array(':weid' => $_W['uniacid']));
+            $condition = '';
+            if (!empty($_GPC['keyword'])) {
+                $types = trim($_GPC['types']);
+                $condition .= " AND {$types} LIKE '%{$_GPC['keyword']}%'";
             }
+            if (isset($_GPC['status']) && !empty($_GPC['status'])) {
+                $condition .= " AND status={$_GPC['status']} ";
+            }
+            $pindex = max(1, intval($_GPC['page']));
+            $psize = 8;
 
-            //ims_mc_members
-            //ims_mc_mapping_fans
-            //SELECT * FROM ims_mc_members a INNER JOIN ims_mc_mapping_fans b ON a.uid=b.uid WHERE b.openid IN (SELECT from_user FROM ims_weisrc_dish_blacklist)
+            $start = ($pindex - 1) * $psize;
+            $limit = "";
+            $limit .= " LIMIT {$start},{$psize}";
+            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_fans) . " WHERE weid = :weid {$condition} ORDER BY id DESC " . $limit, array(':weid' => $weid), 'from_user');
+            $total = pdo_fetchcolumn("SELECT count(1) FROM " . tablename($this->table_fans) . " WHERE weid = :weid {$condition} ", array(':weid' => $weid));
+
+            $order_count = pdo_fetchall("SELECT from_user,COUNT(1) as count FROM " . tablename($this->table_order) . " WHERE storeid=:storeid  GROUP BY from_user,weid having weid = :weid", array(':weid' => $weid, ':storeid' => $storeid), 'from_user');
+            $pay_price = pdo_fetchall("SELECT from_user,sum(totalprice) as totalprice FROM " . tablename($this->table_order) . " WHERE ispay=1 AND storeid=:storeid  GROUP BY from_user,weid having weid = :weid", array(':weid' => $weid, ':storeid' => $storeid), 'from_user');
 
             $pager = pagination($total, $pindex, $psize);
-        } else if ($operation == 'black') {
-            $id = $_GPC['id'];
+        } else if ($operation == 'post') {
+            $id = intval($_GPC['id']);
+            $item = pdo_fetch("SELECT * FROM " . tablename($this->table_fans) . " WHERE id = :id", array(':id' => $id));
 
-            //pdo_query("UPDATE " . tablename($this->table_blacklist) . " SET status = abs(status - 1) WHERE id=:id AND weid=:weid", array(':id' => $id, ':weid' => $_W['uniacid']));
+            $order_count = pdo_fetchcolumn("SELECT COUNT(1) as count FROM " . tablename($this->table_order) . " WHERE from_user=:from_user AND weid = :weid AND storeid=:storeid ", array(':weid' => $weid, ':from_user' => $item['from_user'], ':storeid' => $storeid));
+            $cancel_count = pdo_fetchcolumn("SELECT COUNT(1) as count FROM " . tablename($this->table_order) . " WHERE from_user=:from_user AND weid = :weid AND status=-1 AND storeid=:storeid ", array(':weid' => $weid, ':from_user' => $item['from_user'], ':storeid' => $storeid));
+            $pay_price = pdo_fetchcolumn("SELECT sum(totalprice) as totalprice FROM " . tablename($this->table_order) . " WHERE ispay=1 AND weid = :weid AND from_user=:from_user AND storeid=:storeid ", array(':weid' => $weid, ':from_user' => $item['from_user'], ':storeid' => $storeid));
 
-            pdo_delete($this->table_blacklist, array('id' => $id, 'weid' => $weid));
+            if (checksubmit()) {
+                $data = array(
+                    'weid' => $weid,
+                    'nickname' => trim($_GPC['nickname']),
+                    'username' => trim($_GPC['username']),
+                    'mobile' => trim($_GPC['mobile']),
+                    'address' => trim($_GPC['address']),
+                    'lat' => trim($_GPC['baidumap']['lat']),
+                    'lng' => trim($_GPC['baidumap']['lng']),
+                    'sex' => intval($_GPC['sex']),
+                    'dateline' => TIMESTAMP
+                );
+                if (!empty($_GPC['headimgurl'])) {
+                    $data['headimgurl'] = $_GPC['headimgurl'];
+                }
 
-            message('操作成功！', $this->createWebUrl('blacklist', array('op' => 'display')), 'success');
+                if (empty($item)) {
+                    pdo_insert($this->table_fans, $data);
+                } else {
+                    unset($data['dateline']);
+                    pdo_update($this->table_fans, $data, array('id' => $id, 'weid' => $weid));
+                }
+                message('操作成功！', $this->createWebUrl('fans', array('op' => 'display', 'storeid' => $storeid)), 'success');
+            }
+        } else if ($operation == 'delete') {
+            $id = intval($_GPC['id']);
+            $item = pdo_fetch("SELECT id FROM " . tablename($this->table_fans) . " WHERE id = :id AND weid=:weid", array(':id' => $id, ':weid' => $weid));
+            if (empty($item)) {
+                message('抱歉，不存在或是已经被删除！', $this->createWebUrl('fans', array('op' => 'display', 'storeid' => $storeid)), 'error');
+            }
+            pdo_delete($this->table_fans, array('id' => $id, 'weid' => $weid));
+            message('删除成功！', $this->createWebUrl('fans', array('op' => 'display', 'storeid' => $storeid)), 'success');
+        } else if ($operation == 'setstatus') {
+            $id = intval($_GPC['id']);
+            $status = intval($_GPC['status']);
+            pdo_query("UPDATE " . tablename($this->table_fans) . " SET status = abs(:status - 1) WHERE id=:id", array(':status' => $status, ':id' => $id));
+            message('操作成功！', $this->createWebUrl('fans', array('op' => 'display', 'storeid' => $storeid)), 'success');
         }
+        include $this->template('fans');
+    }
 
-        include $this->template('blacklist');
+    public function doWebAllfans()
+    {
+        global $_GPC, $_W;
+        load()->func('tpl');
+        $weid = $this->_weid;
+        $action = 'fans';
+        $title = $this->actions_titles[$action];
+        $storeid = intval($_GPC['storeid']);
+        $returnid = $this->checkPermission($storeid);
+
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+        if ($operation == 'display') {
+            $condition = '';
+            if (!empty($_GPC['keyword'])) {
+                $types = trim($_GPC['types']);
+                $condition .= " AND {$types} LIKE '%{$_GPC['keyword']}%'";
+            }
+            if (isset($_GPC['status']) && !empty($_GPC['status'])) {
+                $condition .= " AND status={$_GPC['status']} ";
+            }
+            $pindex = max(1, intval($_GPC['page']));
+            $psize = 8;
+
+            $start = ($pindex - 1) * $psize;
+            $limit = "";
+            $limit .= " LIMIT {$start},{$psize}";
+            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_fans) . " WHERE weid = :weid {$condition} ORDER BY id DESC " . $limit, array(':weid' => $weid), 'from_user');
+            $total = pdo_fetchcolumn("SELECT count(1) FROM " . tablename($this->table_fans) . " WHERE weid = :weid {$condition} ", array(':weid' => $weid));
+
+            $order_count = pdo_fetchall("SELECT from_user,COUNT(1) as count FROM " . tablename($this->table_order) . "  GROUP BY from_user,weid having weid = :weid", array(':weid' => $_W['uniacid']), 'from_user');
+            $pay_price = pdo_fetchall("SELECT from_user,sum(totalprice) as totalprice FROM " . tablename($this->table_order) . " WHERE ispay=1 GROUP BY from_user,weid having weid = :weid", array(':weid' => $_W['uniacid']), 'from_user');
+
+            $pager = pagination($total, $pindex, $psize);
+        } else if ($operation == 'post') {
+            $id = intval($_GPC['id']);
+            $item = pdo_fetch("SELECT * FROM " . tablename($this->table_fans) . " WHERE id = :id", array(':id' => $id));
+
+            $order_count = pdo_fetchcolumn("SELECT COUNT(1) as count FROM " . tablename($this->table_order) . " WHERE from_user=:from_user AND weid = :weid", array(':weid' => $weid, ':from_user' => $item['from_user']));
+            $cancel_count = pdo_fetchcolumn("SELECT COUNT(1) as count FROM " . tablename($this->table_order) . " WHERE from_user=:from_user AND weid = :weid AND status=-1", array(':weid' => $weid, ':from_user' => $item['from_user']));
+            $pay_price = pdo_fetchcolumn("SELECT sum(totalprice) as totalprice FROM " . tablename($this->table_order) . " WHERE ispay=1 AND weid = :weid AND from_user=:from_user", array(':weid' => $weid, ':from_user' => $item['from_user']));
+
+            if (checksubmit()) {
+                $data = array(
+                    'weid' => $weid,
+                    'nickname' => trim($_GPC['nickname']),
+                    'username' => trim($_GPC['username']),
+                    'mobile' => trim($_GPC['mobile']),
+                    'address' => trim($_GPC['address']),
+                    'lat' => trim($_GPC['baidumap']['lat']),
+                    'lng' => trim($_GPC['baidumap']['lng']),
+                    'sex' => intval($_GPC['sex']),
+                    'dateline' => TIMESTAMP
+                );
+                if (!empty($_GPC['headimgurl'])) {
+                    $data['headimgurl'] = $_GPC['headimgurl'];
+                }
+
+                if (empty($item)) {
+                    pdo_insert($this->table_fans, $data);
+                } else {
+                    unset($data['dateline']);
+                    pdo_update($this->table_fans, $data, array('id' => $id, 'weid' => $weid));
+                }
+                message('操作成功！', $this->createWebUrl('allfans', array('op' => 'display', 'storeid' => $storeid)), 'success');
+            }
+        } else if ($operation == 'delete') {
+            $id = intval($_GPC['id']);
+            $item = pdo_fetch("SELECT id FROM " . tablename($this->table_fans) . " WHERE id = :id AND weid=:weid", array(':id' => $id, ':weid' => $weid));
+            if (empty($item)) {
+                message('抱歉，不存在或是已经被删除！', $this->createWebUrl('allfans', array('op' => 'display', 'storeid' => $storeid)), 'error');
+            }
+            pdo_delete($this->table_fans, array('id' => $id, 'weid' => $weid));
+            message('删除成功！', $this->createWebUrl('allfans', array('op' => 'display', 'storeid' => $storeid)), 'success');
+        } else if ($operation == 'setstatus') {
+            $id = intval($_GPC['id']);
+            $status = intval($_GPC['status']);
+            pdo_query("UPDATE " . tablename($this->table_fans) . " SET status = abs(:status - 1) WHERE id=:id", array(':status' => $status, ':id' => $id));
+            message('操作成功！', $this->createWebUrl('allfans', array('op' => 'display', 'storeid' => $storeid)), 'success');
+        }
+        include $this->template('allfans');
     }
 
     public function doWebOrder()
     {
         global $_W, $_GPC;
-        $GLOBALS['frames'] = $this->getNaveMenu();
+        $weid = $this->_weid;
+//        $GLOBALS['frames'] = $this->getNaveMenu();
 
         load()->func('tpl');
         $action = 'order';
         $title = $this->actions_titles[$action];
         $storeid = intval($_GPC['storeid']);
+        $returnid = $this->checkPermission($storeid);
 
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
         if ($operation == 'display') {
@@ -3427,7 +6299,7 @@ class weisrc_dishModuleSite extends WeModuleSite
                 $commoncondition .= " AND username LIKE '%{$_GPC['username']}%' ";
             }
 
-            if (isset($_GPC['status']) && $_GPC['status'] != 0) {
+            if (isset($_GPC['status']) && $_GPC['status'] != '') {
                 $commoncondition .= " AND status = '" . intval($_GPC['status']) . "'";
             }
 
@@ -3441,7 +6313,7 @@ class weisrc_dishModuleSite extends WeModuleSite
                 $list = pdo_fetchall($sql, $paras);
                 $orderstatus = array(
                     '-1' => array('css' => 'default', 'name' => '已取消'),
-                    '0' => array('css' => 'danger', 'name' => '待付款'),
+                    '0' => array('css' => 'danger', 'name' => '待处理'),
                     '1' => array('css' => 'info', 'name' => '已确认'),
                     '2' => array('css' => 'warning', 'name' => '已付款'),
                     '3' => array('css' => 'success', 'name' => '已完成')
@@ -3468,14 +6340,13 @@ class weisrc_dishModuleSite extends WeModuleSite
                     $i++;
                 }
 
-                $this->exportexcel($arr, array('订单号', '商户订单号' , '支付方式','状态', '总价', '真实姓名', '电话号码', '地址', '时间'), time());
+                $this->exportexcel($arr, array('订单号', '商户订单号', '支付方式', '状态', '总价', '真实姓名', '电话号码', '地址', '时间'), time());
                 exit();
             }
 
             $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_order) . " WHERE $commoncondition ORDER BY id desc, dateline DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, $paras);
 
             $total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->table_order) . " WHERE $commoncondition", $paras);
-
             $pager = pagination($total, $pindex, $psize);
 
             if (!empty($list)) {
@@ -3484,79 +6355,116 @@ class weisrc_dishModuleSite extends WeModuleSite
                 }
             }
 
-            $order_count_all = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->table_order) . "  WHERE {$commonconditioncount} ");
-            $order_count_confirm = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->table_order) . "  WHERE {$commonconditioncount} AND status=1");
-            $order_count_pay = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->table_order) . "  WHERE {$commonconditioncount} AND status=2");
-            $order_count_finish = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->table_order) . "  WHERE {$commonconditioncount} AND status=3");
-            $order_count_cancel = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->table_order) . "  WHERE {$commonconditioncount} AND status=-1");
-
-            $users = fans_search($userids, array('realname', 'resideprovince', 'residecity', 'residedist', 'address', 'mobile', 'qq'));
+//            $order_count_all = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->table_order) . "  WHERE {$commonconditioncount} ");
+//            $order_count_confirm = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->table_order) . "  WHERE {$commonconditioncount} AND status=1");
+//            $order_count_pay = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->table_order) . "  WHERE {$commonconditioncount} AND status=2");
+//            $order_count_finish = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->table_order) . "  WHERE {$commonconditioncount} AND status=3");
+//            $order_count_cancel = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->table_order) . "  WHERE {$commonconditioncount} AND status=-1");
 
             //打印数量
-            $print_order_count = pdo_fetchall("SELECT orderid,COUNT(1) as count FROM ".tablename($this->table_print_order)."  GROUP BY orderid,weid having weid = :weid", array(':weid' => $_W['weid']), 'orderid');
-
-            //黑名单
-            $blacklist = pdo_fetchall("SELECT * FROM ".tablename($this->table_blacklist)." WHERE weid = :weid", array(':weid' => $_W['weid']), 'from_user');
+            $print_order_count = pdo_fetchall("SELECT orderid,COUNT(1) as count FROM " . tablename($this->table_print_order) . "  GROUP BY orderid,weid having weid = :weid", array(':weid' => $_W['uniacid']), 'orderid');
 
             //门店列表
-            $storelist = pdo_fetchall("SELECT * FROM ".tablename($this->table_stores)." WHERE weid = :weid", array(':weid' => $_W['weid']), 'id');
+            $storelist = pdo_fetchall("SELECT * FROM " . tablename($this->table_stores) . " WHERE weid = :weid", array(':weid' => $_W['uniacid']), 'id');
 
         } elseif ($operation == 'detail') {
             //流程 第一步确认付款 第二步确认订单 第三步，完成订单
             $id = intval($_GPC['id']);
-            $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id=:id LIMIT 1", array(':id' => $id));
+            $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id=:id AND weid=:weid LIMIT 1", array(':id' => $id, ':weid' => $this->_weid));
+
+            $fans = pdo_fetch("SELECT * FROM " . tablename($this->table_fans) . " WHERE from_user=:from_user AND weid=:weid LIMIT 1", array(':from_user' => $order['from_user'], ':weid' => $this->_weid));
+            //改价
+            if (!empty($_GPC['confirmprice'])) {
+                pdo_update($this->table_order,
+                    array(
+                        'totalprice' => $_GPC['updateprice'],
+                        'paydetail' => empty($order['paydetail']) ? date('Y-m-d H:i', TIMESTAMP) . '改价为' . $_GPC['updateprice'] : $order['paydetail'] . '<br/>' . date('Y-m-d H:i', TIMESTAMP) . '改价为' . $_GPC['updateprice']
+                    ),
+                    array('id' => $id)
+                );
+                message('改价成功！', referer(), 'success');
+            }
 
             if (checksubmit('confrimsign')) {
-                pdo_update($this->table_order, array('remark' => $_GPC['remark'], 'sign' => $_GPC['sign'], 'reply' => $_GPC['reply']), array('id' => $id));
+                pdo_update($this->table_order, array('reply' => $_GPC['reply']), array('id' => $id));
                 message('操作成功！', referer(), 'success');
             }
-            if (checksubmit('finish')) {
+
+            $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE id=:id AND weid=:weid LIMIT 1", array(':id' => $order['storeid'], ':weid' => $weid));
+            $setting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " where weid = :weid LIMIT 1", array(':weid' => $weid));
+
+            if (!empty($_GPC['finish'])) {
                 //isfinish
                 if ($order['isfinish'] == 0) {
                     //计算积分
                     $this->setOrderCredit($order['id']);
                     pdo_update($this->table_order, array('isfinish' => 1), array('id' => $id));
+                    if ($order['dining_mode'] == 1) {
+                        pdo_update($this->table_tables, array('status' => 0), array('id' => $order['tables']));
+                    }
                 }
-                pdo_update($this->table_order, array('status' => 3, 'remark' => $_GPC['remark']), array('id' => $id));
+                pdo_update($this->table_order, array('status' => 3), array('id' => $id, 'weid' => $weid));
+                $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id=:id AND weid=:weid LIMIT 1", array(':id' => $id, ':weid' => $this->_weid));
+                $this->sendOrderNotice($order, $store, $setting);
                 message('订单操作成功！', referer(), 'success');
             }
-            if (checksubmit('cancel')) {
-                pdo_update($this->table_order, array('status' => 1, 'remark' => $_GPC['remark']), array('id' => $id));
+            if (!empty($_GPC['cancel'])) {
+                pdo_update($this->table_order, array('status' => 1), array('id' => $id, 'weid' => $weid));
                 message('取消完成订单操作成功！', referer(), 'success');
             }
-            if (checksubmit('confirm')) {
-                pdo_update($this->table_order, array('status' => 1, 'remark' => $_GPC['remark']), array('id' => $id));
+            if (!empty($_GPC['confirm'])) {
+                pdo_update($this->table_order, array('status' => 1), array('id' => $id, 'weid' => $weid));
+
+                $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id=:id AND weid=:weid LIMIT 1", array(':id' => $id, ':weid' => $this->_weid));
+                $this->sendOrderNotice($order, $store, $setting);
                 message('确认订单操作成功！', referer(), 'success');
             }
-            if (checksubmit('cancelpay')) {
-                pdo_update($this->table_order, array('status' => 0, 'remark' => $_GPC['remark']), array('id' => $id));
+            if (!empty($_GPC['cancelpay'])) {
+                pdo_update($this->table_order, array('status' => 0), array('id' => $id, 'weid' => $weid));
                 message('取消订单付款操作成功！', referer(), 'success');
             }
-            if (checksubmit('confrimpay')) {
-                pdo_update($this->table_order, array('status' => 2, 'remark' => $_GPC['remark']), array('id' => $id));
+            if (!empty($_GPC['confrimpay'])) {
+                pdo_update($this->table_order, array('ispay' => 1), array('id' => $id, 'weid' => $weid));
+
+                $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id=:id AND weid=:weid LIMIT 1", array(':id' => $id, ':weid' => $this->_weid));
+                $this->sendOrderNotice($order, $store, $setting);
                 message('确认订单付款操作成功！', referer(), 'success');
             }
-            if (checksubmit('close')) {
-                pdo_update($this->table_order, array('status' => -1, 'remark' => $_GPC['remark']), array('id' => $id));
+            if (!empty($_GPC['close'])) {
+                pdo_update($this->table_order, array('status' => -1), array('id' => $id, 'weid' => $weid));
+
+                $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id=:id AND weid=:weid LIMIT 1", array(':id' => $id, ':weid' => $this->_weid));
+                $this->sendOrderNotice($order, $store, $setting);
                 message('订单关闭操作成功！', referer(), 'success');
             }
-            if (checksubmit('open')) {
-                pdo_update($this->table_order, array('status' => 0, 'remark' => $_GPC['remark']), array('id' => $id));
+            if (!empty($_GPC['open'])) {
+                pdo_update($this->table_order, array('status' => 0), array('id' => $id, 'weid' => $weid));
                 message('开启订单操作成功！', referer(), 'success');
             }
 
             $item = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id = :id", array(':id' => $id));
 
-            $item['user'] = fans_search($item['from_user'], array('realname', 'resideprovince', 'residecity', 'residedist', 'address', 'mobile', 'qq'));
-
-            $goodsid = pdo_fetchall("SELECT goodsid, total FROM " . tablename($this->table_order_goods) . " WHERE orderid = '{$item['id']}'", array(), 'goodsid');
-
-            $goods = pdo_fetchall("SELECT * FROM " . tablename($this->table_goods) . "  WHERE id IN ('" . implode("','", array_keys($goodsid)) . "')");
-            $item['goods'] = $goods;
+            $goods = pdo_fetchall("SELECT a.goodsid,a.price, b.credit, a.total,b.thumb,b.title,b.id FROM " . tablename($this->table_order_goods) . " a INNER JOIN " . tablename($this->table_goods) . " b ON a.goodsid=b.id WHERE a.orderid = :id", array(':id' => $id));
+            if ($item['dining_mode'] == 1) {
+                $tablesid = intval($item['tables']);
+                $table = pdo_fetch("SELECT * FROM " . tablename($this->table_tables) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $tablesid));
+                if (empty($table)) {
+//                    exit('餐桌不存在！');
+                } else {
+                    $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $table['tablezonesid']));
+                    if (empty($tablezones)) {
+//                        exit('餐桌类型不存在！');
+                    }
+                    $table_title = $tablezones['title'] . '-' . $table['title'];
+                }
+            }
+            if ($item['dining_mode'] == 3) {
+                $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $item['tablezonesid']));
+            }
         } else if ($operation == 'delete') {
             $id = $_GPC['id'];
-            pdo_delete($this->table_order, array('id' => $id));
-            pdo_delete($this->table_order_goods, array('orderid' => $id));
+            pdo_delete($this->table_order, array('id' => $id, 'weid' => $weid));
+            pdo_delete($this->table_order_goods, array('orderid' => $id, 'weid' => $weid));
             message('删除成功！', $this->createWebUrl('order', array('op' => 'display', 'storeid' => $storeid)), 'success');
         } else if ($operation == 'print') {
             $id = $_GPC['id'];//订单id
@@ -3568,7 +6476,7 @@ class weisrc_dishModuleSite extends WeModuleSite
                 message('请先添加打印机或者开启打印机！');
             }
 
-            foreach($prints as $key => $value) {
+            foreach ($prints as $key => $value) {
                 if ($value['print_status'] == 1 && $value['type'] == 'hongxin') {
                     $data = array(
                         'weid' => $_W['uniacid'],
@@ -3581,32 +6489,252 @@ class weisrc_dishModuleSite extends WeModuleSite
                 }
             }
             $this->feiyinSendFreeMessage($id);
-            message('操作成功！', $this->createWebUrl('order', array('op' => 'display', 'storeid' => $storeid)), 'success');
-        } else if ($operation == 'black') {
-            $id = $_GPC['id'];//订单id
-            $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id=:id AND weid=:weid  LIMIT 1", array(':id' => $id, ':weid' => $_W['uniacid']));
-
-            if (empty($order)) {
-                message('数据不存在!');
-            }
-
-            $data = array(
-                'weid' => $_W['uniacid'],
-                'from_user' => $order['from_user'],
-                'status' => 0,
-                'dateline' => TIMESTAMP
-            );
-
-            $blacker = pdo_fetch("SELECT * FROM " . tablename($this->table_blacklist) . " WHERE from_user=:from_user AND weid=:weid  LIMIT 1", array(':from_user' => $order['from_user'], ':weid' => $_W['uniacid']));
-
-            if (!empty($blacker)) {
-                message('该用户已经在黑名单中!', $this->createWebUrl('order', array('op' => 'display', 'storeid' => $storeid)));
-            }
-
-            pdo_insert('weisrc_dish_blacklist', $data);
+            $this->_365SendFreeMessage($id);
             message('操作成功！', $this->createWebUrl('order', array('op' => 'display', 'storeid' => $storeid)), 'success');
         }
         include $this->template('order');
+    }
+
+    public function doWebAllOrder()
+    {
+        global $_W, $_GPC;
+        $weid = $this->_weid;
+//        $GLOBALS['frames'] = $this->getNaveMenu();
+
+        load()->func('tpl');
+        $action = 'order';
+        $title = $this->actions_titles[$action];
+        $storeid = intval($_GPC['storeid']);
+        $returnid = $this->checkPermission($storeid);
+
+        $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+        if ($operation == 'display') {
+
+            $commoncondition = " weid = '{$_W['uniacid']}' ";
+            if ($storeid != 0) {
+                $commoncondition .= " AND storeid={$storeid} ";
+            }
+
+            $commonconditioncount = " weid = '{$_W['uniacid']}' ";
+            if ($storeid != 0) {
+                $commonconditioncount .= " AND storeid={$storeid} ";
+            }
+
+            if (!empty($_GPC['time'])) {
+                $starttime = strtotime($_GPC['time']['start']);
+                $endtime = strtotime($_GPC['time']['end']) + 86399;
+                $commoncondition .= " AND dateline >= :starttime AND dateline <= :endtime ";
+                $paras[':starttime'] = $starttime;
+                $paras[':endtime'] = $endtime;
+            }
+
+            if (empty($starttime) || empty($endtime)) {
+                $starttime = strtotime('-1 month');
+                $endtime = time();
+            }
+
+            $pindex = max(1, intval($_GPC['page']));
+            $psize = 10;
+
+            if (!empty($_GPC['ordersn'])) {
+                $commoncondition .= " AND ordersn LIKE '%{$_GPC['ordersn']}%' ";
+            }
+
+            if (!empty($_GPC['tel'])) {
+                $commoncondition .= " AND tel LIKE '%{$_GPC['tel']}%' ";
+            }
+
+            if (!empty($_GPC['username'])) {
+                $commoncondition .= " AND username LIKE '%{$_GPC['username']}%' ";
+            }
+
+            if (isset($_GPC['status']) && $_GPC['status'] != '') {
+                $commoncondition .= " AND status = '" . intval($_GPC['status']) . "'";
+            }
+
+            if (isset($_GPC['paytype']) && $_GPC['paytype'] != '') {
+                $commoncondition .= " AND paytype = '" . intval($_GPC['paytype']) . "'";
+            }
+
+            if ($_GPC['out_put'] == 'output') {
+                $sql = "select * from " . tablename($this->table_order)
+                    . " WHERE $commoncondition ORDER BY status DESC, dateline DESC ";
+                $list = pdo_fetchall($sql, $paras);
+                $orderstatus = array(
+                    '-1' => array('css' => 'default', 'name' => '已取消'),
+                    '0' => array('css' => 'danger', 'name' => '待处理'),
+                    '1' => array('css' => 'info', 'name' => '已确认'),
+                    '2' => array('css' => 'warning', 'name' => '已付款'),
+                    '3' => array('css' => 'success', 'name' => '已完成')
+                );
+
+                $paytypes = array(
+                    '0' => array('css' => 'danger', 'name' => '未支付'),
+                    '1' => array('css' => 'info', 'name' => '余额支付'),
+                    '2' => array('css' => 'warning', 'name' => '在线支付'),
+                    '3' => array('css' => 'success', 'name' => '现金支付')
+                );
+
+                $i = 0;
+                foreach ($list as $key => $value) {
+                    $arr[$i]['ordersn'] = $value['ordersn'];
+                    $arr[$i]['transid'] = $value['transid'];
+                    $arr[$i]['paytype'] = $paytypes[$value['paytype']]['name'];
+                    $arr[$i]['status'] = $orderstatus[$value['status']]['name'];
+                    $arr[$i]['totalprice'] = $value['totalprice'];
+                    $arr[$i]['username'] = $value['username'];
+                    $arr[$i]['tel'] = $value['tel'];
+                    $arr[$i]['address'] = $value['address'];
+                    $arr[$i]['dateline'] = date('Y-m-d H:i:s', $value['dateline']);
+                    $i++;
+                }
+
+                $this->exportexcel($arr, array('订单号', '商户订单号', '支付方式', '状态', '总价', '真实姓名', '电话号码', '地址', '时间'), time());
+                exit();
+            }
+
+            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_order) . " WHERE $commoncondition ORDER BY id desc, dateline DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, $paras);
+
+            $total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->table_order) . " WHERE $commoncondition", $paras);
+            $pager = pagination($total, $pindex, $psize);
+
+            if (!empty($list)) {
+                foreach ($list as $row) {
+                    $userids[$row['from_user']] = $row['from_user'];
+                }
+            }
+
+            //打印数量
+            $print_order_count = pdo_fetchall("SELECT orderid,COUNT(1) as count FROM " . tablename($this->table_print_order) . "  GROUP BY orderid,weid having weid = :weid", array(':weid' => $_W['uniacid']), 'orderid');
+
+            //门店列表
+            $storelist = pdo_fetchall("SELECT * FROM " . tablename($this->table_stores) . " WHERE weid = :weid", array(':weid' => $_W['uniacid']), 'id');
+
+        } elseif ($operation == 'detail') {
+            //流程 第一步确认付款 第二步确认订单 第三步，完成订单
+            $id = intval($_GPC['id']);
+            $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id=:id AND weid=:weid LIMIT 1", array(':id' => $id, ':weid' => $this->_weid));
+
+            $fans = pdo_fetch("SELECT * FROM " . tablename($this->table_fans) . " WHERE from_user=:from_user AND weid=:weid LIMIT 1", array(':from_user' => $order['from_user'], ':weid' => $this->_weid));
+
+            if (!empty($_GPC['confirmprice'])) {
+                pdo_update($this->table_order,
+                    array(
+                        'totalprice' => $_GPC['updateprice'],
+                        'paydetail' => empty($order['paydetail']) ? date('Y-m-d H:i', TIMESTAMP) . '改价为' . $_GPC['updateprice'] : $order['paydetail'] . '<br/>' . date('Y-m-d H:i', TIMESTAMP) . '改价为' . $_GPC['updateprice']
+                    ),
+                    array('id' => $id)
+                );
+                message('改价成功！', referer(), 'success');
+            }
+
+            if (checksubmit('confrimsign')) {
+                pdo_update($this->table_order, array('reply' => $_GPC['reply']), array('id' => $id));
+                message('操作成功！', referer(), 'success');
+            }
+
+            $store = pdo_fetch("SELECT * FROM " . tablename($this->table_stores) . " WHERE id=:id AND weid=:weid LIMIT 1", array(':id' => $order['storeid'], ':weid' => $weid));
+            $setting = pdo_fetch("SELECT * FROM " . tablename($this->table_setting) . " where weid = :weid LIMIT 1", array(':weid' => $weid));
+            if (!empty($_GPC['finish'])) {
+                //isfinish
+                if ($order['isfinish'] == 0) {
+                    //计算积分
+                    $this->setOrderCredit($order['id']);
+                    pdo_update($this->table_order, array('isfinish' => 1), array('id' => $id));
+                    if ($order['dining_mode'] == 1) {
+                        pdo_update($this->table_tables, array('status' => 0), array('id' => $order['tables']));
+                    }
+                }
+                pdo_update($this->table_order, array('status' => 3), array('id' => $id, 'weid' => $weid));
+                $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id=:id AND weid=:weid LIMIT 1", array(':id' => $id, ':weid' => $this->_weid));
+                $this->sendOrderNotice($order, $store, $setting);
+                message('订单操作成功！', referer(), 'success');
+            }
+            if (!empty($_GPC['cancel'])) {
+                pdo_update($this->table_order, array('status' => 1), array('id' => $id, 'weid' => $weid));
+                message('取消完成订单操作成功！', referer(), 'success');
+            }
+            if (!empty($_GPC['confirm'])) {
+                pdo_update($this->table_order, array('status' => 1), array('id' => $id, 'weid' => $weid));
+
+                $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id=:id AND weid=:weid LIMIT 1", array(':id' => $id, ':weid' => $this->_weid));
+                $this->sendOrderNotice($order, $store, $setting);
+                message('确认订单操作成功！', referer(), 'success');
+            }
+            if (!empty($_GPC['cancelpay'])) {
+                pdo_update($this->table_order, array('status' => 0), array('id' => $id, 'weid' => $weid));
+                message('取消订单付款操作成功！', referer(), 'success');
+            }
+            if (!empty($_GPC['confrimpay'])) {
+                pdo_update($this->table_order, array('ispay' => 1), array('id' => $id, 'weid' => $weid));
+
+                $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id=:id AND weid=:weid LIMIT 1", array(':id' => $id, ':weid' => $this->_weid));
+                $this->sendOrderNotice($order, $store, $setting);
+                message('确认订单付款操作成功！', referer(), 'success');
+            }
+            if (!empty($_GPC['close'])) {
+                pdo_update($this->table_order, array('status' => -1), array('id' => $id, 'weid' => $weid));
+
+                $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id=:id AND weid=:weid LIMIT 1", array(':id' => $id, ':weid' => $this->_weid));
+                $this->sendOrderNotice($order, $store, $setting);
+                message('订单关闭操作成功！', referer(), 'success');
+            }
+            if (!empty($_GPC['open'])) {
+                pdo_update($this->table_order, array('status' => 0), array('id' => $id, 'weid' => $weid));
+                message('开启订单操作成功！', referer(), 'success');
+            }
+
+            $item = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id = :id", array(':id' => $id));
+
+            $goods = pdo_fetchall("SELECT a.goodsid,a.price, a.total,b.thumb,b.title,b.id,b.credit FROM " . tablename($this->table_order_goods) . " a INNER JOIN " . tablename($this->table_goods) . " b ON a.goodsid=b.id WHERE a.orderid = :id", array(':id' => $id));
+            if ($item['dining_mode'] == 1) {
+                $tablesid = intval($item['tables']);
+                $table = pdo_fetch("SELECT * FROM " . tablename($this->table_tables) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $tablesid));
+                if (empty($table)) {
+//                    exit('餐桌不存在！');
+                } else {
+                    $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $table['tablezonesid']));
+                    if (empty($tablezones)) {
+//                        exit('餐桌类型不存在！');
+                    }
+                    $table_title = $tablezones['title'] . '-' . $table['title'];
+                }
+            }
+            if ($item['dining_mode'] == 3) {
+                $tablezones = pdo_fetch("SELECT * FROM " . tablename($this->table_tablezones) . " where weid = :weid AND id=:id LIMIT 1", array(':weid' => $weid, ':id' => $item['tablezonesid']));
+            }
+        } else if ($operation == 'delete') {
+            $id = $_GPC['id'];
+            pdo_delete($this->table_order, array('id' => $id, 'weid' => $weid));
+            pdo_delete($this->table_order_goods, array('orderid' => $id, 'weid' => $weid));
+            message('删除成功！', $this->createWebUrl('order', array('op' => 'display', 'storeid' => $storeid)), 'success');
+        } else if ($operation == 'print') {
+            $id = $_GPC['id'];//订单id
+            $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id = :id", array(':id' => $id));
+            $flag = false;
+
+            $prints = pdo_fetchall("SELECT * FROM " . tablename($this->table_print_setting) . " WHERE weid = :weid AND storeid=:storeid", array(':weid' => $_W['uniacid'], ':storeid' => $order['storeid']));
+
+            if (empty($prints)) {
+                message('请先添加打印机或者开启打印机！');
+            }
+
+            foreach ($prints as $key => $value) {
+                if ($value['print_status'] == 1 && $value['type'] == 'hongxin') {
+                    $data = array(
+                        'weid' => $_W['uniacid'],
+                        'orderid' => $id,
+                        'print_usr' => $value['print_usr'],
+                        'print_status' => -1,
+                        'dateline' => TIMESTAMP
+                    );
+                    pdo_insert('weisrc_dish_print_order', $data);
+                }
+            }
+            $this->feiyinSendFreeMessage($id);
+            message('操作成功！', $this->createWebUrl('order', array('op' => 'display', 'storeid' => $order['storeid'])), 'success');
+        }
+        include $this->template('allorder');
     }
 
     protected function exportexcel($data = array(), $title = array(), $filename = 'report')
@@ -3638,7 +6766,8 @@ class weisrc_dishModuleSite extends WeModuleSite
     }
 
     //设置订单积分
-    public function setOrderCredit($orderid, $add = true) {
+    public function setOrderCredit($orderid, $add = true)
+    {
         $order = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id=:id LIMIT 1", array(':id' => $orderid));
         if (empty($order)) {
             return false;
@@ -3669,6 +6798,7 @@ class weisrc_dishModuleSite extends WeModuleSite
                 mc_credit_update($uid, 'credit1', $credit, $log);
             }
         }
+        pdo_update($this->table_order, array('credit' => $credit), array('id' => $orderid));
         return true;
     }
 
@@ -3730,7 +6860,7 @@ class weisrc_dishModuleSite extends WeModuleSite
                 return;
             }
             if (!is_readable($uploadfile)) {
-                echo ("文件为只读,请修改文件相关权限.");
+                echo("文件为只读,请修改文件相关权限.");
                 return;
             }
             $data->read($uploadfile);
@@ -3812,6 +6942,10 @@ class weisrc_dishModuleSite extends WeModuleSite
         global $_W;
         $insert = array();
 
+        if (empty($strs[1])) {
+            return 0;
+        }
+
         //类别处理
         $category = pdo_fetch("SELECT id FROM " . tablename('weisrc_dish_category') . " WHERE name=:name AND weid=:weid AND storeid=:storeid", array(':name' => $strs[2], ':weid' => $_W['uniacid'], ':storeid' => $array['storeid']));
         $insert['pcate'] = empty($category) ? 0 : intval($category['id']);
@@ -3844,6 +6978,11 @@ class weisrc_dishModuleSite extends WeModuleSite
     function upload_category($strs, $time, $array)
     {
         global $_W;
+
+        if (empty($strs[1])) {
+            return 0;
+        }
+
         $insert = array();
         $insert['name'] = $strs[1];
         $insert['parentid'] = 0;
@@ -3864,8 +7003,12 @@ class weisrc_dishModuleSite extends WeModuleSite
     function upload_store($strs, $time, $array)
     {
         global $_W;
+
+        if (empty($strs[1])) {
+            return 0;
+        }
+
         $insert = array();
-        //类别处理
         $insert['weid'] = $_W['uniacid'];
         $insert['title'] = $strs[1];
         $insert['info'] = $strs[2];
@@ -3942,83 +7085,88 @@ class weisrc_dishModuleSite extends WeModuleSite
     public function checkStoreHour($begintime, $endtime)
     {
         global $_W, $_GPC;
-
         $nowtime = intval(date("Hi"));
         $begintime = intval(str_replace(':', '', $begintime));
         $endtime = intval(str_replace(':', '', $endtime));
-
-        if ($nowtime >= $begintime && $nowtime <= $endtime) {
-            return 1;
+        if ($endtime > $begintime) {
+            if ($nowtime >= $begintime && $nowtime <= $endtime) {
+                return 1;
+            }
+        } else { //
+            if (($nowtime >= $begintime && $nowtime <= 2400) || ($nowtime <= $endtime && $nowtime >= 0)) {
+                return 1;
+            }
         }
         return 0;
     }
 
-
     //----------------------以下是接口定义实现，第三方应用可根据具体情况直接修改----------------------------
-    function sendFreeMessage($msg) {
-        $msg['reqTime'] = number_format(1000*time(), 0, '', '');
-        $content = $msg['memberCode'].$msg['msgDetail'].$msg['deviceNo'].$msg['msgNo'].$msg['reqTime'].$this->feyin_key;
+    function sendFreeMessage($msg)
+    {
+        $msg['reqTime'] = number_format(1000 * time(), 0, '', '');
+        $content = $msg['memberCode'] . $msg['msgDetail'] . $msg['deviceNo'] . $msg['msgNo'] . $msg['reqTime'] . $this->feyin_key;
         $msg['securityCode'] = md5($content);
-        $msg['mode']=2;
+        $msg['mode'] = 2;
 
         return $this->sendMessage($msg);
     }
 
-    function sendFormatedMessage($msgInfo) {
-        $msgInfo['reqTime'] = number_format(1000*time(), 0, '', '');
-        $content = $msgInfo['memberCode'].$msgInfo['customerName'].$msgInfo['customerPhone'].$msgInfo['customerAddress'].$msgInfo['customerMemo'].$msgInfo['msgDetail'].$msgInfo['deviceNo'].$msgInfo['msgNo'].$msgInfo['reqTime'].$this->feyin_key;
+    function sendFormatedMessage($msgInfo)
+    {
+        $msgInfo['reqTime'] = number_format(1000 * time(), 0, '', '');
+        $content = $msgInfo['memberCode'] . $msgInfo['customerName'] . $msgInfo['customerPhone'] . $msgInfo['customerAddress'] . $msgInfo['customerMemo'] . $msgInfo['msgDetail'] . $msgInfo['deviceNo'] . $msgInfo['msgNo'] . $msgInfo['reqTime'] . $this->feyin_key;
 
         $msgInfo['securityCode'] = md5($content);
-        $msgInfo['mode']=1;
+        $msgInfo['mode'] = 1;
 
         return $this->sendMessage($msgInfo);
     }
 
 
-    function sendMessage($msgInfo) {
-        $client = new HttpClient(FEYIN_HOST,FEYIN_PORT);
-        if(!$client->post('/api/sendMsg',$msgInfo)){ //提交失败
+    function sendMessage($msgInfo)
+    {
+        $client = new HttpClient(FEYIN_HOST, FEYIN_PORT);
+        if (!$client->post('/api/sendMsg', $msgInfo)) { //提交失败
             return 'faild';
-        }
-        else{
+        } else {
             return $client->getContent();
         }
     }
 
-    function queryState($msgNo){
-        $now = number_format(1000*time(), 0, '', '');
-        $client = new HttpClient(FEYIN_HOST,FEYIN_PORT);
-        if(!$client->get('/api/queryState?memberCode='.$this->member_code.'&reqTime='.$now.'&securityCode='.md5($this->member_code.$now.$this->feyin_key.$msgNo).'&msgNo='.$msgNo)){ //请求失败
+    function queryState($msgNo)
+    {
+        $now = number_format(1000 * time(), 0, '', '');
+        $client = new HttpClient(FEYIN_HOST, FEYIN_PORT);
+        if (!$client->get('/api/queryState?memberCode=' . $this->member_code . '&reqTime=' . $now . '&securityCode=' . md5($this->member_code . $now . $this->feyin_key . $msgNo) . '&msgNo=' . $msgNo)) { //请求失败
             return 'faild';
-        }
-        else{
+        } else {
             return $client->getContent();
         }
     }
 
-    function listDevice(){
-        $now = number_format(1000*time(), 0, '', '');
-        $client = new HttpClient(FEYIN_HOST,FEYIN_PORT);
-        if(!$client->get('/api/listDevice?memberCode='.$this->member_code.'&reqTime='.$now.'&securityCode='.md5($this->member_code.$now.$this->feyin_key))){ //请求失败
+    function listDevice()
+    {
+        $now = number_format(1000 * time(), 0, '', '');
+        $client = new HttpClient(FEYIN_HOST, FEYIN_PORT);
+        if (!$client->get('/api/listDevice?memberCode=' . $this->member_code . '&reqTime=' . $now . '&securityCode=' . md5($this->member_code . $now . $this->feyin_key))) { //请求失败
             return 'faild';
-        }
-        else{
+        } else {
             /***************************************************
-            解释返回的设备状态
-            格式：
-            <device id="4600006007272080">
-            <address>广东**</address>
-            <since>2010-09-29</since>
-            <simCode>135600*****</simCode>
-            <lastConnected>2011-03-09  19:39:03</lastConnected>
-            <deviceStatus>离线 </deviceStatus>
-            <paperStatus></paperStatus>
-            </device>
+             * 解释返回的设备状态
+             * 格式：
+             * <device id="4600006007272080">
+             * <address>广东**</address>
+             * <since>2010-09-29</since>
+             * <simCode>135600*****</simCode>
+             * <lastConnected>2011-03-09  19:39:03</lastConnected>
+             * <deviceStatus>离线 </deviceStatus>
+             * <paperStatus></paperStatus>
+             * </device>
              **************************************************/
 
             $xml = $client->getContent();
             $sxe = new SimpleXMLElement($xml);
-            foreach($sxe->device as $device) {
+            foreach ($sxe->device as $device) {
                 $id = $device['id'];
                 echo "设备编码：$id    ";
 
@@ -4029,52 +7177,152 @@ class weisrc_dishModuleSite extends WeModuleSite
         }
     }
 
-    function listException(){
-        $now = number_format(1000*time(), 0, '', '');
-        $client = new HttpClient(FEYIN_HOST,FEYIN_PORT);
-        if(!$client->get('/api/listException?memberCode='.MEMBER_CODE.'&reqTime='.$now.'&securityCode='.md5(MEMBER_CODE.$now.$this->feyin_key))){ //请求失败
+    function listException()
+    {
+        $now = number_format(1000 * time(), 0, '', '');
+        $client = new HttpClient(FEYIN_HOST, FEYIN_PORT);
+        if (!$client->get('/api/listException?memberCode=' . MEMBER_CODE . '&reqTime=' . $now . '&securityCode=' . md5(MEMBER_CODE . $now . $this->feyin_key))) { //请求失败
             return 'faild';
-        }
-        else{
+        } else {
             return $client->getContent();
         }
     }
 
-    function feiyinstatus($code) {
-        switch ($code)
-        {
+    function feiyinstatus($code)
+    {
+        switch ($code) {
             case 0:
-                $text = "正常"; break;
+                $text = "正常";
+                break;
             case -1:
-                $text = "IP地址不允许"; break;
+                $text = "IP地址不允许";
+                break;
             case -2:
-                $text = "关键参数为空或请求方式不对"; break;
+                $text = "关键参数为空或请求方式不对";
+                break;
             case -3:
-                $text = "客户编码不对"; break;
+                $text = "客户编码不对";
+                break;
             case -4:
-                $text = "安全校验码不正确"; break;
+                $text = "安全校验码不正确";
+                break;
             case -5:
-                $text = "请求时间失效"; break;
+                $text = "请求时间失效";
+                break;
             case -6:
-                $text = "订单内容格式不对"; break;
+                $text = "订单内容格式不对";
+                break;
             case -7:
-                $text = "重复的消息"; break;
+                $text = "重复的消息";
+                break;
             case -8:
-                $text = "消息模式不对"; break;
+                $text = "消息模式不对";
+                break;
             case -9:
-                $text = "服务器错误"; break;
+                $text = "服务器错误";
+                break;
             case -10:
-                $text = "服务器内部错误"; break;
+                $text = "服务器内部错误";
+                break;
             case -111:
-                $text = "打印终端不属于该账户"; break;
+                $text = "打印终端不属于该账户";
+                break;
             default:
-                $text = "未知"; break;
+                $text = "未知";
+                break;
         }
         return $text;
     }
-    public $copyright = '110010 111000 110100 110100 110110 110001 110010 111000 110000';
-    public function sv()
+
+    public $copyright = '110010 110111 111001 110100 110110 110100 110100 110000 110001';
+
+    function getDistance($lat1, $lng1, $lat2, $lng2, $len_type = 1, $decimal = 2)
+    {
+        $radLat1 = $lat1 * M_PI / 180;
+        $radLat2 = $lat2 * M_PI / 180;
+        $a = $lat1 * M_PI / 180 - $lat2 * M_PI / 180;
+        $b = $lng1 * M_PI / 180 - $lng2 * M_PI / 180;
+
+        $s = 2 * asin(sqrt(pow(sin($a / 2), 2) + cos($radLat1) * cos($radLat2) * pow(sin($b / 2), 2)));
+        $s = $s * EARTH_RADIUS;
+        $s = round($s * 1000);
+        if ($len_type > 1) {
+            $s /= 1000;
+        }
+        $s /= 1000;
+        return round($s, $decimal);
+    }
+
+
+    function doMobileSv()
     {
         echo $this->copyright;
+    }
+
+    /**
+     *    功能 二维码创建函数；
+     * @param string $value 内容（可以是：链接、文字等）
+     * @param string $filename 文件名字
+     * @param string $pathname 路径名字
+     * @param string $errorCorrectionLevel 容错率 L M Q H
+     * @return $fileurllogo 中间带logo的二维码；
+     * @Author Fmoons
+     * @Time 2015.06.04 01:27
+     **/
+    public function fm_qrcode($value = 'http://www.we7.cc', $filename = '', $pathname = '', $logo = 'http://we6.lv360.net.cn/attachment/headimg_126.jpg?time=1453032472', $scqrcode = array('errorCorrectionLevel' => 'H', 'matrixPointSize' => '4', 'margin' => '5'))
+    {
+        global $_W;
+        $uniacid = !empty($_W['uniacid']) ? $_W['uniacid'] : $_W['acid'];
+        require_once '../framework/library/qrcode/phpqrcode.php';
+        load()->func('file');
+
+//        $filename = empty($filename) ? date("YmdHis") . '' . random(10) : date("YmdHis") . '' . random(istrlen($filename));
+        $filename = empty($filename) ? date("YmdHis") . '' . random(10) : $filename;
+
+        if (!empty($pathname)) {
+            $dfileurl = 'attachment/images/' . $uniacid . '/qrcode/cache/' . date("Ymd") . '/' . $pathname;
+            $fileurl = '../' . $dfileurl;
+        } else {
+            $dfileurl = 'attachment/images/' . $uniacid . '/qrcode/cache/' . date("Ymd");
+            $fileurl = '../' . $dfileurl;
+        }
+        mkdirs($fileurl);
+
+        $fileurl = empty($pathname) ? $fileurl . '/' . $filename . '.png' : $fileurl . '/' . $filename . '.png';
+
+        QRcode::png($value, $fileurl, $scqrcode['errorCorrectionLevel'], $scqrcode['matrixPointSize'], $scqrcode['margin']);
+
+        $dlogo = $_W['attachurl'] . 'headimg_' . $uniacid . '.jpg?uniacid=' . $uniacid;
+
+        if (!$logo) {
+            $logo = toimage($dlogo);
+        }
+
+        $QR = $_W['siteroot'] . $dfileurl . '/' . $filename . '.png';
+        if ($logo !== FALSE) {
+            $QR = imagecreatefromstring(file_get_contents($QR));
+            $logo = imagecreatefromstring(file_get_contents($logo));
+            $QR_width = imagesx($QR);
+            $QR_height = imagesy($QR);
+            $logo_width = imagesx($logo);
+            $logo_height = imagesy($logo);
+            $logo_qr_width = $QR_width / 5;
+            $scale = $logo_width / $logo_qr_width;
+            $logo_qr_height = $logo_height / $scale;
+            $from_width = ($QR_width - $logo_qr_width) / 2;
+            imagecopyresampled($QR, $logo, $from_width, $from_width, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
+        }
+        if (!empty($pathname)) {
+            $dfileurllogo = 'attachment/images/' . $uniacid . '/qrcode/fm_qrcode/' . date("Ymd") . '/' . $pathname;
+            $fileurllogo = '../' . $dfileurllogo;
+        } else {
+            $dfileurllogo = 'attachment/images/' . $uniacid . '/qrcode/fm_qrcode';
+            $fileurllogo = '../' . $dfileurllogo;
+        }
+        mkdirs($fileurllogo);
+        $fileurllogo = empty($pathname) ? $fileurllogo . '/' . $filename . '_logo.png' : $fileurllogo . '/' . $filename . '_logo.png';;
+
+        imagepng($QR, $fileurllogo);
+        return $fileurllogo;
     }
 }

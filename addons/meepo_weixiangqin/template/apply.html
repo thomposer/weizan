@@ -18,8 +18,12 @@
 	<li><a href="{php echo $this->createWebUrl('baoyuerecord')}">包月记录</a></li>
 	<li><a href="{php echo $this->createWebUrl('Exchangerecord')}">兑换记录</a></li>
 	<li><a href="{php echo $this->createWebUrl('chatcontent')}">聊天记录</a></li>
-	<li><a href="{php echo $this->createWebUrl('phototjapply')}">图片管理</a></li>
+	<li><a href="{php echo $this->createWebUrl('photolist')}">图片管理</a></li>
     <li><a href="{php echo $this->createWebUrl('set')}">基本设置</a></li>
+	<li><a href="{php echo $this->createWebUrl('sayhi_content')}">打招呼语设置</a></li>
+	<li><a href="{php echo $this->createWebUrl('flower_record')}">送花记录</a></li>
+	<li><a href="{php echo $this->createWebUrl('sayhi_record')}">打招呼记录</a></li>
+	<li><a href="{php echo $this->createWebUrl('share_record')}">分享记录</a></li>
 </ul>
 {if $op == 'display'}
 <div class="panel panel-info">
@@ -67,6 +71,8 @@
 							<th>用户<i></i></th>
 							<th>扣取积分数</th>
 							<th>当前状态</th>
+							<th>推荐天数</th>
+							<th>首页显示过期时间<i></i></th>
 							<th>申请时间<i></i></th>
 							
 						</tr>
@@ -84,6 +90,9 @@
 							</td>
 							<td>{$row['payment']}积分</td>
 							<td>{if $row['yingcang']=='1'}显示{else}隐藏{/if}</td>
+							<td>{$row['day_num']}天</td>
+							<td><div style="margin-bottom:10px;">{php echo date('Y-m-d', $row['tj_over_time']);}</div>
+								<div>{php echo date('H:i:s', $row['tj_over_time']);}</div></td>
 							<td style="font-size:12px; color:#666;">
 								<div style="margin-bottom:10px;">{php echo date('Y-m-d', $row['createtime']);}</div>
 								<div>{php echo date('H:i:s', $row['createtime']);}</div>

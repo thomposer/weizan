@@ -16,7 +16,7 @@ if($_GPC['done'] == '1') {
 	$pars = array();
 	$pars[':plid'] = $params['tid'];
 	$log = pdo_fetch($sql, $pars);
-	if(!empty($log)) {
+	if(!empty($log) && !empty($log['status'])) {
 		if (!empty($log['tag'])) {
 			$tag = iunserializer($log['tag']);
 			$log['uid'] = $tag['uid'];

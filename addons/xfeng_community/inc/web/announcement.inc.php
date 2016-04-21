@@ -9,7 +9,8 @@
  */
 
 	global $_GPC,$_W;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$op = !empty($_GPC['op'])?$_GPC['op']:'list';
 	$id = intval($_GPC['id']);
 	//判断是否是操作员
@@ -170,6 +171,7 @@
 	
 						);
 					}
+					// print_r($data);exit();
 					$content = $this->sendtpl($openid,$url,$template_id,$data);
 
 				}

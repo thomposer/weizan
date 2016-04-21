@@ -9,47 +9,71 @@
  */
 
 	global $_GPC,$_W;
+	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'member';
 	load()->model('mc');
 	$userinfo = mc_oauth_userinfo();
-	$member = mc_fetch($_W['fans']['uid'],array('mobile','credit1'));
-	// $op = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
-	// 	load()->model('activity');
-	// 	$filter = array();
-	// 	$coupons = activity_coupon_owned($_W['member']['uid'], $filter);
-	// 	$tokens = activity_token_owned($_W['member']['uid'], $filter);
+	$member = mc_fetch($_W['fans']['uid'],array('mobile','credit1','realname','address'));
+	if ($op == 'member') {
+		
+		
+		$dos = "'fled','houselease','homemaking','car','cost','shopping','business','government'";
+		$menus = pdo_fetchall("SELECT * FROM".tablename('xcommunity_nav')."WHERE uniacid =:uniacid AND do in({$dos})",array(':uniacid' => $_W['uniacid']),'do');
 
-	// 	$setting = uni_setting($_W['uniacid'], array('creditnames', 'creditbehaviors', 'uc', 'payment', 'passport'));
-	// 	$behavior = $setting['creditbehaviors'];
-	// 	$creditnames = $setting['creditnames'];
-	// 	$credits = mc_credit_fetch($_W['member']['uid'], '*');
+		$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
+		if ($styleid) {
+			include $this->template('style/style'.$styleid.'/member');
+		}
 
-	// 	$title   = '我的社区';
-	// 	$member = $this->changemember();
-	// 	$tel = $this->linkway();
-	// 	$region = pdo_fetch("SELECT * FROM".tablename('xcommunity_region')."WHERE id='{$member['regionid']}'");
-	// 	load()->classs('weixin.account');
-	// 	$obj = new WeiXinAccount();
-	// 	$access_token = $obj->fetch_available_token();
-	// 	$openid = $_W['openid'];
-	// 	$url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN';
-	// 	load()->func('communication');
-	// 	$ret = ihttp_get($url);
-	// 	if(!is_error($ret)) {
-	// 		$auth = @json_decode($ret['content'], true);
-	// 	}	
-	// $name1 = "xiaofeng_store";
-	// $um1 = pdo_fetch("SELECT * FROM".tablename('uni_account_modules')."WHERE module='{$name1}' AND uniacid='{$_W['uniacid']}'");
-	// if ($op == 'my') {
-	// 	$title   = '修改个人信息';
-	// 	$regions = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}'");
-	// 	include $this->template('my');
-	// 	exit();
-	// }
-	$dos = "'repair','report','fled','houselease','homemaking','car','cost','shopping','business'";
-	$menus = pdo_fetchall("SELECT * FROM".tablename('xcommunity_nav')."WHERE uniacid =:uniacid AND do in({$dos})",array(':uniacid' => $_W['uniacid']),'do');
+	}elseif ($op == 'my') {
+		# code...
+		$mem = $this->changemember();
+		$region = $this->region($mem['regionid']);
+		$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
+		if ($styleid) {
+			include $this->template('style/style'.$styleid.'/my');
+		}
+	}elseif ($op == 'edit') {
+		$r = $_GPC['r'];
+	
+			$id = intval($_GPC['id']);
+			if ($id) {
+				$mem = pdo_fetch("SELECT * FROM".tablename('xcommunity_member')."WHERE id=:id AND weid=:weid",array(':id' => $id,':weid' => $_W['weid']));
+			}
+			
 
-	$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
-	if ($styleid) {
-		include $this->template('style/style'.$styleid.'/member');
+		if ($_W['isajax']) {
+			if ($r == 'm') {
+					$rs = mc_update($_W['member']['uid'], array('realname' => $_GPC['realname']));
+					//pdo_query("UPDATE ".tablename('xcommunity_member')."SET realname = '{$_GPC['realname']}' WHERE id=:id",array(':id' => $id));
+					pdo_update('xcommunity_member',array('realname' => $_GPC['realname']),array('id' => $id));
+					$result = array(
+									'status' => 1,
+								);
+					echo json_encode($result);exit();
+			}elseif ($r == 'b') {
+				$rs = mc_update($_W['member']['uid'], array('mobile' => $_GPC['mobile']));
+					//pdo_query("UPDATE ".tablename('xcommunity_member')."SET mobile = :mobile WHERE id=:id",array(':mobile' => $_GPC['mobile'],':id' => $id));
+					pdo_update('xcommunity_member',array('mobile' => $_GPC['mobile']),array('id' => $id));
+					$result = array(
+									'status' => 1,
+								);
+					echo json_encode($result);exit();
+			}elseif ($r == 'a') {
+				$rs = mc_update($_W['member']['uid'], array('address' => $_GPC['address']));
+					//pdo_query("UPDATE ".tablename('xcommunity_member')."SET address = :address WHERE id=:id",array(':address' => $_GPC['address'],':id' => $id));
+					pdo_update('xcommunity_member',array('address' => $_GPC['address']),array('id' => $id));
+					$result = array(
+									'status' => 1,
+								);
+					echo json_encode($result);exit();
+			}
+				
+		}
+		$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
+		if ($styleid) {
+			include $this->template('style/style'.$styleid.'/edit');
+		}
 	}
+
+	
 	

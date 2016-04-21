@@ -67,15 +67,15 @@ top: 0;
 }
 </style>
 </body>
-<script src="{RES2}/js/zepto.min.js"></script>
-<script src="{RES2}/js/zepto.upload.js"></script>
+<script src="http://n.youyuan.com/resources/v20/js/zepto.min.js"></script>
+<script src="http://n.youyuan.com/resources/v20/js/zepto.upload.js"></script>
 <script>
    
    
     var Photo=(function(){return{addPhoto:function(b){var a=new Image();a.onload=function(){var c=$("<li></li>").append(a).append('<div class="loading">待审核</div>');$("#add_photo").after(c)};a.src=b.path}}})();$(function(){$("body").on("tap","#cancel,.closed",function(){$(".common_alert,.mask").addClass("hidden")});if(window.youyuan){$("#add_photo").on("tap",function(){var e={url:"{php echo $this->createMobileUrl('UploadImage2')}",params:{isMain:"0",userId:$("#GUID").val()},callback:"Photo.addPhoto"};youyuan.upload(JSON.stringify(e))})}else{var b,c,d,a;$("#add_photo").upload({action:"{php echo $this->createMobileUrl('UploadImage2')}",params:{isMain:0},onChooseFile:function(g,h){b=g;c=$('<span class="state"></span>');d=$('<div class="loading">上传中</div>').append(c);var f=$("<li></li>").append(g).append(d);$("#add_photo").after(f);$("#add_photo").hide();var e=0;a=setInterval(function(){e+=5;if(e>100){e=0}c.css("width",e+"%")},100)},onSubmit:function(f){$("#add_photo").show();if(f.re==1){clearInterval(a);{if $photocfg['isstatus']==1}d.html("待审核");{else}d.html("sucess");{/if}b.src="{$_W['attachurl']}"+f.path;var e=$("#back").val();if(e&&e=="hongniang"){$(".common_alert,.mask").removeClass("hidden")}}else{$.tips("上传失败");$("#add_photo").next().remove()}}})}});
 </script>
-<!--<script src="{RES2}/js/base.js?v=7a0db0e0"></script>-->
-<script src="{RES2}/js/weixin-api.js?v=12676311"></script>
+<!--<script src="http://www.baidufe.com/fe/base/static/js/base.js?v=7a0db0e0"></script>-->
+<script src="http://www.baidufe.com/fe/base/static/js/weixin-api/weixin-api.js?v=12676311"></script>
         <script >
 		$("#btn").live("click",function () { 
        var curSrc = $(this).attr("src");

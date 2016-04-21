@@ -9,7 +9,8 @@
  */
 
 	global $_GPC,$_W;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 	$id        = intval($_GPC['id']);
 	if ($op == 'list') {
@@ -58,9 +59,9 @@
 		}
 		$pindex = max(1, intval($_GPC['page']));
 		$psize  = 10;
-		$sql    = "select h.*,r.city,r.dist,r.title from ".tablename('xcommunity_houselease')."as h left join".tablename('xcommunity_region')."as r on h.regionid = r.id  where $condition LIMIT ".($pindex - 1) * $psize.','.$psize;
+		$sql    = "select h.*,r.city,r.dist,r.title,b.address from ".tablename('xcommunity_houselease')."as h left join(".tablename('xcommunity_region')."as r left join".tablename('xcommunity_member')."as b on b.regionid = r.id ) on h.openid = b.openid  where $condition LIMIT ".($pindex - 1) * $psize.','.$psize;
 		$list   = pdo_fetchall($sql,$params);
-		$total  = pdo_fetchcolumn('select count(*) from'.tablename("xcommunity_houselease")."as h left join".tablename('xcommunity_region')."as r on h.regionid = r.id where $condition",$params);
+		$total  = pdo_fetchcolumn('select count(*) from'.tablename("xcommunity_houselease")."as h left join(".tablename('xcommunity_region')."as r left join".tablename('xcommunity_member')."as b on b.regionid = r.id ) on h.openid = b.openid where $condition",$params);
 		$pager  = pagination($total, $pindex, $psize);
 		load()->func('tpl');
 		include $this->template('web/houselease/list');

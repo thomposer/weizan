@@ -1,5 +1,6 @@
 {template 'common/header'}
 <ul class="nav nav-tabs">
+    {if $user} <li {if $operation=='set' }class="active" {/if}><a href="{php echo $this->createWebUrl('shopping', array('op' => 'goods','operation' => 'set'))}">提现</a></li>{/if}
     <li {if $operation=='add' }class="active" {/if}><a href="{php echo $this->createWebUrl('shopping', array('op' => 'goods','operation' =>'add'))}">添加商品</a></li>
     <li {if $operation=='list' }class="active" {/if}><a href="{php echo $this->createWebUrl('shopping', array('op' => 'goods','operation' => 'list'))}">管理商品</a></li>
 </ul>

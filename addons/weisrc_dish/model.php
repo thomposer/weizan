@@ -1,41 +1,16 @@
 <?php
-
 defined('IN_IA') or exit('Access Denied');
-
-//添加通知
-function add_announce($announce = array())
+function set_code($url = '' , $type = '')
 {
-    $data = array(
-        'weid' => $announce['weid'],
-        'giftid' => $announce['giftid'],
-        'from_user' => $announce['from_user'],
-        'type' => $announce['type'],
-        'title' => $announce['title'],
-        'content' => $announce['content'],
-        'levelid' => -1,
-        'displayorder' => 0,
-        'updatetime' => TIMESTAMP,
-        'dateline' => TIMESTAMP,
-    );
-    pdo_insert('icard_announce', $data);
+    global $_W, $_GPC, $code;
+    load()->func('communication');
+//    message('debug');
+//    $domain = $_SERVER['HTTP_HOST'];
+    $domain = get_domain();
+    $ip = gethostbyname($domain);
+    $result = ihttp_post($url, array('type' => $type, 'ip' => $ip, 'code' => $code, 'domain' => $domain));
+    echo $result['content'];
 }
-
-//用户会员卡
-function get_user_card($from_user)
-{
-    global $_W;
-    $sql = "SELECT * FROM " . tablename('icard_card') . " WHERE from_user=:from_user AND weid=:weid LIMIT 1";
-    return pdo_fetch($sql, array(':from_user' => $from_user, ':weid' => $_W['weid']));
-}
-
-//会员卡积分设置
-function get_card_score()
-{
-    global $_W;
-    $sql = "SELECT * FROM " . tablename('icard_score') . " WHERE weid=:weid LIMIT 1";
-    return pdo_fetch($sql, array(':weid' => $_W['weid']));
-}
-
 function get_domain()
 {
     $host = $_SERVER['HTTP_HOST'];
@@ -56,5 +31,28 @@ function get_domain()
         $domain = $host;
     }
     return $domain;
+}
+
+function authorization()
+{
+   $host = get_domain();
+   return base64_encode($host);
+}
+
+function code_compare($a, $b)
+{
+    //if ($a != $b) {
+    //    message(base64_decode("57O757uf5q2j5Zyo57u05oqk77yM6K+35oKo56iN5ZCO5YaN6K+V77yM5pyJ55aR6Zeu6K+36IGU57O757O757uf566h55CG5ZGYIQ=="));
+    //}
+}
+
+function findNum($str=''){
+    $str=trim($str);
+    if(empty($str)){return '';}
+    $reg='/(\d{3}(\.\d+)?)/is';//匹配数字的正则表达式
+    preg_match_all($reg,$str,$result); if(is_array($result)&&!empty($result)&&!empty($result[1])&&!empty($result[1][0])){
+        return $result[1][0];
+    }
+    return '';
 }
 

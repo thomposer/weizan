@@ -920,11 +920,12 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		}
 		//查询分享赠送次数
 		$Scount = 0;
+		$daytime = strtotime(date('Y-m-d'));
 		if($share['sharenum']>0){
 			switch ($share['sharetimes']){
 				case 1://赠送当天
 				    if($share['sharetype']){//分享成功打开链接后
-					    $sharenum = pdo_fetchcolumn("select count(id) as dd from ".tablename('stonefish_bigwheel_sharedata')." where uniacid='".$uniacid."' and rid= '".$rid."' and fromuser='".$from_user."'");
+					    $sharenum = pdo_fetchcolumn("select count(id) as dd from ".tablename('stonefish_bigwheel_sharedata')." where uniacid='".$uniacid."' and rid= '".$rid."' and fromuser='".$from_user."' and visitorstime>='".$daytime."'");
 				        if($share['sharenumtype']==2&&$reply['day_number_times']>0&&$sharenum>0){
 					        $reply['day_number_times'] = $reply['day_number_times']+ ceil($share['sharenum']);
 							$reply['number_times'] =$reply['number_times']+ceil($share['sharenum']);
@@ -934,7 +935,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 							$reply['number_times'] =$reply['number_times']+floor($share['sharenum'] * $sharenum);
 							$Scount = floor($share['sharenum'] * $sharenum);
 				        }
-					}elseif($fans['share_num']>0&&$reply['day_number_times']>0){//分享赠送
+					}elseif($fans['share_num']>0&&$reply['day_number_times']>0 && $fans['sharetime']>$daytime){//分享赠送
 						$reply['day_number_times'] =$reply['day_number_times']+ceil($share['sharenum']);
 						$reply['number_times'] =$reply['number_times']+ceil($share['sharenum']);
 						$Scount = ceil($share['sharenum']);
@@ -942,7 +943,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 				    break;
 				case 2://赠送总数
 				    if($share['sharetype']){//分享成功打开链接后
-					    $sharenum = pdo_fetchcolumn("select count(id) as dd from ".tablename('stonefish_bigwheel_sharedata')." where uniacid='".$uniacid."' and rid= '".$rid."' and fromuser='".$from_user."'");
+					    $sharenum = pdo_fetchcolumn("select count(id) as dd from ".tablename('stonefish_bigwheel_sharedata')." where uniacid='".$uniacid."' and rid= '".$rid."' and fromuser='".$from_user."' and visitorstime>='".$daytime."'");
 				        if($share['sharenumtype']==2&&$reply['number_times']>0&&$sharenum>0){
 					        $reply['number_times'] = $reply['number_times']+ ceil($share['sharenum']);
 							$Scount = ceil($share['sharenum']);
@@ -950,7 +951,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 				            $reply['number_times'] = $reply['number_times']+floor($share['sharenum'] * $sharenum);
 							$Scount = floor($share['sharenum'] * $sharenum);
 				        }
-					}elseif($fans['share_num']>0&&$reply['number_times']>0){//分享赠送-$fans['tosharenum']
+					}elseif($fans['share_num']>0&&$reply['number_times']>0&&$fans['sharetime']>$daytime){//分享赠送-$fans['tosharenum']
 						$reply['number_times'] =$reply['number_times']+ceil($share['sharenum']);
 						$Scount = ceil($share['sharenum']);
 					}
@@ -1164,7 +1165,7 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
             pdo_update('stonefish_bigwheel_reply', array('fansnum' => $reply['fansnum'] + 1), array('id' => $reply['id']));
         }else{
 			if($fans['awardnum']>=$reply['award_num']&&$reply['award_num']!=0){				
-				$this->Json_encode(array("success"=>2, "msg"=>'您已中过大奖了，本活动仅限中奖'.$reply['award_num'].'次，谢谢！'));
+				$this->Json_encode(array("success"=>2, "msg"=>$reply['award_num_tips']));
 			}
 			if($fans['status']==0){
 				$this->Json_encode(array("success"=>2, "msg"=>'会员已被锁定，请联系管理员'));
@@ -1233,11 +1234,12 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
         //查询是活动定义的次数还是商户赠送次数
 		//查询分享赠送次数
 		$Scount = 0;
+		$daytime = strtotime(date('Y-m-d'));
 		if($share['sharenum']>0){
 			switch ($share['sharetimes']){
 				case 1://赠送当天
 				    if($share['sharetype']){//分享成功打开链接后
-					    $sharenum = pdo_fetchcolumn("select count(id) as dd from ".tablename('stonefish_bigwheel_sharedata')." where uniacid='".$uniacid."' and rid= '".$rid."' and fromuser='".$from_user."'");
+					    $sharenum = pdo_fetchcolumn("select count(id) as dd from ".tablename('stonefish_bigwheel_sharedata')." where uniacid='".$uniacid."' and rid= '".$rid."' and fromuser='".$from_user."' and visitorstime>='".$daytime."'");
 				        if($share['sharenumtype']==2&&$reply['day_number_times']>0&&$sharenum>0){
 					        $reply['day_number_times'] = $reply['day_number_times']+ ceil($share['sharenum']);
 							$reply['number_times'] =$reply['number_times']+ceil($share['sharenum']);
@@ -1245,20 +1247,20 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 				            $reply['day_number_times'] = $reply['day_number_times']+floor($share['sharenum'] * $sharenum);
 							$reply['number_times'] =$reply['number_times']+floor($share['sharenum'] * $sharenum);
 				        }
-					}elseif($fans['share_num']>0&&$reply['day_number_times']>0){//分享赠送
+					}elseif($fans['share_num']>0&&$reply['day_number_times']>0&&$fans['sharetime']>$daytime){//分享赠送
 						$reply['day_number_times'] =$reply['day_number_times']+ceil($share['sharenum']);
 						$reply['number_times'] =$reply['number_times']+ceil($share['sharenum']);
 					}
 				    break;
 				case 2://赠送总数
 				    if($share['sharetype']){//分享成功打开链接后
-					    $sharenum = pdo_fetchcolumn("select count(id) as dd from ".tablename('stonefish_bigwheel_sharedata')." where uniacid='".$uniacid."' and rid= '".$rid."' and fromuser='".$from_user."'");
+					    $sharenum = pdo_fetchcolumn("select count(id) as dd from ".tablename('stonefish_bigwheel_sharedata')." where uniacid='".$uniacid."' and rid= '".$rid."' and fromuser='".$from_user."' and visitorstime>='".$daytime."'");
 				        if($share['sharenumtype']==2&&$reply['number_times']>0&&$sharenum>0){
 					        $reply['number_times'] = $reply['number_times']+ ceil($share['sharenum']);
 				        }elseif($reply['number_times']>0){
 				            $reply['number_times'] = $reply['number_times']+floor($share['sharenum'] * $sharenum);
 				        }
-					}elseif($fans['share_num']>0&&$reply['number_times']>0){//分享赠送-$fans['tosharenum']
+					}elseif($fans['share_num']>0&&$reply['number_times']>0&&$fans['sharetime']>$daytime){//分享赠送-$fans['tosharenum']
 						$reply['number_times'] =$reply['number_times']+ceil($share['sharenum']);
 					}
 				    break;
@@ -1279,11 +1281,11 @@ class stonefish_bigwheelModuleSite extends WeModuleSite {
 		$replystr = pdo_fetch("select number_times,day_number_times from " . tablename('stonefish_bigwheel_reply') . " where rid = :rid order by `id` desc", array(':rid' => $rid));
         //判断总次数超过限制,一般情况不会到这里的，考虑特殊情况,回复提示文字msg，便于测试
         if ($fans['totalnum'] >= $reply['number_times'] && $replystr['number_times'] > 0) {
-           $this->Json_encode(array("success"=>2, "msg"=>'您超过参与总次数了，不能再参与了!'));
+           $this->Json_encode(array("success"=>2, "msg"=>$reply['number_times_tips']));
         }
         //判断当日是否超过限制,一般情况不会到这里的，考虑特殊情况,回复提示文字msg，便于测试
         if ($fans['todaynum'] >= $reply['day_number_times'] && $replystr['day_number_times'] > 0) {
-            $this->Json_encode(array("success"=>2, "msg"=>'您超过当日参与次数了，不能再参与了!'));
+            $this->Json_encode(array("success"=>2, "msg"=>$reply['day_number_times_tips']));
         }
         //所有奖品
 		$gift = pdo_fetchall("select * from ".tablename('stonefish_bigwheel_prize')." where rid = :rid and uniacid=:uniacid order by Rand()", array(':rid' => $rid,':uniacid' => $uniacid));

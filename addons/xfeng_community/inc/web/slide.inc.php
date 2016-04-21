@@ -8,7 +8,8 @@
  * 后台幻灯
  */
 	global $_W,$_GPC;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$op = !empty($_GPC['op'])?$_GPC['op']:'list';
 	if ($op == 'list') {
 		$pindex = max(1, intval($_GPC['page']));

@@ -8,7 +8,8 @@
  * 后台超市管理
  */
 	global $_W,$_GPC;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'].$_GPC['op'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'order';
 	$operation = !empty($_GPC['operation']) ? $_GPC['operation'] : 'list';
 	$regions = $this->regions();
@@ -104,7 +105,8 @@
 						$piclist[] = is_array($p)?$p['attachment']:$p;
 					}
 				}
-				
+				$starttime = !empty($item['starttime']) ? date('Y-m-d H:i',$item['starttime']) : date('Y-m-d',timestamp);
+				$endtime = !empty($item['endtime']) ? date('Y-m-d H:i',$item['endtime']) : date('Y-m-d',timestamp);
 			}
 			
 			if ($user) {
@@ -130,6 +132,8 @@
 				if(empty($_GPC['thumbs'])){
 					$_GPC['thumbs'] = array();
 				}
+				$starttime = strtotime($_GPC['birth']['start']);
+				$endtime   = strtotime($_GPC['birth']['end']);
 				$data = array(
 					'weid' => intval($_W['uniacid']),
 					'displayorder' => intval($_GPC['displayorder']),
@@ -146,6 +150,8 @@
 					'credit' => intval($_GPC['credit']),
 					'status' => intval($_GPC['status']),
 					'type' => 1,
+					'starttime' => $starttime,
+					'endtime' => $endtime,
 				);
 				if ($user) {
 					$data['uid'] = $_W['uid'];
@@ -214,6 +220,39 @@
 			
 			pdo_delete('xcommunity_goods',array('id' => $id));
 			message('删除成功！', referer(), 'success');
+		}elseif ($operation == 'set') {
+			//个人设置
+			if ($user) {
+				$users = pdo_fetch("SELECT * FROM".tablename('xcommunity_users')."WHERE uid=:uid",array(':uid' => $_W['uid']));
+			}
+
+			include $this->template('web/shopping/goods/set');
+		}elseif ($operation == 'cash') {
+			//商家提现
+			if ($user) {
+				$users = pdo_fetch("SELECT * FROM".tablename('xcommunity_users')."WHERE uid=:uid",array(':uid' => $_W['uid']));
+			}
+			if (checksubmit('submit')) {
+				if ($_GPC['cash'] > $users['balance']) {
+					message('余额不足，无法提现',referer(),'error');
+				}
+				$data = array(
+					'weid' => $_W['weid'],
+					'ordersn' => date('YmdHi').random(10, 1),
+					'price' => $_GPC['cash'],
+					'type' => 'scash',
+					'createtime' => TIMESTAMP,
+					'uid' => $_W['uid'],
+				);
+				$r = pdo_insert('xcommunity_order',$data);
+				if ($r) {
+					pdo_update('xcommunity_users',array('balance' => $users['balance'] - number_format(floatval($_GPC['cash']),2)),array('id' => $users['id']));
+					message('提交成功',$this->createWebUrl('shopping',array('op' => 'cash')),'success');
+				}
+				
+			}
+
+			include $this->template('web/shopping/goods/cash');
 		}
 		
 	}elseif($op == 'slide'){
@@ -561,6 +600,53 @@
 		}
 
 
+	}elseif ($op == 'cash') {
+		//余额提现
+		if ($operation == 'list') {
+			$condition = '';
+			if ($user) {
+				$condition .=" AND uid=:uid";
+				$parms[':uid'] = $_W['uid'];
+			}
+			$pindex = max(1, intval($_GPC['page']));
+			$psize  = 20;
+			$sql = "SELECT * FROM".tablename('xcommunity_order')."WHERE weid='{$_W['weid']}' AND type='scash' $condition LIMIT ".($pindex - 1) * $psize.','.$psize;
+			$list   = pdo_fetchall($sql,$parms);
+			$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_order')."WHERE weid='{$_W['weid']}' AND type='scash' $condition",$parms);
+			$pager  = pagination($total, $pindex, $psize);
+
+			include $this->template('web/shopping/cash/list');
+		}elseif ($operation == 'del') {
+			//删除提现订单
+			if (pdo_delete('xcommunity_order',array('id' => $id))) {
+				$result = array(
+						'status' => 1,
+					);
+				echo json_encode($result);exit();
+			}
+		}
+		
+	}elseif($op == 'verify'){
+		//处理状态
+		$id = intval($_GPC['id']);
+		if ($id) {
+			if ($_W['isajax']) {
+				$r = pdo_update('xcommunity_order',array('status' => 1),array('id' => $id));
+				if ($r) {
+					$result = array(
+							'status' => 1,
+						);
+					echo json_encode($result);exit();
+				}
+			}
+		}
+		// $type = $_GPC['type'];
+		// $data = intval($_GPC['data']);
+		// if (in_array($type, array('status'))) {
+		// 	$data = ($data==1?'0':'1');
+		// 	pdo_update("xcommunity_order", array($type => $data), array("id" => $id, "weid" => $_W['uniacid']));
+		// 	die(json_encode(array("result" => 1, "data" => $data)));
+		// }
 	}
 
 

@@ -1,6 +1,6 @@
 {template 'common/header'}
 <ul class="nav nav-tabs">
-    {if $user} <li {if $operation=='set' }class="active" {/if}><a href="{php echo $this->createWebUrl('business', array('op' => 'dp','operation' => 'set'))}">个人设置</a></li>{/if}
+    {if $user} <li {if $operation=='set' }class="active" {/if}><a href="{php echo $this->createWebUrl('business', array('op' => 'dp','operation' => 'set'))}">提现</a></li>{/if}
     <li {if $operation=='list' }class="active" {/if}><a href="{php echo $this->createWebUrl('business', array('op' => 'dp','operation' => 'list'))}">店铺列表</a></li>
     <li {if $operation=='add' }class="active" {/if}><a href="{php echo $this->createWebUrl('business', array('op' => 'dp','operation' => 'add'))}">添加店铺</a></li>
 </ul>

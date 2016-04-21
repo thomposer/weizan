@@ -32,18 +32,14 @@
             <input type='text' name='costtime' id='costtime' class="form-control" value="{$item['costtime']}" placeholder="例如：2016年1月1日-2016年3月30日"/>
           </div>
       </div>
+      {loop $cate $key $c}
       <div class="form-group">
-          <label for="propertyfee" class="col-sm-2 control-label">物业费</label>
+          <label for="propertyfee" class="col-sm-2 control-label">{$c}</label>
           <div class="col-xs-4">
-            <input type='text' name='propertyfee' id='propertyfee' class="form-control" value="{$item['propertyfee']}" placeholder="请输入物业费"/>
+            <input type='text' name='fee[]' id='fee' class="form-control" value="{$fee[$key]}" placeholder="请输入物业费"/>
           </div>
       </div>
-      <div class="form-group">
-          <label for="otherfee" class="col-sm-2 control-label">其他费用</label>
-          <div class="col-xs-4">
-            <input type='text' name='otherfee' id='otherfee' class="form-control" value="{$item['otherfee']}" placeholder="请输入其他费用"/>
-          </div>
-      </div>
+      {/loop}
       <div class="form-group">
           <label for="total" class="col-sm-2 control-label">总计费用</label>
           <div class="col-xs-4">

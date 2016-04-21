@@ -185,7 +185,7 @@
 <body>
     <header id="header">
         <div class="header_div">
-            <div id="left_div" onClick="window.location.href='{php echo $this->createMobileUrl('report',array('op' => 'list'))}'"></div>
+            <div id="left_div" onClick="window.location.href='{php echo $this->createMobileUrl('member')}'"></div>
             <div id="middle_div">
                 <h1 id="title">我的意见</h1></div>
             <div id="right_div">
@@ -208,6 +208,11 @@
 
     </div>
     {template 'style/style1/footer'}
+    {php $member = $this->changemember();$region = pdo_fetch("SELECT * FROM".tablename('xcommunity_region')."WHERE id=:id",array(':id' => $member['regionid']));}
+    <div id="btn_div">
+        <div id="btn_dj"><span id="btn_input" class="btn_img hide_b"></span></div>
+        <div id="menu_b" class="menu_btn hide_m"><a href="tel:{$region['linkway']}">电话建议</a><a href="{php echo $this->createMobileUrl('report',array('op' => 'add'))}">在线建议</a><a href="{php echo $this->createMobileUrl('report',array('op' => 'my'))}">我的意见</a></div>
+    </div>
     <script>
     $(function() {
         $("#btn_div").fix({

@@ -38,15 +38,15 @@ body {
 .id-icon {
 	background:url(/addons/bm_qrsign/template/mobile/images/id.png) no-repeat;
 	width:35px;
-	height:35px;
-	-webkit-background-size:90%;
-	-moz-background-size:90%;
-	background-size:90%;
+	height:25px;
+	-webkit-background-size:60%;
+	-moz-background-size:60%;
+	background-size:60%;
 	display:inline-block;
 	vertical-align:middle
 }
 .pwd-icon {
-	background:url(images/pwd.png) no-repeat;
+	background:url(/res/images/pwd.png) no-repeat;
 	width:35px;
 	height:25px;
 	-webkit-background-size:60%;
@@ -58,8 +58,7 @@ body {
 .input_box input {
 	border:none;
 	width:70%;
-	height:25px;
-	font-size:18px !important
+	margin-top:-5px;
 }
 .fs2 {
 	color:#858585;
@@ -161,12 +160,9 @@ body {
 }
 .input_box {
 	position:relative;
-	height:47px;
+	height:40px;
 	line-height:20px;
-	padding-top: 8px;
-	padding-right: 8px;
-	padding-bottom: 10px;
-	padding-left: 4px;
+	padding:10px;
 	width:100%;
 	-webkit-box-sizing:border-box;
 	-moz-box-sizing:border-box;
@@ -174,7 +170,9 @@ body {
 	-o-box-sizing:border-box;
 	box-sizing:border-box;
 	display:block;
+	font-size:14px;
 	margin-bottom:12px;
+	border-radius:12px;
 	color:#313131;
 	border:1px solid #ddd;
 	background:#fff
@@ -195,10 +193,12 @@ body {
 	min-height:40px;
 	line-height:20px;
 	padding:10px;
+	border-radius:10px
 }
 .orange_linear {
-	background:#44b549;
+	background:#e8380d;
 	color:#fff;
+	box-shadow:0px 7px 0px #cecece
 }
 .btn_area .btn-reg {
 	width:100%;
@@ -210,7 +210,7 @@ body {
 }
 </style>
 <div class="layout">
-	<div class="container_01 mt20a" style="margin-top: 25px;margin-bottom: 20px;width:240px">
+	<div class="container_01 mt20a" style="margin-top: 25px;margin-bottom: 20px;width:200px">
 		<img src="{$qrpicurl}" alt="" class="img-responsive">
 	</div>
 	{if $reply['qrtype'] == 1}
@@ -220,9 +220,9 @@ body {
 			<div class="input_box">
 				<em class="id-icon"></em>
 				{if $reply['qrinput'] == 1}
-				<input type="text" name="qrmoney" id="qrmoney" value=""  placeholder="请输入支付金额"/>
+				<input type="text" name="qrmoney" id="qrmoney" value="{$reply['qrmoney']}"  placeholder="请输入支付金额"/>
 				{else}
-				<input type="text" name="qrmoney" id="qrmoney" value="{$reply['qrmoney']}"  readonly="readonly"/>
+				<input type="text" name="qrmoney" id="qrmoney" value="{$reply['qrmoney']}" readonly="readonly"/>
 				{/if}
 				<div id="username_tag" class="error_tipsp">
 					<em class="error_ico"></em>
@@ -255,6 +255,11 @@ body {
 			</div>
 		</form>
 	</div>
+	<p class="tips_title" style="font-size:15px;text-align:center;color:red;">{$reply['title']}</p>
+	<p class="tips_title" style="font-size:15px;text-align:center;color:red;">{$reply['desc']}</p>
+	{if $reply['qrinput'] == 0}
+		<p class="tips_title" style="font-size:15px;text-align:center;color:red;">￥{$reply['qrmoney']}元</p>
+	{/if}
 	{else}
 	<div class="container_02 mb20">
 		<form method="post" id="Form" action="">
@@ -293,8 +298,11 @@ body {
 			</div>
 		</form>
 	</div>
-	<p class="tips_title" style="font-size:12px;text-align:center;">扫码签到</p>	
+	<p class="tips_title" style="font-size:15px;text-align:center;color:red;">{$reply['title']}</p>
+	<p class="tips_title" style="font-size:15px;text-align:center;color:red;">{$reply['desc']}</p>
 	{/if}
 </div>
+<!--center><div style="font-size:10px">Copyright&copy;<a href="http://www.lanrenmb.com/" target="_blank">
+懒人模板</a> All Rights Reserved (2013-2015) 版权所有</center-->
 </body>
 </html>

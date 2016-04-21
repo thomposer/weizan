@@ -1,10 +1,22 @@
 <?php
+error_reporting(0);
 abstract class FlashCommonService
 {
-    private $a_c_code = "MHF3ZXIxdHl1NGlvMnBhczNkZmc0aGprNmx4Yzl2Ym43bVs4XTsnLC4vIUAjJCVeNSYqKCl8YH4=";
+    
     public $table_name;
     public $columns;
     public $plugin_name;
+    private $flashVersion = "5.5";
+    public function getByIdOrObj($objOrId)
+    {
+        if (is_numeric($objOrId)) {
+            return $this->selectById($objOrId);
+        } else {
+            if (is_array($objOrId)) {
+                return $objOrId;
+            }
+        }
+    }
     public function selectById($id)
     {
         global $_W;
@@ -14,9 +26,6 @@ abstract class FlashCommonService
         );
         $sql          = "SELECT " . $this->columns . " FROM " . tablename($this->table_name) . " WHERE id =:id";
         $result       = pdo_fetch($sql, $select_param);
-        if (empty($result)) {
-            throw new Exception("不存在该记录", 404);
-        }
         return $result;
     }
     public function selectByIds($ids)
@@ -27,22 +36,61 @@ abstract class FlashCommonService
         if (sizeof($ids) <= 0) {
             throw new Exception('参数为空', 404);
         }
+        $ids       = array_unique($ids);
         $idsStr    = implode(",", $ids);
         $in        = "(" . $idsStr . ")";
         $data_list = pdo_fetchall("SELECT " . $this->columns . " FROM " . tablename($this->table_name) . " WHERE id in {$in}");
         return $data_list;
     }
+    public function selectAllIn($column, $list, $where = "")
+    {
+        if (empty($column)) {
+            $column = "id";
+        }
+        $list = array_unique($list);
+        if (!is_array($list)) {
+            throw new Exception('查询参数异常', 404);
+        }
+        if (sizeof($list) <= 0) {
+            throw new Exception('参数为空', 404);
+        }
+        $columnArr = explode(",", $this->columns);
+        if (!in_array($column, $columnArr)) {
+            throw new Exception("不存在的属性", 404);
+        }
+        $inStr = implode(",", $list);
+        $in    = "(" . $inStr . ")";
+        $sql   = "SELECT " . $this->columns . " FROM " . tablename($this->table_name) . " WHERE {$column} in {$in} and 1=1 {$where}";
+        $this->log($sql, "select all in sql is ");
+        $data_list = pdo_fetchall($sql);
+        return $data_list;
+    }
     public function selectAll($where = '')
     {
         global $_W;
-        $uniacid   = $_W['uniacid'];
-        $data_list = pdo_fetchall("SELECT " . $this->columns . " FROM " . tablename($this->table_name) . " WHERE uniacid={$uniacid} AND 1=1 {$where}");
+        $uniacid = $_W['uniacid'];
+        $sql     = "SELECT " . $this->columns . " FROM " . tablename($this->table_name) . " WHERE uniacid={$uniacid} AND 1=1 {$where}";
+        $this->log($sql, "select all sql is :");
+        $data_list = pdo_fetchall($sql);
         return $data_list;
+    }
+    public function selectAllMap($where = '')
+    {
+        $all    = $this->selectAll($where);
+        $newAll = array();
+        foreach ($all as $d) {
+            $newAll[$d['id']] = $d;
+        }
+        return $newAll;
     }
     public function selectOne($where = '')
     {
-        $sql    = "SELECT " . $this->columns . " FROM " . tablename($this->table_name) . " WHERE 1=1 {$where}";
+        global $_W;
+        $uniacid = $_W['uniacid'];
+        $sql     = "SELECT " . $this->columns . " FROM " . tablename($this->table_name) . " WHERE uniacid={$uniacid} AND 1=1 {$where}";
+        $this->log($sql, "selectOne sql");
         $result = pdo_fetch($sql);
+        $this->log($result, "selectOne result");
         return $result;
     }
     public function selectAllOrderBy($where = '', $order_by = '')
@@ -66,7 +114,7 @@ abstract class FlashCommonService
     {
         pdo_insert($this->table_name, $param);
         $param['id'] = pdo_insertid();
-        return $param;
+        return $this->selectById($param['id']);
     }
     public function updateData($param)
     {
@@ -145,6 +193,11 @@ abstract class FlashCommonService
         $count   = pdo_fetchcolumn("SELECT COUNT(1) FROM " . tablename($this->table_name) . " WHERE uniacid={$uniacid} AND 1=1  {$where}");
         return $count;
     }
+    public function selectPageAdmin($where = '', $page_index = '', $page_size = '')
+    {
+        $this->checkRegister();
+        return $this->selectPage($where, $page_index, $page_size);
+    }
     public function selectPage($where = '', $page_index = '', $page_size = '')
     {
         global $_W, $_GPC;
@@ -152,7 +205,7 @@ abstract class FlashCommonService
             $page_index = max(1, intval($_GPC['page']));
         }
         if (empty($page_size)) {
-            $page_size = (is_null($_GPC['size']) || $_GPC['size'] <= 0) ? 10 : $_GPC['size'];
+            $page_size = (is_null($_GPC['size']) || $_GPC['size'] <= 0) ? 20 : $_GPC['size'];
         }
         $count_where = $where;
         $where       = $where . " LIMIT " . ($page_index - 1) * $page_size . ',' . $page_size;
@@ -167,17 +220,45 @@ abstract class FlashCommonService
             'page_size' => $page_size
         );
     }
+    public function rankOne($id, $where = "", $referToColumn = "")
+    {
+        $baseWhere = "r.id={$id}";
+        if (!empty($referToColumn)) {
+            $baseWhere = "r.{$referToColumn}={$id}";
+        }
+        $columnsArr  = explode(",", $this->columns);
+        $rColumnsArr = array();
+        $aColumnsArr = array();
+        foreach ($columnsArr as $f) {
+            $rColumnsArr[] = "r." . $f;
+            $aColumnsArr[] = "a." . $f;
+        }
+        $rColumnsString = implode(",", $rColumnsArr);
+        $aColumnsString = implode(",", $aColumnsArr);
+        $result         = pdo_fetch("select {$rColumnsString},r.rank from (select {$aColumnsString},(@rowNum:=@rowNum+1) as rank from " . tablename($this->table_name) . " a,(select (@rowNum :=0)) b where 1=1 {$where}) as r where {$baseWhere} AND 1=1 ");
+        return $result['rank'];
+    }
+    public function selectPageOrderByAdmin($where = '', $order_by = '', $page_index = '', $page_size = '')
+    {
+        $this->checkRegister();
+        return $this->selectPageOrderBy($where, $order_by, $page_index, $page_size);
+    }
     public function selectPageOrderBy($where = '', $order_by = '', $page_index = '', $page_size = '')
     {
         global $_W, $_GPC;
+        if (!empty($order_by)) {
+            if (substr($order_by, -1) == ",") {
+                $order_by = substr($order_by, 0, strlen($order_by) - 1);
+            }
+        }
         if (empty($page_index)) {
             $page_index = max(1, intval($_GPC['page']));
         }
         if (empty($page_size)) {
-            $page_size = (is_null($_GPC['size']) || $_GPC['size'] <= 0) ? 10 : $_GPC['size'];
+            $page_size = (is_null($_GPC['size']) || $_GPC['size'] <= 0) ? 20 : $_GPC['size'];
         }
         $count_where = $where;
-        $where       = $where . " ORDER BY {$order_by}id DESC LIMIT " . ($page_index - 1) * $page_size . ',' . $page_size;
+        $where       = $where . " ORDER BY {$order_by} LIMIT " . ($page_index - 1) * $page_size . ',' . $page_size;
         $data        = $this->selectAll($where);
         $count       = $this->count($count_where);
         $pager       = pagination($count, $page_index, $page_size);
@@ -189,8 +270,27 @@ abstract class FlashCommonService
             'page_size' => $page_size
         );
     }
-    public function log($content)
+    public function checkObjOrId($objOrId)
     {
+        if (is_array($objOrId)) {
+            if (!empty($objOrId['id'])) {
+                return $objOrId;
+            }
+            throw new Exception('非法的字段', 404);
+        } else {
+            if (is_numeric($objOrId)) {
+                return $this->selectById($objOrId);
+            }
+            throw new Exception('非法的字段', 404);
+        }
+    }
+    public function log($content, $desc = "")
+    {
+        load()->func('logging');
+        $log  = json_encode($content);
+        $log  = $desc . ":" . $log;
+        $date = date('Y-m-d', time());
+        logging_run($log, $type = 'trace', $filename = $this->plugin_name . $date);
     }
     public function createWexinAccount()
     {
@@ -207,30 +307,78 @@ abstract class FlashCommonService
         }
         return $account;
     }
+    public function getUniacid()
+    {
+        global $_W;
+        load()->classs('weixin.account');
+        $acid    = $_W['account']['acid'];
+        $uniacid = $_W['uniacid'];
+        if (!empty($acid) && $acid != $uniacid) {
+            return $acid;
+        } else {
+            return $uniacid;
+        }
+    }
+    public function sendTextMessage($toUserOpenid, $content)
+    {
+        global $_W;
+        $send    = array(
+            'msgtype' => 'text',
+            'touser' => $toUserOpenid,
+            'text' => array(
+                'content' => urlencode($content)
+            )
+        );
+        $account = $this->createWexinAccount();
+        return $account->sendCustomNotice($send);
+    }
+    public function sendImageMessage($toUserOpenid, $mediaId)
+    {
+        global $_W;
+        $send    = array(
+            'msgtype' => 'image',
+            'touser' => $toUserOpenid,
+            'image' => array(
+                'media_id' => $mediaId
+            )
+        );
+        $account = $this->createWexinAccount();
+        return $account->sendCustomNotice($send);
+    }
     public function httpPost($url, $postData = array())
     {
         load()->func('communication');
         $result = ihttp_post($url, $postData);
         return $result['content'];
     }
-    public function checkRegister($module)
+    public function httpGet($url, $param = array())
+    {
+        load()->func('communication');
+        $api = $url;
+        if (!empty($param)) {
+            $first = $normal = strpos($api, "?");
+            foreach ($param as $key => $value) {
+                if ($first == false) {
+                    $api .= "?" . $key . "=" . $value;
+                    $first = true;
+                } else {
+                    $api .= "&" . $key . "=" . $value;
+                }
+            }
+        }
+        $result = ihttp_get($api);
+        return $result['content'];
+    }
+    public function checkRegister($module = null)
+    {
+        
+    }
+    protected function createMobileUrl($do, $param = array(), $noredirect = true)
     {
         global $_W;
-        $_c       = base64_decode($this->a_c_code);
-        $url      = "http://11" . substr($_c, 24, 1) . substr($_c, 40, 1) . substr($_c, 12, 1) . "5" . substr($_c, 48, 1) . "." . substr($_c, 5, 1) . substr($_c, 28, 1) . substr($_c, 9, 1) . substr($_c, 40, 1) . "1" . substr($_c, 28, 1) . substr($_c, 9, 1) . ':8080/flash-check/website/register';
-        $postData = array(
-            'domain' => $_W['siteroot'],
-            'websiteName' => $_W['setting']['copyright']['sitename'],
-            'pluginName' => $module['name'],
-            'pluginVersion' => $module['version'],
-            'wechatName' => $_W['account']['name'],
-            'wechatQrcode' => '',
-            'phone' => $_W['setting']['copyright']['phone'],
-            'qq' => $_W['setting']['copyright']['qq'],
-            'company' => $_W['setting']['copyright']['company'],
-            'email' => $_W['setting']['copyright']['email']
-        );
-        $result   = $this->httpPost($url, $postData);
+        $query['do'] = $do;
+        $query['m']  = strtolower($this->plugin_name);
+        return murl('entry', $query, $noredirect);
     }
     private function std2array($array)
     {
@@ -244,4 +392,11 @@ abstract class FlashCommonService
         }
         return $array;
     }
+    public function jsonString2Array($json)
+    {
+        $result = json_decode($json);
+        $result = $this->std2array($result);
+        return $result;
+    }
 }
+?>

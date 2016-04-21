@@ -8,22 +8,22 @@
  * 后台小区信息
  */
 	global $_GPC,$_W;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 	$uid = $_W['uid'];
 	$id = intval($_GPC['id']);	
 	if ($op == 'add') {
-		// $name = "xiaofeng_numbercontrol";
-		// $module = pdo_fetch("SELECT * FROM".tablename('modules')."WHERE name='{$name}'");
-		// if ($module) {
-		// 	$user = pdo_fetch("SELECT * FROM".tablename('xiaofeng_users')."as u left join".tablename('xiaofeng_users_group')."as g on u.groupid = g.id WHERE u.uid=:uid",array(':uid' => $uid));
-		// 	if ($user) {
-		// 		$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}'");
-		// 		if($total == $user['maxaccount']){
-		// 			message("已经达到添加小区上限",$this->createWebUrl('region',array('op' => 'display')),'success');exit();
-		// 		}
-		// 	}
-		// }
+
+
+		$user = pdo_fetch("SELECT * FROM".tablename('xcommunity_users')."as u left join".tablename('xcommunity_users_group')."as g on u.groupid = g.id WHERE u.uid=:uid",array(':uid' => $uid));
+		if ($user) {
+			$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}'");
+			if($total == $user['maxaccount']){
+				message("已经达到添加小区上限",$this->createWebUrl('region',array('op' => 'list')),'success');exit();
+			}
+		}
+
 		if ($id) {
 				$item = pdo_fetch("SELECT * FROM".tablename('xcommunity_region')."WHERE weid=:weid AND id=:id",array(":id" => $id,":weid" => $_W['weid']));
 				if (empty($item)) {
@@ -79,9 +79,9 @@
 				$condition .= " AND r.city = :city";
 				$params[':city'] = $reside['city'];
 			}
-			if ($reside['dist']) {
+			if ($reside['district']) {
 				$condition .= " AND r.dist = :dist";
-				$params[':dist'] = $reside['dist'];
+				$params[':dist'] = $reside['district'];
 			}
 			
 		}
@@ -102,7 +102,9 @@
 			$condition .=" AND r.pid = :pid";
 			$params[':pid'] = $pid;
 		}
+
 		$list = pdo_fetchall("SELECT r.address as address,r.province as province,r.city as city ,r.dist as dist,r.qq,r.title as rtitle ,r.id,r.linkmen,r.linkway,p.title as ptitle,r.url FROM".tablename('xcommunity_region')."as r left join ".tablename('xcommunity_property')."as p on r.pid = p.id WHERE r.weid='{$_W['weid']}' $condition LIMIT ".($pindex - 1) * $psize.','.$psize,$params);
+		// print_r($reside);exit;
 		$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_region')."as r left join ".tablename('xcommunity_property')."as p on r.pid = p.id WHERE r.weid='{$_W['weid']}' $condition",$params);
 		$pager  = pagination($total, $pindex, $psize);
 		load()->func('tpl');
@@ -175,9 +177,14 @@
 		$params[':uniacid'] = $_W['uniacid'];
 		$condition .= ' AND regionid=:regionid';
 		$params[':regionid'] = $id;
-		if (!empty($_GPC['room'])) {
+		if (!empty($_GPC['keyword'])) {
 			$condition .= " AND room LIKE :keyword";
 			$params[':keyword'] = "%{$_GPC['keyword']}%";
+		}
+		$rid=$_GPC['rid'];
+		if (!empty($rid)) {
+			$ids = implode(',',$rid);
+			$condition .=" AND id in({$ids})";
 		}
 		$sql = "SELECT * FROM".tablename('xcommunity_room')."WHERE $condition LIMIT ".($pindex - 1) * $psize.','.$psize;
 		$list = pdo_fetchall($sql,$params);
@@ -186,13 +193,41 @@
 		$pager  = pagination($total, $pindex, $psize);
 		//删除用户
 		if (checksubmit('delete')) {
-			$ids=$_GPC['rid'];
+
 			if (!empty($ids)) {
 				foreach ($ids as $key => $id) {
 					pdo_delete('xcommunity_room',array('id' => $id));
 				}
 				message('删除成功',referer(),'success');
 			}
+		}
+		//导出用户
+		if (checksubmit('export')) {
+			$sql = "SELECT * FROM".tablename('xcommunity_room')."WHERE $condition ";
+			$li = pdo_fetchall($sql,$params);
+				$this->export($li,array(
+			            "title" => "房号数据-" . date('Y-m-d-H-i', time()),
+			            "columns" => array(
+			                array(
+			                    'title' => '房号',
+			                    'field' => 'room',
+			                    'width' => 16
+			                ),
+			                array(
+			                    'title' => '手机号',
+			                    'field' => 'mobile',
+			                    'width' => 14
+			                ),
+			                array(
+			                    'title' => '注册码',
+			                    'field' => 'code',
+			                    'width' => 18
+			                ),
+			              
+			            )
+					));
+
+
 		}
 		if (checksubmit('submit')) {
 			$data = array(

@@ -24,6 +24,10 @@
 	<li><a href="{php echo $this->createWebUrl('photolist')}">图片管理</a></li>
 	<li><a href="{php echo $this->createWebUrl('tjapply')}">推荐记录</a></li>
     <li><a href="{php echo $this->createWebUrl('set')}">基本设置</a></li>
+	<li><a href="{php echo $this->createWebUrl('sayhi_content')}">打招呼语设置</a></li>
+	<li><a href="{php echo $this->createWebUrl('flower_record')}">送花记录</a></li>
+	<li><a href="{php echo $this->createWebUrl('sayhi_record')}">打招呼记录</a></li>
+	<li><a href="{php echo $this->createWebUrl('share_record')}">分享记录</a></li>
 </ul>
 {if $operation == 'display'}
 <div class="panel panel-info">
@@ -70,7 +74,8 @@
 					<th>会员信息</th>
 					<th style="width:300px">微信支付订单号</th>
 					<th>包月费用</th>
-					<th>充值方式</th>
+					<th>支付方式</th>
+					<th>完成时间</th>
 					<th>包月时间</th>
 					<th>操作</th>
 				</tr>
@@ -89,6 +94,8 @@
 					<td style="width:200px">{$row['transid']}</td>
 					<td>{$row['fee']}元</td>
 					<td>{if $row['paytype']=='2'}微信支付{else}其他支付{/if}</td>
+					<td><div style="margin-bottom:10px;">{php echo date('Y-m-d', $row['time']);}</div>
+					<div>{php echo date('H:i:s', $row['time']);}</div></td>
 					<td>
 					            <div style="margin-bottom:10px;">{php echo date('Y-m-d H:i:s', $row['starttime']);}</div>
 								<div>{php echo date('Y-m-d H:i:s', $row['endtime']);}</div>

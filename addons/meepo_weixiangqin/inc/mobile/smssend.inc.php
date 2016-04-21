@@ -9,9 +9,36 @@ if($_W['isajax']){
    $cfg = $this->module['config'];
    $Mobile = $_GPC['mobile'];
    $num =  random(6, true); 
-   $url='http://utf8.sms.webchinese.cn/?Uid='.$cfg['smsuid'].'&Key='.$cfg['smskey'].'&smsMob='.$Mobile.'&smsText=验证码：'.$num;
-   $result = Get($url);
-   if($result == '1'){
+	 if(empty($cfg['ali_appkey'])){
+		 $url='http://utf8.sms.webchinese.cn/?Uid='.$cfg['smsuid'].'&Key='.$cfg['smskey'].'&smsMob='.$Mobile.'&smsText=验证码：'.$num;
+		 $result = Get($url);
+		 if($result=='1'){
+					$status = 1;
+		 }else{
+					$status = 2;
+			}
+	 }else{
+			include "TopSdk.php";
+			$c = new TopClient();
+			$c->appkey = $cfg['ali_appkey'];
+			$c->secretKey = $cfg['ali_appsecret'];
+			$req = new AlibabaAliqinFcSmsNumSendRequest;
+			$req->setExtend("123456");
+			$req->setSmsType("normal");
+			$req->setSmsFreeSignName($cfg['ali_signname']);
+			$json = json_encode(array("code"=>$num,'product'=>$_W['account']['name'].'平台的'));
+			$req->setSmsParam($json);
+			$req->setRecNum($Mobile);
+			$req->setSmsTemplateCode($cfg['ali_moban_num']);//  SMS_585014  SMS_6290144
+			$result = $c->execute($req);
+			
+			if($result->result->err_code=='0'){
+					$status = 1;
+			}else{
+					$status = 2;
+			}
+	 }
+   if($status == '1'){
 	   pdo_update('hnfans',array('telephone'=>$Mobile),array('from_user'=>$openid,'weid'=>$weid));
 	  $check = pdo_fetchcolumn("SELECT id FROM".tablename('meepo_sms_news')." WHERE openid=:openid AND weid=:weid ORDER BY createtime DESC",array(':openid'=>$openid,':weid'=>$weid));
 	  if(empty($check)){
@@ -21,7 +48,7 @@ if($_W['isajax']){
 	    pdo_update('meepo_sms_news',array('news'=>$num),array('id'=>$check,'weid'=>$weid));
 	  }
    }
-   echo $result;
+   echo $status;
   
 }
 function Get($url){

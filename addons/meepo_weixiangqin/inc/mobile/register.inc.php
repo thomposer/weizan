@@ -53,7 +53,7 @@
 					mc_update($_W['member']['uid'],$data);
 					$RES = pdo_update("hnfans", $_POST,array('from_user'=>$openid,'weid'=>$weid));
                     if ($RES) {
-                        message("亲，恭喜您，保存成功", $this->createMobileUrl('alllist') , 'sucess');
+                        message("亲，恭喜您，保存成功", $this->createMobileUrl('alllist',array('t'=>time())) , 'success');
                     } else {
                         message("你未做任何改变，保存失败！", '','referer');
                     }

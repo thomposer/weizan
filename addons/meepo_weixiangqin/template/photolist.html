@@ -11,11 +11,15 @@
 <ul class="nav nav-tabs">
 	<li {if $_GPC['status'] == 0} class="active"{/if}><a href="{php echo $this->createWebUrl('photolist', array('id' => $id, 'status' => 0))}">待审核</a></li>
 	<li {if $_GPC['status'] == 1} class="active"{/if}><a href="{php echo $this->createWebUrl('photolist', array('id' => $id, 'status' => 1))}">已审核</a></li>
+	<li><a href="{php echo $this->createWebUrl('sayhi_content')}">打招呼语设置</a></li>
 	<li><a href="{php echo $this->createWebUrl('payrecord')}">充值记录</a></li>
 	<li><a href="{php echo $this->createWebUrl('baoyuerecord')}">包月记录</a></li>
 	<li><a href="{php echo $this->createWebUrl('Exchangerecord')}">兑换记录</a></li>
 	<li><a href="{php echo $this->createWebUrl('tjapply')}">推荐记录</a></li>
     <li><a href="{php echo $this->createWebUrl('set')}">基本设置</a></li>
+	<li><a href="{php echo $this->createWebUrl('flower_record')}">送花记录</a></li>
+	<li><a href="{php echo $this->createWebUrl('sayhi_record')}">打招呼记录</a></li>
+	<li><a href="{php echo $this->createWebUrl('share_record')}">分享记录</a></li>
 </ul>
 <div class="panel panel-default">
 

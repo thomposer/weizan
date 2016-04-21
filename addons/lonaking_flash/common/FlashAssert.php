@@ -1,6 +1,11 @@
 <?php
 
-
+/**
+ * 断言:该类所有的方法用法都相同,每个方法调用都可以传入一个message和code 当断言出错则抛出相应提示和错误码的异常信息
+ * User: leon
+ * Date: 15/9/4
+ * Time: 上午1:05
+ */
 require_once dirname(__FILE__).'/../exception/AssertException.php';
 class FlashAssert
 {

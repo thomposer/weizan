@@ -11,7 +11,7 @@ function cache_build_template() {
 
 
 function cache_build_setting() {
-	$sql = 'SELECT * FROM ' . tablename('core_settings');
+	$sql = "SELECT * FROM " . tablename('core_settings');
 	$setting = pdo_fetchall($sql, array(), 'key');
 	if (is_array($setting)) {
 		foreach ($setting as $k => $v) {
@@ -23,7 +23,7 @@ function cache_build_setting() {
 
 
 function cache_build_account_modules() {
-	$uniacid_arr = pdo_fetchall('SELECT uniacid FROM ' . tablename('uni_account'));
+	$uniacid_arr = pdo_fetchall("SELECT uniacid FROM " . tablename('uni_account'));
 	foreach($uniacid_arr as $account){
 		cache_delete("unimodules:{$account['uniacid']}:1");
 		cache_delete("unimodules:{$account['uniacid']}:");
@@ -33,7 +33,7 @@ function cache_build_account_modules() {
 
 function cache_build_account() {
 	global $_W;
-	$uniacid_arr = pdo_fetchall('SELECT uniacid FROM ' . tablename('uni_account'));
+	$uniacid_arr = pdo_fetchall("SELECT uniacid FROM " . tablename('uni_account'));
 	foreach($uniacid_arr as $account){
 		cache_delete("uniaccount:{$account['uniacid']}");
 		cache_delete("unisetting:{$account['uniacid']}");
@@ -43,7 +43,7 @@ function cache_build_account() {
 
 function cache_build_accesstoken() {
 	global $_W;
-	$uniacid_arr = pdo_fetchall('SELECT acid FROM ' . tablename('account_wechats'));
+	$uniacid_arr = pdo_fetchall("SELECT acid FROM " . tablename('account_wechats'));
 	foreach($uniacid_arr as $account){
 		cache_delete("accesstoken:{$account['acid']}");
 		cache_delete("jsticket:{$account['acid']}");
@@ -64,17 +64,17 @@ function cache_build_users_struct() {
 }
 
 function cache_build_frame_menu() {
-	$data = pdo_fetchall('SELECT * FROM ' . tablename('core_menu') . ' WHERE pid = 0 AND is_display = 1 ORDER BY is_system DESC, displayorder DESC, id ASC');
+	$data = pdo_fetchall("SELECT * FROM " . tablename('core_menu') . " WHERE pid = 0 AND is_display = 1 ORDER BY is_system DESC, displayorder DESC, id ASC");
 	$frames =array();
 	if(!empty($data)) {
 		foreach($data as $da) {
 			$frames[$da['name']] = array();
-			$childs = pdo_fetchall('SELECT * FROM ' . tablename('core_menu') . ' WHERE pid = :pid AND is_display = 1 ORDER BY is_system DESC, displayorder DESC, id ASC', array(':pid' => $da['id']));
+			$childs = pdo_fetchall("SELECT * FROM " . tablename('core_menu') . " WHERE pid = :pid AND is_display = 1 ORDER BY is_system DESC, displayorder DESC, id ASC", array(':pid' => $da['id']));
 			if(!empty($childs)) {
 				foreach($childs as $child) {
 					$temp = array();
 					$temp['title'] = $child['title'];
-					$grandchilds = pdo_fetchall('SELECT * FROM ' . tablename('core_menu') . ' WHERE pid = :pid AND is_display = 1 AND type = :type ORDER BY is_system DESC, displayorder DESC, id ASC', array(':pid' => $child['id'], ':type' => 'url'));
+					$grandchilds = pdo_fetchall("SELECT * FROM " . tablename('core_menu') . " WHERE pid = :pid AND is_display = 1 AND type = :type ORDER BY is_system DESC, displayorder DESC, id ASC", array(':pid' => $child['id'], ':type' => 'url'));
 					if(!empty($grandchilds)) {
 						foreach($grandchilds as $grandchild) {
 							$item = array();
@@ -100,7 +100,7 @@ function cache_build_frame_menu() {
 
 function cache_build_module_subscribe_type() {
 	global $_W;
-	$modules = pdo_fetchall("SELECT name, subscribes FROM ".tablename('modules')." WHERE subscribes <> ''");
+	$modules = pdo_fetchall("SELECT name, subscribes FROM " . tablename('modules') . " WHERE subscribes <> ''");
 	$subscribe = array();
 	if (!empty($modules)) {
 		foreach ($modules as $module) {
@@ -129,5 +129,14 @@ function cache_build_module_subscribe_type() {
 }
 
 function cache_build_platform() {
-	return pdo_query("DELETE FROM ".tablename('core_cache')." WHERE `key` LIKE 'account%' AND `key` <> 'account:ticket';");
+	return pdo_query("DELETE FROM " . tablename('core_cache') . " WHERE `key` LIKE 'account%' AND `key` <> 'account:ticket';");
+}
+
+
+function cache_build_stat_fans() {
+	global $_W;
+	$uniacid_arr = pdo_fetchall("SELECT uniacid FROM " . tablename('uni_account'));
+	foreach($uniacid_arr as $account){
+		cache_delete("stat:todaylock:{$account['uniacid']}");
+	}
 }

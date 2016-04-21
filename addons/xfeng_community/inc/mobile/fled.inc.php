@@ -143,7 +143,7 @@
 		$id = intval($_GPC['id']);
 		if ($id) {
 			$item = pdo_fetch("SELECT f.*,s.name as name FROM".tablename('xcommunity_fled')."as f left join".tablename('xcommunity_category')."as s on f.category = s.id WHERE f.id=:id",array(':id' => $id));
-			if ($item['images']) {
+			if ($item['images']&&$item['images']!='N;') {
 				$imgs = pdo_fetchall("SELECT * FROM".tablename('xcommunity_images')."WHERE id in({$item['images']})");
 			}
 			

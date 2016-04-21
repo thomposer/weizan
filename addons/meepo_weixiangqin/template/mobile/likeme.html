@@ -6,7 +6,7 @@
 <meta content="yes" name="apple-mobile-web-app-capable" />
 <meta content="black" name="apple-mobile-web-app-status-bar-style" />
 <meta content="telephone=no" name="format-detection" />
-<title>{if empty($settings['title'])}微相亲{else}{$settings['title']}{/if}喜欢我的</title>
+<title>{if empty($settings['title'])}微相亲{else}{$settings['title']}{/if}跟你打招呼的人</title>
 <link rel="stylesheet" type="text/css" href="{MEEPORES}/static/friend/css/index.css" />
 <link rel="stylesheet" href="{MEEPORES}/static/friend/css/jquery.mobile-1.4.3.css" />
 {php echo register_jssdk(false);}
@@ -16,13 +16,13 @@
 <body style="padding: 15px 10px 10px;">
 <div class="wrap">  
 <header class="mb15">
-  <h1><a href="{php echo  $this->createMobileUrl('alllist')}" class="home fright"><img src="{if empty($settings['logo'])}{MEEPORES}/static/friend/images/logo.png{else}{php echo $_W['attachurl'].$settings['logo']}{/if}"  alt="{if empty($settings['title'])}微相亲{else}{$settings['title']}{/if}"></a><a href="{php echo $this->createMobileUrl('homecenter',array('weid'=>$weid,'openid'=>$from))}" class="goback fleft" style="color:#fff">喜欢我的</a></h1>
+  <h1><a href="{php echo  $this->createMobileUrl('alllist')}" class="home fright"><img src="{if empty($settings['logo'])}{MEEPORES}/static/friend/images/logo.png{else}{php echo $_W['attachurl'].$settings['logo']}{/if}"  alt="{if empty($settings['title'])}微相亲{else}{$settings['title']}{/if}"></a><a href="{php echo $this->createMobileUrl('homecenter',array('weid'=>$weid,'openid'=>$from))}" class="goback fleft" style="color:#fff">跟你打招呼的人</a></h1>
 </header>
 <section class="likedSec mb15">
   <ul class="imgList">
-  {if empty($result)}<li style="height:100px;width:100%"><div style="font-size:20px;color:red;height:40px">太感伤了，还没有人喜欢你呢！<br><br><font style="color:#000;font-size:15px;background-color:#ffded5">尝试先去喜欢别人吧!</font></div></li>{else}
+  {if empty($result)}<li style="height:100px;width:100%"><div style="font-size:20px;color:red;height:40px">太感伤了，没人跟你打招呼！<br><br><font style="color:#000;font-size:15px;background-color:#ffded5">先跟别人打个招呼吧!</font></div></li>{else}
   {loop $result $row}  
-  <li><a class="linka" href="{php echo $this->createMobileUrl('others',array('openid'=>$row['from_user']))}" target="_blank"><img src="{if preg_match('/http:(.*)/',$row['avatar'])}{$row['avatar']} {else if preg_match('/images(.*)/',$row['avatar'])} {$_W['attachurl']}{$row['avatar']}{$row['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" alt="头像"><span>{$row['nickname']}</span></a></li>
+  <li><a class="linka" href="{php echo $this->createMobileUrl('others',array('openid'=>$row['from_user']))}" target="_blank"><img src="{if preg_match('/http:(.*)/',$row['avatar'])}{$row['avatar']} {else if preg_match('/images(.*)/',$row['avatar'])} {$_W['attachurl']}{$row['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" alt="头像"><span>{$row['nickname']}</span></a></li>
   {/loop}
   {/if}
   </ul>

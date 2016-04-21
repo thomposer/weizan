@@ -11,8 +11,7 @@
 	global $_GPC,$_W;
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 	$operation = !empty($_GPC['operation']) ? $_GPC['operation'] : 'list';
-	//判断是否注册，只有注册后，才能进入
-	$member = $this->changemember();
+
 	$region = $this->mreg();
 	if($op == 'list'){
 		//获取购物车数量
@@ -272,7 +271,8 @@
 			exit();
 		}
 		unset($d);
-		
+		//查小区编号
+	$member = $this->changemember();
 		if (checksubmit('submit')) {
 		
 
@@ -373,7 +373,21 @@
 		$params['virtual'] = $order['goodstype'] == 2 ? true : false;
 		$params['module'] = 'xfeng_community';
 		$params['title'] = $goodsTitle;
-	
+		$log = pdo_get('core_paylog', array('uniacid' => $_W['uniacid'], 'module' => $params['module'], 'tid' => $params['tid']));
+		if (empty($log)) {
+        $log = array(
+                'uniacid' => $_W['uniacid'],
+                'acid' => $_W['acid'],
+                'openid' => $_W['member']['uid'],
+                'module' => $this->module['name'], //模块名称，请保证$this可用
+                'tid' => $params['tid'],
+                'fee' => $params['fee'],
+                'card_fee' => $params['fee'],
+                'status' => '0',
+                'is_usecard' => '0',
+        );
+        pdo_insert('core_paylog', $log);
+    	}
 		$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
 		if ($styleid) {
 			include $this->template('style/style'.$styleid.'/shopping/pay');exit();

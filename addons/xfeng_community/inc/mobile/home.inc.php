@@ -28,9 +28,34 @@
 	if ($styleid == 1) {
 		//模板1 
 		$menu = pdo_fetch("SELECT * FROM".tablename('xcommunity_nav')."WHERE uniacid=:uniacid AND isshow = 1 AND status = 1 AND pcate = 0 limit 1",array(':uniacid' => $_W['uniacid']));
-		// print_r($menu);exit();
+		//print_r($list);exit();
+		
 		//二级菜单首页推荐
-		$navs = pdo_fetchall("SELECT * FROM".tablename('xcommunity_nav')."WHERE  uniacid='{$_W['uniacid']}' AND isshow =1 AND status = 1 AND pcate != 0 order by displayorder asc ");
+		$list = pdo_fetchall("SELECT * FROM".tablename('xcommunity_nav')."WHERE  uniacid='{$_W['uniacid']}' AND isshow =1 AND status = 1 AND pcate != 0 order by displayorder asc ");
+		$navs = array();
+		foreach ($list as $key => $value) {
+			$regions = unserialize($value['regionid']);
+			if ($value['enable'] == 1) {
+				$navs[$key]['title'] = $value['title'];
+			    $navs[$key]['id'] = $value['id'];
+			    $navs[$key]['thumb'] = $value['thumb'];
+			    $navs[$key]['url'] = $value['url'];
+			    $navs[$key]['icon'] = $value['icon'];
+			    $navs[$key]['bgcolor'] = $value['bgcolor'];
+			}else{
+				if (@in_array($member['regionid'], $regions)) {
+					$navs[$key]['title'] = $value['title'];
+			    	$navs[$key]['id'] = $value['id'];
+			    	$navs[$key]['thumb'] = $value['thumb'];
+			    	$navs[$key]['url'] = $value['url'];
+			    	$navs[$key]['icon'] = $value['icon'];
+			    	$navs[$key]['bgcolor'] = $value['bgcolor'];
+				}
+				
+			}
+				
+		}
+		
 	}elseif ($styleid == 2) {
 		//模板2
 		$list1 = pdo_fetchall("SELECT * FROM".tablename('xcommunity_nav')."WHERE  uniacid='{$_W['uniacid']}' AND pcate = 0 AND status = 1 order by displayorder asc ");
@@ -95,8 +120,8 @@
 			$pindex = max(1, intval($_GPC['page']));
 			$psize = 100;
 		
-			
-			$list = pdo_fetchall("SELECT * FROM".tablename('xcommunity_goods')."WHERE weid=:weid AND isrecommand =1 AND status = 1 AND type = 1 LIMIT ".($pindex - 1) * $psize.','.$psize,array(':weid' => $_W['uniacid']));
+		
+			$list = pdo_fetchall("SELECT * FROM".tablename('xcommunity_goods')."WHERE weid=:weid AND isrecommand =1 AND status = 1 AND type = 1 AND " . time() . ">=starttime and " . time() . "<=endtime LIMIT ".($pindex - 1) * $psize.','.$psize,array(':weid' => $_W['uniacid']));
 			$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_goods')."WHERE weid=:weid AND isrecommand =1 AND status = 1 AND type = 1 ",array(':weid' => $_W['uniacid']));
 
 

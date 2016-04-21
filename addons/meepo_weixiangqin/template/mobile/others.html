@@ -5,43 +5,34 @@
 <meta content="width=320, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
 
 <title>TA的资料</title>
-<link rel="stylesheet" type="text/css" href="{MEEPORES}/static/friend/css/index.css?a=".{$suijinum} />
-<link rel="stylesheet" href="{MEEPORES}/static/friend/css/jquery.mobile-1.4.3.css" />
+<link rel="stylesheet" type="text/css" href="{MEEPORES}/static/friend/css/index.css?t={php echo time()}" />
+
 {php echo register_jssdk(false);}
  
-         <!--Wap前端Joel公共函数-->
-		 <script type="text/javascript" charset="utf-8" src="{RES}/themes/js/zepto.min.js"></script>
-        <script type="text/javascript" src="{MODULE_URL}template/mobile/sweetalert.min.js"></script>
-	<link rel="stylesheet" href="{MODULE_URL}template/mobile/sweetalert.css" />
-
+<!--Wap前端Joel公共函数-->
+<script type="text/javascript" src="{MODULE_URL}template/mobile/sweetalert.min.js"></script>
+<link rel="stylesheet" href="{MODULE_URL}template/mobile/sweetalert.css" />
+<style>
+#toast {
+    display: none;
+    position: fixed;
+    padding: 9px 15px;
+    background-color: #333;
+    z-index: 8000;
+    border-radius: 5px;
+	font-size: 16px;
+    color: #ffffff;
+    line-height: 20px;
+    text-align: center;
+	
+}
+</style>
 
 <script src="{MEEPORES}/static/friend/js/love.js" ></script>
 <script type="text/javascript">
- var $jq = jQuery.noConflict(true);
-$jq(document).ready(function () {
-	//jQuery(".brand li img").live
-$jq(".hitlike").click(function(){
-		var love = $(this);
-		var id = love.attr("date");
-		var toopenid = $(".toopenid"+id).val();
-		//love.fadeOut(300);
-		$.ajax({
-			type:"POST",
-			url:"{php echo $this->createMobileUrl('likeajax')}",
-			data:{uid:id,toopenid:toopenid},
-			cache:false,
-			success:function(data){
-				
-				love.html(data);
-				//love.fadeIn(300);
-				
-			}
-		});
-		return false;
-	});
-	//});
+$(document).ready(function () {
 
-$jq("#exchange,#exchange2,#exchange3,#exchange4,#exchange5,#exchange6,#exchange7,#exchange8,#exchange9,#exchange10,#exchange11").click(function() {
+$("#exchange,#exchange2,#exchange3,#exchange4,#exchange5,#exchange6,#exchange7,#exchange8,#exchange9,#exchange10,#exchange11").click(function() {
 		var exchange = $(this);
 		var payment = exchange.attr("date");
 		var whichone = exchange.attr("num");
@@ -52,7 +43,7 @@ $jq("#exchange,#exchange2,#exchange3,#exchange4,#exchange5,#exchange6,#exchange7
 		}
 		swal({
 						title: "兑换中心",
-						text: '需要消耗'+payment+'积分!',
+						text: '需要消耗'+payment+'个积分!',
 						showCancelButton: true,
 						confirmButtonColor: "#ff5858",   
 						confirmButtonText: "确定兑换", 
@@ -101,9 +92,9 @@ $jq("#exchange,#exchange2,#exchange3,#exchange4,#exchange5,#exchange6,#exchange7
 													function(isConfirm){ 
 														if (isConfirm) { 
 															{if empty($cfg['lowurl'])}
-																	  window.location='{php echo  $this->createMobileUrl('payjifen')}';
+								 window.location='{php echo  $this->createMobileUrl('payjifen')}';
 															{else}
-																  window.location='{$cfg['lowurl']}';}
+														window.location='{$cfg['lowurl']}';
 															{/if}
 														} else {
 															swal.close();
@@ -126,9 +117,6 @@ $jq("#exchange,#exchange2,#exchange3,#exchange4,#exchange5,#exchange6,#exchange7
 	});
 });
 </script>
-<style type="text/css">
-.ui-icon-loading{display:none !important}
-</style>
 </head>
 
 <body style="padding: 15px 10px 10px;">
@@ -142,11 +130,22 @@ $jq("#exchange,#exchange2,#exchange3,#exchange4,#exchange5,#exchange6,#exchange7
   
     <div class="indexItem">
 	
-      <a href="" class="linka">
-        <img src="{if preg_match('/http:(.*)/',$res['avatar'])}{$res['avatar']} {else if preg_match('/images(.*)/',$res['avatar'])} {$_W['attachurl']}{$res['avatar']}     {else} {MEEPORES}/static/friend/images/cdhn80.jpg{/if}" alt="用户头像" id="headimg">
+      <a href="javascript:;" class="linka">
+        <img src="
+								{if $res['avatar_thumb'] != '1'}
+								{$_W['attachurl']}{$res['avatar_thumb']}  
+								{else}{if preg_match('/http:(.*)/',$res['avatar'])}{$res['avatar']} 
+								{else if preg_match('/images(.*)/',$res['avatar'])} {$_W['attachurl']}{$res['avatar']}    
+								{else}
+								{MEEPORES}/static/friend/images/cdhn80.jpg
+								{/if}{/if}" num = "{if preg_match('/http:(.*)/',$res['avatar'])}{$res['avatar']} 
+								{else if preg_match('/images(.*)/',$res['avatar'])} {$_W['attachurl']}{$res['avatar']}    
+								{else}
+								{MEEPORES}/static/friend/images/cdhn80.jpg
+								{/if}" alt="用户头像" id="headimg">
         <div class="itemc">
           <p class="hcolor" style="font-size:13px;">{php echo cutstr($res['realname'],5,true);}&nbsp;&nbsp;{if $res['gender']=='1'}男{elseif $res['gender']=='2'}女{else}保密{/if}&nbsp;&nbsp;{if $res['age']=='0'}{else}{$res['age']}{/if}&nbsp;&nbsp;&nbsp;&nbsp;{$juli}</p>
-          <p class="lcolor" style="font-size:13px;" >&nbsp;&nbsp;{$res['constellation']}&nbsp;&nbsp;{$res['nickname']}
+          <p class="lcolor" style="font-size:13px;" >&nbsp;&nbsp;{$res['constellation']}&nbsp;&nbsp;{if strlen($res['mingzu'])==1}{else}{$res['mingzu']}{/if}
 		  {if empty($res['education']) && empty($res['constellation'])}<span data-value="phone" class="phone" {if $res['telephoneconfirm']=='0'}style="background-color: #d5d5d5;"{/if}>手机认证</span>{/if}</p>
 		  
 		  <p class="lcolor" style="font-size:13px;"><span>&nbsp;&nbsp;{$res['education']}&nbsp;&nbsp;</span>
@@ -157,10 +156,11 @@ $jq("#exchange,#exchange2,#exchange3,#exchange4,#exchange5,#exchange6,#exchange7
         </div>
       </a>     
 	 
-      <div class="likebox"> 
+      <div class="likebox" style="    margin-top: 100px;"> 
 	    
-        <div class="likeit fleft"><span class="hitlike" date="{$res['id']}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$res['love']}</span></div>
-        <div class="likeit letterit fright"><a class="hitmail"  date="{$res['id']}" href="{php echo $this->createMobileUrl('hitmail',array('toname'=>$res['nickname'],'toopenid'=>$res['from_user']))}" target="__blank" style="color:#fff">聊一聊</a></div>
+        <div class="likeit2 likeit1 fleft"><span onclick="hitlikeone('{$res['id']}','{$res['from_user']}');" id="{$res['from_user']}">&nbsp;{$res['love']}</span></div>
+        <div class="likeit2 letterit fleft"><a class="hitmail"  date="{$res['id']}" href="{php echo $this->createMobileUrl('hitmail',array('toname'=>$res['nickname'],'toopenid'=>$res['from_user']))}" target="__blank" style="color:#fff">聊一聊</a></div>
+		<div class="likeit2 sayhi fleft"><span class="saihello" onclick="sayhi('{$res['id']}','{$res['from_user']}');"  >打招呼</span></div>
       </div>
     </div>
     <div class="dottedLine"></div>    
@@ -173,7 +173,7 @@ $jq("#exchange,#exchange2,#exchange3,#exchange4,#exchange5,#exchange6,#exchange7
    {if !empty($photos)}
     <ul class="piclist">
 	  {loop $photos $row}
-      <li ><img src="{$_W['attachurl']}{$row['url']}" alt="{$row['description']}" id="btn"></li>
+      <li ><img src="{php echo tomedia($row['url'])}"  class="btn"></li>
 	  {/loop}
     </ul>
    {else}
@@ -203,7 +203,6 @@ padding: 0 5px 0 20px;
 border-radius: 2px;
 margin-right: 3px;
 color: #fff;
-font: 12px/24px "寰蒋闆呴粦","Microsoft YaHei";
 font-style: normal;
 }
 </style>
@@ -215,28 +214,56 @@ font-style: normal;
     <h2>基本资料</h2>
 <div class="dottedLine"></div> 
     <ul class="basicList">
-	 <li><label for="">手机号码：</label><span {if $settings['pay_telephone']!='0' && empty($ex['telephone'])}id="exchange"{/if} date="{$settings['pay_telephone']}" num="telephone">{if $settings['pay_telephone']!='0' && empty($ex['telephone'])}点我兑换手机号码【<font style="color:red;">{$settings['pay_telephone']}</font>】{else}
+	 <li><label for="">手机号码：</label>
+	 <span {if $settings['pay_telephone']!='0' && empty($ex['telephone'])}id="exchange"{/if} date="{$settings['pay_telephone']}" num="telephone">
 	 {if !empty($res['telephone'])}
-	 {$res['telephone']}
+	 {if $settings['pay_telephone']!='0' && empty($ex['telephone'])}
+	 点我兑换手机号码【<font style="color:red;">{$settings['pay_telephone']}</font>】积分
 	 {else}
-	 未完善
+		 {if !empty($res['telephone'])}
+		 {$res['telephone']}
+		 {else}
+		 未完善
+		 {/if}
 	 {/if}
-	 {/if} </span></li>
-      <li><label for="">QQ号码：</label><span {if $settings['pay_qq']!='0' && empty($ex['qq'])}id="exchange"{/if} date="{$settings['pay_qq']}" num="qq">{if $settings['pay_qq']!='0' && empty($ex['qq'])}点我兑换qq号码【<font style="color:red;">{$settings['pay_qq']}</font>】{else}
-	 {if !empty($res['qq'])}
-	 {$res['qq']}
 	 {else}
-	 未完善
+		未完善
 	 {/if}
-	 {/if} </span></li>
-	 <li><label for="">微信号：</label><span {if $settings['pay_wechat']!='0' && empty($ex['wechat'])}id="exchange"{/if} date="{$settings['pay_wechat']}" num="wechat">{if $settings['pay_wechat']!='0' && empty($ex['wechat'])}点我兑换微信号码【<font style="color:red;">{$settings['pay_wechat']}</font>】{else}
-	 {if !empty($res['wechat'])}
-	 {$res['wechat']}
+	 </span>
+	 </li>
+      <li><label for="">QQ号码：</label>
+	  <span {if $settings['pay_qq']!='0' && empty($ex['qq'])}id="exchange"{/if} date="{$settings['pay_qq']}" num="qq">
+	  {if !empty($res['qq'])}
+		  {if $settings['pay_qq']!='0' && empty($ex['qq'])}
+		  点我兑换qq号码【<font style="color:red;">{$settings['pay_qq']}</font>】积分
+		  {else}
+			 {if !empty($res['qq'])}
+			 {$res['qq']}
+			 {else}
+			 未完善
+			 {/if}
+		  {/if} 
+	  {else}
+		未完善
+	  {/if}
+	 </span></li>
+	 <li><label for="">微信号：</label><span {if $settings['pay_wechat']!='0' && empty($ex['wechat'])}id="exchange"{/if} date="{$settings['pay_wechat']}" num="wechat">
+	{if !empty($res['wechat'])}
+		 {if $settings['pay_wechat']!='0' && empty($ex['wechat'])}
+		 点我兑换微信号码【<font style="color:red;">{$settings['pay_wechat']}</font>】积分
+		 {else}
+			 {if !empty($res['wechat'])}
+			 {$res['wechat']}
+			 {else}
+			 未完善
+			 {/if}
+		 {/if} 
 	 {else}
-	 未完善
-	 {/if}
-	 {/if} </span></li>
-      <li><label for="">身高：</label><span date="{$settings['pay_height']}" num="height"  {if $settings['pay_height']!='0' && empty($ex['height'])}id="exchange2"{/if}>{if $settings['pay_height']!='0' && empty($ex['height'])}点我兑换Ta的身高【<font style="color:red;">{$settings['pay_height']}</font>】{else}
+		未完善
+	  {/if}
+	 </span>
+	 </li>
+      <li><label for="">身高：</label><span date="{$settings['pay_height']}" num="height"  {if $settings['pay_height']!='0' && empty($ex['height'])}id="exchange2"{/if}>{if $settings['pay_height']!='0' && empty($ex['height'])}点我兑换Ta的身高【<font style="color:red;">{$settings['pay_height']}</font>】积分{else}
 	  {if $res['height']!='0' && !empty($res['height'])}
 	  {$res['height']}cm
 	  {else}
@@ -244,7 +271,7 @@ font-style: normal;
 	  {/if}
 	  {/if}</span></li>
 
-     <li><label for="">体重：</label><span date="{$settings['pay_weight']}" num="weight"  {if $settings['pay_weight']!='0' && empty($ex['weight'])}id="exchange3"{/if}>{if $settings['pay_weight']!='0' && empty($ex['weight'])}点我兑换Ta的体重【<font style="color:red;">{$settings['pay_weight']}</font>】
+     <li><label for="">体重：</label><span date="{$settings['pay_weight']}" num="weight"  {if $settings['pay_weight']!='0' && empty($ex['weight'])}id="exchange3"{/if}>{if $settings['pay_weight']!='0' && empty($ex['weight'])}点我兑换Ta的体重【<font style="color:red;">{$settings['pay_weight']}</font>】积分
 	 {else}
 	 
 	 {if $res['weight']!='0' && !empty($res['weight'])}
@@ -260,7 +287,7 @@ font-style: normal;
 	  {/if}
 	 {/if}</span></li>
 
-	 <li><label for="">车房状态：</label><span date="{$settings['pay_carhouse']}" num="carhouse"  {if $settings['pay_carhouse']!='0' && empty($ex['carhouse'])}id="exchange4"{/if}>{if $settings['pay_carhouse']!='0' && empty($ex['carstatus'])}点我兑换的车房状态【<font style="color:red;">{$settings['pay_carhouse']}</font>】{else}
+	 <li><label for="">车房状态：</label><span date="{$settings['pay_carhouse']}" num="carhouse"  {if $settings['pay_carhouse']!='0' && empty($ex['carhouse'])}id="exchange4"{/if}>{if $settings['pay_carhouse']!='0' && empty($ex['carstatus'])}点我兑换的车房状态【<font style="color:red;">{$settings['pay_carhouse']}</font>】积分{else}
 	 {if !empty($res['carstatus'])}
 	 {$res['carstatus']}、{$res['housestatus']}
 	 {else}
@@ -268,7 +295,7 @@ font-style: normal;
 	 {/if}
 	 {/if}</span></li>
 
-	  <li><label for="">职业：</label><span date="{$settings['pay_occupation']}" num="occupation"  {if $settings['pay_occupation']!='0' && empty($ex['occupation'])}id="exchange"{/if}>{if $settings['pay_occupation']!='0' && empty($ex['occupation'])}点我兑换Ta的职业【<font style="color:red;">{$settings['pay_occupation']}</font>】{else}
+	  <li><label for="">职业：</label><span date="{$settings['pay_occupation']}" num="occupation"  {if $settings['pay_occupation']!='0' && empty($ex['occupation'])}id="exchange"{/if}>{if $settings['pay_occupation']!='0' && empty($ex['occupation'])}点我兑换Ta的职业【<font style="color:red;">{$settings['pay_occupation']}</font>】积分{else}
 	   {if !empty($res['occupation'])}
 			{$res['occupation']}
       {else}
@@ -276,7 +303,7 @@ font-style: normal;
 	  {/if}
 	  {/if}</span></li>
 
-	  <li><label for="">月收入：</label><span date="{$settings['pay_revenue']}" num="revenue"  {if $settings['pay_revenue']!='0' && empty($ex['revenue'])}id="exchange5"{/if}>{if $settings['pay_revenue']!='0' && empty($ex['revenue'])}点我兑换Ta的月收入【<font style="color:red;">{$settings['pay_revenue']}</font>】{else}
+	  <li><label for="">月收入：</label><span date="{$settings['pay_revenue']}" num="revenue"  {if $settings['pay_revenue']!='0' && empty($ex['revenue'])}id="exchange5"{/if}>{if $settings['pay_revenue']!='0' && empty($ex['revenue'])}点我兑换Ta的月收入【<font style="color:red;">{$settings['pay_revenue']}</font>】积分{else}
 	   {if !empty($res['revenue'])}
 			{$res['revenue']}
       {else}
@@ -284,7 +311,7 @@ font-style: normal;
 	  {/if}
 	  {/if}</span></li>
 
-	  <li><label for="">婚姻状况：</label><span date="{$settings['pay_affectivestatus']}" num="affectivestatus"  {if $settings['pay_affectivestatus']!='0' && empty($ex['affectivestatus'])}id="exchange6"{/if}>{if $settings['pay_affectivestatus']!='0' && empty($ex['affectivestatus'])}点我兑换Ta的婚姻状态【<font style="color:red;">{$settings['pay_affectivestatus']}</font>】{else}
+	  <li><label for="">婚姻状况：</label><span date="{$settings['pay_affectivestatus']}" num="affectivestatus"  {if $settings['pay_affectivestatus']!='0' && empty($ex['affectivestatus'])}id="exchange6"{/if}>{if $settings['pay_affectivestatus']!='0' && empty($ex['affectivestatus'])}点我兑换Ta的婚姻状态【<font style="color:red;">{$settings['pay_affectivestatus']}</font>】积分{else}
 	  
        {if !empty($res['affectivestatus'])}
 			{$res['affectivestatus']}
@@ -293,7 +320,7 @@ font-style: normal;
 	  {/if}
 	  {/if}</span></li>
 
-      <li><label for="">自我介绍：</label><span date="{$settings['pay_Descrip']}" num="Descrip"  {if $settings['pay_Descrip']!='0' && empty($ex['Descrip'])}id="exchange7"{/if}>{if $settings['pay_Descrip']!='0' && empty($ex['Descrip'])}点我兑换Ta的自我介绍【<font style="color:red;">{$settings['pay_Descrip']}</font>】{else}
+      <li><label for="">自我介绍：</label><span date="{$settings['pay_Descrip']}" num="Descrip"  {if $settings['pay_Descrip']!='0' && empty($ex['Descrip'])}id="exchange7"{/if}>{if $settings['pay_Descrip']!='0' && empty($ex['Descrip'])}点我兑换Ta的自我介绍【<font style="color:red;">{$settings['pay_Descrip']}</font>】积分{else}
 	  
 	  {if !empty($res['Descrip'])}
 			{$res['Descrip']}
@@ -309,7 +336,7 @@ font-style: normal;
     <h2>理想对象要求</h2>
 	<div class="dottedLine"></div> 
     <ul class="basicList">
-      <li><label for="">身高要求：</label><span date="{$settings['pay_uheight']}" num="uheight"  {if $settings['pay_uheight']!='0' && empty($ex['uheight'])}id="exchange8"{/if}>{if $settings['pay_uheight']!='0' && empty($ex['uheight'])}点我兑换Ta的身高要求【<font style="color:red;">{$settings['pay_uheight']}</font>】
+      <li><label for="">身高要求：</label><span date="{$settings['pay_uheight']}" num="uheight"  {if $settings['pay_uheight']!='0' && empty($ex['uheight'])}id="exchange8"{/if}>{if $settings['pay_uheight']!='0' && empty($ex['uheight'])}点我兑换Ta的身高要求【<font style="color:red;">{$settings['pay_uheight']}</font>】积分
 	  {else}
 	      {if $res['uheightL']!='0' && $res['uheightH']!='0'}
 	      {$res['uheightL']}~~{$res['uheightH']}cm
@@ -322,7 +349,7 @@ font-style: normal;
 
       <li><label for="">年龄要求：</label><span date="{$settings['pay_uage']}" num="uage"  {if $settings['pay_uage']!='0' && empty($ex['uage'])}id="exchange9"{/if}>
 	  {if $settings['pay_uage']!='0' && empty($ex['uage'])}
-	  点我兑换Ta的年龄要求【<font style="color:red;">{$settings['pay_uage']}</font>】
+	  点我兑换Ta的年龄要求【<font style="color:red;">{$settings['pay_uage']}</font>】积分
 	  {else}
 	    {if strlen($res['uage']) == 4 && $res['uage'] != '0'}
 			 {if $res['uage'] == '1825'}
@@ -343,7 +370,7 @@ font-style: normal;
 	  </span>
 	  </li>  
 
-	  <li><label for="">理想星座：</label><span date="{$settings['pay_lxxingzuo']}" num="lxxingzuo"  {if $settings['pay_lxxingzuo']!='0' && empty($ex['lxxingzuo'])}id="exchange10"{/if}>{if $settings['pay_lxxingzuo']!='0' && empty($ex['lxxingzuo'])}点我兑换Ta的理想星座【<font style="color:red;">{$settings['pay_lxxingzuo']}</font>】{else}
+	  <li><label for="">理想星座：</label><span date="{$settings['pay_lxxingzuo']}" num="lxxingzuo"  {if $settings['pay_lxxingzuo']!='0' && empty($ex['lxxingzuo'])}id="exchange10"{/if}>{if $settings['pay_lxxingzuo']!='0' && empty($ex['lxxingzuo'])}点我兑换Ta的理想星座【<font style="color:red;">{$settings['pay_lxxingzuo']}</font>】积分{else}
 	  {if !empty($res['lxxingzuo'])}
 			{$res['lxxingzuo']}
       {else}
@@ -354,7 +381,7 @@ font-style: normal;
 	  </span>
 	  </li> 
 	  
-      <li><label for="">理想的Ta：</label><span date="{$settings['pay_uitsOthers']}" num="uitsOthers"  {if $settings['pay_uitsOthers']!='0' && empty($ex['uitsOthers'])}id="exchange11"{/if}>{if $settings['pay_uitsOthers']!='0' && empty($ex['uitsOthers'])}点我兑换Ta的思密达【<font style="color:red;">{$settings['pay_uitsOthers']}</font>】{else}
+      <li><label for="">理想的Ta：</label><span date="{$settings['pay_uitsOthers']}" num="uitsOthers"  {if $settings['pay_uitsOthers']!='0' && empty($ex['uitsOthers'])}id="exchange11"{/if}>{if $settings['pay_uitsOthers']!='0' && empty($ex['uitsOthers'])}点我兑换Ta的思密达【<font style="color:red;">{$settings['pay_uitsOthers']}</font>】积分{else}
 	  
 	  {if !empty($res['uitsOthers'])}
 			{$res['uitsOthers']}
@@ -370,30 +397,248 @@ font-style: normal;
   </style>
   </article>
 </section>
- <!--div class="basicbtn likeitlong mtb15"><span class="hitlike" date="{$res['id']}">被喜欢了{$res['love']}次哦</div-->
+
  <div class="basicbtn likeitlong mtb15"><a href="{php echo  $this->createMobileUrl('gerenshow',array('openid'=>$openid))}" target="_blank" style="color:#fff">魔方主页</a></div>
  <!-- 弹出层 -->
 <div class="open"><img src="{if preg_match('/http:(.*)/',$res['avatar'])}{$res['avatar']} {else if preg_match('/images(.*)/',$res['avatar'])} {$_W['attachurl']}{$res['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" alt="用户头像" width=300px height=300px></div>
 <!-- 弹出层 -->
-<script src="http://www.baidufe.com/fe/base/static/js/base.js?v=7a0db0e0"></script>
-<script src="http://www.baidufe.com/fe/base/static/js/weixin-api/weixin-api.js?v=12676311"></script>
-        <script >
-		$("#btn").live("click",function () { 
-       var curSrc = $(this).attr("src");
-	  // alert(id);
-		WeixinApi.ready(function(Api) {
-        // 需要播放的图片src list
-        var srcList = [
-		{loop $photoss $row}
+<div id="toast"></div>
+<script type="text/javascript">
+function hitlikeone(m,n){
+			 var love = document.getElementById(n);
+			 swal({
+			  title: "温馨提示",
+			  text: '请输入鲜花数量',
+			  type: 'input',
+			  showCancelButton: true,
+			  confirmButtonColor: "#DD6B55",  
+			  confirmButtonText: "确定",  
+			 cancelButtonText: "取消",  
+			 closeOnConfirm: false,   
+			 closeOnCancel: true,
+			  animation: "slide-from-top"
+			}, function(isConfirm){  
+			   if (isConfirm) {   
+				 var flower_num = parseInt(isConfirm);
+				 if(flower_num > 0){
+							swal({   
+								 title: "温馨提示", 
+								 text: flower_num+"朵鲜花、将消耗你"+(flower_num*{$flower_jifen})+'积分哦！',  
+								 type: "warning",  
+								 showCancelButton: true,  
+								 confirmButtonColor: "#DD6B55",  
+								 confirmButtonText: "确定送",  
+								 cancelButtonText: "不送了",  
+								 closeOnConfirm: false,   
+								 closeOnCancel: true 
+								 }, 
+								 function(isConfirm2){  
+								   
+								   if (isConfirm2) {   
+									 
+									 		$.ajax({
+												type:"POST",
+												dataType:'JSON',
+												url:"{php echo $this->createMobileUrl('likeajax')}",
+												data:{uid:m,toopenid:n,flower_num:flower_num},
+												cache:false,
+												success:function(data){
+												
+													if(data.errno == '-1'){
+														swal.close();
+													   _loading_toast._show(data.message);
+													  
+													}else if(data.errno =='-2'){
+														 swal({   
+															 title: "温馨提示", 
+															 text: "你还未完善个人资料，先去完善吧！",
+															 type: "warning",  
+															 showCancelButton: true,  
+															 confirmButtonColor: "#DD6B55",  
+															 confirmButtonText: "好的",  
+															 cancelButtonText: "知道了",  
+															 closeOnConfirm: true,   
+															 closeOnCancel: true 
+															 }, 
+															 function(isConfirm4){  
+															   if (isConfirm4) {   
+							window.location.href="{php echo  $this->createMobileUrl('userinfo')}";
+															   } else {     
+																  swal.close();
+															   } 
+															});
+													}else if(data.errno=='-3'){
+													  
+													  swal({   
+															 title: "温馨提示", 
+															 text: data.message,
+															 type: "warning",  
+															 showCancelButton: true,  
+															 confirmButtonColor: "#DD6B55",  
+															 confirmButtonText: "去充值",  
+															 cancelButtonText: "知道了",  
+															 closeOnConfirm: true,   
+															 closeOnCancel: true 
+															 }, 
+															 function(isConfirm3){  
+															   if (isConfirm3) {   
+																	{if empty($cfg['lowurl'])}
+								window.location.href="{php echo  $this->createMobileUrl('payjifen')}";
+																	{else}
+									window.location.href="{$cfg['lowurl']}";
+																	{/if}
+															   } else {     
+																  swal.close();
+															   } 
+															});
+													  
+													}else{
+														swal.close();
+														love.innerHTML = data.message;
+														_loading_toast._show("赠送成功！");
+													}
+												}
+											});
+								   } else {     
+									  swal.close();
+								   } 
+								});
+				 }else{
+				   swal.showInputError("鲜花数量必须是大于0的整数");
+				 }
+			   } else {     
+				  swal.close();
+			   } 
+			});
+			 
+    }
+function sayhi(m,n){
+	if(m=='' || n==''){
+		 //swal("温馨提示",'出错了、请重试', "error");
+		  _loading_toast._show("出错了、请重试");
+		 return;
+	}
+	swal({   
+	   title: "温馨提示", 
+	   text: "打招呼将要消耗{$cfg['sayhi_jifen']}个积分哦",
+	   type: "warning",  
+	   showCancelButton: true,  
+	   confirmButtonColor: "#DD6B55",  
+	   confirmButtonText: "确定",  
+	   cancelButtonText: "取消",  
+	   closeOnConfirm: false,   
+	   closeOnCancel: true 
+	   }, 
+	   function(isConfirm3){  
+		 if (isConfirm3) { 
+		   $.ajax({
+		type:"POST",
+		dataType:'JSON',
+		url:"{php echo $this->createMobileUrl('sayhi')}",
+		data:{uid:m,toopenid:n},
+		cache:false,
+		success:function(data){
+			if(data.errno=='-1'){
+			  swal.close();
+				 _loading_toast._show(data.message);
+			}else if(data.errno=='-2'){
+				swal({   
+				 title: "温馨提示", 
+				 text: "你还未完善个人资料，先去完善吧！",
+				 type: "warning",  
+				 showCancelButton: true,  
+				 confirmButtonColor: "#DD6B55",  
+				 confirmButtonText: "好的",  
+				 cancelButtonText: "知道了",  
+				 closeOnConfirm: true,   
+				 closeOnCancel: true 
+				 }, 
+				 function(isConfirm){  
+				   if (isConfirm) {   
+					 window.location.href="{php echo  $this->createMobileUrl('userinfo')}";
+				   } else {     
+					  swal.close();
+				   } 
+				});
+			}else if(data.errno=='-3'){
+				swal({   
+				 title: "温馨提示", 
+				 text: data.message,
+				 type: "warning",  
+				 showCancelButton: true,  
+				 confirmButtonColor: "#DD6B55",  
+				 confirmButtonText: "去充值",  
+				 cancelButtonText: "知道了",  
+				 closeOnConfirm: true,   
+				 closeOnCancel: true 
+				 }, 
+				 function(isConfirm3){  
+				   if (isConfirm3) {   
+						{if empty($cfg['lowurl'])}
+						window.location.href="{php echo  $this->createMobileUrl('payjifen')}";
+						{else}
+						window.location.href="{$cfg['lowurl']}";
+						{/if}
+				   } else {     
+					  swal.close();
+				   } 
+				});
+			}else{
+			     swal.close();
+				 _loading_toast._show("打招呼成功！");
+			}
+		}
+	});
+		 }else{
+			swal.close();
+		 }
+	});
+}
+var _loading_toast= {
+    _center: function() {
+		var _left = ($(window).width() - $("#toast").outerWidth()) / 2 + "px";
+        $("#toast").css({
+            "top": "50%",
+            "left": _left
+        });
+    },
+    _show: function(text, fun) {
+        $("#toast").html(text);
+        _loading_toast._center();
+        $("#toast").show();
+        $("#toast").bind("resize", _loading_toast._center);
+        setTimeout(function() {
+            _loading_toast._hide(fun);
+        }, 2 * 1000);
+    },
+    _hide: function(fun) {
+        $("#toast").hide();
+        $("#toast").unbind("resize");
+        if (fun) {
+            (fun)();
+        }
+    }
+};
+$(".btn").on("click",function () { 
+   var curSrc = $(this).attr("src");
+   var srcList = [
+	{loop $photoss $row}
 	"{$_W['attachurl']}{$row['url']}",
 	{/loop}
 	];
-       Api.imagePreview(curSrc, srcList);
-      });
-	  });
-
-       </script>       
-<script type="text/javascript">
+   wx.previewImage({
+		current: curSrc, // 当前显示图片的http链接
+		urls: srcList // 需要预览的图片http链接列表
+	});
+});    
+$("#headimg").on("click",function () { 
+   var b = $(this).attr("src");
+   var c = $(this).attr("num");
+   wx.previewImage({
+		current: b, // 当前显示图片的http链接
+		urls: [c] // 需要预览的图片http链接列表
+	});
+}); 
   wx.ready(function () {
     var shareData = {
     title: "{$settings['share_title']}",
@@ -437,9 +682,6 @@ font-style: normal;
     });   
     
   });
-
-
-
 function send_intergal(){
    $.ajax({
 			type:"POST",
@@ -461,7 +703,5 @@ function send_intergal(){
 			}
 		});
 }
-
-
-        </script>
-		{template 'footer'}
+</script>
+{template 'footer'}

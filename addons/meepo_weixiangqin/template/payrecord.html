@@ -23,6 +23,10 @@
 	<li><a href="{php echo $this->createWebUrl('photolist')}">图片管理</a></li>
 	<li><a href="{php echo $this->createWebUrl('tjapply')}">推荐记录</a></li>
     <li><a href="{php echo $this->createWebUrl('set')}">基本设置</a></li>
+	<li><a href="{php echo $this->createWebUrl('sayhi_content')}">打招呼语设置</a></li>
+	<li><a href="{php echo $this->createWebUrl('flower_record')}">送花记录</a></li>
+	<li><a href="{php echo $this->createWebUrl('sayhi_record')}">打招呼记录</a></li>
+	<li><a href="{php echo $this->createWebUrl('share_record')}">分享记录</a></li>
 </ul>
 {if $operation == 'display'}
 <div class="panel panel-info">
@@ -70,7 +74,7 @@
 					<th>订单编号</th>
 					<th style="width:300px">微信支付订单号</th>
 					<th>充值费用</th>
-					<th>充值方式</th>
+					<th>支付方式</th>
 					<th>充值时间</th>
 				</tr>
 			</thead>

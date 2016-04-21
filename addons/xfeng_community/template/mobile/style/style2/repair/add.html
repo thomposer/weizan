@@ -265,7 +265,7 @@
 <body>
     <header id="header">
         <div class="header_div">
-            <div id="left_div" onClick="window.location.href='{php echo $this->createMobileUrl('repair',array('op' => 'list'))}'"></div>
+            <div id="left_div" onClick="window.location.href='{php echo $this->createMobileUrl('home')}'"></div>
             <div id="middle_div">
                 <h1 id="title">我要报修</h1></div>
             <div id="right_div">
@@ -280,7 +280,7 @@
             <div class="weui_cell weui_cell_select">
                 <div class="weui_cell_bd weui_cell_primary">
                     <select class="weui_select" name="category" id="category">
-                        <option>请选择报修类型</option>
+                        <option value='0'>请选择报修类型</option>
                         {loop $categories $category}
                         <option value="{$category['name']}" {if $category['name']==$item['category']} selected{/if}>{$category['name']}</option>
                         {/loop}
@@ -292,7 +292,7 @@
                     <label class="weui_label">地址</label>
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
-                    <input class="weui_input" type="text" value="{$member['address']}" id="address" />
+                    <input class="weui_input" type="text" value="{$region['city']}{$region['dist']}{$region['title']}{$member['address']}" id="address" />
                 </div>
             </div>
             <div class="weui_cell">
@@ -377,6 +377,10 @@
                 return false
             };
             var category = $("#category").val();
+            if (category == '0') {
+                alert('请选择报修类型');
+                return false
+            };
             var address = $("#address").val();
             var picIds ='';
             $('input[name="picIds[]"]').each(function(){

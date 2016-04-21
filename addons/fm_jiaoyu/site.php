@@ -28,14 +28,12 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 	public $table_set = 'wx_school_set';
 	public $table_leave = 'wx_school_leave';
 	public $table_notice = 'wx_school_notice';
+	public $table_bjq = 'wx_school_bjq';
+	public $table_media = 'wx_school_media';
+	public $table_dianzan = 'wx_school_dianzan';	
 	
 	// ===============================================
 		
-	// public function doWebUpgrade(){
-		// global $_W, $_GPC;
-		// include_once 'sys/upgrade.php';
-		// echo 'upgraded';
-	// }
 	
 	// 载入逻辑方法
 	private function getLogic($_name, $type = "web", $auth = false) {
@@ -64,6 +62,10 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 	public function doWebIndexajax() {
 		$this->getLogic ( __FUNCTION__, 'web' );
 	}	
+
+    public function doWebUpgrade() {
+        $this->getLogic ( __FUNCTION__, 'web' ); 
+    }
 	
 	// 分类管理
 	public function doWebSemester() {
@@ -169,6 +171,10 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 	}
  	// 异步加载
 	public function doMobileIndexajax() {
+		$this->getLogic ( __FUNCTION__, 'mobile' );
+	}
+
+	public function doMobileBjqajax() {
 		$this->getLogic ( __FUNCTION__, 'mobile' );
 	}	
 	
@@ -323,8 +329,48 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 
     public function doMobileSnotice() {	
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
-	}	
+	}
+
+    public function doMobileZuoye() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileZuoyelist() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
 	
+    public function doMobileSzuoye() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileSzuoyelist() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}	
+
+    public function doMobileZfabu() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileBjqfabu() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileSbjqfabu() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileBjq() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileSbjq() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileMybjqinfo() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}	
+		
 	// ====================== teacher =====================	
 	
 
@@ -414,68 +460,97 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		$res = ihttp_post('https://api.weixin.qq.com/cgi-bin/message/template/send?access_token='.$access_token,$postarr);
 		return true;
 	}
-
-    public function doWebsendMobileQfMsg() {
+	
+	private function sendMobileBjqshtz($schoolid, $weid, $shername, $bj_id) {
 		global $_GPC,$_W;
-		$groupid = $_GPC['gid'];
-		$id = $_GPC['id'];
-		$rid = $_GPC['rid'];
-		$url = urldecode($_GPC['url']);
-		$uniacid = $_W['uniacid'];
-		if (!empty($groupid) || $groupid <> 0) {
-			$w = " AND id = '{$groupid}'";
-		}
-		$pindex = max(1, intval($_GPC['page']));
-		$psize = 20;
-		$a = $item = pdo_fetch("SELECT * FROM ".tablename('site_article')." WHERE id = :id" , array(':id' => $id));
-		
-		if ($groupid == -1) {
-			
-			$userinfo = pdo_fetchall("SELECT openid FROM ".tablename('mc_mapping_fans')." WHERE uniacid = '{$_W['uniacid']}' ORDER BY updatetime DESC, fanid DESC LIMIT ".($pindex - 1) * $psize.','.$psize);
-			$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . " WHERE uniacid = '{$_W['uniacid']}'");
-		}elseif ($groupid == -2) {
-			
-			$userinfo = pdo_fetchall("SELECT from_user FROM ".tablename('fm_photosvote_provevote')." WHERE uniacid = '{$_W['uniacid']}' AND rid = '{$rid}' ORDER BY id DESC LIMIT ".($pindex - 1) * $psize.','.$psize);
-			$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('fm_photosvote_provevote') . " WHERE uniacid = '{$_W['uniacid']}' AND rid = '{$rid}' ");
-		}elseif ($groupid == -3) {
-			
-			$userinfo = pdo_fetchall("SELECT distinct(from_user) FROM ".tablename('fm_photosvote_votelog')." WHERE uniacid = '{$_W['uniacid']}' AND rid = '{$rid}'  ORDER BY id DESC LIMIT ".($pindex - 1) * $psize.','.$psize);
-			$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('fm_photosvote_votelog') . " WHERE uniacid = '{$_W['uniacid']}' AND rid = '{$rid}' ");
-		}else {
-			$userinfo = pdo_fetchall("SELECT openid FROM ".tablename('mc_mapping_fans')." WHERE uniacid = '{$_W['uniacid']}' ORDER BY updatetime DESC, fanid DESC LIMIT ".($pindex - 1) * $psize.','.$psize);
-			$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . " WHERE uniacid = '{$_W['uniacid']}'");
-		}
-		
-		
-		$pager = pagination($total, $pindex, $psize);
+		$msgtemplate = pdo_fetch("SELECT * FROM ".tablename($this->table_set)." WHERE :weid = weid", array(':weid' => $weid));	
+        $template_id = $msgtemplate['bjqshtz'];//消息模板id 微信的模板id
+		$bzj = pdo_fetch("SELECT * FROM " . tablename($this->table_classify) . " where weid = :weid And schoolid = :schoolid And sid = :sid", array(':weid' => $weid, ':schoolid' => $schoolid, ':sid' => $bj_id));	
+		$teachers = pdo_fetch("SELECT * FROM " . tablename($this->table_teachers) . " where weid = :weid AND id = :id", array(':weid' => $weid, ':id' => $bzj['tid']));	
 
-		//$userinfo = pdo_fetchall("SELECT * FROM ".tablename('fm_autogroup_members')." WHERE uniacid = '{$_W['uniacid']}' $uw ORDER BY id DESC");
-		$fmqftemplate = pdo_fetch("SELECT fmqftemplate FROM ".tablename($this->table_reply_huihua)." WHERE rid = :rid LIMIT 1", array(':rid' => $rid));
-		//message($fmqftemplate['fmqftemplate']);
-		foreach ($userinfo as $mid => $u) {
-			if (empty($u['from_user'])) {
-				$from_user = $u['openid'];
-			}else {
-				$from_user = $u['from_user'];
-			}
-			include 'mtemplate/fmqf.php';
-
-			if (!empty($template_id)) {
-				$this->sendtempmsg($template_id, $url, $data, '#FF0000', $from_user);
-			}
-			if (($psize-1) == $mid) {
-				$mq =  round((($pindex - 1) * $psize/$total)*100);
-				$msg = '正在发送，目前：<strong style="color:#5cb85c">'.$mq.' %</strong>';
-				
-				$page = $pindex + 1;
-				$to = $this->createWebUrl('sendMobileQfMsg', array('gid' => $groupid,'rid' => $rid,'id' => $id,'url' => $url, 'page' => $page));
-				message($msg, $to);
-			}
-		}
+	    $leibie = "班级圈内容审核";
+		$zhuangtai = "未通过";
+		$ttime = date('Y-m-d H:i:s', TIMESTAMP);
+		$body = "点击本条消息快速审核 ";
+	    $datas=array(
+		'name'=>array('value'=>$_W['account']['name'],'color'=>'#173177'),
+		'first'=>array('value'=>'老师您好,您收到了一条班级圈内容审核提醒','color'=>'#FF9E05'),
+		'keyword1'=>array('value'=>$leibie,'color'=>'#1587CD'),
+		'keyword2'=>array('value'=>$shername,'color'=>'#FF9E05'),
+		'keyword3'=>array('value'=>$zhuangtai,'color'=>'#1587CD'),
+		'keyword4'=>array('value'=>$ttime,'color'=>'#1587CD'),
+		'remark'=> array('value'=>$body,'color'=>'#FF9E05')
+	     );
+	    $data=json_encode($datas); //发送的消息模板数据
+        
+		$url =  $_W['siteroot'] .'app/'.$this->createMobileUrl('bjq', array('schoolid' => $schoolid, 'bj_id' => $bj_id));
 		
-		message('发送成功！', $this->createWebUrl('fmqf', array('rid' => $rid)));
+
+		if (!empty($template_id)) {
+			$this->sendtempmsg($template_id, $url, $data, '#FF0000', $teachers['openid']);
+		}
 	}
 
+	private function sendMobileBjqshjg($schoolid, $weid, $shername, $toopenid) {
+		global $_GPC,$_W;
+		$msgtemplate = pdo_fetch("SELECT * FROM ".tablename($this->table_set)." WHERE :weid = weid", array(':weid' => $weid));	
+        $template_id = $msgtemplate['bjqshjg'];//消息模板id 微信的模板id
+
+	    $leibie = "班级圈内容审核";
+		$zhuangtai = "审核通过";
+		$ttime = date('Y-m-d H:i:s', TIMESTAMP);
+		$body = "点击本条消息快速查看 ";
+	    $datas=array(
+		'name'=>array('value'=>$_W['account']['name'],'color'=>'#173177'),
+		'first'=>array('value'=>'您好'.$shername.',您收到一条班级圈审核结果通知','color'=>'#FF9E05'),
+		'keyword1'=>array('value'=>$leibie,'color'=>'#1587CD'),
+		'keyword2'=>array('value'=>$zhuangtai,'color'=>'#FF9E05'),
+		'keyword3'=>array('value'=>$ttime,'color'=>'#1587CD'),
+		'remark'=> array('value'=>$body,'color'=>'#FF9E05')
+	     );
+	    $data=json_encode($datas); //发送的消息模板数据
+        
+		$url =  $_W['siteroot'] .'app/'.$this->createMobileUrl('sbjq', array('schoolid' => $schoolid));
+		
+
+		if (!empty($template_id)) {
+			$this->sendtempmsg($template_id, $url, $data, '#FF0000', $toopenid);
+		}
+	}	
+	
+	private function sendMobileZuoye($notice_id, $schoolid, $weid, $tname, $bj_id) {
+		global $_GPC,$_W;
+		$msgtemplate = pdo_fetch("SELECT * FROM ".tablename($this->table_set)." WHERE :weid = weid", array(':weid' => $weid));	
+		$notice = pdo_fetch("SELECT * FROM ".tablename($this->table_notice)." WHERE :weid = weid AND :id = id AND :schoolid = schoolid", array(':weid' => $weid, ':id' => $notice_id, ':schoolid' => $schoolid));
+
+        $template_id = $msgtemplate['zuoye'];//消息模板id 微信的模板id
+		$category = pdo_fetchall("SELECT * FROM " . tablename($this->table_classify) . " WHERE :weid = weid AND :schoolid =schoolid", array(':weid' => $weid, ':schoolid' => $schoolid), 'sid');
+					
+		$userinfo = pdo_fetchall("SELECT * FROM ".tablename($this->table_students)." where weid = :weid And schoolid = :schoolid And bj_id = :bj_id",array(':weid'=>$weid, ':schoolid'=>$schoolid, ':bj_id'=>$notice['bj_id']));
+				
+		foreach ($userinfo as $key => $value) {
+								
+			$openid = pdo_fetchcolumn("select openid from ".tablename($this->table_user)." where sid = '{$value['id']}' ");  
+                
+            $url =  $_W['siteroot'] .'app/'.$this->createMobileUrl('szuoye', array('schoolid' => $schoolid,'id' => $notice_id));
+		    
+			$name  = "{$tname}老师";
+			$title ="{$category[$notice['km_id']]['sname']}老师{$tname}发来一条作业消息!";
+			$bjname  = "{$category[$notice['bj_id']]['sname']}";
+			$body  = "点击本条消息查看详情 ";
+			$datas=array(
+				'name'=>array('value'=>$_W['account']['name'],'color'=>'#173177'),
+				'first'=>array('value'=>$title,'color'=>'#1587CD'),
+				'keyword1'=>array('value'=>$bjname,'color'=>'#1587CD'),
+				'keyword2'=>array('value'=>$notice['title'],'color'=>'#2D6A90'),
+				'remark'=> array('value'=>$body,'color'=>'#FF9E05')
+						);
+			$data = json_encode($datas); //发送的消息模板数据
+			
+			$this->sendtempmsg($template_id, $url, $data, '#FF0000', $openid);
+		}
+	}
+	
 	private function sendMobileXytz($notice_id, $schoolid, $weid, $tname, $groupid) {
 		global $_GPC,$_W;
 		$msgtemplate = pdo_fetch("SELECT * FROM ".tablename($this->table_set)." WHERE :weid = weid", array(':weid' => $weid));	
@@ -541,6 +616,42 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		}
 	}	
 
+	private function sendMobileFxtz($schoolid, $weid, $tname, $bj_id) {
+		global $_GPC,$_W;
+		$msgtemplate = pdo_fetch("SELECT * FROM ".tablename($this->table_set)." WHERE :weid = weid", array(':weid' => $weid));	
+        $template_id = $msgtemplate['bjtz'];//消息模板id 微信的模板id
+		$bname = pdo_fetch("SELECT * FROM ".tablename($this->table_classify)." WHERE :weid = weid AND :schoolid =schoolid And :sid = sid", array(':weid' => $weid, ':schoolid' => $schoolid, ':sid' => $bj_id));
+		$pindex = max(1, intval($_GPC['page']));
+		$psize = 20;
+		
+		$userinfo = pdo_fetchall("SELECT * FROM ".tablename($this->table_students)." where weid = :weid And schoolid = :schoolid And bj_id = :bj_id",array(':weid'=>$weid, ':schoolid'=>$schoolid, ':bj_id'=>$bj_id));	
+		
+		foreach ($userinfo as $key => $value) {
+			
+			$openid = pdo_fetchcolumn("select openid from ".tablename($this->table_user)." where sid = '{$value['id']}' ");
+			$s_name = pdo_fetchcolumn("select s_name from ".tablename($this->table_students)." where id = '{$value['id']}' ");
+
+			$name  = "班主任-{$tname}";
+			$title = "{$s_name}家长，您收到一条学生放学通知";
+			$bjname  = "{$bname['sname']}";
+			$ttime = date('Y-m-d H:i:s', TIMESTAMP);
+			$notice  = "本班级已经放学，请家长注意学生放学后动态，确认是否安全回家";
+			$body  = "";
+			$datas=array(
+				'name'=>array('value'=>$_W['account']['name'],'color'=>'#173177'),
+				'first'=>array('value'=>$title,'color'=>'#FF9E05'),
+				'keyword1'=>array('value'=>$bjname,'color'=>'#1587CD'),
+				'keyword2'=>array('value'=>$name,'color'=>'#2D6A90'),
+				'keyword3'=>array('value'=>$ttime,'color'=>'#1587CD'),
+				'keyword4'=>array('value'=>$notice,'color'=>'#1587CD'),
+				'remark'=> array('value'=>$body,'color'=>'#FF9E05')
+						);
+			$data = json_encode($datas); //发送的消息模板数据
+			$url = "";
+			$this->sendtempmsg($template_id, $url, $data, '#FF0000', $openid);
+		}
+	}	
+	
 	private function sendMobileBjtz($notice_id, $schoolid, $weid, $tname, $bj_id) {
 		global $_GPC,$_W;
 		$msgtemplate = pdo_fetch("SELECT * FROM ".tablename($this->table_set)." WHERE :weid = weid", array(':weid' => $weid));	
@@ -885,7 +996,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
             }
         }
         if ($count == 0) {
-            $msg = "名字有重复哦！";
+            $msg = "有重复录入的成员，请检查！";
         } else {
             $msg = 1;
         }
@@ -942,7 +1053,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		$insert['uid'] = 0;
 		$insert['thumb'] = 'images/global/avatars/avatar_3.jpg';
 
-        $assess = pdo_fetch("SELECT * FROM " . tablename('wx_school_teachers') . " WHERE tname=:tname AND weid=:weid And schoolid=:schoolid LIMIT 1", array(':tname' => $strs[1], ':weid' => $_W['uniacid'], ':schoolid'=> $array['schoolid']));
+        $assess = pdo_fetch("SELECT * FROM " . tablename('wx_school_teachers') . " WHERE tname=:tname AND mobile=:mobile AND weid=:weid And schoolid=:schoolid LIMIT 1", array(':tname' => $strs[1], ':mobile' => $strs[4], ':weid' => $_W['uniacid'], ':schoolid'=> $array['schoolid']));
 
         if (empty($assess)) {
             return pdo_insert('wx_school_teachers', $insert);
@@ -986,7 +1097,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		$insert['area'] = '';
 		$insert['own'] = '';
 
-        $students = pdo_fetch("SELECT * FROM " . tablename('wx_school_students') . " WHERE s_name=:s_name AND weid=:weid And schoolid=:schoolid LIMIT 1", array(':s_name' => $strs[1], ':weid' => $_W['uniacid'], ':schoolid'=> $array['schoolid']));
+        $students = pdo_fetch("SELECT * FROM " . tablename('wx_school_students') . " WHERE s_name=:s_name AND mobile=:mobile AND weid=:weid And schoolid=:schoolid LIMIT 1", array(':s_name' => $strs[1], ':mobile' => $strs[4], ':weid' => $_W['uniacid'], ':schoolid'=> $array['schoolid']));
 
         if (empty($students)) {
             return pdo_insert('wx_school_students', $insert);
@@ -1015,6 +1126,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
         $insert['bj_id'] = empty($banji) ? 0 : intval($banji['sid']);
         $insert['km_id'] = empty($kemu) ? 0 : intval($kemu['sid']);		
         $insert['my_score'] = $strs[6];
+		$insert['info'] = $strs[7];
 		$insert['schoolid'] = $array['schoolid'];
         $insert['weid'] = $_W['uniacid'];
 
@@ -1091,113 +1203,4 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
             }
         }
     }	
-}
-if(!function_exists('paginationm')) {
-	/**
-	 * 生成分页数据
-	 * @param int $currentPage 当前页码
-	 * @param int $totalCount 总记录数
-	 * @param string $url 要生成的 url 格式，页码占位符请使用 *，如果未写占位符，系统将自动生成
-	 * @param int $pageSize 分页大小
-	 * @return string 分页HTML
-	 */
-	function paginationm($tcount, $pindex, $psize = 15, $url = '', $context = array('before' => 5, 'after' => 4, 'ajaxcallback' => '')) {
-		global $_W;
-		$pdata = array(
-			'tcount' => 0,
-			'tpage' => 0,
-			'cindex' => 0,
-			'findex' => 0,
-			'pindex' => 0,
-			'nindex' => 0,
-			'lindex' => 0,
-			'options' => ''
-		);
-		if($context['ajaxcallback']) {
-			$context['isajax'] = true;
-		}
-
-		$pdata['tcount'] = $tcount;
-		$pdata['tpage'] = ceil($tcount / $psize);
-		if($pdata['tpage'] <= 1) {
-			return '';
-		}
-		$cindex = $pindex;
-		$cindex = min($cindex, $pdata['tpage']);
-		$cindex = max($cindex, 1);
-		$pdata['cindex'] = $cindex;
-		$pdata['findex'] = 1;
-		$pdata['pindex'] = $cindex > 1 ? $cindex - 1 : 1;
-		$pdata['nindex'] = $cindex < $pdata['tpage'] ? $cindex + 1 : $pdata['tpage'];
-		$pdata['lindex'] = $pdata['tpage'];
-
-		if($context['isajax']) {
-			if(!$url) {
-				$url = $_W['script_name'] . '?' . http_build_query($_GET);
-			}
-			$pdata['faa'] = 'href="javascript:;" onclick="p(\'' . $_W['script_name'] . $url . '\', \'' . $pdata['findex'] . '\', ' . $context['ajaxcallback'] . ')"';
-			$pdata['paa'] = 'href="javascript:;" onclick="p(\'' . $_W['script_name'] . $url . '\', \'' . $pdata['pindex'] . '\', ' . $context['ajaxcallback'] . ')"';
-			$pdata['naa'] = 'href="javascript:;" onclick="p(\'' . $_W['script_name'] . $url . '\', \'' . $pdata['nindex'] . '\', ' . $context['ajaxcallback'] . ')"';
-			$pdata['laa'] = 'href="javascript:;" onclick="p(\'' . $_W['script_name'] . $url . '\', \'' . $pdata['lindex'] . '\', ' . $context['ajaxcallback'] . ')"';
-		} else {
-			if($url) {
-				$pdata['faa'] = 'href="?' . str_replace('*', $pdata['findex'], $url) . '"';
-				$pdata['paa'] = 'href="?' . str_replace('*', $pdata['pindex'], $url) . '"';
-				$pdata['naa'] = 'href="?' . str_replace('*', $pdata['nindex'], $url) . '"';
-				$pdata['laa'] = 'href="?' . str_replace('*', $pdata['lindex'], $url) . '"';
-			} else {
-				$_GET['page'] = $pdata['findex'];
-				$pdata['faa'] = 'href="' . $_W['script_name'] . '?' . http_build_query($_GET) . '"';
-				$_GET['page'] = $pdata['pindex'];
-				$pdata['paa'] = 'href="' . $_W['script_name'] . '?' . http_build_query($_GET) . '"';
-				$_GET['page'] = $pdata['nindex'];
-				$pdata['naa'] = 'href="' . $_W['script_name'] . '?' . http_build_query($_GET) . '"';
-				$_GET['page'] = $pdata['lindex'];
-				$pdata['laa'] = 'href="' . $_W['script_name'] . '?' . http_build_query($_GET) . '"';
-			}
-		}
-
-		$html = '<div class="pagination pagination-centered"><ul class="pagination pagination-centered">';
-		if($pdata['cindex'] > 1) {
-			$html .= "<li><a {$pdata['faa']} class=\"pager-nav\">首页</a></li>";
-			$html .= "<li><a {$pdata['paa']} class=\"pager-nav\">&laquo;上一页</a></li>";
-		}
-		//页码算法：前5后4，不足10位补齐
-		if(!$context['before'] && $context['before'] != 0) {
-			$context['before'] = 5;
-		}
-		if(!$context['after'] && $context['after'] != 0) {
-			$context['after'] = 4;
-		}
-
-		if($context['after'] != 0 && $context['before'] != 0) {
-			$range = array();
-			$range['start'] = max(1, $pdata['cindex'] - $context['before']);
-			$range['end'] = min($pdata['tpage'], $pdata['cindex'] + $context['after']);
-			if ($range['end'] - $range['start'] < $context['before'] + $context['after']) {
-				$range['end'] = min($pdata['tpage'], $range['start'] + $context['before'] + $context['after']);
-				$range['start'] = max(1, $range['end'] - $context['before'] - $context['after']);
-			}
-			for ($i = $range['start']; $i <= $range['end']; $i++) {
-				if($context['isajax']) {
-					$aa = 'href="javascript:;" onclick="p(\'' . $_W['script_name'] . $url . '\', \'' . $i . '\', ' . $context['ajaxcallback'] . ')"';
-				} else {
-					if($url) {
-						$aa = 'href="?' . str_replace('*', $i, $url) . '"';
-					} else {
-						$_GET['page'] = $i;
-						$aa = 'href="?' . http_build_query($_GET) . '"';
-					}
-				}
-				$html .= ($i == $pdata['cindex'] ? '<li class="active"><a href="javascript:;">' . $i . '</a></li>' : "<li><a {$aa}>" . $i . '</a></li>');
-			}
-		}
-
-		if($pdata['cindex'] < $pdata['tpage']) {
-			$html .= "<li><a {$pdata['naa']} class=\"pager-nav\">下一页&raquo;</a></li>";
-			$html .= "<li><a {$pdata['laa']} class=\"pager-nav\">尾页</a></li>";
-		}
-		$html .= '</ul></div>';
-		return $html;
-	}
 }

@@ -24,7 +24,7 @@
     </head>
     <body>
         <div class="weui_cells weui_cells_access" style="margin-bottom:60px">
-            <a class="weui_cell" href="javascript:;">
+            <a class="weui_cell" href="{php echo $this->createMobileUrl('member',array('op' => 'my'))}">
                 <div class="weui_cell_hd"><img src="{$userinfo['headimgurl']}" alt="" style="width:60px;height:60px;border-radius: 6px;margin-right:10px;display:block"></div>
                 <div class="weui_cell_bd weui_cell_primary">
                     <p>{$userinfo['nickname']}</p>
@@ -42,7 +42,7 @@
                 <div class="weui_cell_ft"></div>
             </a>
              <a style="height:20px;width:100%;background-color: #efeef4;display:block"></a>
-            {if $menus['repair']['status']}
+           
             <a class="weui_cell" href="{php echo $this->createMobileUrl('repair',array('op' => 'my'))}">
                 <div class="weui_cell_hd"><img src="{MODULE_URL}template/mobile/style/style1/static/image/weixiu.png" alt="" style="width:30px;margin-right:5px;display:block"></div>&nbsp;&nbsp;
                 <div class="weui_cell_bd weui_cell_primary">
@@ -50,8 +50,8 @@
                 </div>
                 <div class="weui_cell_ft"></div>
             </a>
-            {/if}
-            {if $menus['report']['status']}
+            
+            
             <a class="weui_cell" href="{php echo $this->createMobileUrl('report',array('op' => 'my'))}">
                 <div class="weui_cell_hd"><img src="{MODULE_URL}template/mobile/style/style1/static/image/tousu.png" alt="" style="width:30px;margin-right:5px;display:block"></div>&nbsp;&nbsp;
                 <div class="weui_cell_bd weui_cell_primary">
@@ -59,7 +59,7 @@
                 </div>
                 <div class="weui_cell_ft"></div>
             </a>
-            {/if}
+         
             {if $menus['fled']['status']}
             <a class="weui_cell" href="{php echo $this->createMobileUrl('fled',array('op' => 'my'))}">
                 <div class="weui_cell_hd"><img src="{MODULE_URL}template/mobile/style/style1/static/image/ershou.png" alt="" style="width:30px;margin-right:5px;display:block"></div>&nbsp;&nbsp;
@@ -122,6 +122,25 @@
                 <div class="weui_cell_hd"><img src="{MODULE_URL}template/mobile/style/style1/static/image/dingdan.png" alt="" style="width:30px;margin-right:5px;display:block"></div>&nbsp;&nbsp;
                 <div class="weui_cell_bd weui_cell_primary">
                     <p>我的团购</p>
+                </div>
+                <div class="weui_cell_ft"></div>
+            </a>
+            {/if}
+            {if $menus['business']['status']}
+            <a class="weui_cell" href="{php echo $this->createMobileUrl('business',array('op' => 'coupon','operation' => 'mycoupon'))}">
+                <div class="weui_cell_hd"><img src="{MODULE_URL}template/mobile/style/style1/static/image/dingdan.png" alt="" style="width:30px;margin-right:5px;display:block"></div>&nbsp;&nbsp;
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>我的团购券</p>
+                </div>
+                <div class="weui_cell_ft"></div>
+            </a>
+            {/if}
+            {if $menus['government']['status']}
+            <a style="height:20px;width:100%;background-color: #efeef4;display:block"></a>
+            <a class="weui_cell" href="./index.php?i={$_W['uniacid']}&c=entry&do=govern&op=my&m=xiaofeng_government">
+                <div class="weui_cell_hd"><img src="{MODULE_URL}template/mobile/style/style1/static/image/dingdan.png" alt="" style="width:30px;margin-right:5px;display:block"></div>&nbsp;&nbsp;
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>我的政务</p>
                 </div>
                 <div class="weui_cell_ft"></div>
             </a>

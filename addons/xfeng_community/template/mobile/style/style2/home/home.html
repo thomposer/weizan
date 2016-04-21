@@ -4,6 +4,7 @@
 <title>{$region['title']}</title>
 <link rel="stylesheet" type="text/css" href="{MODULE_URL}template/mobile/style/style1/static/css/home.css" />
 <link rel="stylesheet" type="text/css" href="{MODULE_URL}template/mobile/style/style1/static/css/style.css" />
+
 <!--组件依赖js begin-->
     <script type="text/javascript" src="{MODULE_URL}template/mobile/style/style1/static/js/zepto.js"></script>
     <script type="text/javascript" src="{MODULE_URL}template/mobile/style/style1/static/js/zepto.extend.js"></script>
@@ -11,7 +12,13 @@
     <script type="text/javascript" src="{MODULE_URL}template/mobile/style/style1/static/js/zepto.fix.js"></script>
     <!--刷新-->
     <script type="text/javascript" src="{MODULE_URL}template/mobile/style/style1/static/js/refresh.js"></script>
+<style type="text/css">
 
+.home-box{overflow:hidden; margin:5px 8px;}
+
+.home-box > div{margin:0 14px; padding:10px 0;border-radius:5px;width: 39px;height:39px;}
+.home-box > div i{display:block; font-size:18px;color: #fff}
+</style>
 
 <body>
     <div id='slider' class='swipe'>
@@ -55,7 +62,11 @@
         <div class="border-b" style="top:44px"></div>
         <ul class="floor-menu-1">
         {loop $children[$row['id']] $item}
-            <li onclick="javascript:window.location.href='{$item['url']}'"><img src="{php echo tomedia($item['thumb'])}" style="width:39px;height:39px;">
+            <li onclick="javascript:window.location.href='{$item['url']}'">
+
+           
+        <img src="{php echo tomedia($item['thumb'])}" style="width:39px;height:39px;">
+
                 <div>{$item['title']}</div>
             </li>
             {/loop}

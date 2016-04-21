@@ -1,6 +1,11 @@
 <?php
 
-
+/**
+ * Created by PhpStorm.
+ * User: leon
+ * Date: 15/10/17
+ * Time: ÏÂÎç2:29
+ */
 class FlashHelper
 {
     /**
@@ -31,7 +36,11 @@ class FlashHelper
         }
     }
 
-    public static function fetchModeArrayIdsMap($arr, $column_name = 'id',$key = 'id'){
-
+    public static function array2Map($arr, $key = 'id'){
+        $result[] = array();
+        foreach($arr as $data){
+            $result[$data[$key]] = $data;
+        }
+        return $result;
     }
 }

@@ -2,6 +2,7 @@
 <ul class="nav nav-tabs">
     <li {if $op == 'list'}class="active"{/if}><a href="{php echo $this->createWebUrl('cost', array('op' => 'list'))}">费用列表</a></li>
     <li><a href="{php echo $this->createWebUrl('cost', array('op' => 'add'))}">费用导入</a></li>
+    <li><a href="{php echo $this->createWebUrl('cost', array('op' => 'category'))}">费用类型</a></li>
 </ul>
     <div class="panel panel-default" style="margin-top: 10px;">
         <div class="panel-body table-responsive">

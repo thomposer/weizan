@@ -209,9 +209,14 @@ if($step == 1) {
 		$groupid = intval($_GPC['groupid']);
 		$uniacid = intval($_GPC['uniacid']);
 		if (!empty($uid)) {
-						pdo_delete('uni_account_users', array('uniacid' => $uniacid, 'role' => 'owner'));
-			$account_users = array('uniacid' => $uniacid, 'uid' => $uid, 'role' => 'owner');
-			pdo_insert('uni_account_users', $account_users);
+						pdo_delete('uni_account_users', array('uniacid' => $uniacid, 'uid' => $uid));
+			$owner = pdo_get('uni_account_users', array('uniacid' => $uniacid, 'role' => 'owner'));
+			if (!empty($owner)) {
+				pdo_update('uni_account_users', array('uid' => $uid), array('uniacid' => $uniacid, 'role' => 'owner'));
+			} else {
+				$account_users = array('uniacid' => $uniacid, 'uid' => $uid, 'role' => 'owner');
+				pdo_insert('uni_account_users', $account_users);
+			}
 		}
 		$user = array(
 			'uid' => $uid,

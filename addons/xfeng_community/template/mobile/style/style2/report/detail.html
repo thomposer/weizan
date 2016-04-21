@@ -74,6 +74,9 @@ text-decoration:none;
             <li class="list-group-item">姓名：<span>{$member['realname']}</span></li>
             <li class="list-group-item">电话：<span>{php echo substr_replace($member['mobile'],'****',3,4)}</span></li>
             <li class="list-group-item">地址：<span>{$item['address']}</span></li>
+            {if $item['resolve']}
+            <li class="list-group-item">处理结果：<span>{$item['resolve']}</span></li>
+            {/if}
         </ul>
         <div id="previewImage" onclick="showImg()">
                 {if $imgs}

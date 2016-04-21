@@ -9,7 +9,8 @@
  */
 
 	global $_GPC,$_W;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 	$id = intval($_GPC['id']);
 	//查报修子类 报修主类ID=3
@@ -76,7 +77,7 @@
 		// 	$list[$key]['mobile'] = $member['mobile'];
 		// }
 		// print_r($list);exit();
-		$list = pdo_fetchall("SELECT m.content,m.comment,m.category,m.createtime,m.status,b.realname,b.mobile,m.id,r.title,r.city,r.dist,r.address FROM".tablename('xcommunity_report')."as m left join(".tablename('xcommunity_region')."as r left join".tablename('xcommunity_member')."as b on b.regionid = r.id ) on m.openid = b.openid WHERE $condtion AND m.type = 1 order by createtime desc LIMIT ".($pindex - 1) * $psize.','.$psize,$params);
+		$list = pdo_fetchall("SELECT m.content,m.comment,m.category,m.createtime,m.status,b.realname,b.mobile,m.id,r.title,r.city,r.dist,b.address FROM".tablename('xcommunity_report')."as m left join(".tablename('xcommunity_region')."as r left join".tablename('xcommunity_member')."as b on b.regionid = r.id ) on m.openid = b.openid WHERE $condtion AND m.type = 1 order by createtime desc LIMIT ".($pindex - 1) * $psize.','.$psize,$params);
 		foreach ($list as $key => $value) {
 				$list[$key]['cctime'] = date('Y-m-d H:i',$value['createtime']);
 			}
@@ -133,7 +134,7 @@
 		//$member = mc_fetch($value['memberid'],array('realname','mobile','address'));
 		$member = $this->member($item['openid']);
 		$images = $item['images'];
-		if ($images) {
+		if ($images&&$item['images'] !='N;') {
 		    $imgs   = pdo_fetchall("SELECT * FROM".tablename('xcommunity_images')."WHERE id in({$images})");
 		}
 

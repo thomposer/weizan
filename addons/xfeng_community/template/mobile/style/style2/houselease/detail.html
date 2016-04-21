@@ -149,10 +149,10 @@
         </script>
         <!--底部信息-->
         <aside class="house_foot">
-            <a href="tel:{if $set['h_status']}{$region['linkway']}{/if}">
+            <a href="tel:{if $set['h_status']}{$set['tel']}{/if}">
                 <div class="house_div">
                 {if $set['h_status']}
-                    <div class="hfoot_l"><span>{$region['linkmen']}</span><span>{$region['linkway']}</span></div>
+                    <div class="hfoot_l"><span>{$item['realname']}</span><span>{$set['tel']}</span></div>
                 {else}
                     <div class="hfoot_l"><span>{$item['realname']}</span><span>{$item['mobile']}</span></div>
                 {/if}

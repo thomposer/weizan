@@ -208,7 +208,7 @@
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
                     <select class="weui_select" id='way'>
-                        <option>请选择求租方式</option>
+                        <option value='0'>请选择求租方式</option>
                         <option value="整套求租">整套求租</option>
                         <option value="单间求租">单间求租</option>
                         <option value="床位求租">床位求租</option>
@@ -223,7 +223,7 @@
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
                     <select class="weui_select" id='way'>
-                        <option>请选择出售方式</option>
+                        <option value='0'>请选择出售方式</option>
                         <option value="整套出售">整套出售</option>
                     </select>
                 </div>
@@ -236,7 +236,7 @@
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
                     <select class="weui_select" id='way'>
-                        <option>请选择整套求购</option>
+                        <option value='0'>请选择整套求购</option>
                         <option value="整套出租">整套求购</option>
                     </select>
                 </div>
@@ -248,7 +248,7 @@
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
                     <select class="weui_select" id='way'>
-                        <option>请选择出租方式</option>
+                        <option value='0'>请选择出租方式</option>
                         <option value="整套出租">整套出租</option>
                         <option value="单间出租">单间出租</option>
                         <option value="床位出租">床位出租</option>
@@ -500,13 +500,29 @@
             };
             var category = "{$category}";
             var way = $("#way").val();
+            if (way == '0') {
+                alert('请选择租赁方式');
+                return false
+            };
             var model_room = $("#model_room").val();
             var model_hall = $("#model_hall").val();
             var model_toilet = $("#model_toilet").val();
             var floor_number = $("#floor_number").val();
             var fitment = $("#fitment").val();
+            if (fitment == '1') {
+                alert('请选择装修情况');
+                return false;
+            };
             var house = $("#house").val();
+            if (house == '1') {
+                alert('请选择住宅类别');
+                return false;
+            };
             var price_way = $("#price_way").val();
+            if (price_way == '1') {
+                alert('请选择押金方式');
+                return false;
+            };
             var checktime = $("#checktime").val();
             var realname = $("#realname").val();
             var mobile = $("#mobile").val();

@@ -47,11 +47,11 @@
 			       <textarea readonly="readonly" style="height:100px;" class="form-control" name="content" cols="70" id="content" >{$item['content']}</textarea>
 			    </div>
 			</div>
-			 {if $item['img']}
+			 {if $imgs}
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">建议图片</label>
                 <div class="col-sm-3">
-                     {loop $item['img'] $value}
+                     {loop $imgs $value}
                         <img src="{$value['src']}" style="width: 60px; height: 60px;border:1px solid white;" />
                      {/loop}
                 </div>

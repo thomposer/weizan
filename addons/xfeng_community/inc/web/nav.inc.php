@@ -8,7 +8,8 @@
  * 后台菜单设置
  */
 	global $_W,$_GPC;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 	$id = intval($_GPC['id']);
 	$regions = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}'");

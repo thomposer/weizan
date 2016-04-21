@@ -26,6 +26,8 @@
 					'liuyanhf' => trim($_GPC['liuyanhf']),
 					'zuoye' => trim($_GPC['zuoye']),
 					'bjtz' => trim($_GPC['bjtz']),
+					'bjqshjg' => trim($_GPC['bjqshjg']),
+					'bjqshtz' => trim($_GPC['bjqshtz']),
                 );
 
                 if (empty($setting)) {

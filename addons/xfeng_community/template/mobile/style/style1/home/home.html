@@ -4,6 +4,8 @@
 <title>{$region['title']}</title>
 <link rel="stylesheet" type="text/css" href="{MODULE_URL}template/mobile/style/style1/static/css/home.css" />
 <link rel="stylesheet" type="text/css" href="{MODULE_URL}template/mobile/style/style1/static/css/style.css" />
+
+
 <!--组件依赖js begin-->
     <script type="text/javascript" src="{MODULE_URL}template/mobile/style/style1/static/js/zepto.js"></script>
     <script type="text/javascript" src="{MODULE_URL}template/mobile/style/style1/static/js/zepto.extend.js"></script>
@@ -40,7 +42,10 @@
         <div class="border-b" style="top:44px"></div>
         <ul class="floor-menu-1" style="margin-top:5px;">
         {loop $navs $nav}
-        <li onclick="javascript:window.location.href='{$nav['url']}'"><img src="{php echo tomedia($nav['thumb'])}" style="width:39px;height:39px;">
+        <li onclick="javascript:window.location.href='{$nav['url']}'">
+   
+        <img src="{php echo tomedia($nav['thumb'])}" style="width:39px;height:39px;">
+
                 <div>{$nav['title']}</div>
             </li>
 

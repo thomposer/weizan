@@ -504,6 +504,12 @@ class Mon_QmShakeModuleSite extends WeModuleSite
 			die(json_encode($res));
 		}
 
+		if (empty($_W['fans']['follow'])){
+			$res['code'] = 508;
+			$res['msg'] = "请关注公众账号后再参加活动!";
+			die(json_encode($res));
+		}
+
 		$already_playCount = $this->findUserRecordCount($sid, $openid);
 
 

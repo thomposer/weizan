@@ -86,6 +86,7 @@
 					'is_rest' => intval($_GPC['is_rest']),
                     'is_sms' => intval($_GPC['is_sms']),
                     'is_hot' => intval($_GPC['is_hot']),
+					'isopen' => intval($_GPC['isopen']),
 					'style1' => intval($_GPC['style1']),
 					'ssort' => intval($_GPC['ssort']),
                     'dateline' => TIMESTAMP,

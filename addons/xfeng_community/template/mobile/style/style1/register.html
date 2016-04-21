@@ -48,6 +48,7 @@
                 </select>
             </div>
         </div> -->
+
         <div class="weui_cell">
             <div class="weui_cell_hd">
                 <label for="" class="weui_label">手机:</label>
@@ -56,6 +57,16 @@
                 <input class="weui_input" type="text" name='mobile' id='mobile' placeholder="请输入与物业处所留手机号一致" />
             </div>
         </div>
+        {if $set['code_status']}
+        <div class="weui_cell">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">注册码:</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input class="weui_input" type="text" name='code' id='code' placeholder="请输入物业提供给您的注册码" />
+            </div>
+        </div>
+        {/if} 
         {if $set['room_enable']}
         <div class="weui_cell weui_cell_select weui_select_after">
             <div class="weui_cell_hd">
@@ -72,33 +83,39 @@
         {else}
         <div class="weui_cell">
             <div class="weui_cell_hd">
-                <label for="" class="weui_label">房号:</label>
+                <label for="" class="weui_label">栋/幢:</label>
             </div>
             <div class="weui_cell_bd weui_cell_primary" style="width:50px">
-                <div style="float:left">
-                    <input style='height: 28px;width:40px' type="text" name='build' id='build' />
-                </div>
-                <div style="float:left;color:#a9a9a9;font-size:14px;line-height:28px">栋/幢</div>&nbsp;
-                <div style="float:left">
-                    <input style='height: 28px;width:40px;' type="text" name='unit' id='unit' />
-                </div>
-                <div style="float:left;color:#a9a9a9;font-size:14px;line-height:28px">单元</div>&nbsp;
-                <div style="float:left">
-                    <input style='height: 28px;width:40px;' type="text" name='room' id='room' />
-                </div>
-                <div style="float:left;color:#a9a9a9;font-size:14px;line-height:28px">室</div>
+                
+                    <input  type="text" name='build' id='build' class="weui_input" placeholder="例如：1栋就输入1"/>
+              
+               
             </div>
         </div>
-        {/if} {if $set['code_status']}
         <div class="weui_cell">
             <div class="weui_cell_hd">
-                <label for="" class="weui_label">注册码:</label>
+                <label for="" class="weui_label">单元:</label>
             </div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" type="text" name='code' id='code' placeholder="请输入物业提供给您的注册码" />
+            <div class="weui_cell_bd weui_cell_primary" style="width:50px">
+             
+             
+                    <input  type="text" name='unit' id='unit' class="weui_input" placeholder="例如：1单元就输入1"/>
+                
             </div>
         </div>
-        {/if} {if $sms['verifycode']}
+        <div class="weui_cell">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">室:</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary" style="width:50px">
+
+                    <input  type="text" name='room' id='room'  class="weui_input" placeholder="例如：101室就输入101"/>
+  
+            </div>
+        </div>
+        {/if} 
+
+        {if $sms['verifycode']}
         <div class="weui_cell">
             <div class="weui_cell_hd">
                 <label class="weui_label">验证码</label>
@@ -118,6 +135,7 @@
             </div>
         </div> -->
     </div>
+     <div class="weui_cells_tips" style="margin: 0 auto;text-align:center">(输入对应的楼栋单元房号，如1栋1单元201室)</div>
     <div class="bd spacing" style="text-align:center;margin-top:10px;">
         <a href="javascript:;" class="weui_btn weui_btn_primary" id="showToast" style="margin-bottom:-10px;width:80%">确认注册</a>
         <a href="javascript:history.go(-1)" class="weui_btn weui_btn_default" style="margin-bottom:40px;width:80%">返回</a>
@@ -174,6 +192,7 @@
                 alert('请填写正确的房间号');
                 return false
             };
+            var unit = $("#unit").val();
             var verifycode = $("#verifycode").val();
             var regionid = "{$_GPC['regionid']}";
             var type = $("#type").val();
@@ -187,6 +206,7 @@
                     mobile: mobile,
                     build: build,
                     room: room,
+                    unit:unit,
                     remark: remark,
                     regionid: regionid,
                     verifycode: verifycode,
@@ -208,16 +228,16 @@
                         $('#toast').show();
                         setTimeout(function() {
                             $('#toast').hide();
-                            window.location.reload();
+                            // window.location.reload();
                         }, 3000);
                     }
                     if (s.status == 3) {
 
-                        $('.weui_dialog_bd').text('验证码错误');
+                        $('.weui_dialog_bd').text('验证码错误或未填写');
                         $('#dialog2').show();
                         setTimeout(function() {
                             $('#dialog2').hide();
-                            window.location.reload();
+                            // window.location.reload();
                         }, 3000);
 
                     }
@@ -227,7 +247,7 @@
                         $('#dialog2').show();
                         setTimeout(function() {
                             $('#dialog2').hide();
-                            window.location.reload();
+                            // window.location.reload();
                         }, 3000);
 
                     }
@@ -237,7 +257,7 @@
                         $('#dialog2').show();
                         setTimeout(function() {
                             $('#dialog2').hide();
-                            window.location.reload();
+                            // window.location.reload();
                         }, 3000);
 
                     }
@@ -271,11 +291,51 @@
 
 
         });
-        $("#mobile").keyup(function() {
-            var mobile = $("#mobile").val();
-            // var leng = mobile.length;
-            // if (leng == 11) {alert(mobile);};
+var code_status ="{$set['code_status']}";
+if (code_status) {
+$("#code").keyup(function() {
+            var code = $("#code").val();
+            var regionid = "{$_GPC['regionid']}";
+            if (code) {
+                $.ajax({
+                    url: "{php echo $this->createMobileUrl('register',array('op' => 'room'))}",
+                    dataType: 'json',
+                    data: {
+                        code: code,
+                        regionid: regionid
+                    },
+                    success: function(s) {
+                        var data = JSON.parse(s.content);
 
+                        if (s.status == 1) {
+                            $.each(data, function(index, value) {
+                                var content = "<option value=\"" + value.room + "\" >" + value.room + "</option>";
+                                $("#address").html(content);
+                            });
+
+
+                        };
+                        if (s.status == 2) {
+                            $('.weui_dialog_bd').text('与物业提供的注册码不一致,请联系物业修改。');
+                            $('#dialog2').show();
+                            setTimeout(function() {
+                                $('#dialog2').hide();
+                                window.location.reload();
+                            }, 3000);
+                        };
+
+                    }
+                })
+            };
+
+        });
+
+
+}
+
+if (code_status == 0) {
+$("#mobile").keyup(function() {
+            var mobile = $("#mobile").val();
             var regionid = "{$_GPC['regionid']}";
             if (mobile) {
                 $.ajax({
@@ -309,7 +369,13 @@
                 })
             };
 
-        });
+        }); 
+
+};
+   
+
+        
+
     })
     </script>
     <script type="text/javascript">

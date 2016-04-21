@@ -8,7 +8,8 @@
  * 后台小区家政信息
  */
 	global $_GPC,$_W;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 	$id        = intval($_GPC['id']);
 	//查家政子类 家政主类ID=1

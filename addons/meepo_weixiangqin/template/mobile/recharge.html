@@ -32,11 +32,11 @@
 						<option value="{php echo 5*$cfg['bilv']}">5元【{php echo 5*$cfg['bilv']}积分】</option>
 						<option value="{php echo 10*$cfg['bilv']}">10元【{php echo 10*$cfg['bilv']}积分】</option>
 						<option value="{php echo 30*$cfg['bilv']}">30元【{php echo 30*$cfg['bilv']}积分】</option>
-						<option value="{php echo 80*$cfg['bilv']}">50元【{php echo 80*$cfg['bilv']}积分】</option>
-						<option value="{php echo 120*$cfg['bilv']}">100元【{php echo 120*$cfg['bilv']}积分】</option>
+						<option value="{php echo 50*$cfg['bilv']}">50元【{php echo 50*$cfg['bilv']}积分】</option>
+						<option value="{php echo 100*$cfg['bilv']}">100元【{php echo 100*$cfg['bilv']}积分】</option>
 					</select>
 				</div>
-				<span><input type="text" placeholder="请输入充值积分整数" name="money" id="money"></span>
+				<span><input type="text" placeholder="请输入充值积分数量" name="money" id="money"></span>
 			</div>
 			<input type="submit" name="submit" class="btn btn-primary btn-block" value="立即充值">
 			<input type="hidden" name="token" value="{$_W['token']}">

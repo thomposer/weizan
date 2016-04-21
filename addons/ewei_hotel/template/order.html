@@ -120,7 +120,7 @@
 					{if $row['status'] == 2}<span class="label label-default">已拒绝</span>{/if}
 					{if $row['status'] == 3}<span class="label label-success">订单完成</span>{/if}
 					{else}
-					{if $row['status'] == 0}<span class="label label-info">已支付,等待确认</span>{/if}
+					{if $row['status'] == 0}<span class="label label-info">{if $row['paytype'] == 3}已提交，待付款{else}已付款，等待确认{/if}</span>{/if}
 					{if $row['status'] == -1}<span class="label label-default">已支付,取消并退款</span>{/if}
 					{if $row['status'] == 1}<span class="label label-success">已支付,已确认</span>{/if}
 					{if $row['status'] == 2}<span class="label label-default">已支付, 已退款</span>{/if}
@@ -129,7 +129,7 @@
 				</td>
 				<td>
 					<a href="{php echo $this->createWebUrl('order', array('op'=>'edit', 'id' => $row['id'], 'roomid' => $row['roomid'], 'hotelid' => $row['hotelid'])); }" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="bottom" title="编辑"><i class="fa fa-edit"></i></a>&nbsp;
-                    <a onclick="return !confirm('此操作不可恢复，取消删除吗?');return false;" href="{php echo $this->createWebUrl('order', array('op'=>'delete', 'id' => $row['id'],'hotelid'=>$hotelid,'roomidid'=>$roomidid))}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="bottom" title="删除"><i class="fa fa-times"></i></a>
+                    <a onclick="return confirm('此操作不可恢复，取消删除吗?');return false;" href="{php echo $this->createWebUrl('order', array('op'=>'delete', 'id' => $row['id'],'hotelid'=>$hotelid,'roomidid'=>$roomidid))}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="bottom" title="删除"><i class="fa fa-times"></i></a>
 				</td>
 			</tr>
 			{/loop}

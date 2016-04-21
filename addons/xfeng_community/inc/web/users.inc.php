@@ -8,9 +8,14 @@
  * 后台管理员设置
  */
 global $_W,$_GPC;
-$GLOBALS['frames'] = $this->NavMenu();
+$do = $_GPC['do'];
+$GLOBALS['frames'] = $this->NavMenu($do);
 $op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 if ($op == 'list') {
+	$u = $this->user();
+	if ($u['regionid']) {
+		echo '小区管理员没有添加管理权限';exit();
+	}
 	$uniacid = intval($_W['uniacid']);
 	$account = pdo_fetch("SELECT * FROM ".tablename('uni_account')." WHERE uniacid = :uniacid", array(':uniacid' => $uniacid));
 	if (empty($account)) {
@@ -32,12 +37,22 @@ if ($op == 'list') {
 	include $this->template('web/users/list');
 }elseif ($op == 'add') {
 	$uid = intval($_GPC['uid']);
-
+	//判断是否是操作员
+	$u = $this->user();
+	$condition = '';
+	if ($u) {
+		$regions = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE pid=:pid",array(':pid' => $u['companyid']));
+	}
+	if ($u['regionid']) {
+		echo '小区管理员没有添加管理权限';exit();
+	}
 	if ($uid) {
 		$user = pdo_fetch("SELECT * FROM".tablename('users')."as u left join ".tablename('xcommunity_users')." as x on u.uid = x.uid WHERE u.uid=:uid",array(':uid' => $uid));
 		$companies = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE pid=:companyid",array(":companyid" => $user['companyid']));
 	}
-	$list = pdo_fetchall("SELECT * FROM".tablename('xcommunity_property')."WHERE weid=:uniacid",array(':uniacid' => $_W['uniacid']));
+	
+
+	$list = pdo_fetchall("SELECT * FROM".tablename('xcommunity_property')."WHERE weid=:uniacid $condition",array(':uniacid' => $_W['uniacid']));
 	if (empty($list)) {
 		// message('还没有添加物业',referer(),'error');exit();
 		echo '没有添加物业';exit();
@@ -45,28 +60,48 @@ if ($op == 'list') {
 	if(checksubmit()) {
 		load()->model('user');
 		$member = array();
-		if (!$uid) {
-			$member['username'] = trim($_GPC['username']);
+	
+			
 		
-			if(!preg_match(REGULAR_USERNAME, $member['username'])) {
-				message('必须输入用户名，格式为 3-15 位字符，可以包括汉字、字母（不区分大小写）、数字、下划线和句点。');
+			
+			
+			if ($uid) {
+				if (!empty($_GPC['password'])) {
+					$member['password'] = $_GPC['password'];
+				}
+			 	$member['username'] = trim($_GPC['username']);
+				
+			 }else {
+			 	if (empty($_GPC['password'])) {
+			 		echo '请输入密码';exit();
+			 	}
+				$member['password'] = $_GPC['password'];
+				$member['username'] = trim($_GPC['username']);
+				if(!preg_match(REGULAR_USERNAME, $member['username'])) {
+					message('必须输入用户名，格式为 3-15 位字符，可以包括汉字、字母（不区分大小写）、数字、下划线和句点。');
+				}
+				if(user_check(array('username' => $member['username']))) {
+					message('非常抱歉，此用户名已经被注册，你需要更换注册名称！');
+				}
 			}
-			if(user_check(array('username' => $member['username']))) {
-				message('非常抱歉，此用户名已经被注册，你需要更换注册名称！');
-			}
-		}
-		if (!empty($_GPC['password'])) {
-			$member['password'] = $_GPC['password'];
-		}
-		if(istrlen($member['password']) < 8) {
-			message('必须输入密码，且密码长度不得低于8位。');
-		}
+		
+			if (!empty($_GPC['password'])) {
+					if(istrlen($member['password']) < 8) {
+						message('必须输入密码，且密码长度不得低于8位。');
+					}
+				}
+			
 		$member['remark'] = $_GPC['remark'];
 		//$member['groupid'] = intval($_GPC['groupid']) ? intval($_GPC['groupid']) : message('请选择所属用户组');
 		$member['groupid'] = 1;
+		if ($u) {
+			$companyid = $user['companyid'];
+		}else{
+			$companyid = intval($_GPC['companyid']);
+		}
 		$data = array(
 					'uniacid' => $_W['uniacid'],
-					'companyid' => intval($_GPC['companyid']),
+					'companyid' => $companyid,
 					'regionid' => intval($_GPC['regionid']),
 				);
 		if ($uid) {
@@ -97,7 +132,7 @@ if ($op == 'list') {
 	}
 	include $this->template('web/users/add');
 }elseif($op == 'menu'){
-	$menus = $this->NavMenu();
+	$menus = $this->NavMenu($do);
 	// print_r($menus);exit();
 	$id = intval($_GPC['id']);
 	if ($id) {

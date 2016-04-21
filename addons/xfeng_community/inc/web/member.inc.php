@@ -9,7 +9,8 @@
  */
 
 	global $_GPC,$_W;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 	$id        = intval($_GPC['id']);
 	if ($op == 'list') { 
@@ -19,6 +20,9 @@
 			}
 			if (!empty($_GPC['mobile'])) {
 				$condition .= " AND m.mobile LIKE '%{$_GPC['mobile']}%'";
+			}
+			if (!empty($_GPC['openid'])) {
+				$condition .= " AND m.openid='{$_GPC['openid']}'";
 			}
 			//判断是否是操作员
 			$user = $this->user();
@@ -44,7 +48,9 @@
 			$total  = pdo_fetchcolumn('select count(*) from'.tablename("xcommunity_member")."as m left join".tablename('xcommunity_region')."as r on m.regionid = r.id where m.weid='{$_W['weid']}' $condition order by m.id desc",$params);
 			$pager  = pagination($total, $pindex, $psize);
 			if ($_GPC['export'] == 1) {
-				$this->export($list,array(
+				$sql    = "select m.*,r.title as title,r.city,r.dist from ".tablename("xcommunity_member")."as m left join".tablename('xcommunity_region')."as r on m.regionid = r.id where m.weid='{$_W['weid']}' $condition order by m.id desc ";
+				$li   = pdo_fetchall($sql,$params);
+				$this->export($li,array(
 			            "title" => "会员数据-" . date('Y-m-d-H-i', time()),
 			            "columns" => array(
 			                array(

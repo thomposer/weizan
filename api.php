@@ -351,7 +351,7 @@ class WeiZan {
 				}
 			}
 		} else {
-			if ($message['event'] == 'subscribe') {
+			if ($message['event'] == 'subscribe' || $message['event'] == 'text' || $message['event'] == 'image') {
 				$rec = array();
 				$rec['acid'] = $_W['acid'];
 				$rec['uniacid'] = $_W['uniacid'];

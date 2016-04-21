@@ -29,19 +29,12 @@
     <section class="my_photo">
         <p class="top">传几张靓照，找朋友吧！</p>
         <ol class="add_photo" id="all">
-
-            
-                <li id="add_photo" class="disbox-center add_icon" style="font-size:1.2em">点击上传</li>
-           {if !empty($photos)}
-   
-	  {loop $photos $row}
-     <li class="father"><a id="del"  onclick="return confirm('确认删除吗？');return false;" href="{php echo $this->createMobileUrl('deletephotos',array('id'=>$row['id']))}">删除</a><img src="{$_W['siteroot']}attachment/{$row['url']}" id="btn"><input type="hidden" id="check{$row['id']}" value="{$_W['attachurl']}{$row['url']}" />{if $row['status']!=1}<div class="loading" style="font-size:16px">待审核</div>{/if}</li>
-	  {/loop}
-   {/if}
-                
-
-            
-
+             <li id="add_photo" class="disbox-center add_icon" style="font-size:1.2em">点击上传</li>
+			 {if !empty($photos)}
+			  {loop $photos $row}
+			 <li class="father"><a id="del"  onclick="return confirm('确认删除吗？');return false;" href="{php echo $this->createMobileUrl('deletephotos',array('id'=>$row['id']))}">删除</a><img src="{$_W['siteroot']}attachment/{$row['url']}" class="btn"><input type="hidden" id="check{$row['id']}" value="{$_W['attachurl']}{$row['url']}" />{if $row['status']!=1}<div class="loading" style="font-size:16px">待审核</div>{/if}</li>
+			  {/loop}
+			  {/if}         
         </ol>
         <ul class="quick_pass">
             <li>1.单张照片不能超过1M且必须为JPG格式的图片</li>
@@ -147,7 +140,7 @@ function downphotos(id){
 			success:function(data){
 			   //alert(data);
                if(data != '0'){
-			         cr += '<li class="father"><img src="{$_W['attachurl']}' + data + '" id="btn"><input type="hidden" id="check{$row['id']}" value="{$_W['attachurl']}' + data + '" /><div class="loading" style="font-size:16px">{if $cfg['isstatus']==0}sucess{else}待审核{/if}</div></li>';
+			         cr += '<li class="father"><img src="{$_W['attachurl']}' + data + '" class="btn"><input type="hidden" id="check{$row['id']}" value="{$_W['attachurl']}' + data + '" /><div class="loading" style="font-size:16px">{if $cfg['isstatus']==0}sucess{else}待审核{/if}</div></li>';
 					 $('#add_photo').after(cr);
 			   }else{
 			     alert('上传失败');
@@ -176,21 +169,16 @@ function send_intergal(){
 			}
 		});
 }
-$("#btn").live("click",function (event) {
+$("body").on("click",'.btn',function () {
 	var alli = new Array();
 	var newall = new Array();
 	var b = $(this).attr('src');
-	//var b = $('#check'+id).val();
 	var allp = $(".add_photo").children("li.father");
 	for(var j=0;j<allp.length;j++){
 			alli[j]=allp.eq(j).find("input").val();
-			
-			
 			newall.push(alli[j]);
 	}
-	
 	wx.previewImage({
-       
       current:b,
       urls: newall
 	

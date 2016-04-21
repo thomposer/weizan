@@ -20,6 +20,36 @@
             transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
         }
     </style>
+    <div class="panel panel-default" id="uploaddata" style="display: none;">
+        <div class="panel-body">
+            <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
+                <input type="hidden" name="leadExcel" value="true">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="weisrc_dish" />
+                <input type="hidden" name="do" value="UploadExcel" />
+                <input type="hidden" name="ac" value="goods" />
+                <input type="hidden" name="storeid" value="{$storeid}" />
+                <a class="btn btn-primary" href="javascript:location.reload()"><i class="fa fa-refresh"></i> 刷新</a>
+                <input name="viewfile" id="viewfile" type="text" value="" style="margin-left: 40px;" class="form-control-excel" readonly>
+                <a class="btn btn-primary"><label for="unload" style="margin: 0px;padding: 0px;">上传...</label></a>
+                <input type="file" class="pull-left btn-primary span3" name="inputExcel" id="unload" style="display: none;"
+                       onchange="document.getElementById('viewfile').value=this.value;this.style.display='none';">
+                <!--<input type="file" class=" pull-left btn-primary span3" name="inputExcel">-->
+                <input type="submit" class="btn btn-primary" name="btnExcel" value="导入数据">
+                <a class="btn btn-primary" href="../addons/weisrc_dish/example/example_goods.xls">下载导入模板</a>
+            </form>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form action="./index.php" method="post" class="form-horizontal form" onsubmit="return formcheck(this)"  enctype="multipart/form-data">
+                <a class="btn btn-default" href="{php echo $this->createWebUrl('goods', array('op' => 'post', 'storeid' => $storeid))}"><i class="fa fa-plus"></i> 添加商品</a>
+                <a class="btn btn-default" href="{php echo $this->createWebUrl('category', array('op' => 'display', 'storeid' => $storeid))}"><i class="fa fa-list"></i> 商品分类</a>
+                <a class="btn btn-success" href="#" onclick="$('#uploaddata').slideToggle();">批量导入</a>
+            </form>
+        </div>
+    </div>
     <div class="panel panel-info">
         <div class="panel-heading">筛选</div>
         <div class="panel-body">
@@ -51,29 +81,6 @@
         </div>
     </div>
     <div class="panel panel-default">
-        <div class="panel-body">
-            <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
-                <input type="hidden" name="leadExcel" value="true">
-                <input type="hidden" name="c" value="site" />
-                <input type="hidden" name="a" value="entry" />
-                <input type="hidden" name="m" value="weisrc_dish" />
-                <input type="hidden" name="do" value="UploadExcel" />
-                <input type="hidden" name="ac" value="goods" />
-                <input type="hidden" name="storeid" value="{$storeid}" />
-
-                <a class="btn btn-primary" href="{php echo $this->createWebUrl('goods', array('op' => 'post', 'storeid' => $storeid))}"><i class="fa fa-plus"></i> 添加商品</a>
-                <a class="btn btn-primary" href="javascript:location.reload()"><i class="fa fa-refresh"></i> 刷新</a>
-                <input name="viewfile" id="viewfile" type="text" value="" style="margin-left: 40px;" class="form-control-excel" readonly>
-                <a class="btn btn-primary"><label for="unload" style="margin: 0px;padding: 0px;">上传...</label></a>
-                <input type="file" class="pull-left btn-primary span3" name="inputExcel" id="unload" style="display: none;"
-                       onchange="document.getElementById('viewfile').value=this.value;this.style.display='none';">
-                <!--<input type="file" class=" pull-left btn-primary span3" name="inputExcel">-->
-                <input type="submit" class="btn btn-primary" name="btnExcel" value="导入数据">
-                <a class="btn btn-primary" href="../addons/weisrc_dish/example/example_goods.xls">下载导入模板</a>
-            </form>
-        </div>
-    </div>
-    <div class="panel panel-default">
         <div class="table-responsive panel-body">
         <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
         <input type="hidden" name="storeid" value="{$storeid}" />
@@ -85,7 +92,7 @@
 					<th style="width:6%;">ID</th>
                     <th style="width:10%;">类别</th>
 					<th style="width:14%">商品名称</th>
-                    <th style="width:8%;">优惠价</th>
+                    <th style="width:8%;">价格</th>
 					<th style="width:8%;">原价</th>
                     <th style="width:8%;">单位</th>
                     <th style="width:8%;">积分</th>
@@ -104,7 +111,7 @@
                         {if !empty($category[$item['pcate']])}{$category[$item['pcate']]['name']}{/if}
                     </td>
 					<td>
-                        <img src="{$_W['attachurl']}{$item['thumb']}" width="50" onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /><br/>
+                        <img src="{php echo tomedia($item['thumb']);}" width="50" onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /><br/>
                         {$item['title']}</td>
                     <td style="color:#f00;">
                         {if $item['isspecial'] == 2}{$item['marketprice']}元{else if $item['isspecial'] == 3}{$item['marketprice']}元{/if}
@@ -226,7 +233,7 @@ $(function(){
                     <!--</div>-->
                 <!--</div>-->
                 <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">优惠价</label>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">价格</label>
                     <div class="col-sm-9">
                         <div class="input-group">
                             <input type="text" name="marketprice" class="form-control" value="{$item['marketprice']}" />
@@ -235,7 +242,7 @@ $(function(){
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商品原价</label>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">原价</label>
                     <div class="col-sm-9">
                         <div class="input-group">
                             <input type="text" name="productprice" class="form-control" value="{$item['productprice']}" />

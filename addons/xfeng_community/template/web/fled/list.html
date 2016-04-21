@@ -15,7 +15,7 @@
                     <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
                         <select name="regionid" class="form-control">
                                 {loop $regions $region}
-                                <option value="{$region['id']}" {if $region['id']==$_GPC[ 'regionid']} selected{/if}>{$region['title']}</option>
+                                <option value="{$region['id']}" {if $region['id']==$_GPC[ 'regionid']} selected{/if}>{$region['city']}{$region['dist']}{$region['title']}</option>
                                 {/loop}
                         </select>
                     </div>
@@ -59,8 +59,8 @@
 					<th class="col-sm-2">名称</th>
 					<th class="col-sm-2">价格</th>
 					<th class="col-sm-2">联系人</th>
-					<th class="col-sm-2">所属小区</th>
-					<th class="col-sm-2">联系电话</th>
+					<th class="col-sm-4">地址</th>
+					<th class="col-sm-3">联系电话</th>
 					<th class="col-sm-3">发布时间</th>
 					<th class="col-sm-5">操作</th>
 				</tr>
@@ -72,13 +72,13 @@
 					<td>{$good['title']}</td>
 					<td>{if empty($good['zprice'])}面议{else}{$good['zprice']}元{/if}</td>
 					<td>{$good['realname']}</td>
-					<td>{$good['city']}{$good['dist']}{$good['rtitle']}</td>
+					<td>{$good['dist']}{$good['rtitle']}{$good['address']}</td>
 					<td>{$good['mobile']}</td>
 					<td>{php echo date('Y-m-d H:i',$good['createtime'])}</td>
 					<td>
 						<a href="{php echo $this->createWebUrl('fled',array('op' => 'detail','id'=>$good['id']))}" class="btn btn-primary btn-sm" ><i class="glyphicon glyphicon-search"></i>查看
 						</a>&nbsp;
-						<a href="javascript:;" data="{$good['id']}" title="删除" class="btn btn-primary btn-sm" id='del'><i class="fa fa-times"></i>删除
+						<a  title="删除" class="btn btn-primary btn-sm" onclick="del('{$good['id']}')"><i class="fa fa-times"></i>删除
 						</a>&nbsp;
 						<a onclick="toblack('{$good['id']}')" href="#" class="btn btn-primary btn-sm"><i class="fa fa-eye-slash"></i>信息加入黑名单</a>
 					</td>
@@ -89,9 +89,9 @@
 	</div>
 	{$pager}
 	<script type="text/javascript">
-	    $(function () {
-	        $("#del").bind("click",function(){
-	            var id = $(this).attr('data');
+
+		function del(id){
+			var id=id;
 		        var url = "{php echo $this->createWebUrl('fled',array('op' => 'delete'),true)}";
 		            $.post(url,
 		            {
@@ -106,8 +106,7 @@
 		                    
 		            },
 		            'json');
-	        });
-		});
+		}
     	function toblack(id){
 	    	var id = id;
 	            if(!id) return false;

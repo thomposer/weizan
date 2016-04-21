@@ -198,9 +198,42 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启女性聊天免费</label>
+			<div class="col-sm-9">
+				<label class="radio-inline">
+					<input type="radio" name="woman_free" value="1" id="xh" {if $settings['woman_free'] == '1'}checked="true"{/if}> 是
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="woman_free" value="2" id="xh"  {if $settings['woman_free'] == '2'}checked="true"{/if}>否
+				</label>
+				<span class="help-block">开启后、女性聊天将免费</span>
+			</div>
+		</div>
+		<div class="form-group">
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label">每条信息消耗积分数量</label>
 			<div class="col-sm-9">
 				<input type="text"  class="form-control" name="chatpay" value="{$settings['chatpay']}">
+				<span class="help-block">注意 当前公众号不具备支付能力 尽量填写小额积分</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">每朵花消耗积分数量</label>
+			<div class="col-sm-9">
+				<input type="text"  class="form-control" name="flower_jifen" value="{$settings['flower_jifen']}">
+				<span class="help-block">注意 当前公众号不具备支付能力 尽量填写小额积分</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">首页送花提示请求时间间隔</label>
+			<div class="col-sm-9">
+				<input type="text"  class="form-control" name="flower_time" value="{$settings['flower_time']}">
+				<span class="help-block">首页送花提示时间间隔、请填写大于4的整数、默认为8秒</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">每次打招呼消耗积分数量</label>
+			<div class="col-sm-9">
+				<input type="text"  class="form-control" name="sayhi_jifen" value="{$settings['sayhi_jifen']}">
 				<span class="help-block">注意 当前公众号不具备支付能力 尽量填写小额积分</span>
 			</div>
 		</div>
@@ -265,10 +298,10 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-xs-12 col-sm-3 col-md-2 control-label">推荐到首页所需积分</label>
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">推荐到首页一天所需积分</label>
 			<div class="col-sm-9">
 				<input type="text"  class="form-control" name="tjjifen" value="{$settings['tjjifen']}">
-				<span class="help-block">推荐到首页所需积分</span>
+				<span class="help-block">推荐到首页位置一天所需积分、积分数按天累加</span>
 			</div>
 		</div>
 		
@@ -309,7 +342,8 @@
 		手机号码验证设置<br><br>
         
 		<font color=red> 1 请注意：若是选择开启手机号码验证 请填写中国网建登录uid以及key</font><br><br>
-		<font color=red> 2 请注意：开通短信服务地址:<a href="http://sms.webchinese.cn/">中国网建短信通</a></font>
+		<font color=red> 2 请注意：默认采用阿里大鱼的短信服务、非要用网建的短信 请留空阿里大鱼短信设置项目</font><br><br>
+		<font color=red> 3 请注意：开通网建通短信服务地址:<a href="http://sms.webchinese.cn/">中国网建短信通</a></font>
 	</div>
 	
 	<div class="panel-body">
@@ -325,6 +359,35 @@
 				<span class="help-block">若是开启了 会员需验证码真实手机号</span>
 			</div>
 		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">阿里大鱼appkey</label>
+			<div class="col-sm-9">
+				<input type="text"  class="form-control" name="ali_appkey" value="{$settings['ali_appkey']}">
+				<span class="help-block">阿里大鱼appkey</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">阿里大鱼appsecret</label>
+			<div class="col-sm-9">
+				<input type="text"  class="form-control" name="ali_appsecret" value="{$settings['ali_appsecret']}">
+				<span class="help-block">阿里大鱼appsecret</span>
+			</div>
+		</div>
+		<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">阿里大鱼身份验证签名</label>
+				<div class="col-lg-9">
+					<input type="text" name="ali_signname" value="{$settings['ali_signname']}"  class="form-control"/>
+					<span class="help-block">默认为：身份验证</span>
+				</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">阿里大鱼身份验证的短信模板号码</label>
+			<div class="col-lg-9">
+				<input type="text" name="ali_moban_num" value="{$settings['ali_moban_num']}" class="form-control"/>
+				<span class="help-block">到阿里大鱼后台管理去改</span>
+			</div>
+		</div>
+
 		<div class="form-group">
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label">中国网建短信通登录用户名</label>
 			<div class="col-sm-9">

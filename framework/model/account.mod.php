@@ -570,6 +570,11 @@ function uni_user_module_permission_check($action = '', $module_name = '') {
 
 function uni_update_week_stat() {
 	global $_W;
+	$cachekey = "stat:todaylock:{$_W['uniacid']}";
+	$cache = cache_load($cachekey);
+	if(!empty($cache) && $cache['expire'] > TIMESTAMP) {
+		return true;
+	}
 	$seven_days = array(
 		date('Ymd', strtotime('-1 days')),
 		date('Ymd', strtotime('-2 days')),
@@ -579,8 +584,17 @@ function uni_update_week_stat() {
 		date('Ymd', strtotime('-6 days')),
 		date('Ymd', strtotime('-7 days')),
 	);
-	$sevens_arr= implode(',', $seven_days);
-	$arr = pdo_fetchall("SELECT * FROM " . tablename('stat_fans') . " WHERE date IN ($sevens_arr) AND uniacid= :uniacid", array(':uniacid' => $_W['uniacid']), 'date');
+	$week_stat_fans = pdo_getall('stat_fans', array('date' => $seven_days, 'uniacid' => $_W['uniacid']), '', 'date');
+	$stat_update_yes = false;
+	foreach ($seven_days as $sevens) {
+		if (empty($week_stat_fans[$sevens]) || $week_stat_fans[$sevens]['cumulate'] <=0) {
+			$stat_update_yes = true;
+			break;
+		}
+	}
+	if (empty($stat_update_yes)) {
+		return true;
+	}
 	foreach($seven_days as $sevens) {
 		if($_W['account']['level'] == ACCOUNT_SUBSCRIPTION_VERIFY || $_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
 			$account_obj = WeAccount::create();
@@ -599,18 +613,19 @@ function uni_update_week_stat() {
 			}
 		} else {
 			$update_stat = array();
-			$update_stat['cumulate'] = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND uniacid = :uniacid AND follow = :follow AND followtime < :endtime', array(':acid' => $_W['acid'], ':uniacid' => $_W['uniacid'], ':endtime' => strtotime($sevens)+86400, ':follow' => 1));
+			$update_stat['cumulate'] = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('mc_mapping_fans') . " WHERE acid = :acid AND uniacid = :uniacid AND follow = :follow AND followtime < :endtime", array(':acid' => $_W['acid'], ':uniacid' => $_W['uniacid'], ':endtime' => strtotime($sevens)+86400, ':follow' => 1));
 			$update_stat['date'] = $sevens;
-			$update_stat['new'] = $arr[$sevens]['new'];
-			$update_stat['cancel'] = $arr[$sevens]['cancel'];
+			$update_stat['new'] = $week_stat_fans[$sevens]['new'];
+			$update_stat['cancel'] = $week_stat_fans[$sevens]['cancel'];
 			$update_stat['uniacid'] = $_W['uniacid'];
 		}
-		if(empty($arr[$sevens])) {
+		if(empty($week_stat_fans[$sevens])) {
 			pdo_insert('stat_fans', $update_stat);
-		} elseif (empty($arr[$sevens]['cumulate']) || $arr[$sevens]['cumulate'] < 0) {
-			pdo_update('stat_fans', $update_stat, array('id' => $arr[$sevens]['id']));
+		} elseif (empty($week_stat_fans[$sevens]['cumulate']) || $week_stat_fans[$sevens]['cumulate'] < 0) {
+			pdo_update('stat_fans', $update_stat, array('id' => $week_stat_fans[$sevens]['id']));
 		}
 	}
+	cache_write($cachekey, array('expire' => TIMESTAMP + 7200));
 	return true;
 }
 

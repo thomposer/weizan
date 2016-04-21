@@ -8,8 +8,9 @@
  * 后台小区设置
  */
 global $_W,$_GPC;
-$GLOBALS['frames'] = $this->NavMenu();
-$id = intval($_GPC['id']);
+$do = $_GPC['do'];
+$GLOBALS['frames'] = $this->NavMenu($do);
+$id = intval($_GPC['sid']);
 if (checksubmit('submit')) {
 		$data = array(
 				'uniacid' => $_W['uniacid'],
@@ -20,6 +21,11 @@ if (checksubmit('submit')) {
 				'h_status' => intval($_GPC['h_status']),
 				's_status' => intval($_GPC['s_status']),
 				'c_status' => intval($_GPC['c_status']),
+				'r_status' => intval($_GPC['r_status']),
+				'r_enable' => intval($_GPC['r_enable']),
+				'region_status' => intval($_GPC['region_status']),
+				'business_status' => intval($_GPC['business_status']),
+				'tel' => $_GPC['tel'],
 			);
 		if (empty($id)) {
 			pdo_insert('xcommunity_set',$data);
@@ -28,6 +34,6 @@ if (checksubmit('submit')) {
 		}
 		message('提交成功',referer(),'success');
 	}
-	$settings = pdo_fetch("SELECT * FROM".tablename('xcommunity_set')."WHERE uniacid=:uniacid",array(":uniacid" => $_W['uniacid']));
+$settings = pdo_fetch("SELECT * FROM".tablename('xcommunity_set')."WHERE uniacid=:uniacid",array(":uniacid" => $_W['uniacid']));
 
 include $this->template('web/set/set');

@@ -29,7 +29,7 @@
                         <th colspan="6">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="menus[]" class='perm-all' data-group="{$sections['do']}" value="{$sections['id']}" 
+                                    <input type="checkbox" name="menus[]" class='perm-all' data-group="{$sections['method']}" value="{$sections['id']}" 
                                     {if in_array($sections['id'],$mmenus)}checked{/if}>{$sections[title]}</label>
                             </div>
                         </th>
@@ -41,7 +41,7 @@
                             {if $i%6 == 1 || $i == 1}<tr>{/if}
                                 <td>
                                     <div class="checkbox">
-                                        <label><input type="checkbox" class="perm-item" value="{$menu['id']}" name="menus[]" data-group="{$menu['do']}" value="{$menu['id']}" {if in_array($menu['id'],$mmenus)}checked{/if}>{$menu['title']}</label>
+                                        <label><input type="checkbox" class="perm-item" value="{$menu['id']}" name="menus[]" data-group="{$menu['method']}" value="{$menu['id']}" {if in_array($menu['id'],$mmenus)}checked{/if}>{$menu['title']}</label>
                                     </div>
                                 </td>
                             {if $i%6 == 0}</tr>{/if}

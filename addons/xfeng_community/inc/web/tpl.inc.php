@@ -8,7 +8,8 @@
  * 后台模板消息设置
  */
 global $_W,$_GPC;
-$GLOBALS['frames'] = $this->NavMenu();
+$do = $_GPC['do'];
+$GLOBALS['frames'] = $this->NavMenu($do);
 $id = intval($_GPC['id']);
 if (checksubmit('submit')) {
 		$data = array(

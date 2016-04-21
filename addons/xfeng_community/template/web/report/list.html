@@ -13,7 +13,7 @@
                     <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
                         <select name="regionid" class="form-control">
                                 {loop $regions $region}
-                                <option value="{$region['id']}" {if $region['id']==$_GPC[ 'regionid']} selected{/if}>{$region['title']}</option>
+                                <option value="{$region['id']}" {if $region['id']==$_GPC[ 'regionid']} selected{/if}>{$region['city']}{$region['dist']}{$region['title']}</option>
                                 {/loop}
                         </select>
                     </div>
@@ -65,7 +65,7 @@
 					<th style="width:100px;">建议类型</th>
 					<th style="width:70px;">建议人</th>
 					<th style="width:120px;">手机</th>
-					<th style="width:150px;">所属小区</th>
+					<th style="width:170px;">地址</th>
 					<th style="width:100px;">建议时间</th>
 					<!-- <th style="width:130px;">处理结果</th>
 					<th style="width:100px;">处理人</th>
@@ -81,9 +81,9 @@
 					<td>{$item['realname']}</td>
 					<td>{$item['mobile']}</td>
 					<td>
-                        {$item['city']}{$item['dist']}{$item['title']}
+                        {$item['city']}{$item['dist']}{$item['title']}{$item['address']}
                     </td>
-					<td>{php echo date('Y-m-d', $item['createtime']);}</td>
+					<td>{php echo date('Y-m-d H:i', $item['createtime']);}</td>
 					
 					<!-- 
 					<td>{php echo cutstr(htmlspecialchars_decode($item['content']), 35, true)}</td> -->

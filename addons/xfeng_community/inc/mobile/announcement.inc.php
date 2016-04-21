@@ -35,6 +35,7 @@
 						$list[$key]['location'] = $value['location'];
 						$list[$key]['reason'] = $value['reason'];
 						$list[$key]['remark'] = $value['remark'];
+						$list[$key]['content'] = $value['content'];
 					}
 				}
 				
@@ -68,7 +69,7 @@
 				                    <div class='list_r'>
 				                        <a href=".$url.">
 				                            <h3>".$value['title']."</h3>
-				                            <p>通知时间:".$value['datetime'].",通知范围:".$value['location'].",通知原因:".$value['reason'].",通知备注:".$value['remark']."</p>
+				                        
 				                            <dl>
 				                            </dl>
 				                        </a>

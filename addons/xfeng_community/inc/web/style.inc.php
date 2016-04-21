@@ -9,7 +9,8 @@
  */
 
 	global $_W,$_GPC;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$data = array(
 				'uniacid' => $_W['uniacid'],
 				'styleid' => $_GPC['styleid'],

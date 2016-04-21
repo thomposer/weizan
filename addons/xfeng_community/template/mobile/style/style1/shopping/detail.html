@@ -45,13 +45,13 @@
                 {if empty($piclist)}
                 <div class='wrap'>
                     <a href="#" style="text-align:center;list-style: none;display:block">
-                        <img src="{php echo tomedia($goods['thumb'])}" height='160px' />
+                        <img src="{php echo tomedia($goods['thumb'])}" height='160px' width='100%'/>
                     </a>
                 </div>
                 {else} {loop $piclist $row}
                 <div class='wrap'>
                     <a href="#" style="text-align:center;list-style: none;display:block">
-                        <img src="{$row}" height='160px' />
+                        <img src="{$row}" height='160px' width='100%'/>
                     </a>
                 </div>
                 {/loop} {/if}

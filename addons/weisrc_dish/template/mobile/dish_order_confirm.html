@@ -80,8 +80,8 @@
                 </ul>
                 <div class="group_1" data-title="选择支付方式">
                     <select style="width: 100%; height: 38px;" onchange="selectpaytype(this);" id="selpaytype">
-                        <option value="0" selected="selected">现金支付</option>
-                        <option value="1">在线支付</option>
+                        <option value="0" selected="selected">线下付款</option>
+                        <option value="1">余额支付</option>
                     </select>
                     <p id="cardinfo" style="width: 100%;color:#f00;padding: 5px;display: none;">
                         {if empty($card)}
@@ -132,9 +132,6 @@
                     return false;
                 "{/if}"
 
-                var url = "{php echo $this->createMobileUrl('pay', array('orderid' => $orderid), true)}";
-                location.href = url;
-                return true;
             }
             var url = "{php echo $this->createMobileUrl('orderconfirmupdate', array('storeid' => $storeid, 'from_user' => $from_user, 'orderid' => $orderid), true)}";
             $.ajax({
@@ -144,8 +141,7 @@
                 },
                 success: function (data) {
                     if (data['message']['code'] == "1") {
-                        //alert("订单确认成功.");
-                        alert(data['message']['msg']);
+                        alert("订单确认成功.");
                         window.location.href = "{php echo $this->createMobileUrl('orderlist', array('storeid' => $storeid, 'from_user' => $from_user), true)}";
                         $("#confirm_order").hide();
                     } else {
@@ -154,7 +150,7 @@
                     }
                 },
                 error: function () {
-                    alert("网络繁忙，请稍后访问!");
+                    alert("网络异常!...");
                 }
             });
         }

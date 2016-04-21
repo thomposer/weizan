@@ -1,6 +1,7 @@
 {template 'common/header'}
 <ul class="nav nav-tabs">
     <li class="active"><a href="#">基本设置</a></li>
+    <!--li {if ($_GPC['do'] == 'upgrade')}class="active"{/if}><a href="{php echo $this->createWebUrl('upgrade')}">在线升级</a></li-->
 </ul>
 <style>
      .item_box img{
@@ -30,7 +31,7 @@
                     <div class="col-sm-9">
                         <input type="text" name="xsqingjia" value="{$setting['xsqingjia']}" class="form-control"/>
                         <div class="help-block">
-                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“学生请假申请”编号为TM00190的模板
+                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“<span style="color:red;">学生请假申请</span>”编号为TM00190的模板
                         </div>
                     </div>
                 </div>
@@ -39,7 +40,7 @@
                     <div class="col-sm-9">
                         <input type="text" name="xsqjsh" value="{$setting['xsqjsh']}" class="form-control"/>
                         <div class="help-block">
-                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“请假审核通知”编号为OPENTM200864357的模板
+                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“<span style="color:red;">请假审核通知</span>”编号为OPENTM200864357的模板
                         </div>
                     </div>
                 </div>
@@ -48,7 +49,7 @@
                     <div class="col-sm-9">
                         <input type="text" name="jsqingjia" value="{$setting['jsqingjia']}" class="form-control"/>
                         <div class="help-block">
-                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“请假审核提醒”编号为OPENTM203328559的模板
+                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“<span style="color:red;">请假审核提醒</span>”编号为OPENTM203328559的模板
                         </div>
                     </div>
                 </div>
@@ -57,7 +58,7 @@
                     <div class="col-sm-9">
                         <input type="text" name="jsqjsh" value="{$setting['jsqjsh']}" class="form-control"/>
                         <div class="help-block">
-                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“请假审批结果通知”编号为OPENTM207256255的模板
+                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“<span style="color:red;">请假审批结果通知</span>”编号为OPENTM207256255的模板
                         </div>
                     </div>
                 </div>
@@ -66,16 +67,16 @@
                     <div class="col-sm-9">
                         <input type="text" name="xxtongzhi" value="{$setting['xxtongzhi']}" class="form-control"/>
                         <div class="help-block">
-                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“学校通知”编号为OPENTM204845041的模板
+                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“<span style="color:red;">学校通知</span>”编号为OPENTM204845041的模板
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">班级通知ID</label>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">放学和班级通知ID</label>
                     <div class="col-sm-9">
                         <input type="text" name="bjtz" value="{$setting['bjtz']}" class="form-control"/>
                         <div class="help-block">
-                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“班级通知”编号为OPENTM204533457的模板
+                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“<span style="color:red;">班级通知</span>”编号为OPENTM204533457的模板
                         </div>
                     </div>
                 </div>				
@@ -84,7 +85,7 @@
                     <div class="col-sm-9">
                         <input type="text" name="liuyan" value="{$setting['liuyan']}" class="form-control"/>
                         <div class="help-block">
-                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“留言提醒”编号为OPENTM202309749的模板
+                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“<span style="color:red;">留言提醒</span>”编号为OPENTM202309749的模板
                         </div>
                     </div>
                 </div>
@@ -93,7 +94,7 @@
                     <div class="col-sm-9">
                         <input type="text" name="liuyanhf" value="{$setting['liuyanhf']}" class="form-control"/>
                         <div class="help-block">
-                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“家长意见回复通知”编号为OPENTM205211081的模板
+                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“<span style="color:red;">家长意见回复通知</span>”编号为OPENTM205211081的模板
                         </div>
                     </div>
                 </div>
@@ -102,12 +103,31 @@
                     <div class="col-sm-9">
                         <input type="text" name="zuoye" value="{$setting['zuoye']}" class="form-control"/>
                         <div class="help-block">
-                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“作业消息提醒”编号为OPENTM207873178的模板
+                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“<span style="color:red;">作业消息提醒</span>”编号为OPENTM207873178的模板
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">班级圈审核结果通知ID</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="bjqshjg" value="{$setting['bjqshjg']}" class="form-control"/>
+                        <div class="help-block">
+                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“<span style="color:red;">审核结果通知</span>”编号为OPENTM400501478的模板
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">班级圈审核提醒ID</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="bjqshtz" value="{$setting['bjqshtz']}" class="form-control"/>
+                        <div class="help-block">
+                            在模板库选择<span style="color:red;">教育－院校</span>，搜索“<span style="color:red;">审核提醒</span>”编号为OPENTM400047769的模板
                         </div>
                     </div>
                 </div>				
             </div>
         </div>
+
 		{else}
 		<div class="panel panel-default">
 			<div class="panel-heading">

@@ -1,42 +1,155 @@
 
 <!DOCTYPE html>
 <html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0, maximum-scale=1.0,user-scalable=0">
+<meta name="format-detection" content="telephone=no"/>
 <title>男神女神榜单</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta id="viewport" name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0">
-<meta name="MobileOptimized" content="100%">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <link href="{MEEPORES}/static/friend/css/search_love.css?a={$suijinum}" rel="stylesheet" type="text/css">
 <link href="{MEEPORES}/static/friend/css/info.css?a={$suijinum}" rel="stylesheet" type="text/css">
 <link href="{MEEPORES}/static/friend/css/nmenu.css?a={$suijinum}" rel="stylesheet" type="text/css">
 {php echo register_jssdk(false);}
-<script src="{MEEPORES}/static/friend/js/love.js" ></script>
+<script src="{MEEPORES}/static/friend/js/jquery.js" ></script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/sweetalert.min.js"></script>
+<link rel="stylesheet" href="{MODULE_URL}template/mobile/sweetalert.css" />
  <script type="text/javascript">
- var $jq = jQuery.noConflict(true);
- $jq(document).ready(function () {
-	//jQuery(".brand li img").live
-$jq("#hitlike").live('click',function(){
-		var love = $(this);
-		var id = love.attr("date");
-		var toopenid = $(".toopenid"+id).val();
-		love.fadeOut(300);
-		$.ajax({
-			type:"POST",
-			url:"{php echo $this->createMobileUrl('likeajax2')}",
-			data:{uid:id,toopenid:toopenid},
-			cache:false,
-			success:function(data){
-				
-				   love.html(data);
-				    love.fadeIn(300);
-				
-				
-			}
-		});
-		return false;
-	});
-	});
+function hitlikeone(m,n){
+			 var love = document.getElementById(n);
+			 swal({
+			  title: "温馨提示",
+			  text: '请输入鲜花数量',
+			  type: 'input',
+			  showCancelButton: true,
+			  confirmButtonColor: "#DD6B55",  
+			  confirmButtonText: "确定",  
+			 cancelButtonText: "取消",  
+			 closeOnConfirm: false,   
+			 closeOnCancel: true,
+			  animation: "slide-from-top"
+			}, function(isConfirm){  
+			   if (isConfirm) {   
+				 var flower_num = parseInt(isConfirm);
+				 if(flower_num > 0){
+							swal({   
+								 title: "温馨提示", 
+								 text: flower_num+"朵鲜花、将消耗你"+(flower_num*{$flower_jifen})+'积分哦！',  
+								 type: "warning",  
+								 showCancelButton: true,  
+								 confirmButtonColor: "#DD6B55",  
+								 confirmButtonText: "确定送",  
+								 cancelButtonText: "不送了",  
+								 closeOnConfirm: false,   
+								 closeOnCancel: true 
+								 }, 
+								 function(isConfirm2){  
+								   
+								   if (isConfirm2) {   
+									 
+									 		$.ajax({
+												type:"POST",
+												dataType:'JSON',
+												url:"{php echo $this->createMobileUrl('likeajax')}",
+												data:{uid:m,toopenid:n,flower_num:flower_num},
+												cache:false,
+												success:function(data){
+												
+													if(data.errno == '-1'){
+														swal.close();
+													   _loading_toast._show(data.message);
+													  
+													}else if(data.errno =='-2'){
+														 swal({   
+															 title: "温馨提示", 
+															 text: "你还未完善个人资料，先去完善吧！",
+															 type: "warning",  
+															 showCancelButton: true,  
+															 confirmButtonColor: "#DD6B55",  
+															 confirmButtonText: "好的",  
+															 cancelButtonText: "知道了",  
+															 closeOnConfirm: true,   
+															 closeOnCancel: true 
+															 }, 
+															 function(isConfirm4){  
+															   if (isConfirm4) {   
+							window.location.href="{php echo  $this->createMobileUrl('userinfo')}";
+															   } else {     
+																  swal.close();
+															   } 
+															});
+													}else if(data.errno=='-3'){
+													  
+													  swal({   
+															 title: "温馨提示", 
+															 text: data.message,
+															 type: "warning",  
+															 showCancelButton: true,  
+															 confirmButtonColor: "#DD6B55",  
+															 confirmButtonText: "去充值",  
+															 cancelButtonText: "知道了",  
+															 closeOnConfirm: true,   
+															 closeOnCancel: true 
+															 }, 
+															 function(isConfirm3){  
+															   if (isConfirm3) {   
+																	{if empty($cfg['lowurl'])}
+								window.location.href="{php echo  $this->createMobileUrl('payjifen')}";
+																	{else}
+									window.location.href="{$cfg['lowurl']}";
+																	{/if}
+															   } else {     
+																  swal.close();
+															   } 
+															});
+													  
+													}else{
+														swal.close();
+														love.innerHTML = data.message;
+														_loading_toast._show("赠送成功！");
+													}
+												}
+											});
+								   } else {     
+									  swal.close();
+								   } 
+								});
+				 }else{
+				   swal.showInputError("鲜花数量必须是大于0的整数");
+				 }
+			   } else {     
+				  swal.close();
+			   } 
+			});
+			 
+    }
+
+var _loading_toast= {
+    _center: function() {
+		var _left = ($(window).width() - $("#toast").outerWidth()) / 2 + "px";
+        $("#toast").css({
+            "top": "50%",
+            "left": _left
+        });
+    },
+    _show: function(text, fun) {
+        $("#toast").html(text);
+        _loading_toast._center();
+        $("#toast").show();
+        $("#toast").bind("resize", _loading_toast._center);
+        setTimeout(function() {
+            _loading_toast._hide(fun);
+        }, 2 * 1000);
+    },
+    _hide: function(fun) {
+        $("#toast").hide();
+        $("#toast").unbind("resize");
+        if (fun) {
+            (fun)();
+        }
+    }
+};
 	</script>
 <style type="text/css">
 .subject,.friends{
@@ -97,6 +210,20 @@ margin-top:4px;
 .f5{background:url("{MEEPORES}/static/friend/caidan/hpdi_menu_2.png") center center no-repeat;background-size: 24px 24px;}
 
 .cur{ border-top:1px solid #ff3600;}
+#toast {
+    display: none;
+    position: fixed;
+    padding: 9px 15px;
+    background-color: #333;
+    z-index: 8000;
+    border-radius: 5px;
+	font-size: 16px;
+    color: #ffffff;
+    line-height: 20px;
+    text-align: center;
+	
+}
+
 </style>
 </head>
 
@@ -129,14 +256,14 @@ margin-top:4px;
 				<dt><a href="{php echo  $this->createMobileUrl('others',array('openid'=>$row['from_user']))}">{php echo cutstr($row['realname'],5,true);}</a><span>{$row['age']} | {$row['resideprovincecity']}</span>
 				</dt>
 				</dl>
-				<input type="hidden" class="toopenid{$row['id']}" value="{$row['from_user']}"/>
-				<a class="search_hi" id="hitlike" date="{$row['id']}" title="{$row['openid']}">赞&nbsp;&nbsp;{$row['love']}</a>
+				
+				<a class="search_hi likeit1" onclick="hitlikeone('{$row['id']}','{$row['from_user']}')" ><span id="{$row['from_user']}">&nbsp;{$row['love']}<span></a>
 				
 				
 				</div>
 				<ul id="all">
 				{loop $photos[$row['id']] $ph}
-				<li><img src="{$_W['attachurl']}{$ph['url']}" height="120" width="90" date="{$row['from_user']}" id="btn"></li>
+				<li><img src="{$_W['attachurl']}{$ph['url']}" height="120" width="90"  class="btn2"></li>
 				{/loop}
 				</ul>
 				</article>
@@ -166,15 +293,8 @@ margin-top:4px;
 	 <span  class="zuipei" ><span class="f5"></span><span>{if empty($cfg['fivecard'])}与我相关{else}{$cfg['fivecard']}{/if}</span></span>
 </div>
 </div>
-<script src="{MEEPORES}/static/friend/style2/jquery-1.js" type="text/javascript"></script>
-<script src="{MEEPORES}/static/friend/style2/jquery_extend.js" type="text/javascript"></script>
-<script src="{MEEPORES}/static/friend/style2/jquery.js" type="text/javascript"></script>
-<script src="{MEEPORES}/static/friend/style2/util.js" type="text/javascript"></script>
-<script src="{MEEPORES}/static/friend/style2/header.js" type="text/javascript"></script>
-<script src="{MEEPORES}/static/friend/style2/nmenu.js" type="text/javascript"></script>
 
-<div style="width: 100%;height: 100%;position: fixed;top:0;opacity: 0;display: none;z-index: 2;" id="tmLevel"></div>
-<img src="http://kh1.58zs.com/xiangqin/Public/Home/Images/logo300x300.jpg" height="0" width="0">
+<div id="toast"></div>
 <script type="text/javascript">
 $(document).ready(function () { 
      $(".subject div").click(function () {
@@ -300,17 +420,17 @@ function send_intergal(){
         </script>
 <script >
 $(document).ready(function () {
-	$("#btn").live("click",function (event) { 
+	$("body").on("click",'.btn2',function () { 
         var curSrc = $(this).attr("src");
-	    var openid = $(this).parents('#all').find("li").find("img").children("#btn");
-		
-		console.log(openid);
+		var newall = new Array();
+	    var allp = $(this).parent().parent().children("li");
+		for(var j=0;j<allp.length;j++){
+				newall.push(allp.eq(j).find("img").attr('src'));
+		}
+	
 		  wx.previewImage({
 						  current:curSrc,
-						  urls: [
-						     curSrc
-						  ]
-						
+						  urls: newall
 						});
 		
 	  });	

@@ -8,7 +8,8 @@
  * 后台黑名单管理
  */
 global $_W,$_GPC;
-$GLOBALS['frames'] = $this->NavMenu();
+$do = $_GPC['do'];
+$GLOBALS['frames'] = $this->NavMenu($do);
 $op = !empty($_GPC['op'])?$_GPC['op']:'list';
 $id = intval($_GPC['id']);
 $type = !empty($_GPC['type']) ? $_GPC['type'] : 2;

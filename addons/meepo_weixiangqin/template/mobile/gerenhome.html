@@ -135,6 +135,19 @@ font-style: normal;
  .descinfo-box-in{ bottom: 35%; opacity: 1; -webkit-transition: all 0.5s ease-in-out; z-index:10;}
  .descinfo-box-out{ bottom: 5%; opacity: 0; -webkit-transition: all 0.5s ease-in-out; z-index:0;}
  .descinfo-close{position: absolute; right: 0; top: 0; width: 3rem; height: 3rem; text-align: center; line-height: 3rem; font-size: 2rem; color:#666;}
+ #toast {
+    display: none;
+    position: fixed;
+    padding: 9px 15px;
+    background-color: #333;
+    z-index: 8000;
+    border-radius: 5px;
+	font-size: 16px;
+    color: #ffffff;
+    line-height: 20px;
+    text-align: center;
+	
+}
 </style>
 </head>
 <body>
@@ -142,7 +155,7 @@ font-style: normal;
 <div class="top_blank"></div>
 <header class="head">
     <ul class="main_nav disbox-hor" id="nav_menu" style="width:100%">
-        <li class="disbox-flex disbox-center" style="width:50%"><a href="{php echo $this->createMobileUrl('alllist')}">返回首页</a></li>
+        <li class="disbox-flex disbox-center" style="width:50%"><a href="{php echo $this->createMobileUrl('alllist')}" target="_blank">返回首页</a></li>
         
         <li class="disbox-flex disbox-center active" style="width:50%"><a href="###">个人中心</a></li>
     </ul>
@@ -159,7 +172,16 @@ font-style: normal;
 							
 															
 						</span>
-                                <dt id="change_icon"><img src="{if preg_match('/http:(.*)/',$res['avatar'])}{$res['avatar']} {else if preg_match('/images(.*)/',$res['avatar'])} {$_W['siteroot']}attachment/{$res['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" />
+                                <dt id="change_icon">
+								<img
+								src="
+								{if $res['avatar_thumb'] != '1'}
+								{$_W['attachurl']}{$res['avatar_thumb']}  
+								{else}{if preg_match('/http:(.*)/',$res['avatar'])}{$res['avatar']} 
+								{else if preg_match('/images(.*)/',$res['avatar'])} {$_W['attachurl']}{$res['avatar']}    
+								{else}
+								{MEEPORES}/static/friend/images/cdhn80.jpg
+								{/if}{/if}" width=60px height=60px />
 												<input type="file" accept="image/jpeg, image/jpg, image/png" onchange="my.changeImg(this, event, {form_action:'{php echo $this->createMobileUrl('UploadImage')}',base_url:''});" />
                                 <div class="checking">点击上传</div>
                                 </dt>
@@ -191,8 +213,8 @@ font-style: normal;
                     </dl>
                 </div>
                 <div class="btn">
-                    <span  class="disbox-center" href="{php echo $this->createMobileUrl('mylike')}">我喜欢的</span>
-                    <span  class="disbox-center" href="{php echo $this->createMobileUrl('likeme')}">喜欢我的</span>
+                    <span  class="disbox-center" href="{php echo $this->createMobileUrl('mylike')}">给我送花的</span>
+                    <span  class="disbox-center" href="{php echo $this->createMobileUrl('likeme')}">跟我打招呼的</span>
                 </div>
 				<div class="btn">
                     <span  class="disbox-center" href="{php echo  $this->createMobileUrl('myphotos')}">我的相册</span>
@@ -233,6 +255,7 @@ font-style: normal;
             <div>{php echo html_entity_decode($cfg['guize']);}</div>
             <a href="javascript:void(0);" class="descinfo-close" id="J_descinfo-close" onclick="close2();" style="color:#ff5858">×</a>
  </section>
+ <div id="toast"></div>
 </body>
 <script>
   $(document).ready(function () { 
@@ -267,64 +290,136 @@ font-style: normal;
 	    $('#active_rule_box').hide();
 	}
   function tuijian(){
-	   swal({
-			title: "推荐到首页",
-			text: "需要消耗{$cfg['tjjifen']}个积分！",
-			showCancelButton: true,
-			confirmButtonColor: "#ff5858",   
-			confirmButtonText: "确定", 
-			cancelButtonText: "取消", 
-			closeOnConfirm: true,  
-			closeOnCancel: true },
-			function(isConfirm){ 
-				if (isConfirm) { 
-					$.ajax({
-										type:"POST",
-										url:"{php echo $this->createMobileUrl('tjself')}",
-										data:{payment:"{$cfg['tjjifen']}"},
-										cache:false,
-										success:function(data){
-											
-											 if(data=="low"){
-												swal({
-													title: "温馨提示",
-													text: '积分不足',
-													type:'info',
-													showCancelButton: true,
-													confirmButtonColor: "#ff5858",   
-													confirmButtonText: "充值积分", 
-													cancelButtonText: "知道了", 
-													closeOnConfirm: true,  
-													closeOnCancel: true },
-													function(isConfirm){ 
-														if (isConfirm) { 
-															{if empty($cfg['lowurl'])}
-																	  window.location='{php echo  $this->createMobileUrl('payjifen')}';
-															{else}
-																  window.location='{$cfg['lowurl']}';}
-															{/if}
-														} else {
-															swal.close();
-														} 
-												});
-											} 
-											else {
-											     swal({
-													title: "温馨提示",
-													text: data,  
-													confirmButtonText: "知道了",   closeOnConfirm: false }, function(){ 
+			 swal({
+			  title: "温馨提示",
+			  text: '请输入推荐到首页天数',
+			  type: 'input',
+			  showCancelButton: true,
+			  confirmButtonColor: "#DD6B55",  
+			  confirmButtonText: "确定",  
+			 cancelButtonText: "取消",  
+			 closeOnConfirm: false,   
+			 closeOnCancel: true,
+			  animation: "slide-from-top"
+			}, function(isConfirm){  
+			   if (isConfirm) { 
+				  var day_num = parseInt(isConfirm);
+				  if(day_num > 0){
+					swal({   
+								 title: "温馨提示", 
+								 text: '推荐'+day_num+"天、将消耗你"+(day_num*{$cfg['tjjifen']})+'个积分哦！',  
+								 type: "warning",  
+								 showCancelButton: true,  
+								 confirmButtonColor: "#DD6B55",  
+								 confirmButtonText: "确定",  
+								 cancelButtonText: "取消",  
+								 closeOnConfirm: false,   
+								 closeOnCancel: true 
+								 }, 
+								 function(isConfirm2){  
+								   
+								   if (isConfirm2) {   
+									 
+									 		$.ajax({
+												type:"POST",
+												dataType:'JSON',
+												url:"{php echo $this->createMobileUrl('tjself')}",
+												data:{day_num:day_num},
+												cache:false,
+												success:function(data){
+												
+													if(data.errno == '-1'){
 														swal.close();
-													});
-											  
-											}
-											
-										}
-									});
-				} else {
-					swal.close();
-				} 
-		});
+													   _loading_toast._show(data.message);
+													  
+													}else if(data.errno =='-2'){
+														 swal({   
+															 title: "温馨提示", 
+															 text: "你还未完善个人资料，先去完善吧！",
+															 type: "warning",  
+															 showCancelButton: true,  
+															 confirmButtonColor: "#DD6B55",  
+															 confirmButtonText: "好的",  
+															 cancelButtonText: "知道了",  
+															 closeOnConfirm: true,   
+															 closeOnCancel: true 
+															 }, 
+															 function(isConfirm4){  
+															   if (isConfirm4) {   
+																	window.location.href="{php echo  $this->createMobileUrl('userinfo')}";
+															   } else {     
+																  swal.close();
+															   } 
+															});
+													}else if(data.errno=='-3'){
+													  
+													  swal({   
+															 title: "温馨提示", 
+															 text: data.message,
+															 type: "warning",  
+															 showCancelButton: true,  
+															 confirmButtonColor: "#DD6B55",  
+															 confirmButtonText: "好的",  
+															 cancelButtonText: "知道了",  
+															 closeOnConfirm: true,   
+															 closeOnCancel: true 
+															 }, 
+															 function(isConfirm3){  
+															   if (isConfirm3) {   
+																	{if empty($cfg['lowurl'])}
+																	window.location.href="{php echo  $this->createMobileUrl('payjifen')}";
+																	{else}
+																	window.location.href="{$cfg['lowurl']}";
+																	{/if}
+															   } else {     
+																  swal.close();
+															   } 
+															});
+													  
+													}else{
+														swal.close();
+														//love.innerHTML = data.message;
+														_loading_toast._show(data.message);
+													}
+												}
+											});
+								   } else {     
+									  swal.close();
+								   } 
+								});
+				  }else{
+					swal.showInputError("天数必须是大于0的整数");
+				  }
+			   }else{
+				swal.close();
+			   }
+			});
 	}
+	var _loading_toast= {
+    _center: function() {
+		var _left = ($(window).width() - $("#toast").outerWidth()) / 2 + "px";
+        $("#toast").css({
+            "top": "50%",
+            "left": _left
+        });
+    },
+    _show: function(text, fun) {
+        $("#toast").html(text);
+        _loading_toast._center();
+        $("#toast").show();
+        $("#toast").bind("resize", _loading_toast._center);
+        setTimeout(function() {
+            _loading_toast._hide(fun);
+        }, 2 * 1000);
+    },
+    _hide: function(fun) {
+        $("#toast").hide();
+        $("#toast").unbind("resize");
+        if (fun) {
+            (fun)();
+        }
+    }
+};
 </script>
 <script>
 function loading(type){
@@ -357,7 +452,7 @@ var my = (function(){
 			if(thi.files.length<1){
 				return that;
 			}
-			 if(thi.files[0].size>=1024*1024*1){
+			 if(thi.files[0].size>=1024*1024*2){
 			 	setTimeout(function(){
 		    			thi.parentNode.childNodes[4].innerText = "文件过大！";
 		    	}, 500);

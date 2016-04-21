@@ -8,7 +8,8 @@
  * 后台支付方式设置
  */
 global $_W,$_GPC;
-$GLOBALS['frames'] = $this->NavMenu();
+$do = $_GPC['do'];
+$GLOBALS['frames'] = $this->NavMenu($do);
 $id = intval($_GPC['id']);
 $op = !empty($_GPC['op']) ? $_GPC['op'] : 'add';
 $type = intval($_GPC['type']) ? intval($_GPC['type']) : 1;
@@ -20,9 +21,16 @@ if ($op == 'add') {
 				'pay' => serialize($_GPC['pay']),
 				'type' => $_GPC['type'],
 			);
+		
 		if ($id) {
 			pdo_update('xcommunity_pay',$data,array('id' => $id));
 		}else{
+			if ($data['type']) {
+				$item = pdo_fetch("SELECT * FROM".tablename('xcommunity_pay')."WHERE uniacid=:uniacid AND type=:type",array(':uniacid' => $_W['uniacid'],':type' => $data['type']));
+				if ($item) {
+					message('类型已存在，无需在添加',referer(),'error');exit();
+				}
+			}
 			pdo_insert('xcommunity_pay',$data);
 		}
 			message('提交成功',$this->createWebUrl('pay',array('op' => 'list')),'success');

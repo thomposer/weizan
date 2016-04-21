@@ -7,9 +7,9 @@
 /**
  * 后台小区商家
  */
-defined('IN_IA') or exit('Access Denied');
 	global $_GPC,$_W;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'].$_GPC['op'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 	$operation = !empty($_GPC['operation']) ? $_GPC['operation'] : 'list';
 	$id       = intval($_GPC['id']);
@@ -88,21 +88,6 @@ defined('IN_IA') or exit('Access Denied');
 
 		// 	include $this->template('web/business/category/add');
 		// }
-	}elseif ($op == 'list') {
-			//店铺列表
-			$condition = '';
-			if ($user) {
-				$condition .=" AND uid=:uid";
-				$parms[':uid'] = $_W['uid'];
-			}
-			$pindex = max(1, intval($_GPC['page']));
-			$psize  = 20;
-			$sql = "SELECT * FROM".tablename('xcommunity_dp')."WHERE weid='{$_W['weid']}' $condition LIMIT ".($pindex - 1) * $psize.','.$psize;
-			$list   = pdo_fetchall($sql,$parms);
-			$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_dp')."WHERE weid='{$_W['weid']}' $condition",$parms);
-			$pager  = pagination($total, $pindex, $psize);
-
-			include $this->template('web/business/dp/list');
 	}elseif($op == 'dp'){
 		//店铺管理
 		if ($operation == 'list') {
@@ -377,9 +362,9 @@ defined('IN_IA') or exit('Access Denied');
 			// echo $code;exit();
 			$pindex = max(1, intval($_GPC['page']));
 			$psize  = 20;
-			$sql = "SELECT o.*,g.title as title  FROM".tablename('xcommunity_order')."as o left join ".tablename('xcommunity_goods')."as g on o.gid = g.id WHERE o.weid='{$_W['weid']}' AND o.type='business' $condition LIMIT ".($pindex - 1) * $psize.','.$psize;
+			$sql = "SELECT o.*,g.title as title  FROM".tablename('xcommunity_order')."as o left join ".tablename('xcommunity_goods')."as g on o.gid = g.id WHERE o.weid='{$_W['weid']}' AND o.type='business' AND o.status = 1 $condition LIMIT ".($pindex - 1) * $psize.','.$psize;
 			$list   = pdo_fetchall($sql,$parms);
-			$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_order')."as o left join ".tablename('xcommunity_goods')."as g on o.gid = g.id WHERE o.weid='{$_W['weid']}' AND o.type='business' $condition",$parms);
+			$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_order')."as o left join ".tablename('xcommunity_goods')."as g on o.gid = g.id WHERE o.weid='{$_W['weid']}' AND o.type='business' AND o.status = 1 $condition",$parms);
 			$pager  = pagination($total, $pindex, $psize);
 			include $this->template('web/business/coupon/list');
 		}elseif ($operation == 'use') {

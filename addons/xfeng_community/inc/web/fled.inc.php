@@ -10,7 +10,8 @@
 
 	
 	global $_W,$_GPC;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$op = !empty($_GPC['op']) ? $_GPC['op'] :'list';
 	$id = intval($_GPC['id']);
 	if ($op == 'list') {
@@ -48,11 +49,11 @@
 				}
 				
 			}
-		$categories = pdo_fetchall("SELECT * FROM".tablename('xcommunity_category')."WHERE weid='{$_W['weid']}' AND parentid=4");
+		$categories = pdo_fetchall("SELECT * FROM".tablename('xcommunity_category')."WHERE weid='{$_W['weid']}' AND type=4");
 		$pindex = max(1, intval($_GPC['page']));
 		$psize  = 10;
-		$list = pdo_fetchall("SELECT f.*,r.city,r.dist,r.title as rtitle FROM".tablename('xcommunity_fled')."as f left join ".tablename('xcommunity_region')."as r on f.regionid = r.id WHERE $condition AND f.black = 0 LIMIT ".($pindex - 1) * $psize.','.$psize,$params);
-		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_fled')."as f left join ".tablename('xcommunity_region')."as r on f.regionid = r.id WHERE $condition AND f.black = 0",$params);
+		$list = pdo_fetchall("SELECT f.*,r.city,r.dist,r.title as rtitle,b.address FROM".tablename('xcommunity_fled')."as f left join(".tablename('xcommunity_region')."as r left join".tablename('xcommunity_member')."as b on b.regionid = r.id ) on f.openid = b.openid WHERE $condition AND f.black = 0 LIMIT ".($pindex - 1) * $psize.','.$psize,$params);
+		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_fled')."as f left join(".tablename('xcommunity_region')."as r left join".tablename('xcommunity_member')."as b on b.regionid = r.id ) on f.openid = b.openid WHERE $condition AND f.black = 0",$params);
 		$pager  = pagination($total, $pindex, $psize);
 		include $this->template('web/fled/list');
 	}elseif ($op == 'delete') {
@@ -75,7 +76,7 @@
 			message('该商品不存在');
 		}
 		$images = unserialize($item['images']);
-		if ($images) {
+		if ($images&&$item['images'] !='N;') {
 			$picid  = implode(',', $images);
 		    $imgs   = pdo_fetchall("SELECT * FROM".tablename('xcommunity_images')."WHERE id in({$picid})");
 		}

@@ -5,14 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
 <meta name="format-detection" content="telephone=no"/>
 <title>门店列表</title>
-<link rel="stylesheet" type="text/css" href="../addons/weisrc_dish/template/css/1/wei_canyin_v1.8.4.css?v=1.0" media="all">
-<link rel="stylesheet" type="text/css" href="../addons/weisrc_dish/template/css/1/wei_dialog_v1.2.1.css?v=1.0" media="all">
+<link rel="stylesheet" type="text/css" href="../addons/weisrc_dish/template/css/1/wei_canyin_v1.8.4.css?v=1.0"
+      media="all">
+<link rel="stylesheet" type="text/css" href="../addons/weisrc_dish/template/css/1/wei_dialog_v1.2.1.css?v=1.0"
+      media="all">
 <script type="text/javascript" src="../addons/weisrc_dish/template/js/1/wei_webapp_v2_common_v1.9.4.js"></script>
 <script type="text/javascript" src="../addons/weisrc_dish/template/js/1/wei_industry_common_v1.3.0.js?v=1"></script>
 <script type="text/javascript" src="../addons/weisrc_dish/template/js/1/wei_dialog_v1.9.9.js"></script>
-<script type="text/javascript" src="../addons/weisrc_dish/template/js/2/jQuery.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5PESLgvMcSbSUbPjmDKgvGZ3"></script>
-<script type="text/javascript" src="../addons/weisrc_dish/template/js/postion.js"></script>
 <style>
     .headselect {
         float: none;
@@ -212,6 +211,7 @@
     }
 </style>
 </head>
+
 <body style="background-color:#e9e9eb;">
 <!--<div class="footFix topSearch" data-indent="140" data-ffix-top="0" id="topSearch">-->
 <!--<form method="get" action="{php echo $this->createMobileUrl('waprestlist', array('from_user' => $from_user))}">-->
@@ -234,68 +234,53 @@
             <option value="-1">请选择</option>
             <option value="0" selected>全部区域</option>
             {loop $area $item}
-            <option value="{$item['id']}" {if $item['id']==$areaid}selected{/if}>{$item['name']}</option>
+            <option value="{$item['id']}"
+            {if $item['id']==$areaid}selected{/if}>{$item['name']}</option>
             {/loop}
         </select>
         {/if}
-        <p><input type="text" placeholder="搜索店名、地址..." name="keyword" value=""/></p>
-        <span>
-            <input type="button" value="搜索" onClick="if(_trim(document.getElementsByName('keyword')[0].value)){return this.form.submit();}else{return false}"/>
-            <input type="reset" value="取消" onClick="document.getElementsByName('keyword')[0].value='';return false;"/>
-            <input type="hidden" name="latitude" value=""/>
-        </span>
     </div>
 </div>
-<div id="page_order" style="padding-top: 0px;margin-top: 10px;" >
-    <input type="hidden" id="curlat" name="curlat" value="0" />
-    <input type="hidden" id="curlng" name="curlng" value="0" />
+<div id="page_order" style="padding-top: 0px;margin-top: 10px;">
     {loop $restlist $row}
-    <section class="morelist" style="height: 130px;">
-        <input id="showlan" type="hidden" value="{$row['lng']},{$row['lat']}"/>
+    <section {if $row['is_delivery']==1}style="height: 138px;"{/if}>
         <article>
             <a href="{php echo $this->createMobileUrl('waplist', array('storeid' => $row['id'], 'from_user' => $from_user), true)}">
-                <table style="cursor:pointer;width: 100%;">
+                <table style="cursor:pointer">
                     <tbody>
                     <tr>
                         <td rowspan="3">
-                            <span>
-                                <img src="{if strstr($row['logo'], 'http') || strstr($row['logo'], './source/modules/')}{$row['logo']}{else}{$_W['attachurl']}{$row['logo']}{/if}" >
-                            </span>
+                            <span><img src="{if strstr($row['logo'], 'http') || strstr($row['logo'], './source/modules/')}{$row['logo']}{else}{$_W['attachurl']}{$row['logo']}{/if}" ></span>
                         </td>
                         <td>
                             <h1 style="float:left;">{$row['title']}</h1>
-                            {if $row['is_delivery']==1 && !empty($row['sendingprice'])}
-                            <div style="margin-left:5px;float:right;display: block">
-                                <p style="line-height:20px;color: white;background-color: #88c5ce;" class="btn_order2">{$row['sendingprice']}元起送</p>
-                            </div>
-                            {/if}
-                            {if $row['is_meal']==1}
-                            <div style="margin-left:5px;float:right;display: block">
-                                <p style="line-height:20px;color: white;background-color: #ff6a00;" class="btn_order2">在线订餐</p>
-                            </div>
-                            {/if}
                             {if $row['is_delivery']==1}
-                            <div style="margin-left:5px;float:right;display: block">
+                            <div style="margin-left:5px;float:left;display: block">
                                 <p style="line-height:20px;color: white;background-color:#F54343;" class="btn_order1">外卖订餐</p>
                             </div>
                             {/if}
+                            {if $row['is_meal']==1}
+                            <div style="margin-left:5px;float:left;display: block">
+                                <p style="line-height:20px;color: white;background-color: #ff6a00;" class="btn_order2">在线订餐</p>
+                            </div>
+                            {/if}
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <p>{$row['address']}<br/><font id="shopspostion">计算中...</font></p>
+                            <p>{$row['address']}</p>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <!--{if $row['is_delivery']==1}-->
-                            <!--<div style="float:left;display: block;min-height: 25px;">-->
-                                <!--&lt;!&ndash;<p style="float:left;background-color: #88c5ce;width: 25px;text-align: center; line-height: 25px; color: white;border-radius: 30px;">外</p>&ndash;&gt;-->
-                                <!--{if !empty($row['sendingprice'])}-->
-                                <!--<p style="margin-left:0px;float:left;background-color: #88c5ce;width: 62px; height: 25px; text-align: center; line-height: 25px; color: white;border-radius: 5px;">{$row['sendingprice']}元起送</p>-->
-                                <!--{/if}-->
-                            <!--</div>-->
-                            <!--{/if}-->
+                            {if $row['is_delivery']==1}
+                            <div style="float:left;display: block;min-height: 25px;">
+                                <!--<p style="float:left;background-color: #88c5ce;width: 25px;text-align: center; line-height: 25px; color: white;border-radius: 30px;">外</p>-->
+                                {if !empty($row['sendingprice'])}
+                                <p style="margin-left:0px;float:left;background-color: #88c5ce;width: 62px; height: 25px; text-align: center; line-height: 25px; color: white;border-radius: 5px;">{$row['sendingprice']}元起送</p>
+                                {/if}
+                            </div>
+                            {/if}
                         </td>
                     </tr>
                     </tbody>
@@ -304,12 +289,14 @@
         </article>
         <ul>
             {if !empty($row['tel'])}
-            <li><a href="javascript:void(0);" class="order" onclick="select_phone({$row['tel']});">预订</a></li>
+            <li><a href="tel:{$row['tel']}" class="order">预订</a></li>
             {/if}
             <li>
-                <a href="http://api.map.baidu.com/marker?location={$row['lat']},{$row['lng']}&title={$row['title']}&name={{$row['title']}}&content={$row['address']}&output=html&src=weiba|weisrc" class="gps">导航</a></li>
+                <a href="http://api.map.baidu.com/marker?location={$row['lat']},{$row['lng']}&title={$row['title']}&name={{$row['title']}}&content={$row['address']}&output=html&src=weiba|weisrc"
+                   class="gps">导航</a></li>
             <li>
-                <a href="{php echo $this->createMobileUrl('wapshopshow', array('storeid' => $row['id'], 'from_user' => $from_user), true)}" class="reality">实景</a></li>
+                <a href="{php echo $this->createMobileUrl('wapshopshow', array('storeid' => $row['id'], 'from_user' => $from_user), true)}"
+                   class="reality">实景</a></li>
         </ul>
     </section>
     {/loop}
@@ -319,10 +306,6 @@
         if (obj.value != -1) {
             window.location.href = "{php echo $this->createMobileurl('waprestlist', array('storeid' => $storeid), true)}" + '&areaid=' + obj.value;
         }
-    }
-
-    function select_phone(obj) {
-        window.location.href = "tel:" + obj;
     }
 </script>
 </body>

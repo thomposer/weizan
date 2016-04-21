@@ -9,7 +9,8 @@
  */
 	
 global $_GPC,$_W;
-$GLOBALS['frames'] = $this->NavMenu();
+$do = $_GPC['do'];
+$GLOBALS['frames'] = $this->NavMenu($do);
 $op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 $id = intval($_GPC['id']);
 $user = $this->user();
@@ -73,10 +74,10 @@ if ($op == 'list') {
 		     
 		   }
 		   if ($user['regionid']) {
-					$regionid = $user['regionid'];
-				}else{
-					$regionid = $_GPC['regionid'];
-				}
+				$regionid = $user['regionid'];
+			}else{
+				$regionid = $_GPC['regionid'];
+			}
 		  $insert['costtime']    = $costtime;
 		  $insert['regionid'] = $regionid;
 		  $res = $this->read($savePath.$file_name);
@@ -89,28 +90,54 @@ if ($op == 'list') {
 		  //print_r($res);exit();
 		  pdo_insert('xcommunity_cost',$insert);
 		  $cid = pdo_insertid();
+		  
+		  $category = pdo_fetch("SELECT name FROM".tablename('xcommunity_category')."WHERE regionid=:regionid",array(':regionid' => $regionid));
+		  $c = explode('|', $category['name']);
+		  $count = count($c);
 		  /*对生成的数组进行数据库的写入*/
-		  foreach ( $res as $k => $v ) {
-			    if ($k != 0) {
-					$data['mobile']      = $v[1];
-					$data['username']    = $v[0];
-					$data['homenumber']  = $v[2];
-					$data['costtime']    = $v[3];
-					$data['propertyfee'] = $v[4];
-					$data['otherfee']    = $v[5];
-					$data['total']       = $v[6];
-					$data['weid']        = $_W['weid'];
-					$data['cid']         = $cid;
-					$data['regionid']    = $regionid;
-					$data['status']      = $v[7];
-					$data['createtime']  = TIMESTAMP;
-					$result              = pdo_insert('xcommunity_cost_list',$data);
-			    }
-		  }
-
-		  if($result){
-	       		message('导入成功',referer(),'success');
-	     	}
+		  // foreach ( $res as $k => $v ) {
+			 //    if ($k != 0) {
+				// 	$data['mobile']      = $v[1];
+				// 	$data['username']    = $v[0];
+				// 	$data['homenumber']  = $v[2];
+				// 	$data['costtime']    = $v[3];
+				// 	$data['propertyfee'] = $v[4];
+				// 	$data['otherfee']    = $v[5];
+				// 	$data['total']       = $v[6];
+				// 	$data['weid']        = $_W['weid'];
+				// 	$data['cid']         = $cid;
+				// 	$data['regionid']    = $regionid;
+				// 	$data['status']      = $v[7];
+				// 	$data['createtime']  = TIMESTAMP;
+				// 	$result              = pdo_insert('xcommunity_cost_list',$data);
+			 //    }
+		  // }
+		 	
+			  foreach ( $res as $k => $v ) {
+			  	$leng = count($v);
+				    if ($k != 0) {
+				    	$r = '';
+						for ($i=5; $i < $count+5; $i++) { 
+							$r .= $v[$i].'|';
+						}
+				    	$data['username']    = $v[0];
+						$data['mobile']      = $v[1];
+						$data['homenumber']  = $v[2];
+						$data['area']    = $v[3];
+						$data['costtime'] = $v[4];
+						$data['fee'] = $r;
+						$data['total']       = $v[$leng-2];
+						$data['status']      = $v[$leng-1];
+						$data['weid']        = $_W['weid'];
+						$data['cid']         = $cid;
+						$data['regionid']    = $regionid;
+						$data['createtime']  = TIMESTAMP;
+						$result              = pdo_insert('xcommunity_cost_list',$data);
+				    }
+			  }
+			  if($result){
+		       		message('导入成功',referer(),'success');
+		      }
 		}
 	}
 
@@ -181,7 +208,7 @@ include $this->template('web/cost/add');
 		if (!empty($cids)) {
 			foreach ($cids as $cid) {
 				$cost = pdo_fetch("SELECT * FROM".tablename('xcommunity_cost_list')."WHERE id='{$cid}'");
-				$member = pdo_fetch("SELECT * FROM".tablename('xcommunity_member')."WHERE mobile='{$cost['mobile']}'");
+				$member = pdo_fetch("SELECT * FROM".tablename('xcommunity_member')."WHERE address='{$cost['homenumber']}'");
 				$openid = $member['openid'];
 				$url = $_W['siteroot']."app/index.php?i={$_W['uniacid']}&c=entry&op=detail&do=cost&id={$cid}&m=xfeng_community";
 				$tpl = pdo_fetch("SELECT * FROM".tablename('xcommunity_wechat_tplid')."WHERE uniacid=:uniacid",array(':uniacid' => $_W['uniacid']));
@@ -272,19 +299,26 @@ include $this->template('web/cost/add');
 	if (empty($id)) {
 		message('缺少参数',referer().'error');
 	}
-	$item = pdo_fetch("SELECT mobile,username,homenumber,total,id,propertyfee,otherfee,total,costtime FROM".tablename('xcommunity_cost_list')."WHERE id=:id",array(':id' => $id));
+	$item = pdo_fetch("SELECT * FROM".tablename('xcommunity_cost_list')."WHERE id=:id",array(':id' => $id));
+
+	if ($item['fee']) {
+		$fee = explode('|', $item['fee']);
+		$category = pdo_fetch("SELECT * FROM".tablename('xcommunity_category')."WHERE regionid=:regionid AND type =7 AND weid=:weid",array(':regionid' => $item['regionid'],':weid' => $_W['uniacid']));
+		$cate = explode('|', $category['name']);
+	}
 	if (empty($item)) {
 		message('数据不存在或已被删除',referer(),'error');
 	}
 	if (checksubmit('submit')) {
+		$fee = implode("|", $_GPC['fee']);
+
 		$data = array(
 				'username' => $_GPC['username'],
 				'mobile' => $_GPC['mobile'],
 				'homenumber' => $_GPC['homenumber'],
 				'costtime' => $_GPC['costtime'],
-				'propertyfee' => $_GPC['propertyfee'],
-				'otherfee' => $_GPC['otherfee'],
 				'total' => $_GPC['total'],
+				'fee' => $fee
 			);
 		if ($id) {
 			$r = pdo_update('xcommunity_cost_list',$data,array('id' => $id));
@@ -294,6 +328,87 @@ include $this->template('web/cost/add');
 		}
 	}
 	include $this->template('web/cost/edit');
+}elseif ($op == 'category') {
+	$operation = !empty($_GPC['operation']) ? $_GPC['operation'] : 'add';
+	if ($operation == 'add') {
+		//增加费用类型
+		//判断是否是操作员
+		if ($user) {
+			//物业管理员
+			if (!$user['regionid']) {
+				$regions = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}' AND pid=:pid",array(':pid' => $user['companyid']));
+
+			}
+		}else{
+			$regions = $this->regions();	
+		}
+		if ($id) {
+			$item = pdo_fetch("SELECT * FROM".tablename('xcommunity_category')."WHERE id=:id AND weid=:weid",array(':id' => $id,':weid' => $_W['uniacid']));
+		}
+		if (checksubmit('submit')) {
+			$data = array(
+					'weid' => $_W['uniacid'],
+					'type' => 7,
+					'name' => $_GPC['name'],
+
+				);
+			if ($user['regionid']) {
+					$regionid = $user['regionid'];
+				}else{
+					$regionid = $_GPC['regionid'];
+				}
+			
+			if ($id) {
+				pdo_update('xcommunity_category',$data,array('id' => $id));
+			}else{
+				$data['regionid'] = $regionid;
+				$category = pdo_fetch("SELECT * FROM".tablename('xcommunity_category')."WHERE regionid=:regionid",array(':regionid' => $regionid));
+				if ($category) {
+					message('该小区费用类型已存在,无需在增加',referer(),'error');exit();
+				}
+				pdo_insert('xcommunity_category',$data);
+			}
+			message('提交成功',referer(),'success');
+		}
+
+
+		
+		include $this->template('web/cost/category/add');
+	}elseif ($operation == 'list') {
+		$pindex = max(1, intval($_GPC['page']));
+		$psize  = 10;
+		$condition = '';
+		
+		if ($user) {
+			if ($user['regionid']) {
+				$condition .="AND c.regionid=:regionid";
+				$params[':regionid'] = $user['regionid'];
+			}else{
+				$condition .=" AND r.pid =:pid";
+				$params[':pid'] = $user['companyid'];
+			}
+			
+		}
+		$list = pdo_fetchall("SELECT c.*,r.title,r.city,r.dist FROM".tablename('xcommunity_category')."as c left join".tablename('xcommunity_region')."as r on c.regionid = r.id WHERE c.weid='{$_W['weid']}' AND c.type=7 $condition",$params);
+		$total  = pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_category')."as c left join".tablename('xcommunity_region')."as r on c.regionid = r.id WHERE c.weid='{$_W['weid']}' AND c.type=7 $condition",$params);
+		$pager  = pagination($total, $pindex, $psize);
+		include $this->template('web/cost/category/list');
+	}elseif ($operation == 'del') {
+		if (empty($id)) {
+			message('缺少参数',referer(),'error');
+		}
+		$result    = pdo_delete('xcommunity_category',array('id' => $id,'weid' => $_W['weid']));	
+		message('删除成功',referer(),'success');
+	}
+}elseif ($op == 'ajax') {
+	$regionid = intval($_GPC['regionid']);
+	if ($regionid) {
+		$cate = pdo_fetch("SELECT * FROM".tablename('xcommunity_category')."WHERE regionid=:regionid",array(':regionid' => $regionid));
+		print_r(json_encode($cate));exit();
+	}else{
+		$cate = 0;
+		print_r(json_encode($cate));exit();
+	}
 }
 
 

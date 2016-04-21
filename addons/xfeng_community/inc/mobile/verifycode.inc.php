@@ -35,6 +35,7 @@
 			$_SESSION['mobile']=$mobile;
 			$_SESSION['code']=$code;
 		}
+		// echo $_SESSION['code'];exit();
 		$sms = pdo_fetch("SELECT resgisterid,verifycode,sms_account FROM".tablename('xcommunity_wechat_smsid')."WHERE uniacid=:uniacid",array(':uniacid' => $_W['uniacid']));
 		if ($sms['verifycode']) {
 			//验证是否开启	

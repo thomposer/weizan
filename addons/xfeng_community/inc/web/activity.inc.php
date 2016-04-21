@@ -8,7 +8,8 @@
  * 后台小区活动
  */
 	global $_W,$_GPC;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 	$id = intval($_GPC['id']);
 	//判断是否是操作员
@@ -155,6 +156,56 @@
 		if (checksubmit('delete')) {
 			pdo_delete('xcommunity_res', " id  IN  ('".implode("','", $_GPC['select'])."')");
 			message('删除成功！',referer(),'success');
+		}
+		//导出用户
+		if (checksubmit('export')) {
+			$li = pdo_fetchall("SELECT r.*,a.title as title,a.price as price FROM".tablename('xcommunity_res')."as r left join ".tablename('xcommunity_activity')."as a on r.aid = a.id WHERE r.weid='{$_W['weid']}' AND r.aid =:aid ",array(':aid' => $aid));
+			foreach ($list as $key => $value) {
+				$li[$key]['cctime'] = date('Y-m-d H:i',$value['createtime']);
+				if ($value['price'] != '0.00') {
+					$li[$key]['s'] = empty($value['status']) ? '未支付' : '已支付';
+				}else{
+					$li[$key]['s'] = '无定金';
+				}
+				
+			}
+			$this->export($li,array(
+			            "title" => "用户数据-" . date('Y-m-d-H-i', time()),
+			            "columns" => array(
+			                array(
+			                    'title' => '活动标题',
+			                    'field' => 'title',
+			                    'width' => 16
+			                ),
+			                array(
+			                    'title' => '姓名',
+			                    'field' => 'truename',
+			                    'width' => 14
+			                ),
+			                array(
+			                    'title' => '电话',
+			                    'field' => 'mobile',
+			                    'width' => 12
+			                ),
+			                array(
+			                    'title' => '人数',
+			                    'field' => 'num',
+			                    'width' => 12
+			                ),
+			                array(
+			                    'title' => '报名时间',
+			                    'field' => 'num',
+			                    'width' => 12
+			                ),
+			                array(
+			                    'title' => '支付状态',
+			                    'field' => 's',
+			                    'width' => 12
+			                ),
+			              
+			            )
+					));
+
 		}
 		include $this->template('web/activity/order');
 	}

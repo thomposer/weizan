@@ -118,12 +118,20 @@
                 var gpsPoint = new BMap.Point(currentLon, currentLat);
                 BMap.Convertor.translate(gpsPoint, 0, initMap); //转换坐标 
             }
-            initMap = function(point) {
+             var region_status = {$settings['region_status']};
+             if (region_status) {
+                initMap = function(point) {
                     wd = point.lat;
                     jd = point.lng;
                     keyw = "";
                     xqAjax(wd, jd, keyw)
                 }
+            }else{
+                xqAjax();
+            }
+            
+               
+   
                 /*ajax请求函数,判断共几页，呈现不同效果*/
             function xqAjax(wd, jd, keyw) {
                 var url = "{php echo $this->createMobileUrl('register',array('op' => 'getaround'))}";

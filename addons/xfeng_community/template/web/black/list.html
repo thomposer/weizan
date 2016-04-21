@@ -9,7 +9,7 @@
     <div class="alert alert-warning alert-dismissible" role="alert">
 	  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	  <p>黑名单说明</p>
-	  {if $type== 2} <p>在二手交易信息管理中可以屏蔽信息，屏蔽后可以在这里进行管理。</p>{elseif $type == 1}<p>在小区拼车信息管理中可以屏蔽信息，屏蔽后可以在这里进行管理</p>{/if}
+	 <p>在二手交易和拼车信息管理中可以屏蔽信息，屏蔽后可以在这里进行管理。</p>
 	</div>
 	<div>
 	  	<a style="display:block;" href="{php echo $this->createWebUrl('black',array('type' => 1))}" class="btn btn-s-sm text-sm btn-info navbar-right m-r-sm"><i class="fa fa-eye-slash text-sg"></i> 拼车信息黑名</a>&nbsp;&nbsp;

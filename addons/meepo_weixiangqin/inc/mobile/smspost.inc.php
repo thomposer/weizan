@@ -11,12 +11,12 @@ if(empty($openid)){
 }
 if($_W['ispost'] && $_W['isajax']) {
 	$user = $this->getusers($weid,$openid);
-	
+	$gender = intval($_GPC['gender']);
 	if(!empty($_GPC['mobile']) && !empty($_GPC['yzm'])){
 	     if($_GPC['mobile']==$user['telephone']){
 			 $check = pdo_fetchcolumn("SELECT news FROM".tablename('meepo_sms_news')." WHERE openid=:openid AND weid=:weid",array(':openid'=>$openid,':weid'=>$weid));
 		        if($_GPC['yzm'] == $check){
-				pdo_update('hnfans',array('telephoneconfirm'=>1),array('from_user'=>$openid,'weid'=>$weid));
+				pdo_update('hnfans',array('telephoneconfirm'=>1,'gender'=>$gender),array('from_user'=>$openid,'weid'=>$weid));
 				   $data =array(
 	                  'error'=>0,
 	                   'message'=>'success',

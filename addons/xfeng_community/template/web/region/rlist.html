@@ -49,7 +49,6 @@
                     <td>{$item['code']}</td>
                     <td>{$item['mobile']}</td>
                     <td>
-                        <a href="{php echo $this->createWebUrl('region',array('op' => 'room','rid' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-download-alt"></i>导出房号</a>
                         <a href="{php echo $this->createWebUrl('region',array('op' => 'edit','rid' => $item['id'],'id' => $id))}" title="编辑" class="btn btn-default btn-sm"><i class="fa fa-edit" data-toggle="tooltip" data-placement="top"></i>编辑</a>
                     </td>
                 </tr>
@@ -66,7 +65,10 @@
                     <input name="token" type="hidden" value="{$_W['token']}" />
                     <input type="submit" class="btn btn-primary span2" name="delete" value="删除" /> &nbsp;
                     <a class="btn btn-default btn-sm" href="javascript:;" data-toggle="modal" data-target="#room_{$id}"><i class='glyphicon glyphicon-plus'></i>添加房号</a>
+                    <button type="submit" name="export" value="1" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-download-alt"></i>导出房号</button>
+                    <!-- <a href="{php echo $this->createWebUrl('region',array('op' => 'room','rid' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-download-alt"></i>导出房号</a> -->
                 </td>
+
             </tr>
         </table>
         {/if} {$pager}

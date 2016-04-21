@@ -97,7 +97,7 @@
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
                     <select class="weui_select" name="category" id='category' style="margin-left:-15px;">
-                        <option>选择服务</option>
+                        <option value='0'>选择服务</option>
                         {loop $categories $category}
                         <option value="{$category['id']}">
 
@@ -111,13 +111,19 @@
                     </select>
                 </div>
             </div>
-            <div class="weui_cell">
+            <!-- <div class="weui_cell">
                 <div class="weui_cell_hd">
                     服务时间：
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
-                     <input class="weui_input" type="datetime-local" id="servicetime" />
+                     <input class="weui_input" type ='text'  id="servicetime" placeholder="请选择时间" onclick="showtime()" />
                 </div> 
+            </div> -->
+            <div class="weui_cell">
+                <div class="weui_cell_hd">服务时间：</div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" type="datetime-local" id="servicetime"/>
+                </div>
             </div>
             <div class="weui_cell">
                 <div class="weui_cell_hd">
@@ -140,7 +146,7 @@
                     <label class="weui_label">地址：</label>
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
-                    <input class="weui_input" type="text" value="{$member['address']}" id="address" />
+                    <input class="weui_input" type="text" value="{$region['city']}{$region['dist']}{$region['title']}{$member['address']}" id="address" />
                 </div>
             </div>
             <a style="height:20px;width:100%;background-color: #efeef4;display:none"  id='ddd'></a>
@@ -175,6 +181,8 @@
     });
     </script>
     <script type="text/javascript">
+
+
     $(function() {
             $("#category").change(function() {
                 var cid = $("#category option:selected").val();
@@ -201,7 +209,13 @@
                 return false
             };
             var category = $("#category").val();
+            if (category == '0') {
+                alert('请选择分类，如没有分类联系管理员增加本类服务');return false;
+            };
             var servicetime = $("#servicetime").val();
+            if (servicetime == '') {
+                alert('请选择时间');return false;
+            };
             var realname = $("#realname").val();
             var mobile = $("#mobile").val();
             var address = $("#address").val();
@@ -222,7 +236,7 @@
                         $('#toast').show();
                         setTimeout(function() {
                             $('#toast').hide();
-                            window.location.reload();
+                            window.location.href="{php echo $this->createMobileUrl('home')}";
                         }, 3000);
                     };
                 }

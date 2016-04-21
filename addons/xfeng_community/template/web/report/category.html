@@ -1,8 +1,8 @@
 
 {template 'common/header'}
 <ul class="nav nav-tabs">
-	<li><a href="{php echo $this->createWebUrl('repair', array('op' => 'list'))}">服务管理</a></li>
-	<li class="active"><a href="{php echo $this->createWebUrl('repair', array('op'=>'category'));}">服务分类</a></li>
+	<li><a href="{php echo $this->createWebUrl('report', array('op' => 'list'))}">服务管理</a></li>
+	<li class="active"><a href="{php echo $this->createWebUrl('report', array('op'=>'category'));}">服务分类</a></li>
 </ul>
 
 <div class="main">
@@ -20,7 +20,7 @@
 				<tr>
 					<td><input class="form-control" name="names[]" type="text" value="{$item['name']}">
 					<input name="ids[]" type="hidden" value="{$item['id']}"></td>
-					<td><a onclick="if (confirm('删除操作不可恢复，确认吗？')){ $(this).parent().parent().next().remove(); return true;} else {return false;}" href="{php echo $this->createWebUrl('repair', array('op' => 'del', 'id' => $item['id']))}" class="btn btn-small" title="删除"><i class="fa fa-times"></i>删除</a></td>
+					<td><a onclick="if (confirm('删除操作不可恢复，确认吗？')){ $(this).parent().parent().next().remove(); return true;} else {return false;}" href="{php echo $this->createWebUrl('report', array('op' => 'del', 'id' => $item['id']))}" class="btn btn-small" title="删除"><i class="fa fa-times"></i>删除</a></td>
 				</tr>
 			{/loop}
 			</tbody>

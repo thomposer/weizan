@@ -100,22 +100,20 @@ if ($do == 'display') {
 					$sql = 'SELECT `openid` FROM ' . tablename('mc_mapping_fans') . " WHERE `acid`={$acid} AND `openid` IN ({$openids})";
 					$ds = pdo_fetchall($sql, array(), 'openid');
 					$sql = '';
-					if (!empty($ds)) {
-						foreach($buffer as $openid) {
-							if(!empty($ds[$openid])) {
-								unset($ds[$openid]);
-								continue;
-							}
-							$salt = random(8);
-							$sql .= "('{$acid}', '{$_W['uniacid']}', 0, '{$openid}', '{$salt}', 1, 0, ''),";
+					foreach($buffer as $openid) {
+						if(!empty($ds) && !empty($ds[$openid])) {
+							unset($ds[$openid]);
+							continue;
 						}
-						if(!empty($sql)) {
-							$sql = rtrim($sql, ',');
-							$sql = 'INSERT INTO ' . tablename('mc_mapping_fans') . ' (`acid`, `uniacid`, `uid`, `openid`, `salt`, `follow`, `followtime`, `tag`) VALUES ' . $sql;
-							pdo_query($sql);
-						}
-						pdo_query("UPDATE " . tablename('mc_mapping_fans') . " SET follow = '1' WHERE `openid` IN ({$openids})");
+						$salt = random(8);
+						$sql .= "('{$acid}', '{$_W['uniacid']}', 0, '{$openid}', '{$salt}', 1, 0, ''),";
 					}
+					if(!empty($sql)) {
+						$sql = rtrim($sql, ',');
+						$sql = 'INSERT INTO ' . tablename('mc_mapping_fans') . ' (`acid`, `uniacid`, `uid`, `openid`, `salt`, `follow`, `followtime`, `tag`) VALUES ' . $sql;
+						pdo_query($sql);
+					}
+					pdo_query("UPDATE " . tablename('mc_mapping_fans') . " SET follow = '1' WHERE `openid` IN ({$openids})");
 				}
 				$ret = array();
 				$ret['total'] = $fans['total'];

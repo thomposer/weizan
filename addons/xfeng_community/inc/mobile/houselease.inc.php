@@ -227,7 +227,7 @@
 		if (empty($item)) {
 			message('信息已删除或不存在',referer(),'error');
 		}
-		if ($item['images']) {
+		if ($item['images']&&$item['images']!='N;') {
 				$imgs = pdo_fetchall("SELECT src FROM".tablename('xcommunity_images')."WHERE id in({$item['images']})");
 			}
 		$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");

@@ -12,7 +12,7 @@
                     <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
                         <select name="regionid" class="form-control">
                                 {loop $regions $region}
-                                <option value="{$region['id']}" {if $region['id']==$_GPC[ 'regionid']} selected{/if}>{$region['title']}</option>
+                                <option value="{$region['id']}" {if $region['id']==$_GPC[ 'regionid']} selected{/if}>{$region['city']}{$region['dist']}{$region['title']}</option>
                                 {/loop}
                         </select>
                     </div>
@@ -62,11 +62,11 @@
 				<tr>
 
 					<th style="width:10%;">姓名</th>
-					<th style="width:12%;">手机</th>
-					<th style="width:15%;">所属小区</th>
-					<th style="width:15%;">发布时间</th>
-					<th style="width:8%;">状态</th>
-					<th style="min-width:60px; width:50%;">操作</th>
+					<th style="width:15%;">手机</th>
+					<th style="width:30%;">地址</th>
+					<th style="width:20%;">发布时间</th>
+					<th style="width:15%;">状态</th>
+					<th style="min-width:60px; width:30%;">操作</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -74,7 +74,7 @@
 				<tr>
 					<td>{$item['realname']}</td>
 					<td>{$item['mobile']}</td>
-					<td>{$item['city']}{$item['dist']}{$item['title']}</td>
+					<td>{$item['city']}{$item['dist']}{$item['title']}{$item['address']}</td>
 					<td>{php echo date('Y-m-d H:i', $item[createtime]);}</td>
 					<td>{if $item['status'] ==1 }<span class="label label-success">已成交</span>{/if}{if $item['status'] == 0 }<span class="label label-info">未成交</span>{/if}{if $item['status'] == 2 }<span class="label label-error">已取消</span>{/if}</td>
 					<td>

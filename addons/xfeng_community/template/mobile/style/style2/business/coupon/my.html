@@ -27,30 +27,13 @@
     <div id="life" class="page-center-box">
         <div id="scroll">
             <div class="list-have-pic buy-list">
-                <!-- 循环 -->
-                <!-- <div class="list-box">
-                    <div class="list-img">
-                        <a href="/mobile/tuan/detail/tuan_id/114.html"><img src="/attachs/2015/10/20/thumb_5625a41a43251.jpg"></a>
-                    </div>
-                    <div class="buy-content">
-                        <p class=""><span class="fl overflow_clear" style="width:60%;"><a href="/mobile/tuan/detail/tuan_id/114.html">蚁人</a></span><span class="fr"><a class="order_detail" href="/mcenter/tuan/detail/order_id/102716.html">详情</a></span></p>
-                        <p><span class="spread-money">总价：￥1</span><span class="spread-money2">数量：1</span></p>
-                        <p class="spread-for">
-                            等待付款
-                        </p>
-                        <a style="color:#fff;" href="/mcenter/tuan/delete/order_id/102716.html" class="button">取消</a>
-                        <a style="color:#fff;" href="/mobile/tuan/pay/order_id/102716.html" class="button2">付款</a>
-                    </div>
-                </div> -->
-               
-               
-                <!-- 循环 -->
+
             </div>
         </div>
          {template 'style/style1/footer'}
         <script>
         $(document).ready(function() {
-            loaddata("{php echo $this->createMobileUrl('business',array('op' => 'coupon','operation' => 'my'))}", $(".list-have-pic"), true);
+            loaddata("{php echo $this->createMobileUrl('business',array('op' => 'coupon','operation' => 'my','status' =>$status))}", $(".list-have-pic"), true);
         });
         </script>
     </div>

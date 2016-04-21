@@ -30,7 +30,7 @@ class bm_qrsignModuleProcessor extends WeModuleProcessor
             }
             return $this->respText($msg);
         }
-        $url                      = $_W['siteroot'] . 'app/' . $this->createMobileUrl('show', array(
+        $url                      = $_W['siteroot'] . 'app/' . $this->createMobileUrl('pay', array(
             'rid' => $rid,
             'from_user' => $this->message['from']
         ));

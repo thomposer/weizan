@@ -11,8 +11,7 @@
 		global $_GPC,$_W;
 		$op = !empty($_GPC['op']) ? $_GPC['op']:'add' ;
 		$id = $_GPC['id'];
-		//查对应的小区编号
-		$member = $this->changemember();
+		
 		$region = $this->mreg();
 		
 		if($op == 'add'){
@@ -23,13 +22,18 @@
 			if(!empty($id)){
     			$item = pdo_fetch("SELECT * FROM".tablename('xcommunity_homemaking')."WHERE id=:id",array(':id' => $id));
     		}
+    		// $dtime = date('Y-m-d H:i',TIMESTAMP);
+    		//查对应的小区编号
+		$member = $this->changemember();
     		if($_W['isajax']){
+    			$stime = strtotime($_GPC['servicetime']);
+    			$servicetime = date("Y-m-d H:i",$stime);
     			$data = array(
 					'weid'                 => $_W['weid'],
 					'openid'               => $_W['fans']['from_user'],
 					'regionid'             => $member['regionid'],
 					'category' => $_GPC['category'],
-					'servicetime'          => $_GPC['servicetime'],
+					'servicetime'          => $servicetime,
 					'realname'          => $_GPC['realname'],
 					'mobile'               => $_GPC['mobile'],
 					'address'	=> $_GPC['address'],
@@ -58,7 +62,7 @@
 							$url ='';
 							$tpl = pdo_fetch("SELECT * FROM".tablename('xcommunity_wechat_tplid')."WHERE uniacid=:uniacid",array(':uniacid' => $_W['uniacid']));
 							$template_id = $tpl['homemaking_tplid'];
-							$createtime = date('Y-m-d H:i:s', $data['servicetime']);
+							//$servicetime$createtime = date('Y-m-d H:i:s', $data['servicetime']);
 							$content = array(
 									'first' => array(
 											'value' => '您好，有一条新的家政服务预约。',
@@ -70,10 +74,10 @@
 											'value' => $_GPC['mobile']
 										),
 									'keyword3' => array(
-											'value' => $createtime
+											'value' => $servicetime
 										),
 									'keyword4' => array(
-											'value' => $cate['name'],
+											'value' => $_GPC['content'],
 										),
 									'remark'    => array(
 										'value' => '请尽快联系客户。',
@@ -100,7 +104,8 @@
 			if ($_W['isajax']) {
 				$pindex = max(1, intval($_GPC['page']));
 				$psize = 2;
-
+				//查对应的小区编号
+		$member = $this->changemember();
 				$list = pdo_fetchall('SELECT f.*,s.name as name FROM'.tablename('xcommunity_homemaking')."as f left join".tablename('xcommunity_category')."as s on f.category = s.id WHERE f.weid='{$_W['weid']}' AND f.regionid='{$member['regionid']}' AND f.openid='{$_W['fans']['from_user']}' order by f.id desc LIMIT ".($pindex - 1) * $psize.','.$psize,$params);
 				$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_homemaking')."as f left join".tablename('xcommunity_category')."as s on f.category = s.id WHERE f.weid='{$_W['weid']}' AND f.regionid='{$member['regionid']}' AND f.openid='{$_W['fans']['from_user']}' order by f.id desc",$params);
 

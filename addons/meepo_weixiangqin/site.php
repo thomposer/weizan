@@ -1,10 +1,4 @@
 <?php
-/**
- * meepo微相亲模块微站定义
- *
- * @author meepo_zam
- * @url
- */
 defined('IN_IA') or exit('Access Denied');
 define(EARTH_RADIUS, 6371);
 define('RES', '../addons/meepo_weixiangqin/template');
@@ -33,12 +27,11 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
         load()->classs('weixin.account');
         $accObj       = WeixinAccount::create($_W['account']['acid']);
         $access_token = $accObj->fetch_token();
-        $token2       = $access_token;
-        if (empty($token2)) {
+        if (empty($access_token)) {
             die('管理员配置的参数有误');
         } else {
             load()->func('communication');
-            $url      = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=' . $token2 . '&openid=' . $openid . '&lang=zh_CN';
+            $url      = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=' . $access_token . '&openid=' . $openid . '&lang=zh_CN';
             $content2 = ihttp_request($url);
             $info     = @json_decode($content2['content'], true);
             if (empty($info['nickname'])) {
@@ -93,119 +86,113 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
         global $_W, $_GPC;
         $weid       = $_W['uniacid'];
         $openid     = $_W['openid'];
+        $day_num    = intval($_GPC['day_num']);
         $uid        = $_W['member']['uid'];
         $cfg        = $this->module['config'];
-        $tuijiannum = empty($cfg['tuijiannum']) ? 10 : intval($cfg['tuijiannum']);
+        $tuijiannum = empty($cfg['tuijiannum']) ? 20 : intval($cfg['tuijiannum']);
         if ($_W['isajax']) {
-            $payment = intval($cfg['tjjifen']);
+            $payment = intval($cfg['tjjifen']) * $day_num;
             load()->model('mc');
-            $member = mc_fetch($uid);
-            if ($member['credit1'] >= $payment) {
+            $credit = mc_credit_fetch($_W['member']['uid']);
+            if (is_array($credit) && $credit['credit1'] >= $payment) {
                 $res = $this->getusers($weid, $openid);
-                if ($res['tuijian'] == '2') {
-                    die('已经显示在首页。无需再次推荐！');
+                if (empty($res['constellation'])) {
+                    die(json_encode(error(-2, '请先完善资料！')));
                 }
                 if ($res['yingcang'] == '2') {
-                    die('你已隐藏个人信息、不可推荐！');
+                    die(json_encode(error(-1, '你已隐藏个人信息、不可推荐！')));
                 }
                 if ($res['gender'] == '0') {
-                    die('你的性别设置为保密，不可推荐！');
+                    die(json_encode(error(-1, '你的性别设置为保密，不可推荐！')));
                 }
                 $allnum = pdo_fetchcolumn("SELECT count(*)  FROM " . tablename('hnfans') . " WHERE  weid='{$weid}' AND nickname!='' AND isshow='1'  AND gender='{$res['gender']}' AND yingcang='1' AND tuijian='2'");
                 if ($allnum >= $tuijiannum) {
-                    die('推荐人数已经满，请联系管理员');
+                    die(json_encode(error(-1, '首页推荐人数已经满，请联系管理员')));
                 }
-                $check = pdo_fetchcolumn("SELECT id,status FROM " . tablename('meepohn_tuijian') . " WHERE openid=:openid AND weid=:weid", array(
+                $check = pdo_fetch("SELECT `status`,`tj_over_time` FROM " . tablename('meepohn_tuijian') . " WHERE openid=:openid AND weid=:weid ORDER BY createtime DESC", array(
                     ':openid' => $openid,
                     ':weid' => $weid
                 ));
-                if (empty($check['id'])) {
+                if (empty($check)) {
                     if ($cfg['tjstatus'] == '1') {
                         $data['status'] = 0;
                     } else {
                         $data['status'] = 1;
                     }
-                    $data['openid']     = $openid;
-                    $data['payment']    = $payment;
-                    $data['createtime'] = time();
-                    $data['weid']       = $weid;
+                    $data['openid']       = $openid;
+                    $data['payment']      = $payment;
+                    $data['day_num']      = $day_num;
+                    $data['tj_over_time'] = time() + $day_num * 86400;
+                    $data['createtime']   = time();
+                    $data['weid']         = $weid;
                     pdo_insert('meepohn_tuijian', $data);
-                    pdo_query('UPDATE ' . tablename('mc_members') . " SET credit1 = credit1 - '{$payment}' WHERE uid = '{$uid}' AND uniacid='{$weid}' ");
+                    $result = mc_credit_update($_W['member']['uid'], 'credit1', -$payment);
                     if ($data['status'] == 1) {
                         pdo_update("hnfans", array(
                             "tuijian" => 2,
-                            'tjtype' => 1
+                            'tjtype' => 1,
+                            'tj_over_time' => $data['tj_over_time']
                         ), array(
                             "from_user" => $openid,
                             "weid" => $weid
                         ));
-                        die('你已推荐成功!');
+                        die(json_encode(error(0, '推荐成功、过期时间为' . date('Y-m-d H:i:s', $data['tj_over_time']))));
                     } else {
-                        pdo_update('hnfans', array(
-                            'tjtype' => 1
+                        pdo_update("hnfans", array(
+                            'tjtype' => 1,
+                            'tj_over_time' => $data['tj_over_time']
                         ), array(
-                            'from_user' => $openid,
+                            "from_user" => $openid,
                             "weid" => $weid
                         ));
-                        die('推荐成功，请等待管理员审核');
+                        die(json_encode(error(0, '推荐成功，请等待管理员审核')));
                     }
                 } else {
                     if ($check['status'] == '0') {
-                        die('你已推荐成功，请等待管理员审核');
+                        die(json_encode(error(-1, '你上次推荐申请未通过审核，请等待审核！')));
                     } else {
-                        die('你已推荐成功，无需再次推荐');
+                        if ($cfg['tjstatus'] == '1') {
+                            $data['status'] = 0;
+                        } else {
+                            $data['status'] = 1;
+                        }
+                        $data['openid']  = $openid;
+                        $data['payment'] = $payment;
+                        $data['day_num'] = $day_num;
+                        if ($check['tj_over_time'] >= time()) {
+                            $data['tj_over_time'] = $check['tj_over_time'] + $day_num * 86400;
+                        } else {
+                            $data['tj_over_time'] = time() + $day_num * 86400;
+                        }
+                        $data['createtime'] = time();
+                        $data['weid']       = $weid;
+                        pdo_insert('meepohn_tuijian', $data);
+                        $result = mc_credit_update($_W['member']['uid'], 'credit1', -$payment);
+                        if ($data['status'] == 1) {
+                            pdo_update("hnfans", array(
+                                "tuijian" => 2,
+                                'tjtype' => 1,
+                                'tj_over_time' => $data['tj_over_time']
+                            ), array(
+                                "from_user" => $openid,
+                                "weid" => $weid
+                            ));
+                            die(json_encode(error(0, '推荐成功、过期时间为' . date('Y-m-d H:i:s', $data['tj_over_time']))));
+                        } else {
+                            pdo_update("hnfans", array(
+                                'tjtype' => 1,
+                                'tj_over_time' => $data['tj_over_time']
+                            ), array(
+                                "from_user" => $openid,
+                                "weid" => $weid
+                            ));
+                            die(json_encode(error(0, '推荐成功，请等待管理员审核')));
+                        }
                     }
                 }
             } else {
-                die('low');
+                die(json_encode(error(-3, '积分不足、当前积分仅为' . $credit['credit1'])));
             }
-        }
-    }
-    public function doWebtuijian()
-    {
-        global $_W, $_GPC;
-        $weid       = $_W['uniacid'];
-        $openid     = $_W['openid'];
-        $cfg        = $this->module['config'];
-        $tuijiannum = empty($cfg['tuijiannum']) ? 10 : intval($cfg['tuijiannum']);
-        if (!empty($_GPC['id'])) {
-            $id      = intval($_GPC['id']);
-            $tuijian = pdo_fetch("SELECT tuijian,gender FROM" . tablename('hnfans') . " WHERE weid=:weid AND id=:id", array(
-                ':weid' => $weid,
-                ':id' => $id
-            ));
-            if ($tuijian['tuijian'] == '1') {
-                if ($tuijian['gender'] == '0') {
-                    message('此人性别保密，不可推荐', 'referer', 'error');
-                }
-            }
-            $allnum = pdo_fetchcolumn("SELECT count(*)  FROM " . tablename('hnfans') . " WHERE  weid='{$weid}' AND nickname!='' AND isshow='1'  AND gender='{$tuijian['gender']}' AND yingcang='1' AND tuijian='2'");
-            if ($allnum >= $tuijiannum) {
-                if ($tuijian['gender'] == '1') {
-                    message('推荐男性数最多为' . $tuijiannum . '人！', 'referer', 'error');
-                } else {
-                    message('推荐女性数最多为' . $tuijiannum . '人！', 'referer', 'error');
-                }
-            }
-            if ($tuijian['tuijian'] == '1') {
-                pdo_update('hnfans', array(
-                    'tuijian' => 2
-                ), array(
-                    'weid' => $weid,
-                    'id' => $id
-                ));
-                message('推荐到首页成功', 'referer', 'success');
-            } else {
-                pdo_update('hnfans', array(
-                    'tuijian' => 1
-                ), array(
-                    'weid' => $weid,
-                    'id' => $id
-                ));
-                message('取消推荐成功', 'referer', 'success');
-            }
-        } else {
-            message('参数错误', 'referer', 'error');
         }
     }
     public function doWebtjapply()
@@ -222,7 +209,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                     ":weid" => $weid,
                     ':id' => intval($row)
                 ));
-                pdo_update('hnfans', array(
+                pdo_update("hnfans", array(
                     'tuijian' => 2
                 ), array(
                     'from_user' => $openid,
@@ -239,7 +226,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                     ":weid" => $weid,
                     ':id' => intval($row)
                 ));
-                pdo_update('hnfans', array(
+                pdo_update("hnfans", array(
                     'tuijian' => 1,
                     'tjtype' => 0
                 ), array(
@@ -313,15 +300,20 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
             $result['message'] = '网络超时，保存失败！';
             $result['result']  = 0;
         } else {
-            $result['imgurl'] = $back['path'];
-            $result['result'] = 1;
             load()->func('file');
+            $thumb = $this->file_image_thumb2(IA_ROOT . '/attachment/' . $back['path'], $thumbimg, $width = 60);
+            if (!empty($thumb['hei'])) {
+                $result['imgurl'] = $thumb['path'];
+            } else {
+                $result['imgurl'] = $back['path'];
+            }
             $headerimg = $this->getusers($weid, $openid);
             if (!strpos($headerimg['avatar'], 'qlogo')) {
                 file_delete($headerimg['avatar']);
             }
             pdo_update('hnfans', array(
-                'avatar' => $back['path']
+                'avatar' => $back['path'],
+                'avatar_thumb' => $result['imgurl']
             ), array(
                 'from_user' => $openid,
                 'weid' => $weid
@@ -364,6 +356,83 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
         }
         pdo_insert('meepohongniangphotos', $data);
         die($picurl);
+    }
+    private function file_image_thumb2($srcfile, $desfile = '', $width = 0)
+    {
+        global $_W;
+        if (!file_exists($srcfile)) {
+            return error('-1', '原图像不存在');
+        }
+        if (intval($width) == 0) {
+            load()->model('setting');
+            $width = intval($_W['setting']['upload']['image']['width']);
+        }
+        if (intval($width) < 0) {
+            return error('-1', '缩放宽度无效');
+        }
+        if (empty($desfile)) {
+            $ext    = pathinfo($srcfile, PATHINFO_EXTENSION);
+            $srcdir = dirname($srcfile);
+            do {
+                $desfile = $srcdir . '/' . random(30) . ".{$ext}";
+            } while (file_exists($desfile));
+        }
+        $des = dirname($desfile);
+        if (!file_exists($des)) {
+            if (!mkdirs($des)) {
+                return error('-1', '创建目录失败');
+            }
+        } elseif (!is_writable($des)) {
+            return error('-1', '目录无法写入');
+        }
+        $org_info = @getimagesize($srcfile);
+        if ($org_info) {
+            if ($width == 0 || $width > $org_info[0]) {
+                copy($srcfile, $desfile);
+                return str_replace(ATTACHMENT_ROOT . '/', '', $desfile);
+            }
+            if ($org_info[2] == 1) {
+                if (function_exists("imagecreatefromgif")) {
+                    $img_org = imagecreatefromgif($srcfile);
+                }
+            } elseif ($org_info[2] == 2) {
+                if (function_exists("imagecreatefromjpeg")) {
+                    $img_org = imagecreatefromjpeg($srcfile);
+                }
+            } elseif ($org_info[2] == 3) {
+                if (function_exists("imagecreatefrompng")) {
+                    $img_org = imagecreatefrompng($srcfile);
+                    imagesavealpha($img_org, true);
+                }
+            }
+        } else {
+            return error('-1', '获取原始图像信息失败');
+        }
+        $scale_org = $org_info[0] / $org_info[1];
+        $height    = $width / $scale_org;
+        if (function_exists("imagecreatetruecolor") && function_exists("imagecopyresampled") && @$img_dst = imagecreatetruecolor($width, $height)) {
+            imagealphablending($img_dst, false);
+            imagesavealpha($img_dst, true);
+            imagecopyresampled($img_dst, $img_org, 0, 0, 0, 0, $width, $height, $org_info[0], $org_info[1]);
+        } else {
+            return error('-1', 'PHP环境不支持图片处理');
+        }
+        if ($org_info[2] == 2) {
+            if (function_exists('imagejpeg')) {
+                imagejpeg($img_dst, $desfile);
+            }
+        } else {
+            if (function_exists('imagepng')) {
+                imagepng($img_dst, $desfile);
+            }
+        }
+        imagedestroy($img_dst);
+        imagedestroy($img_org);
+        $array = array(
+            'path' => str_replace(IA_ROOT . '/attachment/', '', $desfile),
+            'hei' => $height
+        );
+        return $array;
     }
     public function fileUpload2($file, $type = 'image', $name = '')
     {
@@ -479,10 +548,12 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
     public function doMobilechatfatherajax()
     {
         global $_W, $_GPC;
-        $weid = $_W['uniacid'];
-        $back = array();
-        $data = array();
-        $cfgs = $this->module['config'];
+        $weid   = $_W['uniacid'];
+        $back   = array();
+        $data   = array();
+        $openid = $_W['openid'];
+        $res    = $this->getusers($weid, $openid);
+        $cfgs   = $this->module['config'];
         if (!empty($_GPC['content'])) {
             if (empty($_GPC['sender']) || empty($_GPC['geter'])) {
                 $back = array(
@@ -501,7 +572,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                         'message' => '你已将对方拉入黑名单'
                     );
                 } else {
-                    $uresult = pdo_fetchcolumn("SELECT id FROM " . tablename('hnblacklist') . " WHERE wantblack = :wantblack AND blackwho = :blackwho AND weid=:weid", array(
+                    $uresult = pdo_fetchcolumn("SELECT `id` FROM " . tablename('hnblacklist') . " WHERE wantblack = :wantblack AND blackwho = :blackwho AND weid=:weid", array(
                         ':wantblack' => $_GPC['geter'],
                         ':blackwho' => $_GPC['sender'],
                         ':weid' => $weid
@@ -512,6 +583,60 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                             'message' => '对方已将你拉入黑名单'
                         );
                     } else {
+                        if ($cfgs['woman_free'] == 1 && $res['gender'] == '2') {
+                            $senderuid       = pdo_fetch("SELECT avatar,nickname FROM " . tablename('hnfans') . " WHERE from_user = '{$_GPC['sender']}' AND weid = '{$weid}'");
+                            $senderavatar    = $senderuid['avatar'];
+                            $sendernickname  = $senderuid['nickname'];
+                            $data['sender']  = $_GPC['sender'];
+                            $data['geter']   = $_GPC['geter'];
+                            $data['content'] = $_GPC['content'];
+                            $data['msgtype'] = $_GPC['msgtype'];
+                            $data['stime']   = time();
+                            $data['weid']    = $weid;
+                            if (preg_match('/http:(.*)/', $senderavatar)) {
+                                $data['senderavatar'] = $senderavatar;
+                            } elseif (preg_match('/images(.*)/', $senderavatar)) {
+                                $data['senderavatar'] = $_W['attachurl'] . $senderavatar;
+                            } else {
+                                $data['senderavatar'] = MEEPORES . "/static/friend/images/cdhn80.jpg";
+                            }
+                            $data['sendernickname'] = $sendernickname;
+                            pdo_insert('hnmessage', $data);
+                            pdo_update("hnfans", array(
+                                "mails" => $senderuid['mails'] + 1
+                            ), array(
+                                "from_user" => $_GPC['geter'],
+                                "weid" => $weid
+                            ));
+                            $btime    = date('Y-m-d' . '00:00:00', time());
+                            $btimestr = strtotime($btime);
+                            $max      = pdo_fetchcolumn("SELECT count(*) FROM " . tablename('hnmessage') . " WHERE sender=:sender AND geter=:geter  AND weid=:weid AND stime>:stime", array(
+                                ':sender' => $_GPC['geter'],
+                                ':geter' => $_GPC['sender'],
+                                ':weid' => $weid,
+                                ':stime' => $btimestr
+                            ));
+                            $cfgnum   = intval($cfgs['maxnum']);
+                            if ($cfgnum > 0) {
+                                if ($max < $cfgnum) {
+                                    $this->mc_notice_consume2($_GPC['geter'], $sendernickname . '给你发新消息啦！', $sendernickname . '给你发新消息啦！', $this->createMobileUrl('hitmail', array(
+                                        'toname' => $sendernickname,
+                                        'toopenid' => $openid
+                                    )));
+                                }
+                            } else {
+                                $this->mc_notice_consume2($_GPC['geter'], $sendernickname . '给你发新消息啦！', $sendernickname . '给你发新消息啦！', $this->createMobileUrl('hitmail', array(
+                                    'toname' => $sendernickname,
+                                    'toopenid' => $openid
+                                )));
+                            }
+                            $time = date('Y-m-d H:i:s', time());
+                            $back = array(
+                                'succ' => '1',
+                                'message' => $time
+                            );
+                            die(json_encode($back));
+                        }
                         $baoyue = pdo_fetchcolumn("SELECT endtime FROM " . tablename('meepohn_baoyue') . " WHERE openid=:openid AND weid=:weid ORDER BY endtime DESC", array(
                             ':weid' => $weid,
                             ':openid' => $_GPC['sender']
@@ -539,8 +664,8 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                                 }
                                 $data['sendernickname'] = $sendernickname;
                                 pdo_insert('hnmessage', $data);
-                                pdo_update('hnfans', array(
-                                    'mails' => $senderuid['mails'] + 1
+                                pdo_update("hnfans", array(
+                                    "mails" => $senderuid['mails'] + 1
                                 ), array(
                                     "from_user" => $_GPC['geter'],
                                     "weid" => $weid
@@ -556,10 +681,16 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                                 $cfgnum   = intval($cfgs['maxnum']);
                                 if ($cfgnum > 0) {
                                     if ($max < $cfgnum) {
-                                        $this->sendmessage($_GPC['content'], $_GPC['geter']);
+                                        $this->mc_notice_consume2($_GPC['geter'], $sendernickname . '给你发新消息啦！', $sendernickname . '给你发新消息啦！', $this->createMobileUrl('hitmail', array(
+                                            'toname' => $sendernickname,
+                                            'toopenid' => $openid
+                                        )));
                                     }
                                 } else {
-                                    $this->sendmessage($_GPC['content'], $_GPC['geter']);
+                                    $this->mc_notice_consume2($_GPC['geter'], $sendernickname . '给你发新消息啦！', $sendernickname . '给你发新消息啦！', $this->createMobileUrl('hitmail', array(
+                                        'toname' => $sendernickname,
+                                        'toopenid' => $openid
+                                    )));
                                 }
                                 $time  = date('Y-m-d H:i:s', time());
                                 $back  = array(
@@ -567,7 +698,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                                     'message' => $time
                                 );
                                 $touid = $_W['member']['uid'];
-                                pdo_query('UPDATE ' . tablename('mc_members') . " SET credit1 = credit1 - '{$payment}' WHERE uid = '{$touid}' AND uniacid='{$weid}' ");
+                                pdo_query("UPDATE " . tablename('mc_members') . " SET credit1 = credit1 - '{$payment}' WHERE uid = '{$touid}' AND uniacid='{$weid}' ");
                             } else {
                                 $back = array(
                                     'succ' => '2',
@@ -593,8 +724,8 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                             }
                             $data['sendernickname'] = $sendernickname;
                             pdo_insert('hnmessage', $data);
-                            pdo_update('hnfans', array(
-                                'mails' => $senderuid['mails'] + 1
+                            pdo_update("hnfans", array(
+                                "mails" => $senderuid['mails'] + 1
                             ), array(
                                 "from_user" => $_GPC['geter'],
                                 "weid" => $weid
@@ -610,10 +741,16 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                             $cfgnum   = intval($cfgs['maxnum']);
                             if ($cfgnum > 0) {
                                 if ($max < $cfgnum) {
-                                    $this->sendmessage($_GPC['content'], $_GPC['geter']);
+                                    $this->mc_notice_consume2($_GPC['geter'], $sendernickname . '给你发新消息啦！', $sendernickname . '给你发新消息啦！', $this->createMobileUrl('hitmail', array(
+                                        'toname' => $sendernickname,
+                                        'toopenid' => $openid
+                                    )));
                                 }
                             } else {
-                                $this->sendmessage($_GPC['content'], $_GPC['geter']);
+                                $this->mc_notice_consume2($_GPC['geter'], $sendernickname . '给你发新消息啦！', $sendernickname . '给你发新消息啦！', $this->createMobileUrl('hitmail', array(
+                                    'toname' => $sendernickname,
+                                    'toopenid' => $openid
+                                )));
                             }
                             $time = date('Y-m-d H:i:s', time());
                             $back = array(
@@ -671,90 +808,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                         'message' => '对方已将你拉入黑名单'
                     );
                 } else {
-                    $baoyue = pdo_fetchcolumn("SELECT endtime FROM " . tablename('meepohn_baoyue') . " WHERE openid=:openid AND weid=:weid ORDER BY endtime DESC", array(
-                        ':weid' => $weid,
-                        ':openid' => $_GPC['sender']
-                    ));
-                    if (empty($baoyue) || TIMESTAMP > $baoyue) {
-                        $payment = !empty($cfgs['chatpay']) ? intval($cfgs['chatpay']) : 0;
-                        load()->model('mc');
-                        $member = mc_fetch($_W['member']['uid']);
-                        if ($member['credit1'] >= $payment) {
-                            load()->func('communication');
-                            load()->classs('weixin.account');
-                            $accObj       = WeixinAccount::create($_W['account']['acid']);
-                            $access_token = $accObj->fetch_token();
-                            $token2       = $access_token;
-                            $url          = 'http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=' . $token2 . '&media_id=' . $_POST['id'];
-                            $pic_data     = ihttp_request($url);
-                            $path         = "images/meepoxiangqin/";
-                            $path2        = "images/meepoxiangqinthumb/";
-                            load()->func('file');
-                            $picurl   = $path . random(30) . ".jpg";
-                            $thumbimg = $path2 . random(30) . ".jpg";
-                            file_write($picurl, $pic_data['content']);
-                            $thumb = file_image_thumb(IA_ROOT . '/attachment/' . $picurl, IA_ROOT . '/attachment/' . $thumbimg, $width = 70);
-                            if (!is_array($thumb)) {
-                                $thumburl = $thumb;
-                            } else {
-                                $thumburl = $picurl;
-                            }
-                            $sender         = $_W['fans']['from_user'];
-                            $senderuid      = pdo_fetch("SELECT * FROM " . tablename('hnfans') . " WHERE from_user = '{$sender}' AND weid = '{$weid}'");
-                            $senderavatar   = $senderuid['avatar'];
-                            $sendernickname = $senderuid['nickname'];
-                            $data           = array(
-                                'sender' => $sender,
-                                'geter' => $_GPC['geter'],
-                                'content' => $picurl,
-                                'msgtype' => 'images',
-                                'thumburl' => $thumburl,
-                                'stime' => time(),
-                                'weid' => $weid,
-                                'sendernickname' => $sendernickname
-                            );
-                            if (preg_match('/http:(.*)/', $senderavatar)) {
-                                $data['senderavatar'] = $senderavatar;
-                            } elseif (preg_match('/images(.*)/', $senderavatar)) {
-                                $data['senderavatar'] = $_W['attachurl'] . $senderavatar;
-                            } else {
-                                $data['senderavatar'] = MEEPORES . "/static/friend/images/cdhn80.jpg";
-                            }
-                            $res = pdo_insert('hnmessage', $data);
-                            pdo_update('hnfans', array(
-                                'mails' => $senderuid['mails'] + 1
-                            ), array(
-                                "from_user" => $_GPC['geter'],
-                                "weid" => $weid
-                            ));
-                            $btime    = date('Y-m-d' . '00:00:00', time());
-                            $btimestr = strtotime($btime);
-                            $max      = pdo_fetchcolumn("SELECT count(*) FROM " . tablename('hnmessage') . " WHERE sender=:sender AND geter=:geter  AND weid=:weid AND stime>:stime", array(
-                                ':sender' => $sender,
-                                ':geter' => $_GPC['geter'],
-                                ':weid' => $weid,
-                                ':stime' => $btimestr
-                            ));
-                            $cfgnum   = intval($cfgs['maxnum']);
-                            if ($cfgnum) {
-                                if ($max < $cfgnum) {
-                                    $this->sendmessage($_GPC['content'], $_GPC['geter']);
-                                }
-                            } else {
-                                $this->sendmessage($_GPC['content'], $_GPC['geter']);
-                            }
-                            $back['succ']     = '1';
-                            $back['picurl']   = $picurl;
-                            $back['thumburl'] = $thumburl;
-                            $touid            = $_W['member']['uid'];
-                            pdo_query('UPDATE ' . tablename('mc_members') . " SET credit1 = credit1 - '{$payment}' WHERE uid = '{$touid}' AND uniacid='{$weid}' ");
-                        } else {
-                            $back = array(
-                                'succ' => '2',
-                                'message' => '积分余额不足'
-                            );
-                        }
-                    } else {
+                    if ($cfgs['woman_free'] == 1 && $res['gender'] == '2') {
                         load()->func('communication');
                         load()->classs('weixin.account');
                         $accObj       = WeixinAccount::create($_W['account']['acid']);
@@ -768,8 +822,11 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                         $picurl   = $path . random(30) . ".jpg";
                         $thumbimg = $path2 . random(30) . ".jpg";
                         file_write($picurl, $pic_data['content']);
-                        $thumb = file_image_thumb(IA_ROOT . '/attachment/' . $picurl, IA_ROOT . '/attachment/' . $thumbimg, $width = 70);
+                        $thumb            = file_image_thumb(IA_ROOT . '/attachment/' . $picurl, IA_ROOT . '/attachment/' . $thumbimg, $width = 70);
+                        $back['thumburl'] = $thumb;
+                        die(json_encode($back));
                         if (!is_array($thumb)) {
+                            $thumb    = str_replace(IA_ROOT . '/attachment/', '', $thumb);
                             $thumburl = $thumb;
                         } else {
                             $thumburl = $picurl;
@@ -796,8 +853,8 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                             $data['senderavatar'] = MEEPORES . "/static/friend/images/cdhn80.jpg";
                         }
                         $res = pdo_insert('hnmessage', $data);
-                        pdo_update('hnfans', array(
-                            'mails' => $senderuid['mails'] + 1
+                        pdo_update("hnfans", array(
+                            "mails" => $senderuid['mails'] + 1
                         ), array(
                             "from_user" => $_GPC['geter'],
                             "weid" => $weid
@@ -813,10 +870,184 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                         $cfgnum   = intval($cfgs['maxnum']);
                         if ($cfgnum) {
                             if ($max < $cfgnum) {
-                                $this->sendmessage($_GPC['content'], $_GPC['geter']);
+                                $this->mc_notice_consume2($_GPC['geter'], $sendernickname . '给你发新消息啦！', $sendernickname . '给你发新消息啦！', $this->createMobileUrl('hitmail', array(
+                                    'toname' => $sendernickname,
+                                    'toopenid' => $openid
+                                )));
                             }
                         } else {
-                            $this->sendmessage($_GPC['content'], $_GPC['geter']);
+                            $this->mc_notice_consume2($_GPC['geter'], $sendernickname . '给你发新消息啦！', $sendernickname . '给你发新消息啦！', $this->createMobileUrl('hitmail', array(
+                                'toname' => $sendernickname,
+                                'toopenid' => $openid
+                            )));
+                        }
+                        $back['succ']     = '1';
+                        $back['picurl']   = $picurl;
+                        $back['thumburl'] = $thumburl;
+                        die(json_encode($back));
+                    }
+                    $baoyue = pdo_fetchcolumn("SELECT endtime FROM " . tablename('meepohn_baoyue') . " WHERE openid=:openid AND weid=:weid ORDER BY endtime DESC", array(
+                        ':weid' => $weid,
+                        ':openid' => $_GPC['sender']
+                    ));
+                    if (empty($baoyue) || TIMESTAMP > $baoyue) {
+                        $payment = !empty($cfgs['chatpay']) ? intval($cfgs['chatpay']) : 0;
+                        load()->model('mc');
+                        $member = mc_fetch($_W['member']['uid']);
+                        if ($member['credit1'] >= $payment) {
+                            load()->func('communication');
+                            load()->classs('weixin.account');
+                            $accObj       = WeixinAccount::create($_W['account']['acid']);
+                            $access_token = $accObj->fetch_token();
+                            $token2       = $access_token;
+                            $url          = 'http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=' . $token2 . '&media_id=' . $_POST['id'];
+                            $pic_data     = ihttp_request($url);
+                            $path         = "images/meepoxiangqin/";
+                            $path2        = "images/meepoxiangqinthumb/";
+                            load()->func('file');
+                            $picurl   = $path . random(30) . ".jpg";
+                            $thumbimg = $path2 . random(30) . ".jpg";
+                            file_write($picurl, $pic_data['content']);
+                            $thumb = file_image_thumb(IA_ROOT . '/attachment/' . $picurl, IA_ROOT . '/attachment/' . $thumbimg, $width = 70);
+                            if (!is_array($thumb)) {
+                                $thumb    = str_replace(IA_ROOT . '/attachment/', '', $thumb);
+                                $thumburl = $thumb;
+                            } else {
+                                $thumburl = $picurl;
+                            }
+                            $sender         = $_W['fans']['from_user'];
+                            $senderuid      = pdo_fetch("SELECT * FROM " . tablename('hnfans') . " WHERE from_user = '{$sender}' AND weid = '{$weid}'");
+                            $senderavatar   = $senderuid['avatar'];
+                            $sendernickname = $senderuid['nickname'];
+                            $data           = array(
+                                'sender' => $sender,
+                                'geter' => $_GPC['geter'],
+                                'content' => $picurl,
+                                'msgtype' => 'images',
+                                'thumburl' => $thumburl,
+                                'stime' => time(),
+                                'weid' => $weid,
+                                'sendernickname' => $sendernickname
+                            );
+                            if (preg_match('/http:(.*)/', $senderavatar)) {
+                                $data['senderavatar'] = $senderavatar;
+                            } elseif (preg_match('/images(.*)/', $senderavatar)) {
+                                $data['senderavatar'] = $_W['attachurl'] . $senderavatar;
+                            } else {
+                                $data['senderavatar'] = MEEPORES . "/static/friend/images/cdhn80.jpg";
+                            }
+                            $res = pdo_insert('hnmessage', $data);
+                            pdo_update("hnfans", array(
+                                "mails" => $senderuid['mails'] + 1
+                            ), array(
+                                "from_user" => $_GPC['geter'],
+                                "weid" => $weid
+                            ));
+                            $btime    = date('Y-m-d' . '00:00:00', time());
+                            $btimestr = strtotime($btime);
+                            $max      = pdo_fetchcolumn("SELECT count(*) FROM " . tablename('hnmessage') . " WHERE sender=:sender AND geter=:geter  AND weid=:weid AND stime>:stime", array(
+                                ':sender' => $sender,
+                                ':geter' => $_GPC['geter'],
+                                ':weid' => $weid,
+                                ':stime' => $btimestr
+                            ));
+                            $cfgnum   = intval($cfgs['maxnum']);
+                            if ($cfgnum) {
+                                if ($max < $cfgnum) {
+                                    $this->mc_notice_consume2($_GPC['geter'], $sendernickname . '给你发新消息啦！', $sendernickname . '给你发新消息啦！', $this->createMobileUrl('hitmail', array(
+                                        'toname' => $sendernickname,
+                                        'toopenid' => $openid
+                                    )));
+                                }
+                            } else {
+                                $this->mc_notice_consume2($_GPC['geter'], $sendernickname . '给你发新消息啦！', $sendernickname . '给你发新消息啦！', $this->createMobileUrl('hitmail', array(
+                                    'toname' => $sendernickname,
+                                    'toopenid' => $openid
+                                )));
+                            }
+                            $back['succ']     = '1';
+                            $back['picurl']   = $picurl;
+                            $back['thumburl'] = $thumburl;
+                            $touid            = $_W['member']['uid'];
+                            pdo_query("UPDATE " . tablename('mc_members') . " SET credit1 = credit1 - '{$payment}' WHERE uid = '{$touid}' AND uniacid='{$weid}' ");
+                        } else {
+                            $back = array(
+                                'succ' => '2',
+                                'message' => '积分余额不足'
+                            );
+                        }
+                    } else {
+                        load()->func('communication');
+                        load()->classs('weixin.account');
+                        $accObj       = WeixinAccount::create($_W['account']['acid']);
+                        $access_token = $accObj->fetch_token();
+                        $token2       = $access_token;
+                        $url          = 'http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=' . $token2 . '&media_id=' . $_POST['id'];
+                        $pic_data     = ihttp_request($url);
+                        $path         = "images/meepoxiangqin/";
+                        $path2        = "images/meepoxiangqinthumb/";
+                        load()->func('file');
+                        $picurl   = $path . random(30) . ".jpg";
+                        $thumbimg = $path2 . random(30) . ".jpg";
+                        file_write($picurl, $pic_data['content']);
+                        $thumb            = file_image_thumb(IA_ROOT . '/attachment/' . $picurl, IA_ROOT . '/attachment/' . $thumbimg, $width = 70);
+                        $back['thumburl'] = $thumb;
+                        die(json_encode($back));
+                        if (!is_array($thumb)) {
+                            $thumb    = str_replace(IA_ROOT . '/attachment/', '', $thumb);
+                            $thumburl = $thumb;
+                        } else {
+                            $thumburl = $picurl;
+                        }
+                        $sender         = $_W['fans']['from_user'];
+                        $senderuid      = pdo_fetch("SELECT * FROM " . tablename('hnfans') . " WHERE from_user = '{$sender}' AND weid = '{$weid}'");
+                        $senderavatar   = $senderuid['avatar'];
+                        $sendernickname = $senderuid['nickname'];
+                        $data           = array(
+                            'sender' => $sender,
+                            'geter' => $_GPC['geter'],
+                            'content' => $picurl,
+                            'msgtype' => 'images',
+                            'thumburl' => $thumburl,
+                            'stime' => time(),
+                            'weid' => $weid,
+                            'sendernickname' => $sendernickname
+                        );
+                        if (preg_match('/http:(.*)/', $senderavatar)) {
+                            $data['senderavatar'] = $senderavatar;
+                        } elseif (preg_match('/images(.*)/', $senderavatar)) {
+                            $data['senderavatar'] = $_W['attachurl'] . $senderavatar;
+                        } else {
+                            $data['senderavatar'] = MEEPORES . "/static/friend/images/cdhn80.jpg";
+                        }
+                        $res = pdo_insert('hnmessage', $data);
+                        pdo_update("hnfans", array(
+                            "mails" => $senderuid['mails'] + 1
+                        ), array(
+                            "from_user" => $_GPC['geter'],
+                            "weid" => $weid
+                        ));
+                        $btime    = date('Y-m-d' . '00:00:00', time());
+                        $btimestr = strtotime($btime);
+                        $max      = pdo_fetchcolumn("SELECT count(*) FROM " . tablename('hnmessage') . " WHERE sender=:sender AND geter=:geter  AND weid=:weid AND stime>:stime", array(
+                            ':sender' => $sender,
+                            ':geter' => $_GPC['geter'],
+                            ':weid' => $weid,
+                            ':stime' => $btimestr
+                        ));
+                        $cfgnum   = intval($cfgs['maxnum']);
+                        if ($cfgnum) {
+                            if ($max < $cfgnum) {
+                                $this->mc_notice_consume2($_GPC['geter'], $sendernickname . '给你发新消息啦！', $sendernickname . '给你发新消息啦！', $this->createMobileUrl('hitmail', array(
+                                    'toname' => $sendernickname,
+                                    'toopenid' => $openid
+                                )));
+                            }
+                        } else {
+                            $this->mc_notice_consume2($_GPC['geter'], $sendernickname . '给你发新消息啦！', $sendernickname . '给你发新消息啦！', $this->createMobileUrl('hitmail', array(
+                                'toname' => $sendernickname,
+                                'toopenid' => $openid
+                            )));
                         }
                         $back['succ']     = '1';
                         $back['picurl']   = $picurl;
@@ -894,33 +1125,50 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
     public function doMobilebangdanajax()
     {
         global $_W, $_GPC;
-        $weid       = $_W['weid'];
-        $suijinum   = rand();
-        $settings   = pdo_fetch("SELECT * FROM " . tablename('meepo_hongniangset') . " WHERE weid=:weid", array(
+        $weid      = $_W['uniacid'];
+        $suijinum  = rand();
+        $settings  = pdo_fetch("SELECT * FROM " . tablename('meepo_hongniangset') . " WHERE weid=:weid", array(
             ':weid' => $_W['weid']
         ));
-        $openid2    = $_W['openid'];
-        $julires    = $this->getusers($weid, $openid);
-        $tablename  = tablename("hnfans");
-        $psize      = 20;
-        $pindex     = 1;
-        $isshow     = 1;
-        $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-        $endToday   = mktime(0, 0, 0, date('m'), date('d') + 7, date('Y')) - 1;
+        $openid2   = $_W['openid'];
+        $julires   = $this->getusers($weid, $openid);
+        $tablename = tablename("hnfans");
+        $psize     = 20;
+        $pindex    = 1;
+        $isshow    = 1;
+        $endToday  = mktime(0, 0, 0, date('m'), date('d') - 7, date('Y')) - 1;
         if ($_POST['time'] == "week" && $_POST['type'] == "men") {
-            $gender = 1;
-            $list   = pdo_fetchall("SELECT *  FROM " . $tablename . " WHERE yingcang=1 AND weid='{$weid}' AND nickname!='' AND isshow='{$isshow}' AND gender='{$gender}' ORDER BY rand() LIMIT " . ($pindex - 1) * $psize . ',' . $psize);
+            $sql  = "SELECT  toopenid,count(*) AS count,sum(flower_num) AS flower FROM " . tablename('meepo_hongnianglikes') . " WHERE weid=:weid AND createtime>=:createtime GROUP BY toopenid ORDER BY flower DESC,count DESC";
+            $list = pdo_fetchall($sql, array(
+                ':weid' => $weid,
+                ':createtime' => $endToday
+            ));
             if (!empty($list) && is_array($list)) {
-                foreach ($list as $rand) {
-                    $list2[] = pdo_fetch("SELECT *  FROM " . $tablename . " WHERE yingcang=1 AND weid='{$weid}' AND from_user='{$rand['from_user']}' AND gender='{$gender}'");
+                foreach ($list as $val) {
+                    $temp = pdo_fetch("SELECT *  FROM " . $tablename . " WHERE yingcang=1 AND weid='{$weid}' AND from_user='{$val['toopenid']}'");
+                    if ($temp['gender'] == '1') {
+                        $list2[] = $temp;
+                        if (count($list2) == 20) {
+                            break;
+                        }
+                    }
                 }
             }
         } elseif ($_POST['time'] == "week" && $_POST['type'] == "women") {
-            $gender = 2;
-            $list   = pdo_fetchall("SELECT *  FROM " . $tablename . " WHERE yingcang=1 AND weid='{$weid}' AND nickname!='' AND isshow='{$isshow}' AND gender='{$gender}' ORDER BY rand() LIMIT " . ($pindex - 1) * $psize . ',' . $psize);
+            $sql  = "SELECT  toopenid,count(*) AS count,sum(flower_num) AS flower FROM " . tablename('meepo_hongnianglikes') . " WHERE weid=:weid AND createtime>=:createtime GROUP BY toopenid ORDER BY flower DESC,count DESC";
+            $list = pdo_fetchall($sql, array(
+                ':weid' => $weid,
+                ':createtime' => $endToday
+            ));
             if (!empty($list) && is_array($list)) {
-                foreach ($list as $rand) {
-                    $list2[] = pdo_fetch("SELECT *  FROM " . $tablename . " WHERE yingcang=1 AND weid='{$weid}' AND from_user='{$rand['from_user']}'");
+                foreach ($list as $val) {
+                    $temp = pdo_fetch("SELECT *  FROM " . $tablename . " WHERE yingcang=1 AND weid='{$weid}' AND from_user='{$val['toopenid']}'");
+                    if ($temp['gender'] == '2') {
+                        $list2[] = $temp;
+                        if (count($list2) == 20) {
+                            break;
+                        }
+                    }
                 }
             }
         } elseif ($_POST['time'] == "all" && $_POST['type'] == "women") {
@@ -963,17 +1211,18 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                 } else {
                     $result_str .= '<img src="./addons/meepo_weixiangqin/template/mobile/tpl/static/friend/images/cdhn80.jpg" alt="用户头像" height="30" width="30">';
                 }
+                $onclick = "'" . $row['id'] . "','" . $row['from_user'] . "'";
                 $result_str .= '</p><dl><dt><a href="' . $this->createMobileUrl('others', array(
                     'openid' => $row['from_user']
                 )) . '">' . cutstr($row['realname'], 5, true) . '</a><span>' . $row['age'] . ' | ' . $row['resideprovincecity'] . '</span>
 										</dt>
 										</dl>
-										<input type="hidden" class="toopenid' . $row['id'] . '" value="' . $row['from_user'] . '"/>
-										<a class="search_hi" id="hitlike" date="' . $row['id'] . '" title="' . $row['openid'] . '">赞&nbsp;&nbsp;' . $row['love'] . '</a>
+										
+										<a class="search_hi likeit1" id="hitlike"  title="' . $row['openid'] . '" onclick="hitlikeone(' . $onclick . ');" ><span id="' . $row['from_user'] . '">&nbsp;' . $row['love'] . '</span></a>
 										</div>
 										<ul>';
                 foreach ($photos[$row['id']] as $ph) {
-                    $result_str .= '<li><img src="' . $_W['attachurl'] . $ph['url'] . '" height="120" width="90" date="' . $row['from_user'] . '" id="btn"></li>';
+                    $result_str .= '<li><img src="' . $_W['attachurl'] . $ph['url'] . '" height="120" width="90" date="' . $row['from_user'] . '" class="btn2"></li>';
                 }
                 $result_str .= '</ul>
 										</article></div>';
@@ -1012,54 +1261,104 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
     public function doMobilelikeajax()
     {
         global $_W, $_GPC;
-        $weid   = $_W['weid'];
-        $openid = $_W['openid'];
-        if (empty($openid) || empty($_GPC['uid']) || empty($_GPC['toopenid'])) {
-            die('error');
+        $weid       = $_W['uniacid'];
+        $openid     = $_W['openid'];
+        $flower_num = intval($_GPC['flower_num']);
+        if (empty($openid) || empty($_GPC['uid']) || empty($_GPC['toopenid']) || empty($flower_num)) {
+            die(json_encode(error(-1, '出错了、请重试！')));
         } else {
             $res = $this->getusers($weid, $openid);
             if (empty($res['constellation'])) {
-                die('nfull');
+                die(json_encode(error(-2, '请先完善资料！')));
             } else {
                 $toopenid = $_GPC['toopenid'];
                 $uid      = intval($_GPC['uid']);
                 if ($openid == $toopenid) {
-                    die('no way');
+                    die(json_encode(error(-1, '自己不可以给自己送鲜花哦')));
                 } else {
-                    $hadlike = pdo_fetchcolumn("SELECT id FROM " . tablename('meepo_hongnianglikes') . " WHERE toopenid = :toopenid AND openid = :openid AND weid =:weid", array(
-                        ':toopenid' => $toopenid,
-                        ':openid' => $openid,
-                        ':weid' => $weid
-                    ));
-                    if (!empty($hadlike)) {
-                        pdo_delete("meepo_hongnianglikes", array(
-                            'id' => $hadlike
-                        ));
-                        pdo_query('UPDATE ' . tablename('hnfans') . " SET love = love - '1' WHERE from_user = :from_user AND weid=:weid ", array(
-                            ':from_user' => $toopenid,
-                            ':weid' => $weid
-                        ));
-                        $user = $this->getusers($weid, $toopenid);
-                        echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $user['love'];
-                        exit;
-                    } else {
-                        $data = array(
+                    load()->model('mc');
+                    $credit       = mc_credit_fetch($_W['member']['uid']);
+                    $setting      = $this->module['config'];
+                    $flower_jifen = !empty($setting['flower_jifen']) ? intval($setting['flower_jifen']) : 1;
+                    $flower_jifen = $flower_num * $flower_jifen;
+                    if (is_array($credit) && $credit['credit1'] >= $flower_jifen) {
+                        $result = mc_credit_update($_W['member']['uid'], 'credit1', -$flower_jifen);
+                        $data   = array(
                             'uid' => $uid,
                             'openid' => $openid,
                             'toopenid' => $toopenid,
                             'status' => 1,
                             'createtime' => TIMESTAMP,
-                            'weid' => $weid
+                            'weid' => $weid,
+                            'flower_num' => $flower_num,
+                            'credit1' => $flower_jifen
                         );
-                        pdo_insert('meepo_hongnianglikes', $data);
-                        pdo_query('UPDATE ' . tablename('hnfans') . " SET love = love + '1' WHERE from_user = :from_user AND weid=:weid ", array(
+                        pdo_insert("meepo_hongnianglikes", $data);
+                        pdo_query("UPDATE " . tablename('hnfans') . " SET love = love + {$flower_num} WHERE from_user = :from_user AND weid=:weid ", array(
                             ':from_user' => $toopenid,
                             ':weid' => $weid
                         ));
                         $user = $this->getusers($weid, $toopenid);
-                        echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $user['love'];
-                        exit;
+                        $this->mc_notice_consume2($toopenid, $res['nickname'] . '给你送' . $flower_num . '朵花啦！', $res['nickname'] . '给你送了' . $flower_num . '朵花啦！', $this->createMobileUrl('others', array(
+                            'openid' => $openid
+                        )));
+                        die(json_encode(error(0, "&nbsp;" . $user['love'])));
+                    } else {
+                        die(json_encode(error(-3, '积分余额不足！当前积分账户余额仅为' . $credit['credit1'])));
                     }
+                }
+            }
+        }
+    }
+    public function doMobilesayhi()
+    {
+        global $_W, $_GPC;
+        $weid   = $_W['weid'];
+        $openid = $_W['openid'];
+        if (empty($openid) || empty($_GPC['uid']) || empty($_GPC['toopenid'])) {
+            die(json_encode(error(-1, '出错了、请重试！')));
+        } else {
+            $toopenid = $_GPC['toopenid'];
+            $uid      = intval($_GPC['uid']);
+            if ($openid == $toopenid) {
+                die(json_encode(error(-1, '自己不能给自己打招呼哦！')));
+            }
+            $res = $this->getusers($weid, $openid);
+            if (empty($res['constellation'])) {
+                die(json_encode(error(-2, '请先完善资料！')));
+            } else {
+                load()->model('mc');
+                $credit      = mc_credit_fetch($_W['member']['uid']);
+                $setting     = $this->module['config'];
+                $sayhi_jifen = !empty($setting['sayhi_jifen']) ? intval($setting['sayhi_jifen']) : 1;
+                if (is_array($credit) && $credit['credit1'] >= $sayhi_jifen) {
+                    $result = mc_credit_update($_W['member']['uid'], 'credit1', -$sayhi_jifen);
+                    $sayhi  = pdo_fetchcolumn("SELECT `content` FROM " . tablename('meepo_hongniangsayhi_content') . " WHERE weid=:weid ORDER BY rand()", array(
+                        ':weid' => $weid
+                    ));
+                    if (empty($sayhi)) {
+                        $sayhi = $res['nickname'] . '向你打招呼啦！';
+                    } else {
+                        $sayhi = $res['nickname'] . $sayhi;
+                    }
+                    $data = array();
+                    $data = array(
+                        'uid' => $uid,
+                        'openid' => $openid,
+                        'toopenid' => $toopenid,
+                        'status' => 1,
+                        'createtime' => TIMESTAMP,
+                        'weid' => $weid,
+                        'content' => $sayhi,
+                        'credit1' => $sayhi_jifen
+                    );
+                    pdo_insert("meepo_hongniangsayhi", $data);
+                    $this->mc_notice_consume2($toopenid, $sayhi, $sayhi, $this->createMobileUrl('others', array(
+                        'openid' => $openid
+                    )));
+                    die(json_encode(error(0, 'success')));
+                } else {
+                    die(json_encode(error(-3, '积分余额不足！当前积分账户余额仅为' . $credit['credit1'])));
                 }
             }
         }
@@ -1090,12 +1389,12 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                         pdo_delete("meepo_hongnianglikes", array(
                             'id' => $hadlike
                         ));
-                        pdo_query('UPDATE ' . tablename('hnfans') . " SET love = love - '1' WHERE from_user = :from_user AND weid=:weid ", array(
+                        pdo_query("UPDATE " . tablename('hnfans') . " SET love = love - '1' WHERE from_user = :from_user AND weid=:weid ", array(
                             ':from_user' => $toopenid,
                             ':weid' => $weid
                         ));
                         $user = $this->getusers($weid, $toopenid);
-                        echo '赞&nbsp;&nbsp;' . $user['love'];
+                        echo "赞&nbsp;&nbsp;" . $user['love'];
                         exit;
                     } else {
                         $data = array(
@@ -1106,13 +1405,13 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                             'createtime' => TIMESTAMP,
                             'weid' => $weid
                         );
-                        pdo_insert('meepo_hongnianglikes', $data);
-                        pdo_query('UPDATE ' . tablename('hnfans') . " SET love = love + '1' WHERE from_user = :from_user AND weid=:weid ", array(
+                        pdo_insert("meepo_hongnianglikes", $data);
+                        pdo_query("UPDATE " . tablename('hnfans') . " SET love = love + '1' WHERE from_user = :from_user AND weid=:weid ", array(
                             ':from_user' => $toopenid,
                             ':weid' => $weid
                         ));
                         $user = $this->getusers($weid, $toopenid);
-                        echo '赞&nbsp;&nbsp;' . $user['love'];
+                        echo "赞&nbsp;&nbsp;" . $user['love'];
                         exit;
                     }
                 }
@@ -1189,7 +1488,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
         $sql       = 'SELECT * FROM ' . $tablename . ' WHERE from_user=:from_user AND weid=:weid  AND status=:status ORDER BY time DESC';
         $arr       = array(
             ":from_user" => $openid,
-            ":weid" => $_W['weid'],
+            ":weid" => $weid,
             ":status" => $status
         );
         $res       = pdo_fetchall($sql, $arr);
@@ -1198,15 +1497,13 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
     public function getallphotos($openid)
     {
         global $_GPC, $_W;
-        $weid      = $_W['uniacid'];
-        $tablename = tablename("meepohongniangphotos");
-        $sql       = 'SELECT * FROM ' . $tablename . ' WHERE from_user=:from_user AND weid=:weid  ORDER BY time DESC';
-        $arr       = array(
+        $weid = $_W['uniacid'];
+        $sql  = 'SELECT * FROM ' . tablename("meepohongniangphotos") . ' WHERE from_user=:from_user AND weid=:weid  ORDER BY time DESC';
+        $arr  = array(
             ":from_user" => $openid,
-            ":weid" => $_W['weid'],
-            ":status" => $status
+            ":weid" => $_W['uniacid']
         );
-        $res       = pdo_fetchall($sql, $arr);
+        $res  = pdo_fetchall($sql, $arr);
         return $res;
     }
     public function getarea($openid)
@@ -1440,14 +1737,11 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
         $total  = pdo_fetchcolumn("SELECT * FROM " . tablename('meepohongniangphotos') . " WHERE  status='{$status}'  and weid='{$weid}' $conditon ORDER BY time DESC");
         $pager  = pagination($total, $pindex, $psize);
         if (!empty($list)) {
-            if (!empty($list)) {
-                foreach ($list as $arr) {
-                    $userinfo[$arr['from_user']] = pdo_fetch("SELECT * FROM " . tablename('hnfans') . "WHERE weid='{$weid}' AND from_user=:from_user", array(
-                        ":from_user" => $arr['from_user']
-                    ));
-                }
+            foreach ($list as $arr) {
+                $userinfo[$arr['from_user']] = pdo_fetch("SELECT * FROM " . tablename('hnfans') . "WHERE weid='{$weid}' AND from_user=:from_user", array(
+                    ":from_user" => $arr['from_user']
+                ));
             }
-            $a     = "SELECT COUNT(*) FROM " . tablename('meepohongniangphotos') . " WHERE   status='{$status}' AND weid='{$weid}' $conditon";
             $total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('meepohongniangphotos') . " WHERE   status='{$status}' AND weid='{$weid}' $conditon");
             $pager = pagination($total, $pindex, $psize);
         }
@@ -1511,10 +1805,10 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                 if ($_POST['status'] == '1') {
                     message("设置成功,您已经开启了审核", $this->createWebUrl('onoff'), 'success');
                 } else {
-                    message('设置成功,您已经关闭了审核', $this->createWebUrl('onoff'), 'success');
+                    message("设置成功,您已经关闭了审核", $this->createWebUrl('onoff'), 'success');
                 }
             } else {
-                pdo_update('meepo_hongniangonoff', array(
+                pdo_update("meepo_hongniangonoff", array(
                     'status' => $data['status']
                 ), array(
                     'id' => $res['id'],
@@ -1523,7 +1817,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                 if ($_POST['status'] == '1') {
                     message("设置成功,您已经开启了审核", $this->createWebUrl('onoff'), 'success');
                 } else {
-                    message('设置成功,您已经关闭了审核', $this->createWebUrl('onoff'), 'success');
+                    message("设置成功,您已经关闭了审核", $this->createWebUrl('onoff'), 'success');
                 }
             }
         }
@@ -1562,7 +1856,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                 pdo_insert("meepo_hongniangset", $data);
                 message('保存成功', referer());
             } else {
-                pdo_update('meepo_hongniangset', $data, array(
+                pdo_update("meepo_hongniangset", $data, array(
                     'id' => $id
                 ));
                 message('更新成功', referer());
@@ -1598,7 +1892,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                 pdo_insert("meepo_hongniangset", $data);
                 message('保存成功', $this->createWebUrl('set'), 'success');
             } else {
-                pdo_update('meepo_hongniangset', $data, array(
+                pdo_update("meepo_hongniangset", $data, array(
                     'id' => $id
                 ));
                 message('更新成功', $this->createWebUrl('set'), 'success');
@@ -1650,7 +1944,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                         'jljifen' => $settings['share_jifen'],
                         'sharetime' => time()
                     );
-                    pdo_insert('hongniangsharelogs', $data);
+                    pdo_insert("hongniangsharelogs", $data);
                     $all2      = pdo_fetchall("SELECT * FROM " . tablename('hongniangsharelogs') . " WHERE weid=" . $weid . "  AND openid='" . $openid . "' AND sharetime >= '" . $todaytimestamp . "'");
                     $sharenum2 = count($all2);
                     $othernum  = $share_num - $sharenum2;
@@ -1720,7 +2014,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                 if ($credit1 < $payment) {
                     die('low');
                 }
-                if (pdo_query('UPDATE ' . tablename('mc_members') . " SET credit1 = credit1 - '{$payment}' WHERE uid = '{$_W['member']['uid']}' AND uniacid='{$weid}'")) {
+                if (pdo_query("UPDATE " . tablename('mc_members') . " SET credit1 = credit1 - '{$payment}' WHERE uid = '{$_W['member']['uid']}' AND uniacid='{$weid}'")) {
                     if (pdo_query("UPDATE " . tablename('mc_members') . " SET credit1 = credit1 + '{$payment}' WHERE uid = '{$touid}' AND uniacid='{$weid}' ")) {
                         $exchangeres = $this->getexchange($openid, $to, $whichone);
                         if (empty($exchangeres)) {
@@ -1732,7 +2026,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                                 'weid' => intval($weid),
                                 'createtime' => time()
                             );
-                            pdo_insert('hongniangexchangelog', $data);
+                            pdo_insert("hongniangexchangelog", $data);
                         }
                         if ($whichone == "carstatus") {
                             $userinfo[$whichone] = $userinfo['carstatus'] . '、' . $userinfo['housestatus'];
@@ -1779,7 +2073,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                 if ($credit2 < $payment) {
                     die('余额不足，账户余额为' . $credit1 . '元!');
                 }
-                if (pdo_query('UPDATE ' . tablename('hnfans') . " SET credit2 = credit2 - '{$payment}' WHERE from_user = '{$openid}'")) {
+                if (pdo_query("UPDATE " . tablename('hnfans') . " SET credit2 = credit2 - '{$payment}' WHERE from_user = '{$openid}'")) {
                     if (pdo_query("UPDATE " . tablename('hnfans') . " SET credit2 = credit2 + '{$payment}' WHERE from_user = '{$to}'")) {
                         die('success');
                     } else {
@@ -2202,8 +2496,8 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                 }
                 $html .= "\n";
             }
-            header('Content-type:text/csv');
-            header('Content-Disposition:attachment; filename=' . $huodongtitle['title'] . "活动全部数据.csv");
+            header("Content-type:text/csv");
+            header("Content-Disposition:attachment; filename=" . $huodongtitle['title'] . "活动全部数据.csv");
             echo $html;
             exit();
         }
@@ -2456,6 +2750,35 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                 $reside = $r;
             }
         }
+        foreach ($binds as $key => $value) {
+            if ($value == 'reside') {
+                unset($binds[$key]);
+                $binds[] = 'resideprovince';
+                $binds[] = 'residecity';
+                $binds[] = 'residedist';
+                break;
+            }
+        }
+        if (!empty($_W['fans']['from_user']) && !empty($binds)) {
+            $profile = fans_search($_W['fans']['from_user'], $binds);
+            if ($profile['gender']) {
+                if ($profile['gender'] == '0')
+                    $profile['gender'] = '保密';
+                if ($profile['gender'] == '1')
+                    $profile['gender'] = '男';
+                if ($profile['gender'] == '2')
+                    $profile['gender'] = '女';
+            }
+            foreach ($ds as &$r) {
+                if ($profile[$r['bind']]) {
+                    $r['default'] = $profile[$r['bind']];
+                }
+            }
+        }
+        $settings = pdo_fetch("SELECT * FROM " . tablename('meepo_hongniangset') . " WHERE weid=:weid", array(
+            ':weid' => $_W['weid']
+        ));
+        load()->func('tpl');
         if (checksubmit('submit')) {
             $pretotal = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('hnresearch_rows') . " WHERE reid = :reid AND openid = :openid", array(
                 ':reid' => $reid,
@@ -2595,35 +2918,6 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
             }
             message($activity['information'], $this->createMobileUrl('huodongindex'), 'sucess');
         }
-        foreach ($binds as $key => $value) {
-            if ($value == 'reside') {
-                unset($binds[$key]);
-                $binds[] = 'resideprovince';
-                $binds[] = 'residecity';
-                $binds[] = 'residedist';
-                break;
-            }
-        }
-        if (!empty($_W['fans']['from_user']) && !empty($binds)) {
-            $profile = fans_search($_W['fans']['from_user'], $binds);
-            if ($profile['gender']) {
-                if ($profile['gender'] == '0')
-                    $profile['gender'] = '保密';
-                if ($profile['gender'] == '1')
-                    $profile['gender'] = '男';
-                if ($profile['gender'] == '2')
-                    $profile['gender'] = '女';
-            }
-            foreach ($ds as &$r) {
-                if ($profile[$r['bind']]) {
-                    $r['default'] = $profile[$r['bind']];
-                }
-            }
-        }
-        $settings = pdo_fetch("SELECT * FROM " . tablename('meepo_hongniangset') . " WHERE weid=:weid", array(
-            ':weid' => $_W['weid']
-        ));
-        load()->func('tpl');
         include $this->template('hnsubmit');
     }
     public function doMobileMyResearch()
@@ -2733,7 +3027,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                 $endtime   = strtotime($_GPC['datelimit']['end']);
                 $condition .= " AND o.time >= {$starttime} AND o.time <= {$endtime}";
             }
-            $sql   = "select o.* , a.nickname  from " . tablename('hnpayjifen') . " o" . " left join " . tablename('hnfans') . " a on o.openid = a.from_user where $condition ORDER BY a.time DESC" . " LIMIT " . ($pindex - 1) * $psize . ',' . $psize;
+            $sql   = "select o.* , a.nickname  from " . tablename('hnpayjifen') . " o" . " left join " . tablename('hnfans') . " a on o.openid = a.from_user where $condition ORDER BY o.time DESC" . " LIMIT " . ($pindex - 1) * $psize . ',' . $psize;
             $list  = pdo_fetchall($sql);
             $total = pdo_fetchcolumn("select count(*)  from " . tablename('hnpayjifen') . " o" . " left join " . tablename('hnfans') . " a on o.openid = a.from_user where $condition ORDER BY a.time DESC");
             $pager = pagination($total, $pindex, $psize);
@@ -2858,17 +3152,14 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
     public function sendmessage($content, $openid)
     {
         global $_W, $_GPC;
-        $weid   = $_W['weid'];
-        $cfg    = $this->module['config'];
-        $appid  = $cfg['appid'];
-        $secret = $cfg['secret'];
-        $img    = $_W['attachurl'] . $cfg['kefuimg'];
-        $id     = $_W['openid'];
-        $res    = $this->getusers($weid, $id);
+        $weid = $_W['uniacid'];
+        $cfg  = $this->module['config'];
+        $img  = $_W['attachurl'] . $cfg['kefuimg'];
+        $id   = $_W['openid'];
+        $res  = $this->getusers($weid, $id);
         load()->classs('weixin.account');
-        $accObj          = WeixinAccount::create($_W['account']['acid']);
+        $accObj          = WeixinAccount::create($weid);
         $access_token    = $accObj->fetch_token();
-        $token2          = $access_token;
         $title           = $res['nickname'] . '给你发来新消息了！';
         $fans            = pdo_fetch('SELECT salt,acid,openid FROM ' . tablename('mc_mapping_fans') . ' WHERE uniacid = :uniacid AND openid = :openid', array(
             ':uniacid' => $weid,
@@ -2887,21 +3178,90 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
         )));
         $url2            = $_W['siteroot'] . 'app/' . murl('auth/forward', $vars);
         $data            = '{
-										"touser":"' . $openid . '",
-										"msgtype":"news",
-										"news":{
-											"articles": [
-											 {
-												 "title":"' . $title . '",
-												 "description":"' . $title . '",
-												 "url":"' . $url2 . '",
-												 "picurl":"' . $img . '",
-											 }
-											 ]
-										}
-									}';
-        $url             = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" . $token2;
+						"touser":"' . $openid . '",
+						"msgtype":"news",
+						"news":{
+							"articles": [
+							 {
+								 "title":"' . $title . '",
+								 "description":"' . $title . '",
+								 "url":"' . $url2 . '",
+								 "picurl":"' . $img . '",
+							 }
+							 ]
+						}
+					}';
+        $url             = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" . $access_token;
         load()->func('communication');
         $it = ihttp_post($url, $data);
+        return $it;
+    }
+    public function mc_notice_consume2($openid, $title, $content, $url = '', $thumbs = '')
+    {
+        global $_W;
+        load()->model('mc');
+        $acc = mc_notice_init();
+        if (is_error($acc)) {
+            return error(-1, $acc['message']);
+        }
+        if (empty($thumb)) {
+            $cfg   = $this->module['config'];
+            $thumb = $_W['attachurl'] . $cfg['kefuimg'];
+        }
+        if ($_W['account']['level'] == 4) {
+            $url    = $_W['siteroot'] . 'app/' . $url;
+            $status = mc_notice_public($openid, $title, $_W['account']['name'], $content, $url, $_W['account']['name']);
+        }
+        if (is_error($status)) {
+            $status = $this->mc_notice_custom_news2($openid, $title, $content, $url, $thumbs);
+        }
+        if ($_W['account']['level'] == 3) {
+            $status = $this->mc_notice_custom_news2($openid, $title, $content, $url, $thumbs);
+        }
+        return $status;
+    }
+    public function mc_notice_custom_news2($openid, $title, $content, $url, $thumb)
+    {
+        global $_W;
+        load()->model('mc');
+        if (empty($thumb)) {
+            $cfg   = $this->module['config'];
+            $thumb = $_W['attachurl'] . $cfg['kefuimg'];
+        }
+        $acc = mc_notice_init();
+        if (is_error($acc)) {
+            return error(-1, $acc['message']);
+        }
+        $fans               = pdo_fetch('SELECT salt,acid,openid FROM ' . tablename('mc_mapping_fans') . ' WHERE uniacid = :uniacid AND openid = :openid', array(
+            ':uniacid' => $_W['uniacid'],
+            ':openid' => $openid
+        ));
+        $row                = array();
+        $row['title']       = urlencode($title);
+        $row['description'] = urlencode($content);
+        !empty($thumb) && ($row['picurl'] = tomedia($thumb));
+        if (strexists($url, 'http://') || strexists($url, 'https://')) {
+            $row['url'] = $url;
+        } else {
+            $pass['time']   = TIMESTAMP;
+            $pass['acid']   = $fans['acid'];
+            $pass['openid'] = $fans['openid'];
+            $pass['hash']   = md5("{$fans['openid']}{$pass['time']}{$fans['salt']}{$_W['config']['setting']['authkey']}");
+            $auth           = base64_encode(json_encode($pass));
+            $vars           = array();
+            $vars['__auth'] = $auth;
+            if (empty($url)) {
+                $vars['forward'] = base64_encode($this->createMobileUrl('fans_home'));
+            } else {
+                $vars['forward'] = base64_encode($url);
+            }
+            $row['url'] = $_W['siteroot'] . 'app/' . murl('auth/forward', $vars);
+        }
+        $news[]                   = $row;
+        $send['touser']           = trim($openid);
+        $send['msgtype']          = 'news';
+        $send['news']['articles'] = $news;
+        $status                   = $acc->sendCustomNotice($send);
+        return $status;
     }
 }

@@ -8,7 +8,8 @@
  * 后台小区活动
  */
 	global $_W,$_GPC;
-	$GLOBALS['frames'] = $this->NavMenu();
-	$menu = $this->NavMenu();
+	$do = $_GPC['do'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
+	$menu = $this->NavMenu($do);
 	$url = $menu[0]['items'][0]['url'];
 	header("location: " . $url);

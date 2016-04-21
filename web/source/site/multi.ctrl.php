@@ -44,8 +44,10 @@ if($do == 'post') {
 			if (empty($data['title'])) {
 				message('请填写站点名称', referer(), 'error');
 			}
-			if (!strcasecmp($_GPC['bindhost'],$_W['page']['copyright']['sitehost'])) {
-			message('请填写其他域名，不要填本平台域名（或者后台-站点设置域名项没填）！', referer(), 'error');
+			if (!empty($_W['page']['copyright']['sitehost'])) {
+				if (!strcasecmp($_GPC['bindhost'],$_W['page']['copyright']['sitehost'])) {
+				message('请填写其他域名，不要填本平台域名！', referer(), 'error');
+				}
 			}
 			if(!empty($id)) {
 				pdo_update('site_multi', $data, array('id' => $id));

@@ -42,6 +42,7 @@ class wdl_bigwheelModuleSite extends WeModuleSite {
 			$running = false;
 			$msg = '请先关注公众号。';
 		} else {
+			checkauth();
 			$fansID = $_W['member']['uid'];
 			$from_user = $_W['fans']['from_user'];
 			$fans = pdo_fetch("SELECT * FROM " . tablename($this->tablefans) . " WHERE rid = " . $id . " and fansID='" . $fansID . "' and from_user='" . $from_user . "'");

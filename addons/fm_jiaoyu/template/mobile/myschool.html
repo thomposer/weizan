@@ -8,8 +8,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
 <link type="text/css" rel="stylesheet" href="{OSSURL}public/mobile/css/mGrzxTeacher.css?v=4.80915" />
-<link type="text/css" rel="stylesheet" href="{OSSURL}public/mobile/css/jquery.Jcrop.css" />
-<link type="text/css" rel="stylesheet" href="{OSSURL}public/mobile/css/jquery-emoji.css?v=4.8" />
 <link type="text/css" rel="stylesheet" href="{OSSURL}public/mobile/css/greenStyle.css?v=4.80120" />
 <script type="text/javascript" src="{OSSURL}public/mobile/js/jquery-1.11.3.min.js?v=4.8"></script>
 <script type="text/javascript" src="{OSSURL}public/mobile/js/PromptBoxUtil.js?v=4.81022"></script>
@@ -106,13 +104,13 @@
 					<div class="linkImg">
 						<img alt="" src="{OSSURL}public/mobile/img/link_msg.png" style="width:35px;">
 					</div>
-					<span class="linkName">消息管理</span>
+					<span class="linkName">家长留言</span>
 				</div>
 			</a>
 			<a href="{php echo $this->createMobileUrl('noticelist', array('schoolid' => $schoolid), true)}">
 				<div class="linkBox centerBox">
 					<div class="linkImg">
-						<img alt="" src="{OSSURL}public/mobile/img/link_bjq.png" style="width:35px;">
+						<img alt="" src="{OSSURL}public/mobile/img/link_bjtz.png" style="width:35px;">
 					</div>			
 					<span class="linkName">班级通知</span>	
 				</div>
@@ -156,7 +154,7 @@
 			<a href="{php echo $this->createMobileUrl('zuoyelist', array('schoolid' => $schoolid), true)}">
 				<div class="linkBox rightBox">
 					<div class="linkImg">
-						<img alt="" src="{OSSURL}public/mobile/img/link-zuoye.png" style="width:35px;">
+						<img alt="" src="{OSSURL}public/mobile/img/link_zuoye.png" style="width:35px;">
 					</div>			
 					<span class="linkName">发布作业</span>	
 				</div>
@@ -168,12 +166,20 @@
 					</div>			
 					<span class="linkName">一键放学</span>	
 				</div>
+			</a>
+			<a href="{php echo $this->createMobileUrl('bjq', array('schoolid' => $schoolid), true)}">
+				<div class="linkBox centerBox">
+					<div class="linkImg">
+						<img alt="" src="{OSSURL}public/mobile/img/link_bjq.png" style="width:35px;">
+					</div>			
+					<span class="linkName">班级圈</span>	
+				</div>
 			</a>			
 			{else}
 			<a href="{php echo $this->createMobileUrl('zuoyelist', array('schoolid' => $schoolid), true)}">
 				<div class="linkBox centerBox">
 					<div class="linkImg">
-						<img alt="" src="{OSSURL}public/mobile/img/link-zuoye.png" style="width:35px;">
+						<img alt="" src="{OSSURL}public/mobile/img/link_zuoye.png" style="width:35px;">
 					</div>			
 					<span class="linkName">发布作业</span>	
 				</div>
@@ -184,6 +190,14 @@
 						<img alt="" src="{OSSURL}public/mobile/img/link_fx.png" style="width:35px;">
 					</div>			
 					<span class="linkName">一键放学</span>	
+				</div>
+			</a>
+			<a href="{php echo $this->createMobileUrl('bjq', array('schoolid' => $schoolid), true)}">
+				<div class="linkBox leftBox">
+					<div class="linkImg">
+						<img alt="" src="{OSSURL}public/mobile/img/link_bjq.png" style="width:35px;">
+					</div>			
+					<span class="linkName">班级圈</span>	
 				</div>
 			</a>			
 			{/if}

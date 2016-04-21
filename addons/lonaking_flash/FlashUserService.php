@@ -15,12 +15,35 @@ class FlashUserService
     }
     public function updateUserScore($score, $openid, $log = '')
     {
+        $this->updateUserCredit("credit1", $score, $openid, $log);
+    }
+    public function updateUserMoney($money, $openid, $log = '')
+    {
+        $this->updateUserCredit("credit2", $money, $openid, $log);
+    }
+    public function addUserMoney($money, $openid, $log = '')
+    {
+        if ($money < 0) {
+            $money = $money * -1;
+        }
+        $this->updateUserMoney($money, $openid, $log);
+    }
+    public function reduceUserMoney($money, $openid, $log = '')
+    {
+        if ($money < 0) {
+            $this->updateUserMoney($money, $openid, $log);
+        } else {
+            $this->updateUserMoney($money * -1, $openid, $log);
+        }
+    }
+    private function updateUserCredit($type = "credit1", $value, $openid, $log = '')
+    {
         load()->model('mc');
         $uid        = mc_openid2uid($openid);
         $log_arr    = array();
         $log_arr[0] = $uid;
         $log_arr[1] = ($log == '' ? '未记录' : $log);
-        mc_credit_update($uid, 'credit1', $score, $log_arr);
+        mc_credit_update($uid, $type, $value, $log_arr);
     }
     public function fetchUserScore($openid)
     {
@@ -51,10 +74,10 @@ class FlashUserService
     {
         global $_W;
         load()->model('mc');
-        $uid  = mc_openid2uid($openid);
-        $user = mc_fansinfo($_W['member']['uid'], $_W['acid'], $_W['uniacid']);
+        $user = mc_fansinfo($openid, $_W['account']['acid']);
         if (empty($user)) {
-            return null;
+            $this->oauthFansInfo();
+            return $this->fetchFansInfo($openid);
         }
         $user['credit'] = $this->fetchUserCredit($openid);
         $user['score']  = intval($user['credit']['credit1']);
@@ -66,12 +89,21 @@ class FlashUserService
         global $_W;
         load()->model('mc');
         $user = $this->fetchFansInfo($_W['openid']);
-        if (empty($user)) {
-            $user = mc_oauth_userinfo();
+        if (is_null($user) || empty($user['tag']['nickname'])) {
+            $tagUserInfo = mc_oauth_userinfo();
+            $user        = $this->fetchFansInfo($_W['openid']);
+            $user['tag'] = $tagUserInfo;
         }
         $user['credit'] = $this->fetchUserCredit($_W['openid']);
         $user['score']  = intval($user['credit']['credit1']);
         $user['money']  = $user['credit']['credit2'];
+        return $user;
+    }
+    public function oauthFansInfo()
+    {
+        global $_W;
+        load()->model('mc');
+        $user = mc_oauth_userinfo();
         return $user;
     }
     public function fetchUid($openid)
@@ -81,3 +113,4 @@ class FlashUserService
         return $uid;
     }
 }
+?>

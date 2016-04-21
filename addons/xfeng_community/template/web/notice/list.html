@@ -26,7 +26,7 @@
 					<td><input type="checkbox" name="shopping_status" onclick="verify(this,{$item['id']},'shopping_status')" data="{$item['shopping_status']}" {if $item['shopping_status'] == 2 }checked="checked"{/if}> 是</td>
 					<td><input type="checkbox" name="homemaking_status" onclick="verify(this,{$item['id']},'homemaking_status')" data="{$item['homemaking_status']}" {if $item['homemaking_status'] == 2 }checked="checked"{/if}> 是</td>
 					<td>
-						<a href="JavaScript:;" data="{$item['id']}" class="del_peo"><i class="fa fa-trash-o text-sg"></i> 删除微信 </a>
+						<a title="删除" class="btn btn-primary btn-sm" onclick="del('{$item['id']}')" ><i class="fa fa-trash-o text-sg"></i> 删除微信 </a>
 					</td>
 				</tr>
 				{/loop}
@@ -35,26 +35,24 @@
 		{$pager}
 	</div>
 <script type="text/javascript">
- $(function () {
-        $(".del_peo").bind("click",function(){
-            var id = $(this).attr('data');
-            // alert(id);
-	        var url = "{php echo $this->createWebUrl('notice',array('op' => 'delete'))}";
-	            $.post(url,
-	            {
-	                id:id
-	            },
-	            function(msg){
-	                    if (msg.status == 1) {
-	                    	setTimeout(function(){
-	                        	window.location.reload();
-	                   		 },100);
-	                    };
-	                    
-	            },
-	            'json');
-        });
-});
+
+function del(id){
+			var id=id;
+		        var url = "{php echo $this->createWebUrl('notice',array('op' => 'delete'),true)}";
+		            $.post(url,
+		            {
+		                id:id
+		            },
+		            function(msg){
+		                    if (msg.status == 1) {
+		                    	setTimeout(function(){
+		                        	window.location.reload();
+		                   		 },100);
+		                    };
+		                    
+		            },
+		            'json');
+		}
  function verify(obj, id, type) {
     $.post("{php echo $this->createWebUrl('notice',array('op' => 'verify'))}", {
         id: id,

@@ -294,6 +294,7 @@ class DB {
 			foreach ($params as $fields => $value) {
 				if (is_array($value)) {
 					$result['fields'] .= $split . "`$fields` IN ('".implode("','", $value)."')";
+					$split = ' ' . $glue . ' ';
 				} else {
 					$result['fields'] .= $split . "`$fields` =  :{$suffix}$fields";
 					$split = ' ' . $glue . ' ';

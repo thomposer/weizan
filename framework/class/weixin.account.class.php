@@ -1365,11 +1365,6 @@ class WeiXinAccount extends WeAccount {
 	
 	public function getFansStat() {
 		global $_W;
-		$cachekey = "stat:wxhistory:{$_W['uniacid']}";
-		$cache = cache_load($cachekey);
-		if (!empty($cache) && $cache['expire'] > TIMESTAMP) {
-			return $cache['data'];
-		}
 		$token = $this->getAccessToken();
 		if (is_error($token)) {
 			return $token;
@@ -1380,12 +1375,9 @@ class WeiXinAccount extends WeAccount {
 			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
 		}
 		$summary = @json_decode($response['content'], true);
-		if(empty($summary) || !empty($summary['errcode'])) {
-			$cache = array(
-				'data' => $result,
-				'expire' => strtotime(date('Y-m-d')) + 86399,
-			);
-			cache_write($cachekey, $cache);
+		if(empty($summary)) {
+			return error(-1, "接口调用失败, 元数据: {$response['meta']}");
+		} elseif (!empty($summary['errcode'])) {
 			return error(-1, "访问微信接口错误, 错误代码: {$summary['errcode']}, 错误信息: {$summary['errmsg']},信息详情：{$this->error_code($summary['errcode'])}");
 		}
 		$url = "https://api.weixin.qq.com/datacube/getusercumulate?access_token={$token}";
@@ -1414,11 +1406,6 @@ class WeiXinAccount extends WeAccount {
 				$result[$key]['cumulate'] = $row['cumulate_user'];
 			}
 		}
-		$cache = array(
-			'data' => $result,
-			'expire' => strtotime(date('Y-m-d')) + 86399,
-		);
-		cache_write($cachekey, $cache);
 		return $result;
 	}
 }

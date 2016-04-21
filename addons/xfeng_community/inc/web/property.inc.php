@@ -9,7 +9,12 @@
  */
 
 	global $_GPC,$_W;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'];
+	$menus = $this->NavMenu($do);
+	
+
+	$GLOBALS['frames'] = $menus;
+
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 	if ($op == 'list') {
 		$pindex = max(1, intval($_GPC['page']));
@@ -40,7 +45,7 @@
 		$regions = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}' AND pid=0");
 		if (empty($id)) {
 			if (empty($regions)) {
-				message('已无绑定的小区，请先添加小区',$this->createWebUrl('region',array('op' => 'add')),'error');
+				message('已无未绑定的小区，请先添加小区',$this->createWebUrl('region',array('op' => 'add')),'error');
 			}
 		}
 

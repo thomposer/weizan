@@ -14,7 +14,7 @@
                     <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
                         <select name="regionid" class="form-control">
                                 {loop $regions $region}
-                                <option value="{$region['id']}" {if $region['id']==$_GPC[ 'regionid']} selected{/if}>{$region['title']}</option>
+                                <option value="{$region['id']}" {if $region['id']==$_GPC[ 'regionid']} selected{/if}>{$region['city']}{$region['dist']}{$region['title']}</option>
                                 {/loop}
                         </select>
                     </div>
@@ -68,7 +68,7 @@
 					<td>
 						<a onclick="toblack('{$cars['id']}')" href="#" class="btn btn-primary btn-sm"><i class="fa fa-eye-slash"></i>信息加入黑名单</a>
 						&nbsp;
-						<a href="javascript:;" data="{$cars['id']}" title="删除" class="btn btn-primary btn-sm" id='del'><i class="fa fa-times"></i>删除
+						<a onclick="del('{$good['id']}')" title="删除" class="btn btn-primary btn-sm" ><i class="fa fa-times"></i>删除
 						</a>&nbsp;
 						
 					</td>
@@ -79,9 +79,10 @@
 	</div>
 	{$pager}
 	<script type="text/javascript">
-	    $(function () {
-	        $("#del").bind("click",function(){
-	            var id = $(this).attr('data');
+	
+
+		function del(id){
+			var id=id;
 		        var url = "{php echo $this->createWebUrl('car',array('op' => 'delete'),true)}";
 		            $.post(url,
 		            {
@@ -96,8 +97,7 @@
 		                    
 		            },
 		            'json');
-	        });
-		});
+		}
 	    function toblack(id){
 	    	var id = id;
 	            if(!id) return false;

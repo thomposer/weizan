@@ -8,7 +8,8 @@
  * 后台小区电话信息
  */
 	global $_GPC,$_W;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$id = intval($_GPC['id']);
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 	//判断是否是操作员

@@ -14,7 +14,7 @@
 		$tablename = tablename("hnfans");
 		$isshow =1;
 		$gender=2;
-        $list2 = pdo_fetchall("SELECT *  FROM " . $tablename . " WHERE   yingcang=1 AND weid='{$weid}' AND nickname!='' AND isshow='{$isshow}' AND gender='{$gender}' ORDER BY rand() LIMIT 0,20"); //·ÖÒ³
+        $list2 = pdo_fetchall("SELECT *  FROM " . $tablename . " WHERE   yingcang=1 AND weid='{$weid}' AND nickname!='' AND isshow='{$isshow}' AND gender='{$gender}' ORDER BY rand() LIMIT 0,20"); //åˆ†é¡µ
         if(!empty($list2) && is_array($list2)){
 			if(!empty($list2)){
 					foreach($list2 as $row){

@@ -9,54 +9,23 @@
  */
 
 	global $_W,$_GPC;
-	$GLOBALS['frames'] = $this->NavMenu();
+	$do = $_GPC['do'];
+	$GLOBALS['frames'] = $this->NavMenu($do);
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 	$id        = $_GPC['id'];
 	//查投诉子类 投诉主类ID=4
 	$categories = pdo_fetchall("SELECT * FROM".tablename('xcommunity_category')."WHERE weid='{$_W['weid']}' AND type=3");
 	if($op == 'list'){
-		//搜索 type 1为报修，2为投诉
-		// $category  = $_GPC['category'];
-		// $type      = 2;
-		// $starttime = strtotime($_GPC['birth']['start']) ;
-		// $endtime   = strtotime($_GPC['birth']['end']) ;
-		// if (!empty($starttime) && $starttime==$endtime) {
-		// 	$endtime = $endtime+86400-1;
-		// }
-		// $condition = '';
-		// if (!empty($_GPC['category'])) {
-		// 	$condition .= " AND a.category = '{$_GPC['category']}'";
-		// }
-		// //bug
-		// if (!empty($_GPC['status'])) {
-		// 	$condition .=" AND a.status = '{$_GPC['status']}'";
-		// }
-		// if ($starttime && $endtime) {
-		// 	$condition .="AND a.createtime between '{$starttime}' and '{$endtime}'";
-		// }
-		// //判断是否是操作员
-		// $user = $this->user();
-		// if ($user) {
-		// 	$condition .="AND a.regionid=:regionid";
-		// 	$params[':regionid'] = $user['regionid'];
-		// }
-		// if (!$user) {
-		// 		$regions = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}'");
-		// 		$regionid = intval($_GPC['regionid']);
-		// 		if ($regionid) {
-		// 			$condition .=" AND a.regionid =:regionid";
-		// 			$params[':regionid'] = $regionid;
-		// 		}
-		// }
-		$condtion = ' m.weid =:weid';
+
+		$condition = ' m.weid =:weid';
 		$params[':weid'] = $_W['uniacid'];
 		if (!empty($_GPC['category'])) {
-			$condtion .= " AND m.category = :category";
+			$condition .= " AND m.category = :category";
 			$params[':category'] = $_GPC['category'];
 		}
 		$status = intval($_GPC['status']);
 		if (!empty($status)) {
-			$condtion .=" AND m.status = :status";
+			$condition .=" AND m.status = :status";
 			$params[':status'] = $status;
 		}
 		$starttime = strtotime($_GPC['birth']['start']) ;
@@ -65,23 +34,10 @@
 			$endtime = $endtime+86400-1;
 		}
 		if ($starttime && $endtime) {
-			$condtion .=" AND m.createtime between '{$starttime}' and '{$endtime}'";
+			$condition .=" AND m.createtime between '{$starttime}' and '{$endtime}'";
 		}
 		$regions = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}'");
-		//判断是否是操作员
-		// $user = $this->user();
-		// if ($user) {
-		// 	$condition .="AND a.regionid=:regionid";
-		// 	$params[':regionid'] = $user['regionid'];
-		// }
-		// if (!$user) {
-		// 		$regions = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}'");
-		// 		$regionid = intval($_GPC['regionid']);
-		// 		if ($regionid) {
-		// 			$condition .=" AND a.regionid =:regionid";
-		// 			$params[':regionid'] = $regionid;
-		// 		}
-		// }
+
 		$user = $this->user();
 			if ($user) {
 				if ($user['regionid']) {
@@ -96,12 +52,14 @@
 		//显示投诉记录
 		$pindex = max(1, intval($_GPC['page']));
 		$psize  = 10;
-		
-		$list = pdo_fetchall("SELECT m.content,m.comment,m.category,m.createtime,m.status,b.realname,b.mobile,m.id,r.title,r.city,r.dist,r.address FROM".tablename('xcommunity_report')."as m left join(".tablename('xcommunity_region')."as r left join".tablename('xcommunity_member')."as b on b.regionid = r.id ) on m.openid = b.openid WHERE $condtion AND m.type = 2 order by createtime desc LIMIT ".($pindex - 1) * $psize.','.$psize,$params);
+		$sql = "SELECT m.content,m.comment,m.category,m.createtime,m.status,b.realname,b.mobile,m.id,r.title,r.city,r.dist,b.address FROM".tablename('xcommunity_report')."as m left join(".tablename('xcommunity_region')."as r left join".tablename('xcommunity_member')."as b on b.regionid = r.id ) on m.openid = b.openid WHERE $condition AND m.type = 2 order by createtime desc LIMIT ".($pindex - 1) * $psize.','.$psize;
+		// print_r($sql);exit();
+		$list = pdo_fetchall($sql,$params);
+		// print_r($list);
 		foreach ($list as $key => $value) {
 				$list[$key]['cctime'] = date('Y-m-d H:i',$value['createtime']);
 			}
-		$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_report')."as m left join(".tablename('xcommunity_region')."as r left join".tablename('xcommunity_member')."as b on b.regionid = r.id ) on m.openid = b.openid WHERE $condtion AND m.type = 2",$params);
+		$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_report')."as m left join(".tablename('xcommunity_region')."as r left join".tablename('xcommunity_member')."as b on b.regionid = r.id ) on m.openid = b.openid WHERE $condition AND m.type = 2",$params);
 		 //$sql    = "select a.regionid,a.comment,a.id,a.category,a.content,a.createtime,a.status,a.resolver,a.resolve,a.resolvetime,b.realname as realname ,b.mobile as mobile,b.address as address from".tablename("xcommunity_report")."as a left join".tablename("xcommunity_member")."as b on a.openid=b.openid where a.weid='{$_W['weid']}'  and a.type = 2 $condition LIMIT ".($pindex - 1) * $psize.','.$psize;
 		//$list   = pdo_fetchall($sql,$params);
 		//print_r($condition);exit();
@@ -150,11 +108,11 @@
 		//对应ID的投诉记录查看
 		$sql  = "select a.images,a.id,a.category,a.content,a.createtime,a.status,a.resolver,a.resolve,a.resolvetime,b.realname,a.openid from".tablename("xcommunity_report")."as a left join".tablename("xcommunity_member")."as b on a.openid=b.openid where a.weid='{$_W['weid']}' and a.id='{$id}' $condition ";
 		$value = pdo_fetch($sql);
-		$images = unserialize($value['images']);
-		if ($images) {
-			$picid  = implode(',', $images);
-		    $imgs   = pdo_fetchall("SELECT * FROM".tablename('xcommunity_images')."WHERE id in({$picid})");
+		$images = $value['images'];
+		if ($images&&$item['images'] !='N;') {
+		    $imgs   = pdo_fetchall("SELECT * FROM".tablename('xcommunity_images')."WHERE id in({$images})");
 		}
+		// print_r($value);exit();
 		//组成一个新的数组
 		 $item = array();
 		 $item = array(
@@ -166,10 +124,10 @@
 				'createtime'  =>$value['createtime'],
 				'status'      =>$value['status'],
 				'reply'       =>$reply,
-				'img'		  =>$imgs,
 				'resolve'     =>$value['resolve'],
 				'resolver'    =>$value['resolver'],
 		 	 );
+		 // print_r($item);exit();
 		if($_W['ispost']){
 			
 				$resolver = empty($_GPC['resolver'])?$_W['username']:$_GPC['resolver'];
@@ -230,7 +188,7 @@
 					$r = pdo_insert("xcommunity_category",$data);
 				}
 			}
-			message('提交成功',$this->createWebUrl('report',array('op' => 'list')));
+			message('提交成功',$this->createWebUrl('report',array('op' => 'list')),'success');
 
 		}
 

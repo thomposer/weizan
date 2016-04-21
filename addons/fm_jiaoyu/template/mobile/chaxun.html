@@ -57,7 +57,7 @@
                 <header>老师点评</header>
                 <article>
                     <!-- <header>老师点评</header> -->
-                    <section>暂无</section>
+                    <section>{if !empty($item['info'])}{$item['info']}{else}暂无{/if}</section>
                 </article>
             </dd>
           {/loop}	

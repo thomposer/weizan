@@ -1,8 +1,8 @@
 <?php
-
 defined('IN_IA') or exit('Access Denied');
-
-class Lonaking_flashModuleSite extends WeModuleSite {
-
-
+class Lonaking_flashModuleSite extends WeModuleSite
+{
+    public function doMobileForceUpdate()
+    {
+    }
 }

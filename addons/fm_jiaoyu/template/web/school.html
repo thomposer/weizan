@@ -1,7 +1,8 @@
 {template 'common/header'}
- <ul class="nav nav-tabs">
-          <li {if $operation == 'display'}class="active"{/if}><a href="{php echo $this->createWebUrl('school', array('op' => 'display'))}">学校管理</a></li>
- </ul>
+<ul class="nav nav-tabs">
+	 <li {if $operation == 'display'}class="active"{/if}><a class="btn btn-primary" href="{php echo $this->createWebUrl('school', array('op' => 'display'))}">学校管理</a></li>
+  </ul>
+
 {if $operation == 'display'}
 <style>
     .form-control-excel {
@@ -23,20 +24,18 @@
 </style>
 <div class="main">
     <div class="panel panel-default">
+        <div class="panel-body">         
+		<a class="btn btn-primary" href="{php echo $this->createWebUrl('school', array('op' => 'post'))}"><i class="fa fa-plus"></i> 添加学校</a>
+		<a class="btn btn-primary" href="javascript:location.reload()"><i class="fa fa-refresh"></i>刷新</a>
+        </div>
+    </div>
+    <div class="panel panel-default">
         <div class="panel-body">
             <form action="./index.php" method="get" class="form-horizontal" role="form">
                 <input type="hidden" name="c" value="site" />
                 <input type="hidden" name="a" value="entry" />
                 <input type="hidden" name="m" value="fm_jiaoyu" />
                 <input type="hidden" name="do" value="school" />
-                <div class="form-group">
-                    <div class="col-sm-2 col-lg-2">  
-                        {if $_W['isfounder']}                    
-						<a class="btn btn-primary" href="{php echo $this->createWebUrl('school', array('op' => 'post'))}"><i class="fa fa-plus"></i> 添加学校</a>
-						{/if}
-						<a class="btn btn-primary" href="javascript:location.reload()"><i class="fa fa-refresh"></i>刷新</a>
-                    </div>
-                </div>
             </form>
         </div>
     </div>
@@ -251,6 +250,22 @@
 						<span  id="tongzhi" class="label label-success "></span>	
 					</div>
 				</div>
+			</div>
+			<div class="modal-body" style="width: 100%;float: none;">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">班级圈（学生入口）</label>
+					<div class="col-sm-3 col-xs-5">
+						<span  id="bjq" class="label label-success "></span>	
+					</div>
+				</div>
+			</div>
+			<div class="modal-body" style="width: 100%;float: none;">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">班级圈（教师入口）</label>
+					<div class="col-sm-3 col-xs-5">
+						<span  id="sbjq" class="label label-success "></span>	
+					</div>
+				</div>
 			</div>			
 			<div class="modal-footer">
 				<!--<input type="submit" name="tijiao" id="tijiao" class="btn btn-success" value="开始上传">-->
@@ -327,7 +342,9 @@ function hdurl(schoolid){
 	 $('#bangding').html('{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&j={$_W['uniacid']}&c=entry&schoolid=' + schoolid + '&do=bangding&m=fm_jiaoyu');
 	 $('#xsqj').html('{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&j={$_W['uniacid']}&c=entry&schoolid=' + schoolid + '&do=xsqj&m=fm_jiaoyu');
 	 $('#duihua').html('{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&j={$_W['uniacid']}&c=entry&schoolid=' + schoolid + '&do=jiaoliu&m=fm_jiaoyu');
-	 $('#tongzhi').html('{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&j={$_W['uniacid']}&c=entry&schoolid=' + schoolid + '&do=snoticelist&m=fm_jiaoyu');	 
+	 $('#tongzhi').html('{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&j={$_W['uniacid']}&c=entry&schoolid=' + schoolid + '&do=snoticelist&m=fm_jiaoyu');
+	 $('#bjq').html('{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&j={$_W['uniacid']}&c=entry&schoolid=' + schoolid + '&do=bjq&m=fm_jiaoyu');
+	 $('#sbjq').html('{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&j={$_W['uniacid']}&c=entry&schoolid=' + schoolid + '&do=sbjq&m=fm_jiaoyu');	 
 }
 
 function tankuang(schooid){
@@ -566,20 +583,20 @@ function drop_confirm(msg, url){
                         </div>
                     </div>
                 </div>				
-                <!--div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否推荐</label>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否审核班级圈</label>
                     <div class="col-sm-9">
                         <label class="radio-inline">
-                            <input type="radio" name="is_hot" value="1" {if $reply['is_hot']==1 || empty($reply)}checked{/if}>是
+                            <input type="radio" name="isopen" value="1" {if $reply['isopen']==1 || empty($reply)}checked{/if}>是
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="is_hot" value="0" {if isset($reply['is_hot']) && empty($reply['is_hot'])}checked{/if}>否
+                            <input type="radio" name="isopen" value="0" {if isset($reply['isopen']) && empty($reply['isopen'])}checked{/if}>否
                         </label>
                         <div class="help-block">
-                            在搜索页显示
+                            发布班级圈是否需要班主任审核
                         </div>
                     </div>
-                </div-->
+                </div>
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
                     <div class="col-sm-9">

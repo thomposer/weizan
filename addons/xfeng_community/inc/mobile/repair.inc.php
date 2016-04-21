@@ -11,8 +11,7 @@
 
 	global $_GPC,$_W;
 	$op = !empty($_GPC['op'])?$_GPC['op']:'list';
-	//查小区编号
-	$member = $this->changemember();
+	
 	$region = $this->mreg();
 	load()->model('mc');
 	$m = mc_fetch($_W['fans']['uid'],array('mobile','address','realname'));
@@ -20,6 +19,8 @@
 		//查报修子类 报修主类ID=3
 		$categories = pdo_fetchall("SELECT * FROM".tablename('xcommunity_category')."WHERE weid='{$_W['weid']}' AND type=2");
 		$m = mc_fetch($_W['member']['uid'],array('realname','mobile','address'));
+		//查小区编号
+	$member = $this->changemember();
 		if ($_W['isajax']) {
 			$data  = array(
 				'openid'      => $_W['fans']['from_user'],
@@ -34,7 +35,7 @@
 				'address' => $_GPC['address'],
 			);
 			
-
+			// print_r($data);exit();
 			$r = pdo_insert("xcommunity_report",$data);
 			$id = pdo_insertid();
 			
@@ -167,7 +168,9 @@
 			include $this->template('style/style'.$styleid.'/repair/add');exit();
 		}
 	}elseif ($op == 'list') {
-
+		$set = pdo_fetch("SELECT * FROM".tablename('xcommunity_set')."WHERE uniacid=:uniacid",array(':uniacid' => $_W['uniacid']));
+		//查小区编号
+	$member = $this->changemember();
 		if ($_W['isajax']) {
 			$pindex = max(1, intval($_GPC['page']));
 			$psize = 10;
@@ -177,11 +180,16 @@
 				$condition .=" AND status=:status";
 				$parmas[':status'] = $status; 
 			}
-			$sql = "select * from ".tablename("xcommunity_report")."where weid='{$_W['weid']}' and type=1  AND regionid='{$member['regionid']}' $condition LIMIT ".($pindex - 1) * $psize.','.$psize;
+			if ($set['r_status']) {
+				$condition .=" AND regionid='{$member['regionid']}'";
+			}else{
+				$condition .=" AND openid='{$_W['fans']['from_user']}'";
+			}
+			$sql = "select * from ".tablename("xcommunity_report")."where weid='{$_W['weid']}' and type=1 $condition LIMIT ".($pindex - 1) * $psize.','.$psize;
 			// print_r($sql);exit();
 			$list    = pdo_fetchall($sql,$parmas);
 
-			$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_report')."WHERE weid='{$_W['weid']}' and type=1  AND regionid='{$member['regionid']}' $condition ",$parmas);
+			$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_report')."WHERE weid='{$_W['weid']}' and type=1 $condition ",$parmas);
 			
 			$data = array();
 	    	if ($list){
@@ -244,6 +252,8 @@
 			include $this->template('style/style'.$styleid.'/repair/rank');exit();
 		}
 	}elseif ($op == 'my') {
+		//查小区编号
+	$member = $this->changemember();
 		if($_W['isajax']){
 			$pindex = max(1, intval($_GPC['page']));
 			$psize = 10;
@@ -322,18 +332,25 @@
 		if (empty($id)) {
 			message('缺少参数',referer(),'error');
 		}
+		$member = $this->member($_W['fans']['from_user']);
+		
 		$item =pdo_fetch("SELECT * FROM".tablename('xcommunity_report')."WHERE id=:id",array(':id' => $id));
-		if ($item['images']) {
+		if ($item['resolver'] == $member['realname']) {
+			$r = 1;
+		}
+		if ($item['images']&&$item['images'] !='N;') {
 			$imgs = pdo_fetchall("SELECT * FROM".tablename('xcommunity_images')."WHERE id in({$item['images']})");
 		}
-
+		
 		if (empty($item['resolver'])) {
-			pdo_update('xcommunity_report',array('resolver' => $_W['fans']['from_user'],'status' => 1,'resolvetime' => TIMESTAMP),array('id' => $id));
+		 		pdo_update('xcommunity_report',array('resolver' => $member['realname'],'status' => 3,'resolvetime' => TIMESTAMP),array('id' => $id));
 		}
+
+
 		if (checksubmit('submit')) {
 			$status = intval($_GPC['status']);
-			pdo_update('xcommunity_report',array('status' => $status,'resolvetime' => TIMESTAMP),array('id' => $id));
-			if ($status == 2) {
+			pdo_update('xcommunity_report',array('status' => $status,'resolve' => $_GPC['resolve'],'resolvetime' => TIMESTAMP),array('id' => $id));
+			if ($status == 1) {
 				$openid = $item['openid'];
 				$member = pdo_fetch("SELECT realname FROM".tablename('xcommunity_member')."WHERE openid=:openid",array(':openid' => $openid));
 				$tpl = pdo_fetch("SELECT * FROM".tablename('xcommunity_wechat_tplid')."WHERE uniacid=:uniacid",array(':uniacid' => $_W['uniacid']));
@@ -371,7 +388,7 @@
 			message('缺少参数',referer(),'error');
 		}
 		$item =pdo_fetch("SELECT * FROM".tablename('xcommunity_report')."WHERE id=:id",array(':id' => $id));
-		if ($item['images']) {
+		if ($item['images']&&$item['images'] !='N;') {
 			$imgs = pdo_fetchall("SELECT * FROM".tablename('xcommunity_images')."WHERE id in({$item['images']})");
 		}
 

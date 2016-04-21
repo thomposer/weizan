@@ -35,9 +35,8 @@
 						<tbody>
 							<tr>
 								<td style="width:10%;text-align:center;" >编号</td>
-								<td style="width:20%;text-align:center;" >昵称</td>
-								<td style="width:20%;text-align:center;" >支付时间</td>
-								<td style="width:20%;text-align:center;" >提交时间</td>
+								<td style="width:40%;text-align:center;" >昵称</br>OpenID</td>
+								<td style="width:30%;text-align:center;" >支付时间</br>提交时间</td>
 								<td style="width:10%;text-align:center;" >金额</td>
 								<td style="width:10%;text-align:center;" >状态</td>
 								<!--td style="width:10%;text-align:center;" >操作</td-->
@@ -45,12 +44,12 @@
 							{loop $list $row}
 							<tr>
 								<td style="text-align:center;" >{$row['id']}</td>	
-								<td style="text-align:center;" >{$row['username']}</td>
-								<!--td style="text-align:center;" >{php echo date("Y-m-d H:i:s" , $row['paytime'] );}</td-->
-								<td style="text-align:center;" >{if !strexists('1970',$row['paytime'])}{php echo date("Y-m-d H:i:s" , $row['paytime'] );}{else}----------{/if}</td>
-								<td style="text-align:center;" >{php echo date("Y-m-d H:i:s" , $row['dateline'] );}</td>
+								<td style="text-align:center;" >{$row['username']}</br>{$row['fromuser']}</td>
+								<td style="text-align:center;" >{if !strexists('1970',$row['paytime'])}{php echo date("Y-m-d H:i:s" , $row['paytime'] );}{else}----------{/if}
+								</br>
+								{php echo date("Y-m-d H:i:s" , $row['dateline'] );}</td>
 								<td style="text-align:center;" >{$row['qrmoney']}</td>
-								<td>
+								<td style="text-align:center;" >
 									{if empty($row['status']) || ($row['status'] == 0)}
 										<span class="label label-success">未支付</span>
 									{else}

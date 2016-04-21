@@ -83,7 +83,11 @@
 		$id = intval($_GPC['id']);
 		if ($id) {
 			$detail = pdo_fetch("SELECT * FROM".tablename('xcommunity_activity')."WHERE id=:id",array(':id' => $id));
-			$res = pdo_fetch("SELECT * FROM".tablename('xcommunity_res')."WHERE openid=:openid AND aid=:aid",array(':openid' => $_W['fans']['from_user'],':aid' => $id));
+			$condition = '';
+			if ($detail['price'] != '0.00' && $detail['price'] != '0') {
+				$condition .=" AND status = 1";
+			}
+			$res = pdo_fetch("SELECT * FROM".tablename('xcommunity_res')."WHERE openid=:openid AND aid=:aid $condition",array(':openid' => $_W['fans']['from_user'],':aid' => $id));
 			$enddate = strtotime($detail['enddate']);
 			$starttime = date('Y-m-d', $detail['starttime']);
 			$endtime = date('Y-m-d', $detail['endtime']);
@@ -114,24 +118,37 @@
 					'aid'        => $aid,
 					'createtime' => TIMESTAMP,
 				);
-			$r1 = pdo_insert('xcommunity_res',$data);
+			$res = pdo_fetch("SELECT id FROM".tablename('xcommunity_res')."WHERE aid=:aid AND openid =:openid",array(':aid' => $aid,':openid' => $_W['fans']['from_user']));
+			if ($res) {
+				$r1 = pdo_update('xcommunity_res',$data,array('id' => $res['id']));
+				$rid = $res['id'];
+			}else{
+				$r1 = pdo_insert('xcommunity_res',$data);
+				$rid = pdo_insertid();
+			}
+			
 			if ($item['price'] != '0.00' && $item['price'] != '0') {
 				$data = array(
 					'weid' => $_W['uniacid'],
 					'from_user' => $_W['fans']['from_user'],
-					'ordersn' => date('YmdHi').random(10, 1),
 					'createtime' => TIMESTAMP,
 					'price'	=> $item['price']*$data['num'],
-					'aid' => $aid,
+					'aid' => $rid,
 					'type' => 'activity',
 					'regionid' => $member['regionid'],
 				);
-				$order = pdo_fetch("SELECT id FROM".tablename('xcommunity_order')."WHERE ordersn=:ordersn",array(':ordersn' => $data['ordersn']));
+
+				$order = pdo_fetch("SELECT id FROM".tablename('xcommunity_order')."WHERE aid=:aid",array(':aid' => $res['id']));
 				if ($order) {
-					message('订单已存在，无需提交',referer(),'error');
+					pdo_update('xcommunity_order',$data,array('id' => $order['id']));
+					$orderid = $order['id'];
+				}else{
+					$data['ordersn'] = date('YmdHi').random(10, 1);
+					pdo_insert('xcommunity_order', $data);
+					$orderid =pdo_insertid();
 				}
-				pdo_insert('xcommunity_order', $data);
-				$orderid =pdo_insertid();
+				
+				
 				if ($orderid) {
 					$result = array(
 								'status' => 2,
@@ -153,7 +170,7 @@
 		}
 	
 	}elseif ($op == 'pay') {
-		//查物业费支持的支付方式
+		//查活动支持的支付方式
 		$setdata = $this->syspay(4);
 		$set = unserialize($setdata['pay']);
 		//查当前订单信息
@@ -169,6 +186,21 @@
 		$params['virtual'] = $order['goodstype'] == 2 ? true : false;
 		$params['module'] = 'xfeng_community';
 		$params['title'] = '活动支付';
+		$log = pdo_get('core_paylog', array('uniacid' => $_W['uniacid'], 'module' => $params['module'], 'tid' => $params['tid']));
+		if (empty($log)) {
+        $log = array(
+                'uniacid' => $_W['uniacid'],
+                'acid' => $_W['acid'],
+                'openid' => $_W['member']['uid'],
+                'module' => $this->module['name'], //模块名称，请保证$this可用
+                'tid' => $params['tid'],
+                'fee' => $params['fee'],
+                'card_fee' => $params['fee'],
+                'status' => '0',
+                'is_usecard' => '0',
+        );
+        pdo_insert('core_paylog', $log);
+}		}
 		$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
 		if ($styleid) {
 			include $this->template('style/style'.$styleid.'/activity/pay');exit();

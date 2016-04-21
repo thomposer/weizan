@@ -52,7 +52,9 @@ if(!empty($type)) {
 	
 	$record = array();
 	$record['type'] = $type;
-	$record['uniontid'] = $log['uniontid'] = date('YmdHis').$moduleid.random(8,1);
+	if (empty($log['uniontid'])) {
+		$record['uniontid'] = $log['uniontid'] = date('YmdHis').$moduleid.random(8,1);
+	}
 	if($type != 'delivery') {
 				if($setting['payment']['card']['switch'] == 2 && !empty($_GPC['card_id']) && !empty($_GPC['encrypt_code']) && !empty($_W['acid'])) {
 			$card_id = base64_decode($_GPC['card_id']);

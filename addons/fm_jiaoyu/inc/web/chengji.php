@@ -58,6 +58,7 @@
 					'qh_id' => trim($_GPC['qh']),
 					'xq_id' => trim($_GPC['xueqi']),
 					'my_score' => trim($_GPC['score']),
+					'info' => trim($_GPC['info']),
                 );
 			
                 if (empty($id)) {

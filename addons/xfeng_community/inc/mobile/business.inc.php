@@ -28,18 +28,18 @@
 				$pindex = max(1, intval($_GPC['page']));
 				$psize  = 10;
 				$settings = pdo_fetch("SELECT * FROM".tablename('xcommunity_set')."WHERE uniacid=:uniacid",array(":uniacid" => $_W['uniacid']));
-				if ($settings['range']) {
-					$range = $settings['range'];
-				}else{
-					$range = 5;
-				}
-				
-				$point = $this->squarePoint($lng, $lat, $range);
+				//是否开启商家定位
 				$condition = '';
-				if ($lng&&$lat) {
-					$condition .=" AND lat<>0 AND lat >= '{$point['right-bottom']['lat']}' AND lat <= '{$point['left-top']['lat']}' AND lng >= '{$point['left-top']['lng']}' AND lng <= '{$point['right-bottom']['lng']}'";
+				if ($settings['business_status']) {
+					if ($settings['range']) {
+						$range = $settings['range'];
+					}else{
+						$range = 5;
+					}
+			        $point = $this->squarePoint($lng, $lat, $range);
+			       	$condition .="AND lat<>0 AND lat >= '{$point['right-bottom']['lat']}' AND lat <= '{$point['left-top']['lat']}' AND lng >= '{$point['left-top']['lng']}' AND lng <= '{$point['right-bottom']['lng']}'";
 
-				}
+				} 
 		        $keyword = $_GPC['keyword'];
 		        if ($keyword) {
 		        	$condition .= " AND sjname LIKE '%{$_GPC['keyword']}%'";
@@ -82,10 +82,11 @@
 			                        'lng'   => $temp['lng'],
 			                        'lat'   => $temp['lat'],
 			                        'address'=>$temp['address'],
-			                        'mobile' => $temp['picurl'],
+			                        'mobile' => $temp['mobile'],
 			                        'picurl' => $temp['picurl'],
 			                        'id' => $temp['id'],
-			                    );
+			                        'businessurl' => $temp['businessurl'],
+ 			                    );
 			                    unset($result[$h]);
 			                    $temp = array();
 			                }
@@ -93,11 +94,16 @@
 			            $html = '';
 						foreach ($list as $key => $value) {
 							$thumb = tomedia($value['picurl']);
-							$url = $this->createMobileUrl('business',array('op' => 'detail','id' => $value['id']));
+							if ($value['businessurl']) {
+								$url = $value['businessurl'];
+							}else{
+								$url = $this->createMobileUrl('business',array('op' => 'detail','id' => $value['id']));
+							}
+							
 							$html .="
 									<div class=\"list-box\">
 					                    <div class=\"list-img\">
-					                        <a class=\"pic\" href=\"".$url."\"><img src=\"".$thumb."\"></a>
+					                        <a class=\"pic\" href=\"".$url."\"><img src=\"".$thumb."\" width='110px' heigth='73px' ></a>
 					                    </div>
 					                    <div class=\"list-content\">
 					                        <p>
@@ -270,9 +276,10 @@
 				include $this->template('style/style'.$styleid.'/business/coupon/confirm');exit();
 			}
 		}elseif ($operation == 'my') {
-			$status = !empty($_GPC['status']) ? $_GPC['status'] : 0;
+				$status = !empty($_GPC['status']) ? $_GPC['status'] : 0;
+				// print_r($status);exit();
 			if ($_W['isajax'] || $_W['ispost']) {
-		
+				
 				$pindex = max(1, intval($_GPC['page']));
 				$psize  = 10;
 		        $sql = "SELECT o.*,g.title as title ,g.thumb as thumb FROM".tablename('xcommunity_order')."as o left join".tablename('xcommunity_goods')."as g on o.gid = g.id WHERE o.weid=:weid AND  o.type = 'business' AND o.from_user = :from_user AND o.status = :status order by id desc LIMIT ".($pindex - 1) * $psize.','.$psize;
@@ -280,7 +287,7 @@
 		        $params[':from_user'] = $_W['fans']['from_user'];
 		        $params[':status'] = $status;
 				$result = pdo_fetchall($sql,$params);
-				// print_r($result);exit();
+				
 
 				$html = '';
 				foreach ($result as $key => $value) {
@@ -305,7 +312,7 @@
 
 			                      $html.="</p>";
 			                      if (empty($value['status'])) {
-			                      	$html.="     <a style=\"color:#fff;\" href=\"\" class=\"button\">取消</a>
+			                      	$html.="     <a style=\"color:#fff;\" onclick=\"del(".$value['id'].")\" class=\"button\">取消</a>
 			                        <a style=\"color:#fff;\" href=\"".$link."\" class=\"button2\">付款</a>";
 			                      }
 			                   
@@ -320,6 +327,83 @@
 			$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
 			if ($styleid) {
 				include $this->template('style/style'.$styleid.'/business/coupon/my');exit();
+			}
+		}elseif ($operation == 'mycoupon') {
+
+			// if ($_W['isajax'] || $_W['ispost']) {
+				$enable = !empty($_GPC['enable']) ? $_GPC['enable'] : 0 ;
+				$pindex = max(1, intval($_GPC['page']));
+				$psize  = 100;
+				$condition = '';
+				if ($enable) {
+					$condition .=" AND o.enable = :enable";
+					$params[':enable'] = $enable;
+				}
+		        $sql = "SELECT o.*,g.title as title  FROM".tablename('xcommunity_order')."as o left join".tablename('xcommunity_goods')."as g on o.gid = g.id WHERE o.weid=:weid AND  o.type = 'business' AND o.from_user = :from_user AND o.status = 1 $condition order by id desc LIMIT ".($pindex - 1) * $psize.','.$psize;
+		        $params[':weid'] = $_W['uniacid'];
+		        $params[':from_user'] = $_W['fans']['from_user'];
+		        
+				$result = pdo_fetchall($sql,$params);
+				// $html = '';
+				// foreach ($result as $key => $value) {
+				// 	$html .="
+				// 		<div class=\"coupon-list\">
+	   //                  <div class=\"coupon-box\">
+	   //                      <div class=\"coupon-box-content\">
+	   //                          <div class=\"fl left\">
+	   //                              <div class=\"bg c-1\">
+	   //                                  <div>￥
+	   //                                      <p>58</p>
+	   //                                  </div>
+	   //                                  <img src=\"/themes/default/Mobile/statics/img/personal_coupon_roud_c1.png\">
+	   //                              </div>
+	   //                              <div class=\"state c-1\">
+	   //                                  <a href=\"/mcenter/tuancode/refund/code_id/1078.html\">申请退款</a>
+	   //                              </div>
+	   //                          </div>
+	   //                          <div class=\"fl center\">
+	   //                              <p class=\"overflow_clear\" style=\"padding-bottom:0;padding-top:0;\"><a style=\"color:#fff;\" href=\"/mcenter/tuan/detail/order_id/102996.html\">[58店通用] 棒约翰比萨 </a> &nbsp;&nbsp;&nbsp; <a style=\"color:#fff;\"> 数量：</a></p>
+	   //                              <p>店铺：</p>
+	   //                              <p>密码：70606297</p>
+	   //                              <p>
+	   //                                  提供密码或者商家扫描
+	   //                                  <a href=\"/mcenter/tuancode/weixin/code_id/1078.html\" style=\"color: #000000;\">二维码</a>
+	   //                              </p>
+	   //                          </div>
+	   //                          <div class=\"fl right\">
+	   //                              <div class=\"star\"><img src=\"/themes/default/Mobile/statics/img/personal_coupon_star_c1.png\"></div>
+	   //                              <p class=\"c-3\">有效期至</p>
+	   //                              2017-11-14</div>
+	   //                          <div class=\"clear\"></div>
+	   //                      </div>
+	   //                      <img src=\"/themes/default/Mobile/statics/img/personal_coupon_bg_c1.png\" width=\"100%\" height=\"\">
+	   //                  </div>
+	   //              </div>
+
+
+				// 	";
+				// 	print_r($html);exit();
+				// }
+			
+			
+			// }
+			$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
+			if ($styleid) {
+				include $this->template('style/style'.$styleid.'/business/coupon/mycoupon');exit();
+			}
+		}elseif ($operation == 'delete') {
+			$id = intval($_GPC['id']);
+			if ($_W['isajax']) {
+				if (empty($id)) {
+					exit('缺少参数');
+				}
+				$r = pdo_delete('xcommunity_order',array('id' => $id));
+				if ($r) {
+					$result = array(
+							'status' => 1,
+						);
+					echo json_encode($result);exit();
+				}
 			}
 		}
 	}elseif ($op == 'rank') {
@@ -428,7 +512,21 @@
 		$params['virtual'] = $order['goodstype'] == 2 ? true : false;
 		$params['module'] = 'xfeng_community';
 		$params['title'] = $goodsTitle;
-	
+		$log = pdo_get('core_paylog', array('uniacid' => $_W['uniacid'], 'module' => $params['module'], 'tid' => $params['tid']));
+		if (empty($log)) {
+	        $log = array(
+	                'uniacid' => $_W['uniacid'],
+	                'acid' => $_W['acid'],
+	                'openid' => $_W['member']['uid'],
+	                'module' => $this->module['name'], //模块名称，请保证$this可用
+	                'tid' => $params['tid'],
+	                'fee' => $params['fee'],
+	                'card_fee' => $params['fee'],
+	                'status' => '0',
+	                'is_usecard' => '0',
+	        );
+	        pdo_insert('core_paylog', $log);
+    	}
 		$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
 		if ($styleid) {
 			include $this->template('style/style'.$styleid.'/business/pay');exit();

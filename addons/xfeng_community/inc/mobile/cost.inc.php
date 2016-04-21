@@ -37,10 +37,10 @@
 		                            <p style='font-size:12px;width:75%'>".$value['costtime']."物业账单合计".$value['total']."元</p>
 		                        </div>
 		                        <div class='weui_cell_ft'>";
-		                        if ($value['status'] == '否') {
-		                        	$data[]['html'] .="<span class='label label-success'>支付</span>";
+		                        if ($value['status'] == '否' || empty($value['status'])) {
+		                        	$data[]['html'] .="<span class='label label-success'>我要缴费</span>";
 		                        }else{
-		                        	$data[]['html'] .="<span class='label label-default'>已支付</span>";
+		                        	$data[]['html'] .="<span class='label label-info'>已支付</span>";
 		                        }
 		            $data[]['html'].="            </div>
 		                    </a>
@@ -65,7 +65,10 @@
 		if (empty($id)) {
 			message('缺少参数',referer(),'error');
 		}
+		$category = pdo_fetch("SELECT name FROM".tablename('xcommunity_category')."WHERE regionid=:regionid",array(':regionid' => $member['regionid']));
+		$c = explode('|', $category['name']);
 		$item = pdo_fetch("SELECT * FROM".tablename('xcommunity_cost_list')."WHERE weid=:weid AND id=:id",array(':weid' => $_W['weid'],':id' => $id));
+		$fee = explode('|', $item['fee']);
 		if (empty($item)) {
 			message('费用不存在或已被删除',referer(),'error');
 		}
@@ -89,6 +92,8 @@
 			if (empty($order)) {
 				pdo_insert('xcommunity_order', $data);
 				$orderid =pdo_insertid();
+			}else{
+				$orderid = $order['id'];
 			}
 			
 			//判断是否开启支付宝独立支付
@@ -191,6 +196,21 @@
 		$params['virtual'] = $order['goodstype'] == 2 ? true : false;
 		$params['module'] = 'xfeng_community';
 		$params['title'] = '物业费支付';
+		$log = pdo_get('core_paylog', array('uniacid' => $_W['uniacid'], 'module' => $params['module'], 'tid' => $params['tid']));
+		if (empty($log)) {
+        $log = array(
+                'uniacid' => $_W['uniacid'],
+                'acid' => $_W['acid'],
+                'openid' => $_W['member']['uid'],
+                'module' => $this->module['name'], //模块名称，请保证$this可用
+                'tid' => $params['tid'],
+                'fee' => $params['fee'],
+                'card_fee' => $params['fee'],
+                'status' => '0',
+                'is_usecard' => '0',
+        );
+        pdo_insert('core_paylog', $log);
+    	}
 		$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
 		if ($styleid) {
 			include $this->template('style/style'.$styleid.'/cost/pay');exit();
