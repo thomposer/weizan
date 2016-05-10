@@ -15,10 +15,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <!-- Mobile Devices Support @end -->
       
- 	<link rel='stylesheet' href='{FMURL}mobile/templates/stylebase/style/css/style.css?{php echo time()}' type='text/css' media='all' />
+ 	<link rel='stylesheet' href='{FM_STATIC_MOBILE}stylebase/css/style.css?{php echo time()}' type='text/css' media='all' />
 	<script type="text/javascript" src="{$_W['siteroot']}app/resource/js/lib/jquery-1.11.1.min.js"></script>
 
- 	<link rel="stylesheet" href="{FMURL}mobile/templates/stylebase/style/css/champagnerose.css?ver={php echo time()}" type="text/css">
+ 	<link rel="stylesheet" href="{FM_STATIC_MOBILE}stylebase/css/champagnerose.css?ver={php echo time()}" type="text/css">
 	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 	<script type="text/javascript">
 	// jssdk config 对象
@@ -54,7 +54,7 @@
 						</div>
 						<div class="list_item_top clearfix">
 							<div class="list_item_top_avatar">
-								<a href="{php echo $this->createMobileUrl('tuserphotos', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}"><span><img src="{php echo $this->getphotos($user['photo'], $user['avatar'], $reply['picture'], 1)}" alt="头像" width="36" height="36" class="user_img"></span></a>
+								<a href="{php echo $this->createMobileUrl('tuserphotos', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}"><span><img src="{php echo $this->getphotos($user['photo'], $user['avatar'], $rbasic['picture'], 1)}" alt="头像" width="36" height="36" class="user_img"></span></a>
 							</div>
 							<div class="list_item_top_name">
 								<span class="user_name"><a href="{php echo $this->createMobileUrl('tuserphotos', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}" class="user_name">{php echo $this->getusernames($user['realname'], $user['nickname'])}</a></span><span class="level level_{$level}">{$level}</span><span class="j_floor_lz floor_lz_icon">楼主</span><br>
@@ -114,7 +114,7 @@
 		{if $total > $psize}	
 			<div align="center">  
 				<button class="usr_more load_more label label-info" id="load_more_button" style="  width: 100%;"><i class="fa fa-random"></i> 查看更多</button>
-				<div class="animation_image" style="display:none;width:50px;color:#fff"><img src="../addons/fm_photosvote/template/mobile/photos/ajax-loader.gif" width="50"> Loading...</div>  
+				<div class="animation_image" style="display:none;width:50px;color:#fff"><img src="{FM_STATIC_MOBILE}public/photos/ajax-loader.gif" width="50"> Loading...</div>  
 			</div>
 		{/if}
 
@@ -127,7 +127,7 @@
 		</div>
 		<footer id="colophon" role="contentinfo">
 			<div class="site-info" >
-			  {if $reply['iscopyright']==1}<a href="{$reply['copyrighturl']}" style="color:#4D402B">&copy; {$reply['copyright']}</a>{else}<a href="javascript:;" style="color:#4D402B">{if empty($footer_off)}&copy;{if empty($_W['account']['name'])}&copy; 2015 FantasyMoons All Rights Reserved{else}{$_W['account']['name']}{/if} {$_W['setting']['copyright']['statcode']}{/if}{/if} 			</div><!-- .site-info -->
+			  {if $rdisplay['iscopyright']==1}<a href="{$rdisplay['copyrighturl']}" style="color:#4D402B">&copy; {$rdisplay['copyright']}</a>{else}<a href="javascript:;" style="color:#4D402B">{if empty($footer_off)}&copy;{if empty($_W['account']['name'])}&copy; 2015 FantasyMoons All Rights Reserved{else}{$_W['account']['name']}{/if} {$_W['setting']['copyright']['statcode']}{/if}{/if} 			</div><!-- .site-info -->
 		</footer><!-- #colophon -->
     </div>
 </div>
@@ -340,7 +340,7 @@
 			return false;
 		}
 		var bbstype = "bbsreply";
-		var iscode = "{$reply['iscode']}";		
+		var iscode = "{$rvote['iscode']}";		
 		bbsreply(content, iscode, bbstype);
 		
 	});	

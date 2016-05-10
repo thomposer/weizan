@@ -63,7 +63,7 @@
                     <div class="xq_l">
                         <ul class="house_xqul">
                             <li>
-                                <label>出租方式：</label>{if $item['way'] == 1} 整套出租{elseif $item['way'] == 2}单间出租{else} 床位出租{/if}</li>
+                                <label>出租方式：</label>{$item['way']}</li>
                             <li>
                                 <label>房屋户型：</label>{$item['model_room']}室{$item['model_hall']}厅{$item['model_toilet']}卫</li>
                             <li>
@@ -81,7 +81,7 @@
                         </ul>
                     </div>
                     <div class="xq_r">
-                        <span class="price">{$item['price']}</span>
+                        <span class="{if $item['category'] == 1 || $item['category'] == 2}price{else}price_w{/if}">{$item['price']}</span>
                         <div class="other_info" style="text-align:center; padding:5px;"><span>{$item['price_way']}</span></div>
                         <!-- 预留-->
                         <!-- <div class="house_rz norz">

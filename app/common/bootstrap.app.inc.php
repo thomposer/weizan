@@ -18,6 +18,10 @@ if (!empty($_W['uniaccount']['endtime']) && TIMESTAMP > $_W['uniaccount']['endti
 }
 
 $_W['acid'] = $_W['uniaccount']['acid'];
+$isdel_account = pdo_get('account', array('isdeleted' => 1, 'acid' => $_W['acid']));
+if (!empty($isdel_account)) {
+	exit('指定公众号已被删除');
+}
 $_W['session_id'] = '';
 if (isset($_GPC['state']) && !empty($_GPC['state']) && strexists($_GPC['state'], 'we7sid-')) {
 	$pieces = explode('-', $_GPC['state']);
@@ -136,14 +140,14 @@ $_W['account']['groupid'] = $_W['uniaccount']['groupid'];
 $_W['account']['qrcode'] = tomedia('qrcode_'.$_W['acid'].'.jpg').'?time='.$_W['timestamp'];
 $_W['account']['avatar'] = tomedia('headimg_'.$_W['acid'].'.jpg').'?time='.$_W['timestamp'];
 if ($_W['container'] == 'wechat') {
-	if ($_W['account']['level'] < 3) {
-		if (!empty($unisetting['jsauth_acid'])) {
-			$jsauth_acid = $unisetting['jsauth_acid'];
-		} elseif (!empty($unisetting['oauth']['account'])) {
-			$jsauth_acid = $unisetting['oauth']['account'];
-		}
+	if (!empty($unisetting['jsauth_acid'])) {
+		$jsauth_acid = $unisetting['jsauth_acid'];
 	} else {
-		$jsauth_acid = $_W['acid'];
+		if ($_W['account']['level'] < 3 && !empty($unisetting['oauth']['account'])) {
+			$jsauth_acid = $unisetting['oauth']['account'];
+		} else {
+			$jsauth_acid = $_W['acid'];
+		}
 	}
 	if (!empty($jsauth_acid)) {
 		$accountObj = WeAccount::create($jsauth_acid);

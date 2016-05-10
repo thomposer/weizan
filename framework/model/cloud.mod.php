@@ -433,7 +433,11 @@ function _cloud_shipping_parse($dat, $file) {
 		return error(-1, '补丁程序正在更新中，请稍后再试！');
 	}
 	if(strlen($dat['content']) != 32) {
-		return error(-1, '云服务平台向您的服务器传输数据过程中出现错误, 这个错误可能是由于您的通信密钥和云服务不一致, 请尝试诊断云服务参数(重置站点ID和通信密钥). 传输原始数据:' . $dat['meta']);
+		return error(-1, '
+		访问云服务器错误, 可能原因:
+		1、您的服务器防火墙屏蔽了云服务器IP；
+		2、您的服务器IP地址没有授权（请:<a href="http://bbs.012wz.com/forum.php?mod=viewthread&tid=859" target="_blank">点击授权</a>，
+		或联系售后客服授权:<a href="http://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDA4MzA3NV8yMTc1MThfODAwMDgzMDc1XzJf" target="_blank">800083075</a>）');
 	}
 	$data = @file_get_contents($file);
 	if(empty($data)) {

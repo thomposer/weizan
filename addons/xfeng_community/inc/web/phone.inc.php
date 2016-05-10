@@ -23,33 +23,33 @@
 		if ($user) {
 			$condition .=" AND uid='{$_W['uid']}'";
 		}
+		if (!empty($_GPC['keyword'])) {
+			$condition .= " AND phone LIKE :keyword";
+			$params[':keyword'] = "%{$_GPC['keyword']}%";
+		}
+		$regions = $this->regions();
 		$sql    = "select * from ".tablename("xcommunity_phone")."where weid = '{$_W['weid']}' $condition LIMIT ".($pindex - 1) * $psize.','.$psize;
-		$list   = pdo_fetchall($sql);
-		// if ($user) {
-		// 	$list1   = pdo_fetchall($sql);
-		// 	foreach ($list1 as $key => $value) {
-		// 		$regionids = unserialize($value['regionid']);
-		// 		if (is_array($regionids)) {
-		// 			if (@in_array($user['regionid'],$regionids)) {
-		// 				$list[$key]['content'] = $value['content'];
-		// 				$list[$key]['phone'] = $value['phone'];
-		// 				$list[$key]['thumb'] = $value['thumb'];
-		// 				$list[$key]['id'] = $value['id'];	
-		// 			}
-		// 		}else{
-		// 			if ($regionids == $user['regionid']) {
-		// 				$list[$key]['content'] = $value['content'];
-		// 				$list[$key]['phone'] = $value['phone'];
-		// 				$list[$key]['thumb'] = $value['thumb'];
-		// 				$list[$key]['id'] = $value['id'];					
-		// 			}
-		// 		}
+		$row   = pdo_fetchall($sql,$params);
+		$regionid = intval($_GPC['_regionid']);
+		$list = '';
+		if ($regionid) {
+			foreach ($row as $key => $value) {
+				if ($value['regionid'] != 'N;') {
+					$rregions = unserialize($value['regionid']);
+					if (@in_array($regionid, $rregions)) {
+						$list[$key]['id'] = $value['id'];
+						$list[$key]['thumb'] = $value['thumb'];
+						$list[$key]['phone'] = $value['phone'];
+						$list[$key]['content'] = $value['content'];
+						$list[$key]['displayorder'] = $value['displayorder'];
+					}
+				}
 				
-		// 	}
-		// }else{
-		// 	$list   = pdo_fetchall($sql);
-		// }
-		$total  = pdo_fetchcolumn('select count(*) from'.tablename("xcommunity_phone")."where  weid = '{$_W['weid']}' ");
+			}
+		}else{
+			$list = $row;
+		}
+		$total  = pdo_fetchcolumn('select count(*) from'.tablename("xcommunity_phone")."where  weid = '{$_W['weid']}' ",$params);
 		$pager  = pagination($total, $pindex, $psize);
 		if (!empty($_GPC['displayorder'])) {
 			foreach ($_GPC['displayorder'] as $id => $displayorder) {
@@ -92,7 +92,7 @@
 					$data['uid'] = $_W['uid'];
 				}
 				if ($user['regionid']) {
-					$data['regionid'] = serialize($user['regionid']);
+					$data['regionid'] = serialize(array(0 => $user['regionid']));
 
 				}else{
 					$data['regionid'] = serialize($_GPC['regionid']);

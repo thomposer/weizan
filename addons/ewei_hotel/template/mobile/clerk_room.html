@@ -21,18 +21,21 @@
 </div>
 {if $op=='room_status'}
 <div class="list">
-    {loop $list $item} 
-	<div class="lists"><div class="text" onclick="location.href='{php echo $this->createMobileUrl('clerk_room_status',array('ac'=>'getdate','hotelid'=>$item['id']))}'">{$item['title']}</div><div class="right"></div></div>
-  	{/loop}
-  	</div>
-  	
+	{loop $list $item}
+	<div class="lists">
+		<div class="text" onclick="location.href='{php echo $this->createMobileUrl('clerk_room_status',array('ac'=>'getdate','hotelid'=>$item['id']))}'">{$item['title']}</div>
+		<div class="right"></div>
+	</div>
+	{/loop}
+</div>
 {elseif $op=='room_price'}
 <div class="list">
-    {loop $list $item} 
-	<div class="lists"><div class="text" onclick="location.href='{php echo $this->createMobileUrl('clerk_room_price',array('ac'=>'getdate','status'=>'confirm','hotelid'=>$item['id']))}'">{$item['title']}</div><div class="right"></div></div>
-  	{/loop}
-  	</div>
+	{loop $list $item}
+	<div class="lists">
+		<div class="text" onclick="location.href='{php echo $this->createMobileUrl('clerk_room_price',array('ac'=>'getdate','status'=>'confirm','hotelid'=>$item['id']))}'">{$item['title']}</div><div class="right"></div>
+	</div>
+	{/loop}
+</div>
 {/if}
-
 </body>
 </html>

@@ -51,8 +51,12 @@ if ($op == 'list') {
 		$companies = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE pid=:companyid",array(":companyid" => $user['companyid']));
 	}
 	
-
-	$list = pdo_fetchall("SELECT * FROM".tablename('xcommunity_property')."WHERE weid=:uniacid $condition",array(':uniacid' => $_W['uniacid']));
+	if ($u) {
+		$list = pdo_fetchall("SELECT * FROM".tablename('xcommunity_property')."WHERE weid=:uniacid AND id=:companyid",array(':uniacid' => $_W['uniacid'],':companyid' => $u['companyid']));
+	}else{
+		$list = pdo_fetchall("SELECT * FROM".tablename('xcommunity_property')."WHERE weid=:uniacid $condition",array(':uniacid' => $_W['uniacid']));
+	}
+	
 	if (empty($list)) {
 		// message('还没有添加物业',referer(),'error');exit();
 		echo '没有添加物业';exit();

@@ -201,7 +201,7 @@ function mc_fansinfo($openidOruid, $acid = 0, $uniacid = 0){
 		$condition = '`openid` = :openid';
 		$params[':openid'] = $openidOruid;
 	}
-	
+
 	if (!empty($acid)) {
 		$params[':acid'] = $acid;
 		$condition .= " AND `acid` = :acid";
@@ -223,6 +223,9 @@ function mc_fansinfo($openidOruid, $acid = 0, $uniacid = 0){
 			if (is_array($fan['tag']) && !empty($fan['tag']['headimgurl'])) {
 				$fan['tag']['avatar'] = tomedia($fan['tag']['headimgurl']);
 				unset($fan['tag']['headimgurl']);
+				$fan['nickname'] = $fan['tag']['nickname'];
+				$fan['gender'] = $fan['sex'] = $fan['tag']['sex'];
+				$fan['avatar'] = $fan['headimgurl'] = $fan['tag']['avatar'];
 			}
 		} else {
 			$fan['tag'] = array();
@@ -233,6 +236,9 @@ function mc_fansinfo($openidOruid, $acid = 0, $uniacid = 0){
 		$fan['uid'] = 0;
 		$fan['openid'] = $fan['tag']['openid'];
 		$fan['follow'] = 0;
+		$fan['nickname'] = $fan['tag']['nickname'];
+		$fan['gender'] = $fan['sex'] = $fan['tag']['sex'];
+		$fan['avatar'] = $fan['headimgurl'] = $fan['tag']['headimgurl'];
 		$mc_oauth_fan = mc_oauth_fans($fan['openid']);
 		if (!empty($mc_oauth_fan)) {
 			$fan['uid'] = $mc_oauth_fan['uid'];
@@ -492,7 +498,6 @@ function mc_credit_update($uid, $credittype, $creditval = 0, $log = array()) {
 	if (!in_array($credittype, $credittypes)) {
 		return error('-1', "指定的用户积分类型 “{$credittype}”不存在.");
 	}
-
 	$creditval = floatval($creditval);
 	if (empty($creditval)) {
 		return true;

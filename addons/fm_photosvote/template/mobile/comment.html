@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta name="description" content="">
     <meta property="wb:webmaster" content="a314cb0fa82db1ba">
-    <title>{php if(isset($title)) $_W['page']['title'] = $title}{if !empty($_W['page']['title'])}{$_W['page']['title']} - {/if}{if !empty($_W['account']['name'])}{$_W['account']['name']}{/if}{if !empty($_W['page']['sitename'])} - {$_W['page']['sitename']}{else}{if IMS_FAMILY != 'x'} - Powered by 012wz.com{/if}{/if}</title>
+    <title>{php if(isset($title)) $_W['page']['title'] = $title}{if !empty($_W['page']['title'])}{$_W['page']['title']} - {/if}{if !empty($_W['account']['name'])}{$_W['account']['name']}{/if}{if !empty($_W['page']['sitename'])} - {$_W['page']['sitename']}{/if}</title>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
     <!-- Mobile Devices Support @begin -->
@@ -13,35 +13,17 @@
     <meta content="telephone=no, address=no" name="format-detection">
     <meta name="apple-mobile-web-app-capable" content="yes"> <!-- apple devices fullscreen -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    {php echo register_jssdk()}
     <!-- Mobile Devices Support @end -->
-      
- 	<link rel='stylesheet' href='{FMURL}mobile/templates/stylebase/style/css/style.css?{php echo time()}' type='text/css' media='all' />
+ 	<link rel='stylesheet' href='{FM_STATIC_MOBILE}stylebase/css/style.css?{php echo time()}' type='text/css' media='all' />
 	<script type="text/javascript" src="{$_W['siteroot']}app/resource/js/lib/jquery-1.11.1.min.js"></script>
-
- 	<link rel="stylesheet" href="{FMURL}mobile/templates/stylebase/style/css/champagnerose.css?ver={php echo time()}" type="text/css">
-	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-	<script type="text/javascript">
-	// jssdk config 对象
-	jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} || {};
-	
-	// 是否启用调试
-	jssdkconfig.debug = false;
-	
-	jssdkconfig.jsApiList = [
-		'checkJsApi',
-		'onMenuShareTimeline',
-		'onMenuShareAppMessage',
-		'onMenuShareQQ',
-		'onMenuShareWeibo',
-		'openLocation',
-		'getLocation'
-	];
-	</script>
+ 	<link rel="stylesheet" href="{FM_STATIC_MOBILE}stylebase/css/champagnerose.css?ver={php echo time()}" type="text/css">
 </head>
+
 
 <body>
 <!--body-->
-{template 'templates/stylebase/tvote'}
+{template 'tvote'}
 <div id="content" style="max-width: 640px;margin: 0 auto;">
     <div class="masonry" style="margin: 0px auto; ">
     	<div id="pblist" class="list">
@@ -53,7 +35,7 @@
 						</div>
 						<div class="list_item_top clearfix">
 							<div class="list_item_top_avatar">
-								<a href="{php echo $this->createMobileUrl('tuserphotos', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}"><span><img src="{php echo $this->getphotos($user['photo'], $user['avatar'], $reply['picture'], 1)}" alt="头像" width="36" height="36" class="user_img"></span></a>
+								<a href="{php echo $this->createMobileUrl('tuserphotos', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}"><span><img src="{php echo $this->getphotos($user['photo'], $user['avatar'], $rbasic['picture'], 1)}" alt="头像" width="36" height="36" class="user_img"></span></a>
 							</div>
 							<div class="list_item_top_name">
 								<span class="user_name"><a href="{php echo $this->createMobileUrl('tuserphotos', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}" class="user_name">{php echo $this->getusernames($user['realname'], $user['nickname'])}</a></span><span class="level level_{$level}">{$level}</span><span class="j_floor_lz floor_lz_icon">楼主</span><br>
@@ -113,7 +95,7 @@
 		{if $total > $psize}	
 			<div align="center">  
 				<button class="usr_more load_more label label-info" id="load_more_button" style="  width: 100%;"><i class="fa fa-random"></i> 查看更多</button>
-				<div class="animation_image" style="display:none;width:50px;color:#fff"><img src="../addons/fm_photosvote/template/mobile/photos/ajax-loader.gif" width="50"> Loading...</div>  
+				<div class="animation_image" style="display:none;width:50px;color:#fff"><img src="{FM_STATIC_MOBILE}public/photos/ajax-loader.gif" width="50"> Loading...</div>  
 			</div>
 		{/if}
 
@@ -126,7 +108,7 @@
 		</div>
 		<footer id="colophon" role="contentinfo">
 			<div class="site-info" >
-			  {if $reply['iscopyright']==1}<a href="{$reply['copyrighturl']}" style="color:#4D402B">&copy; {$reply['copyright']}</a>{else}<a href="javascript:;" style="color:#4D402B">{if empty($footer_off)}&copy;{if empty($_W['account']['name'])}&copy; 2015 FantasyMoons All Rights Reserved{else}{$_W['account']['name']}{/if} {$_W['setting']['copyright']['statcode']}{/if}{/if} 			</div><!-- .site-info -->
+			  {if $rdisplay['iscopyright']==1}<a href="{$rdisplay['copyrighturl']}" style="color:#4D402B">&copy; {$rdisplay['copyright']}</a>{else}<a href="javascript:;" style="color:#4D402B">{if empty($footer_off)}&copy;{if empty($_W['account']['name'])}&copy; 2015 FantasyMoons All Rights Reserved{else}{$_W['account']['name']}{/if} {$_W['setting']['copyright']['statcode']}{/if}{/if} 			</div><!-- .site-info -->
 		</footer><!-- #colophon -->
     </div>
 </div>
@@ -339,87 +321,9 @@
 			return false;
 		}
 		var bbstype = "bbsreply";
-		var iscode = "{$reply['iscode']}";		
+		var iscode = "{$rvote['iscode']}";		
 		bbsreply(content, iscode, bbstype);
 		
 	});	
 </script>
-
-
-<?php
-	$_share['title'] = !empty($_share['title']) ? $_share['title'] : $_W['account']['name'];
-	$_share['imgUrl'] = !empty($_share['imgUrl']) ? $_share['imgUrl'] : '';
-	if(isset($_share['content'])){
-		$_share['desc'] = $_share['content'];
-		unset($_share['content']);
-	}
-	$_share['desc'] = !empty($_share['desc']) ? $_share['desc'] : '';
-	$_share['desc'] = preg_replace('/\s/i', '', str_replace('	', '', cutstr(str_replace('&nbsp;', '', ihtmlspecialchars(strip_tags($_share['desc']))), 60)));
-	if(empty($_share['link'])) {
-		$_share['link'] = '';
-		$query_string = $_SERVER['QUERY_STRING'];
-		if(!empty($query_string)) {
-			//加上分享人的uid
-			parse_str($query_string, $query_arr);
-			$query_arr['u'] = $_W['member']['uid'];
-			$query_string = http_build_query($query_arr);
-			$_share['link'] = $_W['siteroot'].'app/index.php?'. $query_string;
-		}
-	}
-?>
-	<script type="text/javascript">
-	
-	
-	wx.config(jssdkconfig);
-	
-	var $_share = {php echo json_encode($_share);};
-	
-	if(typeof sharedata == 'undefined'){
-		sharedata = $_share;
-	} else {
-		sharedata['title'] = sharedata['title'] || $_share['title'];
-		sharedata['desc'] = sharedata['desc'] || $_share['desc'];
-		sharedata['link'] = sharedata['link'] || $_share['link'];
-		sharedata['imgUrl'] = sharedata['imgUrl'] || $_share['imgUrl'];
-	}
-	
-	function tomedia(src) {
-		if(typeof src != 'string')
-			return '';
-		if(src.indexOf('http://') == 0 || src.indexOf('https://') == 0) {
-			return src;
-		} else if(src.indexOf('../addons') == 0 || src.indexOf('../attachment') == 0) {
-			src=src.substr(3);
-			return window.sysinfo.siteroot + src;
-		} else if(src.indexOf('./resource') == 0) {
-			src=src.substr(2);
-			return window.sysinfo.siteroot + 'app/' + src;
-		} else if(src.indexOf('images/') == 0) {
-			return window.sysinfo.attachurl+ src;
-		}
-	}
-	
-	if(sharedata.imgUrl == ''){
-		var _share_img = $('body img:eq(0)').attr("src");
-		if(_share_img == ""){
-			sharedata['imgUrl'] = window.sysinfo.attachurl + 'images/global/wechat_share.png';
-		} else {
-			sharedata['imgUrl'] = tomedia(_share_img);
-		}
-	}
-	
-	if(sharedata.desc == ''){
-		var _share_content = _removeHTMLTag($('body').html());
-		if(typeof _share_content == 'string'){
-			sharedata.desc = _share_content.replace($_share['title'], '')
-		}
-	}
-	wx.ready(function () {			
-		wx.onMenuShareAppMessage(sharedata);
-		wx.onMenuShareTimeline(sharedata);
-		wx.onMenuShareQQ(sharedata);
-		wx.onMenuShareWeibo(sharedata);
-		getlocaltion();
-	});
-	</script>
-   </body></html>
+{template 'footer'}

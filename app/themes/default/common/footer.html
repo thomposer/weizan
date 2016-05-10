@@ -37,6 +37,7 @@
 	}
 ?>
 	<script type="text/javascript">
+	$(function(){
 	wx.config(jssdkconfig);
 	var $_share = {php echo json_encode($_share);};
 	if(typeof sharedata == 'undefined'){
@@ -82,7 +83,6 @@
 			$.post(url, function(dat){});
 		}
 	{/if}
-	$(function(){
 		if($('.js-quickmenu')!=null && $('.js-quickmenu')!=''){
 			var h = $('.js-quickmenu').height()+'px';
 			$('body').css("padding-bottom",h);

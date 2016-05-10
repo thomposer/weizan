@@ -54,7 +54,7 @@ class WeiXinPlatform extends WeiXinAccount {
 			);
 			$response = $this->request(ACCOUNT_PLATFORM_API_ACCESSTOKEN, $data);
 			if (is_error($response)) {
-				$errormsg = $this->error_code($response['errno']);
+				$errormsg = $this->error_code($response['errno'], $response['errmsg']);
 				return error($response['errno'], $errormsg);
 			}
 			$accesstoken = array(
@@ -283,7 +283,7 @@ class WeiXinPlatform extends WeiXinAccount {
 		$response = ihttp_request($url, json_encode($post));
 		$response = json_decode($response['content'], true);
 		if (empty($response) || !empty($response['errcode'])) {
-			return error($response['errcode'], $this->error_code($response['errcode']));
+			return error($response['errcode'], $this->error_code($response['errcode'], $response['errmsg']));
 		}
 		return $response;
 	}

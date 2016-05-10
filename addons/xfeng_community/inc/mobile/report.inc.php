@@ -43,10 +43,11 @@
 			$notice = pdo_fetchall("SELECT * FROM".tablename('xcommunity_wechat_notice')."WHERE uniacid=:uniacid",array('uniacid' => $_W['uniacid']));
 			
 			foreach ($notice as $key => $value) {
-				if ($value['type'] == 1 || $value['type'] == 3) {
+				// if ($value['type'] == 1 || $value['type'] == 3) {
 					$regions = unserialize($value['regionid']);
 					if (@in_array($member['regionid'], $regions)) {
 						if ($value['report_status'] == 2) {
+								if ($value['type'] == 2 || $value['type'] == 3) {
 								//短信提醒
 								$mmember = $this->member($value['fansopenid']);
 								$content = $_GPC['content'];
@@ -56,10 +57,11 @@
 									$appkey = $sms['sms_account'];
 									$this->Resms($content,$tpl_id,$appkey,$mmember['mobile'],$member['mobile']);
 								}
-
+								}
+								if ($value['type'] == 1 || $value['type'] == 3) {
 								//模板消息通知
 								$openid = $value['fansopenid'];
-								$url = $_W['siteroot']."app/index.php?i={$_W['uniacid']}&c=entry&op=detail&id={$id}&do=report&m=xfeng_community";
+								$url = $_W['siteroot']."app/index.php?i={$_W['uniacid']}&c=entry&op=grab&id={$id}&do=report&m=xfeng_community";
 								$tpl = pdo_fetch("SELECT * FROM".tablename('xcommunity_wechat_tplid')."WHERE uniacid=:uniacid",array(':uniacid' => $_W['uniacid']));
 								$template_id = $tpl['report_tplid'];
 								$createtime = date('Y-m-d H:i:s', $_W['timestamp']);
@@ -87,9 +89,10 @@
 										),	
 									);
 								$this->sendtpl($openid,$url,$template_id,$content);
+								}
 							}
 					}
-				}
+				// }
 			}
 			// foreach ($list as $key => $value) {
 				
@@ -346,5 +349,66 @@
 					);
 				echo json_encode($result);exit();
 			}
+		}
+	}elseif ($op == 'grab') {
+		$id = intval($_GPC['id']);
+		if (empty($id)) {
+			message('缺少参数',referer(),'error');
+		}
+		$member = $this->member($_W['fans']['from_user']);
+		
+		$item =pdo_fetch("SELECT * FROM".tablename('xcommunity_report')."WHERE id=:id",array(':id' => $id));
+		if ($item['resolver'] == $member['realname']) {
+			$r = 1;
+		}
+		if ($item['images']&&$item['images'] !='N;') {
+			$imgs = pdo_fetchall("SELECT * FROM".tablename('xcommunity_images')."WHERE id in({$item['images']})");
+		}
+		
+		if (empty($item['resolver'])) {
+		 		pdo_update('xcommunity_report',array('resolver' => $member['realname'],'status' => 3,'resolvetime' => TIMESTAMP),array('id' => $id));
+		}
+
+
+		if (checksubmit('submit')) {
+			$status = intval($_GPC['status']);
+			pdo_update('xcommunity_report',array('status' => $status,'resolve' => $_GPC['resolve'],'resolvetime' => TIMESTAMP),array('id' => $id));
+			if ($status == 1) {
+				$openid = $item['openid'];
+				$member = pdo_fetch("SELECT realname FROM".tablename('xcommunity_member')."WHERE openid=:openid",array(':openid' => $openid));
+				$tpl = pdo_fetch("SELECT * FROM".tablename('xcommunity_wechat_tplid')."WHERE uniacid=:uniacid",array(':uniacid' => $_W['uniacid']));
+				$template_id = $tpl['report_wc_tplid'];
+				$url = '';
+				$content = array(
+								'first' => array(
+										'value' => '您的投诉建议已处理',
+									),
+								'keyword1' => array(
+										'value' =>  $member['realname'],
+									),
+								'keyword2' => array(
+										'value' => $item['category'],
+									),
+								'keyword3' => array(
+										'value' => $item['content'],
+									),
+								'keyword4' => array(
+										'value' => $item['content'],
+									),
+								'keyword5' => array(
+										'value' => $_GPC['resolve'],
+									),
+								'remark'    => array(
+									'value' => '请到微信我的意见建议给我们评价，谢谢使用！',
+								),	
+					);
+				$result = $this->sendtpl($openid,$url,$template_id,$content);
+			}
+			message('处理完成',referer(),'success');
+
+		}
+		$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
+		if ($styleid) {
+			include $this->template('style/style'.$styleid.'/repair/grab');exit();
 		}
 	}

@@ -32,7 +32,7 @@
     require(['bootstrap'],function($){
         $("button[name=test_auto]").on("click", function(){
             $.ajax({
-                'url':"{php echo $this->createWebUrl('Test')}",
+                'url':"{php echo url('members/test')}",
                 'data':{op:'auto'},
                 'type':'POST',
                 'async':'true',

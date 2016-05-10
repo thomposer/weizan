@@ -36,8 +36,8 @@ if($_W['ispost']) {
         $transport_amount = "";//运费
         $total_amount = $_POST['recharge_number'] * 100;//总金额
         $buyer_sp_username = "aaaa";//买家在商户网站的用户名
-        $return_url = $_W['siteroot']."addons/kim_financial/return_url.php";//后台通知地址
-        $page_url = $_W['siteroot']."addons/kim_financial/return_url.php";//前台通知地址
+        $return_url = $_W['siteroot']."web/source/members/common/return_url.inc.php";//后台通知地址
+        $page_url = $_W['siteroot']."web/source/members/common/return_url.inc.php";//前台通知地址
         $pay_type = "2";//支付方式(1:余额支付（必须登录百付宝）2:网银支付（在百付宝页面上选择银行，可以不登录百付宝）3:银行网关支付（直接跳到银行的支付页面，无需登录百付宝）)
         $bank_no = "";//默认银行的编码：如果支付方式是银行网关支付，则必须有值。取值范围参见接入指南附录
         $sp_uno = "";//用户在商户端的用户ID(必须唯一)
@@ -83,18 +83,18 @@ if($_W['ispost']) {
             }
         }
         //die(json_encode(array("code"=>0,"message"=>"创建订单失败.")));
-        message("创建订单失败，请选择其他支付方式",$this->createWebUrl('Recharge'));
+        message("创建订单失败，请选择其他支付方式",url('members/recharge'));
     }else{
         /**************************请求参数**************************/
         //支付类型
         $payment_type = "1";
         //必填，不能修改
         //服务器异步通知页面路径
-        $notify_url = $_W['siteroot']."addons/kim_financial/notify_url.php";
+        $notify_url = $_W['siteroot']."web/source/members/common/notify_url.inc.php";
         //需http://格式的完整路径，不能加?id=123这类自定义参数
 
         //页面跳转同步通知页面路径
-        $return_url =  $_W['siteroot']."addons/kim_financial/notify_url.php";
+        $return_url =  $_W['siteroot']."web/source/members/common/notify_url.inc.php";
         //需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/
 
         //卖家支付宝帐户

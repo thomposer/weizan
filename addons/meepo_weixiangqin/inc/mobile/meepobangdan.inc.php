@@ -1,6 +1,6 @@
 <?php
-        include_once(MODULE_ROOT.'/func.php');
-        global $_W,$_GPC;
+    include_once(MODULE_ROOT.'/func.php');
+    global $_W,$_GPC;
 		if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
 	    }else{
 		    $url=$this->createMobileUrl('Errorjoin');			

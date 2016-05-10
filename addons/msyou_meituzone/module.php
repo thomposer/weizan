@@ -45,7 +45,6 @@ class Msyou_meituzoneModule extends WeModule
                 'pagesize' => 5,
                 'gzjoin' => 0,
                 'gzzan' => 0,
-                'musicurl' => MODULE_URL . "style/pipayu.mp3",
                 'justpai' => 0,
                 'justpinglun' => 0
             );
@@ -81,14 +80,14 @@ class Msyou_meituzoneModule extends WeModule
             'indexshowcontent' => intval($_GPC['indexshowcontent']),
             'followurl' => $_GPC['followurl'],
             'indexshowzan' => intval($_GPC['indexshowzan']),
-            'maxaddimg' => 3,
-            'pagesize' => 5,
-            'gzjoin' => 0,
-            'gzzan' => 0,
-            'musicurl' => MODULE_URL . "style/pipayu.mp3",
-            'coverurl' => "",
-            'justpai' => 0,
-            'justpinglun' => 0
+            'maxaddimg' => $_GPC['maxaddimg'],
+            'pagesize' => $_GPC['pagesize'],
+            'gzjoin' => intval($_GPC['gzjoin']),
+            'gzzan' => intval($_GPC['gzzan']),
+            'musicurl' => json_encode($_GPC['musicurl']),
+            'coverurl' => $_GPC['coverurl'],
+            'justpai' => intval($_GPC['justpai']),
+            'justpinglun' => intval($_GPC['justpinglun'])
         );
         if (empty($id)) {
             if ($insert['starttime'] <= time()) {

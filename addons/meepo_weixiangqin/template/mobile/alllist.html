@@ -386,7 +386,7 @@ var _loading_toast= {
 <div class="wrap"> 
 <header class="mb15">         
   <h1>
-  <a href="" target="_blank" class="home fleft"><img src="{if empty($settings['logo'])}{MEEPORES}/static/friend/images/logo.png{else}{php echo $_W['attachurl'].$settings['logo']}{/if}"  alt="{if empty($settings['title'])}校园红娘{else}{$settings['title']}{/if}"></a>
+  <a href="{php echo  $this->createMobileUrl('alllist')}&t={php echo time()}" target="_blank" class="home fleft"><img src="{if empty($settings['logo'])}{MEEPORES}/static/friend/images/logo.png{else}{php echo $_W['attachurl'].$settings['logo']}{/if}"  alt="{if empty($settings['title'])}校园红娘{else}{$settings['title']}{/if}"></a>
   
   <span  class="ucenter fright"><i><em></em></i></span>
   <span class="pl15 fright ucenter" style="font-size:16px;width:105px;" id="timeRight"></span>
@@ -400,16 +400,16 @@ var _loading_toast= {
 		   <div class="swiper-container" id="advSwiper2" style="height:120px" >
 			  <div class="swiper-wrapper">
 			  {loop $slide $row}
-				<div href="{php echo $row['url']}" class="swiper-slide">
+				<a href="{php echo $row['url']}" class="swiper-slide">
 					<img src="{$_W['attachurl']}{$row['attachment']}" />
-				</div>
+				</a>
 			  {/loop}
 			  </div>
 			  <div class="swiper-pagination"></div>
 			</div>
 		
         {/if}
-        <div style="clear: both;"></div>
+        <div style="clear: both;height:15px;"></div>
 <!--增加幻灯片-->
 	<div class="search_box">
 		<div class="search">
@@ -469,6 +469,9 @@ var _loading_toast= {
 <div class="gj-go-top"  onclick="load_again();">
 	<i class="load_again"></i>
 </div>
+<div class="gj-go-top_true"  onclick="javascript:$(document).scrollTop(0);return false;">
+	<i class="back_top"></i>
+</div>
 <div class="flower_news">
 <ul class="flower_li">
 <li class="flower_avatar"><img src="{MEEPORES}/static/friend/images/cdhn80.jpg" class="flower_avatar_img" /></li>
@@ -476,16 +479,26 @@ var _loading_toast= {
 <li class="flower_time">1秒前</li>
 </ul>
 </div>
+<input type="hidden" id="open_status" />
 </body>
  <script type="text/javascript">
 	var ids='';
 	$(document).ready(function () {
 		$(window).scroll(function(){
+		  if($('.gj-go-top').length>0){
 			if($(document).scrollTop() > 300){
 				$('.gj-go-top').fadeIn();
 			}else{
 				$('.gj-go-top').fadeOut();
 			}
+		  }
+		  //if($('#open_status').val()!=''){
+			if($(document).scrollTop() > 400){
+				$('.gj-go-top_true').fadeIn();
+			}else{
+				$('.gj-go-top_true').fadeOut();
+			}
+		  //}
 		});
 		setInterval(getflower_record,{$flower_time});  
 		function getflower_record(){
@@ -520,6 +533,7 @@ var _loading_toast= {
 		}
 	var man_status = 0;
 	$('.meepohot').on('click',function(){
+		$('.gj-go-top').remove();
 		man_status = 0;
          $(this).addClass("cur").siblings().removeClass("cur");
 		$("#list_article").empty();
@@ -621,6 +635,7 @@ var _loading_toast= {
 	});
 	var woman_status = 0;
 	$('.meeponew').on('click',function(){
+		$('.gj-go-top').remove();
 		woman_status = 0;
          $(this).addClass("cur").siblings().removeClass("cur");
 		$("#list_article").empty();

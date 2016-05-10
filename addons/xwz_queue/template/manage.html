@@ -37,8 +37,8 @@
                 <tr><th class='with-checkbox'  style='width:30px;'>
                         <input type="checkbox" class="check_all" /></th>
                     <th style="width:150px;">名称</th>
-                    <th style="width:300px;">类型</th>
-                    <th style="width:300px;">管理二位码</th>
+                    <th style="width:200px;">类型</th>
+                    <th style="width:200px;">管理二位码</th>
                     <th  style="width:100px;">状态</th>
                     <th>操作</th>
                 </tr>
@@ -59,6 +59,7 @@
                     <td>{$row['statusstr']}</td>
                     <td>
                         <a class="btn btn-primary" target="_blank" rel="tooltip" href="{php echo $this->createWebUrl('screen',array('rid'=>$row['rid'],'wid'=>$_W['uniacid']))}" title="大屏幕"><i class="fa fa-cog"></i> 大屏幕</a>
+                        <a class="btn btn-default" rel="tooltip" href="{php echo $this->createWebUrl('manager',array('rid'=>$row['rid']))}" title="管理员"><i class="fa fa-users"></i> 管理员</a>
                         <a class="btn btn-default" rel="tooltip" href="{php echo $this->createWebUrl('queue',array('rid'=>$row['rid']))}" title="队列管理"><i class="fa fa-cog"></i> 队列管理</a>
                         <a class="btn btn-default" rel="tooltip" href="{php echo $this->createWebUrl('fans',array('rid'=>$row['rid']))}" title="排队统计"><i class="fa fa-user"></i> 排队统计</a>
                         <a class="btn btn-default" rel="tooltip" href="{php echo url('platform/reply/post',array('m'=>'xwz_queue','rid'=>$row['rid']));}" title="编辑"><i class="fa fa-edit"></i> 编辑</a>

@@ -188,19 +188,19 @@
 		$params['title'] = '活动支付';
 		$log = pdo_get('core_paylog', array('uniacid' => $_W['uniacid'], 'module' => $params['module'], 'tid' => $params['tid']));
 		if (empty($log)) {
-        $log = array(
-                'uniacid' => $_W['uniacid'],
-                'acid' => $_W['acid'],
-                'openid' => $_W['member']['uid'],
-                'module' => $this->module['name'], //模块名称，请保证$this可用
-                'tid' => $params['tid'],
-                'fee' => $params['fee'],
-                'card_fee' => $params['fee'],
-                'status' => '0',
-                'is_usecard' => '0',
-        );
-        pdo_insert('core_paylog', $log);
-}		}
+	        $log = array(
+	                'uniacid' => $_W['uniacid'],
+	                'acid' => $_W['acid'],
+	                'openid' => $_W['member']['uid'],
+	                'module' => $this->module['name'], //模块名称，请保证$this可用
+	                'tid' => $params['tid'],
+	                'fee' => $params['fee'],
+	                'card_fee' => $params['fee'],
+	                'status' => '0',
+	                'is_usecard' => '0',
+	        );
+	        pdo_insert('core_paylog', $log);
+		}
 		$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
 		if ($styleid) {
 			include $this->template('style/style'.$styleid.'/activity/pay');exit();

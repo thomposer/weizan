@@ -84,12 +84,19 @@
 			</div>
 		</div>
 		<div class="panel panel-default">
-			<div class="panel-heading">文章页全局广告设置</div>
+			<div class="panel-heading">全局设置</div>
 			<div class="panel-body">	
 
-				
 				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label">第三方广告</label>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">列表左上角LOGO</label>
+                    <div class="col-sm-9 col-xs-12">
+                        {php echo tpl_form_field_image('data[logo]', $settings['logo'])}  
+                        <div class="help-block"><strong>请上传90*24px的图片</strong></div>                    
+                    </div>
+
+                </div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">文章页底部第三方广告</label>
 					<div class="col-sm-9 col-xs-12">
 						<textarea name="data[dsfgg]" class="form-control" placeholder="如果这里添加了，不显示上方的自定义广告" rows=5>{$settings['dsfgg']}</textarea>						
 					</div>
@@ -106,6 +113,12 @@
 						<input type="text" name="data[sharelink]" class="form-control" value="{$settings['sharelink']}" />						
 					</div>
 				</div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关注引导图片</label>
+                    <div class="col-sm-9 col-xs-12">
+                       {php echo tpl_form_field_image('data[guanzhu]', $settings['guanzhu'])}                       
+                    </div>
+                </div>
 				<div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">留言是否需要审核</label>
                     <div class="col-sm-9">
@@ -210,6 +223,7 @@
                 
                  </div>
                    </div>
+                  
 		<div class="form-group">
 					<div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 col-sm-offset-3 col-md-offset-2 col-lg-offset-2">
 						<input name="submit" type="submit" value="提交" class="btn btn-primary" />

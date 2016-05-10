@@ -73,7 +73,7 @@ return pdo_insertid();
 }
 function get_settings()
 {
-$value = pdo_fetchcolumn("SELECT value FROM ".tablename("core_settings")." WHERE `key`=:key",array(":key"=>"kim_financial"));
+$value = pdo_fetchcolumn("SELECT value FROM ".tablename("core_settings")." WHERE `key`=:key",array(":key"=>"members"));
 if(empty($value)) 
 {
 return array();
@@ -134,7 +134,7 @@ if(!empty($settings["tx_date"]) && intval($settings["tx_date"]) > 0 && is_email_
 		{
 			return $send;
 		}
-		cache_write('kim_financial_email_tx'.$_W["uniacid"], array("time" => date("Y-m-d", TIMESTAMP)));
+		cache_write('members_email_tx'.$_W["uniacid"], array("time" => date("Y-m-d", TIMESTAMP)));
 		return error(0,"套餐到期提醒,成功");
 	}
 	return error(0,"提醒邮箱未设定");
@@ -249,7 +249,7 @@ function is_email_tx($time,$day)
 {
 global $_W;
 if($time < 0) return false;
-$temp = cache_read("kim_financial_email_tx".$_W["uniacid"]);
+$temp = cache_read("members_email_tx".$_W["uniacid"]);
 if($temp["time"] == date("Y-m-d", TIMESTAMP)) return false;
 if($time <= $day*24*60*60) 
 {
@@ -312,13 +312,13 @@ function GetPayResult() {
         $order_no = $_GPC["order_no"];
         $order = pdo_fetch("SELECT * FROM ".tablename("uni_payorder")." WHERE orderid=:orderid", array(":orderid"=>$order_no));
         if(empty($order)){
-            message("订单不存在!",$this->createWebUrl("FinancialCenter"));
+            message("订单不存在!",url("members/member"));
         }
         if($order["status"] <> 1) {
-            message("订单待支付状态，如果支付成功请与客服联系!",$this->createWebUrl("FinancialCenter"));
+            message("订单待支付状态，如果支付成功请与客服联系!",url("members/member"));
         }
         if($order["status"] == 1) {
-            message("订单支付成功!",$this->createWebUrl("FinancialCenter"));
+            message("订单支付成功!",url("members/member"));
             exit;
         }
 }

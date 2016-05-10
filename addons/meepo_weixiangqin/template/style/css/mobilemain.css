@@ -143,7 +143,7 @@ body > div {
 .toolssend {
     width: 47px;
     border-radius: 5px;
-    background-color: #2792ff;
+    background-color: #ff5858;
     font-size: 15px;
     color: white;
     vertical-align: middle;
@@ -223,7 +223,7 @@ body > div {
             max-width: 140px;
             float: left;
             margin-left: -2px;
-            background-color: #e2e2e2;
+            background-color: #ff5858;
             font-size: 14px;
             border-radius: 15px;
             padding: 12px 15px;
@@ -254,7 +254,7 @@ body > div {
 
             .ul_talk li .content .second {
                 font-size: 14px;
-                color: #2792ff;
+                color: #ff5858;
                 display: inline-block;
                 vertical-align: top;
             }
@@ -424,7 +424,7 @@ body > div {
 
     .ul_talk.reply .content {
         direction: ltr;
-        background-color: #2792ff;
+        background-color: #ff5858;
         float: right;
         margin-bottom: 0;
     }

@@ -6,7 +6,7 @@ function PromptBox(){
 	this.id = "PromptBox",
 	this.class = "mainColor PromptBox",
 	this.text = "自定义提示框",
-	this.defaultTime= 1500,
+	this.defaultTime= 2000,
 	this.outTime = this.defaultTime,
 	this.hideShade = function(id){
 		var PromptBoxShade = document.getElementById(id+"Shade");

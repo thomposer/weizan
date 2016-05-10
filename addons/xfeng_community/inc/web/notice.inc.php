@@ -68,6 +68,7 @@
 					'report_status' => $_GPC['report_status'],
 					'shopping_status' => $_GPC['shopping_status'],
 					'homemaking_status' => $_GPC['homemaking_status'],
+					'change_status' => $_GPC['change_status'],
 					'type' => intval($_GPC['type']),
 				);
 			if ($user) {

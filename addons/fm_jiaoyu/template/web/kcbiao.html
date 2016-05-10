@@ -92,7 +92,21 @@ require(['bootstrap'],function($){
     <div class="panel panel-default">
         <div class="table-responsive panel-body">
         <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
-		<input type="hidden" name="schoolid" value="{$schoolid}" />
+		        <input type="hidden" name="leadExcel" value="true">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="fm_jiaoyu" />
+                <input type="hidden" name="do" value="UploadExcel" />
+                <input type="hidden" name="ac" value="kcbiao" />
+				<input type="hidden" name="schoolid" value="{$schoolid}" />
+
+                <a class="btn btn-primary" href="javascript:location.reload()"><i class="fa fa-refresh"></i> 刷新</a>
+                <input name="viewfile" id="viewfile" type="text" value="" style="margin-left: 40px;" class="form-control-excel" readonly>
+                <a class="btn btn-primary"><label for="unload" style="margin: 0px;padding: 0px;">上传...</label></a>
+                <input type="file" class="pull-left btn-primary span3" name="inputExcel" id="unload" style="display: none;"
+                       onchange="document.getElementById('viewfile').value=this.value;this.style.display='none';">
+                <input type="submit" class="btn btn-primary" name="btnExcel" value="导入数据">
+                <a class="btn btn-primary" href="../addons/fm_jiaoyu/public/example/example_kcbiao.xls">下载导入模板</a>
         <table class="table table-hover">
 			<thead class="navbar-inner">
 				<tr>

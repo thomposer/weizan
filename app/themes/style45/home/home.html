@@ -54,12 +54,11 @@
 	<li>
 		<a href="{$row['linkurl']}">
 			{if $row['thumb']}<img src="{$row['thumb']}" class="pull-left thumb" onerror="this.parentNode.removeChild(this)" />{/if}
-			<div class="title">{$row['title']}</div>
+			<div class="title">{php echo cutstr($row['title'],25,1);}</div>
 			<div class="createtime">{php echo date('Y-m-d H:i:s', $row['createtime'])}</div>
 		</a>
 	</li>
 	{/loop}
 </div>
 </div>
-
 {template 'common/footer'}

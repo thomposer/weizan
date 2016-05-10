@@ -77,7 +77,7 @@
 		// 	$list[$key]['mobile'] = $member['mobile'];
 		// }
 		// print_r($list);exit();
-		$list = pdo_fetchall("SELECT m.content,m.comment,m.category,m.createtime,m.status,b.realname,b.mobile,m.id,r.title,r.city,r.dist,b.address FROM".tablename('xcommunity_report')."as m left join(".tablename('xcommunity_region')."as r left join".tablename('xcommunity_member')."as b on b.regionid = r.id ) on m.openid = b.openid WHERE $condtion AND m.type = 1 order by createtime desc LIMIT ".($pindex - 1) * $psize.','.$psize,$params);
+		$list = pdo_fetchall("SELECT m.content,m.comment,m.category,m.createtime,m.status,b.realname,b.mobile,m.id,r.title,r.city,r.dist,b.address FROM".tablename('xcommunity_report')."as m left join(".tablename('xcommunity_region')."as r left join".tablename('xcommunity_member')."as b on b.regionid = r.id ) on m.openid = b.openid WHERE $condtion AND m.type = 1 order by m.createtime desc LIMIT ".($pindex - 1) * $psize.','.$psize,$params);
 		foreach ($list as $key => $value) {
 				$list[$key]['cctime'] = date('Y-m-d H:i',$value['createtime']);
 			}
@@ -154,15 +154,18 @@
 				$template_id = $tpl['grab_wc_tplid'];
 				$content = array(
 							'first' => array(
-									'value' => '您的报修已处理',
+									'value' => '尊敬的业主，您的报修已经完成',
 								),
 							'keyword1' => array(
-									'value' => $item['content'],
+									'value' => $member['address'],
 								),
 							'keyword2' => array(
-									'value' => $member['realname'],
+									'value' =>$item['content'],
 								),
-							'keyword3'	=> array(
+							'keyword3' => array(
+									'value' =>$_GPC['resolver'],
+								),
+							'keyword4'	=> array(
 									'value' => date('Y-m-d H:i',TIMESTAMP),
 								),
 							'remark'    => array(

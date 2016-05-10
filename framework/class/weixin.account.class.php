@@ -495,7 +495,7 @@ class WeiXinAccount extends WeAccount {
 		}
 	}
 
-	public function error_code($code) {
+	public function error_code($code, $errmsg = '未知错误') {
 		$errors = array(
 			'-1' => '系统繁忙',
 			'0' => '请求成功',
@@ -605,7 +605,7 @@ class WeiXinAccount extends WeAccount {
 		if($errors[$code]) {
 			return $errors[$code];
 		} else {
-			return '未知错误';
+			return $errmsg;
 		}
 	}
 	

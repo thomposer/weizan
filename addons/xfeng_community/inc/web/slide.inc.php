@@ -20,7 +20,29 @@
 			$condition .= " AND title LIKE :keyword";
 			$params[':keyword'] = "%{$_GPC['keyword']}%";
 		}
-		$list = pdo_fetchall("SELECT * FROM ".tablename("xcommunity_slide")." WHERE weid = '{$_W['weid']}' $condition ORDER BY displayorder DESC, id DESC LIMIT ".($pindex - 1) * $psize.','.$psize, $params);
+		//显示所有小区
+		$regions = $this->regions();	
+		$row = pdo_fetchall("SELECT * FROM ".tablename("xcommunity_slide")." WHERE weid = '{$_W['weid']}' $condition ORDER BY displayorder DESC, id DESC LIMIT ".($pindex - 1) * $psize.','.$psize, $params);
+		$regionid = intval($_GPC['_regionid']);
+		$list = '';
+		if ($regionid) {
+			foreach ($row as $key => $value) {
+				if ($value['regionid'] != 'N;') {
+					$rregions = unserialize($value['regionid']);
+					if (@in_array($regionid, $rregions)) {
+						$list[$key]['id'] = $value['id'];
+						$list[$key]['displayorder'] = $value['displayorder'];
+						$list[$key]['thumb'] = $value['thumb'];
+						$list[$key]['url'] = $value['url'];
+						$list[$key]['title'] = $value['title'];
+					}
+				}
+				
+			}
+		}else{
+			$list = $row;
+		}
+		
 		$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename("xcommunity_slide") . " WHERE weid = '{$_W['weid']}' $condition");
 		$pager = pagination($total, $pindex, $psize);
 		if (!empty($_GPC['displayorder'])) {

@@ -125,7 +125,17 @@ margin-top: -3px;
  <div id="insert1"></div>
 <ul class="mainmenu">
 {loop $navs $nav}
-<li><a href="{$nav['url']}"><img src="{$_W['attachurl']}{$nav['icon']}"><p><b>{$nav['name']}</b><span></span><i></i></p></a></li>
+<li><a href="{$nav['url']}">
+		{if !empty($nav['icon'])}
+
+		<img src="{$_W['attachurl']}{$nav['icon']}">
+
+		{else}
+
+		<i class="fa {$nav['css']['icon']['icon']}" style="{$nav['css']['icon']['style']}"></i>
+
+		{/if}
+<p><b>{$nav['name']}</b><span></span><i></i></p></a></li>
 {/loop}
 </ul>
  <div id="insert2"></div>

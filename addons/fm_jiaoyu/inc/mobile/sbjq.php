@@ -57,8 +57,11 @@
             
 			$item = pdo_fetch("SELECT * FROM " . tablename($this->table_bjq) . " WHERE id = :id ", array(':id' => $id));	
 						
-		 include $this->template('sbjq');
+		 include $this->template('students/sbjq');
           }else{
-         include $this->template('bangding');
+         //include $this->template('bjq');
+		 		    $stopurl = $_W['siteroot'] .'app/'.$this->createMobileUrl('bjq', array('schoolid' => $schoolid));
+			header("location:$stopurl");
+			exit;
           }        
 ?>

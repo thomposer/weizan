@@ -1,5 +1,5 @@
 <?php
-global $_W,$_GPC;//¸úÎÒ´òÕÐºôµÄÈË
+global $_W,$_GPC;//è·Ÿæˆ‘æ‰“æ‹›å‘¼çš„äºº
 $weid = $_W['uniacid'];
 $settings = pdo_fetch("SELECT * FROM ".tablename('meepo_hongniangset')." WHERE weid=:weid",array(':weid'=>$_W['weid']));
 $openid = $_W['openid']; 

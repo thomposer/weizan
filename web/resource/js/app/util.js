@@ -510,6 +510,23 @@
 		};
 	};
 
+	util.phoneBrowser = function(callback, page){
+		var footer = '';
+		var modalobj = util.dialog('一键拨号',['./index.php?c=utility&a=link&do=phone&callback=phoneLinkComplete&page='+ page],footer,{containerName:'link-container'});
+		modalobj.modal({'keyboard': false});
+		modalobj.find('.modal-body').css({'height':'120px','overflow-y':'auto' });
+		modalobj.modal('show');
+
+		window.phoneLinkComplete = function(link, page){
+			if($.isFunction(callback)){
+				callback(link, page);
+				if (page == '' || page == undefined) {
+					modalobj.modal('hide');
+				}
+			}
+		};
+	};
+
 	util.showModuleLink = function(callback){
 		var footer = '';
 		var modalobj = util.dialog('模块链接选择',['./index.php?c=utility&a=link&do=modulelink&callback=moduleLinkComplete'], '');
@@ -749,6 +766,7 @@
 			}, opts);
 		});
 	};
+
 	if (typeof define === "function" && define.amd) {
 		define(['bootstrap'], function(){
 			return util;

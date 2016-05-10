@@ -29,7 +29,7 @@
 				       exit;
 					}else{
 						if(empty($res['nickname'])){
-							 //$this->insertit();//录入
+							 $this->insertit();//录入
 						}
 						$tablename = tablename("hnfans");
 						$gender = pdo_fetchcolumn("SELECT `gender` FROM ".  $tablename ." WHERE  weid=:weid AND from_user = :from_user",array(':weid'=>$weid,':from_user'=>$openid));
@@ -81,7 +81,7 @@
 		   exit;
 		}
 		if($cfg['telephoneconfirm'] == '1'){
-		    if($res['telephoneconfirm'] == '0'){
+		    if($res['telephoneconfirm'] == '0' || empty($res['telephone'])){
 			   $smsurl=$this->createMobileUrl('sms');			
 				header("location:$smsurl");
 				exit;

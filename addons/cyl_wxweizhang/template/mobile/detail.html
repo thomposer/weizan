@@ -42,8 +42,14 @@
 {php echo register_jssdk($debug);} 
 
             <div class="lincoapp-header2" data-code="0">
-                <h2 class="title" style="line-height: 0.44rem;text-align: left"><a href="{php echo $this->createMobileUrl('index');}" class="logo"></a></h2>
-                <span class="iright iwxshare" onclick="document.getElementById('mcover').style.display='block';">分享朋友圈</span>
+                <h2 class="title" style="line-height: 0.44rem;text-align: left;padding: 10px"><a href="{php echo $this->createMobileUrl('index');}">
+                {if $settings['logo']}
+            <img src="{php echo tomedia($settings['logo'])}" width="90" >
+            {else}
+            <img src="{MODULE_URL}images/logo.png" width="90" >
+             {/if}
+             </a></h2>
+                <span class="iright iwxshare" onclick="document.getElementById('mcover').style.display='block';">分享给朋友</span>
             </div>
 
             <div id="mcover" onclick="document.getElementById('mcover').style.display='';" style="display:none;">
@@ -61,9 +67,9 @@
 
         <div class="rich_media_inner">
             <div id="page-content">
-                <div id="img-content" class="rich_media_area_primary">
+                <div class="rich_media_area_primary" style="padding:0px">
                     <h2 class="rich_media_title">
-                        {$contents['title']}
+                        {$contents['title']} 
                     </h2>
                        
 
@@ -76,11 +82,17 @@
                         <a  href="{$settings['sharelink']}">{$contents['source']}</a><br>
                       {/if}
                     </em>
-                    </div>                    
+                    </div>   
+                    {if $settings['guanzhu']}
+                      <img src="{php echo tomedia($settings['guanzhu'])}" alt="" width="100%">   
+                    {else}
+                     <img src="{MODULE_URL}images/guanzhu.gif" alt="" width="100%">   
+                    {/if}
+
                     {if $credit['status']==1 && $credit['limit'] >= 0}
-    <img src="https://mmbiz.qlogo.cn/mmbiz/yqVAqoZvDibG3130Y2hAXktGHLUh928RJOMWFa6azEYBwfPDzI0FnjKbC8NfPOJewIz6GgQ3jQ7n5JDKZx54rHQ/0?wx_fmt=gif" alt="" width="100%"> 
-  <p class="weui_btn weui_btn_plain_primary" style="padding: 0px;font-size: 100%">关注后转发即可获得{$credit['share']}
-  {if $contents['jifen'] ==1 }元{/if} {if $contents['jifen'] ==2 }积分{/if}，朋友浏览可获得{$credit['click']}{if $contents['jifen'] ==1 }元{/if} {if $contents['jifen'] ==2 }积分{/if} </p>
+   
+  <p class="weui_btn weui_btn_plain_primary" style="padding: 0px;font-size: 100%">此文章发给朋友即可获得{$credit['share']}
+  {if $contents['jifen'] ==1 }余额{/if} {if $contents['jifen'] ==2 }积分{/if}，朋友浏览可获得{$credit['click']}{if $contents['jifen'] ==1 }余额{/if} {if $contents['jifen'] ==2 }积分{/if} </p>
 
                     {/if}
                     <div class="rich_media_content " id="js_content">                        
@@ -97,7 +109,7 @@
         
      
                      <a class="media_tool_meta meta_primary" id="js_view_source" href="{$contents['linkurl']}">阅读原文</a>{else}<a class="media_tool_meta meta_primary" id="js_view_source" href="{$settings['sharelink']}">阅读原文</a>    {/if}
-                        <a class="media_tool_meta tips_global meta_extra" href="{php echo $this->createMobileUrl('detail', array('id'=>$id,'op'=>'liuyan'));}">写留言</a>
+                        <a class="media_tool_meta tips_global meta_extra" href="{php echo $this->createMobileUrl('detail', array('id'=>$id,'op'=>'liuyan'));}" style="float: right">写留言</a>
                       
                     </div>
                 </div>             
@@ -175,7 +187,7 @@
                         <a href="{$gg['link']}" id="btn2">   
                         <strong class="infonews-tit" style="color:#000">{$gg['title']}</strong>   
                         <span class="infonews-u-img">       
-                        <img src="{php echo tomedia($gg['thumb'])}" alt="" style="box-shadow:2px 1px 15px #000">   
+                        <img src="{php echo tomedia($gg['thumb'])}" alt="" style="">   
                         </span>   
                         <span class="btn-infonews">赞助广告</span>
                         </a>

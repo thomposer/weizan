@@ -12,7 +12,7 @@
                     <div class="col-sm-10">
                         <label class="radio-inline">
                             <input type="radio" name="code_status" value="1" {if $settings['code_status']==1 } checked{/if} />验证</label>
-                        <label for="radio_0" class="radio-inline">
+                        <label  class="radio-inline">
                             <input type="radio" name="code_status" value="0" {if empty($settings[ 'code_status']) || $settings[ 'code_status']==0 } checked{/if} /> 不验证</label>
                         <span class="help-block">如果开启注册码验证房号，手机号码验证房号将失效。</span>
                     </div>
@@ -30,9 +30,9 @@
                 <div class="form-group">
                     <label for="verify" class="col-sm-2 control-label">是否开启导入房号显示</label>
                     <div class="col-sm-10">
-                        <label for="radio_1" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="room_enable" value="1" {if $settings['room_enable']==1 } checked{/if} />显示</label>
-                        <label for="radio_0" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="room_enable" value="0" {if empty($settings['room_enable']) || $settings['room_enable']==0 } checked{/if} /> 不显示</label>
                         <span class="help-block"></span>
                     </div>
@@ -40,9 +40,9 @@
                 <div class="form-group">
                     <label for="verify" class="col-sm-2 control-label">是否开启房屋租赁托管</label>
                     <div class="col-sm-10">
-                        <label for="radio_1" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="h_status" value="1" id='h_status' {if $settings['h_status']==1 } checked{/if} />开启</label>
-                        <label for="radio_0" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="h_status" value="0" id='h_status' {if empty($settings['h_status']) || $settings['h_status']==0 } checked{/if} /> 关闭</label>
                         <span class="help-block"></span>
                     </div>
@@ -57,9 +57,9 @@
                 <div class="form-group">
                     <label for="verify" class="col-sm-2 control-label">是否开启商家提成</label>
                     <div class="col-sm-10">
-                        <label for="radio_1" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="s_status" value="1" {if $settings['s_status']==1 } checked{/if} />开启</label>
-                        <label for="radio_0" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="s_status" value="0" {if empty($settings['s_status']) || $settings['s_status']==0 } checked{/if} /> 关闭</label>
                         <span class="help-block"></span>
                     </div>
@@ -67,9 +67,9 @@
                 <div class="form-group">
                     <label for="verify" class="col-sm-2 control-label">是否开启超市提成</label>
                     <div class="col-sm-10">
-                        <label for="radio_1" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="c_status" value="1" {if $settings['c_status']==1 } checked{/if} />开启</label>
-                        <label for="radio_0" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="c_status" value="0" {if empty($settings['c_status']) || $settings['c_status']==0 } checked{/if} /> 关闭</label>
                         <span class="help-block"></span>
                     </div>
@@ -77,9 +77,9 @@
                 <div class="form-group">
                     <label for="verify" class="col-sm-2 control-label">报修投诉是否全部显示</label>
                     <div class="col-sm-10">
-                        <label for="radio_1" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="r_status" value="1" {if $settings['r_status']==1 } checked{/if} />显示</label>
-                        <label for="radio_0" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="r_status" value="0" {if empty($settings['r_status']) || $settings['r_status']==0 } checked{/if} /> 不显示</label>
                         <span class="help-block"></span>
                     </div>
@@ -87,9 +87,9 @@
                 <div class="form-group">
                     <label for="verify" class="col-sm-2 control-label">切换小区是否审核</label>
                     <div class="col-sm-10">
-                        <label for="radio_1" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="r_enable" value="1" {if $settings['r_enable']==1 } checked{/if} />审核</label>
-                        <label for="radio_0" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="r_enable" value="0" {if empty($settings['r_enable']) || $settings['r_enable']==0 } checked{/if} /> 不审核</label>
                         <span class="help-block"></span>
                     </div>
@@ -107,9 +107,9 @@
                 <div class="form-group">
                     <label for="verify" class="col-sm-2 control-label">是否开启小区定位</label>
                     <div class="col-sm-10">
-                        <label for="radio_1" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="region_status" value="1" {if $settings['region_status']==1 } checked{/if} />开启</label>
-                        <label for="radio_0" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="region_status" value="0" {if empty($settings['region_status']) || $settings['region_status']==0 } checked{/if} /> 关闭</label>
                         <span class="help-block"></span>
                     </div>
@@ -117,9 +117,9 @@
                 <div class="form-group">
                     <label for="verify" class="col-sm-2 control-label">是否开启商家定位</label>
                     <div class="col-sm-10">
-                        <label for="radio_1" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="business_status" value="1" {if $settings['business_status']==1 } checked{/if} />开启</label>
-                        <label for="radio_0" class="radio-inline">
+                        <label class="radio-inline">
                             <input type="radio" name="business_status" value="0" {if empty($settings['business_status']) || $settings['business_status']==0 } checked{/if} /> 关闭</label>
                         <span class="help-block"></span>
                     </div>

@@ -8,6 +8,10 @@ if(empty($openid)){
 if($_W['isajax']){
    $cfg = $this->module['config'];
    $Mobile = $_GPC['mobile'];
+	 $check_mobile = pdo_fetchcolumn("SELECT `telephone` FROM".tablename('hnfans')." WHERE telephone=:telephone AND weid=:weid AND telephoneconfirm=:telephoneconfirm",array(':telephone'=>$Mobile,':weid'=>$weid,':telephoneconfirm'=>'1'));
+	 if(!empty($check_mobile)){
+			die('over');
+	 }
    $num =  random(6, true); 
 	 if(empty($cfg['ali_appkey'])){
 		 $url='http://utf8.sms.webchinese.cn/?Uid='.$cfg['smsuid'].'&Key='.$cfg['smskey'].'&smsMob='.$Mobile.'&smsText=验证码：'.$num;

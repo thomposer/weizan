@@ -14,21 +14,21 @@
 	<meta name="apple-mobile-web-app-capable" content="yes" /> <!-- apple devices fullscreen -->
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 	<!-- Mobile Devices Support @end -->
-	<meta name="keywords" content="{if empty($_W['setting']['copyright']['keywords'])}Î¢Çæ,Î¢ÐÅ,Î¢ÐÅ¹«ÖÚÆ½Ì¨{else}{$_W['setting']['copyright']['keywords']}{/if}" />
-	<meta name="description" content="{if empty($_W['setting']['copyright']['description'])}Î¢ÐÅ¹«ÖÚÆ½Ì¨×ÔÖúÒýÇæ£¬¼ò³ÆÎ¢Çæ£¬Î¢ÇæÊÇÒ»¿îÃâ·Ñ¿ªÔ´µÄÎ¢ÐÅ¹«ÖÚÆ½Ì¨¹ÜÀíÏµÍ³¡£{else}{$_W['setting']['copyright']['description']}{/if}" />
+	<meta name="keywords" content="{if empty($_W['setting']['copyright']['keywords'])}Î¢ï¿½ï¿½,Î¢ï¿½ï¿½,Î¢ï¿½Å¹ï¿½ï¿½ï¿½Æ½Ì¨{else}{$_W['setting']['copyright']['keywords']}{/if}" />
+	<meta name="description" content="{if empty($_W['setting']['copyright']['description'])}Î¢ï¿½Å¹ï¿½ï¿½ï¿½Æ½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ£¬ï¿½ï¿½ï¿½Î¢ï¿½æ£¬Î¢ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ñ¿ï¿½Ô´ï¿½ï¿½Î¢ï¿½Å¹ï¿½ï¿½ï¿½Æ½Ì¨ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½{else}{$_W['setting']['copyright']['description']}{/if}" />
 	<script type="text/javascript" src="./resource/script/jquery-1.7.2.min.js"></script>
 	{if $bootstrap_type == 3}
-	<link type="text/css" rel="stylesheet" href="./themes/mobile/default/style/bootstrap.css">
-	<script type="text/javascript" src="./themes/mobile/default/script/bootstrap.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="./themes/default/style/bootstrap.css">
+	<script type="text/javascript" src="./themes/default/script/bootstrap.min.js"></script>
 	{else}
 	<link type="text/css" rel="stylesheet" href="./resource/style/bootstrap.css">
 	<script type="text/javascript" src="./resource/script/bootstrap.js"></script>
 	{/if}
 	<link type="text/css" rel="stylesheet" href="./resource/style/font-awesome.min.css" />
-	<link type="text/css" rel="stylesheet" href="./themes/mobile/default/style/common.mobile.css">
+	<link type="text/css" rel="stylesheet" href="./themes/default/style/common.mobile.css">
 	<script type="text/javascript" src="./resource/script/cascade.js"></script>
-	<script type="text/javascript" src="./themes/mobile/default/script/jquery.touchwipe.js"></script>
-	<script type="text/javascript" src="./themes/mobile/default/script/swipe.js"></script>
+	<script type="text/javascript" src="./themes/default/script/jquery.touchwipe.js"></script>
+	<script type="text/javascript" src="./themes/default/script/swipe.js"></script>
 	<!--[if IE 7]>
 	<link rel="stylesheet" href="./resource/style/font-awesome-ie7.min.css">
 	<![endif]-->
@@ -104,7 +104,7 @@ height: 32px;}
 </ul>
 <div id="insert2"></div>
 
-<div class="copyright">{if empty($footer_off)}&copy;{if empty($_W['account']['name'])}Î¢ÇæÍÅ¶Ó{else}{$_W['account']['name']}{/if}&nbsp;&nbsp;{$_W['setting']['copyright']['statcode']}{/if}</div>
+<div class="copyright">{if empty($footer_off)}&copy;{if empty($_W['account']['name'])}Î¢ï¿½ï¿½ï¿½Å¶ï¿½{else}{$_W['account']['name']}{/if}&nbsp;&nbsp;{$_W['setting']['copyright']['statcode']}{/if}</div>
 
 
 {if $_W['quickmenu']['menus']}
@@ -122,11 +122,11 @@ $(function() {
 	});
 	$(".menu-main a").click(function(){ $(".menu-main").hide(); });
 
-	//¿ØÖÆtab¿í¶È
+	//ï¿½ï¿½ï¿½ï¿½tabï¿½ï¿½ï¿½
 	var profile_tab = $(".nav-tabs li");
 	profile_tab.css({"width": 100/profile_tab.length+"%", "text-align": "center"});
 
-	//ÊÖ»ú±íµ¥´¦Àí
+	//ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	$(".form-table").delegate(".checkbox input[type='checkbox']", "click", function(){
 		$(this).parent().toggleClass("btn-inverse");
 	});
@@ -135,7 +135,7 @@ $(function() {
 		a.html(a.html() +' '+  $(this).val());
 	});
 
-	//´¦Àí¹Ì¶¨ºáÏòµ¼º½Ìõ
+	//ï¿½ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ï¿½ï¿½òµ¼ºï¿½ï¿½ï¿½
 	var navbarFixedTop = false, navbarFixedBottom = false;
 	navbarFixedTop = $(".navbar").hasClass("navbar-fixed-top");
 	navbarFixedBottom = $(".navbar").hasClass("navbar-fixed-bottom");
@@ -143,7 +143,7 @@ $(function() {
 	if(navbarFixedBottom) $("body").css("padding-bottom", "41px");
 });
 
-//¶Ô·ÖÏíÊ±µÄÊý¾Ý´¦Àí
+//ï¿½Ô·ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½
 function _removeHTMLTag(str) {
 	str = str.replace(/<script[^>]*?>[\s\S]*?<\/script>/g,'');
 	str = str.replace(/<style[^>]*?>[\s\S]*?<\/style>/g,'');
@@ -175,7 +175,7 @@ document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
 		"wContent":  "{$_share['title']}"
 	};
 
-	// ·¢ËÍ¸øºÃÓÑ
+	// ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½ï¿½
 	WeixinJSBridge.on('menu:share:appmessage', function (argv) {
 		WeixinJSBridge.invoke('sendAppMessage', {
 			"img_url": window.shareData.imgUrl,
@@ -189,7 +189,7 @@ document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
 		})
 	});
 
-	// ·ÖÏíµ½ÅóÓÑÈ¦
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¦
 	WeixinJSBridge.on('menu:share:timeline', function (argv) {
 		WeixinJSBridge.invoke('shareTimeline', {
 			"img_url": window.shareData.imgUrl,
@@ -203,7 +203,7 @@ document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
 		});
 	});
 
-	// ·ÖÏíµ½Î¢²©
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Î¢ï¿½ï¿½
 	WeixinJSBridge.on('menu:share:weibo', function (argv) {
 		WeixinJSBridge.invoke('shareWeibo', {
 			"content": window.shareData.wContent,

@@ -22,7 +22,7 @@
 
 		    $userinfo = iunserializer($it['userinfo']);
 		    
-		 include $this->template('qingjia');
+		 include $this->template('teacher/qingjia');
           }else{
          include $this->template('bangding');
           }        

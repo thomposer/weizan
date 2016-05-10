@@ -46,13 +46,11 @@ $.getJSON("{php echo $this->createMobileUrl('announcement',array('op' => 'ajax')
 {if $item['location']}
 	<p>通知范围:{$item['location']}</p>
 {/if}
-{if $item['reason']&&$iten['content']}
-	<p>通知类型:{$item['reason']}</p>
-{else}
+{if $item['reason']}
 	<p>通知原因:{$item['reason']}</p>
 {/if}
 {if $item['content']}
-	<p>通知内容:{$item['content']}</p>
+	<p>{$item['content']}</p>
 {/if}
 {if $item['remark']}
 	<p>通知备注:{$item['remark']}</p>

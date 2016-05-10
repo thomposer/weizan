@@ -1,21 +1,21 @@
-{template 'common/header'}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>提现中心</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/open/libs/weui/0.4.0/weui.css" />
+  </head>
+  <body>
 <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/0.4.0/weui.css">
 <style>
   body{font-family: "微软雅黑"}
   .list-block{margin:0.8rem 0px;}
   .label{color: #000;text-align: left;font-family: "微软雅黑"}
 </style>
-<div class="weui_tab">
-    <div class="weui_navbar">
-        <div class="weui_navbar_item weui_bar_item_on">
-            提现中心
-        </div>
-       
-    </div>
-    <div class="weui_tab_bd">
-
-    </div>
-</div>
 <div class="weui_msg">
     <div class="weui_icon_area"><img src="{$_W['fans']['tag']['avatar']}" alt="" width="100" style="border-radius:50%"></div>
     <div class="weui_text_area">
@@ -55,4 +55,5 @@
         <a href="{php echo $this->createMobileUrl('member', array('uid'=>$_W['fans']['uid']));}">返回会员中心</a>
     </div>
 </div>
-{template 'common/footer'}
+</body>
+</html>

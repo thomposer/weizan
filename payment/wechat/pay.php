@@ -71,7 +71,7 @@ $params = array(
 	'tid' => $log['tid'],
 	'fee' => $log['card_fee'],
 	'user' => $log['openid'],
-	'title' => $params['title'],
+	'title' => urldecode($params['title']),
 	'uniontid' => $log['uniontid'],
 );
 $wOpt = wechat_build($params, $wechat);

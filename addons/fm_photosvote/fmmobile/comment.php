@@ -2,6 +2,8 @@
 /**
  * 女神来了模块定义
  *
+ * @author 微赞科技
+ * @url http://bbs.012wz.com/
  */
 defined('IN_IA') or exit('Access Denied');
 		/**$filecomment = IA_ROOT . '/addons/fm_photosvote/template/mobile/comment.html';

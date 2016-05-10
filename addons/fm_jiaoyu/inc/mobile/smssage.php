@@ -57,7 +57,7 @@
 				 ));				 
             $item = pdo_fetch("SELECT * FROM " . tablename($this->table_leave) . " WHERE id = :id ", array(':id' => $id));		
 			
-		 include $this->template('smssage');
+		 include $this->template('students/smssage');
           }else{
          include $this->template('bangding');
           }        

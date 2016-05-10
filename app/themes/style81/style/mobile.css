@@ -7,7 +7,7 @@
 -webkit-box-sizing:border-box; 
 -webkit-transform:scale(0);-webkit-animation-name:janim;-webkit-animation-duration:.3s;-webkit-animation-timing-function:linear;-webkit-animation-iteration-count:1;-webkit-animation-direction:normal;-webkit-animation-fill-mode:forwards;}
 @-webkit-keyframes janim {0%{-webkit-transform:scale(0.2)}50%{-webkit-transform:scale(1.2)}100%{-webkit-transform:scale(1)}}
-.icon-items li a{display:block;width: 100%;height:70px;line-height:70px;color:#FFF;font-size:18px;}
+.icon-items li a{display:block;width: 100%;height:70px;line-height:70px;color:#FFF;}
 .icon-items li a:hover{background-color: rgba(0,0,0,.1); z-index: 1;color:#FFF;}
 .icon-items li a i{width:30px;height:30px;display:inline-block;vertical-align:middle;margin-right:15px;}
 

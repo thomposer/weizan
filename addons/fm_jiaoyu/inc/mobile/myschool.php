@@ -27,7 +27,8 @@
 
 		    $userinfo = iunserializer($it['userinfo']);
 		    
-		 include $this->template('myschool');
+			
+		 include $this->template('teacher/myschool');
           }else{
          include $this->template('bangding');
           }        

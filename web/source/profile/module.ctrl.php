@@ -61,8 +61,33 @@ if($do == 'setting') {
 		if (empty($_W['setting']['site']['key']) || empty($_W['setting']['site']['token'])) {
 			message('站点未注册，请先注册站点。', url('cloud/profile'), 'info');
 		}
+		if (empty($config)) {
+			$config = array();
+		}
+		
 		load()->model('cloud');
-		$iframe = cloud_module_setting_prepare($module, 'setting');
+		load()->func('communication');
+		
+		$pro_attach_url = tomedia('pro_attach_url');
+		$pro_attach_url = str_replace('pro_attach_url', '', $pro_attach_url);
+		
+		$module_simple = array_elements(array('name', 'type', 'title', 'version', 'settings'), $module);
+		$module_simple['pro_attach_url'] = $pro_attach_url;
+		
+		$iframe = cloud_module_setting_prepare($module_simple, 'setting');
+		$result = ihttp_post($iframe, array('inherit_setting' => base64_encode(iserializer($config))));
+		if (is_error($result)) {
+			message($result['message']);
+		}
+		$result = json_decode($result['content'], true);
+		if (is_error($result)) {
+			message($result['message']);
+		}
+		
+		$module_simple = array_elements(array('name', 'type', 'title', 'version', 'settings'), $module);
+		$module_simple['pro_attach_url'] = $pro_attach_url;
+		
+		$iframe = cloud_module_setting_prepare($module_simple, 'setting');
 		template('profile/module_setting');
 		exit();
 	}

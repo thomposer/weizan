@@ -87,7 +87,7 @@ return true;
 <div class="wrap"> 
 
   <header class="mb15">
-	<h1><a href="http://meepo.com.cn" class="home fright"><img src="{if empty($settings['logo'])}{MEEPORES}/static/friend/images/logo.png{else}{php echo $_W['attachurl'].$settings['logo']}{/if}"  alt="{if empty($settings['title'])}微相亲{else}{$settings['title']}{/if}"></a><a href="{php echo  $this->createMobileUrl('alllist')}"  target="_blank" class="goback fleft" style="color:#fff">{if empty($res['telephone'])}完善{else}编辑{/if}资料</a></h1>
+	<h1><a href="javascript:void(0);" class="home fright"><img src="{if empty($settings['logo'])}{MEEPORES}/static/friend/images/logo.png{else}{php echo $_W['attachurl'].$settings['logo']}{/if}"  alt="{if empty($settings['title'])}微相亲{else}{$settings['title']}{/if}"></a><a href="{php echo  $this->createMobileUrl('alllist')}"  target="_blank" class="goback fleft" style="color:#fff">{if empty($res['telephone'])}完善{else}编辑{/if}资料</a></h1>
   </header>
 <div id="pt-main">
 <form class="regForm" action="" method="post" target="_self" enctype="multipart/form-data" onSubmit="return beforeSubmit(this);">

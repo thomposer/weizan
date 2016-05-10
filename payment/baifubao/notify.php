@@ -40,9 +40,8 @@ if (!empty($_GPC['pay_result']) && $_GPC['pay_result'] == '1') {
 				$acc->PayConsumeCode($codearr);
 			}
 						if($log['is_usecard'] == 1 && $log['card_type'] == 2) {
-				$now = time();
 				$log['card_id'] = intval($log['card_id']);
-				pdo_query('UPDATE ' . tablename('activity_coupon_record') . " SET status = 2, usetime = {$now}, usemodule = '{$log['module']}' WHERE uniacid = :aid AND couponid = :cid AND uid = :uid AND status = 1 LIMIT 1", array(':aid' => $_W['uniacid'], ':uid' => $log['openid'], ':cid' => $log['card_id']));
+				pdo_update('activity_coupon_record', array('status' => '2', 'usetime' => time(), 'usemodule' => $log['module']), array('uniacid' => $_W['uniacid'], 'recid' => $log['card_id'], 'status' => '1'));
 			}
 
 			$site = WeUtility::createModuleSite($log['module']);

@@ -26,7 +26,11 @@
 	<div class="wz_17_line add_qq_more">
              <a href="{$nav['url']}">
                  <div class="wz_17_text wz_17_color_0<?php echo $key;?> wz_17_flat_right m_text">{$nav['name']}</div>
-                 <div class="wz_17_img "><img src="{$_W['attachurl']}{$nav['icon']}" class="m_pic"></div>
+                 {if !empty($nav['icon'])}
+				 <div class="wz_17_img "><img src="{$_W['attachurl']}{$nav['icon']}" class="m_pic"></div>
+				 {else}
+				  <div class="wz_17_img "><i class="{$nav['css']['icon']['icon']}" style="{$nav['css']['icon']['style']}"></i></div>
+				  {/if}
              </a>
              <div class="clfl"></div>
         </div>

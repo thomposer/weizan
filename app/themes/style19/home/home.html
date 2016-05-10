@@ -6,7 +6,8 @@
 	.box{width:75%; padding:31% 0 0 5.2%;}
 	.box .box-item{float:left; text-align:center;  display:block; width:45%; margin:0 3.2% 5.2% 0; border-radius:3.66em; height:6.82em; text-decoration:none; outline:none;padding:10px; position:relative; overflow:hidden; color:#fff; }
 	.box i{display:inline-block; height:50%; margin:10% 0 4%; vertical-align:middle; color:#fff; width:45px; font-size:35px;}
-	.box span{color:{$_W['styles']['fontnavcolor']};display:inline-block; width:98%; height:1.38em; font-weight:bold; overflow:hidden;}
+	.box i.icon{position:absolute; width:100%; height:100%; left:0; top:0; margin:0;}
+	.box span{color:{$_W['styles']['fontnavcolor']};display:inline-block; width:98%; height:1.38em; font-weight:bold; text-align:center; overflow:hidden; position:absolute; bottom:15px; left:0;}
 </style>
 <div class="box clearfix">
 	{php $num = 0;}
@@ -19,7 +20,7 @@
 	{php if($num == 5) $bg = 'rgba(194,123,188,0.95)';}
 	<a href="{$nav['url']}" class="box-item" style="background:{$bg};">
 		{if !empty($nav['icon'])}
-		<i style="background:url({$_W['attachurl']}{$nav['icon']}) no-repeat;background-size:cover;" class=""></i>
+		<i style="background:url({$_W['attachurl']}{$nav['icon']}) no-repeat;background-size:cover;" class="icon"></i>
 		{else}
 		<i class="fa {$nav['css']['icon']['icon']}" style="{$nav['css']['icon']['style']}"></i>
 		{/if}

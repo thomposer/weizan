@@ -38,7 +38,7 @@
 			$isbzr = pdo_fetch("SELECT * FROM " . tablename($this->table_teachers) . " where weid = :weid AND id = :id", array(':weid' => $_W ['uniacid'], ':id' => $it['tid']));
 			$picarr = iunserializer($leave['picarr']);
 			
-		 include $this->template('snotice');
+		 include $this->template('students/snotice');
           }else{
          $stopurl = $_W['siteroot'] .'app/'.$this->createMobileUrl('mnotice', array('schoolid' => $schoolid, 'id' =>  $_GPC['id']));
 			header("location:$stopurl");

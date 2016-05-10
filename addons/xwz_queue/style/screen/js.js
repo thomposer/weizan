@@ -10,6 +10,7 @@ $(function(){
             if(data.list){
             	var list = '';
             	$(data.list).each(function(index, el) {
+                  
             		list += '<li data-type="'+ this.type +'" class="clearfix"><span class="wrap-con-cl fl">';
                     if(this.before == 0){
                     	if(this.current == 0){
@@ -19,7 +20,7 @@ $(function(){
                     	}
                     	
                     }else{
-                    	list +='<strong>下一位：</strong>' +  this.type+this.before;
+                    	list +='<strong>当前：</strong>' +  this.type+this.before;
                     }
 
                     list+='</span><span class="wrap-con-cr fr">'+ this.type_name +'</span></li>';

@@ -114,16 +114,30 @@
 
 	}
 	
-	
-	
+
 	if ($_W['isajax']) {
 			$pindex = max(1, intval($_GPC['page']));
 			$psize = 100;
 		
 		
-			$list = pdo_fetchall("SELECT * FROM".tablename('xcommunity_goods')."WHERE weid=:weid AND isrecommand =1 AND status = 1 AND type = 1 AND " . time() . ">=starttime and " . time() . "<=endtime LIMIT ".($pindex - 1) * $psize.','.$psize,array(':weid' => $_W['uniacid']));
+			$rows = pdo_fetchall("SELECT * FROM".tablename('xcommunity_goods')."WHERE weid=:weid AND isrecommand =1 AND status = 1 AND type = 1 AND " . time() . ">=starttime and " . time() . "<=endtime LIMIT ".($pindex - 1) * $psize.','.$psize,array(':weid' => $_W['uniacid']));
 			$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_goods')."WHERE weid=:weid AND isrecommand =1 AND status = 1 AND type = 1 ",array(':weid' => $_W['uniacid']));
+			$list = array();
+			$member = $this->changemember();
 
+			foreach ($rows as $key => $value) {
+				$regions = unserialize($value['regionid']);
+				if (@in_array($member['regionid'], $regions)) {
+
+					$list[$key]['id'] = $value['id'] ;
+					$list[$key]['thumb'] = $value['thumb'] ;
+					$list[$key]['createtime'] = $value['createtime'] ;
+					$list[$key]['title'] = $value['title'] ;
+					$list[$key]['unit'] = $value['unit'] ;
+					$list[$key]['marketprice'] = $value['marketprice'] ;
+					$list[$key]['productprice'] = $value['productprice'] ;
+				}
+			}
 
 			$data = array();
 			foreach ($list as $key => $value) {

@@ -26,5 +26,5 @@
 
 		$banners = pdo_fetchall("SELECT bannername,link,thumb FROM " . tablename($this->table_banners) . " WHERE enabled=1 AND weid = '{$_W['uniacid']}' AND schoolid = '{$schoolid}' ORDER BY displayorder ASC");
 
-        include $this->template('detail');
+        include $this->template('common/detail');
 ?>

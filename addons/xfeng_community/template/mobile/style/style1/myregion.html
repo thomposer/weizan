@@ -53,6 +53,7 @@
         <div id="community_bottom">
             <div class="com_contact">
                 <div class="btn"><a href="tel:{$region['linkway']}"><span class="xqtel">小区电话</span></a></div>
+               {if $region['qq']}
                 <div class="btn">
                     <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={$region['qq']}&site=qq&menu=yes">
                         <span class="xqkf">
@@ -60,6 +61,7 @@
                         </span>
                     </a>
                 </div>
+                {/if}
             </div>
             <div class="com_bother">你有什么疑问可以直接联系我们</div>
         </div>

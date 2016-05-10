@@ -455,6 +455,7 @@
 		} elseif ($operation == 'detail') {
 			$id = intval($_GPC['id']);
 			$item = pdo_fetch("SELECT o.*,m.realname as realname,m.mobile as mobile,m.address as address FROM " . tablename('xcommunity_order') . "as o left join".tablename('xcommunity_member')."as m on o.from_user = m.openid WHERE o.id = :id", array(':id' => $id));
+			$region = $this->region($item['regionid']);
 			//获取商品信息
 			$goods = pdo_fetchall("SELECT g.*, o.total,o.price as orderprice FROM " . tablename('xcommunity_order_goods') .
 					" o left join " . tablename('xcommunity_goods') . " g on o.goodsid=g.id " . " WHERE o.orderid='{$id}'");

@@ -17,6 +17,7 @@
                 $data = array(
 				    'weid' => $_W['uniacid'],
                     'istplnotice' => intval($_GPC['istplnotice']),
+					'guanli' => intval($_GPC['guanli']),
 					'xsqingjia' => trim($_GPC['xsqingjia']),
 					'xsqjsh' => trim($_GPC['xsqjsh']),
 					'jsqingjia' => trim($_GPC['jsqingjia']),

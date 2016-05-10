@@ -12,7 +12,7 @@
 		<div class="tab-pane active" id="tab1">
 			<div class="mobile-div img-rounded" style="text-align: center; padding:10px;font-weight:bold;overflow:hidden;word-break:break-all">
 			{if !empty($cfg['logo'])}
-				<img src="{$_W['attachurl']}{$cfg['logo']}" width="100%" />
+				<img src="{$cfg['logo']}" width="100%" />
 			{/if}
 			{if !empty($cfg['shopname'])}
 				<br/><br/>{$cfg['shopname']}
@@ -30,11 +30,11 @@
 			</div>
 			{if !empty($cfg['description'])}
 			<div class="mobile-div img-rounded " style='overflow:hidden;word-break:break-all;padding:15px;'>
-				{$cfg['description']}
+				{php echo htmlspecialchars_decode($cfg['description'])}
 			</div>
 			{/if}
 		</div>
 	</div>
 </div>
-{template 'footer'}
+{template 'footer-base'}
 {template 'footerbar'}

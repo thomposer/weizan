@@ -47,10 +47,13 @@ class CoreModuleReceiver extends WeModuleReceiver {
 			$sceneid = $this->message['scene'];
 			$acid = $this->acid;
 			$uniacid = $this->uniacid;
-			$row = pdo_fetch("SELECT id, name, acid FROM ".tablename('qrcode')." WHERE uniacid = :aid AND acid = :acid AND qrcid = :qrcid", array(':aid' => $uniacid, ':acid' => $acid, ':qrcid' => $sceneid));
-			if(empty($row)) {
-				$row = pdo_fetch("SELECT id, name, acid FROM ".tablename('qrcode')." WHERE uniacid = :aid AND acid = :acid AND scene_str = :scene_str", array(':aid' => $uniacid, ':acid' => $acid, ':scene_str' => $sceneid));
+			$sceneid = trim($sceneid = $this->message['scene']);
+			if(is_numeric($sceneid)) {
+				$scene_condition = " `qrcid` = '{$sceneid}'";
+			} else {
+				$scene_condition = " `scene_str` = '{$sceneid}'";
 			}
+			$row = pdo_fetch("SELECT `id`, `keyword`, `name`, `acid` FROM " . tablename('qrcode') . " WHERE `uniacid` = '{$uniacid}' AND {$scene_condition}");
 			$insert = array(
 				'uniacid' => $_W['uniacid'],
 				'acid' => $row['acid'],

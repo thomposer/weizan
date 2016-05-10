@@ -73,7 +73,7 @@ text-decoration:none;
             <li class="list-group-item">状态：<span class="label label-success">{if $item['status'] == 1}已处理{elseif $item['status'] == 2}未处理{/if}</span></li>
             <li class="list-group-item">姓名：<span>{$member['realname']}</span></li>
             <li class="list-group-item">电话：<span>{php echo substr_replace($member['mobile'],'****',3,4)}</span></li>
-            <li class="list-group-item">地址：<span>{$item['address']}</span></li>
+           <!--  <li class="list-group-item">地址：<span>{$item['address']}</span></li> -->
             {if $item['resolve']}
             <li class="list-group-item">处理结果：<span>{$item['resolve']}</span></li>
             {/if}

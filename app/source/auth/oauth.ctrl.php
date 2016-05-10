@@ -105,10 +105,10 @@ if (intval($_W['account']['level']) != 4) {
 	$mc_oauth_fan = mc_oauth_fans($oauth['openid'], $_W['acid']);
 	if (empty($mc_oauth_fan) && (!empty($_SESSION['openid']) || !empty($_SESSION['uid']))) {
 		$data = array(
-				'acid' => $_W['acid'],
-				'oauth_openid' => $oauth['openid'],
-				'uid' => intval($_SESSION['uid']),
-				'openid' => $_SESSION['openid']
+			'acid' => $_W['acid'],
+			'oauth_openid' => $oauth['openid'],
+			'uid' => intval($_SESSION['uid']),
+			'openid' => $_SESSION['openid']
 		);
 		pdo_insert('mc_oauth_fans', $data);
 	}

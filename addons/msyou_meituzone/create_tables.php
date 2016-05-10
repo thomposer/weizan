@@ -147,6 +147,7 @@
 					 `uniacid` int(11) unsigned NOT NULL,
 					 `rid` int(11) unsigned NOT NULL,
 					 `fanid` int(11) unsigned NOT NULL,
+					 `bh` int(11) NOT NULL default 0,
 					 `imgurl` text NOT NULL DEFAULT '',
 					 `content` text NOT NULL DEFAULT '',
 
@@ -160,6 +161,30 @@
 					 `createtime` int(11) unsigned NOT NULL,
 					 `editer` int(11) unsigned NOT NULL,
 					 `edittime` int(11) unsigned NOT NULL,
+					 PRIMARY KEY (`id`)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+				pdo_run($sqlstr);
+			}else{
+				if (!pdo_fieldexists('msyou_meituzone_lists','bh')){
+//					echo 'msyou_meituzone_lists createid'; 
+					$sqlstr="alter table ".tablename('msyou_meituzone_lists')." add `bh` int(11) NOT NULL DEFAULT 0;";
+	  				pdo_run($sqlstr);
+	  			}
+			}
+		}
+
+		if ($tablestr="msyou_meituzone_lists_log"||$stablestr=''){
+			//ģʽ
+			if (!pdo_tableexists('msyou_meituzone_lists_log')){
+//				echo 'msyou_meituzone_lists'; 
+				$sqlstr="CREATE TABLE ".tablename('msyou_meituzone_lists_log')." (
+					 `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+					 `uniacid` int(11) unsigned NOT NULL,
+					 `rid` int(11) unsigned NOT NULL,
+					 `listsid` int(11) unsigned NOT NULL,
+					 `uid` int(11) unsigned NOT NULL,
+  					`zancount` int(11) NOT NULL DEFAULT 0,
+					 `createtime` int(11) unsigned NOT NULL,
 					 PRIMARY KEY (`id`)
 					) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 				pdo_run($sqlstr);

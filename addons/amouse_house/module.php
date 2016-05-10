@@ -4,7 +4,7 @@
  * 招聘信息
  * 时尚生活互动平台信息模块定义
  * @author 史中营
- * @QQ 214983937
+ * @QQ 8000 830 75
  * @url 
  */
 defined('IN_IA') or exit('Access Denied');

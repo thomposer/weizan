@@ -28,5 +28,5 @@
             message('没有找到该学校，请联系管理员！');
         }
 		
-        include $this->template('kc');
+        include $this->template('common/kc');
 ?>

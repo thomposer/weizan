@@ -1,13 +1,13 @@
 <style>
 
 .topannounce {
-  background: {if !empty($reply['bodytscolor'])}{$reply['bodytscolor']}{else}#000{/if} url({php echo toimage($reply['bodytsbg'])}) no-repeat 0 center;
+  background: {if !empty($rbody['bodytscolor'])}{$rbody['bodytscolor']}{else}#000{/if} url({php echo toimage($rbody['bodytsbg'])}) no-repeat 0 center;
   color: #fff;
   background-size: 100%;
     z-index: 9999999;
 }
 .top {
-  background: {if !empty($reply['topbgcolor'])}{$reply['topbgcolor']}{else}#000{/if} url({php echo toimage($reply['topbg'])}) no-repeat 0 center;
+  background: {if !empty($rbody['topbgcolor'])}{$rbody['topbgcolor']}{else}#000{/if} url({php echo toimage($rbody['topbg'])}) no-repeat 0 center;
   color: #fff;
   background-size: 100%;
   padding: 8px 0px;
@@ -15,19 +15,19 @@
 }
 .top a {
   padding: 0 5px;
-  color: {$reply['topbgtext']};
+  color: {$rbody['topbgtext']};
 }
 .top .topa {
 
-  {if !empty($reply['topbgrightcolor'])}
-	background: {if !empty($reply['topbgrightcolor'])}{$reply['topbgrightcolor']}{else}#000{/if} ;
+  {if !empty($rbody['topbgrightcolor'])}
+	background: {if !empty($rbody['topbgrightcolor'])}{$rbody['topbgrightcolor']}{else}#000{/if} ;
   {else}
-	background: url({if !empty($reply['topbgright'])}{php echo toimage($reply['topbgright'])}{else}../addons/fm_photosvote/template/images/bm.png{/if}) center no-repeat ;
+	background: url({if !empty($rbody['topbgright'])}{php echo toimage($rbody['topbgright'])}{else}{FM_STATIC_MOBILE}public/images/bm.png{/if}) center no-repeat ;
   {/if}
  
   
   
-  color: {$reply['topbgtext']};
+  color: {$rbody['topbgtext']};
   background-size: 100% 100%;
 }
 
@@ -41,7 +41,7 @@
             position: fixed;
             z-index: 980;
             /*background-color: #fffddf;*/
-            background-color: {if !empty($reply['bodytscolor'])}{$reply['bodytscolor']}{else}#CB418E{/if};
+            background-color: {if !empty($rbody['bodytscolor'])}{$rbody['bodytscolor']}{else}#CB418E{/if};
             opacity: 0.95;
             overflow: hidden;
             box-shadow: 0px 0px 2px #CB418E;
@@ -56,10 +56,10 @@
 				    top: 10px;
             left: 10px;
             /*background-color: #fffddf;*/
-            background-color: {if !empty($reply['bodytscolor'])}{$reply['bodytscolor']}{else}#CB418E{/if};
+            background-color: {if !empty($rbody['bodytscolor'])}{$rbody['bodytscolor']}{else}#CB418E{/if};
             background-size: 20px;
             background-repeat: no-repeat;
-            background-image: url(../addons/fm_photosvote/template/images/speaker.png?{php echo time()});
+            background-image: url({FM_STATIC_MOBILE}public/images/speaker.png?{php echo time()});
 			float:left;
         }
 
@@ -72,7 +72,7 @@
         }
 
         #s-word a {
-            color: {if !empty($reply['bodytextcolor'])}{$reply['bodytextcolor']}{else}#fff{/if};
+            color: {if !empty($rbody['bodytextcolor'])}{$rbody['bodytextcolor']}{else}#fff{/if};
             text-decoration: none;  margin-right: 60px;
         }
 
@@ -83,10 +83,10 @@
 			
 				    top: 12px;
             right: 10px;
-            background-color: {if !empty($reply['bodytscolor'])}{$reply['bodytscolor']}{else}#CB418E{/if};
+            background-color: {if !empty($rbody['bodytscolor'])}{$rbody['bodytscolor']}{else}#CB418E{/if};
             background-size: 15px;
             background-repeat: no-repeat;
-            background-image: url(../addons/fm_photosvote/template/images/yellowfork.png);
+            background-image: url({FM_STATIC_MOBILE}public/images/yellowfork.png);
 			float:right;
         }
 		.modal-open .modal {
@@ -95,9 +95,9 @@
       z-index: 111111111;
     }
 .btn_music {
-{if ($reply['ishuodong'] == 2 || $reply['ishuodong'] == 3) && $reply['ipannounce']}
+{if ($rhuihua['ishuodong'] == 2 || $rhuihua['ishuodong'] == 3) && $rdisplay['ipannounce']}
   	top: 10em;
-{elseif ($reply['ishuodong'] == 0 || $reply['ishuodong'] == 1) && !$reply['ipannounce']}
+{elseif ($rhuihua['ishuodong'] == 0 || $rhuihua['ishuodong'] == 1) && !$rdisplay['ipannounce']}
 	top: 20px;
 {else}
 	top:50px;
@@ -105,7 +105,7 @@
 
 }
 </style>
-{if $reply['ipannounce'] == 1} 	
+{if $rdisplay['ipannounce'] == 1} 	
 	<div id="topannounce" class="topannounce">
 			 <div id="speaker">
 					<div id="s-icon"></div>
@@ -132,10 +132,10 @@
 	</script>	
 {/if}
 
-{if (($reply['ishuodong'] == 2 || $reply['ishuodong'] == 3) && !empty($reply['huodongurl'])) }
+{if (($rhuihua['ishuodong'] == 2 || $rhuihua['ishuodong'] == 3) && !empty($rhuihua['huodongurl'])) }
 <style type="text/css">
   .mui-global-m-smart-banner{background: rgba(0, 0, 0, 0.5);overflow: hidden;padding: 10px;margin: 0;    position: fixed;
-    {if $reply['ipannounce']}
+    {if $rdisplay['ipannounce']}
      top: 40px;
     {else}
      top: 0px;
@@ -163,13 +163,13 @@
     <span class="mui-global-m-sb-btn-close" id="J_GloablSmartBannerClose"></span>
   </div>
   <div class="mui-global-m-sb-app-inf">
-      <a id="J_GlobalSmartBannerLink" href="{$reply['huodongurl']}&from=fm_photosvote&oid={$from_user}" target="_blank">
+      <a id="J_GlobalSmartBannerLink" href="{$rhuihua['huodongurl']}&from=fm_photosvote&oid={$from_user}" target="_blank">
         <div style="width:50px;height:50px;overflow:hidden;margin-right:20px;margin-left:10px;float:left;">
-          <img src="{php echo toimage($reply['hhhdpicture'])}" width="50" style="">
+          <img src="{php echo toimage($rhuihua['hhhdpicture'])}" width="50" style="">
         </div>  
         <div class="mui-global-m-sb-meta">
-          <h5>{$reply['huodongname']}</h5>
-          <h4>{$reply['huodongdes']}</h4>
+          <h5>{$rhuihua['huodongname']}</h5>
+          <h4>{$rhuihua['huodongdes']}</h4>
         </div>
         <span class="mui-global-m-sb-download">查看详情 > </span>
       </a>
@@ -186,8 +186,8 @@
   }
 </script>
 {/if}
-{if $reply['isbgaudio']}  
-	<span id="playbox" class="btn_music musicplay" style="display:block;"><audio id="audio" loop="" preload="none" src="{php echo tomedia($reply['bgmusic'])}"></audio>
+{if $rdisplay['isbgaudio']}  
+	<span id="playbox" class="btn_music musicplay" style="display:block;"><audio id="audio" loop="" preload="none" src="{php echo tomedia($rdisplay['bgmusic'])}"></audio>
 	</span>
 	<script>
 	    $(function(){

@@ -1,5 +1,5 @@
 <?php
-global $_W,$_GPC;//给我送花的人
+global $_W,$_GPC;//缁欐垜閫佽姳鐨勪汉
 $weid = $_W['uniacid'];
 $settings = pdo_fetch("SELECT * FROM ".tablename('meepo_hongniangset')." WHERE weid=:weid",array(':weid'=>$_W['weid']));
 $openid = $_W['openid']; 

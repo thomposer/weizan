@@ -30,7 +30,12 @@ a{color:{$_W['styles']['linkcolor']}; text-decoration:none;}
  {loop $navs $nav}
       <a href="{$nav['url']}" class="mod-index">
           <p>
-            <i><img alt="{$nav['name']}" src="{$_W['attachurl']}{$nav['icon']}"></i><small>{$nav['name']}</small>
+		{if !empty($nav['icon'])}
+            <i><img alt="{$nav['name']}" src="{$_W['attachurl']}{$nav['icon']}"></i>
+		{else}
+		<i class="fa {$nav['css']['icon']['icon']}" style="{$nav['css']['icon']['style']}"></i>
+		{/if}
+			<small>{$nav['name']}</small>
           </p>
 </a>      
 {/loop}

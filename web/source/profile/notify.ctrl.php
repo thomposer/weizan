@@ -30,11 +30,16 @@ if($do == 'mail') {
 		$row = array();
 		$row['notify'] = iserializer($notify);
 		pdo_update('uni_settings', $row, array('uniacid' => $_W['uniacid']));
+		load()->func('communication');
 		if (!empty($_GPC['testsend']) && !empty($_GPC['receiver'])) {
-			load()->func('communication');
 			$result = ihttp_email($_GPC['receiver'], $_W['account']['name'] . '验证邮件'.date('Y-m-d H:i:s'), '如果您收到这封邮件则表示您系统的发送邮件配置成功！');
 			if (is_error($result)) {
-				message($result['message']);
+				message('配置失败，请检查配置信息');
+			}
+		} else {
+			$result = ihttp_email($notify['mail']['username'], $_W['account']['name'] . '验证邮件'.date('Y-m-d H:i:s'), '如果您收到这封邮件则表示您系统的发送邮件配置成功！');
+			if (is_error($result)) {
+				message('配置失败，请检查配置信息');
 			}
 		}
 		cache_delete("unisetting:{$_W['uniacid']}");

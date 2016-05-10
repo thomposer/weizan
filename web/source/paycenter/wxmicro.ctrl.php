@@ -194,6 +194,8 @@ if($do == 'pay') {
 	}
 	load()->model('card');
 	$card_set = card_setting();
+	$card_params = json_decode($card_set['params'], true);
+	$grant_rate = $card_params[1]['params']['grant_rate'];
 	unset($card_set['params'], $card_set['nums'], $card_set['times'], $card_set['business'], $card_set['html'], $card_set['description']);
 	$card_set_str = json_encode($card_set);
 }

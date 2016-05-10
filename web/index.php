@@ -135,6 +135,17 @@ $acl = array(
 			
 		)
 	),
+	'agent' => array(
+		'direct' => array(
+			'agent_login',
+			'agent',
+			'agent_info',
+			'agent_show',
+			'agent_site',
+			'agent_user',
+			'logout'
+		)
+	),
 	'cron' => array(
 		'direct' => array(
 			'entry',

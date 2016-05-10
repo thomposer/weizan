@@ -14,12 +14,12 @@
 	<link href="{$_W['siteroot']}app/resource/css/bootstrap.min.css" rel="stylesheet">
 	<link href="{$_W['siteroot']}app/resource/css/common.css" rel="stylesheet">
 	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-	<script src="../addons/fm_photosvote/template/mobile/newfile/dist/lrz.bundle.js"></script>
+	<script src="{FM_STATIC_PLUGIN}upload/dist/lrz.bundle.js"></script>
 	<script src="{$_W['siteroot']}app/resource/js/require.js"></script>
 	<script src="{$_W['siteroot']}app/resource/js/app/config.js"></script>
 	<script type="text/javascript" src="{$_W['siteroot']}app/resource/js/lib/jquery-1.11.1.min.js"></script>
-	<script type="text/javascript" src="../addons/fm_photosvote/template/mobile/photos/js/main.js?{php echo time()}"></script>
-	<link rel="stylesheet" type="text/css" href="../addons/fm_photosvote/template/css/style.css?{php echo time()}">
+	<script type="text/javascript" src="{FM_STATIC_MOBILE}public/photos/js/main.js?{php echo time()}"></script>
+	<link rel="stylesheet" type="text/css" href="{FM_STATIC_MOBILE}public/css/style.css?{php echo time()}">
 	<script type="text/javascript">
 	if(navigator.appName == 'Microsoft Internet Explorer'){
 		if(navigator.userAgent.indexOf("MSIE 5.0")>0 || navigator.userAgent.indexOf("MSIE 6.0")>0 || navigator.userAgent.indexOf("MSIE 7.0")>0) {
@@ -59,6 +59,16 @@
 		'openLocation',
 		'getLocation'
 	];
+	function _removeHTMLTag(str) {
+		if(typeof str == 'string'){
+			str = str.replace(/<script[^>]*?>[\s\S]*?<\/script>/g,'');
+			str = str.replace(/<style[^>]*?>[\s\S]*?<\/style>/g,'');
+			str = str.replace(/<\/?[^>]*>/g,'');
+			str = str.replace(/\s+/g,'');
+			str = str.replace(/&nbsp;/ig,'');
+		}
+		return str;
+	}
 	</script>
 </head>
 <body>
@@ -87,7 +97,7 @@
   border-radius: 0;
   overflow: hidden;
   position: relative;
-  background: {if empty($reply['bodytscolor'])} #FFFFFF{else}{$reply['bodytscolor']}{/if} url({php echo toimage($reply['bodytsbg'])}) center no-repeat;
+  background: {if empty($rbody['bodytscolor'])} #FFFFFF{else}{$rbody['bodytscolor']}{/if} url({php echo toimage($rbody['bodytsbg'])}) center no-repeat;
   
   }
 .product li dl{ overflow: hidden;}
@@ -96,7 +106,7 @@
 
 .product li dt span img{ width: 100%; float: left; border:none;}
 .product li dd{line-height: 18px; 
-color: {if empty($reply['bodytextcolor'])}#555555{else}{$reply['bodytextcolor']}{/if};
+color: {if empty($rbody['bodytextcolor'])}#555555{else}{$rbody['bodytextcolor']}{/if};
 
 font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 .product li dd span{ color: #f12500;}
@@ -323,7 +333,7 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
   }
 </style>
 
-<div class="banner"{if $reply['ipannounce'] == 1}  style="  margin-top: 90px;  margin: 0 auto;  max-width: 640px;"{/if}><img src="{php echo toimage($reply['picture'])}" style="max-width: 100%;"></div>
+<div class="banner"{if $rdisplay['ipannounce'] == 1}  style="  margin-top: 90px;  margin: 0 auto;  max-width: 640px;"{/if}><img src="{php echo toimage($rbasic['picture'])}" style="max-width: 100%;"></div>
 
  <div class="center">
  	<div class="product">
@@ -342,7 +352,7 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 								{if !empty($mygift)}
                   <dt style="margin:0 auto;text-align:left;  border-top: 1px solid #E7E7E7; border-bottom: 1px solid #E7E7E7;margin-top:15px;  background: #DBDBDB;">
                     <div style="float:left;width: 15%;  padding: 0 15px;">
-                      <img src="{FMURL}images/status.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 15px;"/>
+                      <img src="{FM_STATIC_MOBILE}public/images/status.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 15px;"/>
                     </div>
                     <div style="float:right;width: 85%;">
                      <p class="mingc ptitle" style="border-bottom:0px solid #000">当前状态：{if $mygift['status'] == 1}审核通过{elseif $mygift['status'] == 2}正在审核中{elseif $mygift['status'] == 3}未通过审核{else}等待报名中{/if}</p>
@@ -350,26 +360,53 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
                   </dt>
                 {/if}
 								<dt style="margin:0 auto;text-align:left;  border-top: 1px solid #E7E7E7; border-bottom: 1px solid #E7E7E7;">
-									<div style="float:left;width: 25%; padding: 20px 4%;"><img src="{if !empty($avatar)}{php echo toimage($avatar)}{elseif !empty($mygift['avatar'])}{php echo toimage($mygift['avatar'])}{else}{FMURL}images/noavatar.png?v=3.0{/if}" width="50" style="border-radius:1000px; max-width: 80px;"/></div>
+									<div style="float:left;width: 25%; padding: 20px 4%;"><img src="{if !empty($avatar)}{php echo toimage($avatar)}{elseif !empty($mygift['avatar'])}{php echo toimage($mygift['avatar'])}{else}{FM_STATIC_MOBILE}public/images/noavatar.png?v=3.0{/if}" width="50" style="border-radius:1000px; max-width: 80px;"/></div>
 									<div style="float:right;width: 75%;">
-										<img src="{FMURL}images/xm.png?v=3.0" width="25" style=" width: 25px;float:left; display: table-cell;  position: absolute;  top: 15px;"/>
+										<img src="{FM_STATIC_MOBILE}public/images/xm.png?v=3.0" width="25" style=" width: 25px;float:left; display: table-cell;  position: absolute;  top: 15px;"/>
 										<input type="text" id="realname" class="mingc" name="realname" value="{php echo $this->getusernames($mygift['realname'], $nickname, 20)}" placeholder="请填写{$regtitlearr['cmmrealname']}" style=" padding-left: 35px;" >
-										<p><img src="{FMURL}images/mobile.png?v=3.0" width="25" style=" width: 25px;float:left; display: table-cell;  position: absolute;  top: 65px;"/><input type="text" id="mobile" class="mingc" name="mobile" value="{$mygift['mobile']}" placeholder="请填写{$regtitlearr['cmmmobile']}" style="border-bottom:0px solid #e7e7e7; padding-left: 35px;" /></p>
+										<p><img src="{FM_STATIC_MOBILE}public/images/mobile.png?v=3.0" width="25" style=" width: 25px;float:left; display: table-cell;  position: absolute;  top: 65px;"/><input type="text" id="mobile" class="mingc" name="mobile" value="{$mygift['mobile']}" placeholder="请填写{$regtitlearr['cmmmobile']}" style="border-bottom:0px solid #e7e7e7; padding-left: 35px;" /></p>
 									</div>
 								</dt>
-								<dt style="margin:0 auto;text-align:left;  border-top: 1px solid #E7E7E7; border-bottom: 1px solid #E7E7E7;margin-top:15px;">
-									<div style="float:left;width: 15%;  padding: 0 15px;">
-										<img src="{FMURL}images/xy.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 15px;"/>
-									</div>
-									<div style="float:right;width: 85%;">
-										<p class="mingc ptitle">参赛主题宣言</p>
-										<input type="text" id="photoname" class="mingc" name="photoname" value="{$mygift['photoname']}" placeholder="参赛主题宣言" style="border-bottom:0px solid #e7e7e7;"  >
-									</div>
-								</dt>
+                {if $rdisplay['isphotosname']}
+                  <dt style="margin:0 auto;text-align:left;  border-top: 1px solid #E7E7E7; border-bottom: 1px solid #E7E7E7;margin-top:15px;">
+                    <div style="float:left;width: 15%;  padding: 0 15px;">
+                      <img src="{FM_STATIC_MOBILE}public/images/xy.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 15px;"/>
+                    </div>
+                    <div style="float:right;width: 85%;">
+                      <p class="mingc ptitle">{if empty($regtitlearr['cmmphotosname'])}参赛主题宣言{else}{$regtitlearr['cmmphotosname']}{/if}</p>
+                      <input type="text" id="photoname" class="mingc" name="photoname" value="{$mygift['photoname']}" placeholder="{if !empty($pnametag)}
+请从下面选择{/if}{if empty($regtitlearr['cmmphotosname'])}参赛主题宣言{else}{$regtitlearr['cmmphotosname']}{/if}" style="border-bottom:0px solid #e7e7e7;"  >
+                      {if !empty($pnametag)}
+                      <style type="text/css">
+                      .pnametag {color: #333;background-color: #f5f5f5;border-color: #ddd;}
+                      </style>
+                      <div class="photonametext"><!--readonly="readonly"-->
+                        {loop $pnametag $mid $row}
+                          {php $mid = $mid + 1;}
+                          <p class="mingc ptitle pnametag">{$mid}、<a href="javascript:;">{$row['title']}</a></p>
+                        {/loop}
+                      </div>
+                      {/if}
+                    </div>
+                  </dt>
+                  <script type="text/javascript">
+                    var photoname = $('#photoname');
+                    var EOF_STR = document.all?"\r\n":"\n";
+                    $('.photonametext').find('a').click(function(){
+                      var txt1=document.getElementById("photoname");
+                        txt1.value="";
+                        txt1.focus();
+                      var tmp_txt = photoname.val()+$(this).text()+EOF_STR;
+
+                      photoname.val(tmp_txt);
+
+                    });
+                  </script>
+                {/if}
                   {if !empty($tags)}
 								<dt style="margin:0 auto;text-align:left;  border-top: 1px solid #E7E7E7; border-bottom: 1px solid #E7E7E7;margin-top:15px;">
 									<div style="float:left;width: 15%;  padding: 0 15px;">
-										<img src="{FMURL}images/fz.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 8px;"/>
+										<img src="{FM_STATIC_MOBILE}public/images/fz.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 8px;"/>
 									</div>
 									<div style="float:right;width: 85%;">
 										<p class="mingc ptitle">参赛组别</p>
@@ -384,7 +421,7 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 								{/if}
 								<dt style="margin:0 auto;text-align:left;  border-top: 1px solid #E7E7E7; border-bottom: 1px solid #E7E7E7;margin-top:15px;">
 									<div style="float:left;width: 15%;  padding: 0 15px;">
-										<img src="{FMURL}images/tp.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 15px;"/>
+										<img src="{FM_STATIC_MOBILE}public/images/tp.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 15px;"/>
 									</div>
 									<div style="float:right;width: 85%;">
 										<p class="mingc ptitle">上传图片</p>
@@ -392,7 +429,7 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 											{loop $photosarr $row}
 												
 												<div class="parentFileBox allbox{$row['id']}" id="parentFileBox{$row['id']}" style="width: 140px;"> 
-													<a href="javascript::;" class="webuploader-pick" id="webuploader{$row['id']}" onclick="javascript:$('#photo{$row['id']}').click();" style="display:none" /><img src="{FMURL}images/addimages.png?v=3.0" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"/></a>
+													<a href="javascript::;" class="webuploader-pick" id="webuploader{$row['id']}" onclick="javascript:$('#photo{$row['id']}').click();" style="display:none" /><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.0" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"/></a>
 												  	<ul class="fileBoxUl">
 												    	<li id="fileBox_WU_FILE_{$row['id']}" class="diyUploadHover"> 
 												     		<div class="viewThumb" >
@@ -412,9 +449,9 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 													<input type="file" name="photo{$row['id']}" id="photo{$row['id']}" class="webuploader-element-invisible" style="display:none;" accept="image/*" capture="camera" onchange="changeone('photo{$row['id']}', '{$row['id']}')" >
 												</div>
 											{/loop}
-											{if $photosarrnum < $reply['tpxz']}
+											{if $photosarrnum < $rvote['tpxz']}
 												<div class="parentFileBox allbox{$mid}" id="parentFileBox{$mid}" style="width: 140px;"> 
-													<a href="javascript::;" class="webuploader-pick" id="webuploader{$mid}" onclick="javascript:$('#photo{$mid}').click();"><img src="{FMURL}images/addimages.png?v=3.0" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"/></a>
+													<a href="javascript::;" class="webuploader-pick" id="webuploader{$mid}" onclick="javascript:$('#photo{$mid}').click();"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.0" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"/></a>
 													
 												  	<ul class="fileBoxUl">
 												    	<li id="fileBox_WU_FILE_{$mid}" class="diyUploadHover"> 
@@ -439,7 +476,7 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 										{else}
 											
 											<div class="parentFileBox allbox{$mid}" id="parentFileBox{$mid}" style="width: 140px;"> 
-												<a href="javascript::;" class="webuploader-pick" id="webuploader{$mid}" onclick="javascript:$('#photo{$mid}').click();"><img src="{FMURL}images/addimages.png?v=3.0" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"/></a>
+												<a href="javascript::;" class="webuploader-pick" id="webuploader{$mid}" onclick="javascript:$('#photo{$mid}').click();"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.0" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"/></a>
 											  	<ul class="fileBoxUl">
 											    	<li id="fileBox_WU_FILE_{$mid}" class="diyUploadHover"> 
 											     		<div class="viewThumb" >
@@ -463,54 +500,57 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 									</div>
 								</dt>
 								
+								
+                {if $rdisplay['isregdes']}
+                  <dt style="margin:0 auto;text-align:left;  border-top: 1px solid #E7E7E7; border-bottom: 1px solid #E7E7E7;margin-top:15px;">
+                    <div style="float:left;width: 15%;  padding: 0 15px;">
+                      <img src="{FM_STATIC_MOBILE}public/images/jieshao.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 15px;"/>
+                    </div>
+                    <div style="float:right;width: 85%;" >
+
+                      <p class="mingc ptitle">{if empty($regtitlearr['cmmregdes'])}介绍{else}{$regtitlearr['cmmregdes']}{/if}</p>
+                       <textarea style="height:auto; min-height:80px;line-height:30px;border-bottom:0px solid #e7e7e7;" class="mingc" id="description" name="description" placeholder="{if empty($regtitlearr['cmmregdes'])}介绍{else}{$regtitlearr['cmmregdes']}{/if}" cols="70" >{$mygift['description']}</textarea>
+                    </div>
+                  </dt>
+                {/if}
+
 								<dt style="margin:0 auto;text-align:left;  border-top: 1px solid #E7E7E7; border-bottom: 1px solid #E7E7E7;margin-top:15px;">
 									<div style="float:left;width: 15%;  padding: 0 15px;">
-										<img src="{FMURL}images/jieshao.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 15px;"/>
-									</div>
-									<div style="float:right;width: 85%;">
-
-										<p class="mingc ptitle">介绍</p>
-										 <textarea style="height:auto; min-height:80px;line-height:30px;border-bottom:0px solid #e7e7e7;" class="mingc" id="description" name="description" placeholder="介绍" cols="70" >{$mygift['description']}</textarea>
-									</div>
-								</dt>
-
-								<dt style="margin:0 auto;text-align:left;  border-top: 1px solid #E7E7E7; border-bottom: 1px solid #E7E7E7;margin-top:15px;">
-									<div style="float:left;width: 15%;  padding: 0 15px;">
-                    {if $reply['isweixin']}
-                    <img src="{FMURL}images/weixin.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 8px;"/>{/if}          
-                    {if $reply['isqqhao']}
-                    <img src="{FMURL}images/qq.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}          
-                    {if $reply['isemail']}
-                    <img src="{FMURL}images/email.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}         
-                    {if $reply['isjob']}
-                    <img src="{FMURL}images/job.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}         
-                    {if $reply['isxingqu']}
-                    <img src="{FMURL}images/xingqu.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}          
-                    {if $reply['isaddress']}
-                    <img src="{FMURL}images/address.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}
+                    {if $rdisplay['isweixin']}
+                    <img src="{FM_STATIC_MOBILE}public/images/weixin.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 8px;"/>{/if}          
+                    {if $rdisplay['isqqhao']}
+                    <img src="{FM_STATIC_MOBILE}public/images/qq.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}          
+                    {if $rdisplay['isemail']}
+                    <img src="{FM_STATIC_MOBILE}public/images/email.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}         
+                    {if $rdisplay['isjob']}
+                    <img src="{FM_STATIC_MOBILE}public/images/job.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}         
+                    {if $rdisplay['isxingqu']}
+                    <img src="{FM_STATIC_MOBILE}public/images/xingqu.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}          
+                    {if $rdisplay['isaddress']}
+                    <img src="{FM_STATIC_MOBILE}public/images/address.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}
                   </div>
                   <div style="float:right;width: 85%;">
-                    {if $reply['isweixin']}
+                    {if $rdisplay['isweixin']}
                     <p class="mingc ptitle">{$regtitlearr['cmmweixin']}</p>
                     <input type="text" id="weixin" name="weixin" class="mingc" value="{$mygift['weixin']}" placeholder="{$regtitlearr['cmmweixin']}" style="line-height: 38px;">
                     {/if}         
-                    {if $reply['isqqhao']}
+                    {if $rdisplay['isqqhao']}
                     <p class="mingc ptitle">{$regtitlearr['cmmqqhao']}</p>
                     <br /><input type="text" id="qqhao" name="qqhao"  class="mingc" value="{$mygift['qqhao']}" placeholder="{$regtitlearr['cmmqqhao']}" style="line-height: 38px;"/>
                     {/if}         
-                    {if $reply['isemail']}
+                    {if $rdisplay['isemail']}
                     <p class="mingc ptitle">{$regtitlearr['cmmemail']}</p>
                     <br /><input type="text" id="email" name="email" class="mingc" value="{$mygift['email']}" placeholder="{$regtitlearr['cmmemail']}" style="line-height: 38px;"/>
                     {/if}         
-                    {if $reply['isjob']}
+                    {if $rdisplay['isjob']}
                     <p class="mingc ptitle">{$regtitlearr['cmmjob']}</p>
                     <br /><input type="text" id="job" name="job" class="mingc" value="{$mygift['job']}" placeholder="{$regtitlearr['cmmjob']}" style="line-height: 38px;"/>
                     {/if}         
-                    {if $reply['isxingqu']}
+                    {if $rdisplay['isxingqu']}
                     <p class="mingc ptitle">{$regtitlearr['cmmxingqu']}</p>
                     <br /><input type="text" id="xingqu" name="xingqu" class="mingc" value="{$mygift['xingqu']}" placeholder="{$regtitlearr['cmmxingqu']}" style="line-height: 38px;"/>
                     {/if}         
-                    {if $reply['isaddress']}
+                    {if $rdisplay['isaddress']}
                     <p class="mingc ptitle">{$regtitlearr['cmmaddress']}</p>
                     <br /><input type="text" id="address" name="address" class="mingc" value="{$mygift['address']}" placeholder="{$regtitlearr['cmmaddress']}" style="border-bottom:0px solid #e7e7e7;"/>
                     {/if}
@@ -532,7 +572,7 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 {template 'templates/stylebase/tvote'}
 <script type="text/javascript">
 	var mygift = "{$mygift}";
-	var subscribe = "{$reply['subscribe']}";
+	var subscribe = "{$rshare['subscribe']}";
 	var follow = "{$follow}";
 	if (subscribe == 1) {
 		if (follow == 0) {
@@ -541,10 +581,10 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 	}
 	if	(mygift == '' || mygift == null) {
 		var now = "{$now}";
-		var bstart_time = "{$reply['bstart_time']}";
-		var bend_time = "{$reply['bend_time']}";
-		var btipstart = "{$reply['btipstart']}";
-		var btipend = "{$reply['btipend']}";
+		var bstart_time = "{$rbasic['bstart_time']}";
+		var bend_time = "{$rbasic['bend_time']}";
+		var btipstart = "{$rbasic['btipstart']}";
+		var btipend = "{$rbasic['btipend']}";
 		if (now <= bstart_time) {
 			//fminfo(btipstart);
 			fmloadding('.overlay_container', btipstart);
@@ -560,12 +600,29 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 	function reg() {
 		fmloadding('.overlay_container', '正在保存中...');
 		var now = "{$now}";
-		var bstart_time = "{$reply['bstart_time']}";
-		var bend_time = "{$reply['bend_time']}";
-		var btipstart = "{$reply['btipstart']}";
-		var btipend = "{$reply['btipend']}";
-		var isrealname = "{$reply['isrealname']}";
-		var ismobile = "{$reply['ismobile']}";
+		var bstart_time = "{$rbasic['bstart_time']}";
+		var bend_time = "{$rbasic['bend_time']}";
+		var btipstart = "{$rbasic['btipstart']}";
+		var btipend = "{$rbasic['btipend']}";
+    var isrealname = "{$rdisplay['isrealname']}";
+    var ismobile = "{$rdisplay['ismobile']}";
+    var isphotosname = "{$rdisplay['isphotosname']}";
+    var isregdes = "{$rdisplay['isregdes']}";
+    var isweixin = "{$rdisplay['isweixin']}";
+    var isqqhao = "{$rdisplay['isqqhao']}";
+    var isemail = "{$rdisplay['isemail']}";
+    var isjob = "{$rdisplay['isjob']}";
+    var isxingqu = "{$rdisplay['isxingqu']}";
+    var isaddress = "{$rdisplay['isaddress']}";
+    var open_mobile = "{$regtitlearr['open_mobile']}";
+    var open_photosname = "{$regtitlearr['open_photosname']}";
+    var open_regdes = "{$regtitlearr['open_regdes']}";
+    var open_weixin = "{$regtitlearr['open_weixin']}";
+    var open_qqhao = "{$regtitlearr['open_qqhao']}";
+    var open_email = "{$regtitlearr['open_email']}";
+    var open_job = "{$regtitlearr['open_job']}";
+    var open_xingqu = "{$regtitlearr['open_xingqu']}";
+    var open_address = "{$regtitlearr['open_address']}";
 		var isphoto = "{$mygift['photo']}";
 		var youkuurl = "{$mygift['youkuurl']}";
 
@@ -585,28 +642,69 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 			fmloadding('.overlay_container', btipend);
 			return false;
 		}
-		
-		if (isrealname == 1) {
-		  if ($('#realname').val() == '') {
-			fmloadding('.overlay_container', '真实姓名没有填写');
-			return false;
-		  }
-		}
-		if (ismobile == 1) {
-		  if ($('#mobile').val() == '') {
-			fmloadding('.overlay_container', '手机号码没有填写');         
-			return false;
-		  }
-		}
-		if ($('#photoname').val() == '' ) {
-			//fminfo('照片主题名没有填写');
-			fmloadding('.overlay_container', '主题没有填写');
-			return false;
-		}
-		if ($('#description').val() == '') {
-			fmloadding('.overlay_container', '介绍没有填写');
-			return false;
-		}
+ if (isrealname) {
+      if ($('#realname').val() == '') {
+      fmloadding('.overlay_container', '{$regtitlearr['cmmrealname']} 没有填写');
+      return false;
+      }
+    }
+
+    if (open_mobile && ismobile) {
+      if ($('#mobile').val() == '') {
+      fmloadding('.overlay_container', '{$regtitlearr['cmmmobile']} 没有填写');     
+      return false;
+      }
+    }
+
+    if (open_photosname && isphotosname) {
+      if ($('#photoname').val() == '' ) {
+        fmloadding('.overlay_container', '{$regtitlearr['cmmphotosname']} 没有填写');
+        return false;
+      }
+    }    
+    if (open_regdes && isregdes) {
+      if ($('#description').val() == '') {
+        fmloadding('.overlay_container', '{$regtitlearr['cmmregdes']} 没有填写');
+        return false;
+      }
+    }
+    if (open_weixin && isweixin) {
+      if ($('#weixin').val() == '') {
+        fmloadding('.overlay_container', '{$regtitlearr['cmmweixin']} 没有填写');
+        return false;
+      }
+    }
+    if (open_qqhao && isqqhao) {
+      if ($('#qqhao').val() == '') {
+        fmloadding('.overlay_container', '{$regtitlearr['cmmqqhao']} 没有填写');
+        return false;
+      }
+    }
+    if (open_email && isemail) {
+      if ($('#email').val() == '') {
+        fmloadding('.overlay_container', '{$regtitlearr['cmmemail']} 没有填写');
+        return false;
+      }
+    }
+    if (open_job && isjob) {
+      if ($('#job').val() == '') {
+        fmloadding('.overlay_container', '{$regtitlearr['cmmjob']} 没有填写');
+        return false;
+      }
+    }
+    if (open_xingqu && isxingqu) {
+      if ($('#xingqu').val() == '') {
+        fmloadding('.overlay_container', '{$regtitlearr['cmmxingqu']} 没有填写');
+        return false;
+      }
+    }
+    if (open_address && isaddress) {
+      if ($('#address').val() == '') {
+        fmloadding('.overlay_container', '{$regtitlearr['cmmaddress']} 没有填写');
+        return false;
+      }
+    }
+
 		
 		var submitData = {
 				photoname: $('#photoname').val(),
@@ -649,7 +747,7 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 <script type="text/javascript">
 
 	function sendpic(){
-		var subscribe = "{$reply['subscribe']}";
+		var subscribe = "{$rshare['subscribe']}";
 		var follow = "{$follow}";
 		if (subscribe == 1) {
 			if (follow == 0) {
@@ -664,7 +762,7 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 	}
 	function sendp(){
 		
-		var subscribe = "{$reply['subscribe']}";
+		var subscribe = "{$rshare['subscribe']}";
 		var follow = "{$follow}";
 
 		if (subscribe == 1) {
@@ -684,7 +782,7 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 
     function afteradd(addmid){
 		  var html ='<div class="parentFileBox allbox' + addmid + '" id="parentFileBox' + addmid + '" style="width: 140px;"> ';
-            html +='<a href="javascript::;" class="webuploader-pick" id="webuploader' + addmid + '" onclick="javascript:$(\'#photo' + addmid + '\').click();"><img src="{FMURL}images/addimages.png?v=3.0" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"/></a>';
+            html +='<a href="javascript::;" class="webuploader-pick" id="webuploader' + addmid + '" onclick="javascript:$(\'#photo' + addmid + '\').click();"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.0" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"/></a>';
             html +='<ul class="fileBoxUl">';
 			html +='    	<li id="fileBox_WU_FILE_' + addmid + '" class="diyUploadHover"> ';
 			html +='     		<div class="viewThumb" >';
@@ -722,7 +820,7 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 
 	             	$(".allbox" + mid).remove();      
 	             	fmloadding('.overlay_container', result.msg);
-	             	var tpxz = "{$reply['tpxz']}";
+	             	var tpxz = "{$rvote['tpxz']}";
 					//if (result.photosarrnum < tpxz) {
 					//	afteradd(result.addlastmid);
 					//}
@@ -757,8 +855,8 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 	}
 	
 		function upload(filename, posturl, mid) {
-				var width = "{$reply['autolitpic']}";
-				var zl = "{php echo $reply['autozl']/100}";
+				var width = "{$rvote['autolitpic']}";
+				var zl = "{php echo $rvote['autozl']/100}";
 			 	lrz(filename.files[0], {
 			        width: width,
 			        quality: zl
@@ -812,7 +910,7 @@ font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;}
 									document.getElementById('preview' + mid).src = result.imgurl;
 									document.getElementById('diyCancel' + result.lastmid).style.display = 'block';
 									document.getElementById('diySuccess' + result.lastmid).style.display = 'block';
-									var tpxz = "{$reply['tpxz']}";
+									var tpxz = "{$rvote['tpxz']}";
 									if (result.photosarrnum < tpxz) {
 										afteradd(result.addlastmid);
 									}

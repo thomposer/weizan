@@ -15,22 +15,7 @@
     <script src="{MODULE_URL}template/mobile/style/style1/static/js/jquery-1.7.1.min.js"></script>
     <script src="{MODULE_URL}template/mobile/style/style1/static/js/dp.js"></script>
     <script src="{MODULE_URL}template/mobile/style/style1/static/js/layer.js"></script>
-    <script>
-    function bd_encrypt(gg_lat, gg_lon) // 百度地图测距偏差 问题修复
-    {
-        var x_pi = 3.14159265358979324 * 3000.0 / 180.0;
-        var x = gg_lon;
-        var y = gg_lat;
-        var z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi);
-        var theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi);
-        var bd_lon = z * Math.cos(theta) + 0.0065;
-        var bd_lat = z * Math.sin(theta) + 0.006;
-        dingwei("{php echo $this->createMobileUrl('business',array('op' => 'list'))}", bd_lat, bd_lon);
-    }
-    navigator.geolocation.getCurrentPosition(function(position) {
-        bd_encrypt(position.coords.latitude, position.coords.longitude);
-    });
-    </script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=77E9802d7cfbcde01b5ea17f1388f35d"></script>
 </head>
 
 <body>
@@ -87,72 +72,39 @@
             <ul>
                 <li class="on">
                     <a class=" "></a><a href="">全部分类</a></li>
-                <li><a style="color:red;" href="{php echo $this->createMobileUrl('business',array('op' => 'list'),true)}&parent='美食'">美食</a></li>
-                <li><a title="休闲娱乐" href="{php echo $this->createMobileUrl('business',array('op' => 'list'),true)}&parent='休闲娱乐'">休闲娱乐</a></li>
-                <li><a title="购物" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent='丽人'">丽人</a></li>
-                <li><a title="结婚" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent='结婚'">结婚</a></li>
-                <li><a title="亲子" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent='亲子'">亲子</a></li>
-                <li><a title="运动健身" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent='运动健身'">运动健身</a></li>
-                <li><a title="酒店" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent='酒店'">酒店</a></li>
-                <li><a title="爱车" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent='爱车'">爱车</a></li>
-                <li><a title="生活服务" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent='生活服务'">生活服务</a></li>
-                <li><a title="其他" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent='其他'">其他</a></li>
+                <li><a style="color:red;" href="{php echo $this->createMobileUrl('business',array('op' => 'list'),true)}&parent=美食">美食</a></li>
+                <li><a title="休闲娱乐" href="{php echo $this->createMobileUrl('business',array('op' => 'list'),true)}&parent=休闲娱乐">休闲娱乐</a></li>
+                <li><a title="购物" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent=丽人">丽人</a></li>
+                <li><a title="结婚" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent=结婚">结婚</a></li>
+                <li><a title="亲子" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent=亲子">亲子</a></li>
+                <li><a title="运动健身" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent=运动健身">运动健身</a></li>
+                <li><a title="酒店" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent=酒店">酒店</a></li>
+                <li><a title="爱车" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent=爱车">爱车</a></li>
+                <li><a title="生活服务" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent=生活服务">生活服务</a></li>
+                <li><a title="其他" href="{php echo $this->createMobileUrl('business',array('op' => 'list'))}&parent=其他">其他</a></li>
             </ul>
         </div>
-        <!-- <div class="serch-bar-mask-list">
-            <ul>
-                <li><a href="/mobile/shop/index/cat/1.html" class="on">全部地区</a></li>
-                <li class="down_menuList_li"><a href="/mobile/shop/index/cat/1/area/1.html">瑶海</a></li>
-                <li class="down_menuList_li"><a href="/mobile/shop/index/cat/1/area/2.html">新站</a></li>
-                <li class="down_menuList_li"><a href="/mobile/shop/index/cat/1/area/3.html">包河</a></li>
-                <li class="down_menuList_li"><a href="/mobile/shop/index/cat/1/area/4.html">政务</a></li>
-                <li class="down_menuList_li"><a href="/mobile/shop/index/cat/1/area/5.html">庐阳</a></li>
-                <li class="down_menuList_li"><a href="/mobile/shop/index/cat/1/area/6.html">蜀山</a></li>
-                <li class="down_menuList_li"><a href="/mobile/shop/index/cat/1/area/7.html">滨湖</a></li>
-                <li class="down_menuList_li"><a href="/mobile/shop/index/cat/1/area/8.html">高新</a></li>
-                <li class="down_menuList_li"><a href="/mobile/shop/index/cat/1/area/9.html">肥东</a></li>
-                <li class="down_menuList_li"><a href="/mobile/shop/index/cat/1/area/10.html">肥西</a></li>
-                <li class="down_menuList_li"><a href="/mobile/shop/index/cat/1/area/12.html">长丰</a></li>
-            </ul>
-        </div> -->
-        <!-- <div class="serch-bar-mask-list">
-            <ul>
-                <li><a href="/mobile/shop/index/cat/1.html" class="on">全部商圈</a></li>
-            </ul>
-        </div> -->
-        <!-- <div class="serch-bar-mask-list">
-            <ul>
-                <li><a href="">距离优先</a></li>
-                <li><a href="">推荐排序</a></li>
-            </ul>
-        </div> -->
         <div class="serch-bar-mask-bg"></div>
     </div>
     <div id="app_nav" class="page-center-box" style="top: 0.9rem;">
         <div id="scroll">
             <!-- 列表 -->
             <div class="list-have-pic">
-                <!-- <div class="list-box">
-                    <div class="list-img">
-                        <a class="pic" href="/mobile/shop/detail/shop_id/94.html"><img src="/attachs/2015/04/25/thumb_553b4a7c07b1f.jpg"></a>
-                    </div>
-                    <div class="list-content">
-                        <p>
-                            <a class="fl" title="太太满庭芳" href="/mobile/shop/detail/shop_id/94.html">太太满庭芳</a>
-                            <span class="range fr">135.12km</span>
-                        </p>
-                        <div class="clear"></div>
-                        <p class="c_h overflow_clear">瑶海区凤阳路8号（11中对面）</p>
-                        <div class="listBox_tag_box"></div>
-                        <a href="tel:13547444474">
-                            <div class="seller_tel_btn"></div>
-                        </a>
-                    </div>
-                </div> -->
             </div>
             <script>
             $(document).ready(function() {
-                loaddata("{php echo $this->createMobileUrl('business',array('op' => 'list'))}", $(".list-have-pic"), true);
+                var geolocation = new BMap.Geolocation();
+                geolocation.getCurrentPosition(function(r){
+                    if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                        var mk = new BMap.Marker(r.point);
+                        var lng = r.point.lng;
+                        var lat = r.point.lat;
+                         loaddata("{php echo $this->createMobileUrl('business',array('op' => 'list','parent' => $parent,'keyword' => $keyword))}&lng="+lng+"&lat="+lat, $(".list-have-pic"), true);
+                    }else {
+                        alert('获取当前位置失败,请确认是否开启定位服务');
+                    }        
+                },{enableHighAccuracy: true})
+               
             });
             </script>
         </div>
@@ -176,6 +128,7 @@
                 scrollTop: 0
             }, 200);
         });
+ 
     });
     </script>
     <iframe id="baocms_frm" name="baocms_frm" style="display:none;"></iframe>

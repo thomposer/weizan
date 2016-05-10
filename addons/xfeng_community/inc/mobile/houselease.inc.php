@@ -108,12 +108,17 @@
 				$list[$key]['fitment'] = $value['fitment'];
 				$list[$key]['createtime'] = $value['createtime'];
 				$list[$key]['id'] = $value['id'];
+				$list[$key]['category'] = $value['category'];
 			}
 			// print_r($list);exit();
 			$data = array();
 			foreach ($list as $key => $value) {
 				$url = $this->createMobileUrl('houselease',array('op' => 'detail','id' => $value['id']));
-				
+				if ($value['category'] == 1 || $value['category'] == 2) {
+					$c = 'price';
+				}else{
+					$c = 'price_w';
+				}
 				$datetime = date('Y-m-d H:i:s',$value['createtime']);
 				
 				$data[]['html'] = "<li onClick=\"location.href='".$url."'\">
@@ -125,22 +130,17 @@
 								    	<span >[".$value['way']."]</span>".$value['title']."</h3>
 												            <div class='price_div'>
 												                <div class='price_r'>
-												                    <span class='price'>".$value['price']."</span>
+												                    <span class='".$c."'>".$value['price']."</span>
 												                </div>
 												            </div>
 												        </div>
 												    </div>
-												    <div class='other_info'>
-												        <span>".$value['price_way']."</span>|<span>";
-												        if ($value['way'] == 1) {
-												        	$data[]['html'] .="整套";
-												        }elseif ($value['way'] == 2) {
-												        	$data[]['html'] .="单间";
-												        }else{
-												        	$data[]['html'] .="床位";
-												        }
-
-												       $data[]['html'] .="</span>|<span>".$value['model_room']."室".$value['model_hall']."厅".$value['model_toilet']."卫</span>|<span>".$value['model_area']."m<sup>2</sup></span>|<span>".$value['floor_layer']."/".$value['floor_number']."层</span>|<span>".$value['fitment']."</span></div>
+												    <div class='other_info'>";
+												    if ($value['price_way']) {
+												    	$data[]['html'] .= "<span>".$value['price_way']."</span>|";
+												    }
+												        
+												       $data[]['html'] .="<span>".$value['way']."</span>|<span>".$value['model_room']."室".$value['model_hall']."厅".$value['model_toilet']."卫</span>|<span>".$value['model_area']."m<sup>2</sup></span>|<span>".$value['floor_layer']."/".$value['floor_number']."层</span>|<span>".$value['fitment']."</span></div>
 												    <div class='other_time'>发布时间：".$datetime."</div>
 												</li>";
 			}

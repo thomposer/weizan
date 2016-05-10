@@ -26,16 +26,14 @@
 	.box1>a span{color:{$_W['styles']['fontnavcolor']}; display:block; width:90%; height:30px; margin:0 5%; text-align:center; line-height:30px; overflow:hidden;}
 </style>
 <div class="box clearfix">
-	{data func="site_navs" section="1" item="nav"}
-	<a href="{$nav['url']}" class="box-item">
+	{data func="site_navs" section="1" item="nav"}	<a href="{$nav['url']}" class="box-item">
 		{if !empty($nav['icon'])}
 		<img src="{$_W['attachurl']}{$nav['icon']}">
 		{else}
 		<i class="fa {$nav['css']['icon']['icon']}" style="{$nav['css']['icon']['style']}"></i>
 		{/if}
 		<span style="{$nav['css']['name']}" title="{$nav['name']}">{$nav['name']}</span>
-	</a>
-	{/data}
+	</a>	{/data}
 </div>
 <div class="box1">
 	{data func="site_navs" section="2" item="row"}

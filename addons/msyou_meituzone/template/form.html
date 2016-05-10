@@ -23,7 +23,7 @@
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">详细说明</label>
 					<div class="col-sm-9 col-xs-12">
-						<textarea style="height:200px; width:100%;" id='detail' class="form-control span7 richtext" name="detail" >{$reply['detail']}</textarea>
+						{php echo tpl_ueditor('detail', $reply['detail']);}
 					</div>
 				</div>
 				<div class="form-group">
@@ -70,7 +70,7 @@
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动规则</label>
 					<div class="col-sm-9 col-xs-12">
-						<textarea style="height:200px; width:100%;" id='content' class="form-control span7 richtext" name="content" >{$reply['content']}</textarea>
+						{php echo tpl_ueditor('content', $reply['content']);}
 					</div>
 				</div>
 				<div class="form-group">
@@ -99,7 +99,7 @@
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">版权信息</label>
 					<div class="col-sm-9 col-xs-12">
-						<textarea style="height:150px; width:100%;" id='crinfo' class="form-control span7 richtext" name="crinfo" >{$reply['crinfo']}</textarea>
+						{php echo tpl_ueditor('crinfo', $reply['crinfo']);}
 					</div>
 				</div>
 				<div class="form-group">
@@ -150,8 +150,20 @@
 		 		<div class="form-group">
 		            <label class="col-xs-12 col-sm-3 col-md-2 control-label">背景音乐</label>
 		            <div class="col-sm-9 col-xs-12">
-		               	{php echo tpl_form_field_audio('musicurl',$reply['musicurl']);}
-		            </div>
+		            	<div class="col-sm-12">
+			                {php $musicurl=json_decode($reply['musicurl']);}
+			                {php echo tpl_form_field_audio('musicurl[]', (empty($musicurl[0])?'../addons/msyou_meituzone/style/images/default.mp3':$musicurl[0]));}
+							<span class="help-block">选择上传的音频文件或直接输入URL地址，常用格式：mp3</span>
+		                </div>
+		            	<div class="col-sm-6 col-xs-12">
+		            		<span class="help-block">播放标识</span>
+			               	{php $options = array('global'=>true, 'extras'=>array('image'=> 'style=\'width: 50px;height: 50px;background-color: #666;\'"')); echo tpl_form_field_image('musicurl[]',(empty($musicurl[1])?'../addons/msyou_meituzone/style/images/play.png':$musicurl[1]),'../addons/msyou_meituzone/style/images/play.png',$options);}
+		                </div>
+		            	<div class="col-sm-6 col-xs-12">
+		            		<span class="help-block">停止标识</span>
+			               	{php $options = array('global'=>true, 'extras'=>array('image'=> 'style=\'width: 50px;height: 50px;background-color: #666;\'"')); echo tpl_form_field_image('musicurl[]',(empty($musicurl[2])?'../addons/msyou_meituzone/style/images/stop.png':$musicurl[2]),'../addons/msyou_meituzone/style/images/stop.png',$options);}
+		                </div>
+		        	</div>
 		        </div>
 		 		<div class="form-group">
 		            <label class="col-xs-12 col-sm-3 col-md-2 control-label">首页封面图片</label>
@@ -160,6 +172,7 @@
 						<span class="help-block">首页封面图片，点击后显示页面！</span>
 		            </div>
 		        </div>
+		        <!--
 		 		<div class="form-group">
 		            <label class="col-xs-12 col-sm-3 col-md-2 control-label">支持拍照</label>
 		            <div class="col-sm-9 col-xs-12">
@@ -178,6 +191,7 @@
 						<span class="help-block">在图片详情中显示评论及回复功能！</span>
 		            </div>
 		        </div>
+		        -->
 			</div>
 			
 		</div>
@@ -185,8 +199,6 @@
 </div>
 <script>
 	$(function () {
-	$('#tab_999').find("*").each(function() { $(this).attr("disabled", "disabled");});
-	
 		window.optionchanged = false;
 		$('#myTab a').click(function (e) {
 			e.preventDefault();//阻止a链接的跳转行为
@@ -213,11 +225,13 @@
 			window.location = url;
 		}
 	}
+/*
     require(['jquery', 'util'], function($, u){
 		$(function(){
-			u.editor($('#detail')[0]);
+		//	u.editor($('#detail')[0]);
 			u.editor($('#content')[0]);
 			u.editor($('#crinfo')[0]);
 		});
     });
+*/
 </script>

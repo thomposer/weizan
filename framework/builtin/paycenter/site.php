@@ -91,7 +91,7 @@ class PaycenterModuleSite extends WeModuleSite {
 
 	public function doMobileHome() {
 		global $_W, $_GPC;
-		pc_check_login();
+		paycenter_check_login();
 		$user_permission = uni_user_permission('system');
 		$today_revenue = $this->revenue(0);
 		$yesterday_revenue = $this->revenue(-1);

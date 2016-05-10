@@ -20,5 +20,5 @@
 
         $teachers = pdo_fetchall("SELECT * FROM " . tablename($this->table_teachers) . " WHERE weid = :weid AND schoolid =:schoolid", array(':weid' => $_W['uniacid'], ':schoolid' => $schoolid), 'id');
 		
-        include $this->template('mytecher');
+        include $this->template('students/mytecher');
 ?>

@@ -435,7 +435,7 @@
 				</select>
 			</div>
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-4">
-				<input type="text" name="start" class="form-control" value="" placeholder="采集页数，每页20条"/>
+				<input type="text" name="start" id="start" class="form-control" value="" placeholder="采集页数，每页20条"/>
 			</div>			
 			
 			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-4">
@@ -469,12 +469,22 @@
 			<input type="hidden" name="token" value="{$_W['token']}" />
 		</div>
 	</div>
-	<script>
-  $('#myButton').on('click', function () {
-    var $btn = $(this).input('loading')
-    // business logic...
-    $btn.input('reset')
-  })
+	<script type="text/javascript">
+$(document).ready(function (){
+ $("#btn2").click(function(){       
+   
+    $.post("{php echo $this->createMobileUrl('handsel',array('action'=>img))}",
+      {
+        ggid:"{$gg['id']}",   
+        
+        articleid:"{$contents['id']}"
+      },
+  function(data){
+    
+  });
+ 
+  });
+ });
 </script>
 </form>
 {/if}

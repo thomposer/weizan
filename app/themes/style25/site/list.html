@@ -45,21 +45,11 @@ body{background:#EBEBEB;}
 	<li>
 		<a href="{$row['linkurl']}">
 			{if $row['thumb']}<img src="{$row['thumb']}" class="pull-right thumb" onerror="this.parentNode.removeChild(this)" />{/if}
-			<div class="title">{$row['title']}</div>
+			<div class="title">{php echo cutstr($row['title'],25,1);}</div>
 			<div class="createtime">{php echo date('Y-m-d H:i:s', $row['createtime'])}</div>
 		</a>
 	</li>
 	{/loop}
 </ul>
-<script>
-	require(['jquery'], function($){
-		$(function(){
-			$('#category_show').click(function(){
-				$('.head .order').toggleClass('hide');
-				return false;
-			});
-		});
-	});
-</script>
 <div class="pager-position">{$result['pager']}</div>
 {template 'common/footer'}

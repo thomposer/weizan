@@ -13,7 +13,9 @@
         //查询是否用户登录		
 		$userid = pdo_fetch("SELECT * FROM " . tablename($this->table_user) . " where :schoolid = schoolid And :weid = weid And :openid = openid And :tid = tid", array(':weid' => $weid, ':schoolid' => $schoolid, ':openid' => $openid, 'tid' => '0'), 'id');
 		$it = pdo_fetch("SELECT * FROM " . tablename($this->table_user) . " where weid = :weid AND id=:id ORDER BY id DESC", array(':weid' => $weid, ':id' => $userid['id']));	
-
+        
+		$school = pdo_fetch("SELECT * FROM " . tablename($this->table_index) . " where weid = :weid AND id=:id ORDER BY ssort DESC", array(':weid' => $weid, ':id' => $schoolid));
+		
 		$category = pdo_fetchall("SELECT * FROM " . tablename($this->table_classify) . " WHERE :schoolid = schoolid And :weid = weid ORDER BY sid ASC, ssort DESC", array(':weid' => $_W['uniacid'], ':schoolid' => $schoolid), 'sid');
 		
         if(!empty($userid['id']) && $userid['tid'] == '0'){
@@ -23,8 +25,10 @@
 
 		    $userinfo = iunserializer($it['userinfo']);
 		    
-		 include $this->template('user');
+		 include $this->template('students/user');
           }else{
-         include $this->template('bangding');
+         //include $this->template('myschool');
+		    $stopurl = $_W['siteroot'] .'app/'.$this->createMobileUrl('myschool', array('schoolid' => $schoolid));
+			header("location:$stopurl");
+			exit;
           }        
-?>

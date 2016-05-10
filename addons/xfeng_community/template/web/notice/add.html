@@ -69,7 +69,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="shopping_status" class="col-sm-2 control-label">客户预约通知是否启用</label>
+                    <label for="shopping_status" class="col-sm-2 control-label">家政预约通知是否启用</label>
                     <div class="col-sm-4">
                         <label class="radio-inline">
                             <input type="radio" name="homemaking_status" id="" value="2" {if $item['homemaking_status']==2 || empty($item['homemaking_status'])}checked="checked" {/if}> 是
@@ -79,6 +79,17 @@
                         </label>
                     </div>
                 </div>
+                <!-- <div class="form-group">
+                    <label for="shopping_status" class="col-sm-2 control-label">切换小区通知是否启用</label>
+                    <div class="col-sm-4">
+                        <label class="radio-inline">
+                            <input type="radio" name="change_status" id="" value="2" {if $item['change_status']==2 || empty($item['change_status'])}checked="checked" {/if}> 是
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="change_status" id="" value="1" {if $item['change_status']==1 }checked="checked" {/if}> 否
+                        </label>
+                    </div>
+                </div> -->
                  {if !$user['regionid']}
                 <div class="form-group">
                         <label for="" class="col-sm-2 control-label">选择小区</label>

@@ -28,7 +28,7 @@ function showMsg(setting){
         closeTime = setting.closeTime || 3000,
         buttom = setting.buttom || "40px";
     if($("#xhPopup").length<=0){
-	    $("body").append('<div id="xhPopup" style="z-index:91;left:0px; bottom: 60px; position: fixed;width:30%"><div></div></div>');
+	    $("body").append('<div id="xhPopup" style="z-index:1091;left:0px; bottom: 60px; position: fixed;width:60%"><div></div></div>');
 	    //$("body").append('<div id="xhPopup" style="-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box;position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: 10000;text-align: center;"></div>');
     }
     var xhPopupitem = $('<div style="-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box;padding:0 5%;text-align:center;width: 100%;"><label style="display: inline-block;padding: 10px 20px;font-size: 15px;background:rgba(19,19,19,0.88) none repeat scroll !important;color: #fff;line-height:22px;border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;width:100%;">'+msg+'</label></div>');

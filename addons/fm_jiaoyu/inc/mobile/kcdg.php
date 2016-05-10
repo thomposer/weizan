@@ -14,5 +14,5 @@
         if (empty($item)) {
             message('参数错误');
         }
-        include $this->template('kcdg');
+        include $this->template('common/kcdg');
 ?>

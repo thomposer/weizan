@@ -115,7 +115,7 @@
 							                <div class='weui_cell_bd weui_cell_primary'>
 							                    <p>
 							                        
-							                        <p style='background-color:#48b54e;color:white;width:50px;height:20px; border-radius: 5px;font-size:12px;text-align:center;line-height:20px;float:left'>【".$value['name']."】</p>
+							                        <p style='background-color:#48b54e;color:white;width:35%;white-space:nowrap;height:20px; border-radius: 5px;font-size:14px;text-align:center;line-height:20px;float:left'>【".$value['name']."】</p>
 							                       
 
 							                       <p style='font-size:12px;line-height:20px;'>&nbsp;&nbsp;".$value['content']."</p>

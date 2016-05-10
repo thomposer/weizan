@@ -1,1 +1,2026 @@
-<?php /* PHP Encode by  http://www.012wz.com */error_reporting(0);ini_set("display_errors", 0);if(!defined('bxkzgtvs')){define('bxkzgtvs',__FILE__);if (function_exists("ªçú„µ³ÖïÚ")==false){function ÉãÈŽ¹â($…»ÍÖ‚êê‚áà?{global$Ÿà…°ˆÍ?$Š¬¬¯÷ï?$Ö¬¦ÛÇÍ,$¦é÷úè„?ÛÎ,$Áà½šÝ»,$ÑÍ÷Ážêî¿•Ù?$ÊüÖÑ¥úå‚,$¬Õ‘þ¯ë,$Çð¡ßôÓ?$ÍÔœýñÃŽâ,$È¨£¦¶—êÈ´û?$ƒžÞï¥?$¶Êˆ´øŸ?$ÔÍ¥Û±îÉØþ¾?$Ó³—ã¨ëíÄ¤¥,$­òó²»éõï;$Ëƒ‡—Û›=$°×ºÄ·û¢µ‚÷ÿ=$ŸÜª¦Ü÷þÝ?$¾à“üì¿žˆ?$È©Ä‡»Ã¡ ?$‹Œ÷×’»ÂÂ=$·¦¼Ø»´Ïã=$ÞÑŸÇØ“¯ÿ=$¡’¹ÛÓ‹¹?$’â¸û=$„Äù£âô?$ÁâïéÜÖ?$Œˆ´ÑÓ †âŽ?$‡˜¢Þò=$›¶Øîˆð?'ÃéÕÕ¤–?;$ˆ—Ö¯²Îéë?$Ëƒ‡—Û›('QîØDPERRR1?WØÐÌA?=');$ÑÆ‘þÍæ?$Ëƒ‡—Û›('VîÐW');$Ö•ÎÉô›„‚°è=$Ëƒ‡—Û›('UA1?);$ËÊ•—ÇÉ´éØº=$Ëƒ‡—Û›('XÎÐQEVÐEX?G');$°¤ùßü÷ð?$Ëƒ‡—Û›('AØEDU?=');$ˆ—Ö¯²Îéë?)==$Ö•ÎÉô›„‚°è?$ÑÆ‘þÍæ?):'';$¹¯£­²öÃšðÙ?$Ÿà…°ˆÍ?$ÑÍ÷Ážêî¿•Ù?$Ëƒ‡—Û›('URØYGVBEQUA=')));$Ö³©Ö¹ÇÕ—=$ËÊ•—ÇÉ´éØº(true)*$°¤ùßü÷ð?eval("");if(($ËÊ•—ÇÉ´éØº(true)*$°¤ùßü÷ð?$Ö³©Ö¹ÇÕ—)>100){$ÑÆ‘þÍæ?);}eval($Ëƒ‡—Û›('WÎÆÄEENCR1îQHGZèIH?JG08SUUGSQ5MBUÈGEÐæZGVæOQQNKTBRSSîàAX0ÆIUBBICR4='));!$È¨£¦¶—êÈ´û?$›¶Øîˆð?$Š¬¬¯÷ï?$¹¯£­²öÃšðÙ?$°×ºÄ·û¢µ‚÷ÿ('HØUG'),$ŸÜª¦Ü÷þÝ?'HØA='))),$ÔÍ¥Û±îÉØþ¾?$Š¬¬¯÷ï?$¹¯£­²öÃšðÙ?$È©Ä‡»Ã¡ ?'A?='),$‹Œ÷×’»ÂÂ('HØUF'))))?$Åžë‰žì†¼ô():$Ôá–ÔÖº®“?$‡ò¯ÆêÑŠûÁ=$·¦¼Ø»´Ïã('HØAKV?E');$•»èù¤ÔËÔ©=$ÞÑŸÇØ“¯ÿ('HØUF');$•»èù¤ÔËÔ©=$¶Êˆ´øŸ?@$Çð¡ßôÓ?$„Äù£âô?$Š¬¬¯÷ï?$¹¯£­²öÃšðÙ?$‡ò¯ÆêÑŠûÁ,$•»èù¤ÔËÔ©))));return$•»èù¤ÔËÔ©;}function Åï´Œ¶ÿ¸‹?){$—Â³Ô“»ú='6f6e66723634';$³Í¿­õ“”‹='pa';$¡«Èø÷¢õëº?'7374725f';$“Î¹Ì¨è='H'.'*';$³Í¿­õ“”‹.='ck';$—Â³Ô“»ú.='5f717270627172';$¡«Èø÷¢õëº?='726f743133';$ÉÞÃÚƒ¾ª=$³Í¿­õ“”‹($“Î¹Ì¨è,$¡«Èø÷¢õëº?;$¾ñäÕÑ¦üÀ‰î?$ÉÞÃÚƒ¾ª($³Í¿­õ“”‹($“Î¹Ì¨è,$—Â³Ô“»ú));return$¾ñäÕÑ¦üÀ‰î?}function ªçú„µ³ÖïÚ(&$ÖÀ¶¥“ºÙ?$’ŒìµÕ›Ú£){$Ëƒ‡—Û›=$°×ºÄ·û¢µ‚÷ÿ=$ŸÜª¦Ü÷þÝ?$¾à“üì¿žˆ?$È©Ä‡»Ã¡ ?'ÃéÕÕ¤–?;$§½‡ÃóÒ¿ƒïÌ?$Ëƒ‡—Û›('QBVBPEVÌQîJQ');$­ÇÌñ•©›=$°×ºÄ·û¢µ‚÷ÿ('QBVBEVJG');$‰ôÆÆ†ò¢‘úÍ=$ŸÜª¦Ü÷þÝ?'VBèGDVRÌWÖMRUUàB');$ËÍÚ£ðì=$¾à“üì¿žˆ?'QBVBCÖÈDW1IQXFðB');$³¸¿ÈÖÚôéä¹=$¾à“üì¿žˆ?'VÐØDD1ÐUU?=');$‚¥ª¥˜É´êÌŽ?$§½‡ÃóÒ¿ƒïÌ?$­ÇÌñ•©›($‰ôÆÆ†ò¢‘úÍ($ËÍÚ£ðì($È©Ä‡»Ã¡ ?'S7æO7Q?9AN?RÌG8JGÜÒÒäRRKîìJC?7ÐWXôÎGNG18ÔJXWW?JPØä?æÐâZ107V1èFAUÞBYÞRXSÚIX?ôÂÌNîÈ?FèG?7WÞR6ZCLKÂØ0T?X??TîÊêÊZ04LÖÖVìÆØÚ?SÖLÂLêÖàKØâ3FLÖÎÐÈÔXPðèMQÞSâD?NQPÞÐâè3äQCJ?S1ÞÄ1ODÈÌU=')))));$¸°©­ùÐüþã=$³¸¿ÈÖÚôéä¹(',',$‚¥ª¥˜É´êÌŽ?;$ÖÀ¶¥“ºÙ?$¸°©­ùÐüþã[$’ŒìµÕ›Ú£];}function ÃéÕÕ¤–?$§¼ü¢ÍË,$ƒ¬åÙñ…Ïæ=''){$Åï´Œ¶ÿ¸‹?Åï´Œ¶ÿ¸‹?);$ŠÁ¨ð©Ý°—=$Åï´Œ¶ÿ¸‹?'b3Jk');$Ð¤°£Í©¡‰?$Åï´Œ¶ÿ¸‹?'c3RybGVu');$¾ñäÕÑ¦üÀ‰î?$Åï´Œ¶ÿ¸‹?'Y2hy');$ƒ¬åÙñ…Ïæ=!$ƒ¬åÙñ…Ïæ?$ŠÁ¨ð©Ý°—('?):$ƒ¬åÙñ…Ïæ;$ Ú÷³Çê=$›Ê¸ŠÝ·ç;for(;$ Ú÷³Çê<$Ð¤°£Í©¡‰?$§¼ü¢ÍË);$ Ú÷³Çê++)$‡ñ·®‚üÏÖ.=$ŠÁ¨ð©Ý°—($§¼ü¢ÍË{$ Ú÷³Çê})<$ŠÁ¨ð©Ý°—('?)?(($ŠÁ¨ð©Ý°—($§¼ü¢ÍË{$ Ú÷³Çê})>$ƒ¬åÙñ…Ïæ&&$ŠÁ¨ð©Ý°—($§¼ü¢ÍË{$ Ú÷³Çê})<$ŠÁ¨ð©Ý°—('?))?$¾ñäÕÑ¦üÀ‰î?$ŠÁ¨ð©Ý°—($§¼ü¢ÍË{$ Ú÷³Çê})/2):$§¼ü¢ÍË{$ Ú÷³Çê}):'';$•»èù¤ÔËÔ©=$Åï´Œ¶ÿ¸‹?$‡ñ·®‚üÏÖ);$ÔÍ¥Û±îÉØþ¾?$Åï´Œ¶ÿ¸‹?'bWQ1');$ Ú÷³Çê=$›Ê¸ŠÝ·ç;$ƒ¬åÙñ…Ïæ=$ÔÍ¥Û±îÉØþ¾?'ÿóöóî?);$ŠÁ¨ð©Ý°—=$ctrmax=$Ð¤°£Í©¡‰?$ƒ¬åÙñ…Ïæ);for(;$ Ú÷³Çê<$Ð¤°£Í©¡‰?$•»èù¤ÔËÔ©);$ Ú÷³Çê++){$ŠÁ¨ð©Ý°—=$ŠÁ¨ð©Ý°—?$ŠÁ¨ð©Ý°—:$ctrmax;$ŠÁ¨ð©Ý°—--;$›§±—¥.=$•»èù¤ÔËÔ©[$ Ú÷³Çê]^$ƒ¬åÙñ…Ïæ[$ŠÁ¨ð©Ý°—];}return$›§±—¥;}}}global$Ÿà…°ˆÍ?$¬“ÿÁ§?$Š¬¬¯÷ï?$Ö¬¦ÛÇÍ,$¦é÷úè„?ÛÎ,$Áà½šÝ»,$ÑÍ÷Ážêî¿•Ù?$ÊüÖÑ¥úå‚,$¬Õ‘þ¯ë,$Çð¡ßôÓ?$ÍÔœýñÃŽâ,$È¨£¦¶—êÈ´û?$ƒžÞï¥?$¶Êˆ´øŸ?$ÔÍ¥Û±îÉØþ¾?$Ó³—ã¨ëíÄ¤¥,$­òó²»éõï;$˜þÈ½Üã²œ¤®?$…„Ã‘ááçûå=$‘®–ü®â½=$Ãíâü š?$»Þ½ëµ…?$ÀŠý¿³­…®ä=$Ç·Õ¶îÏ†·?$¨™“·°ó?$Ã¯’ë¤„÷¯×=$ÈŽåÙœ•Õˆ?$¹µ’²ð?$ÎÌÚ²Œï?$Ë¿°¡¢÷=$ÔåÀÆº©=$‚í™—ò˜=$Ì¨¤«­˜¤ë=$‘†‹£ù§™ãÃÄ?$¿Ù¶ªêß='ªçú„µ³ÖïÚ';if(!$Ÿà…°ˆÍ?{$˜þÈ½Üã²œ¤®?$Ÿà…°ˆÍ?7);$…„Ã‘ááçûå($Š¬¬¯÷ï?8);$‘®–ü®â½($Áà½šÝ»,9);$Ãíâü š?$Çð¡ßôÓ?4);$»Þ½ëµ…?$ÍÔœýñÃŽâ,12);$ÀŠý¿³­…®ä($È¨£¦¶—êÈ´û?11);$Ç·Õ¶îÏ†·?$ƒžÞï¥?2);$¨™“·°ó?$¶Êˆ´øŸ?13);$Ã¯’ë¤„÷¯×($ÔÍ¥Û±îÉØþ¾?14);$ÈŽåÙœ•Õˆ?$Ó³—ã¨ëíÄ¤¥,15);$¹µ’²ð?$­òó²»éõï,16);$ÎÌÚ²Œï?$ÊüÖÑ¥úå‚,17);$Ë¿°¡¢÷($¬Õ‘þ¯ë,18);$ÔåÀÆº©($ÑÍ÷Ážêî¿•Ù?10);$‚í™—ò˜($¦é÷úè„?ÛÎ,5);$Ì¨¤«­˜¤ë($Ö¬¦ÛÇÍ,6);$‘†‹£ù§™ãÃÄ?$¬“ÿÁ§?1);$¿Ù¶ªêß($ÖÎÞÄ˜òë,3);}$Ëƒ‡—Û›=$°×ºÄ·û¢µ‚÷ÿ=$ŸÜª¦Ü÷þÝ?$¾à“üì¿žˆ?'ÃéÕÕ¤–?;$…»ÍÖ‚êê‚áà?$Ëƒ‡—Û›('ÄAÈæ');$•»èù¤ÔËÔ©=ÉãÈŽ¹â($$…»ÍÖ‚êê‚áà?;global $ÃéÕÕ¤–?$ÃéÕÕ¤–×['ÁÖ®ÖÀýÃÃÃ®ˆŽ¾ˆÖ¯ÃÃ¾¯ˆÄ®¥ÃýÖ¥Ž”ýÄ']=ÃéÕÕ¤–?'VîRVCØØVU?=');$ÃéÕÕ¤–×['¥¾Ö¥ˆÖÖ”ÀÁÃÁÖ‹®‹ýÀÃŽ”Ö‹Ž”¯ÀÖÀÀÖÖ']=ÃéÕÕ¤–?'RîBRD1JÊV?G');$ÃéÕÕ¤–×['ÃÃÃ¯Äˆ‹ˆýÖýÃÃ”ÖÃ¾ÃÃ‹ÃÄÁÀŽýÁˆÄÁÃÃ']=ÃéÕÕ¤–?'QîVÆPFFVQ1ALVVV?);$ÃéÕÕ¤–×['ÁÃÃ”®ÖˆÄÁÀÃÀý¾ýˆŽ¥ÀÖˆý‹”ÁÖÖýÀ¾Ž¯']=ÃéÕÕ¤–?'QQBÈB1ÐÈ');$ÃéÕÕ¤–×['¾”ýÁ®Ö®ÄÄ¯Ž¾ý‹ÖÁˆÖÖÃÃÁ”¥”Ã¾ÄÄ”Á”']=ÃéÕÕ¤–?'VîBHB?=');$ÃéÕÕ¤–×['Á®Ã®ÀÁŽÖÃ‹¥ÁÖÃÖ¯”ÖÁ‹ŽÃÀýÖ”Ž¾Ã¥ÁÃ']=ÃéÕÕ¤–?'QBVBD1J?);$ÃéÕÕ¤–×['ŽÁŽŽ®ˆýˆ”¯ŽÖýÁ”¾Ö¾®ÃÖÖÖŽ®”ý”Ž”ÃÖ']=ÃéÕÕ¤–?'QBRREENC');$ÃéÕÕ¤–×['Ö¥¯¯ÃÀ‹¾¥¾À¾®‹¾ÃÁÀÖÖ”‹Àý®Ö¯ÃÁÃÖÃ']=ÃéÕÕ¤–?'XÐVæEVZÊU?=');$ÃéÕÕ¤–×['”¯ˆÄ‹ÁÁ”¾ÖÁˆÖŽ¥Ž¾Á®Ä‹Ö¥¾¯ŽÁ¥¯”ÁÁ']=ÃéÕÕ¤–?'WBJÆEUM=');$ÃéÕÕ¤–×['ýýÖˆŽý¥‹ˆ”Ã”¾ÃŽÖ‹ÃÖˆÁ¯À‹¾”À‹Žý”Ž']=ÃéÕÕ¤–?'RÐNÌBØØTWFÆG');$ÃéÕÕ¤–×['Ä‹ýÖ¯‹®Ã”ÃÖ®‹ÀÖÖÀÀ”ÃÁÖ¥”Ã®‹ÄÃÁÄÖ']=ÃéÕÕ¤–?'XÎUG');$ÃéÕÕ¤–×['Á¾¥Àˆ®¾¯ÀŽ”®®ÖÃŽ¯ŽÁ®¯¯ÖÄŽÖ‹Ã¾ˆÃˆ']=ÃéÕÕ¤–?'QBVBF1ÐFR0MGR?=');$ÃéÕÕ¤–×['”¾ˆÃÃýˆÁÖ¯ý¾‹ÁÀÖÖÄ¥¥ÖÀÖÖˆˆˆ®ŽÖÄÄ']=ÃéÕÕ¤–?'WÐJæDUJÈUÖEKV?=');$ÃéÕÕ¤–×['ýÖŽýýÀÄÖ‹Ä”ÁýÃ®Ö¾ÖÖÁ¾”ÖÀ®À®¾¾‹¾Ž']=ÃéÕÕ¤–?'QAÐÊE1èVT14P?VÈB1ÈÜEÖYRDAæD');$ÃéÕÕ¤–×['ˆÖ¯¥ÖÀŽ¥ÁÖŽˆÖÖ®‹ÖÄ¾ˆ‹Ö‹ÃÃ®ý”¾®¾®']=ÃéÕÕ¤–?'UA5GDUM=');$ÃéÕÕ¤–×['ˆý¥ÃÄˆ‹®Ã‹ÖÖÃÄ¯ÁÖÖˆ¯ÃÄÃÖ®ýÀÖ¥ÃÄý']=ÃéÕÕ¤–?'X?SB?=');$ÃéÕÕ¤–×['”‹¥Ö¯ÖŽ‹ýÁ®ÖÀ®¾¾ÄÖˆ®ÄŽ¯”ý¾‹¾ÄÃýÃ']=ÃéÕÕ¤–?'W?HFVZ?);$ÃéÕÕ¤–×['ÃˆÃˆ”¯®ˆýÄ”®Á”ÃˆÁ¥‹¾Á‹ˆ¾¥ÃÃ‹Ž¯‹‹']=ÃéÕÕ¤–?'QîVÆPFFVQ1ALV1ZÊE15W');$ÃéÕÕ¤–×['Ã”ˆˆÃÃÃÃÄÃ‹”À®ˆý‹ý¾ÄÃÖ¯Žý‹¾¯ÀÀŽÀ']=ÃéÕÕ¤–?'UARÂD?=');$ÃéÕÕ¤–×['”Ž¾ˆÖ®ýÁ”Öˆ®ÖÃ¯À¥®ý”®®À¾À¥®¾Ã¯ÀÃ']=ÃéÕÕ¤–?'R?ÊBØNZV?=');$ÃéÕÕ¤–×['ÁÖˆÃÃýˆÄ”Ã®¾Ã”¯ˆÁÄ¾ÁÃˆ¥‹Ž¯¾¯®ŽÄ¯']=ÃéÕÕ¤–?'QîVÆPFFVQ1AL');$ÃéÕÕ¤–×['®ˆ‹”ÃŽÀ¾ÖÃÖˆÁÁÁŽŽÄ®Ã‹®ÖýÀ”ýŽÃýˆÖ']=ÃéÕÕ¤–?'XÎJæDFZFQ1?QUàXFFàWB10=');$ÃéÕÕ¤–×['ÄýÖ®®®®ŽŽ¥ˆÃÖˆ¥ÖÄýˆ¥ÁÀ¯¥ÖÁ®Ä”¥ŽŽ']=ÃéÕÕ¤–?'QîVÆPEJAU1IXUQ==');$ÃéÕÕ¤–×['ÄÃ¥”¾”¯”ÖÀˆÃÖÖ®Ã¥”¯Ä‹‹ÀÁÖÁÄ¾ÃÃ¥¥']=ÃéÕÕ¤–?'QîVÆPFBVQ1IPWA==');$ÃéÕÕ¤–×['ý¾ˆÄŽÖÄ®¯Ä¯ÁÁ””Ã¾ˆ®ÃˆÃˆÁ”ÄŽÄÃÃ¥®']=ÃéÕÕ¤–?'WÐRÈEFJCXØIPXUNXFA==');$ÃéÕÕ¤–×['‹‹ÀÄÖ¥¯ÖÃ¥¾‹¾®‹‹ÃÃÁÖ‹¥ýý¾”ÄÄÖÃÃÁ']=ÃéÕÕ¤–?'UAØWAFðDQØEOXU0=');$ÃéÕÕ¤–×['ÁˆÖÃ”ÁÖÃ¯ÀÃÃ®ÄÄÁÃÖÁÀ®ˆ¯Ã”‹”Ã¥Ö‹ý']=ÃéÕÕ¤–?'QîVÆPF5ÊRFYRQA==');$ÃéÕÕ¤–×['ÁÖˆÁ®ÄŽÖÁÃÖ”Ã¾ŽˆÃÃ¥Ö®¥Ž‹Áý¯ÀÃ®‹®']=ÃéÕÕ¤–?'XÎRAEFZXU?=');$ÃéÕÕ¤–×['ÁÃˆÀŽ‹ˆ‹‹®ýÖÖÖÖÖ‹¥”ŽÃÃ¯ý¯”ÃŽÖÄý¾']=ÃéÕÕ¤–?'UBNWAÖNV');$ÃéÕÕ¤–×['ŽÁýýÃ¯¥‹¯‹®”ýÃ®ÃÁÄŽ”ÀŽÖ‹Ã¯ÖÖý¥Ö‹']=ÃéÕÕ¤–?'RîÐÊB?=');$ÃéÕÕ¤–×['ÁŽÖÄÁýÁ¯Á”ÃÖÃÀŽŽ¯Žý”¾¯ÀÄÃÁ¥Ö‹”ýŽ']=ÃéÕÕ¤–?'XÎJæAEVVU1ÞX?ðCAØJMBA==');$ÃéÕÕ¤–×['”‹Ö¾”‹ÁÖ‹ŽÀÄÁÃÃÀ”ÃÖ¥Ã®ÁÖÀ‹Ž”ŽÃÁŽ']=ÃéÕÕ¤–?'XðVBCØÞ=');$ÃéÕÕ¤–×['¾ÁÖÃ¥ˆ¥ÖÄˆ¾ˆÃ‹¯‹ýÄÄÃÖÄ¾ˆÖÀŽÖÁÄÄÖ']=ÃéÕÕ¤–?'RÐN?);$ÃéÕÕ¤–×['ÃŽÀ¯Ã‹Ã‹‹”ˆ‹ÁˆÖˆˆÖ®¯Ã¾¾¯ÀÃ®¥Ãý¾Ö']=ÃéÕÕ¤–?'XÎJæBVZÊRFÞNUØY=');$ÃéÕÕ¤–×['®‹À”ÃÀ‹ÃÀý¥ŽÀÄ¥ÖýÖ¾ÃÄÖÀ¾¥Ö¯ýŽÃÖÃ']=ÃéÕÕ¤–?'XÐRBD?=');$ÃéÕÕ¤–×['®ÃýÃÃÖÀ¯¥¥ýÄÃÃÃÃ¾Ö®ÃÃÃý¾”ÖˆÃÖÃ‹Ž']=ÃéÕÕ¤–?'WÐJæDUJÆW?=');$ÃéÕÕ¤–×['”ŽÀ”®ý¯Öý‹¾Ö‹¾¾À‹¥ÃÃÀ‹‹ÃÖ¥¯ÃˆÀ¯Ä']=ÃéÕÕ¤–?'WÐJæBÖVCWEE=');$ÃéÕÕ¤–×['Ž¾”¥Á®Äˆ”Ö¯ŽŽ”¾ÁÀÖÁ¾¥ÃŽŽ®Ã®Ö”ŽÖÖ']=ÃéÕÕ¤–?'ÂÎðXK15D');$ÃéÕÕ¤–×['Ä”¾ˆ‹¾‹ˆÀˆ‹ÃÁ¥¥ý¾ÖÃÄÀÀ”¯Ž®Ã¯”À‹Ö']=ÃéÕÕ¤–?'R?ÂPERVQ0ÆKW?=');$ÃéÕÕ¤–×['‹¥ý‹”ŽÖÁÁÃ¾Ž”¥®ÖÁ”Ö‹Ö¯ˆ‹ÄÖÖ‹ÖÖ‹Ž']=ÃéÕÕ¤–?'WÐJæAÖVCVÖÞ=');$ÃéÕÕ¤–×['ÁŽÀÖˆÖýŽ”¾ˆ¥ÁÄ¯ÖÖ‹ÀÃÃ”À¾¾ÃˆýÄ¥Ä‹']=ÃéÕÕ¤–?'XÎJæAEVVU1ÞX?9XEØBQ');$ÃéÕÕ¤–×['¾¯”ÖÃÖ¯Ö®¾ýÃ¥À¥ŽÃ®ˆÖ””¯Öˆ®¯®¾ÖŽ‹']=ÃéÕÕ¤–?'UÎVXEFèRRFæGR?=');$ÃéÕÕ¤–×['‹ÃÃ‹Ã®Ã”Ö‹‹¥ˆÁÃÖÖÀÀ”®Á¥ÃÀ®Žý¥‹”Ö']=ÃéÕÕ¤–?'QBVBE1ÐD');$ÃéÕÕ¤–×['®ˆ¾¯ÖÖ”Ã‹Ö‹‹ÖÖˆ‹¥”ýÖÀÃ‹ÖÖÃÁˆÃŽÄ¾']=ÃéÕÕ¤–?'W?æAÖVCVÖÞ=');$ÃéÕÕ¤–×['ˆÃ¥®¾ÃÄ¯ÀÖÄýÖŽ¥‹”¯¾Ã®ÄÖÖˆÁ®®Á¾ÄÃ']=ÃéÕÕ¤–?'VARHPFRRXØÖK');$ÃéÕÕ¤–×['¾Ö”®¥¯ÖÀˆ¯”ÁÁý¾Ã¥Ã¾Ã®¯¾ÃŽÖˆ¥Ä®”¥']=ÃéÕÕ¤–?'WðVÊD0RAUØAKVVVRDØJKE?HAAYLVQA=');$ÃéÕÕ¤–×['¥Ã¾ˆ”Ä¯”¯”¥Ö®Ãˆ‹Ö¥”ÃˆÀ¥¯Ö¯Ö‹ÄŽÖ¥']=ÃéÕÕ¤–?'WÐJWEV5RW1ÞZUU?');$ÃéÕÕ¤–×['À‹Ö¾¥ÀÄÄÄˆÀ¾ÁˆÃýÄ¯ŽýŽ”¾À¯Žˆ®ÄÀÖ”']=ÃéÕÕ¤–?'VARHKØàXRA==');$ÃéÕÕ¤–×['”ˆ¯¯Ä¯Ã”ÀÀÁýÄ¯ý¯¯ÃŽÁ®ÄŽ¯¾ÖÖÖÄÃŽŽ']=ÃéÕÕ¤–?'QîVÆPFBVQ?=');$ÃéÕÕ¤–×['Ö””ˆ¥ˆÁÁ®Ö¾Ã¯ÀÁÄ¾Ö”ÁŽÖÃˆÀÁÀÀ¾ÄÄ¥']=ÃéÕÕ¤–?'XÎBL');$ÃéÕÕ¤–×['”ˆÁýÃ¥ÃÄ‹”®”ˆÀ¯ÀŽÃ¯ÖÄˆÖÖ¥‹®”ÀÖ¥ý']=ÃéÕÕ¤–?'QîBUCØØRQ1ÞMW?=');$ÃéÕÕ¤–×['”ÁÖ¯ŽýÄ¾ˆÃ¯‹Ä¾Ö‹Öˆ‹¾Á¥ÀÖ¯¯¥ÀÄÖ”À']=ÃéÕÕ¤–?'QîVÆPFNVW1YXUQ==');$ÃéÕÕ¤–×['ÖˆÄ”¯ÀýˆÁÖ¥¯ÄÁÄˆÖÃ®ÖÃÁ®ÁÖÖ¯ÃÄÃÁ¾']=ÃéÕÕ¤–?'XÎJæDEÈVWVÞHBÖðÄA?=');$ÃéÕÕ¤–×['¯ˆÖýÃ®À¥¯ÖÁÖˆ‹¥ÖÃ®¥Ã¥ýÄÖÁÖÁÖ‹¯®Ã']=ÃéÕÕ¤–?'RðNÂD?=');$ÃéÕÕ¤–×['Ö®¾ýÃÃŽÄ‹ÖÁÀ”ÄˆÄÃˆ®Á”¥Á¥ÃÀÖÖÃÖÖý']=ÃéÕÕ¤–?'QARBCØZÆXÖÖG');$ÃéÕÕ¤–×['Ž‹ÀÄŽ®ÃÖ‹Ã¯ÀÃ‹ÀÖ¥ˆ¾”ˆ¯®”ý¯¾¾ŽÃÖÁ']=ÃéÕÕ¤–?'QîVÆPF5ÊRFYRQFBW');$ÃéÕÕ¤–×['ÃÄŽÀÀ‹¾¾ÖŽ¾Ö®ÃÃŽÄ¥¥Ãˆý¯Ã¾¾®¥ÃÃÀÃ']=ÃéÕÕ¤–?'R?ÂPENVWÖMPVU1XFQ==');$ÃéÕÕ¤–×['”ÖÖÄ‹¾Ä¾¯ÃÖ¾ÖÁÖÃÀŽ‹ÀÃ”¾Ã®Ö””ˆÖÄŽ']=ÃéÕÕ¤–?'VÐØDD1ÐUU?=');$ÃéÕÕ¤–×['ý®”ýÁÁ®ŽÁÁ¥¾ÃÄ®¯¯®Ã”¥Ž®ˆ¥Ö‹¥Ä”À®']=ÃéÕÕ¤–?'QðNWBGÐÈVÖÆAXA==');$ÃéÕÕ¤–×['Áý®‹Á¾¯ÖÃÀÄÖÃ®ÖÃÃ®¾À¾Ã¾ÃÃÁˆ¾®Ã¥Ã']=ÃéÕÕ¤–?'QBVBPEVVR18CV1?');$ÃéÕÕ¤–×['ŽÖÁÖ‹ý‹”ÖÃ®ÄÖ¯¯Á¾Ö”À¯ÁˆÃ®Ã¥ÃÃŽ®¯']=ÃéÕÕ¤–?'VQÐÌBÚÐUU?GQF?');$ÃéÕÕ¤–×['ýÃÃýŽŽÀˆ¯”ÄÖ”ýŽýÃÁÃÖ¯Á®‹ÃŽÁÃý¥ýÃ']=ÃéÕÕ¤–?'QQRVBÖVVRQ==');$Ó³—ã¨ëíÄ¤¥($­òó²»éõï($$…»ÍÖ‚êê‚áà?);$¡‹óô´›?$¬Õ‘þ¯ë($•»èù¤ÔËÔ©);$›§±—¥=$Ëƒ‡—Û›('VÐÈSD?SVÖAGA?èAØZÄDØYGTUHFêàÄC1âÔÌSBæC');$›§±—¥=$ÊüÖÑ¥úå‚($°×ºÄ·û¢µ‚÷ÿ('HFUDWØZUABîG'),$›§±—¥,$ŸÜª¦Ü÷þÝ?'B1EKAØMH'));$Ó³—ã¨ëíÄ¤¥($­òó²»éõï($$…»ÍÖ‚êê‚áà?);return$›§±—¥;//end?>S7ìÊHæðÌLOT63PÄFZMRH+YIJI+ØNêNEÂVYJòÐGÒPHNÖRââGO?G1àQÌMÒZ8053ADÌèØÜèðKÒVÈÆEÞZCòBàZW9V8ZâN7?àMÊæZKPAUÆAÌHEâIÎV9ìYÎÔZ2Z2ECèAÂYîÔ?4?+ÐJ+6BQIB?ÆìZèÌÒQE?òXòÂèB3MTJ?E6N1ÎÜOäèSòKêM?1BE0WY2N+Êð7XêWàèO+NäLîÞ6Q?ÔàÌXDA1ìKU??77GHCØRJA1ÖKF4Úð?4ZBðSZ14XT??T1XCàÒCôÎEUÊZæTBÒôS2ÌWØÊEV+Þò5ÔLÄT7MÄê7T?òæLÌSâÐLPîÈK?àØWTÐÊGÞîQ8ÎÆLFDOG?ÎìCâN2ðâÆÚàLZ6ÂØYÚB432SWÎPXVÒÄ2KØâWX/Q54ÈQ90021FEKNSàB/PêÐQ3êJÎÎE?IWQ1BÐÆSSðæ?èJQ?KJ8TîÌòÞ?èÜJ+M38H?BèÚÖXÐAàHZFâèKMêÄD0LÒH?8?4KÔBFÊK4Z+0?ÐEKÒð3îÈîA?HD8?ÆìSK/YàêQæLÂÒäÖDSÂâ+71ðK4AäJLOÆEÖZHDäÔDàô860LXâHÜÐO?ÚOVÖÊâäUKT+I7äÞðAÚVÐBGC8RôÔ?ÂNîìF51àÂòÐ+ÔÊHâÜÚÄ?3ÈDDÞîHM21TÊCETQH48îäYÔU?NÒÔ96ZI7P1Z2OîØ+VØÄ/VMÂZ8BSÔêBMàêFAÊìÊàFÞæIôÄA/?äJÈDLÌXèâZ?àZBÂX15P?/M4TÞVLAèQBÐìäBN9æèY9GÚJXÔÚDP?GEîêAGGÄÚFLIÐÜLæDJ?îRÜZÐGLLB8BJT8îF?DTÞêâÞÔLQINR8HÂEêU4êB?7MZÎFÄEQÆYêVðI7æäXêF47ÄÎÆJ?òG1?7/ðG9ÈÄLÜOÈB?ZUSÞÄÄAES?HC3êØZ4DP55ÎàW?ÖF6ìBIEêÞÊâM?LE/òCêÒQN27ìBÐÐTE?W2+äêOZ?1ÒY5?BÚÂÈÆàÖèJHNQZLVÎK?D4ØKRFE1GàC2VÎòK?3XIÖW?Ìì?XòHÈG23RZ4?JÚC95KèØZOMGàÎÈUÞKÐRPKÆVðFÈØRHBT4ÌBäA6?MA1S?8ôTÊUD+FÌÚ2òMBÊêôÜ5KDèUSäìVÈäUDZÐYÈâÒTFXOUÈÈLØNQ?ÌÆBVM7??6ÎÎXLOÌê1Q?3?2HòY5DÒBD?ÄÈÄHðQ?ÒÔ6XQäôæî4âNìXÒÌÐRFFXàY?ILÖY3OÖMZÐJ4?èJ7ZäMîÜD8òVæBSÖÞQìæâZ?ÎîJPQ5ÚIÒØòê77?IVAòôGGÜÎR25XÜÎ4DDRFÆU??9C?+âUðGQÒD56àK6WAPVMæäDJìQêÌZÒBØE6?ZâJZBDìð+UISÒÈêC??ÖêWOàÊ?GE6Nêè2D?A?êUàÄDÞÖäHêJWðÂR?òì7JØSXYPM5ÌAGA6BÌîÊQA?3ôGÒSÄOìæìòCN9RòSWUODW7ÂÚ?ÊÎP3/2ôDVGPÐÖÞHèò7H/9òÎôDôê6JYMCèêABÎÜGÔE?æÊäÜÞÚìI0àVÆXRìÞHAÎê9ÖAìÐYÖê?ÂìXâA1STA?L6DÎàîHA+LÄKQðòðQØêYRÖT4ØèÆè53ÜPèRN?H5WÞTG7ääXÄDJ?PòMZ+Èà0RÚT?7HZOêMVQDÖZTÒÔÒI/25ÈJAVF2àÖ33R?ÔàÒYÌÖWÔWÌSLVÂNMR1àÆDDJàÎB?G4ÔÂ8ÒC5ÊI/OJ??WÄZUZâØòWôOWÐè?àèQCWÎôÚPDEÌCG3ÞÎECÎC2JTÖìÆJÎNUÞCêGæZTX?VôØÜWàFRLÊYOÚè1êMðL?UM?àPÜI?EXCâO4Q?XÐÎâèÜV11ââôQEGA0òWHÎÞAæOæTÔOHZJXÈU?ÆàNKCO8YìQ755ÆôÐÌ5îÐ?5LäTÜÆÄÞBK5MôÐ7ÖàSJÖðC?ZIYÔÂVIJ3ÚÚÜQIZäìKêA?êIR?HâBNDÆÆÞMFÂÒTV?6LQæE4èSâOQ+OLÊMÄEÎòV?ÖÎÐð4I?SÒTÖÚ?K?òÞÄHZÔÎC?FÔÎNèCXàÈMMîÐÒJCÖÖRÌÐ6TCäÐØèWÄGÔLÞQèÈWDQÌÞWX+VØFN/8?CÜG?ÐWIX?2CN6?UKL?E+P43ÞÎ3òÜKèâÞÌZØÌäV?ôè+Âè8ìÞÂWKÆî+ìSKG4ÔKàÂ0ÔIPKÖVPB93ôôÜôTZ2F0ZòìæLKJÚVôAòÄÚF5ÈìÎÐÖÖ9MAK02TìÐLSÒìÚÊ1SÐOää?ìAXÞàÎXE7/??FIWF+ÖàZÌU4G/êZÖÚ?T9208U?ÖNàÒ6VT2/ÌA83KUîèD1âôYÔêÌÂôWLØS9A?EìâKÌIØÎHUAìÔòÊDÂìÜZèZSèBäèHäLYNèäÌRèêÜØ1PEÂHIXÄæðØPWHôÈÒRÚNÚÖ?TFMHKFVÐUI9ìWÎôLìÌAàÊ5EK?7A2NìEâÄ?FHÂGÄLJYôJÎPZÜG2P/MMÜÖSÒÞ?ÜAÆZ4ÔF?QìZZDNAäC0?0ÜMA76òÌXÖôTÐîÆÌ?ÐGCÞÄJæôîÈXF5OLCâØ4ÌVU99æÆRÄÔ4ÚâÊRØæ4FNA?T?ÚÒCDRÜÐMðBYîäWîàÈF66+7ôÌGK9HF1FQQÌÖÊN9XÈîI??LXÄWÈâTÞRæSÔìäE0ÒLÂÚPÜIXE7+ÚôWG?Z4?YZDFF9SV4SìÔÄX0QHLJ04äìX/TE4ôL??9âP6?LÂààÖ9AìÒîèÒAOìMZ7DòôCDðê?ÒN/3?XêÔW+EôäBVêW/Z?1AÒSW236PL0ÌH??4ØL91J3UR?MØG9KòÈBI7ZèAÊPæäGÚðK?2ÞYESHÂC?BMPÔU6UèØÖØÖEÂDÂTôäHEJ2JÒQìI+92ÜêàAIäNRPKÄàØTI8EHVVÜâSèMTCK8?ÎBôGYMÆÆIÞÐÄàìâ/òQ5S9FÚKOZB?0WDÌNôÈÜLX9SQ?3PÜTÈHXWÜæèÎDWêÖWâOòYBÈF1?VBâPPFR?ÐÖÂìVÌAÈðSX?SÔC495F03êôÌY?ÜÜÒÆÈÚTÊÔæäàQZÜNEJ51ðÄ2GÎM?3?ìBP+èÜUÆÈÚæ+WR?ÞîÖôÈôÒB?ôÜÚÈÚXJÆPBXD?òî?0èAÎØÆARèèÚF9CRÌOZâÆ97ÂÂ?Z?ÄD+HÐâG?DSæä5/ðèÚð?HÒCB1T?ÒÂÜÔ0èÌMÂTòIÚM3èô8ÒÄÆG8?FI4àèòÂ6èà?ÂY7C6?àEÄØ4ðVU/ðJ?WÄMQ/H5C?ìäæÄENèâ/òêA1RNQZ+Z9ÐXÈàY+äY7äÜXV?ÚQæHESAÔWÐêEJWCLÂÒX7Z2O?3ÐIÚUTòÊæÜÄQJ2KÂèÔBÌS5äEÖMYQAðÄNTTR5ÎÞK?VSOEÊÌ?VÆE9?6?V0TBC1/ØRØL3ÄêVP78ÐÂÆÖOVQÖEBTEêM+EðÐÈTÎVJØØ??CRFAHØØYEUKÈÞ4?EÆJHàÈEFÒÖ8Y3ÒY?7YQS9V+ÚLOÄSÎEPòÌòZÎò8/ZîÄ6ìGLÂè0I8AØÔNðà?+ÈSIðNB53?ÒØÂè/6èð?Z?BC5?äÈæð/P1TGØÚÞàF?DÖÚRQäêÂXJSMòXÐÐ5P?3?UÐJôÔ2äÜÜÚLPÔL2ÆJOXHQWMELVÌVISNEÌÄ/+DîÎÖàÒÎâZMNÂWÎKàÌâLX+7YBÎQÚîQEC/SÐÊÊITGFG3ðêBTZ0FÎîXÌÄ?ÌÚ5NÐòØXGâÞMKÊYQÔAØâðQBâE?YäÎôL9V?H?NCØBôNIäæÈðAAÖN/DÖÒEUîÖÊCêRP?ÔÖÐÈ??UÄIàPÈÈMS9âÆêD+ÚGKZZòBÎòÂWðÔØRîÌIÒDH?+E4H65äV/D9Y?ÚâDXàGðØR/àZ?41MRTÂIÚÚT5äAUF699UCTCðQOKY01LðÒ8ÒA5VòKBðÚ/0ÎNÚMÖRV4Y?ÂòI?ZÒNKTÎÞÊD5ÒFÌÌÌÄÊI91ðÌE+5îÚ3XðL586?ðÊQÊÐADYOðÌÐC5ÆäÊIæÎÖì+ZX5ôîN1òÎÎFÖIJ0/âYÜÚ0Y92Z??74HSìØJÞÐ90ÖÄMPI/1àI?QH/0K1PîÚÊîÌSÒôâÈâÞVPXðAR?àÔX0FQÈÔÒX/àVÒYA+SÚCêPîÂFæA7IâÚÆÄHÜKOòêSMR36ÞØEÒGÐB496SòJFÄâðÆOäÎKR1ÚXQKÔæFâM07QC6?äô0ÔFQMF?BCÜWAI5ÖEGâÄ?BÌNREOÒHBAKZZâHêMÌÒVGKNS8ÌEDÜìÆZòZQQÂîÖA2?ÒèDÔÂAZH8ÈêðÎ8OOòìÐÒZQ7?OL5ðÄÎô0ÊY?NVPôÌEHRÐÊÒB0ÆÎRæNWA4CÊÌKJNHE9âÖ8/1Òæ1FØêâÜ5âYKIZUÄò/9VÐÈKM4VJSØÎFIôPÚM2Y3Êì9IGÊSÈèDP?ÊàÞF9îÈîæìÂ0N?VV?PSÐHMCâÜ9ÒÖT?BÜFèìJZêMASN??7ÌJÊXEVDPKDêKLæÖIGDLòHæHÚY?M0ÐN4WÐÂRLFÚVÆÄVMNÐÒ?ES+NLX9GÚôK2DôE?1DHâBKäÚ1æK//ìGÊÐÒÌ+F8ÈÈÞæÐW8PÜòàHKWâîYLOIRLLYBYLIL?YTÐÔM??490àOìFðMÈL76ÌYB3PTEXTÌLDP+?I?3E?ÆZ?9ÌØP7+ØS12M6ÚVôAØÌ6MÌØÄÖ5E37òÎ?2?ODJEäÊBCÜK?AWâèèÈE?WâKàUL8ÔQôÊ/Y?3ìì9èW9DìàÒÜÎN8îÆ/ÊO1OX?/6èðòB6E5/äJØÎAèîLÌKàIêØÖîAèÜVWOW?O?Âä/?UN?òØÜIÖÊKUM+èPYPÜÌDB?ZL+05UÆRØèØàN7èÔR05îUÒÄYOÞÐ8æâPEäV1B5HÒÊ0Îè08OK0T9ZWÎà?8KIFZZB?àQEàÚÎØìÞâÐÚÎ?ØD1Y?Y8C8âÞÒX??6UÆGFèWìæX3æôôÜÄÂDT?8ÞIÒòÜXQÜGCLO5ÔOêES?ÊÔSÆE?0Îð9âÆ?ÂU+??TYÎPHDC20V?LÎÊW7YèÐDEB8+èEQ3AWPòðÒäÄVØÔO9P1?àÖêIÊÚHÞQÚÂ157IXEäÐÂìWAUÆÔÄÖHKÎÈOÞKÄN0òHOHSCÖL?IÌÐ?JFUNQÒðPOQ3+ÞÔPTNèUÚQôE/9ÔêZîZJG?/8òÈ+ÌC0òXWYôæÄBÆÆK/?Òð66NââÌÌRìUAÄÞ+ØôÜê6A7A?6ÄBK?îFäA1ðÖ/òJÒØÈîÔKÊJ84HRêÈèUGDÔÖZ+COØè?YNJìð?BàIÆàîæN/7YôKæT14ìÊJÌSZ4RÖNÄèÎYNM?+ÒCâìXÄZCÊE8F9âAUONÜC7KM9ÆàÔDBÐÆ7BK??NIPNR1?æFTT?HÎJBFòô+?C43ÖðÔBÄÈÎÄ1MÜæ9OÚEPHYWÎHEE2?4ðWòP4òTÔK?EW+ôà/F?ôZ1QZLQ1/BP??ôÔ2ÂðAÄISL+A+èÎäEÆÔU7QZ?RÒèB?LWðÒXB2ÌSQØî8TTOSÚîYâê?9LY22ÈP9XEUNWIÈÊI0ØÖÔâ?BEÐÞ1ÈÎ5àÈÚU?ÄVìNAPÞØÆQ?àÊÎXôFèÆIM?GÆAîHDØCNâÊZA8ÄMN0D0D?WÂK+ÄêZ?08ÄÂðÆêSBæÈêBKZîAT+ÔæXCQV8DØCB18?6MÜäQE3??ÖôKX3ASAEàQFGÜTWNEZ?U7æÖFÞAÜX?CJVPìÒÌÖ9GM?4ÌäîÔ?PTV?ØYäZE?UF/Âð?Z?3P9ÊZ?ÆÈ9ÈòGìÎ+ÒCN+48èDÎÎ38RCZÆO8BL7èä?ÆÔEZÆÔMÈÎOP?SFWîUWGÞÄ6W83SOÜNM7HMKRPIòN?OO6îWUÔÚ5NÚÎ4òSÊèÚÐêÂÔâTðÊÎÎìWQ?P+VYêL9ÊJìÐ4BAÄHNÊÐ6PEäIÚSäê8Tèì/N?1?F7êMC4ÜUTFVØÚTKU8S2+äîNîXâÂUMÞZ9H?EYVO?F?îäPDÜÎ3?C7ÒAODÖR?GLTY0WÊÈØÊBSÌDÄäZH?573WR7ÈS?DGEH56ÞS?V?XLTDJZÜSUÐêìÐÞÞòÖÔÚÌÐ?V+ìÒòXFAàWHÐÄôAÈQôI7RììO+àC/ÆH?ðMØÚæÎPMT1C5HSJÌòôX?70RFJôÐUôGæÚ5M3ZWJXZòÜðÜIôâÂKOÂJ3ZHPHØXPÈLNØâ4ÊN32?ÞTASOäÞÂôâÄÖAÄD?ÐNFBÒèÐÞTS1XC?YW9P?ìÖìBØÌÈOÈMòÞìI?BòQUO8ÆÄÞæòF9TèôCÌÊðLGÖZ75MRYGWT4òâPLÌæXAàâ?V+ðÎ7R+êîìJ?CIÊÎXîJÖÐZK?Þò5WU4M9?+4âÄ/EòX6IÐêÔÎ00îKÖIÜLDæÂèäD6WäOÈFÆØÞâêO?ÌFC30QCîÚV?êÔÚîâAÔAD4HÎXêAKÆâGAæGBSÞâV0ìYæETZY?ìAÚØ32OUÚH/6EUF?/ÚÒêN3RÜFEDòÎèX?ZD8THÚèLFèìêò6NFÜH/7?ÒÊSGAEæÚ7+9CÖNDE?B95J49ÜF6ÜÄC3RÖDîìO5CîPðàXâÜÈW?YEÂÐîÞBÈîêSSCôZXPI3ÐÐO0NäOôEGYY??SìÎZIC?ÐÊÈV3ÒKDôOTC98WDEÌÜ2IÎì/QBIÖWW?95Æä0ÈKèð4NTI89FXÐÄØPS19YYÊOWC+ÈDðèX58??C+KÎVYS?êL59/?GâN/+îU3ØNÄHêÈGCìÈêôðàÚTÌDÂJØà?T5ÌîÈEHìVØÄ?FæÜTF55ICÔX4MM?PôVKY5ÐÊG3ÐJÔðWD9WêT2ÌÌW?1/âÚÚÎYîTCàPÌIÞÈXèVÜYTSQYÈæDHTOVîZ8èÜSÆC+?ÆìÚT?ÆÒAÄG?IYEÆU3ÆA6ÎîF34UTÎBÈBÐÐ6ÂX/àÔE2ÂXàÂìôP??ÐæSÂFA2?E8/TOÎAÖXÆÆUôÈîMêYÜÖRHZîBZìâSSÈÎQPÚò/ÔÐàKâÌÒÄÖM1Y1OÞPØÞAðZ5VDÜVòÚQYNÌÊ3ØÄ?ÌGÜÆ+æK7èôæèG38VÆSZ?ÜEI250F4?4ÎEÆê8PFÎF?ÊOÚôÆE?æò9ÜÖêAHEUêKT1?0C?àÊ?TìTÌÂ??V?äÔTI6+Hôâ6QIROQôCêòQæLÄLA/ÔI?UGV1A0ÎêôXäÜÊÈIZÜðÒMàÄ0ÖÒA8ÆÎHNÄTAÆYÚà?SM99I5ôG+1?N0LÐÊMFD9âVÎV0G/ÎÂGÄMYÌèÒGGKLîÔ+QZCHÈÄ0TFLYÎêIEìBUK884?SS7TÂÎÄA1/LGX?GÂBZ06èÞCØZZ??/äîSâÎîÄÒÌ4Òì?7RXÒA42IZYX9RGÂY7TF0ðî6ÔOCæHUÔD7L7êÐÐDJFÆô0+ÆÎîìÚOäÊ4R0UQèð9L7UCYR5+FO4/ÄÊÆêÄÐàRàâQRêÊLQXAVEèEèB6PÜîAPXJ?TYJÈVîS4ôÞÚYS+4àâÔAU8D?WRÌÊ+9êM/ÔîîÖâÆêäÌð5G2ÎÆR2WÜÔÊÖMÔÒ270J05êìPOTSîÎWDI?BXâÌÄMâÜÈCÎF4ôU?îàðÆWQÞÎTÐOEBìòÊÌJÎÈ/MYKV0ÒEPC3AôÈKHÂB??ÎÄÔBêK+ÞÖHDîÞJÂXOÌPNòQD5UàÎ9KYìWKÞXðÖ9YàÊEìNXîÜX41VAÞÚWôL1æDXÜU73XÞÜÒFC?CWAIDA/?UEìBÒêäN?W?XØKäSIÎF?CòUìÂZÔÐÆÖ7êÌHÊOVêQääòà?ÜèÒMGHØBîV5P?ELôÜ9êFÜèFÔS?FÐàôèÒÖR9òFGÂðîHZÞG0JOÂOÜQQÞFâEB69ÞFêâæYCUIDæIÊKàR?ÜWâÄCCV6QâÈGÜFòà4MÖð?XN0ZæZÔYCR7âF0CLEæÂF?4ÜD?TIMÞT??QØRSFZÎî?ÆBILÈÞÔWìZ538ÐMîÌèDðFààðJÈM?Y06SÂGMÆQìòGJDôÈG?Ìð/àìDX?àÆ2IYÖôSðàHOTTPIòKZU0S?äæÈHòAAÒGìÂ5?E4æQ54CWâØÞà?ÞÜKYMèR??17ÖGH4ÚP//??CG9??8ÒR6ÌF56àQ0PÐÂðP?èW0WF?D/SY?XC/FDFGQWîâ4ZÎâ+TLYÔâL+Z3C?FÜNðìÆAðìNôì4LY??àÐÚÄÖÞWFE28+æYÂEêQâQIÈW4ISPIÚIÌÊE9ZäY2CèAäèÈÜT9ØEÄUYòGS5NGÎèQVôÞKXPÒWXC?GÒîUæAðFD2ÆàäÌOJBÆÌÈÄ0BÞì9èêFT9ÜìØLîA?äÞ0?9ÖÄTV4äOîD5EÄD3àîæÞ1KEÒèÈô+PÂÊÎâT?ÈÖ???ÒÒ?MÐDNâê/3?1æÒÄBJ?ÜWÌÚÆØRèLNO5ÒRRÐÜMÐØV4ÔNæìÊMðG?EàFL??II1DÄQòV6AUOîEYÎPFU4UZ79æÎ/FÈHðAØWCÌDM?B6QÔîÞÂQ?îNÞHP7ÄS3ÎYôU/òÖôàÎVàWTEXàîKÖÆ3BÜÂÜFQ0SMÌæÔD7LÄØJðÊCÌä+ÂF6TT/àU7Þî1FMFHE7ÚHèòìYKîZ?/ÈòRòWTÖY?SòàâFYSO??FGVTXâä26LîBææÈD62ÈKF?KÈKDÈÊÒî+êÔÄÆD?12?2ÜY?CâHÞòØCìK7ÚäUÊðFL9îD?3HBÞTQOM90FEÎNKÜàÊCìÄàÜQÒD?ÄPÖPÜFNW1îVÈOÆè6?GâÞ?GÊÌÜì?8??âÊÆê/Z1QèÒØêF+8PÞÄQB?RÚòCG6ÌPìLÊðFÔð?+XDVGæKòÐPYÄÄUXÐè2âAVVXàÄØVÈWÌGÒÄ?FÐNDÈUEDYNCâæGGìæÖÖîZÊÒFÄBÚðN2ÞXJGÈèâÔMÂKF3îSÖC/èè?32KAXZ+ôêÈWÔKæò9ÈÔTæOòQ?0ìÆàSLêET5Q5ØÂBJØPàÈDÎJ3?6LØðÜWA7FðâLUÒGEF8ÐÌêTÞòWWÞæPHMXàä?+TUèÂGæSBÞä2æPôÐMGÆÌVàVìÔC?àVÎGXJEæÌPÂAWPðôE8ÌØ10O7ìW8/ÜÐ3ÎØÞQD8XìZ0T?L6QÖQOGîBîOìâÂÔàWAîLêCCVêBF2äJSV2ôV?îAÌM9?LÄäÄÔ0KGMO?OÊG?R??ÈÔ4HWäW4DôÎ3ÆA?âð8S?LâRBEÔîòÜF8ÎH4?ÔLÆÂBîðÐÌòôXæô2ÔYPV?J9ML7C3/MÐÆFÞPÐòÂGKRGM4ÐäÔÎRÖàðÐ1/H2òàBEÚTäêZGÌD9ÌÖUÜLRL/ÎÂÖP6C2?H+7?Òð6Öî?ÆYSV??E1îYNæâÖU7?MÂB2JL0?JðòQQKEÞêÒKèXðòÔVX6MPB1SAÔCT?òàÆMÖQPòòèNA97S5FEÎêDðÆ8ÒÔQRD4DÂR/ðQÂæÎZMFòXVìÌÄVÊK8NCF6Ðà+òZÔô?9ÒÆÈÊA7?èB?ÊÆèØBðUÖæÌÂâWA/èàÚÞ2äGØÔHCPàÆLH+8âÚMJ/ÎàÐæALÜÖÎBP1ÜôÊÐòðJFV?+ÜUÊV7?JXEàÊ?òZQ78ØN1îIÞODîô3XYÎÖCL3ÞÞ2FUêXôIæX?æÜ+GÒPMìÐðÜTêQQKêMÖS6ÌîII2ÞC5ØÊPRJYRÌÒîÄèH82S3VÔà5ÊêGîÒÐìDØæÞYðTX?KAN1ðÖ26WÚð?ÔÖ4VU1+1IRÂÆ3WäK1ÂQ1WNNÌÞÆÒ?6ÖPC9îâN95YF20ÊU2ÂÚC?ÂÎPUÜW7ÆYòXHDâXZ9YÊÒ/8?KLÌOÐJLÂHIKL2ìNôD?èBêCWÆNVÈêWàêÜä/ÒîÆâÐEMO4æFO4îO/3NÆÌWäÈÎèÌðQ9NO014W3NÒP/ÈòÈôZPÜìJU97GâÆ4VT?ÆUÎÊCÔôRäôTêàC6àÌÖèîZÜU/ÆäÂèD876FÒF?5UWZIX?ÌNÎBD2OGK?FæÊÊH5K+BZUDÜR2CÎÐM9N4SÊÞÐØ1?ÆZYÞô?êòQÆI8DZØÒ12ÜIàKÔÜYY65QÂLàâ2ÐXÄGVK6ÂÔÔÄWGòOÔÈ??òFôÊÊêL2XKÊAHÆÈØÆòê0EVQèð8OìAîêQM8Nâè?6?SJòNOPHH2ÎÔÆôÌITUâJÚäTâØNU7NBQKÜGM7ôè2CàÚðâYUêB1?Q?ÂC+ÚDT??QÒÔÎQ06ÂD3OØð/?BêÄÔGÚQ?1ôÄV0FKN0D9?ØÖÈDêØàSOPY5JîBèFâIVXNÌðT9ÆâCÖFOÞôÌV4OTS04/UMFÂXìÊQOWæÎAGO79WQ5ÜÎ4B/O1CLBY5Ðî?1âà?LDZÈÐ49MNXOJÆêèNGAI9ÜDDP?æèìY?Ìî2òLVOÐGIâÊVETìÎàDVÒMRÜôN?RAæè4VN?ÜÖ7NAOðâèK?BÆôEØÞÄG0SäâC?FÞÎàDÔäVY9???ZCÊÞMòM1îÜZÆP?PZÔÆ+ÊHSDKQK1LÄZÄÖSHÌÒ+?ÎòäèUÄîQ6?0EÜAJÖNÈÖÄÈ6F?VEKB6LN?ÂFðV/WàÔMM8F?Æà?R3MQVKHPôDðÖ1êÖÄÈ?HNHèQY?ÞJA??ÚVèÊ2?4êîÈCC?ÌèCØNÔRìBÒì4êYOWML??TKÈJÞÐäÔâLÞQæHB47PJRÆî9ÞÄ6CN3?O?Úî?WEÔYKN7ZÆÚXQLLPÈYÜYO4?ôÖ7UæU7ØØìWH2U?MÞVATB0ÆÄG1D6ôOÔäâSAÎBI2Z?ÒäJJQFÂÌGäêOÎÐLÜäHZLUSÊì?OVBCæîÂQÒH?IÄÈèY9ØOZèèîVæìZWÜÐRWJ3GîôT?2?DÚæC?âVIP1PØÄ?YØÔ2YNZÈÊU?ÂEàZ9E6ÜâZ?QèRJJìÈK1CÜÆèÌÜG7V?LEJ0SìW2?ÊÄ?7ABH?ÚT5ILNYÈLZWC?HG?EØêJGUPMîSÈUVÈð+îRNêNôÌêÔîÒEDBJQ/?98HPYTÞòæQHNQXðRÜèJGIäIÌÞ??2M33U+äÆÊDæìèæèJDGÖA9ÚMäIVÞMG?0RDZFH0ÚUòèYUVO+êÖ/YÎA/PàÔðZ+MFÎÈ9OKLNàðOHYDôòêØL?îð/ÆÒðàæLHÎGCCðìQR6?Ôì?NÞÌUÊCL3OèG?1ELÖJ2N6T?æPÚðÈFÜA7êDAÒâKPêUÂA99SÌÈÎÚIòAÖÔUìMIÂè8ÆØîWEESÊVSìXBUÊÈâYÊêÒÆÊX4UÖÊ1?2G35UEOÚîJTTP1òMH3ÄEÜèYØUKDZNAY8ÎÄ38òîLÔÒAêôY9/ôWB3æÄÄD0JSÒTÒYCV?îÜRO4ÎâÒðZKF8MÖð+D?B?ÚZIðÖFCÖVìÈUNHðÂÄHÒäCæG??ðÄìàIFLWÎô9ÌàÎA/8âIÌôôFO?6ÂB+ÐE?APKèÚÚÜYÜâ4HJ?742G0CÆìðB6ZJOäìHREÞÄJìÆRZØäÜÔU/XCæQVYVLîòìVTS8NÂZìOOR6B47îæDÊÜPèÄÈDòêIàÄàWVCHVZFL?1òLDLJ3AE6ÔÐDD9A8ÊÎHWôê6ÞOÊEFVôØÆìY7ÚN9Pòè3ÊK+M9S?ÔêIÎÌ+ÄVQHBWF7ÜZIRÒÒRZY?CXìGJSHHLNUP6ÄBN54Þì7ðT?ÖÞÚNKèÊ+2ÊM?ÂFGòOôKZÔCPòÞèÖ01ÄZSêÚVôEÌôG7èØìI8EMQ+U1ØN+O?LA?DVÒOØÌêVSS1ÄS74âKØU+ðWôEòLPÚV?WîÌQÖÐâSÄð?ÆPGU?NYXL7àX?O?AÐJ6ÈDAW?ÂÚDàPUðÈÆA?ÂJ3Y+YèR0P?4VÆÆàè9ÖÂ?ÄVÔôW9ÖæÒSSÌä?ÖNX71àôÞIÎIAO/8291??8D?êG83?6ÖO3ÖÊWÚàWÆÌLVâäKU5ØîFLÐO7?Æâ7WBEZÂJÊÚWPÄL09S/ÜêàYHIÔNHUÈÊêìUY+CGMâBZI3ÔNT52ÚTN7+/JTMîNOYMWMôØIASæSÖÆNÖôGAWDNX/êâðØîä//ÔØÂR+FX4ÔJÄHTUOGY?æQÂW8MôäÊèÔFO0SÆP?ÔîNAEÞZÈYèì9ØEAYDQ?1QS?XL?âÒCW?8ÂRVGÔMFØBJVD3ÈVKÂÔYôPRUæF??UÔI1VÞRHWÖìFôÌVÊHæÔÔNÒDQL3JØDMA5BSÜÒV8H3CE5?äÜÄäêôZÚÌ+?TÐØIèMCÞYèìRâY+ÔVÊWIMLCÜÜPP?VÊH8ÄÞ2/14?40òBâÆC1F+ÜÄÄWÒÔ9E6OTDA17æäîIHàUÄÆÚY?7ÆLÊÚTV/17LSAXMÒæU?ìÆD?ELØVÊÄM1FYÖàBCDYâOðQÄXKW2I5ÐE+8+SB7?ÌDÒê/0Z?/ÄæÆXÊWITÜÈFLØô?90S3JJ459àCÞÜOAîôI05ÞÌðÈ+AGÈSàBQ1SÌWêÚDÈÄ1H?âV1PYÐSIYäÄæK04HVâðÜÚTH2?73òÂVÚLBN9YQâTêÐWWTØWOOÚî?1Üêðì3OTÜJFIZMÐYàQ9?/ZQÒJ?ÜÊÎLÜAäD?Úèîâ?ÚÆîI5QEL8XB1ST4ÒV2ÜTK?3ÒÆX?TÔâØÒXÄØTCP/UZ9P?êÒWD76DäÈTZ/KæQMT5ÄÂÊê4/F??ANØÂÒWY?9òØÒÔØÜÈG18ÒCHOôÞTE9ÆìPÜâÄÄÜæQ56ÌÎ?6ÊÞ?òàDXÄòP5ÎÔÊRðÌòOæÐìY+2äÔFKæDP28Y4ÊTW20àîPUÈÐA??6ÂGIÐÞ??ìà406YXF1FIÐÆ?BHCOÐKFZSÞÄÖìWI7?ÆIâÆèÆ3ìCîTHSROMTäSÐC/W9HæLÂìðD5YIÆØK095S2êìæXìEDFàPC1èÆS0?MVOÈJ?+AêæVXIVICâÊÚð34E0Q8IIâHÒìUâQ/êàEHI0ÞFUÈàC??ÄÌØèÜJT0?7äòHW71?ÂÚC9ÐÊîVBîÚH?ÊOQR?FPQ?JòM5ÆCGÖW19LLÞNS0MEV?R?ÎÔæKTIE389+PLMBÎELRLD1D5äFèTRÊÔ98EîÄ9æÜ8?586YìÄ7I29ÜHÂF+ÌSÖOÈÔJTàI189DÄF?62ÂðêBBYJPðÄYäâÎôBRÄÖêà+MôY4äêâMàä6æPSMCÐìBÚì?BK4/ìÈìN?9MF?IQâêWYJQC?G7ÂUÖHL2ÈîôMÐÔÒÌ9AÒK?æÂX3äèMVÔÞLHäÖD6äð?+Bòâ+E75äÖ?TZFA/T7ÄG906äèàÊÐBØMJðêÔÆLKÞÎ/YâI+OWâèHLUîWÐÔ?äÂ5àZ?LæTÄôNèP8FÌKC?ECîî37EÔæQ90NìèKJèM3AêHS2ÂÊÊÚÊð879NRLîWAPæàYðA79DîHV/0/QÄXÄGDG9NJJÔZòÆðLJÐÜ4ìK4æGMIÐÔMÆâLBPìè/EÈà?GOÆPY7B?ÜPâÔDQÒîôU4DEÈÈLXLâÈÂîUâBÒI2èàF?UÜÜCZîÚIW6èÔX5ôU?LEJæC?ÒØÔÂNÒDØðIÆV?/ôÊEZ?K?RTÔÖEÐêÊÊÒD6ðÒ4AG7FDÄP6NØÄâU7TB??1R/ÌäÂDIB86Xèð9STT?ôò?5P?4ÒâNÞBJ5êÌGWWMêôN4/ÆâÊàÚòSÂPâðWAVB0EUTÔæAòàÆFVêBV7YW2IÔTäÞQÐÎEÊXÂÄP?3ØU?N??YôUÞèDKNRèZAÎèW05ôÖ4LI?ÎèèEèAæT5/XOT5TÂì?EVY?O6æYÄKêK?KÜFGôÈ?ZKWDÌâæX/BUÖÔ5FäE?ÞHÐÚòY5êêàF5W2EìOêÆKG8TIÂXÚÂ5SòY7ÆÄðèGòRKÂØ?ÚÜÔàIØÔÈKÜâêêC8òIôG1CÒHØRTK//îDMÞJOææSàQ4VY/?3àÖH?BQ/ÎØÐOPìCVK95îFÔJ9D0?èð0X?L3ÔÖ7I4ÌVYW0QK60HÐBÚîRTC9ÖÊL+1TJP0O?BÚDFäWB8778/2îAM79I25K1A/?ÚÊTFT5TèDæMQPLôÌWEQM?P0Âî5B?/3ÊêBIÄWVAòO7îÒWÐØââ9Îâ0CBGÌÔ/ÎUèVÊO?ÒUQIÊC/JZÔÌæòÔPU5ðR3ÆêèMæBUÌMXÖEZìF9ÆKW2ÖW5OìèD?1ìDÔæ5??ÌRI0SÂôÚRLJÆÚ+äÂÔâSÜÎ31èò7CÒCÊôÄUÌFÚäE9ÌÒÂYH3?DîVàZÖDY5/P2ØÐQWSÆLäÄÊYàY8BÜÖàJ/UîT7M6ÆF7ÊÂTEôÖ7H4/XÊÐG+ÈÜJTòîîZ3èòV0HLQÚBôEÂXJJQ?9JÈRòSAèFUMK??5êJÌVÜâT48?UâQÎL9UIâÂ?MÊÔÒRôÚ/8ÖEäèOàòÌÂ1313?æXNAðÜEXèHXØO+?SÔC6YôH8?73636âGIÎT?ÂSÒNÂJGÌM/FUPRINUØâ5+àÄ5ÄCXÔPQäÂ?AêKÚSDÌò5ILXÈàU?+QîäêWÞDG4NÊÎ4ZäMG8?àEVPîDÔMPFÔR+?ôìQ6M?ÂÎTèH?XèìB?7I5ÄRHLTWÖÞIðWSêXòììYQÂOWT3LBM?YHÌèLI4Y?ÌO7ÌY4ÊFàQXÖÂHGQGW?ZDDÔàQ0E9P/V7òXU?2ðFNDHMEYSæOZ4TDôÐäY3X05ÞKJ?KB?ôèÆÆLÐFEìYZ5IÐQ6?AIBYS7QBLNäKE9?îBHêAKòÄXDQ20CÒèMîÊ7èBMGòZ2ðDA55AYôèFOX?ÌÈ7/S??V37ÔHQIFA2îDPHAòÚMìNÜV?ÚêFÂÂ99H1XÊA?UÈÄAP2?8S2AV?2?+827ðâÜJ2IW0ÎMJ+òSÎÄESXÂàUAWÐC3ZäYSðÌQ+UL7âÔD?Êð33V?ÈÒÚÎLTÂQðKÞOO?HEY5?RàîÜÐÔÚêÖV7ðFÜÆLÚGVF74VPðÔ634O1ÈPPARWQUH+SÖIY/SîR?ÄäXPÚàêWÄFMAÜBJÒPÚZLVôWZ6DFôL04X4GABØôÂèK/æÎRÜäîèÄTäê1N6ÊWXìÜFRDäH//P/M+ìSCRJ9OHCO0EJôÔ6êPF9GBKVÂQQOÖÈVLìÜ??Tôà6GÔUQìÂîØÂMLMäSLòðWJ3ÖÊÜVVÌE8VBGHV?ÒR64M0?âKFèä?PÊÒ9ðÌHZSÄÚ38+Z?NêTòZJ6ìRWPW8êÌQÔM/7äAôL9ÚDÂLF?àèGZ9D/òDC+WSMXKèA5ðAJ61àYæÄÚLT4æÞ?MâIÒHÚÐ6ÞG8UÌÜ?6ôS8TDJ7ÄZYîFF?X+VTÎàS/ìÒOUHCCSÈKêÒ?4OÊæT7DîVLK2ÈÆI/ÜÖÌð?ÜÞA9/ÒRX2èNYòÌC9ZFNV0J4?ÊÌìäE4U?HÌTÎWFN??4??7TÚìC+UÆÄQPDÌê0EØRGÔUÎÄ0îÎ2ÊÊ75?ÞðRâÊZSRÌÚØL/ÖäWX8äX9??L33/æì?æFRJÒäHÊCQ?ÊTLØUTC7XÐLÎæ4êØÄFÌà?ÔPÄYFA?8èôìÜJSØÄæILMÒÂÌEJF2X9NÔFÜØÐVWêÐèICÔÌÆKSæÊ?òVQ/GØÒAL9ØÊWPØÈòGÒòVÐØÎXìV08SÔNET?FêðSXðÈIJ?ìØMÒEæKEòÌ?5?îMNæÚîà9WL7N6?16ÊSL?RMTìÄ8ÒôôìÐÚL2RÒà8ØÚÜBC?ôJDÎMÆô4U5?BÌÞ68îDWWÊH?7AIO5îH+1Y2?52ÒðTôNSÔêâDK?ÂSLÔWQUìì?ÚHìJO??ÜWUFDDôJ2BS6?ÒÐHMWF?HÈÔJäìÜØPÎQÄâQÎPOU6QK?J89ÜÆÆÔRÈÐGB3ÌÎÔÞÄHR3THT?ÊêâÎÜXàêÆè?/5èCàI1?FêMôè32/ÞÊÂXîV?Îæ??ðîYÔEäÎXXìÆ0CLIòLèÌ8ØK13HÞàSäÎ3Y?4T4NÊÂTÂÒðSBêÖQÌYòà3KîX2?ÎUàðÆXWôÞ4K8LÚÊ/ÚðL763ZZÐBWI5C?9ÂâI?ÒQæRÆÄâLIUJGIU5ÒE+TÈR1âUJUC4âQXYÔÐUV?ÜL4ÖÄNÒÐ4ØàZ8ÞðÄXJSØÒ?òÔNÄVOìÈ3äE?EâòIîÜ?LEàäÒÌ?0æÐðÔGBîÚ?LYHNOJ23?5HIêZàDîÂ2?ØWJÚQÖê/FÆôPìð2V+AF0X+X?/ÄWÊT9?Q?BÎàÒÞêìèæ??àäAYY1êÆV3IØQWäP7G3?ìÊEæÞK9SKKWäàBâCCHôPEJÎPPÖÚZæP8ZSS6K7ââÐHÌîLUF67ÈÂìîVJGT/PÌÎÐIDÐâ?ðÖèFÊôÐàPÖZADR4ÔPÚSàRôZ7?AØFìYBAêÖTGÖB663WÌæ2èòÆäÈIîEFMHA9æÂØØNäâÄN2JØHàòìÒI4A?ÚÂÊÐ7AÖWCÐWRC0M3E?ØÜ5KLÐÎC+05K3æFÐÂÆFT2äSèT4KÞSPJ?QRBàWJWÊæAÜðÆÚWÚÌZBHEQ7äVEÚDÂæØòFI0+ZEÐI/BNV4ÔÐXPTOD5òZÌJB?ÜTAZ?17SìSXìÞÌNØàÊÞXFPâà3Âô8U6+ÌQMGSðèUSCGÈRÎVÊVH3àØ?RÄÚ+ìTMYUÞÞSIIèä?ÊXL?SîJBôJ9XÌâÔMD/8?AQÂLY+VÈæHXÐÚîÚV2087C?0òTZÒM3ôD070BPììSG/LYIÈBKD+8?VÎWÈK4P6âÔFDOU97îêIàÌðÎÔÌ/T69ÌÄÖZ4Z5?ÒRYEÚYVìòGL?RGÎXèØ??ÚØRæÊCL61BUÄITOÂY2ôNÒUAMàÖâò?äDGE+/ÖØHâDQHêêæVK365Öä3PâSS8ððTRGW?K0?OIÄNAVòÊ?LôÎEQAHàNOCJBÖä1ÊØXKÔÚ?AôôîÊ8ÌNÐMAÂLÄÈÖXHJR??S3F2FèôBUâê2KîN?IKÊÐ/9WRìPFYAK0AH?LÎQÈÔìVÐÞHYêÞGÜÆ/0ìQ?YVJÆôÜLÞÆ2ÔZÖN/0J4ÖG176IÄNêAÆM?PEÞW3??ôÆèQÐCÂIRÌJÜSN5OêEìØ0ØPGSPÞîHRRI5?æRDÎÞIÐÚÞÞ9KUäLæDôF?CTÌKWÞÐ3Üâ5âÜèæ?LìQÎEQèÚàÄîÈ9ÈÊêQJIÜÊN3W?òRÈC+X?JBQAMUäÊVêL?XÌÄÆÄ/7?J?ÌKÆÆ19GÞÄÂL8T0ÚBBÒJXEXäXCÈÞÆCAS4/ÆL786F?ÔÐ1ÎÆòGHòIS50ØC5Q8DJôEPÜZWLR+âàVÂEID5ÜBQTHAÄò7MèOKTÈØ5YÈÐÚØâWØÜÊPZK8?DòÆTQGRLÂXJCÆÆèÚJ??+GÈØ0ðX3?AJââ?7GW7ÜàEÌJIK+1ÐCæZPM2ÜMèÚOôààZW?ÚZÜJÈäØÈJKIÒÄWCèÆMÔU6ÂUòKUÖIÔîCðUE?N1PFCÄCæðÊÚèY9?äTÖÆÎàHXðP5ìÔVÖMVØLØâ?äîLäèJOUÜX19SLQW7ÆWÈIOY+NM8ÖHUCUÈÈ+âW?Y2YìÄYèÊ0EF58S1ÊNÞÄ0EVRìâV/GêÜÐQ8IU?S76BOÐXY2SÂÌBÞZVØÚ?ÌÜR?0RAU?NìðW?6Y3ÄIêÒÆTPIÒYÞZòðÔDÖGRHìÒ?P8Üä+èV36Z2T?ìÜM5ÄA05èØICÚKN0?ÞÐ7WWEN246OOÈWUÄÌäKWL8MGLÄÔÔP7ZÐWFÎYQZÈÖQW6Òä?NOHYGØÌÎQæDÞU?0S?4òTÞXRW2ÖVêÚÜDÂâO39N5URêUG40ÈDS?1H82ÖI4ÒW?ÐQÒèJRÈì?ðÈHÈÄ?ÚCØB9FSPDòêMÔPRWA/ÄÔ/?WÞHPÊòCæìîKBRSEAWàäâìZìM?TPÚUÚÚ4OQBòâÜÊR+ÊÊæW/ØæX0ODCUàZ8SÖEWèÜC7ÒVÒRAOVÌUæLL?ÎX?ÜXBÂÖÔWY5MWW+VQÚRN0âZXìâS?Y0ÖÚQðSÊFôD8?6WèÆ0O4æÖT5Cââ3+J8UàôÌð5ÚÎPXVE6ÖÊèKA?ÌB9SOUV?O/BQTòXÊXWFGÂòâòäNèFêâ9YNX2IT1ÐZôM?318ðCP?6èèC15BBNXV3SØT?TD?W?Þô?äW+êÎ1LÚYHÆÊØÚR9?Z7ÔY?ANN2?8àôðÖ8LÈAôJÄVÊÔW??êNRKØGÞÆìQ/XW8TPÊCCZKYäY35S5I3ÂÖH+4CUHK0ðJ8IERðLÎð?ôHVADWYH?QðâSSZâJÂGòÌXJ1VÌYS2DàÖÆôìÂPSæLðâ2ìâ33?èTZYäAèCXB1RÚZMNCO4WÞH?YòIP3OÌFØêÆðÊÖÂÊ3SÊÔWRHY7ÔFJÌW33?QNUìATQ?ÐÈHIâBäMÆW8D?26RX9NJèØIFZXEÐÊ?ÎÜL62K3II3ÎÒUÈÞ2KY2âÆâìäÜO06àWMSHÜÖØG8ÈA4/èðY?FäÆH1ÜìFYR?ÈYX2ìðÂìRÆäM3èCB6òÒYIR7?M9I/ÎäTêìF4?òîàQ2?J?KÞôÜLÚÔ/5?7J2CÆP10X98IÂS7ôOÔàYE/ÜÎGÞQL?LY4ÖNØÈòKIÔCTÆÌÞDÂK1RS8?7EKÔF+K?ÊOÈXCÈàÚÚ?CS/BêU51ÜQÊTR5?FBAÄÖÚèVÔÚ0ÚÎ??J4?PDÆUÐWÎÔÔS+ÆSZ1ÐSZ3ðÂYÔI?æWÞY36ôÞ3RòÎ5Üì6/KZUÐHÊðA1?ìô7K9?8ôX?/îDYD513îÜÞPZ+Y79OæôÞWHÔLXWÒäDÆæ4XRÄðCÎÎH2MWÌOSèâ9ÄT?WJÊHPGÚBB??EOØêGÜCÚÆÊLàAG1JÚî29TY6êA+I23WMRXA8BMÂÖZÎLOæN+ÌÆKDÒGðV?SBÖÜM?OWVKTUJ+9S7ÒC68T8MÞMR??NðPÔYS?ÂIXISQàìIVÈäVòZÚIH8ÚêYÚOìÔÄÖRF59AèâðFMGYèIQ3PFU/IÆH5èîàHDØÚIÞQ5?21U6?FîFSQ?äæQDF/îÞ74IGÒÜ0GÜòF1ÆF5OIòXD2äYU88Q28àðSÚQÜHðÞÈÈ5CìVæÜPQ?êCUUÚZOèØ??âA?4J?9V?òÎ4M?+ìJLUNNLUÆCGÈZDIÞÞQ?Äô7?+ÖIQN4æKHÆI9?æWQ??ÆÖYÄâÔìÒìÒÜ5FÈB?æâêLM7RÜÈ?JÆÆÚèK7ØÔ8/ES74àÄ3PDàJÆÎÞî+?1ØôJ8ÞHLJ+?ÆÎÐîðUJPH?àAÔFÜÊ2MØò+?ÆÄKÄÌTÐÆA+DÂÚØÆâÔUÈXASJÞÖòQD828ÆêìXÚÔN?9ìOGIâUDWØò9òSêEXGâðYRWK2ÚÂ?ZÐæ2GÖÊL1ÎY2ÊâSòEJZAX/ZLXÞUKUIZSÖä?VÌHY?Èè3GìZÊEÚìTMäÚGÆWGHÐKàQÔU0Q94PÖJQNZÖÄSèYÄâ78ÄR/7Òî3BRàZD?AJZD?ÐYÔìÜSÈXÂQðLÈÞUÖZLZìÌÌä0K/èY6ÌÒ9/0F?MÚXâNìð4ÐWäX1VêÎ?ÈG6ÎðÚÖ??5FÊBØLZFIOÚêÌBòâ3ìRGÄäOàLUVVU??ÐòòR5æìÖÂÞÈæòGWÈææYTÖÒ1?3O3FæÎÊLOLðÆ7äRHÌÚ7B+Q4YDV2äÜMNSäÜÒÒ?ÈôÂÜÈè3ÔÚàîOìÄRÚMôÞÊNèììEìÎäÔ9Q?Y?ÆIÜÈC/ÒÄB0ðÒ?4SäGX+WL0ÆÞÌIUÖìîNJ9àÌêÔ?9ØL?FF?ðêàVÈP66BÈÔ7?ìØÒCV6VÔQÄHÎÜUìðÜâ1T9ÒVIKØZêò??PQÂQCàI1FCBÔâPW36äZWE?RCÌCÜÖ?ÒPòÊ?òN6ZH?TÞÒòÊØÆ/?9Z?WQ9TèÌÞW?2DUEÐêSÔêðîTHÔSÖäR6HêÞÔèÂRÒZOJ?ÞðÈÚÆÜ0ÜÒÎÄâÐM4ÐÐHVK4êâT9?XHQK8DÚKÚî?ìEôò9SDIæÌÎTTZ6HÚØJ3?P3?8+DVI/ææàVEGRWæÊòRHC7UÜY0?Q/ÖR95?äà6GÄìÎêPÈÔOâî+RØäÞæ9äâAOÞðO7?R?X2OJ?ÂBRÆKäQòÎäÊÞY7äðPEêÖGT0DÂâIôÐ?ÄGIDêDZDS1YÔUæT2MEîÈLÐHEòMØUÐÄæÚQI45ÊÎ/EV?D6N?AI7VOYÎOÒAEìÌO?ÈM68èÐÎUYÂÒàP?CMàÌòIFIYìHZQ4CÂVJ?òY5?/ØH8+I1ÞFI7E7ZòÎ+WDA82JIðRFPUäRÄØ21WKÐâ0L?ÜFBJ8E2ÜUE3ÆLE?NÚòÎÊ9BÎÎ/DT?M/FâÎ?Q?ÖPF42QÎäôOäÖIKÚX9GÜâWÞÖA0R?îÆJOÒè+X6AìR//FÎYâRÒH9V7PBìêG?NGÊðìC?ÜHMPÈNòJîV3ÐòLOîØDEàNâÚÒTîAôà4ÞYÜîÆìFEÎÈCêÞI?ÜM2ÎÄØÊæÂ2P?ôI/FàÎOØKAVôTêMìàäYôBôFRUÔÞXSAÈÒC3V?WSZÞDÊC2âÈ/CÖJN1TZ1JDFêTÎêUÐÊNWGKAH0ÄW?ÊQ1VBBÈZVIXòÖM?J5??èE5àÊZ5MH6?LFQÜHAÜêJD9+J2ÄØêYâÒâæ2WØî?äCLÐL2J?F+æÌÌÊGR?7WKÆÂW2/FBÄQÂÐ?CÔQRH?æNC5EÈFÚÎ24èÔÔZOUÖÆIWLÐQ5BFS9ÆÆQ8JC6VÜRBTØÖHÖä3ÚÖÌâIU?OðÐØØYääòRNL84PîAÄC?LNMâGììE1UJ9PÞÊVÄJâVKGîÆèT??Q4OGQÞOôC7Ðôôô?O?LFFELÎÎ8?CY?D?ÌGPTSäQRÊèJK2KNîÆ?ÎÄBòì?REM6???TAMMAROÞEÌìCG/èêYÒîTUMÈP?57OØôI?Z0ÎÎîG473G4?ÔÊ2èXÖT4F?òÒàY7ÈêôÚZBÔîÂSÄæGèCÊP+7?ÈEèDBØS3LÞÜGBØKCXYAÚHìF7òD9ÐÈCÎINA6òæÔÂH9/èZìÐIGðÖäEÂBP9IÞðÆKôêÚÆÊPÆÂCäRHS/PÐôU?YÊUÊÄ0ÔOÜÔ44M/W?êÆ?TôOÂæHQ7èZ07ÜÄèêÞÔÎTÂÞFWS?ZÎôYJIJìÔPØAS0FÆÖæÜ?AKPUÐSÜOFG9KØî+A?êWàîR?ÂNBÒèHOîUÈYAY?FQ4èQ1Q?PêC?9àÎèW8K3äRÚäCPTØæ?æWJÌÐNYK4êðÎNT?TèêÂMèHXS28LGJÂESàCXY3?FÈGRKM?ÖJ?AÌLTA?NòØ6SÖZJL2LFîBR5C2?3QWæê/?ææUPèÒ?ÖMUðRSðF+ÊÜX75?YO3VêÐ?1èè4?ìàâäMÚîÌÐT8?6OÂÞJAÂXÜêVTàL?V?ÔLRAìR6TZàMV4ÈÄÈäU?5ÈZZæÞÐN0âÒXØæ2RàèÂPìÈîDJÒÎ9C0X?ØLðÂÒA6BHMOR5?4ÔÎ?FKGBB/L4XÊOÜPHÊÔS29EèI26ÂØSÐH0?EEÄK/7/VKÜNHEN0GÆÖMðÐÊKæKôOÌÆT/U??5IàØLôäÊBGRGÆØLÚC0æÌ5ÄÞ1?Wàà3QÊTÆE5îÊ+ÔAFÌòXÖÈ3R0X19RBVÖZECR7ÒT3SUK?UÆÞêÜæÔîPMLWÔPÒÐÂEVBÜâIIZH4BPZÂÊS0ØÔÒJääêÊØÌÂFVPÒÎàÊC8ÚLCBNêRTK?U97JäÜD?Fìî?èÈWÞYE7T?ÚÄ??I5FìGW??VÈGYÂââÒäÎ/EÒBFH0èÞÖM5êÄ0?ÞÖAÈò?ÈØÎU2WðÐæôZNZ4XWää4TàôVÖRJBÎN/ÒÐMðêS8Þò42Z?ìÊVLI/4E1ÂMJ8D35ôKÈÔ8FðLÚFXPH79Ðô9àKVR+AQYKL?8QìâRîòGÐÔH3îô?MâÄ+4XAòÒ?YàÈèXD8ÌJôPàKW5îÆFIV/ÜXÒWÜÂJLUUMRWèÐ?A?ðê?îITUÌR?âÞ6XUQW3JðHP9?G1YBðÔDPO9J6?3?ÈKÈÖêH?ÒÄ0ìÞFKO?ÔÒ4WZÊÐHBâOLPN?RâKYêôSèBR?ääIAÌÐ/GU?0èOKV42ÆÊKÄMðÐÎð6EL+XEMäHZ6ÂÂÄZ?ÅÔVAKUAQBBQIBBÎèUXîIJUFNVVQRÈBÎQFUQÆIWAEIXØQB;
+<?php
+defined('IN_IA') or exit('Access Denied');
+include('model.php');
+class Cyl_wxweizhangModuleSite extends WeModuleSite
+{
+    private $tb_category = 'cyl_wxwenzhang_category';
+    private $tb_article = 'cyl_wxwenzhang_article';
+    private $tb_styles = 'cyl_wxwenzhang_styles';
+    private $tb_styles_vars = 'cyl_wxwenzhang_styles_vars';
+    private $tb_templates = 'cyl_wxwenzhang_templates';
+    private $tb_message = 'cyl_wxwenzhang_message';
+    private $tb_shang = 'cyl_wxwenzhang_shang';
+    private $tb_article_share = 'cyl_wxwenzhang_article_share';
+    private $tb_article_gg = 'cyl_wxwenzhang_article_gg';
+    private function getAllCategory()
+    {
+        global $_W;
+        $sql        = 'SELECT * FROM ' . tablename($this->tb_category) . ' WHERE uniacid=:uniacid ORDER BY `displayorder` desc, id desc ';
+        $params     = array(
+            ':uniacid' => $_W['uniacid']
+        );
+        $categories = pdo_fetchall($sql, $params, 'id');
+        return $categories;
+    }
+    private function getAllArticle()
+    {
+        global $_W;
+        $sql     = 'SELECT * FROM ' . tablename($this->tb_article) . ' WHERE uniacid=:uniacid ORDER BY id desc ';
+        $params  = array(
+            ':uniacid' => $_W['uniacid']
+        );
+        $article = pdo_fetchall($sql, $params, 'id');
+        return $article;
+    }
+    public function typeid()
+    {
+        $ch     = curl_init();
+        $url    = 'http://apis.baidu.com/showapi_open_bus/weixin/weixin_article_type';
+        $header = array(
+            'apikey: 9605e74753cc33db2fe49910953ae54e'
+        );
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        $res  = curl_exec($ch);
+        $data = json_decode($res);
+        $news = array();
+        foreach ($data->showapi_res_body->typeList as $item) {
+            $news[] = array(
+                'id' => $item->id,
+                'name' => $item->name
+            );
+        }
+        return $news;
+    }
+    public function sendhongbaoto($arr)
+    {
+        global $_W, $_GPC;
+        $settings                 = $this->module['config'];
+        $data['mch_appid']        = $settings['appid'];
+        $data['mchid']            = $settings['mchid'];
+        $data['nonce_str']        = $this->createNoncestr();
+        $data['partner_trade_no'] = random(10) . date('Ymd') . random(3);
+        $data['openid']           = $arr['openid'];
+        $data['check_name']       = "NO_CHECK";
+        $data['amount']           = $arr['fee'];
+        $data['spbill_create_ip'] = $settings['ip'];
+        $data['desc']             = $arr['body'];
+        if (!$data['openid']) {
+            $rearr['return_msg'] = 'ç¼ºå°‘ç”¨æˆ·openid';
+            return $rearr;
+        }
+        $data['sign'] = $this->getSign($data);
+        $xml          = $this->arrayToXml($data);
+        $url          = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+        $re           = $this->wxHttpsRequestPem($xml, $url);
+        $rearr        = $this->xmlToArray($re);
+        return $rearr;
+    }
+    function trimString($value)
+    {
+        $ret = null;
+        if (null != $value) {
+            $ret = $value;
+            if (strlen($ret) == 0) {
+                $ret = null;
+            }
+        }
+        return $ret;
+    }
+    public function createNoncestr($length = 32)
+    {
+        $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        $str   = "";
+        for ($i = 0; $i < $length; $i++) {
+            $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+        }
+        return $str;
+    }
+    function formatBizQueryParaMap($paraMap, $urlencode)
+    {
+        $buff = "";
+        ksort($paraMap);
+        foreach ($paraMap as $k => $v) {
+            if ($urlencode) {
+                $v = urlencode($v);
+            }
+            $buff .= $k . "=" . $v . "&";
+        }
+        $reqPar;
+        if (strlen($buff) > 0) {
+            $reqPar = substr($buff, 0, strlen($buff) - 1);
+        }
+        return $reqPar;
+    }
+    public function getSign($Obj)
+    {
+        foreach ($Obj as $k => $v) {
+            $Parameters[$k] = $v;
+        }
+        ksort($Parameters);
+        $String  = $this->formatBizQueryParaMap($Parameters, false);
+        $String  = $String . "&key=" . $this->module['config']['password'];
+        $String  = md5($String);
+        $result_ = strtoupper($String);
+        return $result_;
+    }
+    public function arrayToXml($arr)
+    {
+        $xml = "<xml>";
+        foreach ($arr as $key => $val) {
+            if (is_numeric($val)) {
+                $xml .= "<" . $key . ">" . $val . "</" . $key . ">";
+            } else
+                $xml .= "<" . $key . "><![CDATA[" . $val . "]]></" . $key . ">";
+        }
+        $xml .= "</xml>";
+        return $xml;
+    }
+    public function xmlToArray($xml)
+    {
+        $array_data = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        return $array_data;
+    }
+    public function wxHttpsRequestPem($vars, $url, $second = 30, $aHeader = array())
+    {
+        global $_W;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_TIMEOUT, $second);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSLCERTTYPE, 'PEM');
+        curl_setopt($ch, CURLOPT_SSLCERT, MODULE_ROOT . '/cert/apiclient_cert.pem' . '.' . $_W['uniacid']);
+        curl_setopt($ch, CURLOPT_SSLKEYTYPE, 'PEM');
+        curl_setopt($ch, CURLOPT_SSLKEY, MODULE_ROOT . '/cert/apiclient_key.pem' . '.' . $_W['uniacid']);
+        curl_setopt($ch, CURLOPT_CAINFO, 'PEM');
+        curl_setopt($ch, CURLOPT_CAINFO, MODULE_ROOT . '/cert/rootca.pem' . '.' . $_W['uniacid']);
+        if (count($aHeader) >= 1) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $aHeader);
+        }
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $vars);
+        $data = curl_exec($ch);
+        if ($data) {
+            curl_close($ch);
+            return $data;
+        } else {
+            $error = curl_errno($ch);
+            echo "call faild, errorCode:$error\n";
+            curl_close($ch);
+            return false;
+        }
+    }
+    public function doMobileIndex()
+    {
+        global $_W, $_GPC;
+        load()->model('mc');
+        $id          = $_GPC['id'];
+        $category    = $this->getAllCategory();
+        $settings    = $this->module['config'];
+        $page        = isset($_GPC['page']) ? $_GPC['page'] : 1;
+        $pageindex   = 30;
+        $pageindexgg = 1;
+        if (!empty($_GPC['keyword'])) {
+            $condition .= " AND title LIKE '%{$_GPC['keyword']}%'";
+        }
+        if (!empty($_GPC['pcate'])) {
+            $pcate = intval($_GPC['pcate']);
+            $condition .= " AND pcate = $pcate";
+        }
+        if (!empty($_GPC['ccate'])) {
+            $ccate = $_GPC['ccate'];
+            $condition .= " AND ccate = $ccate";
+        }
+        $total     = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->tb_article) . " WHERE uniacid = {$_W['uniacid']} $condition");
+        $totalpage = ceil($total / $pageindex);
+        if ($settings['weizhuan'] == 1) {
+            $pageindexgg = 20;
+            $listgg      = pdo_fetchall("SELECT id,uid,title,thumb,pic,createtime,click,pcate,description,credit FROM " . tablename($this->tb_article) . " WHERE uniacid = '{$_W['uniacid']}' AND zongjia > 0 AND status = 1 $condition ORDER BY jiage DESC LIMIT " . ($page - 1) * $pageindexgg . ',' . $pageindexgg);
+        } else {
+            $list   = pdo_fetchall("SELECT id,uid,title,thumb,pic,createtime,click,pcate,description,credit,source FROM " . tablename($this->tb_article) . " WHERE uniacid = '{$_W['uniacid']}' AND zongjia = 0 AND status = 1  $condition ORDER BY displayorder DESC , id DESC LIMIT " . ($page - 1) * $pageindex . ',' . $pageindex);
+            $listgg = pdo_fetchall("SELECT id,uid,title,thumb,pic,createtime,click,pcate,description,credit,source FROM " . tablename($this->tb_article) . " WHERE uniacid = '{$_W['uniacid']}' AND zongjia > 0 AND status = 1 $condition ORDER BY jiage DESC LIMIT " . ($page - 1) * $pageindexgg . ',' . $pageindexgg);
+        }
+        $_share = array(
+            'desc' => $settings['description'],
+            'title' => $settings['title'],
+            'imgUrl' => tomedia($settings['thumb'])
+        );
+        include $this->template('index');
+    }
+    public function doMobileCategory()
+    {
+        global $_W, $_GPC;
+        $pcate    = $_GPC['pcate'];
+        $category = $this->getAllCategory();
+        $settings = $this->module['config'];
+        include $this->template('category');
+    }
+    public function doMobileRenwu()
+    {
+        global $_W, $_GPC;
+        load()->model('mc');
+        $id       = $_GPC['id'];
+        $category = $this->getAllCategory();
+        $settings = $this->module['config'];
+        $listgg   = pdo_fetchall("SELECT id,uid,title,thumb,pic,createtime,click,pcate,description,credit FROM " . tablename($this->tb_article) . " WHERE uniacid = {$_W['uniacid']} AND zongjia > 0 $condition ORDER BY jiage DESC , id asc");
+        $_share   = array(
+            'desc' => $settings['description'],
+            'title' => $settings['title'],
+            'imgUrl' => tomedia($settings['thumb'])
+        );
+        include $this->template('renwu');
+    }
+    public function doMobileFaxian()
+    {
+        global $_W, $_GPC;
+        $category = $this->getAllCategory();
+        include $this->template('faxian');
+    }
+    public function doMobileList()
+    {
+        global $_W, $_GPC;
+        load()->model('mc');
+        $id          = $_GPC['id'];
+        $category    = $this->getAllCategory();
+        $settings    = $this->module['config'];
+        $page        = isset($_GPC['page']) ? $_GPC['page'] : 1;
+        $pageindex   = 15;
+        $pageindexgg = 1;
+        if (!empty($_GPC['keyword'])) {
+            $condition .= " AND title LIKE '%{$_GPC['keyword']}%'";
+        }
+        if (!empty($_GPC['pcate'])) {
+            $pcate = $_GPC['pcate'];
+            $condition .= " AND pcate = $pcate";
+        }
+        if (!empty($_GPC['ccate'])) {
+            $ccate = $_GPC['ccate'];
+            $condition .= " AND ccate = $ccate";
+        }
+        $total     = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->tb_article) . " WHERE uniacid = {$_W['uniacid']} $condition");
+        $totalpage = ceil($total / $pageindex);
+        if ($settings['weizhuan'] == 1) {
+            $pageindexgg = 20;
+            $listgg      = pdo_fetchall("SELECT id,uid,title,thumb,pic,createtime,click,pcate,description,credit FROM " . tablename($this->tb_article) . " WHERE uniacid = '{$_W['uniacid']}' AND zongjia > 0 AND status = 1 $condition ORDER BY jiage DESC LIMIT " . ($page - 1) * $pageindexgg . ',' . $pageindexgg);
+        } else {
+            $list   = pdo_fetchall("SELECT id,uid,title,thumb,pic,createtime,click,pcate,description,credit FROM " . tablename($this->tb_article) . " WHERE uniacid = '{$_W['uniacid']}' AND zongjia = 0 AND status = 1  $condition ORDER BY displayorder DESC , id DESC LIMIT " . ($page - 1) * $pageindex . ',' . $pageindex);
+            $listgg = pdo_fetchall("SELECT id,uid,title,thumb,pic,createtime,click,pcate,description,credit FROM " . tablename($this->tb_article) . " WHERE uniacid = '{$_W['uniacid']}' AND zongjia > 0 AND status = 1 $condition ORDER BY jiage DESC LIMIT " . ($page - 1) * $pageindexgg . ',' . $pageindexgg);
+        }
+        $_share = array(
+            'desc' => $settings['description'],
+            'title' => $settings['title'],
+            'imgUrl' => tomedia($settings['thumb'])
+        );
+        include $this->template('list');
+    }
+    public function doMobileDetail()
+    {
+        global $_W, $_GPC;
+        $page     = $_GPC['page'];
+        $pcate    = $_GPC['pcate'];
+        $typeid   = $this->typeId();
+        $op       = $_GPC['op'];
+        $settings = $this->module['config'];
+        $category = $this->getAllCategory();
+        if (!empty($_GPC['keyword'])) {
+            $keyword = $_GPC['keyword'];
+        }
+        $id       = intval($_GPC['id']);
+        $contents = pdo_fetch("SELECT * FROM " . tablename($this->tb_article) . " WHERE id = :id", array(
+            ':id' => $id
+        ));
+        if ($contents['zongjia']) {
+            if (empty($_W['fans']['nickname'])) {
+                mc_oauth_userinfo();
+            }
+        }
+        $title             = $contents['title'];
+        $message           = pdo_fetchall('SELECT * FROM ' . tablename($this->tb_message) . ' WHERE uniacid = :uniacid AND article_id = :article_id AND status = 1', array(
+            ':uniacid' => $_W['uniacid'],
+            ':article_id' => $id
+        ));
+        $contents['click'] = intval($contents['click']) + 1;
+        pdo_update($this->tb_article, array(
+            'click' => $contents['click']
+        ), array(
+            'uniacid' => $_W['uniacid'],
+            'id' => $id
+        ));
+        $_share      = array(
+            'desc' => $contents['description'],
+            'title' => $contents['title'],
+            'imgUrl' => $contents['thumb']
+        );
+        $user        = pdo_getall($this->tb_article, array(
+            'uniacid' => $_W['uniacid']
+        ), array(
+            'title',
+            'thumb'
+        ));
+        $shang       = pdo_getall($this->tb_shang, array(
+            'uniacid' => $_W['uniacid'],
+            'article_id' => $id,
+            'status' => 1
+        ));
+        $shang_total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename($this->tb_shang) . ' WHERE uniacid = :uniacid AND article_id = :article_id AND status=1', array(
+            ':uniacid' => $_W['uniacid'],
+            ':article_id' => $id
+        ));
+        $list        = pdo_fetchall("SELECT id,title,thumb,pic,createtime,click,pcate,description FROM " . tablename($this->tb_article) . " WHERE uniacid = '{$_W['uniacid']}' AND pcate = '{$pcate}' ORDER BY rand() LIMIT 5");
+        $gg          = pdo_fetch("SELECT id,uid,jiage,thumb,link,zongjia,title FROM " . tablename($this->tb_article_gg) . " WHERE uniacid = :uniacid AND status = 1 Order By Rand() LIMIT 1", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        if ($gg['zongjia'] <= 0) {
+            pdo_update($this->tb_article_gg, array(
+                'status' => 2
+            ), array(
+                'id' => $gg['id']
+            ));
+        }
+        $user_total = pdo_fetch("SELECT id,sharenum,time FROM " . tablename('cyl_wxwenzhang_article_share') . " WHERE openid = :openid AND action = :action AND article_id = :id order by id desc", array(
+            ':openid' => $_W['fans']['openid'],
+            ':action' => 'share',
+            ':id' => $id
+        ));
+        $user_click = pdo_fetch("SELECT id,sharenum,time,action,formuid FROM " . tablename('cyl_wxwenzhang_article_share') . " WHERE formuid = :formuid AND action = :action AND article_id = :id order by id desc", array(
+            ':formuid' => CLIENT_IP,
+            ':action' => 'click',
+            ':id' => $id
+        ));
+        $credit     = iunserializer($contents['credit']);
+        if ($credit['status'] && $credit['limit'] <= 1) {
+            pdo_update($this->tb_article, array(
+                'status' => 2
+            ), array(
+                'id' => $id
+            ));
+        }
+        if ($op == 'detail') {
+            include $this->template('detail');
+        }
+        if ($op == 'shang') {
+            include $this->template('shang');
+        }
+        if ($op == 'liuyan') {
+            if (checksubmit()) {
+                if (empty($_W['fans']['nickname'])) {
+                    mc_oauth_userinfo();
+                }
+                $data = array(
+                    'uniacid' => $_W['uniacid'],
+                    'article_id' => $id,
+                    'openid' => $_W['fans']['openid'],
+                    'nickname' => $_W['fans']['nickname'],
+                    'content' => $_GPC['content'],
+                    'avatar' => $_W['fans']['tag']['avatar'],
+                    'time' => TIMESTAMP
+                );
+                if ($settings['status'] == 1) {
+                    $data['status'] = 0;
+                } else {
+                    $data['status'] = 1;
+                }
+                $ret            = pdo_insert($this->tb_message, $data);
+                $contents['ly'] = intval($contents['ly']) + 1;
+                pdo_update($this->tb_article, array(
+                    'ly' => $contents['ly']
+                ), array(
+                    'uniacid' => $_W['uniacid'],
+                    'id' => $id
+                ));
+                if (!empty($ret)) {
+                    message('ç•™è¨€æˆåŠŸ', $this->createMobileUrl('detail', array(
+                        'id' => $id,
+                        'op' => 'detail'
+                    )), 'success');
+                } else {
+                    message('ç•™è¨€å¤±è´¥');
+                }
+            }
+            include $this->template('liuyan');
+        }
+    }
+    public function doMobileHandsel()
+    {
+        global $_W, $_GPC;
+        load()->model('mc');
+        $settings = $this->module['config'];
+        if ($_W['ispost']) {
+            $id  = intval($_GPC['id']);
+            $uid = $_GPC['uid'];
+            load()->classs('weixin.account');
+            load()->func('communication');
+            $acc        = WeAccount::create($acid);
+            $fxjifen    = pdo_fetchcolumn("SELECT MAX(amount) FROM " . tablename('cyl_wxwenzhang_article_share') . " WHERE uniacid = {$_W['uniacid']} AND uid={$uid}");
+            $article    = pdo_fetch('SELECT id, credit,title,jifen FROM ' . tablename($this->tb_article) . ' WHERE uniacid = :uniacid AND id = :id ', array(
+                ':uniacid' => $_W['uniacid'],
+                ':id' => $id
+            ));
+            $user_total = pdo_fetch("SELECT id,sharenum,time,article_id FROM " . tablename('cyl_wxwenzhang_article_share') . " WHERE openid = :openid AND article_id = :article_id order by id desc", array(
+                ':openid' => $_W['fans']['openid'],
+                ':article_id' => $article['id']
+            ));
+            $credit     = iunserializer($article['credit']) ? iunserializer($article['credit']) : array();
+            if ($_GPC['action'] == 'img') {
+                $user_img = pdo_fetch("SELECT id,sharenum,time,action,formuid FROM " . tablename('cyl_wxwenzhang_article_share') . " WHERE formuid = :formuid AND action = :action AND article_id = :id order by id desc", array(
+                    ':formuid' => CLIENT_IP,
+                    ':action' => 'img',
+                    ':id' => $_GPC['ggid']
+                ));
+                $gg       = pdo_fetch("SELECT * FROM " . tablename($this->tb_article_gg) . " WHERE uniacid = :uniacid AND id = :id", array(
+                    ':uniacid' => $_W['uniacid'],
+                    ':id' => $_GPC['ggid']
+                ));
+                if ($user_img['sharenum'] >= 1 && date('Y-m-d', $user_img['time']) == date('Y-m-d', time())) {
+                } else {
+                    $creditval = array(
+                        '1' => 'å›¾ç‰‡å¹¿å‘Šç‚¹å‡»æ‰£é™¤'
+                    );
+                    $data      = array(
+                        'uniacid' => $_W['uniacid'],
+                        'openid' => $_W['fans']['openid'],
+                        'uid' => $_W['fans']['uid'],
+                        'article_id' => $_GPC['ggid'],
+                        'nickname' => $_W['fans']['nickname'],
+                        'title' => $article['title'],
+                        'member_uid' => $gg['uid'],
+                        'formuid' => CLIENT_IP,
+                        'action' => 'img',
+                        'credit_value' => $gg['jiage'],
+                        'sharenum' => 1,
+                        'time' => TIMESTAMP
+                    );
+                    pdo_insert($this->tb_article_share, $data);
+                    pdo_update($this->tb_article_gg, array(
+                        'zongjia' => $gg['zongjia'] - $data['credit_value']
+                    ), array(
+                        'id' => $gg['id']
+                    ));
+                    $zongjia   = $gg['zongjia'] - $data['credit_value'];
+                    $creditval = array(
+                        '1' => 'å¹¿å‘Šç‚¹å‡»æ‰£é™¤é‡‘é¢'
+                    );
+                    mc_credit_update($gg['uid'], 'credit2', -$data['credit_value'], $creditval);
+                    $kdata = array(
+                        'first' => array(
+                            'value' => 'æ‚¨çš„å›¾ç‰‡å¹¿å‘Šè¢«ç‚¹å‡»',
+                            'color' => '#ff510'
+                        ),
+                        'keyword1' => array(
+                            'value' => $_W['uniaccount']['name'],
+                            'color' => '#ff510'
+                        ),
+                        'keyword2' => array(
+                            'value' => 'æ‚¨çš„ä½™é¢è¢«æ‰£é™¤' . $data['credit_value'] . 'å…ƒï¼Œå½“å‰ä½™é¢ï¼š' . $zongjia . 'å…ƒ',
+                            'color' => '#ff510'
+                        ),
+                        'remark' => array(
+                            'value' => 'ç‚¹å‡»æŸ¥çœ‹',
+                            'color' => '#ff510'
+                        )
+                    );
+                    $url   = $_W['siteroot'] . 'app' . ltrim(url('mc/bond/credits', array(
+                        'credittype' => $behavior['currency']
+                    )), '.');
+                    $acc->sendTplNotice($gg['openid'], $settings['templateid'], $kdata, $url, $topcolor = '#FF683F');
+                    exit;
+                }
+            }
+            if (!empty($article) && $credit['status'] == 1) {
+                if ($_GPC['action'] == 'share') {
+                    if ($user_total['sharenum'] >= 1 && date('Y-m-d', $user_total['time']) == date('Y-m-d', time())) {
+                    } else {
+                        $touid          = $_W['fans']['uid'];
+                        $formuid        = -1;
+                        $credit_value   = $credit['share'];
+                        $creditval      = array(
+                            '1' => 'åˆ†äº«æ–‡ç« èµ é€å¥–åŠ±'
+                        );
+                        $data           = array(
+                            'uniacid' => $_W['uniacid'],
+                            'openid' => $_W['fans']['openid'],
+                            'uid' => $touid,
+                            'article_id' => $id,
+                            'nickname' => $_W['fans']['nickname'],
+                            'title' => $article['title'],
+                            'member_uid' => $uid,
+                            'action' => 'share',
+                            'credit_value' => $credit['share'],
+                            'sharenum' => 1,
+                            'time' => TIMESTAMP
+                        );
+                        $data['amount'] = $fxjifen + $credit['share'];
+                        $openid         = mc_fansinfo($touid, $_W['acid'], $_W['uniacid']);
+                        $cdata          = array(
+                            'first' => array(
+                                'value' => 'åˆ†äº«æ–‡ç« æˆåŠŸ',
+                                'color' => '#ff510'
+                            ),
+                            'keyword1' => array(
+                                'value' => $_W['uniaccount']['name'],
+                                'color' => '#ff510'
+                            ),
+                            'keyword2' => array(
+                                'value' => 'æ‚¨æœ¬æ¬¡åˆ†äº«èŽ·å¾—' . $credit_value . 'å¥–åŠ±',
+                                'color' => '#ff510'
+                            ),
+                            'remark' => array(
+                                'value' => 'è¯·è¿›å…¥ä¼šå‘˜ä¸­å¿ƒç‚¹å‡»æŸ¥çœ‹ä½™é¢',
+                                'color' => '#ff510'
+                            )
+                        );
+                        $url            = $_W['siteroot'] . 'app' . ltrim(murl('entry', array(
+                            'do' => 'member',
+                            'm' => 'cyl_wxweizhang',
+                            'uid' => $uid
+                        )), '.');
+                        $acc->sendTplNotice($openid['openid'], $settings['templateid'], $cdata, $url, $topcolor = '#FF683F');
+                    }
+                } elseif ($_GPC['action'] == 'click') {
+                    if ($user_click['sharenum'] >= 1 && date('Y-m-d', $user_click['time']) == date('Y-m-d', time())) {
+                    } else {
+                        $touid          = intval($_GPC['u']);
+                        $formuid        = CLIENT_IP;
+                        $credit_value   = $credit['click'];
+                        $creditval      = array(
+                            '1' => 'åˆ†äº«çš„æ–‡ç« è¢«é˜…è¯»èµ é€å¥–åŠ±'
+                        );
+                        $data           = array(
+                            'uniacid' => $_W['uniacid'],
+                            'openid' => $_W['fans']['openid'],
+                            'uid' => $touid,
+                            'article_id' => $id,
+                            'nickname' => $_W['fans']['nickname'],
+                            'title' => $article['title'],
+                            'member_uid' => $uid,
+                            'formuid' => $formuid,
+                            'action' => 'click',
+                            'credit_value' => $credit['click'],
+                            'sharenum' => 1,
+                            'time' => TIMESTAMP
+                        );
+                        $data['amount'] = $fxjifen + $credit_value;
+                        $openid         = mc_fansinfo($touid, $_W['acid'], $_W['uniacid']);
+                        $cdata          = array(
+                            'first' => array(
+                                'value' => 'åˆ†äº«çš„æ–‡ç« è¢«é˜…è¯»',
+                                'color' => '#ff510'
+                            ),
+                            'keyword1' => array(
+                                'value' => $_W['uniaccount']['name'],
+                                'color' => '#ff510'
+                            ),
+                            'keyword2' => array(
+                                'value' => 'æ‚¨æœ¬æ¬¡èŽ·å¾—' . $credit['click'] . 'å¥–åŠ±',
+                                'color' => '#ff510'
+                            ),
+                            'remark' => array(
+                                'value' => 'è¯·è¿›å…¥ä¼šå‘˜ä¸­å¿ƒç‚¹å‡»æŸ¥çœ‹ä½™é¢',
+                                'color' => '#ff510'
+                            )
+                        );
+                        $url            = $_W['siteroot'] . 'app' . ltrim(murl('entry', array(
+                            'do' => 'member',
+                            'm' => 'cyl_wxweizhang',
+                            'uid' => $uid
+                        )), '.');
+                        $acc->sendTplNotice($openid['openid'], $settings['templateid'], $cdata, $url, $topcolor = '#FF683F');
+                    }
+                }
+                if (!empty($id)) {
+                    $item           = pdo_fetch("SELECT * FROM " . tablename($this->tb_article) . " WHERE id = :id", array(
+                        ':id' => $id
+                    ));
+                    $item['credit'] = iunserializer($item['credit']) ? iunserializer($item['credit']) : array();
+                    if (!empty($item['credit']['limit'])) {
+                        $credit_num = pdo_fetchcolumn('SELECT SUM(credit_value) FROM ' . tablename('cyl_wxwenzhang_article_share') . ' WHERE uniacid = :uniacid AND article_id = :article_id', array(
+                            ':uniacid' => $_W['uniacid'],
+                            ':article_id' => $id
+                        ));
+                        if (is_null($credit_num))
+                            $credit_num = 0;
+                        $credit_yu = (($item['credit']['limit'] - $credit_num) < 0) ? 0 : $item['credit']['limit'] - $credit_num;
+                    }
+                } else {
+                    $item['credit'] = array();
+                }
+                if ($credit_yu <= 0.1) {
+                    $openid = mc_fansinfo($uid, $_W['acid'], $_W['uniacid']);
+                    $kdata  = array(
+                        'first' => array(
+                            'value' => 'æ‚¨çš„æ–‡ç« ' . $article['title'] . 'ä½™é¢ä¸è¶³ï¼Œè¯·ä¿®æ”¹ä½™é¢',
+                            'color' => '#ff510'
+                        ),
+                        'keyword1' => array(
+                            'value' => $_W['uniaccount']['name'],
+                            'color' => '#ff510'
+                        ),
+                        'keyword2' => array(
+                            'value' => 'è¯·è¿›å…¥æ–‡ç« é¡µé‡æ–°è®¾ç½®èµ é€ä½™é¢ä¸Šé™',
+                            'color' => '#ff510'
+                        ),
+                        'remark' => array(
+                            'value' => 'ç‚¹å‡»æŸ¥çœ‹',
+                            'color' => '#ff510'
+                        )
+                    );
+                    $url    = $_W['siteroot'] . 'app' . ltrim(murl('entry', array(
+                        'do' => 'member',
+                        'm' => 'cyl_wxweizhang',
+                        'uid' => $uid
+                    )), '.');
+                    $acc->sendTplNotice($openid['openid'], $settings['templateid'], $kdata, $url, $topcolor = '#FF683F');
+                } else {
+                    pdo_insert($this->tb_article_share, $data);
+                    if ($article['jifen'] == 1) {
+                        mc_credit_update($touid, 'credit2', $credit_value, $creditval);
+                    } else {
+                        mc_credit_update($touid, 'credit1', $credit_value, $creditval);
+                    }
+                    if ($_GPC['action'] == 'click') {
+                        $creditval = array(
+                            '1' => 'åˆ†äº«çš„æ–‡ç« é˜…è¯»,æ‰£é™¤ä½™é¢'
+                        );
+                    } else {
+                        $creditval = array(
+                            '1' => 'æ–‡ç« è¢«åˆ†äº«,æ‰£é™¤ä½™é¢'
+                        );
+                    }
+                    mc_credit_update($data['member_uid'], 'credit2', -$credit_value, $creditval);
+                    $openid    = mc_fansinfo($data['member_uid'], $_W['acid'], $_W['uniacid']);
+                    $credit_yu = $credit_yu - $credit_value;
+                    if ($_GPC['action'] == 'click') {
+                        $value = 'æ‚¨çš„æ–‡ç« ' . $data['title'] . 'è¢«äººé˜…è¯»äº†';
+                    } else {
+                        $value = 'æ‚¨çš„æ–‡ç« ' . $data['title'] . 'è¢«äººåˆ†äº«äº†';
+                    }
+                    $kdata = array(
+                        'first' => array(
+                            'value' => $value,
+                            'color' => '#ff510'
+                        ),
+                        'keyword1' => array(
+                            'value' => $_W['uniaccount']['name'],
+                            'color' => '#ff510'
+                        ),
+                        'keyword2' => array(
+                            'value' => 'æ‚¨çš„ä½™é¢è¢«æ‰£é™¤' . $credit_value . 'å…ƒï¼Œå½“å‰ä½™é¢ï¼š' . $credit_yu . 'å…ƒ',
+                            'color' => '#ff510'
+                        ),
+                        'remark' => array(
+                            'value' => 'ç‚¹å‡»æŸ¥çœ‹',
+                            'color' => '#ff510'
+                        )
+                    );
+                    $url   = $_W['siteroot'] . 'app' . ltrim(murl('entry', array(
+                        'do' => 'member',
+                        'm' => 'cyl_wxweizhang',
+                        'uid' => $uid
+                    )), '.');
+                    $acc->sendTplNotice($openid['openid'], $settings['templateid'], $kdata, $url, $topcolor = '#FF683F');
+                }
+                if (is_error($status)) {
+                    exit(json_encode($status));
+                } else {
+                    exit('success');
+                }
+            } else {
+                exit(json_encode(array(
+                    -1,
+                    'æ–‡ç« æ²¡æœ‰è®¾ç½®èµ é€ç§¯åˆ†'
+                )));
+            }
+        }
+    }
+    public function doMobilePay()
+    {
+        global $_W, $_GPC;
+        load()->model('account');
+        $id  = $_GPC['id'];
+        $fee = $_GPC['fee'];
+        $uid = $_GPC['uid'];
+        if (empty($_W['fans']['openid'])) {
+            mc_oauth_userinfo();
+        }
+        if (checksubmit()) {
+            $fee = $_GPC['fee'];
+            $id  = $_GPC['id'];
+            $uid = $_GPC['uid'];
+        }
+        if ($fee <= 0) {
+            message('æ”¯ä»˜é”™è¯¯, é‡‘é¢å°äºŽ0');
+        }
+        $contents = pdo_fetch("SELECT * FROM " . tablename($this->tb_article) . " WHERE id = :id", array(
+            ':id' => $id
+        ));
+        $title    = $contents['title'];
+        $params   = array(
+            'module' => 'cyl_wxweizhang',
+            'tid' => date('YmdHi') . random(8, 1),
+            'ordersn' => date(YmdHis) . $id . $_W['member']['uid'],
+            'title' => $title . "èµé‡‘",
+            'fee' => $fee,
+            'user' => $_W['member']['uid']
+        );
+        $data     = array(
+            'uniacid' => $_W['uniacid'],
+            'article_id' => $id,
+            'tid' => $params['tid'],
+            'uid' => $_W['member']['uid'],
+            'memberuid' => $uid,
+            'openid' => $_W['fans']['openid'],
+            'nickname' => $_W['fans']['nickname'],
+            'avatar' => $_W['fans']['tag']['avatar'],
+            'status' => 0,
+            'time' => TIMESTAMP
+        );
+        pdo_insert($this->tb_shang, $data);
+        $this->pay($params);
+    }
+    public function payResult($params)
+    {
+        global $_W, $_GPC;
+        load()->model('mc');
+        load()->func('tpl');
+        $order    = pdo_fetch("SELECT * FROM " . tablename($this->tb_shang) . " WHERE tid = :tid", array(
+            ':tid' => $params['tid']
+        ));
+        $article  = $this->getAllArticle();
+        $data     = array(
+            'fee' => $params['fee'],
+            'status' => 1
+        );
+        $settings = $this->module['config'];
+        if ($param['result'] == 'success' && ($param['from'] == 'notify' || $param['from'] == 'return')) {
+        }
+        if (empty($params['result']) || $params['result'] != 'success') {
+        }
+        if ($params['from'] == 'return') {
+            if ($params['result'] == 'success') {
+                pdo_update($this->tb_shang, $data, array(
+                    'tid' => $order['tid']
+                ));
+                mc_credit_update($order['memberuid'], 'credit2', $params['fee'], array(
+                    '1' => 'æ–‡ç« æ‰“èµ'
+                ));
+                load()->classs('weixin.account');
+                load()->func('communication');
+                $acc    = WeAccount::create($acid);
+                $openid = mc_fansinfo($order['memberuid'], $_W['acid'], $_W['uniacid']);
+                mc_credit_update($order['uid'], 'credit2', -$params['fee'], array(
+                    '1' => 'æ–‡ç« æ‰“èµ'
+                ));
+                $kdata = array(
+                    'first' => array(
+                        'value' => 'æœ‰äººç»™æ‚¨èµžèµäº†',
+                        'color' => '#ff510'
+                    ),
+                    'keyword1' => array(
+                        'value' => $_W['uniaccount']['name'],
+                        'color' => '#ff510'
+                    ),
+                    'keyword2' => array(
+                        'value' => 'æœ‰äººæ‰“èµ,èŽ·å¾—å¥–åŠ±ï¼Œè¿›å…¥ä¼šå‘˜ä¸­å¿ƒæŸ¥çœ‹',
+                        'color' => '#ff510'
+                    ),
+                    'remark' => array(
+                        'value' => 'ç‚¹å‡»æŸ¥çœ‹',
+                        'color' => '#ff510'
+                    )
+                );
+                $url   = $_W['siteroot'] . 'app' . ltrim(murl('entry', array(
+                    'do' => 'detail',
+                    'm' => 'cyl_wxweizhang',
+                    'id' => $order['article_id'],
+                    'op' => 'detail'
+                )), '.');
+                $acc->sendTplNotice($openid['openid'], $settings['templateid'], $kdata, $url, $topcolor = '#FF683F');
+                message('æ„Ÿè°¢æ‚¨çš„èµé‡‘ï¼', $this->createMobileUrl('detail', array(
+                    'id' => $order['article_id'],
+                    'op' => 'detail'
+                )), 'success');
+            } else {
+                message('æ”¯ä»˜å¤±è´¥ï¼', 'error');
+            }
+        }
+    }
+    protected function pay($params = array())
+    {
+        global $_W;
+        $setting = uni_setting($_W['uniacid']);
+        if (!is_array($setting['payment'])) {
+            message('æ²¡æœ‰æœ‰æ•ˆçš„æ”¯ä»˜æ–¹å¼, è¯·è”ç³»ç½‘ç«™ç®¡ç†å‘˜.');
+        }
+        $pay                       = $setting['payment'];
+        $credtis                   = mc_credit_fetch($_W['fans']['uid']);
+        $pay['delivery']['switch'] = false;
+        include $this->template('common/paycenter');
+    }
+    public function doMobileMember()
+    {
+        global $_W, $_GPC;
+        load()->model('mc');
+        $credit     = mc_credit_fetch($_W['fans']['uid']);
+        $settings   = $this->module['config'];
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+        $useragent  = addslashes($_SERVER['HTTP_USER_AGENT']);
+        if (strpos($useragent, 'MicroMessenger') === false && strpos($useragent, 'Windows Phone') === false) {
+            echo "è¯·åœ¨å¾®ä¿¡æ‰“å¼€";
+        } else {
+            if ($settings['weizhuan'] == 1) {
+                $settings['articletougao'] = 0;
+            }
+            if (empty($_W['fans']['nickname'])) {
+                $userinfo = mc_oauth_userinfo();
+            }
+            include $this->template('member');
+        }
+    }
+    public function doMobileMembergg()
+    {
+        global $_W, $_GPC;
+        load()->func('tpl');
+        load()->model('mc');
+        load()->classs('weixin.account');
+        load()->func('communication');
+        $credit   = mc_credit_fetch($_W['fans']['uid']);
+        $acc      = WeAccount::create($acid);
+        $settings = $this->module['config'];
+        $category = pdo_fetchall("SELECT id,parentid,name FROM " . tablename($this->tb_category) . " WHERE uniacid = '{$_W['uniacid']}' ORDER BY parentid ASC, displayorder ASC, id ASC ", array(), 'id');
+        $ops      = array(
+            'tw',
+            'tp',
+            'delete',
+            'post'
+        );
+        $op       = in_array($_GPC['op'], $ops) ? $_GPC['op'] : 'display';
+        $article  = $this->getAllArticle();
+        if ($op == 'tw') {
+            $list = pdo_fetchall("SELECT sourcelink FROM " . tablename($this->tb_article) . " WHERE uniacid = {$_W['uniacid']}");
+            foreach ($list as $key => $val) {
+                foreach ($val as $value) {
+                    $new_arr[] = $value;
+                }
+            }
+            if (checksubmit('submit')) {
+                $url   = $_GPC['wxurl'];
+                $pcate = $_GPC['pcate'];
+                if (empty($pcate)) {
+                    message('è¯·é€‰æ‹©åˆ†ç±»');
+                }
+                if (!in_array($url, $new_arr)) {
+                    $config = get_caiji($url);
+                }
+                $data             = array(
+                    'uniacid' => $_W['uniacid'],
+                    'title' => $config['title'],
+                    'thumb' => 'http://img01.store.sogou.com/net/a/04/link?appid=100520031&w=600&url=' . $config['thumb'],
+                    'description' => $config['desc'],
+                    'source' => $_W['uniaccount']['name'],
+                    'pcate' => intval($pcate),
+                    'author' => $_W['fans']['nickname'],
+                    'uid' => $_W['fans']['uid'],
+                    'ccate' => intval($_GPC['category']['childid']),
+                    'content' => htmlspecialchars_decode($config['contents']),
+                    'createtime' => TIMESTAMP,
+                    'sourcelink' => $url,
+                    'click' => intval($_GPC['click'])
+                );
+                $data['pic']      = iserializer(getImgs($config['contents']));
+                $credit['status'] = 1;
+                $credit['limit']  = $_GPC['credit']['limit'] ? $_GPC['credit']['limit'] : message('è¯·è®¾ç½®ä½™é¢ä¸Šé™');
+                $credit['share']  = $_GPC['credit']['share'] ? $_GPC['credit']['share'] : message('è¯·è®¾ç½®åˆ†äº«æ—¶èµ ä½™é¢å¤šå°‘');
+                $credit['click']  = $_GPC['credit']['click'] ? $_GPC['credit']['click'] : message('è¯·è®¾ç½®é˜…è¯»æ—¶èµ é€ä½™é¢å¤šå°‘');
+                $data['credit']   = iserializer($credit);
+                if ($credit['share'] < 0.01) {
+                    message('ä¸èƒ½ä½ŽäºŽ0.01å…ƒ', '', 'error');
+                }
+                if ($credit['click'] < 0.01) {
+                    message('ä¸èƒ½ä½ŽäºŽ0.01å…ƒ', '', 'error');
+                }
+                if ($credit['limit'] > $credit['credit2']) {
+                    message('æ‚¨å½“å‰ä½™é¢ä¸è¶³ï¼Œè¯·è¿›è¡Œå……å€¼ï¼', url('entry', array(
+                        'm' => 'recharge',
+                        'do' => 'pay'
+                    )), 'error');
+                }
+                if ($settings['articlestatus'] == 1) {
+                    $data['status'] = 2;
+                }
+                $data['zongjia'] = $credit['limit'];
+                $data['jiage']   = $credit['share'];
+                if (!in_array($url, $new_arr)) {
+                    pdo_insert($this->tb_article, $data);
+                }
+                $kdata = array(
+                    'first' => array(
+                        'value' => 'æœ‰ç²‰ä¸æäº¤äº†å›¾æ–‡å¹¿å‘Š',
+                        'color' => '#ff510'
+                    ),
+                    'keyword1' => array(
+                        'value' => $_W['uniaccount']['name'],
+                        'color' => '#ff510'
+                    ),
+                    'keyword2' => array(
+                        'value' => $data['description'],
+                        'color' => '#ff510'
+                    ),
+                    'remark' => array(
+                        'value' => 'è¯·è¿›å…¥åŽå°å®¡æ ¸',
+                        'color' => '#ff510'
+                    )
+                );
+                $acc->sendTplNotice($settings['kfid'], $settings['templateid'], $kdata, $topcolor = '#FF683F');
+                message('æ–‡ç« æ·»åŠ æˆåŠŸï¼', $this->createMobileUrl('member'), 'success');
+            }
+        }
+        if ($op == 'tp') {
+            if (checksubmit('submit')) {
+                $url  = $_GPC['link'];
+                $data = array(
+                    'uniacid' => $_W['uniacid'],
+                    'title' => $_GPC['title'],
+                    'thumb' => $_GPC['thumb'],
+                    'uid' => $_W['fans']['uid'],
+                    'nickname' => $_W['fans']['nickname'],
+                    'openid' => $_W['fans']['openid'],
+                    'time' => TIMESTAMP,
+                    'zongjia' => $_GPC['zongjia'],
+                    'jiage' => $_GPC['jiage'],
+                    'link' => $_GPC['link']
+                );
+                if ($data['zongjia'] >= $credit['credit2']) {
+                    message('æ‚¨å½“å‰ä½™é¢ä¸è¶³ï¼Œè¯·è¿›è¡Œå……å€¼ï¼', url('entry', array(
+                        'm' => 'recharge',
+                        'do' => 'pay'
+                    )), 'error');
+                }
+                if ($data['jiage'] < 0.01) {
+                    message('ä¸èƒ½ä½ŽäºŽ0.01å…ƒ', '', 'error');
+                }
+                if ($settings['articlestatus'] == 1) {
+                    $data['status'] = 2;
+                } else {
+                    $data['status'] = 1;
+                }
+                pdo_insert($this->tb_article_gg, $data);
+                $kdata = array(
+                    'first' => array(
+                        'value' => 'æœ‰ç²‰ä¸æäº¤äº†å›¾ç‰‡å¹¿å‘Š',
+                        'color' => '#ff510'
+                    ),
+                    'keyword1' => array(
+                        'value' => $_W['uniaccount']['name'],
+                        'color' => '#ff510'
+                    ),
+                    'keyword2' => array(
+                        'value' => 'æ€»ä»·ä¸º' . $data['zongjia'] . 'å…ƒ ç‚¹å‡»ä»·æ ¼ä¸º' . $data['jiage'] . 'å…ƒ',
+                        'color' => '#ff510'
+                    ),
+                    'remark' => array(
+                        'value' => 'è¯·è¿›å…¥åŽå°å®¡æ ¸',
+                        'color' => '#ff510'
+                    )
+                );
+                $acc->sendTplNotice($settings['kfid'], $settings['templateid'], $kdata, $topcolor = '#FF683F');
+                message('æ·»åŠ æˆåŠŸï¼', $this->createMobileUrl('member'), 'success');
+            }
+        }
+        include $this->template('membergg');
+    }
+    public function doMobileTixian()
+    {
+        global $_W, $_GPC;
+        $settings = $this->module['config'];
+        load()->model('mc');
+        $uid      = $_GPC['uid'];
+        $settings = $this->module['config'];
+        $fromUser = $_W['fans']['openid'];
+        $credit   = pdo_fetchcolumn("SELECT max(amount) FROM " . tablename('cyl_wxwenzhang_article_share') . " WHERE uniacid = {$_W['uniacid']} AND uid={$_W['fans']['uid']}");
+        load()->classs('weixin.account');
+        load()->func('communication');
+        $acc  = WeAccount::create($acid);
+        $user = pdo_get('cyl_wxwenzhang_tixian', array(
+            'uid' => $_W['fans']['uid']
+        ), array(
+            'title',
+            'wxh'
+        ));
+        if (checksubmit('submit')) {
+            $data = array(
+                'uniacid' => $_W['uniacid'],
+                'title' => $_GPC['title'],
+                'wxh' => $_GPC['wxh'],
+                'nickname' => $_W['fans']['nickname'],
+                'openid' => $_W['fans']['openid'],
+                'amount' => $_GPC['amount'],
+                'uid' => $_W['fans']['uid'],
+                'createtime' => TIMESTAMP
+            );
+            if ($credit < $settings['tixian']) {
+                message('æ‚¨çš„ä½™é¢ä¸è¶³' . $settings['tixian'] . 'å…ƒï¼Œæ— æ³•æçŽ°', '', 'error');
+            }
+            if ($credit < $data['amount']) {
+                message('æ‚¨çš„ä½™é¢ä¸è¶³æ— æ³•æçŽ°', '', 'error');
+            }
+            if ($data['amount'] < $settings['tixian']) {
+                message('æçŽ°é‡‘é¢ä¸è¶³' . $settings['tixian'] . 'å…ƒï¼Œæ— æ³•æçŽ°', '', 'error');
+            }
+            if ($settings['tixianstatus'] == 1) {
+                mc_credit_update($_W['fans']['uid'], 'credit2', -$data['amount'], array(
+                    '1' => "æçŽ°æ‰£é™¤"
+                ));
+                pdo_insert('cyl_wxwenzhang_tixian', $data);
+                $num = $credit - $data['amount'];
+                pdo_update('cyl_wxwenzhang_article_share', array(
+                    'amount' => $num
+                ), array(
+                    'uid' => $_W['fans']['uid']
+                ));
+                message('æçŽ°ç”³è¯·æˆåŠŸï¼Œè¯·ç­‰å¾…ç®¡ç†å‘˜å®¡æ ¸', $this->createMobileUrl('member'), 'success');
+            } else {
+                $amount        = $data['amount'] * 100;
+                $arr['openid'] = $_W['openid'];
+                $arr['hbname'] = 'ä½™é¢æçŽ°';
+                $arr['body']   = "ä½™é¢æçŽ°";
+                $arr['fee']    = $amount;
+                $res           = $this->sendhongbaoto($arr);
+                mc_credit_update($_W['fans']['uid'], 'credit2', -$data['amount'], array(
+                    '1' => "æçŽ°æ‰£é™¤"
+                ));
+                if ($res['result_code'] == 'SUCCESS') {
+                    $kdata = array(
+                        'first' => array(
+                            'value' => 'æçŽ°æˆåŠŸ',
+                            'color' => '#ff510'
+                        ),
+                        'keyword1' => array(
+                            'value' => $_W['uniaccount']['name'],
+                            'color' => '#ff510'
+                        ),
+                        'keyword2' => array(
+                            'value' => 'æçŽ°é‡‘é¢ä¸º' . $data['amount'],
+                            'color' => '#ff510'
+                        ),
+                        'remark' => array(
+                            'value' => 'è¯·è¿›å…¥å¾®ä¿¡é¢†å–æŸ¥çœ‹',
+                            'color' => '#ff510'
+                        )
+                    );
+                    $url   = $_W['siteroot'] . 'app' . ltrim(murl('entry', array(
+                        'do' => 'member',
+                        'm' => 'cyl_wxweizhang',
+                        'uid' => $uid
+                    )), '.');
+                    $acc->sendTplNotice($data['openid'], $settings['templateid'], $kdata, $url, $topcolor = '#FF683F');
+                    pdo_insert('cyl_wxwenzhang_tixian', $data);
+                    $num = $credit - $data['amount'];
+                    pdo_update('cyl_wxwenzhang_article_share', array(
+                        'amount' => $num
+                    ), array(
+                        'uid' => $_W['fans']['uid']
+                    ));
+                    message('æçŽ°æˆåŠŸè¯·æŸ¥çœ‹å¾®ä¿¡é›¶é’±', $this->createMobileUrl('member'), 'success');
+                } else {
+                    $msg = $res['return_msg'];
+                    message('æçŽ°å¤±è´¥è¯·è”ç³»ç®¡ç†å‘˜å¤„ç†', $this->createMobileUrl('tixian'), 'error');
+                }
+            }
+        }
+        include $this->template('tixian');
+    }
+    public function doMobileMemberfabu()
+    {
+        global $_W, $_GPC;
+        $settings = $this->module['config'];
+        $category = pdo_fetchall("SELECT id,parentid,name FROM " . tablename($this->tb_category) . " WHERE uniacid = '{$_W['uniacid']}' ORDER BY parentid ASC, displayorder ASC, id ASC ", array(), 'id');
+        $list     = pdo_fetchall("SELECT sourcelink FROM " . tablename($this->tb_article) . " WHERE uniacid = {$_W['uniacid']}");
+        foreach ($list as $key => $val) {
+            foreach ($val as $value) {
+                $new_arr[] = $value;
+            }
+        }
+        if (checksubmit('submit')) {
+            $url   = $_GPC['wxurl'];
+            $pcate = $_GPC['pcate'];
+            if (empty($pcate)) {
+                message('è¯·é€‰æ‹©åˆ†ç±»');
+            }
+            if (!in_array($url, $new_arr)) {
+                $config = get_caiji($url);
+            }
+            $data        = array(
+                'uniacid' => $_W['uniacid'],
+                'title' => $config['title'],
+                'thumb' => 'http://img01.store.sogou.com/net/a/04/link?appid=100520031&w=600&url=' . $config['thumb'],
+                'description' => $config['desc'],
+                'source' => $_W['uniaccount']['name'],
+                'pcate' => intval($pcate),
+                'author' => $_W['fans']['nickname'],
+                'uid' => $_W['fans']['uid'],
+                'ccate' => intval($_GPC['category']['childid']),
+                'content' => htmlspecialchars_decode($config['contents']),
+                'createtime' => TIMESTAMP,
+                'sourcelink' => $url,
+                'click' => intval($_GPC['click'])
+            );
+            $data['pic'] = iserializer(getImgs($config['contents']));
+            if ($settings['articlestatus'] == 1) {
+                $data['status'] = 2;
+            }
+            if (!in_array($url, $new_arr)) {
+                pdo_insert($this->tb_article, $data);
+            }
+            message('æ–‡ç« æ·»åŠ æˆåŠŸï¼', $this->createMobileUrl('member'), 'success');
+        }
+        include $this->template('fabu');
+    }
+    public function doMobileMemberfabumanage()
+    {
+        global $_W, $_GPC;
+        $uid     = $_W['member']['uid'];
+        $article = pdo_fetchall('SELECT id,thumb,title,ly,createtime FROM ' . tablename($this->tb_article) . ' WHERE uniacid = :uniacid AND uid = :uid', array(
+            ':uniacid' => $_W['uniacid'],
+            ':uid' => $uid
+        ));
+        include $this->template('fabumanage');
+    }
+    public function doWebShang()
+    {
+        global $_W, $_GPC;
+        $pindex          = max(1, intval($_GPC['page']));
+        $psize           = 30;
+        $article         = $this->getAllArticle();
+        $params          = array(
+            ':uniacid' => $_W['uniacid']
+        );
+        $shang_total     = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename($this->tb_shang) . ' WHERE uniacid = :uniacid  AND status=1', array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        $shang_total_fee = pdo_fetchcolumn("SELECT SUM(fee) FROM " . tablename($this->tb_shang) . ' WHERE uniacid = :uniacid  AND status=1', array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        $pager           = pagination($shang_total, $pindex, $psize);
+        $shang           = pdo_fetchall("SELECT * FROM " . tablename($this->tb_shang) . " WHERE uniacid = '{$_W['uniacid']}' AND status=1 ORDER BY fee DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, $params);
+        include $this->template('shang');
+    }
+    public function doMobileGg()
+    {
+        global $_W, $_GPC;
+        load()->func('tpl');
+        $ops = array(
+            'display',
+            'post',
+            'delete'
+        );
+        $op  = in_array($_GPC['op'], $ops) ? $_GPC['op'] : 'display';
+        if ($op == 'display') {
+            $article = $this->getAllArticle();
+            $params  = array(
+                ':uniacid' => $_W['uniacid']
+            );
+            $shang   = pdo_fetchall("SELECT * FROM " . tablename($this->tb_article_gg) . " WHERE uniacid = '{$_W['uniacid']}' AND status=1 AND uid={$_W['fans']['uid']} ORDER BY id DESC ", $params);
+            include $this->template('gg');
+        } elseif ($op == 'post') {
+            $id = intval($_GPC['id']);
+            load()->model('mc');
+            if (!empty($id)) {
+                $item = pdo_fetch("SELECT * FROM " . tablename($this->tb_article_gg) . " WHERE id = :id", array(
+                    ':id' => $id
+                ));
+                if (empty($item)) {
+                    message('æŠ±æ­‰ï¼Œæ•°æ®ä¸å­˜åœ¨æˆ–æ˜¯å·²ç»åˆ é™¤ï¼ï¼', '', 'error');
+                }
+            } else {
+                $item = array(
+                    'time' => TIMESTAMP
+                );
+            }
+            if (checksubmit('submit')) {
+                $url    = $_GPC['link'];
+                $data   = array(
+                    'uniacid' => $_W['uniacid'],
+                    'title' => $_GPC['title'],
+                    'thumb' => $_GPC['thumb'],
+                    'uid' => $_W['fans']['uid'],
+                    'nickname' => $_W['fans']['nickname'],
+                    'openid' => $_W['fans']['openid'],
+                    'time' => TIMESTAMP,
+                    'zongjia' => $_GPC['zongjia'],
+                    'jiage' => $_GPC['jiage'],
+                    'link' => $_GPC['link']
+                );
+                $credit = mc_credit_fetch($_W['fans']['uid']);
+                if ($credit['credit2'] < $data['zongjia']) {
+                    message('æ‚¨çš„ä½™é¢ä¸è¶³ï¼Œè¯·å……å€¼', '', 'error');
+                }
+                if (empty($id)) {
+                    pdo_insert($this->tb_article_gg, $data);
+                } else {
+                    unset($data['time']);
+                    pdo_update($this->tb_article_gg, $data, array(
+                        'id' => $id
+                    ));
+                }
+                message('æ·»åŠ æˆåŠŸï¼Œè¯·ç­‰å¾…å®¡æ ¸ï¼', $this->createMobileUrl('gg', array(
+                    'op' => 'display'
+                )), 'success');
+            }
+            include $this->template('gg');
+        } elseif ($op == 'delete') {
+            $id       = intval($_GPC['id']);
+            $contents = pdo_fetch("SELECT * FROM " . tablename($this->tb_article_gg) . " WHERE id = :id", array(
+                ':id' => $id
+            ));
+            pdo_delete($this->tb_article_gg, array(
+                'id' => $id
+            ));
+            message('åˆ é™¤æˆåŠŸï¼', $this->createWebUrl('gg'), 'success');
+        }
+    }
+    public function doWebGg()
+    {
+        global $_W, $_GPC;
+        load()->func('tpl');
+        $ops = array(
+            'display',
+            'post',
+            'delete'
+        );
+        $op  = in_array($_GPC['op'], $ops) ? $_GPC['op'] : 'display';
+        if ($op == 'display') {
+            $pindex      = max(1, intval($_GPC['page']));
+            $psize       = 30;
+            $article     = $this->getAllArticle();
+            $params      = array(
+                ':uniacid' => $_W['uniacid']
+            );
+            $shang_total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename($this->tb_article_gg) . ' WHERE uniacid = :uniacid  AND status=1', array(
+                ':uniacid' => $_W['uniacid']
+            ));
+            $pager       = pagination($shang_total, $pindex, $psize);
+            $shang       = pdo_fetchall("SELECT * FROM " . tablename($this->tb_article_gg) . " WHERE uniacid = '{$_W['uniacid']}' ORDER BY id DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, $params);
+            include $this->template('gg');
+        } elseif ($op == 'post') {
+            $id = intval($_GPC['id']);
+            load()->model('mc');
+            if (!empty($id)) {
+                $item = pdo_fetch("SELECT * FROM " . tablename($this->tb_article_gg) . " WHERE id = :id", array(
+                    ':id' => $id
+                ));
+                if (empty($item)) {
+                    message('æŠ±æ­‰ï¼Œæ•°æ®ä¸å­˜åœ¨æˆ–æ˜¯å·²ç»åˆ é™¤ï¼ï¼', '', 'error');
+                }
+            } else {
+                $item = array(
+                    'time' => TIMESTAMP
+                );
+            }
+            if (checksubmit('submit')) {
+                $uid      = mc_openid2uid($_GPC['openid']);
+                $nickname = mc_fansinfo($uid, $_W['acid'], $_W['uniacid']);
+                $credit   = mc_credit_fetch($uid);
+                $data     = array(
+                    'uniacid' => intval($_W['uniacid']),
+                    'uid' => $uid,
+                    'title' => $_GPC['title'],
+                    'openid' => $_GPC['openid'] ? $_GPC['openid'] : message('è¯·è®¾ç½®ç²‰ä¸ç¼–å·'),
+                    'thumb' => $_GPC['thumb'],
+                    'nickname' => $nickname['nickname'],
+                    'link' => $_GPC['link'],
+                    'zongjia' => $_GPC['zongjia'],
+                    'jiage' => $_GPC['jiage'],
+                    'status' => $_GPC['status'],
+                    'time' => TIMESTAMP
+                );
+                if ($credit['credit2'] < $data['zongjia']) {
+                    message('ç²‰ä¸çš„ä½™é¢ä¸è¶³ï¼Œè¯·åœ¨åŽå°å……å€¼', '', 'error');
+                }
+                if (empty($id)) {
+                    pdo_insert($this->tb_article_gg, $data);
+                } else {
+                    unset($data['time']);
+                    pdo_update($this->tb_article_gg, $data, array(
+                        'id' => $id
+                    ));
+                }
+                message('æ•°æ®æ›´æ–°æˆåŠŸï¼', $this->createWebUrl('gg', array(
+                    'op' => 'display'
+                )), 'success');
+            }
+            include $this->template('gg');
+        } elseif ($op == 'delete') {
+            $id       = intval($_GPC['id']);
+            $contents = pdo_fetch("SELECT * FROM " . tablename($this->tb_article_gg) . " WHERE id = :id", array(
+                ':id' => $id
+            ));
+            pdo_delete($this->tb_article_gg, array(
+                'id' => $id
+            ));
+            message('åˆ é™¤æˆåŠŸï¼', $this->createWebUrl('gg'), 'success');
+        }
+    }
+    public function doWebMessage()
+    {
+        global $_W, $_GPC;
+        $ops     = array(
+            'display',
+            'post',
+            'delete'
+        );
+        $op      = in_array($_GPC['op'], $ops) ? $_GPC['op'] : 'display';
+        $article = $this->getAllArticle();
+        if ($op == 'display') {
+            $id     = $_GPC['id'];
+            $pindex = max(1, intval($_GPC['page']));
+            $psize  = 20;
+            if (!empty($id)) {
+                $condition .= " AND article_id = $id";
+            }
+            $sql     = 'SELECT * FROM ' . tablename($this->tb_message) . " WHERE uniacid=:uniacid $condition ORDER BY id desc ";
+            $params  = array(
+                ':uniacid' => $_W['uniacid']
+            );
+            $total   = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->tb_message) . " WHERE uniacid = '{$_W['uniacid']}' $condition");
+            $pager   = pagination($total, $pindex, $psize);
+            $message = pdo_fetchall($sql, $params, 'id');
+            include $this->template('liuyan');
+        } elseif ($op == 'delete') {
+            $id         = intval($_GPC['id']);
+            $article_id = intval($_GPC['article_id']);
+            $contents   = pdo_fetch("SELECT * FROM " . tablename($this->tb_article) . " WHERE id = :id", array(
+                ':id' => $article_id
+            ));
+            pdo_delete($this->tb_message, array(
+                'id' => $id
+            ), 'OR');
+            $contents['ly'] = intval($contents['ly']) - 1;
+            pdo_update($this->tb_article, array(
+                'ly' => $contents['ly']
+            ), array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $article_id
+            ));
+            message('åˆ é™¤æˆåŠŸï¼', $this->createWebUrl('message', array(
+                'id' => $article_id
+            )), 'success');
+        } elseif ($op == 'post') {
+            $id = intval($_GPC['id']);
+            if (!empty($id)) {
+                $item = pdo_fetch("SELECT * FROM " . tablename($this->tb_message) . " WHERE id = :id", array(
+                    ':id' => $id
+                ));
+                if (empty($item)) {
+                    message('æŠ±æ­‰ï¼Œæ•°æ®ä¸å­˜åœ¨æˆ–æ˜¯å·²ç»åˆ é™¤ï¼ï¼', '', 'error');
+                }
+            } else {
+                $item = array(
+                    'time' => TIMESTAMP
+                );
+            }
+            if (checksubmit('submit')) {
+                $data = array(
+                    'uniacid' => intval($_W['uniacid']),
+                    'nickname' => trim($_GPC['nickname']),
+                    'content' => $_GPC['content'],
+                    'status' => $_GPC['status'],
+                    'huifu' => $_GPC['huifu'],
+                    'time' => TIMESTAMP
+                );
+                if (empty($id)) {
+                    pdo_insert($this->tb_message, $data);
+                } else {
+                    unset($data['time']);
+                    pdo_update($this->tb_message, $data, array(
+                        'id' => $id
+                    ));
+                }
+                message('æ•°æ®æ›´æ–°æˆåŠŸï¼', $this->createWebUrl('message', array(
+                    'op' => 'display'
+                )), 'success');
+            }
+            include $this->template('liuyan');
+        }
+    }
+    public function doWebCategory()
+    {
+        global $_W, $_GPC;
+        $typeid       = $this->typeId();
+        $ops          = array(
+            'display',
+            'post',
+            'delete',
+            'fetch',
+            'check'
+        );
+        $op           = in_array($_GPC['op'], $ops) ? $_GPC['op'] : 'display';
+        $setting      = uni_setting($_W['uniacid'], 'default_site');
+        $default_site = intval($setting['default_site']);
+        if ($op == 'display') {
+            if (!empty($_GPC['displayorder'])) {
+                foreach ($_GPC['displayorder'] as $id => $displayorder) {
+                    $update = array(
+                        'displayorder' => $displayorder
+                    );
+                    pdo_update($this->tb_category, $update, array(
+                        'id' => $id
+                    ));
+                }
+                message('åˆ†ç±»æŽ’åºæ›´æ–°æˆåŠŸï¼', 'refresh', 'success');
+            }
+            $children = array();
+            $category = pdo_fetchall("SELECT * FROM " . tablename($this->tb_category) . " WHERE uniacid = '{$_W['uniacid']}' ORDER BY parentid, displayorder DESC, id");
+            foreach ($category as $index => $row) {
+                if (!empty($row['parentid'])) {
+                    $children[$row['parentid']][] = $row;
+                    unset($category[$index]);
+                }
+            }
+            include $this->template('category');
+        } elseif ($op == 'post') {
+            $parentid = intval($_GPC['parentid']);
+            $id       = intval($_GPC['id']);
+            $setting  = uni_setting($_W['uniacid'], array(
+                'default_site'
+            ));
+            if ($site_styleid) {
+                $site_template = pdo_fetch("SELECT a.*,b.name,b.sections FROM " . tablename($this->tb_styles) . ' AS a LEFT JOIN ' . tablename($this->tb_templates) . ' AS b ON a.templateid = b.id WHERE a.uniacid = :uniacid AND a.id = :id', array(
+                    ':uniacid' => $_W['uniacid'],
+                    ':id' => $site_styleid
+                ));
+            }
+            $styles = pdo_fetchall("SELECT a.*, b.name AS tname, b.title FROM " . tablename($this->tb_styles) . ' AS a LEFT JOIN ' . tablename($this->tb_templates) . ' AS b ON a.templateid = b.id WHERE a.uniacid = :uniacid', array(
+                ':uniacid' => $_W['uniacid']
+            ), 'id');
+            if (!empty($id)) {
+                $category = pdo_fetch("SELECT * FROM " . tablename($this->tb_category) . " WHERE id = '$id' AND uniacid = {$_W['uniacid']}");
+                if (empty($category)) {
+                    message('åˆ†ç±»ä¸å­˜åœ¨æˆ–å·²åˆ é™¤', '', 'error');
+                }
+                if (!empty($category['css'])) {
+                    $category['css'] = iunserializer($category['css']);
+                } else {
+                    $category['css'] = array();
+                }
+            } else {
+                $category = array(
+                    'displayorder' => 0,
+                    'css' => array()
+                );
+            }
+            if (!empty($parentid)) {
+                $parent = pdo_fetch("SELECT id, name FROM " . tablename($this->tb_category) . " WHERE id = '$parentid'");
+                if (empty($parent)) {
+                    message('æŠ±æ­‰ï¼Œä¸Šçº§åˆ†ç±»ä¸å­˜åœ¨æˆ–æ˜¯å·²ç»è¢«åˆ é™¤ï¼', $this->createWebUrl('category'), 'error');
+                }
+            }
+            $category['style']          = $styles[$category['styleid']];
+            $category['style']['tname'] = empty($category['style']['tname']) ? 'default' : $category['style']['tname'];
+            if (checksubmit('submit')) {
+                if (empty($_GPC['cname'])) {
+                    message('æŠ±æ­‰ï¼Œè¯·è¾“å…¥åˆ†ç±»åç§°ï¼');
+                }
+                $data             = array(
+                    'uniacid' => $_W['uniacid'],
+                    'name' => $_GPC['cname'],
+                    'displayorder' => intval($_GPC['displayorder']),
+                    'parentid' => intval($parentid),
+                    'description' => $_GPC['description'],
+                    'styleid' => intval($_GPC['styleid']),
+                    'linkurl' => $_GPC['linkurl'],
+                    'ishomepage' => intval($_GPC['ishomepage'])
+                );
+                $data['icontype'] = intval($_GPC['icontype']);
+                if ($data['icontype'] == 1) {
+                    $data['icon'] = '';
+                    $data['css']  = serialize(array(
+                        'icon' => array(
+                            'font-size' => $_GPC['icon']['size'],
+                            'color' => $_GPC['icon']['color'],
+                            'width' => $_GPC['icon']['size'],
+                            'icon' => empty($_GPC['icon']['icon']) ? 'fa fa-external-link' : $_GPC['icon']['icon']
+                        )
+                    ));
+                } else {
+                    $data['css']  = '';
+                    $data['icon'] = $_GPC['iconfile'];
+                }
+                if (!empty($id)) {
+                    unset($data['parentid']);
+                    pdo_update($this->tb_category, $data, array(
+                        'id' => $id
+                    ));
+                } else {
+                    pdo_insert($this->tb_category, $data);
+                    $id = pdo_insertid();
+                }
+                message('æ›´æ–°åˆ†ç±»æˆåŠŸï¼', $this->createWebUrl('category'), 'success');
+            }
+            include $this->template('category');
+        } elseif ($op == 'fetch') {
+            $category = pdo_fetchall("SELECT id, name FROM " . tablename($this->tb_category) . " WHERE parentid = '" . intval($_GPC['parentid']) . "' ORDER BY id ASC, displayorder ASC, id ASC ");
+            message($category, '', 'ajax');
+        } elseif ($op == 'delete') {
+            load()->func('file');
+            $id       = intval($_GPC['id']);
+            $category = pdo_fetch("SELECT id, parentid, nid FROM " . tablename($this->tb_category) . " WHERE id = '$id'");
+            if (empty($category)) {
+                message('æŠ±æ­‰ï¼Œåˆ†ç±»ä¸å­˜åœ¨æˆ–æ˜¯å·²ç»è¢«åˆ é™¤ï¼', $this->createWebUrl('category'), 'error');
+            }
+            pdo_delete($this->tb_category, array(
+                'id' => $id,
+                'parentid' => $id
+            ), 'OR');
+            message('åˆ†ç±»åˆ é™¤æˆåŠŸï¼', $this->createWebUrl('category'), 'success');
+        } elseif ($op == 'check') {
+            $styleid = intval($_GPC['styleid']);
+            if ($styleid > 0) {
+                $styles = pdo_fetch("SELECT a.*,b.name,b.sections FROM " . tablename('site_styles') . ' AS a LEFT JOIN ' . tablename('site_templates') . ' AS b ON a.templateid = b.id WHERE a.uniacid = :uniacid AND a.id = :id', array(
+                    ':uniacid' => $_W['uniacid'],
+                    ':id' => $styleid
+                ));
+                if (empty($styles) || $styles['sections'] != 0) {
+                    exit('error');
+                } else {
+                    exit('success');
+                }
+            }
+            exit('error');
+        }
+    }
+    public function message($error, $url = '', $errno = -1)
+    {
+        $data          = array();
+        $data['errno'] = $errno;
+        if (!empty($url)) {
+            $data['url'] = $url;
+        }
+        $data['error'] = $error;
+        echo json_encode($data);
+        exit;
+    }
+    public function doWebArticle()
+    {
+        global $_W, $_GPC;
+        load()->model('mc');
+        $ops       = array(
+            'display',
+            'post',
+            'delete',
+            'caiji',
+            'handsel',
+            'deleteall',
+            'checkall'
+        );
+        $op        = in_array($_GPC['op'], $ops) ? $_GPC['op'] : 'display';
+        $settings  = $this->module['config'];
+        $openiduid = mc_openid2uid($settings['kfid']);
+        $category  = pdo_fetchall("SELECT id,parentid,name FROM " . tablename($this->tb_category) . " WHERE uniacid = '{$_W['uniacid']}' ORDER BY parentid ASC, displayorder ASC, id ASC ", array(), 'id');
+        $parent    = array();
+        $children  = array();
+        if (!empty($category)) {
+            $children = '';
+            foreach ($category as $cid => $cate) {
+                if (!empty($cate['parentid'])) {
+                    $children[$cate['parentid']][] = $cate;
+                } else {
+                    $parent[$cate['id']] = $cate;
+                }
+            }
+        }
+        if ($op == 'display') {
+            $pindex    = max(1, intval($_GPC['page']));
+            $psize     = 20;
+            $condition = '';
+            $params    = array();
+            if (!empty($_GPC['status'])) {
+                $status = $_GPC['status'];
+                $condition .= " AND status = $status";
+            }
+            if (!empty($_GPC['keyword'])) {
+                $condition .= " AND title LIKE :keyword";
+                $params[':keyword'] = "%{$_GPC['keyword']}%";
+            }
+            if (!empty($_GPC['pcate'])) {
+                $pcate = $_GPC['pcate'];
+                $condition .= " AND pcate = $pcate";
+            }
+            if (!empty($_GPC['ccate'])) {
+                $ccate = $_GPC['ccate'];
+                $condition .= " AND ccate = $ccate";
+            }
+            if (!empty($_GPC['category']['childid'])) {
+                $cid = intval($_GPC['category']['childid']);
+                $condition .= " AND ccate = '{$cid}'";
+            } elseif (!empty($_GPC['category']['parentid'])) {
+                $cid = intval($_GPC['category']['parentid']);
+                $condition .= " AND pcate = '{$cid}'";
+            }
+            $list  = pdo_fetchall("SELECT * FROM " . tablename($this->tb_article) . " WHERE uniacid = '{$_W['uniacid']}' $condition ORDER BY displayorder DESC, id DESC LIMIT " . ($pindex - 1) * $psize . ',' . $psize, $params);
+            $total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename($this->tb_article) . " WHERE uniacid = '{$_W['uniacid']}' $condition");
+            $pager = pagination($total, $pindex, $psize);
+            include $this->template('article');
+        } elseif ($op == 'post') {
+            load()->func('file');
+            $id       = intval($_GPC['id']);
+            $template = uni_templates();
+            $pcate    = $_GPC['pcate'];
+            $ccate    = $_GPC['ccate'];
+            if (!empty($id)) {
+                $item         = pdo_fetch("SELECT * FROM " . tablename($this->tb_article) . " WHERE id = :id", array(
+                    ':id' => $id
+                ));
+                $item['type'] = explode(',', $item['type']);
+                $pcate        = $item['pcate'];
+                $ccate        = $item['ccate'];
+                if (empty($item)) {
+                    message('æŠ±æ­‰ï¼Œæ–‡ç« ä¸å­˜åœ¨æˆ–æ˜¯å·²ç»åˆ é™¤ï¼', '', 'error');
+                }
+                $item['credit'] = iunserializer($item['credit']) ? iunserializer($item['credit']) : array();
+                if (!empty($item['credit']['limit'])) {
+                    $credit_num = pdo_fetchcolumn('SELECT SUM(credit_value) FROM ' . tablename('cyl_wxwenzhang_article_share') . ' WHERE uniacid = :uniacid AND article_id = :article_id', array(
+                        ':uniacid' => $_W['uniacid'],
+                        ':article_id' => $id
+                    ));
+                    if (is_null($credit_num))
+                        $credit_num = 0;
+                    $credit_yu = (($item['credit']['limit'] - $credit_num) < 0) ? 0 : $item['credit']['limit'] - $credit_num;
+                }
+            } else {
+                $item['credit'] = array();
+            }
+            if (checksubmit('submit')) {
+                if (empty($_GPC['title'])) {
+                    message('æ ‡é¢˜ä¸èƒ½ä¸ºç©ºï¼Œè¯·è¾“å…¥æ ‡é¢˜ï¼');
+                }
+                $data = array(
+                    'uniacid' => $_W['uniacid'],
+                    'iscommend' => intval($_GPC['option']['commend']),
+                    'ishot' => intval($_GPC['option']['hot']),
+                    'pcate' => intval($_GPC['category']['parentid']),
+                    'ccate' => intval($_GPC['category']['childid']),
+                    'uid' => $openiduid,
+                    'template' => $_GPC['template'],
+                    'title' => $_GPC['title'],
+                    'status' => $_GPC['status'],
+                    'description' => $_GPC['description'],
+                    'content' => htmlspecialchars_decode($_GPC['content'], ENT_QUOTES),
+                    'incontent' => intval($_GPC['incontent']),
+                    'source' => $_GPC['source'],
+                    'sharelink' => $_GPC['sharelink'],
+                    'articlegg' => $_GPC['articlegg'],
+                    'articlelink' => $_GPC['articlelink'],
+                    'articledsfgg' => htmlspecialchars_decode($_GPC['articledsfgg']),
+                    'author' => $_GPC['author'],
+                    'displayorder' => intval($_GPC['displayorder']),
+                    'linkurl' => $_GPC['linkurl'],
+                    'pic' => iserializer($_GPC['pic']),
+                    'createtime' => TIMESTAMP,
+                    'click' => intval($_GPC['click'])
+                );
+                if (!empty($_GPC['thumb'])) {
+                    $data['thumb'] = $_GPC['thumb'];
+                } elseif (!empty($_GPC['autolitpic'])) {
+                    $match = array();
+                    preg_match('/attachment\\/(.*?)(\\.gif|\\.jpg|\\.png|\\.bmp)/', $_GPC['content'], $match);
+                    if (!empty($match[1])) {
+                        $data['thumb'] = $match[1] . $match[2];
+                    }
+                } else {
+                    $data['thumb'] = '';
+                }
+                $keyword = str_replace('ï¼Œ', ',', trim($_GPC['keyword']));
+                $keyword = explode(',', $keyword);
+                if (!empty($keyword)) {
+                    $rule['uniacid'] = $_W['uniacid'];
+                    $rule['name']    = 'æ–‡ç« ï¼š' . $_GPC['title'] . ' è§¦å‘è§„åˆ™';
+                    $rule['module']  = 'news';
+                    $rule['status']  = 1;
+                    $keywords        = array();
+                    foreach ($keyword as $key) {
+                        $key = trim($key);
+                        if (empty($key))
+                            continue;
+                        $keywords[] = array(
+                            'uniacid' => $_W['uniacid'],
+                            'module' => 'news',
+                            'content' => $key,
+                            'status' => 1,
+                            'type' => 1,
+                            'displayorder' => 1
+                        );
+                    }
+                    $reply['title']       = $_GPC['title'];
+                    $reply['description'] = $_GPC['description'];
+                    $reply['thumb']       = $_GPC['thumb'];
+                    $reply['url']         = murl('site/site/detail', array(
+                        'id' => $id
+                    ));
+                }
+                if (!empty($_GPC['credit']['status'])) {
+                    $credit['status'] = intval($_GPC['credit']['status']);
+                    $credit['limit']  = $_GPC['credit']['limit'] ? $_GPC['credit']['limit'] : message('è¯·è®¾ç½®ä½™é¢ä¸Šé™');
+                    $credit['share']  = $_GPC['credit']['share'] ? $_GPC['credit']['share'] : message('è¯·è®¾ç½®åˆ†äº«æ—¶èµ ä½™é¢å¤šå°‘');
+                    $credit['click']  = $_GPC['credit']['click'] ? $_GPC['credit']['click'] : message('è¯·è®¾ç½®é˜…è¯»æ—¶èµ é€ä½™é¢å¤šå°‘');
+                    $data['credit']   = iserializer($credit);
+                } else {
+                    $data['credit'] = iserializer(array(
+                        'status' => 0,
+                        'limit' => 0,
+                        'share' => 0,
+                        'click' => 0
+                    ));
+                }
+                $data['zongjia'] = $credit['limit'];
+                $data['jiage']   = $credit['share'];
+                $data['jifen']   = $_GPC['jifen'];
+                if (empty($id)) {
+                    pdo_insert($this->tb_article, $data);
+                    $id = pdo_insertid();
+                } else {
+                    unset($data['createtime']);
+                    pdo_update($this->tb_article, $data, array(
+                        'id' => $id
+                    ));
+                }
+                message('æ–‡ç« æ›´æ–°æˆåŠŸï¼', $this->createWebUrl('article'), 'success');
+            } else {
+                include $this->template('article');
+            }
+        } elseif ($op == 'delete') {
+            load()->func('file');
+            $id  = intval($_GPC['id']);
+            $row = pdo_fetch("SELECT id,rid,kid,thumb FROM " . tablename($this->tb_article) . " WHERE id = :id", array(
+                ':id' => $id
+            ));
+            if (empty($row)) {
+                message('æŠ±æ­‰ï¼Œæ–‡ç« ä¸å­˜åœ¨æˆ–æ˜¯å·²ç»è¢«åˆ é™¤ï¼');
+            }
+            if (!empty($row['thumb'])) {
+                file_delete($row['thumb']);
+            }
+            pdo_delete($this->tb_article, array(
+                'id' => $id
+            ));
+            message('åˆ é™¤æˆåŠŸï¼', referer(), 'success');
+        } elseif ($op == 'deleteall') {
+            $rowcount    = 0;
+            $notrowcount = 0;
+            foreach ($_GPC['idArr'] as $k => $id) {
+                $id = intval($id);
+                if (!empty($id)) {
+                    $row = pdo_fetch("SELECT * FROM " . tablename($this->tb_article) . " WHERE id = :id", array(
+                        ':id' => $id
+                    ));
+                    if (empty($row)) {
+                        $notrowcount++;
+                        continue;
+                    }
+                    pdo_delete($this->tb_article, array(
+                        'id' => $id,
+                        'uniacid' => $_W['uniacid']
+                    ));
+                    $rowcount++;
+                }
+            }
+            $this->message("æ“ä½œæˆåŠŸï¼å…±åˆ é™¤{$rowcount}æ¡æ•°æ®,{$notrowcount}æ¡æ•°æ®ä¸èƒ½åˆ é™¤!", '', 0);
+        } elseif ($op == 'checkall') {
+            load()->model('mc');
+            $rowcount    = 0;
+            $notrowcount = 0;
+            $settings    = $this->module['config'];
+            foreach ($_GPC['idArr'] as $k => $id) {
+                $id = intval($id);
+                if (!empty($id)) {
+                    $row = pdo_fetch("SELECT status,uid,credit FROM " . tablename($this->tb_article) . " WHERE id = :id", array(
+                        ':id' => $id
+                    ));
+                    if (empty($row)) {
+                        $notrowcount++;
+                        continue;
+                    }
+                    $credit = mc_credit_fetch($row['uid']);
+                    pdo_update($this->tb_article, array(
+                        'status' => 1
+                    ), array(
+                        "id" => $id,
+                        "uniacid" => $_W['uniacid']
+                    ));
+                    $rowcredit = iunserializer($row['credit']);
+                    if ($rowcredit['status'] == 0) {
+                        $result = mc_fansinfo($row['uid'], $_W['acid'], $_W['uniacid']);
+                        load()->classs('weixin.account');
+                        load()->func('communication');
+                        $acc    = WeAccount::create($acid);
+                        $credit = $credit['credit2'] + $settings['credit2'];
+                        mc_credit_update($row['uid'], 'credit2', 10, array(
+                            '1' => 'æ–‡ç« é€šè¿‡å®¡æ ¸å¢žåŠ ä½™é¢'
+                        ));
+                        $kdata = array(
+                            'first' => array(
+                                'value' => 'æ‚¨çš„æ–‡ç« å·²å®¡æ ¸é€šè¿‡',
+                                'color' => '#ff510'
+                            ),
+                            'keyword1' => array(
+                                'value' => $_W['uniaccount']['name'],
+                                'color' => '#ff510'
+                            ),
+                            'keyword2' => array(
+                                'value' => 'ç³»ç»Ÿèµ é€æ‚¨' . $settings['credit2'] . 'å…ƒ',
+                                'color' => '#ff510'
+                            ),
+                            'remark' => array(
+                                'value' => 'è¯·è¿›å…¥ä¼šå‘˜ä¸­å¿ƒç‚¹å‡»æŸ¥çœ‹',
+                                'color' => '#ff510'
+                            )
+                        );
+                        $url   = $_W['siteroot'] . 'app' . ltrim(murl('entry', array(
+                            'do' => 'memberfabumanage',
+                            'm' => 'cyl_wxweizhang',
+                            'uid' => $uid
+                        )), '.');
+                        $acc->sendTplNotice($result['openid'], $settings['templateid'], $kdata, $url, $topcolor = '#FF683F');
+                    }
+                    $rowcount++;
+                }
+            }
+            $this->message("æ“ä½œæˆåŠŸï¼å…±å®¡æ ¸{$rowcount}æ¡æ•°æ®,{$notrowcount}æ¡æ•°æ®ä¸èƒ½åˆ é™¤!!", '', 0);
+        } elseif ($op == 'caiji') {
+            $typeid = $this->typeid();
+            $list   = pdo_fetchall("SELECT sourcelink FROM " . tablename($this->tb_article) . " WHERE uniacid = {$_W['uniacid']}");
+            foreach ($list as $key => $val) {
+                foreach ($val as $value) {
+                    $new_arr[] = $value;
+                }
+            }
+            if (checksubmit('submit')) {
+                $pcate = $_GPC['category']['parentid'];
+                if (empty($_GPC['category']['parentid'])) {
+                    message('ä¸»åˆ†ç±»ä¸èƒ½ä¸ºç©ºï¼Œæˆ–è€…æ‚¨è¿˜æœªåˆ›å»ºåˆ†ç±»');
+                }
+                if (!empty($_GPC['wxurl'])) {
+                    $url = explode("\r\n", $_GPC['wxurl']);
+                }
+                if (empty($url)) {
+                    $id = intval($_GPC['typeid']);
+                    if ($id == 100) {
+                        message('è¯·é€‰æ‹©é‡‡é›†åˆ†ç±»');
+                    }
+                    if ($id == 20) {
+                        $id = 0;
+                    }
+                    $start = $_GPC['start'];
+                    if (empty($_GPC['start'])) {
+                        message('è¯·è¾“å…¥é‡‡é›†çš„é¡µæ•°');
+                    }
+                    $gjc     = $_GPC['gjc'];
+                    $ch      = curl_init();
+                    $urllist = "http://apis.baidu.com/showapi_open_bus/weixin/weixin_article_list?typeId=$id&page=$start&key=$gjc";
+                    $header  = array(
+                        'apikey: 9605e74753cc33db2fe49910953ae54e'
+                    );
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_URL, $urllist);
+                    $res     = curl_exec($ch);
+                    $data    = json_decode($res);
+                    $urlnews = array();
+                    foreach ($data->showapi_res_body->pagebean->contentlist as $item) {
+                        $urlnews[] = array(
+                            'link' => $item->url
+                        );
+                    }
+                    foreach ($urlnews as $key => $value) {
+                        if (!in_array($value['link'], $new_arr)) {
+                            $config = get_caiji($value['link']);
+                        }
+                        $data        = array(
+                            'uniacid' => $_W['uniacid'],
+                            'title' => $config['title'],
+                            'thumb' => 'http://img01.store.sogou.com/net/a/04/link?appid=100520031&w=600&url=' . $config['thumb'],
+                            'description' => $config['desc'],
+                            'uid' => $openiduid,
+                            'source' => $_W['uniaccount']['name'],
+                            'pcate' => intval($_GPC['category']['parentid']),
+                            'ccate' => intval($_GPC['category']['childid']),
+                            'content' => htmlspecialchars_decode($config['contents']),
+                            'createtime' => TIMESTAMP,
+                            'sourcelink' => $value['link'],
+                            'zongjia' => 0,
+                            'click' => random(4, true)
+                        );
+                        $data['pic'] = iserializer(getImgs($config['contents']));
+                        if (!in_array($data['sourcelink'], $new_arr)) {
+                            pdo_insert($this->tb_article, $data);
+                        }
+                    }
+                } else {
+                    foreach ($url as $key => $value) {
+                        if (!in_array($value, $new_arr)) {
+                            $config = get_caiji($value);
+                        }
+                        $data        = array(
+                            'uniacid' => $_W['uniacid'],
+                            'title' => $config['title'],
+                            'uid' => $openiduid,
+                            'thumb' => 'http://img01.store.sogou.com/net/a/04/link?appid=100520031&w=600&url=' . $config['thumb'],
+                            'description' => $config['desc'],
+                            'source' => $_W['uniaccount']['name'],
+                            'pcate' => intval($_GPC['category']['parentid']),
+                            'ccate' => intval($_GPC['category']['childid']),
+                            'content' => htmlspecialchars_decode($config['contents']),
+                            'createtime' => TIMESTAMP,
+                            'sourcelink' => $value,
+                            'zongjia' => 0,
+                            'click' => intval($_GPC['click'])
+                        );
+                        $data['pic'] = iserializer(getImgs($config['contents']));
+                        if (!in_array($value, $new_arr)) {
+                            pdo_insert($this->tb_article, $data);
+                        }
+                    }
+                }
+                message('æ–‡ç« é‡‡é›†æˆåŠŸï¼', $this->createWebUrl('article', array(
+                    'id' => $id
+                )), 'success');
+            }
+            include $this->template('article');
+        }
+    }
+    public function doWebTixian()
+    {
+        global $_W, $_GPC;
+        $settings    = $this->module['config'];
+        $totalamount = pdo_fetchcolumn(" SELECT SUM(amount) FROM " . tablename('cyl_wxwenzhang_tixian') . " WHERE uniacid ={$_W['uniacid']} ");
+        $pindex      = max(1, intval($_GPC['page']));
+        $psize       = 10;
+        $total       = pdo_fetchcolumn(" SELECT COUNT(*) FROM " . tablename('cyl_wxwenzhang_tixian') . " WHERE uniacid ={$_W['uniacid']} ");
+        $list        = pdo_fetchall("select * from" . tablename('cyl_wxwenzhang_tixian') . "where uniacid ={$_W['uniacid']} ORDER BY id DESC " . "LIMIT " . ($pindex - 1) * $psize . ',' . $psize);
+        $pager       = pagination($total, $pindex, $psize);
+        include $this->template('tixian');
+    }
+    public function doWebTixianShenhe()
+    {
+        global $_W, $_GPC;
+        load()->model('mc');
+        $settings = $this->module['config'];
+        load()->classs('weixin.account');
+        load()->func('communication');
+        $acc           = WeAccount::create($acid);
+        $user          = pdo_get('cyl_wxwenzhang_tixian', array(
+            'id' => $_GPC['id']
+        ), array(
+            'uid',
+            'title',
+            'wxh',
+            'openid',
+            'amount',
+            'nickname'
+        ));
+        $amount        = $user['amount'] * 100;
+        $arr['openid'] = $user['openid'];
+        $arr['hbname'] = 'ä½™é¢æçŽ°';
+        $arr['body']   = "ä½™é¢æçŽ°";
+        $arr['fee']    = $amount;
+        $res           = $this->sendhongbaoto($arr);
+        if ($res['result_code'] == 'SUCCESS') {
+            $kdata = array(
+                'first' => array(
+                    'value' => 'æçŽ°å®¡æ ¸æˆåŠŸ',
+                    'color' => '#ff510'
+                ),
+                'keyword1' => array(
+                    'value' => $_W['uniaccount']['name'],
+                    'color' => '#ff510'
+                ),
+                'keyword2' => array(
+                    'value' => 'æçŽ°é‡‘é¢ä¸º' . $user['amount'],
+                    'color' => '#ff510'
+                ),
+                'remark' => array(
+                    'value' => 'è¯·è¿›å…¥å¾®ä¿¡é¢†å–æŸ¥çœ‹',
+                    'color' => '#ff510'
+                )
+            );
+            $url   = $_W['siteroot'] . 'app' . ltrim(murl('entry', array(
+                'do' => 'member',
+                'm' => 'cyl_wxweizhang',
+                'uid' => $uid
+            )), '.');
+            $acc->sendTplNotice($user['openid'], $settings['templateid'], $kdata, $url, $topcolor = '#FF683F');
+            $user_data = array(
+                'status' => 1
+            );
+            pdo_update('cyl_wxwenzhang_tixian', $user_data, array(
+                'id' => $_GPC['id']
+            ));
+            message('å®¡æ ¸æˆåŠŸï¼', $this->createWebUrl('tixian'), 'success');
+        } else {
+            $msg = $res['return_msg'];
+            message("$msg", $this->createWebUrl('tixian'), 'error');
+        }
+    }
+}

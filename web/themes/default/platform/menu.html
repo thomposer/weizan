@@ -2,10 +2,15 @@
 {template 'common/header'}
 <link href="./resource/css/app.css" rel="stylesheet">
 <ul class="nav nav-tabs">
-	<li class="active"><a href="{php echo url('platform/menu/display');}">自定义菜单</a></li>
+	<li class="{if $_GPC['status'] == 'normal' || $_GPC['status'] == ''}active{/if}"><a href="{php echo url('platform/menu/display', array('status' => 'normal'));}">自定义菜单</a></li>
+	<li class="{if $_GPC['status'] == 'history'}active{/if}"><a href="{php echo url('platform/menu/display', array('status' => 'history'));}">历史菜单</a></li>
 </ul>
 {if $do == 'display'}
+{if empty($data) && $_GPC['status'] == 'history'}
+<div class="alert alert-info">没有历史菜单</div>
+{else}
 <div class="clearfix">
+	{if $_GPC['status'] != 'history'}
 	<div style="margin-bottom:20px">
 		{if empty($default_menu)}
 			<a href="{php echo url('platform/menu/add', array('type' => 1));}" class="btn btn-primary"><i class="fa fa-plus"></i> 添加默认菜单</a>
@@ -14,6 +19,7 @@
 			<a href="{php echo url('platform/menu/add', array('type' => 3));}" class="btn btn-primary"><i class="fa fa-plus"></i> 添加个性化菜单</a>
 		{/if}
 	</div>
+	{/if}
 	<div class="panel panel-default">
 		<div class="panel-body table-responsive">
 			<table class="table table-hover">
@@ -70,18 +76,27 @@
 						{/if}
 					</td>
 					<td align="right">
+						{if $_GPC['status'] == 'history'}
+						<a href="{php echo url('platform/menu/remove', array('id' => $da['id'], 'type'=> $da['type'], 'op' => 'recover'));}" class="btn btn-default">恢复</a>
+						{/if}
 						{if $da['type'] == 1}
 							<a href="{php echo url('platform/menu/add', array('id' => $da['id'], 'type'=> 1));}" class="btn btn-default">编辑</a>
 						{else}
 							<a href="{php echo url('platform/menu/add', array('id' => $da['id'], 'type'=> $da['type']));}" class="btn btn-default">查看</a>
 						{/if}
 						{if $da['status'] == 0}
+							{if $_GPC['status'] != 'history'}
 							<a href="{php echo url('platform/menu/push', array('id' => $da['id']));}" class="btn btn-default" onclick="if(!confirm('确定推送到微信端?')) return false;">推送到微信端</a>
+							{/if}
 						{/if}
 						{if $da['type'] == 3}
+							{if $_GPC['status'] != 'history'}
 							<a href="{php echo url('platform/menu/copy', array('id' => $da['id']));}" onclick="if(!confirm('确定复制吗')) return false;" class="btn btn-default">复制编辑</a>
+							{/if}
 						{/if}
-						<a href="{php echo url('platform/menu/remove', array('id' => $da['id']));}" onclick="if(!confirm('{if $da['type'] == 1}删除默认菜单会清空所有菜单记录，确定吗？{else}确定删除菜单?{/if}')) return false;" class="btn btn-default">删除</a>
+						{if $da['type'] != 1}
+						<a href="{php echo url('platform/menu/remove', array('id' => $da['id'], 'status' => $_GPC['status']));}" onclick="if(!confirm('{if $da['type'] == 1}删除默认菜单会清空所有菜单记录，确定吗？{else}确定删除菜单?{/if}')) return false;" class="btn btn-default">删除</a>
+						{/if}
 					</td>
 				</tr>
 				{/loop}
@@ -89,6 +104,7 @@
 		</div>
 	</div>
 </div>
+{/if}
 {/if}
 
 {if $do == 'add'}
@@ -208,7 +224,7 @@
 												<div class="form-group">
 													<label class="control-label col-xs-2">地区限制</label>
 													<div class="col-xs-10">
-														<divstyle="margin-top:15px">
+														<div style="margin-top:15px">
 														<div class="row row-fix tpl-district-container">
 															<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 																<select name="" data-value="{$menu['data']['matchrule']['province']}" ng-model="context.group.matchrule.province" ng-disabled="context.group.disabled" class="form-control tpl-province">

@@ -5,7 +5,6 @@
  */
 defined('IN_IA') or exit('Access Denied');
 $moduels = uni_modules();
-
 $params = @json_decode(base64_decode($_GPC['params']), true);
 if(empty($params) || !array_key_exists($params['module'], $moduels)) {
 	message('访问错误.');
@@ -32,10 +31,10 @@ if(!empty($setting['payment']['baifubao']['switch'])) {
 }
 $do = $_GET['do'];
 $type = in_array($do, $dos) ? $do : '';
+
 if(empty($type)) {
 	message('支付方式错误,请联系商家', '', 'error');
 }
-
 if(!empty($type)) {
 	$sql = 'SELECT * FROM ' . tablename('core_paylog') . ' WHERE `uniacid`=:uniacid AND `module`=:module AND `tid`=:tid';
 	$pars  = array();
@@ -46,9 +45,20 @@ if(!empty($type)) {
 	if(!empty($log) && ($type != 'credit' && !empty($_GPC['notify'])) && $log['status'] != '0') {
 		message('这个订单已经支付成功, 不需要重复支付.');
 	}
+	$update_card_log = array(
+		'is_usecard' => '0',
+		'card_type' => '0',
+		'card_id' => '0',
+		'card_fee' => $log['fee']
+	);
+	pdo_update('core_paylog', $update_card_log, array('plid' => $log['plid']));
+	$log['is_usecard'] = '0';
+	$log['card_type'] = '0';
+	$log['card_id'] = '0';
+	$log['card_fee'] = $log['fee'];
+	
 	$moduleid = pdo_fetchcolumn("SELECT mid FROM ".tablename('modules')." WHERE name = :name", array(':name' => $params['module']));
 	$moduleid = empty($moduleid) ? '000000' : sprintf("%06d", $moduleid);
-	$fee = $params['fee'];
 	
 	$record = array();
 	$record['type'] = $type;
@@ -64,11 +74,11 @@ if(!empty($type)) {
 				$record['is_usecard'] = 1;
 				$record['card_type'] = 1;
 				if($card['type'] == 'discount') {
-					$card['fee'] = sprintf("%.2f", ($params['fee'] * ($card['extra'] / 100)));
+					$card['fee'] = sprintf("%.2f", ($log['fee'] * ($card['extra'] / 100)));
 				} elseif($card['type'] == 'cash') {
 					$cash = iunserializer($card['extra']);
-					if($params['fee'] >= $cash['least_cost']) {
-												$card['fee'] =  sprintf("%.2f", ($params['fee'] -  $cash['reduce_cost']));
+					if($log['fee'] >= $cash['least_cost']) {
+												$card['fee'] =  sprintf("%.2f", ($log['fee'] -  $cash['reduce_cost']));
 					}
 				}
 				$record['card_fee'] = $card['fee'];
@@ -76,27 +86,28 @@ if(!empty($type)) {
 				$record['encrypt_code'] = trim($_GPC['encrypt_code']);
 			}
 		}
-		if($setting['payment']['card']['switch'] == 3  && !empty($_GPC['coupon_id'])) {
+		if($setting['payment']['card']['switch'] == 3 && !empty($_GPC['coupon_id'])) {
 			$coupon_id = intval($_GPC['coupon_id']);
 						$coupon = pdo_fetch('SELECT * FROM ' . tablename('activity_coupon') . ' WHERE uniacid = :aid AND couponid = :id', array(':aid' => $_W['uniacid'], ':id' => $coupon_id));
 			$use_modules = pdo_fetchall('SELECT module FROM ' . tablename('activity_coupon_modules') . ' WHERE uniacid = :uniacid AND couponid = :couponid', array(':uniacid' => $_W['uniacid'], ':couponid' => $coupon_id), 'module');
 			$use_modules = array_keys($use_modules);
 			if(!empty($coupon) && ($coupon['starttime'] <= TIMESTAMP  && $coupon['endtime'] >= TIMESTAMP) && in_array($params['module'], $use_modules)) {
 				$coupon['fee'] = $record['card_fee'];
-								$has = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('activity_coupon_record') . ' WHERE uid = :uid AND uniacid = :aid AND couponid = :cid AND status = 1 ', array(':uid' => $_W['member']['uid'], ':aid' => $_W['uniacid'], ':cid' => $coupon_id));
-				if($has > 0) {
+								$coupon_record = pdo_get('activity_coupon_record', array('uid' => $_W['member']['uid'], 'uniacid' => $_W['uniacid'], 'couponid' => $coupon_id, 'status' => '1'));
+				if(!empty($coupon_record)) {
 					$record['is_usecard'] = 1;
 					$record['card_type'] = 2;
 					if($coupon['type'] == '1') {
-						$coupon['fee'] = sprintf("%.2f", ($params['fee'] * $coupon['discount']));
+						$coupon['fee'] = sprintf("%.2f", ($log['fee'] * $coupon['discount']));
 					} elseif($coupon['type'] == '2') {
-						if($params['fee'] >= $coupon['condition']) {
-														$coupon['fee'] = sprintf("%.2f", ($params['fee'] -  $coupon['discount']));
+						if($log['fee'] >= $coupon['condition']) {
+														$coupon['fee'] = sprintf("%.2f", ($log['fee'] -  $coupon['discount']));
 						}
 					}
 				}
+				
 				$record['card_fee'] = $coupon['fee'];
-				$record['card_id'] = $coupon_id;
+				$record['card_id'] = $coupon_record['recid'];
 				$record['encrypt_code'] = '';
 			}
 		}
@@ -105,8 +116,13 @@ if(!empty($type)) {
 		message('系统支付错误, 请稍后重试.');
 	} else {
 		pdo_update('core_paylog', $record, array('plid' => $log['plid']));
+		if (!empty($log['uniontid']) && $record['card_fee']) {
+			$log['card_fee'] = $record['card_fee'];
+			$log['card_id'] = $record['card_id'];
+			$log['card_type'] = $record['card_type'];
+			$log['is_usecard'] = $record['is_usecard'];
+		}
 	}
-	
 	$ps = array();
 	$ps['tid'] = $log['plid'];
 	$ps['uniontid'] = $log['uniontid'];
@@ -132,6 +148,7 @@ if(!empty($type)) {
 			$tag['uid'] = $_W['member']['uid'];
 			pdo_update('core_paylog', array('openid' => $_W['openid'], 'tag' => iserializer($tag)), array('plid' => $plid));
 		}
+		$ps['title'] = urlencode($params['title']);
 		load()->model('payment');
 		load()->func('communication');
 		$sl = base64_encode(json_encode($ps));
@@ -142,7 +159,6 @@ if(!empty($type)) {
 	if($type == 'credit') {
 		$setting = uni_setting($_W['uniacid'], array('creditbehaviors'));
 		$credtis = mc_credit_fetch($_W['member']['uid']);
-		
 		$sql = 'SELECT * FROM ' . tablename('core_paylog') . ' WHERE `plid`=:plid';
 		$pars = array();
 		$pars[':plid'] = $ps['tid'];
@@ -172,9 +188,8 @@ if(!empty($type)) {
 					$a = $acc->PayConsumeCode($codearr);
 				}
 								if($log['is_usecard'] == 1 && $log['card_type'] == 2) {
-					$now = time();
 					$log['card_id'] = intval($log['card_id']);
-					pdo_query('UPDATE ' . tablename('activity_coupon_record') . " SET status = 2, usetime = {$now}, usemodule = '{$log['module']}' WHERE uniacid = :aid AND couponid = :cid AND uid = :uid AND status = 1 LIMIT 1", array(':aid' => $_W['uniacid'], ':uid' => $log['openid'], ':cid' => $log['card_id']));
+					pdo_update('activity_coupon_record', array('status' => '2', 'usetime' => time(), 'usemodule' => $log['module']), array('uniacid' => $_W['uniacid'], 'recid' => $log['card_id'], 'status' => '1'));
 				}
 				$site = WeUtility::createModuleSite($log['module']);
 				if(!is_error($site)) {

@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
+	<!--<script type="text/javascript">
+		var useragent = navigator.userAgent;
+		if (useragent.match(/MicroMessenger/i) != 'MicroMessenger') {
+		
+			alert('已禁止本次访问：您必须使用微信内置浏览器访问本页面！');
+			var url = '{php echo $this->createMobileUrl('stopllq',array('rid'=> $rid))}';
+			var opened = window.open(url, '_self');
+			//opened.opener = null;
+			//opened.close();
+		}
+	</script>-->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<title>{php if(isset($title)) $_W['page']['title'] = $title}{if !empty($_W['page']['title'])}{$_W['page']['title']} - {/if}{if !empty($_W['account']['name'])}{$_W['account']['name']}{/if}{if !empty($_W['page']['sitename'])} - {$_W['page']['sitename']}{else}{if IMS_FAMILY != 'x'} - Powered by 012wz.com{/if}{/if}</title>
@@ -15,152 +26,80 @@
 	<link href="{$_W['siteroot']}app/resource/css/font-awesome.min.css" rel="stylesheet">
 	<link href="{$_W['siteroot']}app/resource/css/animate.css" rel="stylesheet">
 	<link href="{$_W['siteroot']}app/resource/css/common.css" rel="stylesheet">
-	<link href="{$_W['siteroot']}app/{php echo str_replace('./', '', url('utility/style'))}" rel="stylesheet">
-	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-	<script src="{$_W['siteroot']}app/resource/js/require.js"></script>
-	<script src="{$_W['siteroot']}app/resource/js/app/config.js"></script>
 	
-<link href="../addons/fm_photosvote/template/mobile/photos/main.css?v{php echo time();}" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="../addons/fm_photosvote/template/mobile/photos/dialog1.css">
-<link type="text/css" rel="stylesheet" href="../addons/fm_photosvote/template/mobile/photos/style.css">
-<link type="text/css" rel="stylesheet" href="../addons/fm_photosvote/template/mobile/photos/gz_tip.css">
-<script type="text/javascript" src="../addons/fm_photosvote/template/mobile/photos/js/Tip.js"></script>
-<script type="text/javascript" src="../addons/fm_photosvote/template/mobile/photos/js/dialog_min1.js"></script>
+	
+<link href="{FM_STATIC_MOBILE}public/photos/main.css?v{php echo time();}" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="{FM_STATIC_MOBILE}public/photos/dialog1.css">
+<link type="text/css" rel="stylesheet" href="{FM_STATIC_MOBILE}public/photos/style.css">
+<link type="text/css" rel="stylesheet" href="{FM_STATIC_MOBILE}public/photos/gz_tip.css">
+{php echo register_jssdk()}
+<script type="text/javascript" src="{$_W['siteroot']}app/resource/js/lib/jquery-1.11.1.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{FM_STATIC_MOBILE}public/photos/js/Tip.js"></script>
+<script type="text/javascript" src="{FM_STATIC_MOBILE}public/photos/js/dialog_min1.js"></script>
 <script type="text/javascript">
-var config = {
-    coverUrl:'', //canvas图片 如果是挂卡图片形式就有图片地址   如果是其他形式则没有图片地址
-    swipeCur: 0,
-    swipeDir:'horizontal', //滑动图片方向  上下滑动 vertical   左右滑动 horizontal
-}
-//业务关联链接数组
-var ary_biz_jump_id = new Array();
-var ary_biz_jump_url = new Array();
+	var config = {
+	    coverUrl:'', //canvas图片 如果是挂卡图片形式就有图片地址   如果是其他形式则没有图片地址
+	    swipeCur: 0,
+	    swipeDir:'horizontal', //滑动图片方向  上下滑动 vertical   左右滑动 horizontal
+	}
+	//业务关联链接数组
+	var ary_biz_jump_id = new Array();
+	var ary_biz_jump_url = new Array();
 </script>
-<script src="../addons/fm_photosvote/template/mobile/photos/js/zepto_min.js"></script>
-<script src="../addons/fm_photosvote/template/mobile/photos/js/lottery.js"></script>
-<script src="../addons/fm_photosvote/template/mobile/photos/js/swipe.js"></script>
-<script src="../addons/fm_photosvote/template/mobile/photos/js/player.js"></script>
-<script src="../addons/fm_photosvote/template/mobile/photos/js/stackBlur.js"></script>
-<script src="../addons/fm_photosvote/template/mobile/photos/js/app.js"></script>
+<script src="{FM_STATIC_MOBILE}public/photos/js/zepto_min.js"></script>
+<script src="{FM_STATIC_MOBILE}public/photos/js/lottery.js"></script>
+<script src="{FM_STATIC_MOBILE}public/photos/js/swipe.js"></script>
+<script src="{FM_STATIC_MOBILE}public/photos/js/player.js"></script>
+<script src="{FM_STATIC_MOBILE}public/photos/js/stackBlur.js"></script>
+<script src="{FM_STATIC_MOBILE}public/photos/js/app.js"></script>
 <style>
-body{background:#000 no-repeat;  max-width: 640px;  margin: 0 auto;}
-.container {
-  padding-right: 0;
-  padding-left: 0;
-  margin-right: auto;
-  margin-left: auto;
-}
-.zongshu {
-  color: {if empty($bgarr['bodytextcolor'])}#fff{else}{$bgarr['bodytextcolor']}{/if};
-}
-.zongshu span{
-  color: {if empty($bgarr['bodynumcolor'])}#fff{else}{$bgarr['bodynumcolor']}{/if};
-}
-.lapiao .l {
-  color: {if empty($bgarr['bodytextcolor'])}#fff{else}{$bgarr['bodytextcolor']}{/if};
-}
-.lapiao .r {
-  color: {if empty($bgarr['bodytextcolor'])}#fff{else}{$bgarr['bodytextcolor']}{/if};
-}
-.lapiao {
-  height: 50px;
-  background: rgba(0,0,0,0.5);
-  position: fixed;
-  bottom: 0;
-  z-index: 10000;
-  max-width: 640px;
-  margin: 0 auto;
-}
-.int {
-  padding: 10px 5px;
-  width: 100%;
-  background: rgba(0,0,0,0.5);
-  position: fixed;
-  bottom: 0px;
-  z-index: 1000;
-  display: none;
-  max-width: 640px;
-  margin: 0 auto;
-}
+	body{background:#000 no-repeat;  max-width: 640px;  margin: 0 auto;}
+	.container {
+	  padding-right: 0;
+	  padding-left: 0;
+	  margin-right: auto;
+	  margin-left: auto;
+	}
+	.zongshu {
+	  color: {if empty($bgarr['bodytextcolor'])}#fff{else}{$bgarr['bodytextcolor']}{/if};
+	}
+	.zongshu span{
+	  color: {if empty($bgarr['bodynumcolor'])}#fff{else}{$bgarr['bodynumcolor']}{/if};
+	}
+	.lapiao .l {
+	  color: {if empty($bgarr['bodytextcolor'])}#fff{else}{$bgarr['bodytextcolor']}{/if};
+	}
+	.lapiao .r {
+	  color: {if empty($bgarr['bodytextcolor'])}#fff{else}{$bgarr['bodytextcolor']}{/if};
+	}
+	.lapiao {
+	  height: 50px;
+	  background: rgba(0,0,0,0.5);
+	  position: fixed;
+	  bottom: 0;
+	  z-index: 10000;
+	  max-width: 640px;
+	  margin: 0 auto;
+	}
+	.int {
+	  padding: 10px 5px;
+	  width: 100%;
+	  background: rgba(0,0,0,0.5);
+	  position: fixed;
+	  bottom: 0px;
+	  z-index: 1000;
+	  display: none;
+	  max-width: 640px;
+	  margin: 0 auto;
+	}
 </style>
 
 
 
-	<script type="text/javascript">
-	if(navigator.appName == 'Microsoft Internet Explorer'){
-		if(navigator.userAgent.indexOf("MSIE 5.0")>0 || navigator.userAgent.indexOf("MSIE 6.0")>0 || navigator.userAgent.indexOf("MSIE 7.0")>0) {
-			alert('您使用的 IE 浏览器版本过低, 推荐使用 Chrome 浏览器或 IE8 及以上版本浏览器.');
-		}
-	}
-	{php define('HEADER', true);}
-	window.sysinfo = {
-{if !empty($_W['uniacid'])}
-		'uniacid': '{$_W['uniacid']}',
-{/if}
-{if !empty($_W['acid'])}
-		'acid': '{$_W['acid']}',
-{/if}
-{if !empty($_W['openid'])}
-		'openid': '{$_W['openid']}',
-{/if}
-{if !empty($_W['uid'])}
-		'uid': '{$_W['uid']}',
-{/if}
-		'siteroot': '{$_W['siteroot']}',
-		'siteurl': '{$_W['siteurl']}',
-		'attachurl': '{$_W['attachurl']}',
-{if defined('MODULE_URL')}
-		'MODULE_URL': '{MODULE_URL}',
-{/if}
-		'cookie' : {'pre': '{$_W['config']['cookie']['pre']}'}
-	};
+<script type="text/javascript">
 	
-	// jssdk config 对象
-	jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} || {};
 	
-	// 是否启用调试
-	jssdkconfig.debug = false;
-	
-	jssdkconfig.jsApiList = [
-		'checkJsApi',
-		'onMenuShareTimeline',
-		'onMenuShareAppMessage',
-		'onMenuShareQQ',
-		'onMenuShareWeibo',
-		'hideMenuItems',
-		'showMenuItems',
-		'hideAllNonBaseMenuItem',
-		'showAllNonBaseMenuItem',
-		'translateVoice',
-		'startRecord',
-		'stopRecord',
-		'onRecordEnd',
-		'playVoice',
-		'pauseVoice',
-		'stopVoice',
-		'uploadVoice',
-		'downloadVoice',
-		'chooseImage',
-		'previewImage',
-		'uploadImage',
-		'downloadImage',
-		'getNetworkType',
-		'openLocation',
-		'getLocation',
-		'hideOptionMenu',
-		'showOptionMenu',
-		'closeWindow',
-		'scanQRCode',
-		'chooseWXPay',
-		'openProductSpecificView',
-		'addCard',
-		'chooseCard',
-		'openCard'
-	];
-	
-	</script>
-	
-	<script>
 	function _removeHTMLTag(str) {
 		if(typeof str == 'string'){
 			str = str.replace(/<script[^>]*?>[\s\S]*?<\/script>/g,'');
@@ -172,7 +111,7 @@ body{background:#000 no-repeat;  max-width: 640px;  margin: 0 auto;}
 		return str;
 	}
 	</script>
-	<script type="text/javascript" src="../addons/fm_photosvote/template/mobile/photos/js/main.js?{php echo time()}"></script>
+	<script type="text/javascript" src="{FM_STATIC_MOBILE}public/photos/js/main.js?v=1.0"></script>
 
 </head>
 <body>
@@ -181,15 +120,15 @@ body{background:#000 no-repeat;  max-width: 640px;  margin: 0 auto;}
 <div class="container">
     <div class="loading-img">
     	<div id="circular">
-				{loop $picarrs $mid $row}
-					<div id="circular_{$mid}" class="circular"></div>
-				{/loop}
+			{loop $picarrs $mid $row}
+				<div id="circular_{$mid}" class="circular"></div>
+			{/loop}
             <div class="clearfix"></div>
         </div>
     </div>
     <div class="swipe" id="swipe">
-    	<div class="pic_img"><a href="{php echo $this->createMobileUrl('photosvote', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}" ><img src="{php echo $this->getphotos($user['photo'], $user['avatar'], $reply['picture'], 1)}"></a></div>
-    	<div class="zongshu"> {php echo $this->getusernames($user['realname'], $user['nickname'])} {$reply['tpsname']}：<span>{php echo $user['photosnum'] + $user['xnphotosnum']} </span></div>
+    	<div class="pic_img"><a href="{php echo $this->createMobileUrl('tuser', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}" ><img src="{php echo toimage($user['avatar'])}"></a></div>
+    	<div class="zongshu"> {if empty($user['realname'])}{php echo cutstr($user['nickname'], '6')}{else}{php echo cutstr($user['realname'], '6')}{/if} {$rdisplay['tpsname']}：<span>{php echo $user['photosnum'] + $user['xnphotosnum']} </span></div>
         <div class="tanmu" id="tanmu">
         	<span class="yuan"></span>
            <div class="tm">弹幕</div>
@@ -210,19 +149,19 @@ body{background:#000 no-repeat;  max-width: 640px;  margin: 0 auto;}
     <div class="download_mask" id="downloadMask"><i></i></div>
 </div>
 <div class="lapiao">
-	<a href="{php echo $this->createMobileUrl('photosvote', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}" class="l">首页</a>
-	{if !empty($reply['lapiao'])}<em class="r" onclick="button2()">{$reply['lapiao']}</em>{/if}
+	<a href="{php echo $this->createMobileUrl('tuser', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}" class="l">详情模式</a>
+	{if !empty($rdisplay['lapiao'])}<em class="r" onclick="button2()">{$rdisplay['lapiao']}</em>{/if}
     <div id="mcover" onclick="weChat()" style="display:none;">
-            <img src="../addons/fm_photosvote/template/mobile/photos/guide.png">
+            <img src="{FM_STATIC_MOBILE}public/photos/guide.png">
     </div>
-	{if $uallonetp >= $reply['allonetp']}
-		<a href="Javescript::;"> <div class="addl" id="id"><div class="i"><i><img src="../addons/fm_photosvote/template/mobile/photos/xin.png"></i>已投</div><span class="jia">+1</span></div></a>
+	{if $uallonetp >= $rvote['allonetp']}
+		<a href="Javescript::;"> <div class="addl" id="id"><div class="i"><i><img src="{FM_STATIC_MOBILE}public/photos/xin.png"></i>已投</div><span class="jia">+1</span></div></a>
 		
 	{else}	
-		{if $udayonetp >= $reply['dayonetp']}							
-			<a href="Javescript::;"> <div class="addl" id="id"><div class="i"><i><img src="../addons/fm_photosvote/template/mobile/photos/xin.png"></i>已投</div><span class="jia">+1</span></div></a>
+		{if $udayonetp >= $rvote['dayonetp']}							
+			<a href="Javescript::;"> <div class="addl" id="id"><div class="i"><i><img src="{FM_STATIC_MOBILE}public/photos/xin.png"></i>已投</div><span class="jia">+1</span></div></a>
 		{else}	
-			 <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" onclick="tvote()"> <div class="addl" id="id"><div class="i"><i><img src="../addons/fm_photosvote/template/mobile/photos/xin.png"></i>投票</div><span class="jia">+1</span></div></a>
+			 <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" onclick="tvote()"> <div class="addl" id="id"><div class="i"><i><img src="{FM_STATIC_MOBILE}public/photos/xin.png"></i>投票</div><span class="jia">+1</span></div></a>
 					
 		{/if}								
 	{/if}
@@ -239,16 +178,13 @@ body{background:#000 no-repeat;  max-width: 640px;  margin: 0 auto;}
     <input type="button" class="int_btn" id="int_btn" value="发射" />
 </div>
 <div class="hua"><i></i><i></i><i></i> 左右滑动 <i></i><i></i><i></i></div>
-
-
-
 {template 'tvote'}
 <script type="text/javascript">
-var iscode = "{$reply['iscode']}";	
+var iscode = "{$rvote['iscode']}";	
 
-$('#atten_shade').live('click', function() {
- $('#atten_shade').remove();
-})
+//$('#atten_shade').live('click', function() {
+ //	$('#atten_shade').remove();
+//})
 
 
 document.ontouchstart = function(){
@@ -260,20 +196,20 @@ $('#text').blur(function(){
 	$('.swipe li').css('top','0px')	
 })
 $('#tanmu').bind('click',function(){
-		$('.add,.addl').find('i img').removeClass('changesize')	
-		$('.add,.addl').find('span').removeClass('jiayi')	
+		$('.add,.addl').find('i img').removeClass('changesize')	;
+		$('.add,.addl').find('span').removeClass('jiayi')	;
 	if($(int).is(':hidden')){
-		$('.tanmu').css({background : '#ef1e6f',padding:'0 0 0 5px'}).children('.yuan').css('float','right')
-		$('.lapiao').hide()
-		$('.int').show()
+		$('.tanmu').css({background : '#ef1e6f',padding:'0 0 0 5px'}).children('.yuan').css('float','right');
+		$('.lapiao').hide();
+		$('.int').show();
 		tanmuAjax();
 	}else{
-		$('.tanmu').css({background : '#979797',padding:'0'}).children('.yuan').css('float','left')
-		$('.lapiao').show()
-		$('.int').hide()
-		$('.floatTxt').remove()
-		clearInterval(TIMER)
-		clearInterval(TIMER2)
+		$('.tanmu').css({background : '#979797',padding:'0'}).children('.yuan').css('float','left');
+		$('.lapiao').show();
+		$('.int').hide();
+		$('.floatTxt').remove();
+		clearInterval(TIMER);
+		//clearInterval(TIMER2);
 	}
 });
 
@@ -395,7 +331,8 @@ $(document).delegate('#int_btn','click',function(){
 	createDiv($txt.val());
 	var content = $('#int_txt').val();
 	if(content == '' || content == null) {
-		fminfo("请输入内容！");
+		//fminfo("请输入内容！");
+		fmloadding('.overlay_container', '请输入内容！');
 		return false;
 	}
 	var bbstype = "tuserphotos";

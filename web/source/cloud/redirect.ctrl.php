@@ -7,7 +7,7 @@
 if(empty($_W['isfounder'])) {
 	message('访问非法.');
 }
-$do = in_array($do, array('profile', 'device', 'callback', 'appstore', 'buyversion', 'buybranch')) ? $do : 'profile';
+$do = in_array($do, array('profile', 'device', 'callback', 'appstore', 'buyversion', 'buybranch', 'sms')) ? $do : 'profile';
 $authurl = 'http://addons2.weizancms.com/web/index.php?c=auth&a=passwort';
 
 $auth = array();
@@ -27,6 +27,11 @@ if($do == 'profile') {
 	$title = '注册站点';
 }
 
+if($do == 'sms') {
+	$auth['forward'] = 'sms';
+	$iframe = __to($auth);
+	$title = '云短信';
+}
 if($do == 'appstore') {
 	$auth['forward'] = 'appstore';
 	$iframe = __to($auth);

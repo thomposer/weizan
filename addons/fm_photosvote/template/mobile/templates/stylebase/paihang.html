@@ -1,14 +1,14 @@
 {php $bootstrap_type = 3;}
 {template 'header'}
 
-<link type="text/css" rel="stylesheet" href="../addons/fm_photosvote/template/mobile/photos/style.css?v{php echo time();}" />
-<script type="text/javascript" src="../addons/fm_photosvote/template/mobile/photos/js/Tip.js"></script>
+<link type="text/css" rel="stylesheet" href="{FM_STATIC_MOBILE}public/photos/style.css?v{php echo time();}" />
+<script type="text/javascript" src="{FM_STATIC_MOBILE}public/photos/js/Tip.js"></script>
 
 <style>
   body{background:#f5f5f5 no-repeat;background-size:100% auto;}
 
   .con {
-    background: {$reply['zbgcolor']} url({php echo toimage($reply['zbg'])});
+    background: {$rbody['zbgcolor']} url({php echo toimage($rbody['zbg'])});
     padding: 15px 10px 20px;
     margin-top: -60px;
     background-size: 100% auto;
@@ -30,7 +30,7 @@
   .top .topa {
     float: right;
     margin-top: 5px;
-    background:url(../addons/fm_photosvote/template/images/bm.png) center no-repeat #fe7160;
+    background:url({FM_STATIC_MOBILE}public/images/bm.png) center no-repeat #fe7160;
     background-size: 100% 100%;
     line-height: 30px;
     height: 30px;
@@ -67,7 +67,7 @@
     max-width: 640px;
     margin:0 auto;
     height: 60px;
-    background: url({php echo toimage($reply['zbgtj'])}) repeat-x -60px 0;
+    background: url({php echo toimage($rbody['zbgtj'])}) repeat-x -60px 0;
     background-size: auto 100%;
     position: relative;
     z-index: 10px;  margin-top: -10px;
@@ -121,7 +121,7 @@
   }
 </style>
  	
-<div class="banner"style="    margin-top: -20px;"><img src="{php echo toimage($reply['picture'])}" style="max-width: 100%;"></div>
+<div class="banner"style="    margin-top: -20px;"><img src="{php echo toimage($rabsic['picture'])}" style="max-width: 100%;"></div>
 {template 'tongji'}
 
 
@@ -171,12 +171,12 @@
 		{if $total > $psize}	
 		<div align="center">  
 			<button class="usr_more load_more label label-info" id="load_more_button"><i class="fa fa-random"></i> 查看更多</button>
-			<div class="animation_image" style="display:none;width:50px;color:#fff"><img src="../addons/fm_photosvote/template/mobile/photos/ajax-loader.gif" width="50"> Loading...</div>  
+			<div class="animation_image" style="display:none;width:50px;color:#fff"><img src="{FM_STATIC_MOBILE}public/photos/ajax-loader.gif" width="50"> Loading...</div>  
 		</div>
 		{/if}
-		{if $reply['ispaihang'] == 1}{template 'zanzhu'}{/if}
+		{if $rdisplay['ispaihang'] == 1}{template 'zanzhu'}{/if}
 		<div class="copyright">
-		{if $reply['iscopyright']==1}<a href="{$reply['copyrighturl']}">&copy;{$reply['copyright']}</a>{else}<a href="javascript:;">{if empty($footer_off)}&copy;{if empty($_W['account']['name'])}FantasyMoons Team团队{else}{$_W['account']['name']}{/if}&nbsp;&nbsp;{$_W['setting']['copyright']['statcode']}{/if}</a>{/if}
+		{if $rdisplay['iscopyright']==1}<a href="{$rdisplay['copyrighturl']}">&copy;{$rdisplay['copyright']}</a>{else}<a href="javascript:;">{if empty($footer_off)}&copy;{if empty($_W['account']['name'])}FantasyMoons Team团队{else}{$_W['account']['name']}{/if}&nbsp;&nbsp;{$_W['setting']['copyright']['statcode']}{/if}</a>{/if}
 		</div>
 	</div>
 {else}
@@ -247,7 +247,7 @@
 		{if $total > $psize}	
 		<div align="center">  
 			<button class="usr_more load_more label label-info" id="load_more_button"><i class="fa fa-random"></i> 查看更多</button>
-			<div class="animation_image" style="display:none;width:50px;color:#fff"><img src="../addons/fm_photosvote/template/mobile/photos/ajax-loader.gif" width="50"> Loading...</div>  
+			<div class="animation_image" style="display:none;width:50px;color:#fff"><img src="{FM_STATIC_MOBILE}public/photos/ajax-loader.gif" width="50"> Loading...</div>  
 		</div>
 		{/if}
     {if !empty($tagsarr)}
@@ -276,9 +276,9 @@
         </ul>
       </div>
     {/if}
-		{if $reply['ispaihang'] == 1}{template 'zanzhu'}{/if}
+		{if $rdisplay['ispaihang'] == 1}{template 'zanzhu'}{/if}
 		<div class="copyright">
-		{if $reply['iscopyright']==1}<a href="{$reply['copyrighturl']}">&copy;{$reply['copyright']}</a>{else}<a href="javascript:;">{if empty($footer_off)}&copy;{if empty($_W['account']['name'])}FantasyMoons Team团队{else}{$_W['account']['name']}{/if}&nbsp;&nbsp;{$_W['setting']['copyright']['statcode']}{/if}</a>{/if}
+		{if $rdisplay['iscopyright']==1}<a href="{$rdisplay['copyrighturl']}">&copy;{$rdisplay['copyright']}</a>{else}<a href="javascript:;">{if empty($footer_off)}&copy;{if empty($_W['account']['name'])}FantasyMoons Team团队{else}{$_W['account']['name']}{/if}&nbsp;&nbsp;{$_W['setting']['copyright']['statcode']}{/if}</a>{/if}
 		</div>
 	</div>
 

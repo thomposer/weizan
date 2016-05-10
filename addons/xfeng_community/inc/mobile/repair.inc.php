@@ -20,7 +20,7 @@
 		$categories = pdo_fetchall("SELECT * FROM".tablename('xcommunity_category')."WHERE weid='{$_W['weid']}' AND type=2");
 		$m = mc_fetch($_W['member']['uid'],array('realname','mobile','address'));
 		//查小区编号
-	$member = $this->changemember();
+		$member = $this->changemember();
 		if ($_W['isajax']) {
 			$data  = array(
 				'openid'      => $_W['fans']['from_user'],
@@ -44,11 +44,12 @@
 			$notice = pdo_fetchall("SELECT * FROM".tablename('xcommunity_wechat_notice')."WHERE uniacid=:uniacid",array('uniacid' => $_W['uniacid']));
 			// $list = array();
 			foreach ($notice as $key => $value) {
-				if ($value['type'] == 1 || $value['type'] == 3) {
+				// if ($value['type'] == 1 || $value['type'] == 3) {
 					$regions = unserialize($value['regionid']);
 					if (@in_array($member['regionid'], $regions)) {
-						// $list = $notice;
+			
 						if ($value['repair_status'] == 2) {
+							if ($value['type'] == 2 || $value['type'] == 3) {
 							//短信提醒
 							$mmember = $this->member($value['fansopenid']); //管理员手机
 							$content = $_GPC['content'];
@@ -56,9 +57,10 @@
 							if ($sms['report_type']) {
 								$tpl_id = $sms['reportid'];
 								$appkey = $sms['sms_account'];
-								// $mobile = $m['mobile'];
 								$this->Resms($content,$tpl_id,$appkey,$mmember['mobile'],$member['mobile']);
 							}
+							}
+							if ($value['type'] == 1 || $value['type'] == 3) {
 							//模板消息通知
 							$openid = $value['fansopenid'];
 							$url = $_W['siteroot']."app/index.php?i={$_W['uniacid']}&c=entry&op=grab&id={$id}&do=repair&m=xfeng_community";
@@ -90,8 +92,9 @@
 								);
 							$this->sendtpl($openid,$url,$template_id,$content);
 						}
+						}
 					}
-				}
+				// }
 				
 			}
 			// foreach ($list as $key => $value) {
@@ -170,7 +173,7 @@
 	}elseif ($op == 'list') {
 		$set = pdo_fetch("SELECT * FROM".tablename('xcommunity_set')."WHERE uniacid=:uniacid",array(':uniacid' => $_W['uniacid']));
 		//查小区编号
-	$member = $this->changemember();
+		$member = $this->changemember();
 		if ($_W['isajax']) {
 			$pindex = max(1, intval($_GPC['page']));
 			$psize = 10;
@@ -352,26 +355,29 @@
 			pdo_update('xcommunity_report',array('status' => $status,'resolve' => $_GPC['resolve'],'resolvetime' => TIMESTAMP),array('id' => $id));
 			if ($status == 1) {
 				$openid = $item['openid'];
-				$member = pdo_fetch("SELECT realname FROM".tablename('xcommunity_member')."WHERE openid=:openid",array(':openid' => $openid));
+				$member = pdo_fetch("SELECT realname,address FROM".tablename('xcommunity_member')."WHERE openid=:openid",array(':openid' => $openid));
 				$tpl = pdo_fetch("SELECT * FROM".tablename('xcommunity_wechat_tplid')."WHERE uniacid=:uniacid",array(':uniacid' => $_W['uniacid']));
 				$template_id = $tpl['grab_wc_tplid'];
 				$url = '';
 				$content = array(
-						'first' => array(
-								'value' => '您的服务已处理',
-							),
-						'keyword1' => array(
-								'value' => $item['content'],
-							),
-						'keyword2' => array(
-								'value' => $member['realname'],
-							),
-						'keyword3'	=> array(
-								'value' => date('Y-m-d H:i',timestamp),
-							),
-						'remark'    => array(
-							'value' => '谢谢使用。',
-						),	
+							'first' => array(
+									'value' => '尊敬的业主，您的报修已经完成',
+								),
+							'keyword1' => array(
+									'value' => $member['address'],
+								),
+							'keyword2' => array(
+									'value' =>$item['content'],
+								),
+							'keyword3' => array(
+									'value' =>$member['realname'],
+								),
+							'keyword4'	=> array(
+									'value' => date('Y-m-d H:i',TIMESTAMP),
+								),
+							'remark'    => array(
+								'value' => '请到微信我的报修给我们评价，谢谢使用！',
+							),	
 					);
 				$result = $this->sendtpl($openid,$url,$template_id,$content);
 			}

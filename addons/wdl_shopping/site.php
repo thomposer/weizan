@@ -1434,7 +1434,7 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 		}
 		$carttotal = $this->getCartTotal();
 		$profile = fans_search($_W['fans']['from_user'], array('resideprovince', 'residecity', 'residedist', 'address', 'realname', 'mobile'));
-		$row = pdo_fetch("SELECT * FROM " . tablename('mc_member_address') . " WHERE isdefault = 1 and uid = :uid limit 1", array(':uid' => $_W['fans']['uid']));
+		$row = pdo_fetch("SELECT * FROM " . tablename('mc_member_address') . " WHERE isdefault = 1 and uid = :uid limit 1", array(':uid' => $_W['member']['uid']));
 		include $this->template('confirm');
 	}
 
@@ -1834,10 +1834,11 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 			$data['status'] = 1;
 		}
 
-		if (empty($_SESSION['wdl_shopping_pay_result'])) {
+		if ($_SESSION['wdl_shopping_pay_result'] != $params['tid']) {
 			session_start();
-			$_SESSION['wdl_shopping_pay_result'] = 1;
-
+			$_SESSION['wdl_shopping_pay_result'] = $params['tid'];
+			$pay_status = pdo_get('shopping_order', array('id' =>$params['tid']));
+			$pay_status = $pay_status['status'];
 			$goods = pdo_fetchall("SELECT `goodsid`, `total`, `optionid` FROM " . tablename('shopping_order_goods') . " WHERE `orderid` = :orderid", array(':orderid' => $params['tid']));
 			if (!empty($goods)) {
 				$row = array();
@@ -1849,14 +1850,17 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 						$goodsupdate['total'] = ($goodsupdate['total'] < 0) ? 0 : $goodsupdate['total'];
 					}
 					$goodsupdate['sales'] = $goodsInfo['sales'] + $row['total'];
-					pdo_update('shopping_goods', $goodsupdate, array('id' => $row['goodsid']));
-
+					if ($pay_status != 1) {
+						pdo_update('shopping_goods', $goodsupdate, array('id' => $row['goodsid']));
+					}
 					$optionInfo = pdo_fetch("SELECT `stock` FROM " . tablename('shopping_goods_option') . " WHERE `id` = :id", array(':id' => $row['optionid']));
 					$options = array();
 					if ($goodsInfo['totalcnf'] == '1' && !empty($optionInfo['stock'])) {
 						$options['stock'] = $optionInfo['stock'] - $row['total'];
 						$options['stock'] = ($optionInfo['stock'] < 0) ? 0 : $options['stock'];
-						pdo_update('shopping_goods_option', $options, array('id' => $row['optionid']));
+						if ($pay_status != 1) {
+							pdo_update('shopping_goods_option', $options, array('id' => $row['optionid']));
+						}
 					}
 				}
 			}
@@ -1865,9 +1869,9 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 			$setting = uni_setting($_W['uniacid'], array('creditbehaviors'));
 			$credit = $setting['creditbehaviors']['currency'];
 			if ($params['type'] == $credit) {
-				message('支付成功！', $this->createMobileUrl('myorder'), 'success');
+				message('支付成功！', $this->createMobileUrl('myorder', array('status' => 2)), 'success');
 			} else {
-				message('支付成功！', '../../app/' . $this->createMobileUrl('myorder'), 'success');
+				message('支付成功！', '../../app/' . $this->createMobileUrl('myorder', array('status' => 2)), 'success');
 			}
 		}
 		if ($params['from'] == 'return') {

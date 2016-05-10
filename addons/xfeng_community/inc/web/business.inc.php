@@ -219,7 +219,7 @@
 			}
 			$pindex = max(1, intval($_GPC['page']));
 			$psize  = 20;
-			$sql = "SELECT o.*,m.realname as realname,m.mobile as mobile,m.address as address FROM".tablename('xcommunity_order')."as o left join".tablename('xcommunity_member')."as m on o.from_user = m.openid WHERE o.weid='{$_W['weid']}' AND o.type = 'business' $condition LIMIT ".($pindex - 1) * $psize.','.$psize;
+			$sql = "SELECT o.*,m.realname as realname,m.mobile as mobile,m.address as address FROM".tablename('xcommunity_order')."as o left join".tablename('xcommunity_member')."as m on o.from_user = m.openid WHERE o.weid='{$_W['weid']}' AND o.type = 'business' $condition  ORDER BY o.status DESC, o.createtime DESC LIMIT ".($pindex - 1) * $psize.','.$psize;
 			$list   = pdo_fetchall($sql,$parms);
 			foreach ($list as $key => $value) {
 				$list[$key]['cctime'] = date('Y-m-d H:i',$value['createtime']);
@@ -262,7 +262,7 @@
 			            )
 			        ));
 			}
-			$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_order')."as o left join".tablename('xcommunity_member')."as m on o.from_user = m.openid WHERE o.weid='{$_W['weid']}' AND o.type = 'business' $condition",$parms);
+			$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_order')."as o left join".tablename('xcommunity_member')."as m on o.from_user = m.openid WHERE o.weid='{$_W['weid']}' AND o.type = 'business' $condition ORDER BY o.status DESC, o.createtime DESC",$parms);
 			$pager  = pagination($total, $pindex, $psize);
 			load()->func('tpl');
 			include $this->template('web/business/order/list');
@@ -270,6 +270,7 @@
 			$id = intval($_GPC['id']);
 			if ($id) {
 				$item = pdo_fetch("SELECT o.*,m.realname as realname,m.mobile as mobile,m.address as address FROM " . tablename('xcommunity_order') . "as o left join".tablename('xcommunity_member')."as m on o.from_user = m.openid WHERE o.id = :id", array(':id' => $id));
+				$region = $this->region($item['regionid']);
 				if ($item['gid']) {
 					$goods = pdo_fetch("SELECT * FROM".tablename('xcommunity_goods')."WHERE weid=:weid AND id=:id",array(':id' => $item['gid'],':weid' => $_W['uniacid']));
 				}

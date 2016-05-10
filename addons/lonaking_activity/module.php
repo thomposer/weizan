@@ -3,7 +3,7 @@
  * 活动管理平台模块定义
  *
  * @author lonaking
- * @url http://bbs.we7.cc/
+ * @url http://bbs.012wz.com/
  */
 defined('IN_IA') or exit('Access Denied');
 

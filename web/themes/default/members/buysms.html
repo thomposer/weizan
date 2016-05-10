@@ -13,7 +13,6 @@
     <li><a href="{php echo url('members/record');}">会员消费</a></li>
 	<li><a href="{php echo url('members/users');}">充值记录</a></li>
 	<li><a href="{php echo url('members/configs');}">服务配置</a></li>
-    <li><a href="{php echo url('members/test');}">测试服务</a></li>
     {/if}
 </ul>
     <div style="width: 100%" >
@@ -108,7 +107,7 @@
                 }
                 $(this).attr("disabled","true");
                 $.ajax({
-                    'url':"{php echo $this->createWebUrl('BuySms')}",
+                    'url':"{php echo url('members/buysms')}",
                     'data':$("form").serialize(),
                     'type':'POST',
                     'async':'true',

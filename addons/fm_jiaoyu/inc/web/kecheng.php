@@ -10,6 +10,7 @@
         $action = 'kecheng';
 	    $schoolid = intval($_GPC['schoolid']);
 		
+		$school = pdo_fetch("SELECT * FROM " . tablename($this->table_index) . " where id = :id ORDER BY ssort DESC", array(':id' => $schoolid));
 
 		$it = pdo_fetch("SELECT * FROM " . tablename($this->table_classify) . " WHERE sid = :sid", array(':sid' => $sid));
 		$xueqi = pdo_fetchall("SELECT * FROM " . tablename($this->table_classify) . " where weid = '{$_W['uniacid']}' AND schoolid ={$schoolid} And type = 'semester' ORDER BY ssort DESC", array(':weid' => $_W['uniacid'], ':type' => 'semester', ':schoolid' => $schoolid));		
@@ -53,10 +54,13 @@
 				    'weid' => $_W['uniacid'],
 					'schoolid' => $schoolid,
 					'tid' => intval($_GPC['tid']),
+					'xq_id' => trim($_GPC['xq']),
 					'km_id' => trim($_GPC['km']),
 					'bj_id' => trim($_GPC['bj']),
 					'name' => trim($_GPC['name']),
 					'minge' => trim($_GPC['minge']),
+					'yibao' => trim($_GPC['yibao']),
+					'cose' => trim($_GPC['cose']),
 					'dagang' => trim($_GPC['dagang']),
 					'adrr' => trim($_GPC['adrr']),
 					'is_hot' => intval($_GPC['is_hot']),
@@ -148,7 +152,7 @@
                 }	
 										
 				pdo_insert($this->table_kcbiao, $data);
-            	message('操作成功', $this->createWebUrl('kecheng', array('op' => 'display', 'schoolid' => $schoolid)), 'success');    
+					message('操作成功', $this->createWebUrl('kecheng', array('op' => 'display', 'schoolid' => $schoolid)), 'success');    
             }
 		}	
         include $this->template ( 'web/kecheng' );

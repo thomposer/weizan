@@ -61,12 +61,13 @@
 					'location'   =>$_GPC['location'],
 					'reason'     =>$_GPC['reason'],
 					'remark'     =>$_GPC['remark'],
+					'content'    =>htmlspecialchars_decode($_GPC['content'])
 				);
 			if ($user) {
 					$data['uid'] = $_W['uid'];
 				}
 				if ($user['regionid']) {
-					$data['regionid'] = serialize($user['regionid']);
+					$data['regionid'] = serialize(array(0 => $user['regionid']));
 
 				}else{
 					$data['regionid'] = serialize($_GPC['regionid']);

@@ -180,6 +180,18 @@
 		</table>
 	</div>
 </div>
+{elseif $do == 'phone'}
+<div id="">
+	<div class="form-group list-group-item clearfix">
+		<label class="col-xs-12 col-sm-2 col-md-2 control-label" style="margin-top:5px;">号码</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" name="telphone" id="telphone" value="" />
+		</div>
+		<div class="col-sm-4">
+			<a href="javascript:;" class="btn btn-primary" onclick="clicklink('tel:' + $('#telphone').val());">确定</a>
+		</div>
+	</div>
+</div>
 {else}
 <style type="text/css">
 .link-browser ul li{width: 120px; }

@@ -11,13 +11,12 @@
 	{if $_W['isfounder']}
     <li class="active"><a href="{php echo url('members/record');}">会员消费</a></li>
 	<li><a href="{php echo url('members/configs');}">服务配置</a></li>
-    <li><a href="{php echo url('members/test');}">测试服务</a></li>
     {/if}
 </ul>
     <div style="width: 100%" >
         <aside>
             <section>
-                {if $op == 'cz'}
+                {if $do == 'cz'}
                 <div class="panel panel-default">
                     <div class="panel-heading">充值记录</div>
                     <div class="panel-body">

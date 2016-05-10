@@ -79,8 +79,16 @@ require(['jquery', 'util'], function($, u) {
 
 
         {elseif $u['companyid']&&empty($u['regionid'])}
-            <div class="form-group">
-            <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">所属小区</label>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">所属物业</label>
+            <div class="col-sm-10 col-lg-3 col-xs-3">
+                <select name="companyid" class="form-control" id="companyid">
+                    <option value="0">请选择所属物业</option>
+                    {loop $list $row}
+                    <option value="{$row['id']}" {if $user['companyid'] == $row['id']}selected = selected {/if}>{$row['title']}</option>
+                    {/loop}
+                </select>
+            </div>
             <div class="col-sm-10 col-lg-3 col-xs-3">
                 <select name="regionid" class="form-control" id="regionid">
                     <option value="0">请选择所属小区</option>
@@ -91,6 +99,18 @@ require(['jquery', 'util'], function($, u) {
                 <span class="help-block"></span>
             </div>
         </div>
+<!--         <div class="form-group">
+            <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">所属小区</label>
+            <div class="col-sm-10 col-lg-3 col-xs-3">
+                <select name="regionid" class="form-control" id="regionid">
+                    <option value="0">请选择所属小区</option>
+                    {loop $regions $row}
+                    <option value="{$row['id']}" {if $user['regionid'] == $row['id']}selected = selected {/if}>{$row['city']}{$row['dist']}{$row['title']}</option>
+                    {/loop}
+                </select>
+                <span class="help-block"></span>
+            </div>
+        </div> -->
         {/if}
         <div class="form-group">
             <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">备注</label>
@@ -113,7 +133,7 @@ $(function() {
         var companyid = $("#companyid option:selected").val();
         if (companyid != '0') {
             $.getJSON("{php echo $this->createWebUrl('users',array('op' => 'ajax'))}", {companyid:companyid}, function (data) { 
-                var content;
+                var content = "<option value='0'>请选择所属小区</option>";
                 for(var o in data){
                     content +="<option value="+data[o].id+" >"+data[o].title+"</option>";
                 }

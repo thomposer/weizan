@@ -32,7 +32,11 @@
 	{loop $navs $i $nav} 
         <a style="" class="weishidai-list-item tpl-catelist-item" href="{$nav['url']}">
 			<div class="weishidai-list-icon">
-				<img src="{$_W['attachurl']}{$nav['icon']}" />
+				{if !empty($nav['icon'])}
+      <img src="{$_W['attachurl']}{$nav['icon']}">
+      {else}
+      <i class="{$nav['css']['icon']['icon']}" style="{$nav['css']['icon']['style']}"></i>
+      {/if}
 			</div>
 			<div class="weishidai-list-title tpl-cate-title">{$nav['name']}</div>
 		</a>

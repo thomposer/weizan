@@ -1,23 +1,19 @@
  {template 'style/style1/header'}
-<!--  <script type="text/javascript">
-$(function({
-    var url ="{php echo $this->createMobileUrl('repair',array('op' => grab))}" ;
-    $.ajax({
-                    url: url,
-                    async: false,
-                    type: 'post',
-                    dataType: 'json',
-                    data: {
-                        status : 3
-                    },
-                    success: function(data) {
-                        
-                    },
-             })
+  <script type="text/javascript" src="{$_W['siteroot']}app/resource/js/lib/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript">
 
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} || {};
 
-}))
- </script> -->
+    // 是否启用调试
+    jssdkconfig.debug = false;
+
+    jssdkconfig.jsApiList = [
+
+        'previewImage',
+
+    ];
+    </script>
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">详情</h3>
@@ -72,6 +68,7 @@ $(function({
         select('a1');
     });
     </script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script type="text/javascript">
 
 wx.config(jssdkconfig);

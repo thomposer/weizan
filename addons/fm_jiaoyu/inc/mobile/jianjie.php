@@ -16,5 +16,5 @@
         if (empty($item)) {
             message('参数错误');
         }
-        include $this->template('jianjie');
+        include $this->template('common/jianjie');
 ?>

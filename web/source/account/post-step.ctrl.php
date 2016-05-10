@@ -235,6 +235,7 @@ if($step == 1) {
 			$notify['sms']['balance'] = intval($_GPC['balance']);
 			$notify['sms']['signature'] = trim($_GPC['signature']);
 			pdo_update('uni_settings', array('notify' => iserializer($notify)) , array('uniacid' => $uniacid));
+			uni_setting_save('notify', $notify);
 		}
 				pdo_delete('uni_account_group', array('uniacid' => $uniacid));
 		if (!empty($_GPC['package'])) {

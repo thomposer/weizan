@@ -15,22 +15,7 @@
     <script src="{MODULE_URL}template/mobile/style/style1/static/js/jquery-1.7.1.min.js"></script>
     <script src="{MODULE_URL}template/mobile/style/style1/static/js/dp.js"></script>
     <script src="{MODULE_URL}template/mobile/style/style1/static/js/layer.js"></script>
-    <script>
-    function bd_encrypt(gg_lat, gg_lon) // 百度地图测距偏差 问题修复
-    {
-        var x_pi = 3.14159265358979324 * 3000.0 / 180.0;
-        var x = gg_lon;
-        var y = gg_lat;
-        var z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * x_pi);
-        var theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi);
-        var bd_lon = z * Math.cos(theta) + 0.0065;
-        var bd_lat = z * Math.sin(theta) + 0.006;
-        dingwei("{php echo $this->createMobileUrl('business',array('op' => 'list'))}", bd_lat, bd_lon);
-    }
-    navigator.geolocation.getCurrentPosition(function(position) {
-        bd_encrypt(position.coords.latitude, position.coords.longitude);
-    });
-    </script>
+
     <script>
     $(function() {
         if ($('#shangjia_tab').length > 0) /*判断是否存在这个html代码*/ {
@@ -79,7 +64,7 @@
                         </div>
                         <a class="tel" href="tel:{$item['mobile']}"></a>
                     </div>
-                    <!-- <div class="mall-our">
+                   <!--  <div class="mall-our">
                         <a class="mall-fen" href=""><em class="ico ico_1"></em>到这去</a>
                         <a class="mall-fen" href=""><em class="ico ico_2"></em>关注商家</a>
                     </div> -->

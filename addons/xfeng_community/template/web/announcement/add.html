@@ -57,27 +57,33 @@
 	                    </div>
 	                </div>
 	                <div class="form-group" id='s1'>
-	                    <label for="datetime" class="col-sm-2 control-label" id='datetime'>通知时间</label>
+	                    <label for="datetime" class="col-sm-2 control-label" id='datetime1'>通知时间</label>
 	                    <div class="col-sm-6">
 	                        <input type="text" name="datetime" id='datetime' value="{$item['datetime']}" class="form-control" placeHolder="例：2015年4月25日8：00-2015年4月28日18:00" />
 	                    </div>
 	                </div>
 	                <div class="form-group" id='s2'>
-	                    <label for="location" class="col-sm-2 control-label" id='location'>通知范围</label>
+	                    <label for="location" class="col-sm-2 control-label" id='location1'>通知范围</label>
 	                    <div class="col-sm-6">
 	                        <input type="text" name="location" id='location' value="{$item['location']}" class="form-control" placeHolder="例：A16栋-A18栋" />
 	                    </div>
 	                </div>
-	                <div class="form-group">
-	                    <label for="reason" class="col-sm-2 control-label" id='reason'>通知原因</label>
-	                    <div class="col-sm-6">
-	                        <textarea name="reason" id='reason' class="form-control" placeHolder="如是发布门禁通知,请填写门禁卡重新激活办法。其它通知填写原因">{$item['reason']}</textarea>
+	                <div class="form-group" id='s5'>
+	                    <label for="reason" class="col-sm-2 control-label" id='reason1'>通知原因</label>
+	                    <div class="col-sm-10">
+	                        <textarea name="reason" id='reason' class="form-control" rows='12' placeHolder="如是发布门禁通知,请填写门禁卡重新激活办法。其它通知填写原因">{$item['reason']}</textarea>
 	                    </div>
 	                </div>
+                    <div class="form-group" id='s6' style="display:none">
+                        <label for="content" class="col-sm-2 control-label" id='reason1'>通知原因</label>
+                        <div class="col-sm-10">
+                            <textarea name="content" id='content' class="form-control" style="height:300px" >{$item['content']}</textarea>
+                        </div>
+                    </div>
 	                <div class="form-group" id='s3'>
 	                    <label for="remark" class="col-sm-2 control-label">通知备注</label>
 	                    <div class="col-sm-6">
-	                        <input type="text" name="remark" id='remark' value="{$item['remark']}" class="form-control" placeHolder="例：请您提前准备，如有疑问可咨询17715272440" />
+	                        <input type="text" name="remark" id='remark' value="{$item['remark']}" class="form-control" placeHolder="例：请您提前准备，如有疑问可咨询。" />
 	                    </div>
 	                </div>
                     {if !$user['regionid']}
@@ -106,12 +112,11 @@
         </div>
     </form>
     <script>
-    // require(['jquery', 'util'], function($, util) {
-    //     $(function() {
-    //         var editor = util.editor($('#reason')[0]);
-
-    //     });
-    // });
+    require(['jquery', 'util'], function($, util) {
+    $(function() {
+        var editor = util.editor($('#content')[0]);
+    });
+});
     function check(form){
         var status = form['status'].value;
         var enable = form['enable'].value;
@@ -136,10 +141,13 @@
                         return false;
                     }
                 };
-                if (!form['reason'].value) {
-                    alert('请输入通知原因。');
-                    return false;
-                }
+                if (status != 1) {
+                    if (!form['reason'].value) {
+                        alert('请输入通知原因。');
+                        return false;
+                    }
+                };
+                
                 if (status == 2 && enable != 7) {
                     if (!form['remark'].value) {
                         alert('请输入备注。');
@@ -174,6 +182,8 @@
             	$("#s2").hide();
                 $("#s3").hide();
                 $("#s4").hide();
+                $("#s5").hide();
+                $("#s6").show();
             }else{
                 $("#s1").show();
                 $("#s2").show();
@@ -193,12 +203,17 @@
                 $("#s4").show();
             }
            if (s == 4) {
-                $("#datetime").html('门禁卡失效时间');
-                $("#location").html('门禁卡失效范围');
-                $("#reason").html('门禁卡重新激活办法');
-            };
+                $("#datetime1").html('门禁卡失效时间');
+                $("#location1").html('门禁卡失效范围');
+                $("#reason1").html('门禁卡重新激活办法');
+            }else{
+                $("#datetime1").html('通知时间');
+                $("#location1").html('通知范围');
+                $("#reason1").html('通知原因');
+            }
         });
     });
+
     </script>
 
 {template 'common/footer'}

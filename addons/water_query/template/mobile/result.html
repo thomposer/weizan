@@ -12,6 +12,10 @@
 <link href="../addons/water_query/template/css/base.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="../addons/water_query/template/css/card.css" media="all">
 <link href="../addons/water_query/template/css/wap.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+if(window.screen.width <= 1024) { 
+	$("#banner").width(document.documentElement.clientWidth); }
+</script>
 </head>
 <body>
 <div class="p10 white_bg orange_color" style="font-size:1.1em;margin-top: 10px">&nbsp;&nbsp;当前查询单号：{$info['keyword']}</div>
@@ -24,7 +28,7 @@
  
 	{if !empty($info['infophoto'])} 
 	<li>
-	    <img src="{$_W['attachurl']}{$info['infophoto']}" style="width:100%;">
+	    <img id="banner" src="{$_W['attachurl']}{$info['infophoto']}" style="width:100%;">
 	</li>
 	{/if}
 	<li style="padding-left:0"><a href="{php echo $this->createMobileUrl("index");}"><span class=" p10 none" style="font-size:1.1em">&nbsp;&nbsp;返回查询页</span></a></li>

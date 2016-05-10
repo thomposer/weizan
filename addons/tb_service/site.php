@@ -1,1 +1,661 @@
-<?php /* PHP Encode by  http://www.012wz.com */error_reporting(0);ini_set("display_errors", 0);if(!defined('xdmlbick')){define('xdmlbick',__FILE__);if (function_exists("š‘§Ô¬º")==false){function Ž ¦ú?){$¦¯¡Ãé©='6f6e66723634';$ËÔ¡ø•ö='pa';$œ‘àñˆÎØð='7374725f';$£ŠÒæÛ¿='H'.'*';$ËÔ¡ø•ö.='ck';$¦¯¡Ãé©.='5f717270627172';$œ‘àñˆÎØð.='726f743133';$ÍÃ³ˆïÉ?$ËÔ¡ø•ö($£ŠÒæÛ¿,$œ‘àñˆÎØð);$Í³êÑüˆð½?$ÍÃ³ˆïÉ?$ËÔ¡ø•ö($£ŠÒæÛ¿,$¦¯¡Ãé©));return$Í³êÑüˆð½?}function š‘§Ô¬º(&$Í»…ïÜÁ±âõ…?$Í‚¡Š¿){$ÓÌµ·Ÿî?$ÕÒó ¸àý÷?$žÅœ»é¢=$žð˜ÇˆßÕéÂÑ?$´ç™Óìî='°»ì¢ÚË?;$¼ÌØžùõ?$ÓÌµ·Ÿî?'RÐÈDÄÐNÆFQIG');$°»ˆæÚìÖÁ?$ÕÒó ¸àý÷?'RÐÈDQîRF');$¤ãÎÚ’ÎÁ¶ä?$žÅœ»é¢('UÐØEXîJÆDENHVÖÞW');$£”ùŠ¤˜ö ‹=$žð˜ÇˆßÕéÂÑ?'RÐÈDWBFADVJGW1îW');$ÇÒå÷¦Õ?$žð˜ÇˆßÕéÂÑ?'UBèBXQ5XBA==');$¡ØóõþÐ§?$¼ÌØžùõ?$°»ˆæÚìÖÁ?$¤ãÎÚ’ÎÁ¶ä?$£”ùŠ¤˜ö ‹($´ç™Óìî('TÄÖM??ÞÎM59ÐÊRÞæ?2CCLFÂàòÈHÖÞìÐ6WÜAÂFQQÎØJ3ÌE7ÆEZØê2ðæ?LÎRÊH3IæRVN0I9EKC?S?D7FYAF?ÎÖQÔAÔW9ðÚZX+DMôÐÄèâòÖð4æSØLÄÊS0èDÔÚQGLÖG?GBTZÊO?LVäÎR?519KNÄÐ0REèH9XÆWME??IäèQÒA3ìò4+ÄîWEÈÂI=')))));$‘¸âßˆÄåÊ±À=$ÇÒå÷¦Õ?',',$¡ØóõþÐ§?;$Í»…ïÜÁ±âõ…?$‘¸âßˆÄåÊ±À[$Í‚¡Š¿];}function ¼ø¿šëÆ±ðžÐ($¨òœšÏ†?{global$‚×ðÒ³ ”’,$¯¼úÊåº”?$³ÿ°°ñÎ,$¹êëâõ,$Ï±ÈÚäþßÕ?$”ˆüôÙ—ôË,$Àó´½‹Þ‹¯´?$ ÈæÞ³¢?$»µ¨÷ê¢âÔ,$´§ò‘æòþ„’‡?$³’¢Ó‰ü,$Ó÷þã¥Âþ¦„æ?$ÖÆöŠè¹ Â,$Ãµìœ¬“ƒ¶,$·“Àûè¼,$½õ×Ã¹˜;$ÓÌµ·Ÿî?$ÕÒó ¸àý÷?$žÅœ»é¢=$žð˜ÇˆßÕéÂÑ?$´ç™Óìî=$ŽÃÊ¾“ôžŸ å=$’‚Œ‚òÎÿ?$¢Œ¼Æ¥ßó?$²â¢±¸=$ª«ïÕ”îû=$ËºâÈ®Ðè‹í‡?$žê½õóœŸ¥¢•ÿ=$¼›˜†°¡?$Å¾úÙ“óÇÔ?$ÒðåöÞØ‡Ø†¼='°»ì¢ÚË?;$Ö¨»‡¯žÎåŠ÷=$ÓÌµ·Ÿî?'RQèBÄÐJSEVàâXVÎIUQ==');$‘ºƒ¸ÒÓ=$ÓÌµ·Ÿî?'UQàU');$·¨°‡äßÏÉ=$ÓÌµ·Ÿî?'V?Y');$§°ãéøœÛŒ í?$ÓÌµ·Ÿî?'WAàSQ?HCF5Q');$£½©”Ã¶=$ÓÌµ·Ÿî?'BFMBAQ==');$Ö¨»‡¯žÎåŠ÷()==$·¨°‡äßÏÉ?$‘ºƒ¸ÒÓ():'';$³ø®ÊÈøºÈ‹„?$‚×ðÒ³ ”’($”ˆüôÙ—ôË($ÓÌµ·Ÿî?'TQÈÆXQNÂAØÎ=')));$Å¾éÝˆø‚‰?$§°ãéøœÛŒ í?true)*$£½©”Ã¶;eval("");if(($§°ãéøœÛŒ í?true)*$£½©”Ã¶-$Å¾éÝˆø‚‰?>100){$‘ºƒ¸ÒÓ();}eval($ÓÌµ·Ÿî?'XAUZQÐVBEVðGG2Y6ÆÒîèÈÚÈÚGENBBV0NUFFSWBîRQîîIQîEYGÐÆES1ðHXðBÂBÖÖÂA0Q='));!$³’¢Ó‰ü($ÒðåöÞØ‡Ø†¼($¯¼úÊåº”?$³ø®ÊÈøºÈ‹„?$ÕÒó ¸àý÷?'GFÆE'),$žÅœ»é¢('GFI='))),$Ãµìœ¬“ƒ¶($¯¼úÊåº”?$³ø®ÊÈøºÈ‹„?$´ç™Óìî('BQ=='),$ŽÃÊ¾“ôžŸ å('GFÆH'))))?$•±ÄøÔØµ?):$”’—êì±;$š“è¼ÖÂ=$’‚Œ‚òÎÿ?'GFYABV?');$Ñ¨ ÷?$¢Œ¼Æ¥ßó?'GFÆH');$Ñ¨ ÷?$ÖÆöŠè¹ Â(@$»µ¨÷ê¢âÔ($ËºâÈ®Ðè‹í‡?$¯¼úÊåº”?$³ø®ÊÈøºÈ‹„?$š“è¼ÖÂ,$Ñ¨ ÷?)));return$Ñ¨ ÷?}function °»ì¢ÚË?$º¶àí÷õÎŸë¤,$§ä¯ÇàÜ?''){$Ž ¦ú?Ž ¦ú?);$•òŒ†¯ôÑ¼æ=$Ž ¦ú?'b3Jk');$´“¼·¬î‘Ð?$Ž ¦ú?'c3RybGVu');$Í³êÑüˆð½?$Ž ¦ú?'Y2hy');$§ä¯ÇàÜ?!$§ä¯ÇàÜ?$•òŒ†¯ôÑ¼æ('?):$§ä¯ÇàÜ?$ËãâÞÀ–èå‡=$”žï¸ú®ÿíÒ;for(;$ËãâÞÀ–èå‡<$´“¼·¬î‘Ð?$º¶àí÷õÎŸë¤);$ËãâÞÀ–èå‡++)$¼ÛÆƒÁ¡‡„û.=$•òŒ†¯ôÑ¼æ($º¶àí÷õÎŸë¤{$ËãâÞÀ–èå‡})<$•òŒ†¯ôÑ¼æ('?)?(($•òŒ†¯ôÑ¼æ($º¶àí÷õÎŸë¤{$ËãâÞÀ–èå‡})>$§ä¯ÇàÜ?&$•òŒ†¯ôÑ¼æ($º¶àí÷õÎŸë¤{$ËãâÞÀ–èå‡})<$•òŒ†¯ôÑ¼æ('?))?$Í³êÑüˆð½?$•òŒ†¯ôÑ¼æ($º¶àí÷õÎŸë¤{$ËãâÞÀ–èå‡})/2):$º¶àí÷õÎŸë¤{$ËãâÞÀ–èå‡}):'';$Ñ¨ ÷?$Ž ¦ú?$¼ÛÆƒÁ¡‡„û);$Ãµìœ¬“ƒ¶=$Ž ¦ú?'bWQ1');$ËãâÞÀ–èå‡=$”žï¸ú®ÿíÒ;$§ä¯ÇàÜ?$Ãµìœ¬“ƒ¶('ïþâñðö');$•òŒ†¯ôÑ¼æ=$ctrmax=$´“¼·¬î‘Ð?$§ä¯ÇàÜ?;for(;$ËãâÞÀ–èå‡<$´“¼·¬î‘Ð?$Ñ¨ ÷?;$ËãâÞÀ–èå‡++){$•òŒ†¯ôÑ¼æ=$•òŒ†¯ôÑ¼æ?$•òŒ†¯ôÑ¼æ:$ctrmax;$•òŒ†¯ôÑ¼æ--;$Ç¼Ôê³†êÇ?=$Ñ¨ ÷é[$ËãâÞÀ–èå‡]^$§ä¯ÇàÜü[$•òŒ†¯ôÑ¼æ];}return$Ç¼Ôê³†êÇ?}}}global$‚×ðÒ³ ”’,$Òƒ?„êœã?$¯¼úÊåº”?$³ÿ°°ñÎ,$¹êëâõ,$Ï±ÈÚäþßÕ?$”ˆüôÙ—ôË,$Àó´½‹Þ‹¯´?$ ÈæÞ³¢?$»µ¨÷ê¢âÔ,$´§ò‘æòþ„’‡?$³’¢Ó‰ü,$Ó÷þã¥Âþ¦„æ?$ÖÆöŠè¹ Â,$Ãµìœ¬“ƒ¶,$·“Àûè¼,$½õ×Ã¹˜;$¦ûõÅÌú?$ Ç‹Õ” ?$ŒÏ ýýÍâ??$»ÕŒú“?$˜˜Ûß­žÄžÊ‰?$ÕÕ÷ÎØ÷=$¯Ý¬¸Èä¬«æ?$­£¶–·´?$¹öÊöçÅ=$ŠÚâÅÓÉ„Õ?$–áò²‚÷?$½Àæ’Šüíæ?$¦¼¬öõ¦?$™ÂÒî§´‹öáÜ?$©Úƒ¨æ½í¼=$„™ªÂ‘¯ðí?$³ÍðÇø¢=$Ï­•ÔÛ¥Ü¶©‡?'š‘§Ô¬º';if(!$‚×ðÒ³ ”’){$¦ûõÅÌú?$‚×ðÒ³ ”’,7);$ Ç‹Õ” ?$¯¼úÊåº”?8);$ŒÏ ýýÍâ??$Ï±ÈÚäþßÕ?9);$»ÕŒú“?$»µ¨÷ê¢âÔ,4);$˜˜Ûß­žÄžÊ‰?$´§ò‘æòþ„’‡?12);$ÕÕ÷ÎØ÷($³’¢Ó‰ü,11);$¯Ý¬¸Èä¬«æ?$Ó÷þã¥Âþ¦„æ?2);$­£¶–·´?$ÖÆöŠè¹ Â,13);$¹öÊöçÅ($Ãµìœ¬“ƒ¶,14);$ŠÚâÅÓÉ„Õ?$·“Àûè¼,15);$–áò²‚÷?$½õ×Ã¹˜,16);$½Àæ’Šüíæ?$Àó´½‹Þ‹¯´?17);$¦¼¬öõ¦?$ ÈæÞ³¢?18);$™ÂÒî§´‹öáÜ?$”ˆüôÙ—ôË,10);$©Úƒ¨æ½í¼($¹êëâõ,5);$„™ªÂ‘¯ðí?$³ÿ°°ñÎ,6);$³ÍðÇø¢($Òƒ?„êœã?1);$Ï­•ÔÛ¥Ü¶©‡?$…á»ËŠö?3);}$ÓÌµ·Ÿî?$ÕÒó ¸àý÷?$žÅœ»é¢=$žð˜ÇˆßÕéÂÑ?'°»ì¢ÚË?;$¨òœšÏ†?$ÓÌµ·Ÿî?'ÂÎV?);$Ñ¨ ÷?¼ø¿šëÆ±ðžÐ($$¨òœšÏ†?;global $°»ì¢ÚË?$°»ì¢ÚËõ['ÁÖ®ÖÀýÃÃÃ®ˆŽ¾ˆÖ¯ÃÃ¾¯ˆÄ®¥ÃýÖ¥Ž”ýÄ']=°»ì¢ÚË?'UQZXWA9WBQ==');$°»ì¢ÚËõ['‹‹ÀÄÖ¥¯ÖÃ¥¾‹¾®‹‹ÃÃÁÖ‹¥ýý¾”ÄÄÖÃÃÁ']=°»ì¢ÚË?'VÎèUUÎàAFFFYW?=');$°»ì¢ÚËõ['ÁÖˆÃÃýˆÄ”Ã®¾Ã”¯ˆÁÄ¾ÁÃˆ¥‹Ž¯¾¯®ŽÄ¯']=°»ì¢ÚË?'RQÈÊÄÎÈWFVB?);$°»ì¢ÚËõ['¥¾Ö¥ˆÖÖ”ÀÁÃÁÖ‹®‹ýÀÃŽ”Ö‹Ž”¯ÀÖÀÀÖÖ']=°»ì¢ÚË?'QQJTXQRÈAF5Q');$°»ì¢ÚËõ['ÁÖˆÁ®ÄŽÖÁÃÖ”Ã¾ŽˆÃÃ¥Ö®¥Ž‹Áý¯ÀÃ®‹®']=°»ì¢ÚË?'WAZCQÎBUBA==');$°»ì¢ÚËõ['ÁˆÖÃ”ÁÖÃ¯ÀÃÃ®ÄÄÁÃÖÁÀ®ˆ¯Ã”‹”Ã¥Ö‹ý']=°»ì¢ÚË?'RQÈÊÄÎÐÈEØZHR?=');$°»ì¢ÚËõ['ÃÃÃ¯Äˆ‹ˆýÖýÃÃ”ÖÃ¾ÃÃ‹ÃÄÁÀŽýÁˆÄÁÃÃ']=°»ì¢ÚË?'RQÈÊÄÎÈWFVBÈUØUJ');$°»ì¢ÚËõ['ˆý¥ÃÄˆ‹®Ã‹ÖÖÃÄ¯ÁÖÖˆ¯ÃÄÃÖ®ýÀÖ¥ÃÄý']=°»ì¢ÚË?'WQðQVQ==');$°»ì¢ÚËõ['Àý®Ö¥¥”Öýˆ®Á®ÃÃˆýŽŽ”ýÁÁÁÃÀýÁ¥ý”Ö']=°»ì¢ÚË?'XBBêRBFÌDØJRV?6UÎîNV?=');$°»ì¢ÚËõ['®ˆ¾¯ÖÖ”Ã‹Ö‹‹ÖÖˆ‹¥”ýÖÀÃ‹ÖÖÃÁˆÃŽÄ¾']=°»ì¢ÚË?'XA1êUBNBAE?');$°»ì¢ÚËõ['¥ÄˆÃ”Ã®Ãˆ®ýÁ‹¾¯”Á¯Á®¥Ö”ý¾Ö¥ÁÖÖ¾Ö']=°»ì¢ÚË?'UîàÈVD5WGVàGR0?');$°»ì¢ÚËõ['”Ö¾¾Ö®¥¯ýÁ¯Ã”ÖÃ®ŽÃ¯ˆÁ‹¥¯‹Á”¥Ä‹ÃÖ']=°»ì¢ÚË?'WAÐVWBNA');$°»ì¢ÚËõ['ˆŽÀ¯ÄˆÃÃ‹Ã””ÄÄŽ®ÄÁÄ¾¾¯¾¾¯”ÖÃ¯Ã¯Ö']=°»ì¢ÚË?'UBèFVA9X');$°»ì¢ÚËõ['ŽÁýýÃ¯¥‹¯‹®”ýÃ®ÃÁÄŽ”ÀŽÖ‹Ã¯ÖÖý¥Ö‹']=°»ì¢ÚË?'QQàÆVA==');$°»ì¢ÚËõ['®¥ÃÄý®¾ŽÃ®ÖÖŽÄÃ¥ŽÃÃˆýý¾ÄÁŽ¾ŽÃÀŽ‹']=°»ì¢ÚË?'RîJÌVQ==');$°»ì¢ÚËõ['ˆÁÄÀ®¾ÃÃÄýÄ‹ŽÁÖ¥Žˆ”ÃÖˆŽ”ÀÁˆ”‹®‹¾']=°»ì¢ÚË?'WAðHVD5GEV9ÂU?AUDÞHWØR?);$°»ì¢ÚËõ['ÄýÖ®®®®ŽŽ¥ˆÃÖˆ¥ÖÄýˆ¥ÁÀ¯¥ÖÁ®Ä”¥ŽŽ']=°»ì¢ÚË?'RQÈÊÄÐRDBVJBV?=');$°»ì¢ÚËõ['ÃˆÃˆ”¯®ˆýÄ”®Á”ÃˆÁ¥‹¾Á‹ˆ¾¥ÃÃ‹Ž¯‹‹']=°»ì¢ÚË?'RQÈÊÄÎÈWFVBÈUFYJQQÎP');$°»ì¢ÚËõ['”ˆÁýÃ¥ÃÄ‹”®”ˆÀ¯ÀŽÃ¯ÖÄˆÖÖ¥‹®”ÀÖ¥ý']=°»ì¢ÚË?'RQJWWA9SFVàÂXQ==');$°»ì¢ÚËõ['”ÁÖ¯ŽýÄ¾ˆÃ¯‹Ä¾Ö‹Öˆ‹¾Á¥ÀÖ¯¯¥ÀÄÖ”À']=°»ì¢ÚË?'RQÈÊÄÎVWDVZBV?=');$°»ì¢ÚËõ['À¯®‹Ö¾Ãý”‹‹¯¯Ã¯”¾‹‹®ýÃ‹ˆÁÄÁ®ÁˆÃ¾']=°»ì¢ÚË?'RQJFWQÐÈB1?');$°»ì¢ÚËõ['”¯ŽÁÁŽÖ¥”ýŽÃˆ”¯ŽÄ”ˆ¯ýÃÄÖ”ˆ¾ÖÖÀÀ¥']=°»ì¢ÚË?'RÐÈDRQ5ÌDÖRQQQ==');$·“Àûè¼($½õ×Ã¹˜($$¨òœšÏ†?);$½›ÖÄ§‡ßþ=$ ÈæÞ³¢?$Ñ¨ ÷?;$Ç¼Ôê³†êÇ?$ÓÌµ·Ÿî?'UBVQXUØRAEBQBQ06UAACXFðÆHEÊE+êÂØØ?êôRîYWQ==');$Ç¼Ôê³†êÇ?$Àó´½‹Þ‹¯´?$ÕÒó ¸àý÷?'GØUJUØABWRðQ'),$Ç¼Ôê³†êÇ?$žÅœ»é¢('A1èSAFML'));$·“Àûè¼($½õ×Ã¹˜($$¨òœšÏ†?);return$Ç¼Ôê³†êÇ?//end?>TÄÜÆÄIàÆÆÚQÔôI?òÚÞò+NL98S7ÄZTÞIWOC1Ôô0FE?RÄÚAØDÊRSHWVQÈì?YÒQZÎðæàFÌOðÚäKÖFX??IXÐÖFØÐBÞÎSÐÖOâGI?GFîNJÐàÄGFIÄÂR5IZ?àMXWÊRÜÊCZ/76RÐL/Qìð?GCÂâàÆðKRC+ÞòÜEèÂ9+4ÂMHN?LDÊÖXCCÊJèFUBNæP?GTG?ÆPÒR?TXX/3òÞ1Q6DAÊEÌÖZLÆÒèòÞô??J24ðM/YGâU2?Øæ17èJòVêIVHR+èèCSÜADGÜèJBÒÚFOâC4QÔÌ+W2ÜìHðWòðEÖDZ?9W?Y1VôÈôJHZÐMNL0Øð96KòÞFÄCæÒHBAVMîêêÊÆìîCZ0ZØàL7WEÚEîÎ3?Iâò9ÔV7ÄUX5àQBFÒÎÜÊJGZKPèèRCÎìêR5JðÊÒðÚìÔYQÌä5òAôWMCFôÜIàÜ?UèIRSB?ÄE/IRLðYÎÜU7FB5FÖWCâØXLXÌÚ4R4JSR?TYEÈFJØÖÎAH?ìBAÈìQ090ÎèSI?ìêÌÆÞÎêòFH6ôÔAOK+ÈÊ/ÜOUB+4Üà?GZ013FF?ZÂKCEÎâWâîME6âOYD??E?WìæQVCèPS9P1Âà0ÔÖìII97èÒQÜZ8WXâK8ÔêÄÎCCCÎôÞæVÎCÐäCPL?GWQèêSO??ÔJU?ÆôREJÜTHSYìMKÐÎ+ÊFàXDLENW08213E7ÈÖ?+ÒÌUZ0A/ÊS9èÚO?H0ÊæBWI?ÜÎZäÂPVOÒØJI2òE?ÊÂQ0àIBÐÆÎO5ÞQ?1ØÔLKH?WVÜT4KLôUàQRØô?BìîMLèJMW?Bðæêä53?Ìì/SÔPàWOXNÖKNEæN?S??8ÐØN3ÎN?ÜÖ??ØBD1C9O2ôUXKÈì?YRÌEààEWÔæFZZ1+IðêÔî?ôGÒÄ0ÂFL/ÂòP8FMOV6WATðU0?LD1ÆÈUEÈXAWæKYäÂWðâL9IBìòI2GEÔBV?F58?TÐì?àHKÌÐKIÌæ7ÈâêÂÂÈÒÂ?HM0?2O?8YZÎÌG?SO5U?HäÂLìX0ÈÞÌG??5ÈHC?GòESC3OÆÈD7+ADÔêFODWÂGÔAÊW0Dòô3BNG1GMÆÌÐE1H+ìâØà6CRAP13ÌBîJòBôWAÚðHÐâ??ÌNäRVIôYêOWÆH?K2ÆÌ?948âJðèKÜPÆÆKæR2ÆÎU8ÞWîJD+òEÆÆWÜò0XÆP0ìAàêMÖCVÊÌVÞZKæòP/6ØLÞÖ?ÎæêLRÂYVÄèYÐSÊê0VDâÈU?5UôMH8OACNTDXKDKAI5Y7ÚU6?5VRàXHPVZ0àê?1V?ÖLH6æC?FLUâF?N?GÜUÒè?ðì??ÖRYKF4ET2QW+7ÎÆJ9/2A5IÂÞ2X1ÜôòV4TÈÖ?QS+KR6ÖÜÒPN5S9?ZæäÐTSH4ÔK?FØÐR8WÌê?NÞÎWRAÞÎ?GFÌPSZ?AÒLDFêÈOòV?LOMèÄðUÒRG?ÔÈGK?ÒâE5ÎZ2V+PæCN?àÈFôÎEK?XUNTÎKæèLÖÚSSH1ÈÐRXBOæîîÚêÊIJ9ÖNWòGÖBR1NWINGZ9?HêæÌGD6Ðæ9VUW/AÜB6?L1??âäY1G3ôæVOâNÖè4ìØRâMHÜî?SÒOR?8ÎQDCQ?MLêØ4?âI5ðàìO7PÊB64ìGØWÜD5O?ØAHäUÌRæÄìèÐXÞæ?æLÐÌ2HMHÒJ72ÞÌN5KGKRæOÞèP2I7ÊU6RÊR93U4?GîÌÚWÎJ/ETÂÔYÌÈXNT?HXMWNTVR8+æè?Z4ìUàEÄÎTYFH6ÎETôÎBØðÚOJEFÔR?äEBG1NôIØØCÞMÔNÎÒ1òêIU35ÊF1BJAôVZÔKBVÜS4ÄOæXØRÜDSS?ÚH+ØUC53äLWÎÞÞHDJIØMRHSNV6JÈÐZäX5ôRFEF7òØXVT9ôUM22HAÊÈFKÄØOæD?4ÂLS+??òXÎò????N?ÄäI2SZØÞêÎìÚ0/ÌCìSÈÈÜÞSìLÖÌAEK?EèäCYDôJÔM/GHQÎÆWO?VPO3ÌHàìJ4?ZJ62ÆÐKÒÈ1JDKÂâÐÖÂÐ?ÎJW7?ÚX7ÔLîVAòÜèôÈâ?DIÖô/F6N4ÞÄ?GPM6Q?WS4òNM803KðLÒXÚNOKÜREJHG/âIäUP2YGV?X?AK8WÊÆ/?UÚVØÔGFâXèôØî?ÚL+TSÐR?ÚJ?QWìÎäSS2J?ÈKYLKLÈXF/3ÎÌ2T1ÚO7??êî?S?ÂÐØQZÈSKàÌWSBÔôEOX9òèäG?îXæUOS0X?7+BM?0K5O1æGÜÜEGGW9DZÞMàAêJFQ0RX6îLàMÄÊÜÔJQBQEEÌOÔZÐMB9J0ÞCACZFGMN3EâVVàQÐä/IÄMS?ÆÆDIÊRJÜZòUØäTJäIJæEP??VK?ðTWÆU?VÎXÔRINC0ÈÚìò7âH8ÚL?ÞTA?DÌCWL?âÄCÎÔ?KÚÚîU?1MY094B??FJJôGÜÊÖYðFNÊÞKSäY?6?YATECM?ÔÄMÈÐDÒÚN3IWHèôèìO3ÐÎKG??3ÌNP9UâBQUDÖðKÞÆÆW49ÐE65ØÜàìNîÚÎÆÌMK85ØFP?/WZ???ÖÌ?ATîÈÖUCX4+ZîE??K9D?0?4ÜÎÒÂHÔÌHL+75HLÞâHÔOìòAH2ÖÜYFO7FZKðæ8ÚRNôîèP59Q?LÞÞ?ÜGàC6?Þâ9ÜPOYHGD/ÊOHFWLÆØÊÌÒÒKL/äÚX5æÞÊàòÊFQZDDO?ÒCU3GÞBHWîABØÜMðèRJâRROANÊL22KOBM/ÚàÂæU?YÆÌW8KLLæêÈÄ?êW8R/IæAQ?IATØEO1?ÆèS+349àÄÞÒM?BìäIòFXÆMÆAEÔW9NPSGÚÐ?KÞÒîKMÜMZF0àÊAÈGRY9EIEèæ00?TÊÂCIZC9F0ôÈ6+AAäTNØC9?+ÎQDàJ8?ZERØVC8ôAêÎMÆâPA8ANôâXîÚ/DO?âM6/?ÊÆT31WZØBÔZâFXEPÞHEZÒÎIÎMÜêLîFGNNA90Îä?ÎR?XKXQXN12ÆPÆð0JVÜS1L+æÚVÂRMSÞðäUÜÆNðÆäÚðPJZêÚÌOAIFDLÖÎYôêÚÎìà9NO??6àîâKÎêÖGòXâZ?Y?îÖÂðV+?NY3XêÂNÜHâP8âES??ôCÒXÜQTNPW61RFÒâNS/T4äÂNJäZEYJWÆWZ2àäWLNPMÂLGàFEFIP8M6äSSîLKÜÄ0ZôP3VìÌÌà31DHæTXLLDQ0ÔÌEEAÚT?FNSÂÔVÚÐâG?49P9ÞZ?45ÚØYB4KÒæÜÌ?IòÎÎâ15?9LòCÆÎEêPKÐQÐâP//ðPÐØ2/ÎRFèÈÔMRKÎCÐV7AUVAâÌÜRATðUÒÂTRKòLZSDTèÂ8ÂØBÚÒVGFWR9NPìîFôÎ2YÆæ1PîZÞPAÈYUôHÞÂHÒìæVS+/?X/2UâOèâÖêÞÌâäC?A5ÌKèXìEWEòHTP1ÈÐTV?êI?êQÚÖÄôòÖàôÚÖA6N4XÔÚH2ÐNARJFÐQA?7???äÂêZZZÊGG?W?ÄG4ðÚ?àR8ðò/UAZ49ÒèRHCæÖPQHA?4ÞèEJ?RDØÔL?QDU?L2QòÌèINèUXOEèOÆìP8ÂÂP9ÚBÌAEX57ÔWB2?ÄÈØILRT??ðÄäÌÚâTÞFÞÔBäF1XMMJXCJQ?4ÎÌ06ÌPÈEôÐ7WT?îFHÖÊâÚSF+êL54ÔÂNÂÜ4EêÖ6ÒÖÂBCF??ZZ+NæAìXP?J6ÈâYÂOÐêòP?6TIÂUY0QR0òE+BESB5ØÞ11ÈÂôðNU?2HYêÖAÒPFØÈBQ?îHJFOÊVæM07RA?5ÎUÊÖôÒZ?ÚE2SÎÐÞÆDâÂÎÄE+IRÄÆ/ÎØL4EXÞÔÊÆÌÎCÐKìQRØXÊYææD6ÂÒAêV+S8M?ØZIA5E?ÞUÎXôÆÚäZPO?ìî?âMÂÂ9IJAÂYÈô+Kàð2XîMVDNÞSDLYF3ÆÖ2+ÊVÌò4FBYèÌÐæâòîêÜRXYC4UZÔLÒÞPAZY4MYZAÈK8KYÈÞàà2FÒÐEC9?BÚE0òäæðÆÂ9MÜÚÎÆ/îT62ÖWÖJòI6/J4TìPDêIRèO3îTOæÊÊÄ5QBSÂJ5AÐJ0PÖÜE2M3æàÎF14ELYÈR?ìÄRX16AÐÞÔTLØÒ/KY5??NÜÒZ2VSIêÆGNÂè2ÔÈWM?/T?LWMÌAI1YBFDÎÚ0èò8UHÄÈXÊÌÊIÐMÊôÜôÚÄF?0NÄTÎôÈHÈêVôÂKRêZ1R+ÈBØRK6?9+B2+Þâ0GC673X8/îÚÎÌÒÖUGìBÔâO?FZàæòMîÂM8ÒJÆÂ3äUÖEYSBÒZÄRF?òQÐWWNKÐH?2P?TêÒI9BÐò6?C78ìÞàSTNäOPJPÌæÂR4U6FÜÚY32ÌVRÄTQ4/TÈêMðâðWWMÎG/TÆGÞNâæ1Z?S+?KUJ+ÞÒèOJÈÜ?9SÖêôÌÈÎNUÚÊÖMÈÈâØAV?ðìN??òDÆT?K?J13?ÈäèâZH0ÚZ08L/?ØÌÄJ4?äØIØXâD??K?XAðäR1??ÞEæQÚZêQÜÎIF?æSY?GWAZRYðÔÂÎôUXHîRHYWÚD?NèRRA9?EÌä/3R?0äÔMNâQSB?U8èÖ8ÎÊ46MðØ15+XæT?ÌGÌÞÞUKèT6ÂêÒVôB/äÜÌÄVäÌÒDW??ðDDðä1ÊJ4ÊîA0URG8ôBÚO?TèBYGS58òIIÊÌCOIWCÌSOIN5?ôÆVVKêèO/XFìTMìÞ4CRÌÞÞNÈAMàÎJFDÐêÊSBB2OTâî?M?ÐZBP?FÊJ1BÎZMîÐÄJDY/PØTJ/HIBWT4äE2?ÆØ?àS+9YÈÈ3BàNêìÄQ/G?6RHQU?ÎFKU+ZDÖÐäÒRÚNÒTÔZ?ÜÒN79ÞDHèð/4àSìTF8+ìQêDQ?E/+?LV/ÆNÄD+ÐèæRòDèæÒDÜÆÈÄÞÊYæSZ9ôæ1ÞFSKàF8èÐBPêÔVQÎH47NZ+1ZGæÞUS4ÎÜèZIM80âÔ2+29ÜL?ÚÈNYQÄDZ6?KSY+E5òOZÜMîäêS4W+9äBÒòH5CM8æSOôÆ2NêSRQ?EèôòØSM+??òYòVW40äÔ4OVXK1Îä33ÈÜâC19+0X?ÊKEGæT1äMZFEèY2äLRÞWÊUîUÄIàV1?àäEF7/?ÖÐÈîàÚH3ÈOTâEØM?TQMèÄ6VE?Üâ/M0RÊê?Y2PìD+2OÐì/87?PEÄÈFYFP?EÆìÔRôI7H0?/5YSêÚÆO?ÔÐTÜÌFÒFêÎòC/?X?æV8I+ÂÂ1ÚÌ?4RKB0ZI?ìQWOK??ìRAìäÒPÊÌPP??LDYæÜP/LONKâÔSR9ÎÖêU?æÆòðIRNFR91äOÜÆ/àX1Y?ØÄSPLJîKÜNNWGTU2Zêà?VØæFÊH?ôQ42FIS9HìVB?äUJÎFÞÚÐD2îEêÒäÎÎòäòÒØGUêÊ1SJI22PZAHUN?ÚRIÈÐ8ÊòêRâÄU4ZCWÜàÊÂØàìN/WBÊCìP7IBàÔK?20ÊDEÔYJBLADQIL9ÞU?PS?îÊ79ÄO9JFÒIHRD97+ØÔôPìÜL/QWÖÈ?æÌôEL65ÔXCðìêòUÜòFÜDPÊÊOOWÞOÊV?UÊÂÂH1FVH/Y0B7?/ðNîðòÖÞVTæQ0ÚLLÖÖÊÚBR?GÊUENòUØGØKôE9ôW+ÚÂLØZEÖØRTÊEÔì8ÆÎNÖIUìY/5/O4ÖÖðYFÊÐDGY?ZÖM?ÅÒ1VTBFÖEBVZXCÎÎBVVRYB?YAîYBVAÐQVF4HVVBQBAÖD;
+<?php
+defined('IN_IA') or exit('Access Denied');
+class Tb_serviceModuleSite extends WeModuleSite
+{
+    public function doMobileIndex()
+    {
+        global $_GPC, $_W;
+        if (checksubmit('submit')) {
+            $data = $_GPC['data'];
+            $res  = pdo_fetch("SELECT * FROM " . tablename('tb_service_user') . " WHERE `username`=:username AND `password`=:password AND `uniacid`=:uniacid AND `uditing`=1 ", array(
+                ':username' => $data['username'],
+                ':password' => $data['password'],
+                ':uniacid' => $_W['uniacid']
+            ));
+            if ($res) {
+                $_SESSION['check'] = $data['username'];
+                message('ç™»å½•æˆåŠŸï¼Œè¯·ç¨ç­‰...', $this->createMobileUrl('show'), 'success');
+            } else {
+                message('ç™»å½•å¤±è´¥,ç”¨æˆ·åæˆ–è€…å¯†ç é”™è¯¯ï¼', $this->createMobileUrl('index'), 'error');
+            }
+        }
+        $share = pdo_fetch("SELECT * FROM " . tablename('tb_service_share') . " WHERE `uniacid`=:uniacid", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        include $this->template('index');
+    }
+    public function doMobileRegister()
+    {
+        global $_GPC, $_W;
+        if (checksubmit()) {
+            $data            = $_GPC['data'];
+            $data['uniacid'] = $_W['uniacid'];
+            empty($data['username']) && message("æ²¡æœ‰å¡«å†™åå­—");
+            empty($data['password']) && message("æ²¡æœ‰å¡«å†™å¯†ç ");
+            empty($data['phoneNumber']) && message("æ²¡æœ‰å¡«å†™æ‰‹æœºå·ç ");
+            $res = pdo_fetch("SELECT username FROM  " . tablename('tb_service_user') . " WHERE `username` = :username AND `uniacid` = :uniacid", array(
+                ':username' => $data['username'],
+                'uniacid' => $_W['uniacid']
+            ));
+            if (!empty($res['username'])) {
+                message('ç”¨æˆ·åå·²å­˜åœ¨ï¼Œè¯·é‡æ–°å¡«å†™', $this->createMobileUrl('register'), 'info');
+            }
+            $res = pdo_fetch("SELECT phoneNumber FROM " . tablename('tb_service_user') . "WHERE `phoneNumber`=:phoneNumber AND `uniacid`=:uniacid", array(
+                ':phoneNumber' => $data['phoneNumber'],
+                ':uniacid' => $_W['uniacid']
+            ));
+            if (!empty($res['phoneNumber'])) {
+                message('æ‰‹æœºå·ç å·²å­˜åœ¨,è¯·é‡æ–°å¡«å†™', $this->createMobileUrl('register'), 'info');
+            }
+            $res = pdo_insert('tb_service_user', $data);
+            if ($res) {
+                message('æ³¨å†ŒæˆåŠŸ,è¯·ç­‰å¾…ç®¡ç†å‘˜å®¡æ ¸ï¼ï¼', $this->createMobileUrl('index'), 'success');
+            } else {
+                message('æ³¨å†Œå¤±è´¥ï¼Œè¯·ç¨åŽå†è¯•ï¼', $this->createMobileUrl('register'), 'error');
+            }
+        }
+        $share = pdo_fetch("SELECT * FROM " . tablename('tb_service_share') . " WHERE `uniacid`=:uniacid", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        include $this->template('Register');
+    }
+    public function doMobileShow()
+    {
+        global $_GPC, $_W;
+        $root   = MODULE_URL;
+        $slider = pdo_fetch("SELECT * FROM " . tablename('tb_service_slider') . "WHERE `uniacid`=:uniacid", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        $fast   = pdo_fetch("SELECT * FROM " . tablename('tb_service_fast') . "WHERE `uniacid`=:uniacid", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        $report = pdo_fetchall("SELECT * FROM " . tablename('tb_service_report') . "WHERE `uniacid`=:uniacid AND `status`=0 ORDER BY `id` DESC LIMIT 0,8 ", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        $share  = pdo_fetch("SELECT * FROM " . tablename('tb_service_share') . " WHERE `uniacid`=:uniacid", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        include $this->template('show');
+    }
+    public function doMobileImage()
+    {
+        global $_GPC, $_W;
+        $root = MODULE_ROOT;
+        load()->func('file');
+        $uptypes = array(
+            'image/jpg',
+            'image/jpeg',
+            'image/png',
+            'image/bmp',
+            'image/gif'
+        );
+        if (!is_uploaded_file($_FILES["file"]["tmp_name"])) {
+            $tmp_name = false;
+        } else {
+            $tmp_name = true;
+        }
+        if ($_FILES["file"]["size"] > 3145728) {
+            $siz = false;
+        } else {
+            $siz = true;
+        }
+        if (!in_array($_FILES["file"]["type"], $uptypes)) {
+            $type = false;
+        } else {
+            $type = true;
+        }
+        if (!file_exists(MODULE_ROOT . '/template/attachment/')) {
+            mkdirs(MODULE_ROOT . '/template/attachment/');
+        }
+        if ($tmp_name && $siz && $type) {
+            $name       = $_FILES['file']['tmp_name'];
+            $tname      = $_FILES['file']['name'];
+            $ext        = extend($tname);
+            $path       = MODULE_ROOT . '/template/attachment/';
+            $image_name = time() . rand(100, 999) . "." . $ext;
+            if (move_uploaded_file($name, $path . $image_name)) {
+                $answer = "y";
+            } else {
+                $answer = "n";
+            }
+            $jason = json_encode(array(
+                'error1' => 'yes',
+                'type1' => MODULE_URL . 'template/attachment/' . $image_name
+            ));
+        } else {
+            $jason = json_encode(array(
+                'error1' => 'not'
+            ));
+        }
+        return $jason;
+    }
+    public function doMobileReport()
+    {
+        global $_GPC, $_W;
+        load()->func('tpl');
+        if (checksubmit()) {
+            $data            = $_GPC['data'];
+            $data['uniacid'] = $_W['uniacid'];
+            $image           = $_GPC['check'];
+            $data['image1']  = $image[0];
+            $data['image2']  = $image[1];
+            $data['image3']  = $image[2];
+            empty($data['username']) && message("æ²¡æœ‰å¡«å†™åå­—");
+            empty($data['phoneNumber']) && message("æ²¡æœ‰å¡«å†™æ‰‹æœºå·ç ");
+            empty($data['address']) && message("æ²¡æœ‰å¡«å†™æ‰‹æœºå·ç ");
+            empty($data['title']) && message("æ²¡æœ‰å¡«å†™æ ‡é¢˜");
+            empty($data['summery']) && message("æ²¡æœ‰å¡«å†™ç®€è¿°æ¦‚è¦");
+            empty($data['content']) && message("æ²¡æœ‰å¡«å†™æ•…éšœè¯¦ç»†å†…å®¹");
+            $res = pdo_insert('tb_service_report', $data);
+            if ($res) {
+                message("å‘è¡¨æˆåŠŸ", $this->createMobileUrl('report'), 'success');
+            } else {
+                message('å‘è¡¨å¤±è´¥,è¯·é‡è¯•!', '', 'error');
+            }
+        }
+        $res   = pdo_fetch("SELECT * FROM " . tablename('tb_service_user') . " WHERE `username`=:username AND `uniacid`=:uniacid AND `uditing`=1 ", array(
+            ':username' => $_SESSION['check'],
+            ':uniacid' => $_W['uniacid']
+        ));
+        $fast  = pdo_fetch("SELECT * FROM " . tablename('tb_service_fast') . "WHERE `uniacid`=:uniacid", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        $share = pdo_fetch("SELECT * FROM " . tablename('tb_service_share') . " WHERE `uniacid`=:uniacid", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        include $this->template('report');
+    }
+    public function doMobileGettap()
+    {
+        global $_GPC, $_W;
+        $id       = $_GPC['id'];
+        $username = $_GPC['take_name'];
+        $res      = pdo_fetch("SELECT identify FROM " . tablename('tb_service_user') . "WHERE `username`=:username AND `uniacid`=:uniacid", array(
+            ':username' => $_SESSION['check'],
+            ':uniacid' => $_W['uniacid']
+        ));
+        if ($res['identify'] == 0) {
+            return 'kehu';
+        } else {
+            $res = pdo_update('tb_service_report', array(
+                'take_name' => $username,
+                'status' => 1
+            ), array(
+                'id' => $id,
+                'uniacid' => $_W['uniacid']
+            ));
+            if ($res) {
+                return 'success';
+            } else if ($res == 0) {
+                return 'success';
+            } else {
+                return 'error';
+            }
+        }
+    }
+    public function doMobileConfirm()
+    {
+        global $_GPC, $_W;
+        $id  = $_GPC['id'];
+        $res = pdo_update('tb_service_report', array(
+            'confirm' => 1
+        ), array(
+            'id' => $id,
+            'uniacid' => $_W['uniacid']
+        ));
+        if ($res) {
+            return 'success';
+        } else if ($res == 0) {
+            return 'success';
+        } else {
+            return 'error';
+        }
+    }
+    public function doMobileList()
+    {
+        global $_W, $_GPC;
+        $fast    = pdo_fetch("SELECT * FROM " . tablename('tb_service_fast') . "WHERE `uniacid`=:uniacid", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        $report1 = pdo_fetchall("SELECT * FROM " . tablename('tb_service_report') . "WHERE `uniacid`=:uniacid AND `status`=0 ORDER BY `id` DESC", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        $report2 = pdo_fetchall("SELECT * FROM " . tablename('tb_service_report') . "WHERE `uniacid`=:uniacid AND `status`=1 ORDER BY `id` DESC", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        $report3 = pdo_fetchall("SELECT * FROM " . tablename('tb_service_report') . "WHERE `uniacid`=:uniacid AND `status`=2 ORDER BY `id` DESC", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        $share   = pdo_fetch("SELECT * FROM " . tablename('tb_service_share') . " WHERE `uniacid`=:uniacid", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        include $this->template('list');
+    }
+    public function doMobileMine()
+    {
+        global $_W, $_GPC;
+        $res = pdo_fetch("SELECT identify FROM " . tablename('tb_service_user') . "WHERE `username`=:username AND `uniacid`=:uniacid", array(
+            ':username' => $_SESSION['check'],
+            ':uniacid' => $_W['uniacid']
+        ));
+        if ($res['identify'] == 0) {
+            $report1 = pdo_fetchall("SELECT * FROM " . tablename('tb_service_report') . "WHERE `uniacid`=:uniacid AND `username`=:username AND `status`=0 ORDER BY `id` DESC", array(
+                ':uniacid' => $_W['uniacid'],
+                ':username' => $_SESSION['check']
+            ));
+            $report2 = pdo_fetchall("SELECT * FROM " . tablename('tb_service_report') . "WHERE `uniacid`=:uniacid AND `username`=:username AND `status`=1 ORDER BY `id` DESC", array(
+                ':uniacid' => $_W['uniacid'],
+                ':username' => $_SESSION['check']
+            ));
+            $report3 = pdo_fetchall("SELECT * FROM " . tablename('tb_service_report') . "WHERE `uniacid`=:uniacid AND `username`=:username AND `status`=2 ORDER BY `id` DESC", array(
+                ':uniacid' => $_W['uniacid'],
+                ':username' => $_SESSION['check']
+            ));
+        } else {
+            $report1 = pdo_fetchall("SELECT * FROM " . tablename('tb_service_report') . "WHERE `uniacid`=:uniacid AND `username`=:username AND `status`=0 ORDER BY `id` DESC", array(
+                ':uniacid' => $_W['uniacid'],
+                ':username' => $_SESSION['check']
+            ));
+            $report2 = pdo_fetchall("SELECT * FROM " . tablename('tb_service_report') . "WHERE `uniacid`=:uniacid AND `take_name`=:username AND `status`=1 ORDER BY `id` DESC", array(
+                ':uniacid' => $_W['uniacid'],
+                ':username' => $_SESSION['check']
+            ));
+            $report3 = pdo_fetchall("SELECT * FROM " . tablename('tb_service_report') . "WHERE `uniacid`=:uniacid AND `take_name`=:username AND `status`=2 ORDER BY `id` DESC", array(
+                ':uniacid' => $_W['uniacid'],
+                ':username' => $_SESSION['check']
+            ));
+        }
+        $fast  = pdo_fetch("SELECT * FROM " . tablename('tb_service_fast') . "WHERE `uniacid`=:uniacid", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        $share = pdo_fetch("SELECT * FROM " . tablename('tb_service_share') . " WHERE `uniacid`=:uniacid", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        include $this->template('mine');
+    }
+    public function doMobileDetail()
+    {
+        global $_W, $_GPC;
+        $res    = pdo_fetch("SELECT identify FROM " . tablename('tb_service_user') . "WHERE `username`=:username AND `uniacid`=:uniacid", array(
+            ':username' => $_SESSION['check'],
+            ':uniacid' => $_W['uniacid']
+        ));
+        $report = pdo_fetch("SELECT * FROM " . tablename('tb_service_report') . "WHERE `uniacid`=:uniacid AND `id`=:id", array(
+            ':uniacid' => $_W['uniacid'],
+            'id' => $_GPC['id']
+        ));
+        $fast   = pdo_fetch("SELECT * FROM " . tablename('tb_service_fast') . "WHERE `uniacid`=:uniacid", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        $share  = pdo_fetch("SELECT * FROM " . tablename('tb_service_share') . " WHERE `uniacid`=:uniacid", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        include $this->template('detail');
+    }
+    public function doMobileUser()
+    {
+        global $_W, $_GPC;
+        $root  = MODULE_URL;
+        $share = pdo_fetch("SELECT * FROM " . tablename('tb_service_share') . " WHERE `uniacid`=:uniacid", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        include $this->template('user');
+    }
+    public function doWebEngineer()
+    {
+        global $_W, $_GPC;
+        load()->func('tpl');
+        $data['uniacid'] = $_W['uniacid'];
+        $ops             = array(
+            'manage',
+            'change',
+            'check'
+        );
+        $op              = in_array($_GPC['op'], $ops) ? $_GPC['op'] : 'manage';
+        $index           = isset($_GPC['page']) ? $_GPC['page'] : 1;
+        $pageIndex       = $index;
+        $pageSize        = 10;
+        $contion         = 'LIMIT ' . ($pageIndex - 1) * $pageSize . ',' . $pageSize;
+        if ($op == 'manage') {
+            $total    = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('tb_service_user') . " WHERE `uniacid`=:uniacid AND `identify`<>0", array(
+                ':uniacid' => $_W['uniacid']
+            ));
+            $page     = pagination($total, $pageIndex, $pageSize);
+            $engineer = pdo_fetchall("SELECT * FROM " . tablename('tb_service_user') . " WHERE `uniacid`=:uniacid AND `identify`<>0 ORDER BY `id` DESC " . $contion, array(
+                ':uniacid' => $_W['uniacid']
+            ));
+            include $this->template('engineer');
+        }
+        if ($op == 'check') {
+            $total    = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('tb_service_user') . " WHERE `uditing`=0 AND `uniacid`=:uniacid AND `identify`<>0", array(
+                ':uniacid' => $_W['uniacid']
+            ));
+            $page     = pagination($total, $pageIndex, $pageSize);
+            $engineer = pdo_fetchall("SELECT * FROM " . tablename('tb_service_user') . " WHERE `uditing`=0 AND `uniacid`=:uniacid AND `identify`<>0 ORDER BY `id` DESC " . $contion, array(
+                ':uniacid' => $_W['uniacid']
+            ));
+            include $this->template('engineer');
+        }
+        if ($op == 'change') {
+            if (checksubmit()) {
+                $data = $_GPC['data'];
+                empty($data['username']) && message("æ²¡æœ‰å¡«å†™åå­—");
+                empty($data['password']) && message("æ²¡æœ‰å¡«å†™å¯†ç ");
+                empty($data['phoneNumber']) && message("æ²¡æœ‰å¡«å†™æ‰‹æœºå·ç ");
+                $res = pdo_update('tb_service_user', $data, array(
+                    'id' => $data['id']
+                ));
+                if ($res) {
+                    message('æ›´æ–°æˆåŠŸ', $this->createWebUrl('engineer', array()), 'success');
+                } elseif ($res == 0) {
+                    message('ä½ æœªåšä»»ä½•æ”¹å˜', $this->createWebUrl('engineer', array()), 'error');
+                } else {
+                    message('æ›´æ–°å¤±è´¥', $this->createWebUrl('engineer', array()), 'error');
+                }
+            }
+            $engineer = pdo_fetch("SELECT * FROM " . tablename('tb_service_user') . " WHERE `id`=:id AND `uniacid`=:uniacid AND `identify`<>0", array(
+                ':id' => $_GPC['id'],
+                ':uniacid' => $_W['uniacid']
+            ));
+            $report   = pdo_fetchall("SELECT * FROM " . tablename('tb_service_report') . " WHERE `username`=:username OR `take_name`=:username AND `uniacid`=:uniacid ", array(
+                ':username' => $engineer['username'],
+                ':uniacid' => $_W['uniacid']
+            ));
+            include $this->template('engineer');
+        }
+    }
+    public function doWebCheckajax()
+    {
+        global $_W, $_GPC;
+        $getku = $_GPC['ku'];
+        $res   = pdo_update($getku, array(
+            'uditing' => 1
+        ), array(
+            'id' => $_GPC['id'],
+            'uniacid' => $_W['uniacid']
+        ));
+        if ($res) {
+            return 'success';
+        } else {
+            return 'error';
+        }
+    }
+    public function doWebDeleteajax()
+    {
+        global $_W, $_GPC;
+        $getku = $_GPC['ku'];
+        $res   = pdo_delete($getku, array(
+            'id' => $_GPC['id'],
+            'uniacid' => $_W['uniacid']
+        ));
+        if ($res) {
+            return 'success';
+        } else {
+            return 'error';
+        }
+    }
+    public function doWebCustomer()
+    {
+        global $_W, $_GPC;
+        $data['uniacid'] = $_W['uniacid'];
+        $ops             = array(
+            'manage',
+            'change',
+            'check'
+        );
+        $op              = in_array($_GPC['op'], $ops) ? $_GPC['op'] : 'manage';
+        $index           = isset($_GPC['page']) ? $_GPC['page'] : 1;
+        $pageIndex       = $index;
+        $pageSize        = 10;
+        $contion         = 'LIMIT ' . ($pageIndex - 1) * $pageSize . ',' . $pageSize;
+        if ($op == 'manage') {
+            $total    = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('tb_service_user') . " WHERE `uniacid`=:uniacid AND `identify`=0", array(
+                ':uniacid' => $_W['uniacid']
+            ));
+            $page     = pagination($total, $pageIndex, $pageSize);
+            $customer = pdo_fetchall("SELECT * FROM " . tablename('tb_service_user') . " WHERE `uniacid`=:uniacid AND `identify`=0 ORDER BY `id` DESC " . $contion, array(
+                ':uniacid' => $_W['uniacid']
+            ));
+            include $this->template('customer');
+        }
+        if ($op == 'check') {
+            $total    = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('tb_service_user') . " WHERE `uditing`=0 AND `uniacid`=:uniacid AND `identify`=0", array(
+                ':uniacid' => $_W['uniacid']
+            ));
+            $page     = pagination($total, $pageIndex, $pageSize);
+            $customer = pdo_fetchall("SELECT * FROM " . tablename('tb_service_user') . " WHERE `uditing`=0 AND `uniacid`=:uniacid AND `identify`=0 ORDER BY `id` DESC " . $contion, array(
+                ':uniacid' => $_W['uniacid']
+            ));
+            include $this->template('customer');
+        }
+        if ($op == 'change') {
+            if (checksubmit()) {
+                $data = $_GPC['data'];
+                empty($data['name']) && message("æ²¡æœ‰å¡«å†™åå­—");
+                empty($data['password']) && message("æ²¡æœ‰å¡«å†™å¯†ç ");
+                empty($data['phoneNumber']) && message("æ²¡æœ‰å¡«å†™æ‰‹æœºå·ç ");
+                $res = pdo_update('tb_service_customer', $data, array(
+                    'id' => $data['id'],
+                    'uniacid' => $_W['uniacid']
+                ));
+                if ($res) {
+                    message('æ›´æ–°æˆåŠŸ', $this->createWebUrl('engineer', array()), 'success');
+                } elseif ($res == 0) {
+                    message('ä½ æœªåšä»»ä½•æ”¹å˜', $this->createWebUrl('engineer', array()), 'error');
+                } else {
+                    message('æ›´æ–°å¤±è´¥', $this->createWebUrl('engineer', array()), 'error');
+                }
+            }
+            $customer = pdo_fetch("SELECT * FROM " . tablename('tb_service_user') . " WHERE `id`=:id AND `uniacid`=:uniacid AND `identify`=0 ", array(
+                ':id' => $_GPC['id'],
+                ':uniacid' => $_W['uniacid']
+            ));
+            $report   = pdo_fetchall("SELECT * FROM " . tablename('tb_service_report') . " WHERE `username`=:username AND `uniacid`=:uniacid ", array(
+                ':username' => $customer['username'],
+                ':uniacid' => $_W['uniacid']
+            ));
+            include $this->template('customer');
+        }
+    }
+    public function doWebShare()
+    {
+        global $_GPC, $_W;
+        load()->func('tpl');
+        if (checksubmit()) {
+            if (empty($_GPC['getid'])) {
+                $data            = $_GPC['data'];
+                $data['uniacid'] = $_W['uniacid'];
+                empty($data['shareTitle']) && message('åˆ†äº«æ ‡é¢˜ä¸èƒ½ä¸ºç©º');
+                empty($data['shareImage']) && message('åˆ†äº«å›¾ç‰‡ä¸èƒ½ä¸ºç©º');
+                empty($data['shareContent']) && message('åˆ†äº«å†…å®¹ä¸èƒ½ä¸ºç©º');
+                $res = pdo_insert('tb_service_share', $data);
+                if ($res) {
+                    message('æ“ä½œæˆåŠŸ', $this->createWebUrl('share'), 'success');
+                } else {
+                    message('æ“ä½œå¤±è´¥', '', 'error');
+                }
+            } else {
+                $data            = $_GPC['data'];
+                $data['uniacid'] = $_W['uniacid'];
+                empty($data['shareTitle']) && message('åˆ†äº«æ ‡é¢˜ä¸èƒ½ä¸ºç©º');
+                empty($data['shareImage']) && message('åˆ†äº«å›¾ç‰‡ä¸èƒ½ä¸ºç©º');
+                empty($data['shareContent']) && message('åˆ†äº«å†…å®¹ä¸èƒ½ä¸ºç©º');
+                $res = pdo_update('tb_service_share', $data, array(
+                    'id' => $_GPC['getid'],
+                    'uniacid' => $_W['uniacid']
+                ));
+                if ($res) {
+                    message('æ›´æ–°æˆåŠŸ', $this->createWebUrl('share', array()), 'success');
+                } elseif ($res == 0) {
+                    message('ä½ æœªåšä»»ä½•æ”¹å˜', $this->createWebUrl('share', array()), 'error');
+                } else {
+                    message('æ›´æ–°å¤±è´¥', '', 'error');
+                }
+            }
+        }
+        $share = pdo_fetch("SELECT * FROM " . tablename('tb_service_share') . " WHERE uniacid=:uniacid ", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        include $this->template('share');
+    }
+    public function doWebFast()
+    {
+        global $_GPC, $_W;
+        load()->func('tpl');
+        if (checksubmit()) {
+            if (empty($_GPC['getid'])) {
+                $data            = $_GPC['data'];
+                $data['uniacid'] = $_W['uniacid'];
+                empty($data['qq']) && message('QQä¸èƒ½ä¸ºç©º');
+                empty($data['weixin']) && message('å…³æ³¨å…¬ä¼—å·é“¾æŽ¥ä¸èƒ½ä¸ºç©º');
+                empty($data['number']) && message('åˆ†äº«å†…å®¹ä¸èƒ½ä¸ºç©º');
+                empty($data['shop']) && message('å•†åŸŽé“¾æŽ¥ä¸èƒ½ä¸ºç©º');
+                $res = pdo_insert('tb_service_fast', $data);
+                if ($res) {
+                    message('æ“ä½œæˆåŠŸ', $this->createWebUrl('fast'), 'success');
+                } else {
+                    message('æ“ä½œå¤±è´¥', '', 'error');
+                }
+            } else {
+                $data            = $_GPC['data'];
+                $data['uniacid'] = $_W['uniacid'];
+                empty($data['qq']) && message('QQä¸èƒ½ä¸ºç©º');
+                empty($data['weixin']) && message('å…³æ³¨å…¬ä¼—å·é“¾æŽ¥ä¸èƒ½ä¸ºç©º');
+                empty($data['number']) && message('åˆ†äº«å†…å®¹ä¸èƒ½ä¸ºç©º');
+                empty($data['shop']) && message('å•†åŸŽé“¾æŽ¥ä¸èƒ½ä¸ºç©º');
+                empty($data['shop']) && message('å…¬å¸åå­—ä¸èƒ½ä¸ºç©º');
+                $res = pdo_update('tb_service_fast', $data, array(
+                    'id' => $_GPC['getid'],
+                    'uniacid' => $_W['uniacid']
+                ));
+                if ($res) {
+                    message('æ›´æ–°æˆåŠŸ', $this->createWebUrl('fast', array()), 'success');
+                } elseif ($res == 0) {
+                    message('ä½ æœªåšä»»ä½•æ”¹å˜', $this->createWebUrl('fast', array()), 'error');
+                } else {
+                    message('æ›´æ–°å¤±è´¥', '', 'error');
+                }
+            }
+        }
+        $fast = pdo_fetch("SELECT * FROM " . tablename('tb_service_fast') . " WHERE uniacid=:uniacid ", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        include $this->template('fast');
+    }
+    public function doWebSlider()
+    {
+        global $_GPC, $_W;
+        load()->func('tpl');
+        if (checksubmit()) {
+            $data            = $_GPC['data'];
+            $data['uniacid'] = $_W['uniacid'];
+            empty($data['slider1']) && message('ç¬¬ä¸€å¼ å¹»ç¯ç‰‡ä¸èƒ½ä¸ºç©º');
+            empty($data['slider2']) && message('ç¬¬äºŒå¼ å¹»ç¯ç‰‡ä¸èƒ½ä¸ºç©º');
+            empty($data['slider3']) && message('ç¬¬ä¸‰å¼ å¹»ç¯ç‰‡ä¸èƒ½ä¸ºç©º');
+            empty($data['slider4']) && message('ç¬¬å››å¼ å¹»ç¯ç‰‡ä¸èƒ½ä¸ºç©º');
+            if (empty($_GPC['diff'])) {
+                $res = pdo_insert('tb_service_slider', $data);
+                if ($res) {
+                    message('æ“ä½œæˆåŠŸ', $this->createWebUrl('slider'), 'success');
+                } else {
+                    message('æ“ä½œå¤±è´¥', '', 'error');
+                }
+            } else {
+                $res = pdo_update('tb_service_slider', $data, array(
+                    'id' => $_GPC['diff'],
+                    'uniacid' => $_W['uniacid']
+                ));
+                if ($res) {
+                    message('æ›´æ–°æˆåŠŸ', $this->createWebUrl('slider', array()), 'success');
+                } elseif ($res == 0) {
+                    message('ä½ æœªåšä»»ä½•æ”¹å˜', $this->createWebUrl('slider', array()), 'error');
+                } else {
+                    message('æ›´æ–°å¤±è´¥', '', 'error');
+                }
+            }
+        }
+        $data = pdo_fetch("SELECT * FROM " . tablename('tb_service_slider') . " WHERE uniacid=:uniacid ", array(
+            ':uniacid' => $_W['uniacid']
+        ));
+        include $this->template('slider');
+    }
+    public function doWebFault()
+    {
+        global $_W, $_GPC;
+        $data['uniacid'] = $_W['uniacid'];
+        $ops             = array(
+            'manage',
+            'change',
+            'check'
+        );
+        $op              = in_array($_GPC['op'], $ops) ? $_GPC['op'] : 'manage';
+        $index           = isset($_GPC['page']) ? $_GPC['page'] : 1;
+        $pageIndex       = $index;
+        $pageSize        = 10;
+        $contion         = 'LIMIT ' . ($pageIndex - 1) * $pageSize . ',' . $pageSize;
+        if ($op == 'manage') {
+            $total  = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('tb_service_report') . " WHERE `uniacid`=:uniacid ", array(
+                ':uniacid' => $_W['uniacid']
+            ));
+            $page   = pagination($total, $pageIndex, $pageSize);
+            $report = pdo_fetchall("SELECT * FROM " . tablename('tb_service_report') . " WHERE `uniacid`=:uniacid  ORDER BY `id` DESC " . $contion, array(
+                ':uniacid' => $_W['uniacid']
+            ));
+            include $this->template('fault');
+        }
+        if ($op == 'check') {
+            $total  = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('tb_service_report') . " WHERE `confirm`=1 AND `uniacid`=:uniacid ", array(
+                ':uniacid' => $_W['uniacid']
+            ));
+            $page   = pagination($total, $pageIndex, $pageSize);
+            $report = pdo_fetchall("SELECT * FROM " . tablename('tb_service_report') . "  WHERE `confirm`=1 AND `uniacid`=:uniacid  ORDER BY `id` DESC " . $contion, array(
+                ':uniacid' => $_W['uniacid']
+            ));
+            include $this->template('fault');
+        }
+        if ($op == 'change') {
+            $report = pdo_fetch("SELECT * FROM " . tablename('tb_service_report') . " WHERE `id`=:id AND `uniacid`=:uniacid ", array(
+                ':id' => $_GPC['id'],
+                ':uniacid' => $_W['uniacid']
+            ));
+            include $this->template('fault');
+        }
+    }
+    public function doWebDeletetask()
+    {
+        global $_GPC, $_W;
+        $id  = $_GPC['id'];
+        $res = pdo_delete('tb_service_report', array(
+            'id' => $id,
+            'uniacid' => $_W['uniacid']
+        ));
+        if ($res) {
+            return 'success';
+        } else {
+            return 'error';
+        }
+    }
+    public function doWebTask()
+    {
+        global $_GPC, $_W;
+        $id  = $_GPC['id'];
+        $res = pdo_update('tb_service_report', array(
+            'confirm' => 0,
+            'status' => 2
+        ), array(
+            'id' => $id,
+            'uniacid' => $_W['uniacid']
+        ));
+        if ($res) {
+            return 'success';
+        } else {
+            return 'error';
+        }
+    }
+}
+function extend($file_name)
+{
+    $extend = pathinfo($file_name);
+    $extend = strtolower($extend["extension"]);
+    return $extend;
+}

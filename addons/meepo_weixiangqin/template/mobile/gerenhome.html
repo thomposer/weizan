@@ -283,6 +283,8 @@ font-style: normal;
  
   });
   function show2(){
+		var _left = ($(window).width() - $("#active_rule_box").outerWidth()) / 2 + "px";
+		$('#active_rule_box').css({"top": "20%","left":_left});
 		$('#active_rule_box').show();
 	     
 	}
@@ -359,7 +361,7 @@ font-style: normal;
 															 type: "warning",  
 															 showCancelButton: true,  
 															 confirmButtonColor: "#DD6B55",  
-															 confirmButtonText: "好的",  
+															 confirmButtonText: "去充值",  
 															 cancelButtonText: "知道了",  
 															 closeOnConfirm: true,   
 															 closeOnCancel: true 

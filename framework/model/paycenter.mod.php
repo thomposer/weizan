@@ -5,7 +5,7 @@
  */
 defined('IN_IA') or exit('Access Denied');
 
-function pc_order_status() {
+function paycenter_order_status() {
 	
 	return array(
 		'0' => array(
@@ -23,7 +23,7 @@ function pc_order_status() {
 	);
 }
 
-function pc_order_types() {
+function paycenter_order_types() {
 	return array(
 		'wechat' => '微信支付',
 		'alipay' => '支付宝支付',
@@ -32,7 +32,7 @@ function pc_order_types() {
 	);
 }
 
-function pc_order_trade_types() {
+function paycenter_order_trade_types() {
 	return array(
 		'native' => '扫码支付',
 		'jsapi' => '公众号支付',
@@ -40,7 +40,7 @@ function pc_order_trade_types() {
 	);
 }
 
-function pc_check_login() {
+function paycenter_check_login() {
 	global $_W, $_GPC;
 	if(empty($_W['uid']) && $_GPC['do'] != 'login') {
 		message('抱歉，您无权进行该操作，请先登录', murl('entry', array('m' => 'paycenter', 'do' => 'login'), true, true), 'error');

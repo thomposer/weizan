@@ -13,19 +13,19 @@
             <div class="form-group">
                 <label for="verify" class="col-sm-2 control-label">是否开启人工审核</label>
                 <div class="col-sm-10">
-                    <label for="radio_1" class="radio-inline">
-                        <input type="radio" name="verify" id="verify" value="1" {if $settings[ 'verify']==1 } checked{/if} /> 审核</label>
-                    <label for="radio_0" class="radio-inline">
-                        <input type="radio" name="verify" id="verify" value="0" {if empty($settings[ 'verify']) && $settings[ 'verify']==0 } checked{/if} /> 不审核</label>
+                    <label class="radio-inline">
+                        <input type="radio" name="verify" id="verify1" value="1" {if $settings[ 'verify']==1 } checked{/if} /> 审核</label>
+                    <label class="radio-inline">
+                        <input type="radio" name="verify" id="verify2" value="0" {if empty($settings[ 'verify']) && $settings[ 'verify']==0 } checked{/if} /> 不审核</label>
                     <span class="help-block">开启人工审核后，用户绑定需要管理人员审核方可使用物业相关功能，默认不开启审核</span>
                 </div>
             </div>
             <div class="form-group">
                 <label for="businesscode" class="col-sm-2 control-label">是否开启商家短信验证</label>
                 <div class="col-sm-10">
-                    <label for="radio_1" class="radio-inline">
+                    <label class="radio-inline">
                         <input type="radio" name="businesscode" id="businesscode" value="1" {if $settings[ 'businesscode']==1 } checked{/if} /> 验证</label>
-                    <label for="radio_0" class="radio-inline">
+                    <label  class="radio-inline">
                         <input type="radio" name="businesscode" id="businesscode" value="0" {if empty($settings[ 'businesscode']) && $settings[ 'businesscode']==0 } checked{/if} /> 不验证</label>
                     <span class="help-block">开启短信验证后，用户注册商家信息时自动验证其手机号的真实性（发送验证码）。</span>
                 </div>
@@ -33,9 +33,9 @@
             <div class="form-group">
                 <label for="verifycode" class="col-sm-2 control-label">是否开启注册短信验证</label>
                 <div class="col-sm-10">
-                    <label for="radio_1" class="radio-inline">
+                    <label  class="radio-inline">
                         <input type="radio" name="verifycode" id="verifycode" value="1" {if $settings[ 'verifycode']==1 } checked{/if} /> 验证</label>
-                    <label for="radio_0" class="radio-inline">
+                    <label  class="radio-inline">
                         <input type="radio" name="verifycode" id="verifycode" value="0" {if empty($settings[ 'verifycode']) && $settings[ 'verifycode']==0 } checked{/if} /> 不验证</label>
                     <span class="help-block">开启短信验证后，用户注册微小区信息时自动验证其手机号的真实性（发送验证码）。</span>
                 </div>
@@ -43,9 +43,9 @@
             <div class="form-group">
                 <label for="report_type" class="col-sm-2 control-label">是否开启报修投诉</label>
                 <div class="col-sm-10">
-                    <label for="radio_1" class="radio-inline">
+                    <label  class="radio-inline">
                         <input type="radio" name="report_type" id="report_type" value="1" {if $settings[ 'report_type']==1 } checked{/if} /> 验证</label>
-                    <label for="radio_0" class="radio-inline">
+                    <label  class="radio-inline">
                         <input type="radio" name="report_type" id="report_type" value="0" {if empty($settings[ 'report_type']) && $settings[ 'report_type']==0 } checked{/if} /> 不验证</label>
                     <span class="help-block">开启报修投诉后，用户报修投诉信息会自动发给小区管理员手机号（发送验证码）。</span>
                 </div>
@@ -53,9 +53,9 @@
             <div class="form-group">
                 <label for="shopping_status" class="col-sm-2 control-label">是否开启超市发货短信提醒</label>
                 <div class="col-sm-10">
-                    <label for="radio_1" class="radio-inline">
+                    <label  class="radio-inline">
                         <input type="radio" name="shopping_status" id="shopping_status" value="1" {if $settings[ 'shopping_status']==1 } checked{/if} /> 是</label>
-                    <label for="radio_0" class="radio-inline">
+                    <label  class="radio-inline">
                         <input type="radio" name="shopping_status" id="shopping_status" value="0" {if empty($settings[ 'shopping_status']) && $settings[ 'shopping_status']==0 } checked{/if} /> 否</label>
                     <span class="help-block">开启短信提醒后，商家发货自动通过短信发送给购买者。</span>
                 </div>
@@ -63,9 +63,9 @@
                 <div class="form-group">
                     <label for="property_status" class="col-sm-2 control-label">是否开启物业费缴费短信提醒</label>
                     <div class="col-sm-10">
-                        <label for="radio_1" class="radio-inline">
+                        <label  class="radio-inline">
                             <input type="radio" name="property_status" id="property_status" value="1" {if $settings[ 'property_status']==1 } checked{/if} /> 是</label>
-                        <label for="radio_0" class="radio-inline">
+                        <label  class="radio-inline">
                             <input type="radio" name="property_status" id="property_status" value="0" {if empty($settings[ 'property_status']) && $settings[ 'property_status']==0 } checked{/if} /> 否</label>
                         <span class="help-block">开启短信提醒后，可通过短信通知小区用户催缴物业费。</span>
                     </div>

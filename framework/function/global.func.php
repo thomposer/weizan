@@ -295,7 +295,6 @@ function wurl($segment, $params = array()) {
 	return $url;
 }
 
-
 function murl($segment, $params = array(), $noredirect = true, $addhost = false) {
 	global $_W;
 	list($controller, $action, $do) = explode('/', $segment);
@@ -327,7 +326,6 @@ function murl($segment, $params = array(), $noredirect = true, $addhost = false)
 	}
 	return $url;
 }
-
 
 function pagination($total, $pageIndex, $pageSize = 15, $url = '', $context = array('before' => 5, 'after' => 4, 'ajaxcallback' => '')) {
 	global $_W;
@@ -442,8 +440,14 @@ function tomedia($src, $local_path = false){
 		$src = $t = substr($urls['path'], strpos($urls['path'], 'images'));
 	}
 	$t = strtolower($src);
+	if (strexists($t, 'https://mmbiz.qlogo.cn')) {
+		return url('utility/wxcode/image', array('attach' => $src));
+	}
 	if (strexists($t, 'http://') || strexists($t, 'https://')) {
 		return $src;
+	}
+	if (strexists($src, 'https://mmbiz.qlogo.cn')) {
+		return url('utility/wxcode/image', array('attach' => $src));
 	}
 	if ($local_path || empty($_W['setting']['remote']['type']) || file_exists(IA_ROOT . '/' . $_W['config']['upload']['attachdir'] . '/' . $src)) {
 		$src = $_W['siteroot'] . $_W['config']['upload']['attachdir'] . '/' . $src;
@@ -773,6 +777,7 @@ function xml2array($xml) {
 		return $result;
 	}
 }
+
 function scriptname() {
 	global $_W;
 	$_W['script_name'] = basename($_SERVER['SCRIPT_FILENAME']);

@@ -3,7 +3,7 @@
  * 活动管理平台模块微站定义
  *
  * @author lonaking
- * @url http://bbs.we7.cc/
+ * @url http://bbs.012wz.com/
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -29,6 +29,7 @@ class Lonaking_activityModuleSite extends WeModuleSite {
         global $_GPC;
         $activityList = $this->activityService->selectAll();
         $d = $activity = $activityList['0'];//only one
+        $this->activityService->checkRegister($this->module);
         include $this->template('activity_list');
     }
 

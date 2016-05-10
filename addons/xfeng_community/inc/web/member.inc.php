@@ -24,11 +24,25 @@
 			if (!empty($_GPC['openid'])) {
 				$condition .= " AND m.openid='{$_GPC['openid']}'";
 			}
+			if (is_array($_GPC['regionid'])) {
+				$regionid = implode(',', $_GPC['regionid']);
+				$condition .= " AND m.regionid in($regionid)";
+			}
 			//判断是否是操作员
 			$user = $this->user();
+			//查所有小区信息
+			if ($user) {
+				//物业管理员
+				if (!$user['regionid']) {
+					$regions = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}' AND pid=:pid",array(':pid' => $user['companyid']));
+
+				}
+			}else{
+				$regions = $this->regions();	
+			}
 			if ($user) {
 				if ($user['regionid']) {
-					$condition .="AND m.regionid=:regionid";
+					$condition .=" AND m.regionid=:regionid";
 					$params[':regionid'] = $user['regionid'];
 				}else{
 					$condition .=" AND r.pid =:pid";
@@ -36,6 +50,7 @@
 				}
 				
 			}
+			
 			//显示业主信息
 			$pindex = max(1, intval($_GPC['page']));
 			$psize  = 10;

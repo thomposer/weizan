@@ -2,13 +2,13 @@
 
 defined('IN_IA') or exit('Access Denied');
 global $_W, $_GPC;
-pc_check_login();
+paycenter_check_login();
 $op = trim($_GPC['op']) ? trim($_GPC['op']) : 'index';
 
 if($op == 'post') {
 	if(checksubmit()) {
 		$fee = trim($_GPC['fee']) ? trim($_GPC['fee']) : message('收款金额有误', '', 'error');
-		$body = trim($_GPC['body']);
+		$body = trim($_GPC['body']) ? trim($_GPC['body']) : '收银台收款' . $fee;
 		$data = array(
 			'uniacid' => $_W['uniacid'],
 			'clerk_id' => $_W['user']['clerk_id'],
@@ -59,9 +59,9 @@ if($op == 'detail') {
 		message('订单不存在');
 	} else {
 		$store_id = $order['store_id'];
-		$types = pc_order_types();
-		$trade_types = pc_order_trade_types();
-		$status = pc_order_status();
+		$types = paycenter_order_types();
+		$trade_types = paycenter_order_trade_types();
+		$status = paycenter_order_status();
 		$store_info = pdo_get('activity_stores', array('id' => $store_id), array('business_name'));
 	}
 }

@@ -1564,18 +1564,255 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
         $weid = $_W['weid'];
         checklogin();
         if (checksubmit('verify') && !empty($_GPC['select'])) {
-            pdo_update('hnfans', array(
-                'isshow' => 1
-            ), " id  IN  ('" . implode("','", $_GPC['select']) . "')");
+            foreach ($_GPC['select'] as $row) {
+                pdo_update('hnfans', array(
+                    'isshow' => 1
+                ), array(
+                    'weid' => $weid,
+                    'id' => $row
+                ));
+                $fans_openid = pdo_fetchcolumn("SELECT * FROM " . tablename('hnfans') . " WHERE weid = :weid AND id = :id", array(
+                    ':weid' => $weid,
+                    ':id' => $row
+                ));
+                $this->mc_notice_consume2($fans_openid['from_user'], $fans_openid['nickname'] . '你的资料审核通过啦！', $fans_openid['nickname'] . '你的资料审核通过啦！', $this->createMobileUrl('homecenter'));
+            }
             message('审核成功！', $this->createWebUrl('list', array(
                 'page' => $_GPC['page']
-            )), 'sucess');
+            )), 'success');
         }
         if (checksubmit('delete') && !empty($_GPC['select'])) {
             pdo_delete('hnfans', " id  IN  ('" . implode("','", $_GPC['select']) . "')");
             message('删除成功！', $this->createWebUrl('list', array(
                 'page' => $_GPC['page']
-            )), 'sucess');
+            )), 'success');
+        }
+        if (checksubmit('downsome') && !empty($_GPC['select'])) {
+            foreach ($_GPC['select'] as $row) {
+                $sql    = "SELECT * FROM " . tablename('hnfans') . " WHERE weid = :weid AND id = :id";
+                $params = array(
+                    ':weid' => $_W['uniacid'],
+                    ':id' => $row
+                );
+                $list[] = pdo_fetch($sql, $params);
+            }
+            include_once('../framework/library/phpexcel/PHPExcel.php');
+            $objPHPExcel = new PHPExcel();
+            $objDrawing  = new PHPExcel_Worksheet_Drawing();
+            $objPHPExcel->getProperties()->setCreator("Meepo");
+            $objPHPExcel->getProperties()->setLastModifiedBy("Meepo");
+            $objPHPExcel->getProperties()->setTitle("Meepo");
+            $objPHPExcel->getActiveSheet()->setCellValue('A1', '粉丝昵称');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(60);
+            $objPHPExcel->getActiveSheet()->setCellValue('B1', '姓名');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+            $objPHPExcel->getActiveSheet()->setCellValue('C1', '联系方式');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('D1', 'QQ号');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('E1', '微信号');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('F1', '性别');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('G1', '年龄');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('H1', '身高');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('I1', '体重');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('J1', '婚姻状态');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('K1', '所在地');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('L1', '名族');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('M1', '自我介绍');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('N1', '交友宣言');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('O1', '星座');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('P1', '注册时间');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(20);
+            foreach ($list as $key => $value) {
+                if (empty($value['mingzu']) || $value['mingzu'] == '1') {
+                    $mingzu = '未完善';
+                } else {
+                    $mingzu = $value['mingzu'];
+                }
+                $affectivestatus = empty($value['affectivestatus']) ? '未完善' : $value['affectivestatus'];
+                $height          = empty($value['height']) ? '未完善' : $value['height'] . 'cm';
+                if (empty($value['weight'])) {
+                    $weight = '未完善';
+                } else {
+                    if ($value['weight'] == '401') {
+                        $weight = '40kg以下';
+                    } elseif ($value['weight'] == '701') {
+                        $weight = '70kg以下';
+                    } else {
+                        $weight = $value['weight'] . 'kg';
+                    }
+                }
+                if (empty($value['constellation'])) {
+                    $constellation = '未完善';
+                } else {
+                    $constellation = $value['constellation'];
+                }
+                if (empty($value['gender'])) {
+                    $gender = '保密';
+                } elseif ($value['gender'] == '1') {
+                    $gender = '男';
+                } elseif ($value['gender'] == '2') {
+                    $gender = '女';
+                }
+                if (empty($value['age'])) {
+                    $age = '未完善';
+                } else {
+                    $age = $value['age'] . '岁';
+                }
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . ($key + 2), $value['nickname']);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . ($key + 2), $value['realname']);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . ($key + 2), empty($value['telephone']) ? '未完善' : $value['telephone']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . ($key + 2), empty($value['qq']) ? '未完善' : $value['qq']);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . ($key + 2), empty($value['wechat']) ? '未完善' : $value['wechat']);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . ($key + 2), $gender);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . ($key + 2), $age);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . ($key + 2), $height);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . ($key + 2), $weight);
+                $objPHPExcel->getActiveSheet()->setCellValue('J' . ($key + 2), $affectivestatus);
+                $objPHPExcel->getActiveSheet()->setCellValue('K' . ($key + 2), $value['resideprovincecity']);
+                $objPHPExcel->getActiveSheet()->setCellValue('L' . ($key + 2), $mingzu);
+                $objPHPExcel->getActiveSheet()->setCellValue('M' . ($key + 2), empty($value['Descrip']) ? '未完善' : $value['Descrip']);
+                $objPHPExcel->getActiveSheet()->setCellValue('N' . ($key + 2), empty($value['lookingfor']) ? '未完善' : $value['lookingfor']);
+                $objPHPExcel->getActiveSheet()->setCellValue('O' . ($key + 2), $constellation);
+                $objPHPExcel->getActiveSheet()->setCellValue('P' . ($key + 2), date("Y-m-d H:i:s", $value['time']));
+            }
+            $objWriter = new PHPExcel_Writer_Excel5($objPHPExcel);
+            header("Pragma: public");
+            header("Expires: 0");
+            header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+            header("Content-Type:application/force-download");
+            header("Content-Type:application/vnd.ms-execl");
+            header("Content-Type:application/octet-stream");
+            header("Content-Type:application/download");
+            ;
+            header('Content-Disposition:attachment;filename="粉丝资料' . time() . '".xls"');
+            header("Content-Transfer-Encoding:binary");
+            $objWriter->save('php://output');
+            exit();
+        }
+        if (checksubmit('downall')) {
+            $sql    = "SELECT * FROM " . tablename('hnfans') . " WHERE weid = :weid AND isshow = :isshow";
+            $params = array(
+                ':weid' => $_W['uniacid'],
+                ':isshow' => '1'
+            );
+            $list   = pdo_fetchall($sql, $params);
+            include_once('../framework/library/phpexcel/PHPExcel.php');
+            $objPHPExcel = new PHPExcel();
+            $objDrawing  = new PHPExcel_Worksheet_Drawing();
+            $objPHPExcel->getProperties()->setCreator("Meepo");
+            $objPHPExcel->getProperties()->setLastModifiedBy("Meepo");
+            $objPHPExcel->getProperties()->setTitle("Meepo");
+            $objPHPExcel->getActiveSheet()->setCellValue('A1', '粉丝昵称');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(60);
+            $objPHPExcel->getActiveSheet()->setCellValue('B1', '姓名');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+            $objPHPExcel->getActiveSheet()->setCellValue('C1', '联系方式');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('D1', 'QQ号');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('E1', '微信号');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('F1', '性别');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('G1', '年龄');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('H1', '身高');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('I1', '体重');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('J1', '婚姻状态');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('K1', '所在地');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('L1', '名族');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('M1', '自我介绍');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('N1', '交友宣言');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('O1', '星座');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->setCellValue('P1', '注册时间');
+            $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(20);
+            foreach ($list as $key => $value) {
+                $education = !empty($value['education']) ? $value['eduction'] : '未完善';
+                if (empty($value['mingzu']) || $value['mingzu'] == '1') {
+                    $mingzu = '未完善';
+                } else {
+                    $mingzu = $value['mingzu'];
+                }
+                $affectivestatus = empty($value['affectivestatus']) ? '未完善' : $value['affectivestatus'];
+                $height          = empty($value['height']) ? '未完善' : $value['height'] . 'cm';
+                if (empty($value['weight'])) {
+                    $weight = '未完善';
+                } else {
+                    if ($value['weight'] == '401') {
+                        $weight = '40kg以下';
+                    } elseif ($value['weight'] == '701') {
+                        $weight = '70kg以下';
+                    } else {
+                        $weight = $value['weight'] . 'kg';
+                    }
+                }
+                if (empty($value['constellation'])) {
+                    $constellation = '未完善';
+                } else {
+                    $constellation = $value['constellation'];
+                }
+                if (empty($value['gender'])) {
+                    $gender = '保密';
+                } elseif ($value['gender'] == '1') {
+                    $gender = '男';
+                } elseif ($value['gender'] == '2') {
+                    $gender = '女';
+                }
+                if (empty($value['age'])) {
+                    $age = '未完善';
+                } else {
+                    $age = $value['age'] . '岁';
+                }
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . ($key + 2), $value['nickname']);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . ($key + 2), $value['realname']);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . ($key + 2), $value['telephone']);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . ($key + 2), $value['qq']);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . ($key + 2), $value['wechat']);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . ($key + 2), $gender);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . ($key + 2), $age);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . ($key + 2), $height);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . ($key + 2), $weight);
+                $objPHPExcel->getActiveSheet()->setCellValue('J' . ($key + 2), $affectivestatus);
+                $objPHPExcel->getActiveSheet()->setCellValue('K' . ($key + 2), $value['resideprovincecity']);
+                $objPHPExcel->getActiveSheet()->setCellValue('L' . ($key + 2), $mingzu);
+                $objPHPExcel->getActiveSheet()->setCellValue('M' . ($key + 2), $value['Descrip']);
+                $objPHPExcel->getActiveSheet()->setCellValue('N' . ($key + 2), $value['lookingfor']);
+                $objPHPExcel->getActiveSheet()->setCellValue('O' . ($key + 2), $constellation);
+                $objPHPExcel->getActiveSheet()->setCellValue('P' . ($key + 2), date("Y-m-d H:i:s", $value['time']));
+            }
+            $objWriter = new PHPExcel_Writer_Excel5($objPHPExcel);
+            header("Pragma: public");
+            header("Expires: 0");
+            header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+            header("Content-Type:application/force-download");
+            header("Content-Type:application/vnd.ms-execl");
+            header("Content-Type:application/octet-stream");
+            header("Content-Type:application/download");
+            ;
+            header('Content-Disposition:attachment;filename="全部粉丝资料' . time() . '".xls"');
+            header("Content-Transfer-Encoding:binary");
+            $objWriter->save('php://output');
+            exit();
         }
         load()->func('tpl');
         $op     = !empty($_GPC['op']) ? $_GPC['op'] : 'display';

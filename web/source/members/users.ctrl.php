@@ -9,9 +9,9 @@ global $_W,$_GPC;
 if(!$_W['isfounder']) {
     message('不能访问, 需要创始人权限才能访问.');
 }
-$ops = array("xf","cz");
-$op = in_array($_GPC["op"], $ops) ? $_GPC["op"] : "display";
-if($op == "xf") {
+$dos = array('xf', 'cz');
+$do = in_array($do, $dos) ? $do : 'display';
+if($do == "xf") {
     $uid = $_GPC["uid"];
     if(intval($uid) <= 0) message("用户ID不存在.");
     $sql = 'SELECT * FROM ' . tablename('users') . " WHERE uid=:uid LIMIT 1";
@@ -20,7 +20,7 @@ if($op == "xf") {
     list($list,$pager) = getAllRecords("users_credits_record",array("credittype"=>array("op"=>"=","val"=>"credit2")),$uid);
     include $this->template('members/users');
     exit;
-}elseif($op == "cz") {
+}elseif($do == "cz") {
     $uid = $_GPC["uid"];
     if(intval($uid) <= 0) message("用户ID不存在.");
     $sql = 'SELECT * FROM ' . tablename('users') . " WHERE uid=:uid LIMIT 1";

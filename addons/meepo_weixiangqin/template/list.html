@@ -27,6 +27,7 @@
 	<li><a href="{php echo $this->createWebUrl('flower_record')}">送花记录</a></li>
 	<li><a href="{php echo $this->createWebUrl('sayhi_record')}">打招呼记录</a></li>
 	<li><a href="{php echo $this->createWebUrl('share_record')}">分享记录</a></li>
+	<li ><a href="{php echo $this->createWebUrl('quxiao')}">取消关注列表</a></li>
 </ul>
 {if $op == 'display'}
 <div class="panel panel-info">
@@ -52,23 +53,6 @@
 				<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">手机号码</label>
 				<div class="col-xs-12 col-sm-8 col-lg-9">
 					<input class="form-control" name="telephone" id="" type="text" value="{$_GPC['telephone']}">
-				</div>
-			</div>
-			<div class="form-group">
-                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">注册时间</label>
-                <div class="col-xs-12 col-sm-8 col-lg-9">
-               	
-				{php echo tpl_form_field_daterange('datelimit', array('starttime'=>empty($_GPC['starttime']) ? date('Y-m-d',time()) : date('Y-m-d',$_GPC['starttime']),'endtime'=>empty($_GPC['endtime']) ? date('Y-m-d',time()+3600*240) : date('Y-m-d',$_GPC['endtime'])))}
-				
-               </div>
-           </div>
-			<div class="form-group">
-				<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">状态</label>
-				<div class="col-xs-12 col-sm-8 col-lg-9">
-					<select name="yingcang" class='form-control'>
-							<option value="1" {if $_GPC['yingcang']=='1'} selected{/if}>显示</option>
-							<option value="2" {if $_GPC['yingcang']=='2'} selected{/if}>隐藏</option>
-					</select>
 				</div>
 			</div>
 			<div class="form-group">
@@ -182,6 +166,12 @@
 							<td colspan="4">
 								{if $_GPC['isshow'] == 0}
 								<input type="submit" name="verify" value="审核" class="btn btn-primary" />
+								{/if}
+								{if $_GPC['isshow'] == 1}
+								<input type="submit" name="downsome" value="导出" class="btn btn-primary" />
+								{/if}
+								{if $_GPC['isshow'] == 1}
+								<input type="submit" name="downall" value="导出全部" class="btn btn-primary" />
 								{/if}
 								<input type="submit" name="delete" value="删除" class="btn btn-primary" />
 								<input type="hidden" name="token" value="{$_W['token']}" />

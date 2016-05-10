@@ -31,7 +31,7 @@
 			    <div class="col-sm-3">
 			        <select id="regionid" name="_regionid" class='form-control'>
 						{loop $regions $region}
-						<option value="{$region['id']}" {if $member['regionid']==$region['id']}selected{/if}>{$region['city']}{$region['dist']}{$region['title']}</option>
+						<option value="{$region['id']}" {if $member['regionid']==$region['id']}selected{/if}>{$region['title']}</option>
 						{/loop}
 					</select>
 			    </div>

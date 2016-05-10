@@ -75,7 +75,7 @@ class Xwz_queueModule extends WeModule {
                     pdo_insert('xwz_queue_type', $d);
                     $typeids[] = pdo_insertid();
                 } else {
-                    pdo_insert('xwz_queue_type', $d);
+                    pdo_update('xwz_queue_type', $d,array('id'=>$value));
                     $typeids[] = $value;
                 }
             }

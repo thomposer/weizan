@@ -16,25 +16,14 @@
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'region';
 
 	if ($op == 'member') {
-		//判断有没有注册
-		$member = pdo_fetch("SELECT * FROM".tablename('xcommunity_member')."WHERE openid=:openid",array(':openid' => $_W['fans']['from_user']));
-		// if ($member) {
-		// 	$dat = array(
-		// 			'regionid' => intval($_GPC['regionid']),
-		// 			'status' => 0
-		// 		);
-		// 	$result = pdo_update('xcommunity_member',$dat,array('id' => $member['id']));
-		// 	if ($result) {
-				
-		// 		message('等待管理员审核。',referer(),'success');exit();
-		// 	}
-		// }
+		
 		//判断是否开启短信验证
 		$sms = pdo_fetch("SELECT verifycode FROM".tablename('xcommunity_wechat_smsid')."WHERE uniacid=:uniacid",array(':uniacid' => $_W['uniacid']));
-		//是否开启房号注册码验证
+		//是否开启房号注册码验证，//是否开启切换小区审核
 		$set = pdo_fetch("SELECT * FROM".tablename('xcommunity_set')."WHERE uniacid=:uniacid",array(':uniacid' => $_W['uniacid']));
 		
 		if($_W['isajax']){
+			//判断注册码是否正确
 			$code = $_GPC['code'];
 			if ($code) {
 				$room = pdo_fetch("SELECT room FROM".tablename('xcommunity_room')."WHERE uniacid=:uniacid AND code=:code",array(':uniacid' => $_W['uniacid'],':code' => $code));
@@ -45,21 +34,9 @@
 					echo json_encode($result);exit();
 				}
 			}
-			// if ($set['room_status']) {
-			// 	if ($_GPC['mobile']) {
-			// 		$room = pdo_fetch("SELECT room FROM".tablename('xcommunity_room')."WHERE uniacid=:uniacid AND mobile=:mobile",array(':uniacid' => $_W['uniacid'],':mobile' => $_GPC['mobile']));
-			// 		if ($room['room'] != $_GPC['address']) {
-			// 			$result = array(
-			// 					'status' => 5,
-			// 				);
-			// 			echo json_encode($result);exit();
-			// 		}
-			// 	}
-			// }
-			
-			load()->model('mc');
-			//$res = mc_check(array('mobile' => $_GPC['mobile']));
-			if (!$member) {
+			//判断手机号是否注册
+			// if (!$member) {
+			if (empty($set['r_enable'])) {
 				$res = pdo_fetch("SELECT * FROM".tablename('xcommunity_member')."WHERE mobile=:mobile AND  weid=:weid ",array(':mobile' => $_GPC['mobile'],':weid' => $_W['weid']));
 				if ($res) {
 					$result = array(
@@ -68,8 +45,23 @@
 					echo json_encode($result);exit();
 				}
 			}
+			
+			// }
+			//判断有没有注册 status=1 注册成功
+			$member = pdo_fetch("SELECT * FROM".tablename('xcommunity_member')."WHERE openid=:openid",array(':openid' => $_W['fans']['from_user']));
+			if ($member) {
+				//切换小区
+				if ($set['r_enable']) {
+					$status = 0;
+				}else{
+					$status = 1;
+				}
+				
+			}else{
+				$status = 1;
+			}
 			if ($sms['verifycode']) {
-				//判断验证码是否正确
+				//判断手机验证码是否正确
 				load()->classs('wesession');
 				WeSession::start($_W['uniacid'],$_W['fans']['from_user'],60);
 				$verifycode = intval($_GPC['verifycode']);	
@@ -93,6 +85,7 @@
 			}
 			
 			if ($set['room_enable']) {
+				//是否开启房号显示
 				if (empty($_GPC['address'])) {
 					$result = array(
 							'status' => 7,
@@ -116,19 +109,7 @@
 				}
 				
 			}
-			//是否开启切换小区审核
-			$set = pdo_fetch("SELECT * FROM".tablename('xcommunity_set')."WHERE uniacid=:uniacid",array(':uniacid' => $_W['uniacid']));
-
-			if ($member) {
-				if ($set['r_enable']) {
-					$status = 0;
-				}else{
-					$status = 1;
-				}
-				
-			}else{
-				$status = 1;
-				}
+			
 			$data = array(
 					'weid' => $_W['uniacid'],
 					'createtime' => TIMESTAMP,
@@ -141,14 +122,20 @@
 					'mobile' => $_GPC['mobile'],
 					'address' => $address,
 				);
+			load()->model('mc');
 			$rs = mc_update($_W['fans']['uid'], array('mobile' => $_GPC['mobile'],'realname' => $_GPC['realname'],'address' => $_GPC['address']));
 			if ($rs) {
 				$data['memberid'] = $_W['member']['uid'];
 			}
+			// print_r($data);exit();
 			if ($member) {
 				$rr = pdo_update('xcommunity_member',$data,array('id' => $member['id']));
 			}else{
 				$r = pdo_insert('xcommunity_member',$data);
+				//
+				if ($set['room_enable']) {
+					pdo_update('xcommunity_room',array('status' => 1),array('room' => $address,'regionid' => $_GPC['regionid'],'mobile' => $_GPC['mobile']));
+				}
 			}
 			if ($r) {
 				$result = array(
@@ -184,9 +171,7 @@
 			header("Location:".$this->createMobileUrl('register',array('op' => 'member','regionid' => $regions[0][id])));
 		}
 		if ($member) {
-			echo "<script language='javascript'>";
-			echo "  alert('请耐心等待管理员审核');";
-			echo "</script>";exit();
+			header("Location:".$this->createMobileUrl('register',array('op' => 'r')));
 		}
 		if ($_W['ispost']) {
 			if ($_GPC['keywords']) {
@@ -311,6 +296,13 @@
 			}
 		}
 		
+	}elseif ($op == 'r') {
+		# code...
+		$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
+		if ($styleid) {
+			$settings = pdo_fetch("SELECT * FROM".tablename('xcommunity_set')."WHERE uniacid=:uniacid",array(":uniacid" => $_W['uniacid']));
+			include $this->template('style/style'.$styleid.'/r');exit();
+		}
 	} 
 	
 	

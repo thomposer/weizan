@@ -22,10 +22,17 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="grab_wc_tplid" class="col-sm-2 control-label">完成通知模板ID:</label>
+                    <label for="grab_wc_tplid" class="col-sm-2 control-label">报修完成通知模板ID:</label>
                     <div class="col-sm-5">
-                        <input type="text" name="grab_wc_tplid" value="{$settings['grab_wc_tplid']}" class="form-control" placeholder='请输入服务完成通知通知模板ID,从微信公众号后台添加获取'>
-                        <span class="help-block">(OPENTM400569624 完成通知（报修）)</span>
+                        <input type="text" name="grab_wc_tplid" value="{$settings['grab_wc_tplid']}" class="form-control" placeholder='请输入报修完成通知通知模板ID,从微信公众号后台添加获取'>
+                        <span class="help-block">(OPENTM400221028 报修完成通知)</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="report_wc_tplid" class="col-sm-2 control-label">投诉处理结果模板ID:</label>
+                    <div class="col-sm-5">
+                        <input type="text" name="report_wc_tplid" value="{$settings['report_wc_tplid']}" class="form-control" placeholder='请输入投诉处理结果模板ID,从微信公众号后台添加获取'>
+                        <span class="help-block">(OPENTM200874888 投诉处理结果通知)</span>
                     </div>
                 </div>
                 <div class="form-group">

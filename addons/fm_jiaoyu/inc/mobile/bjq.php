@@ -53,7 +53,7 @@
             
 			$item = pdo_fetch("SELECT * FROM " . tablename($this->table_bjq) . " WHERE id = :id ", array(':id' => $id));	
 						
-		 include $this->template('bjq');
+		 include $this->template('teacher/bjq');
           }else{
          include $this->template('bangding');
           }        

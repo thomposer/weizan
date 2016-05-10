@@ -45,5 +45,5 @@
             $restlist = pdo_fetchall("SELECT * FROM " . tablename($this->table_index) . " where weid = :weid and is_show=1 {$strwhere} ORDER BY is_show DESC,ssort DESC, id DESC", array(':weid' => $weid));
         }
 
-        include $this->template('wapindex');
+        include $this->template('common/wapindex');
 ?>

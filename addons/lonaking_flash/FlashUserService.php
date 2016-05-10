@@ -113,4 +113,3 @@ class FlashUserService
         return $uid;
     }
 }
-?>

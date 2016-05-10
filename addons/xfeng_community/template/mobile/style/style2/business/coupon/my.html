@@ -61,6 +61,16 @@
             $(".foot_more_pull").toggle();
         })
     });
+    function del(id){
+        var id = id;
+                $.post("{php echo $this->createMobileUrl('business')}", {"op":"coupon","operation":"delete","id":id}, function(msg){
+                    if (msg.status == 1) {
+                                setTimeout(function(){
+                                    window.location.reload();
+                                 },100);
+                            };
+                },'json');
+    }
     </script>
     <iframe id="baocms_frm" name="baocms_frm" style="display:none;"></iframe>
     <style>

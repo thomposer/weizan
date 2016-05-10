@@ -11,7 +11,7 @@
 		$openid = $_W['openid'];
         $studentsid = intval($_GPC['sid']);
 		
-		$userid = pdo_fetch("SELECT * FROM " . tablename($this->table_user) . " where :schoolid = schoolid And :weid = weid And :openid = openid", array(':weid' => $weid, ':schoolid' => $schoolid, ':openid' => $openid), 'id');
+		$userid = pdo_fetch("SELECT * FROM " . tablename($this->table_user) . " where :schoolid = schoolid And :weid = weid And :openid = openid And :tid = tid", array(':weid' => $weid, ':schoolid' => $schoolid, ':openid' => $openid, ':tid' => 0), 'id');
 		$it = pdo_fetch("SELECT * FROM " . tablename($this->table_user) . " where weid = :weid AND id=:id ORDER BY id DESC", array(':weid' => $weid, ':id' => $userid['id']));	
 		
         if(!empty($userid['id'])){
@@ -29,7 +29,7 @@
                }
             } 
 		
-		 include $this->template('myinfo');
+		 include $this->template('students/myinfo');
           }else{
          include $this->template('bangding');
           }        

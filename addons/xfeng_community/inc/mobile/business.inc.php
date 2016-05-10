@@ -13,44 +13,52 @@
 	$region = $this->mreg();
 	$op = !empty($_GPC['op']) ? $_GPC['op'] : 'list';
 	$operation = !empty($_GPC['operation']) ? $_GPC['operation'] : 'list';
-	WeSession::start($_W['uniacid'],$_W['fans']['from_user'],600);
-	if($_GPC['lng']&&$_GPC['lat']){
-		$_SESSION['lng'] = $_GPC['lng'];
-		$_SESSION['lat'] = $_GPC['lat'];
-	}
-	$lng = $_SESSION['lng'] ? $_SESSION['lng'] : $_GPC['lng'];
-	$lat = $_SESSION['lat'] ? $_SESSION['lat'] : $_GPC['lat'];
-	if($op == 'list' || $op == 'search'){
+	
+	if($op == 'list'){
 		//微信端商家展示
+		//是否开启商家定位
+		// WeSession::start($_W['uniacid'],$_W['fans']['from_user'],600);
+		// if($_GPC['lng']&&$_GPC['lat']){
+		// 	$_SESSION['lng'] = $_GPC['lng'];
+		// 	$_SESSION['lat'] = $_GPC['lat'];
+		// }
+		// $lng = $_SESSION['lng'] ? $_SESSION['lng'] : $_GPC['lng'];
+		// $lat = $_SESSION['lat'] ? $_SESSION['lat'] : $_GPC['lat'];
 		
+		$condition = '';
+
+        $keyword = $_GPC['keyword'];
+        if ($keyword) {
+        	$condition .= " AND sjname LIKE '%{$_GPC['keyword']}%' or parent LIKE '{$_GPC['keyword']}'";
+        }
+        $parent = $_GPC['parent'];
+        if ($parent) {
+        	$condition .= " AND parent = '{$parent}'";
+        }
+        
 		if ($_W['isajax'] || $_W['ispost']) {
+			$lng = $_GPC['lng'];
+			$lat = $_GPC['lat'];
+			$settings = pdo_fetch("SELECT * FROM".tablename('xcommunity_set')."WHERE uniacid=:uniacid",array(":uniacid" => $_W['uniacid']));
+			if ($settings['business_status']) {
+				if ($settings['range']) {
+					$range = $settings['range'];
+				}else{
+					$range = 5;
+				}
+		        $point = $this->squarePoint($lng, $lat, $range);
+		       	$condition .="AND lat<>0 AND lat >= '{$point['right-bottom']['lat']}' AND lat <= '{$point['left-top']['lat']}' AND lng >= '{$point['left-top']['lng']}' AND lng <= '{$point['right-bottom']['lng']}'";
+
+			}
+			// print_r($condition);exit();
 			// if ($lng && $lat) {
 				$pindex = max(1, intval($_GPC['page']));
 				$psize  = 10;
 				$settings = pdo_fetch("SELECT * FROM".tablename('xcommunity_set')."WHERE uniacid=:uniacid",array(":uniacid" => $_W['uniacid']));
-				//是否开启商家定位
-				$condition = '';
-				if ($settings['business_status']) {
-					if ($settings['range']) {
-						$range = $settings['range'];
-					}else{
-						$range = 5;
-					}
-			        $point = $this->squarePoint($lng, $lat, $range);
-			       	$condition .="AND lat<>0 AND lat >= '{$point['right-bottom']['lat']}' AND lat <= '{$point['left-top']['lat']}' AND lng >= '{$point['left-top']['lng']}' AND lng <= '{$point['right-bottom']['lng']}'";
-
-				} 
-		        $keyword = $_GPC['keyword'];
-		        if ($keyword) {
-		        	$condition .= " AND sjname LIKE '%{$_GPC['keyword']}%'";
-		        }
-		        $parent = $_GPC['parent'];
-		        if ($parent) {
-		        	$condition .= " AND parent = '{$parent}'";
-		        }
+				
 		        $sql = "SELECT * FROM".tablename('xcommunity_dp')."WHERE weid='{$_W['weid']}' $condition order by id desc LIMIT ".($pindex - 1) * $psize.','.$psize;
 		       // echo $_GPC['parent'];
-		        // print_r($sql);
+		     
 				$result = pdo_fetchall($sql);
 				// print_r($result);
 				$count = count($result);
@@ -58,7 +66,8 @@
 				if (!empty($result)) {
 			            $min = -1;
 			            foreach ($result as &$row) {
-			                $row['distance'] = $this->getDistance($lat, $lng, $row['lat'], $row['lng']);
+			                $row['distance'] = $this->GetDistance($lat, $lng, $row['lat'], $row['lng']);
+
 			                if ($min < 0 || $row['distance'] < $min) {
 			                    $min = $row['distance'];
 			                }
@@ -127,21 +136,16 @@
 			            return 0;
 			        }
 				
-			// }
+	
 		}
 
-		if ($op == 'list') {
+	
 			$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
 			if ($styleid) {
 				include $this->template('style/style'.$styleid.'/business/list');exit();
 			}
-		}
-		if ($op == 'search') {
-			$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
-			if ($styleid) {
-				include $this->template('style/style'.$styleid.'/business/search');exit();
-			}
-		}
+
+		
 		
 	}elseif ($op == 'detail') {
 		//微信端商家内容页
@@ -245,6 +249,8 @@
 			if ($dpid) {
 				$dp = pdo_fetch("SELECT uid FROM".tablename('xcommunity_dp')."WHERE weid=:weid AND id=:id",array(':weid' => $_W['uniacid'],':id' => $dpid));
 			}
+			//查小区编号
+			$member = $this->changemember();
 			if ($_W['ispost']) {
 				$data = array(
 					'weid' => $_W['uniacid'],
@@ -257,7 +263,8 @@
 					'type' => 'business',
 					'num' => intval($_GPC['num']),
 					'goodsprice' => $_GPC['price'],
-					'enable' => 1
+					'enable' => 1,
+					'regionid' => $member['regionid'],
 				);
 				if ($dp['uid']) {
 					$data['uid'] = $dp['uid'];
@@ -458,7 +465,6 @@
 		        $params[':weid'] = $_W['uniacid'];
 		        $params[':dpid'] = $dpid;
 				$result = pdo_fetchall($sql,$params);
-				// print_r($result);exit();
 
 				$html = '';
 				foreach ($result as $key => $value) {
@@ -467,14 +473,20 @@
 					// print_r($c);
 					load()->model('mc');
 					$m =  mc_fansinfo($value['openid']);
+					// print_r(unserialize($value['content']));exit();
+
 					$html .="
 							<div class=\"guest-box\">
 		                        <div class=\"icon\"><img src=\"".$m['tag']['avatar']."\"></div>
 		                        <div class=\"guest-box-content\">
 		                            <p>".$member['realname']."<span>2016-02-21</span></p>
-		                            <div class=\"point-star\">
-		                                <div style=\"width: 0.9rem;\"></div>
-		                            </div>
+		                            <div style='width:78px;height:24px;'>";
+		            for ($i=0; $i < $c['score']; $i++) { 
+		            	$html .="<img src='".MODULE_URL."template/mobile/style/style1/static/image/star-on.png' >";
+		            }
+		            
+		            
+		            $html .="</div>
 		                            <p class=\"c_h\">".$c['contents']."</p>
 		                            <p class=\"img\">
 		                            </p>
@@ -531,6 +543,19 @@
 		if ($styleid) {
 			include $this->template('style/style'.$styleid.'/business/pay');exit();
 		}
+	}elseif ($op == 'search') {
+		if ($_W['ispost']) {
+		        $keyword = $_GPC['keyword'];
+		        $url = $this->createMobileUrl('business',array('op' => 'list','keyword' => $keyword));
+		        header("Location:{$url}");
+		        exit();
+
+		}
+		$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
+		if ($styleid) {
+			include $this->template('style/style'.$styleid.'/business/search');exit();
+		}
+	
 	}
 
 

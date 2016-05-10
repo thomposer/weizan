@@ -38,7 +38,7 @@
 			$isbzr = pdo_fetch("SELECT * FROM " . tablename($this->table_teachers) . " where weid = :weid AND id = :id", array(':weid' => $_W ['uniacid'], ':id' => $it['tid']));
 			$picarr = iunserializer($leave['picarr']);
 			
-		 include $this->template('zuoye');
+		 include $this->template('teacher/zuoye');
           }else{
          include $this->template('bangding');
           }        

@@ -107,20 +107,20 @@
 					微支付
 					{else if $row['paytype']==22}
 					支付宝
-					{else}
+					{else if $row['paytype']==3 }
 					到店付款
 					{/if}
 				</td>
 				<td >{php echo date("Y-m-d H:i:s",$row['time']); }</td>
 				<td>
 					{if $row['paystatus']==0}
-					{if $row['status'] == 0}<span class="label label-info">{if $row['paytype']==1 || $row['paytype']==2}待付款{else}等待确认{/if}</span>{/if}
+					{if $row['status'] == 0}<span class="label label-info">已提交订单，待付款</span>{/if}
 					{if $row['status'] == -1}<span class="label label-default">已取消</span>{/if}
 					{if $row['status'] == 1}<span class="label label-success">已接受</span>{/if}
 					{if $row['status'] == 2}<span class="label label-default">已拒绝</span>{/if}
 					{if $row['status'] == 3}<span class="label label-success">订单完成</span>{/if}
 					{else}
-					{if $row['status'] == 0}<span class="label label-info">{if $row['paytype'] == 3}已提交，待付款{else}已付款，等待确认{/if}</span>{/if}
+					{if $row['status'] == 0}<span class="label label-info">{if $row['paytype']=='3'}待付款{else}已支付，等待确认{/if}</span>{/if}
 					{if $row['status'] == -1}<span class="label label-default">已支付,取消并退款</span>{/if}
 					{if $row['status'] == 1}<span class="label label-success">已支付,已确认</span>{/if}
 					{if $row['status'] == 2}<span class="label label-default">已支付, 已退款</span>{/if}

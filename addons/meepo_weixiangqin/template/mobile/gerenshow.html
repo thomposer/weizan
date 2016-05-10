@@ -646,12 +646,12 @@ img{display:inline-block;}
                                 <img _src="{if preg_match('/http:(.*)/',$res2['avatar'])}{$res2['avatar']} {else if preg_match('/images(.*)/',$res2['avatar'])} {$_W['attachurl']}{$res2['avatar']}     {else} {MEEPORES}/static/friend/images/cdhn80.jpg{/if}" alt="个人头像show"  height="100px"
                                      src="{if preg_match('/http:(.*)/',$res2['avatar'])}{$res2['avatar']} {else if preg_match('/images(.*)/',$res2['avatar'])}{$_W['attachurl']}{$res2['avatar']}     {else} {MEEPORES}/static/friend/images/cdhn80.jpg{/if}"></li>
                             <li class="item2">{$res2['realname']}</li>
-							<li class="item3">{if $res2['love']=='0'}还未被喜欢{else}被喜欢了{$res2['love']}次{/if}</li>
-                            <li class="item4">身高：{$res2['height']}cm</li>
-                            <li class="item5">职业：{$res2['occupation']}</li>
-                            <li class="item6">星座：{$res2['constellation']}</li>
-                            <li class="item7">月收入：{$res2['revenue']}元</li>
-                            <li class="item8">爱情宣言：{$res2['lookingfor']}</li>
+							<li class="item3">{if $res2['love']=='0'}没人送花给她{else}已经收到<font style="color:red">{$res2['love']}</font>朵花啦!{/if}</li>
+                            <li class="item4">身高：{if !empty($res2['height'])}{$res2['height']}cm{else}未完善{/if}</li>
+                            <li class="item5">职业：{if !empty($res2['occupation'])}{$res2['occupation']}{else}未完善{/if}</li>
+                            <li class="item6">星座：{if !empty($res2['constellation'])}{$res2['constellation']}{else}未完善{/if}</li>
+                            <li class="item7">月收入：{if !empty($res2['revenue'])}{$res2['revenue']}元{else}未完善{/if}</li>
+                            <li class="item8">爱情宣言：{if !empty($res2['lookingfor'])}{$res2['lookingfor']}{else}未完善{/if}</li>
                         </ul>
 						</div>
 					</div>	

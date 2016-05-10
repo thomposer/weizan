@@ -34,7 +34,7 @@
 				 
             $item = pdo_fetch("SELECT * FROM " . tablename($this->table_notice) . " WHERE id = :id ", array(':id' => $id));	
 						
-		 include $this->template('zuoyelist');
+		 include $this->template('teacher/zuoyelist');
           }else{
          include $this->template('bangding');
           }        

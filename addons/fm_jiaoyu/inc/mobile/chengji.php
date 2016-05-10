@@ -9,5 +9,5 @@
         $from_user = $this->_fromuser;
 		$schoolid = intval($_GPC['schoolid']);       
 
-       include $this->template('chengji');
+       include $this->template('students/chengji');
 ?>

@@ -10,7 +10,6 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 	
 	// ===============================================
 	public $m = 'wx_school';
-	public $table_cat = 'wx_school_cat';
 	public $table_classify = 'wx_school_classify';
 	public $table_score = 'wx_school_score';
 	public $table_index = 'wx_school_index';
@@ -30,7 +29,9 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 	public $table_notice = 'wx_school_notice';
 	public $table_bjq = 'wx_school_bjq';
 	public $table_media = 'wx_school_media';
-	public $table_dianzan = 'wx_school_dianzan';	
+	public $table_dianzan = 'wx_school_dianzan';
+	public $table_order = 'wx_school_order';
+    public $table_wxpay = 'wx_school_wxpay';	
 	
 	// ===============================================
 		
@@ -136,17 +137,17 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		$this->getLogic ( __FUNCTION__, 'web' );
 	}	
 
-	//区域管理
+
 	public function doWebArea() {
 		$this->getLogic ( __FUNCTION__, 'web' );
 	}
 
-	//学校类型管理
+
 	public function doWebType() {
 		$this->getLogic ( __FUNCTION__, 'web' );
 	}
 	
-	//分校幻灯片
+
 	public function doWebBanner() {
 		$this->getLogic ( __FUNCTION__, 'web' );
 	}	
@@ -160,6 +161,10 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
     }
 
     public function doWebCook() {
+        $this->getLogic ( __FUNCTION__, 'web' ); 
+    }
+    //forSUTELIST
+    public function doWebBaoming() {
         $this->getLogic ( __FUNCTION__, 'web' ); 
     }	
 		
@@ -182,9 +187,17 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		$this->getLogic ( __FUNCTION__, 'mobile' );
 	}
 	
-	public function doMobileWapindex() {
+	public function doMobileGopay() {
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
 	}
+	
+	public function doMobileWapindex() {
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}	
+
+	public function doMobilePayajax() {
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}	
 	
     public function doMobileDetail() {	
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
@@ -261,7 +274,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
     public function doMobileMyschool() {	
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
 	}
-
+    //for teacher
     public function doMobileQingjia() {	
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
 	}	
@@ -290,7 +303,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
 	}	
 	
-    //for teacher
+    // ====================== students =====================
     public function doMobileSmssage() {	
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
 	}
@@ -303,26 +316,6 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
 	}
 
-    public function doMobileTjiaoliulist() {	
-		$this->getLogic ( __FUNCTION__, 'mobile', true );
-	}
-
-    public function doMobileTjiaoliu() {	
-		$this->getLogic ( __FUNCTION__, 'mobile', true );
-	}
-
-    public function doMobileNoticelist() {	
-		$this->getLogic ( __FUNCTION__, 'mobile', true );
-	}
-
-    public function doMobileNotice() {	
-		$this->getLogic ( __FUNCTION__, 'mobile', true );
-	}
-
-    public function doMobileFabu() {	
-		$this->getLogic ( __FUNCTION__, 'mobile', true );
-	}
-
     public function doMobileSnoticelist() {	
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
 	}
@@ -331,14 +324,6 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
 	}
 
-    public function doMobileZuoye() {	
-		$this->getLogic ( __FUNCTION__, 'mobile', true );
-	}
-
-    public function doMobileZuoyelist() {	
-		$this->getLogic ( __FUNCTION__, 'mobile', true );
-	}
-	
     public function doMobileSzuoye() {	
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
 	}
@@ -359,27 +344,55 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
 	}
 
-    public function doMobileBjq() {	
-		$this->getLogic ( __FUNCTION__, 'mobile', true );
-	}
-
     public function doMobileSbjq() {	
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
 	}
 
     public function doMobileMybjqinfo() {	
 		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileOrder() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
 	}	
 		
 	// ====================== teacher =====================	
 	
+    public function doMobileBjq() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
 
+    public function doMobileZuoye() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
 
+    public function doMobileZuoyelist() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}	
+
+    public function doMobileFabu() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileNoticelist() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileNotice() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}	
+
+    public function doMobileTjiaoliulist() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
+
+    public function doMobileTjiaoliu() {	
+		$this->getLogic ( __FUNCTION__, 'mobile', true );
+	}
 
 	
 	// ====================== FUNC =====================		
-    public function getNaveMenu()
-    {
+    public function getNaveMenu() {
         global $_W, $_GPC;
         $do = $_GPC['do'];
         $navemenu = array();
@@ -397,8 +410,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
         return $navemenu;
     }	
 
-    public function set_tabbar1($action, $schoolid)
-    {
+    public function set_tabbar1($action, $schoolid)  {
         $actions_titles1 = $this->actions_titles1;
         $html = '<ul class="nav nav-tabs">';
         foreach ($actions_titles1 as $key => $value) {
@@ -420,8 +432,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		'banner' => '幻灯片管理',		
     );	
 	
-    public function set_tabbar($action, $schoolid)
-    {
+    public function set_tabbar($action, $schoolid) {
         $actions_titles = $this->actions_titles;
         $html = '<ul class="nav nav-tabs">';
         foreach ($actions_titles as $key => $value) {
@@ -442,8 +453,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 
     );	
 	
-    public function showMessageAjax($msg, $code = 0)
-    {
+    public function showMessageAjax($msg, $code = 0){
         $result['code'] = $code;
         $result['msg'] = $msg;
         message($result, '', 'ajax');
@@ -920,8 +930,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
 		}
 	}	
 
-    protected function exportexcel($data = array(), $title = array(), $filename = 'report')
-    {
+    protected function exportexcel($data = array(), $title = array(), $filename = 'report') {
         header("Content-type:application/octet-stream");
         header("Accept-Ranges:bytes");
         header("Content-type:application/vnd.ms-excel");
@@ -948,8 +957,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
         }
     }
 
-    function uploadFile($file, $filetempname, $array)
-    {
+    function uploadFile($file, $filetempname, $array) {
         //自己设置的上传文件存放路径
         $filePath = '../addons/fm_jiaoyu/public/upload/';
 
@@ -1004,8 +1012,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
         return $msg;
     }
 
-    function upload_assess($strs, $time, $array)
-    {
+    function upload_assess($strs, $time, $array) {
         global $_W;
         $insert = array();
 		//时间处理
@@ -1062,8 +1069,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
         }
     }
 	
-    function upload_students($strs, $time, $array)
-    {
+    function upload_students($strs, $time, $array) {
         global $_W;
         $insert = array();
         //时间处理
@@ -1106,8 +1112,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
         }
     }	
 
-    function upload_chengji($strs, $time, $array)
-    {
+    function upload_chengji($strs, $time, $array) {
         global $_W;	
         $insert = array();
 		//名字处理
@@ -1133,8 +1138,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
         return pdo_insert('wx_school_score', $insert);
     }	
 
-    private function checkUploadFileMIME($file)
-    {
+    private function checkUploadFileMIME($file) {
         // 1.through the file extension judgement 03 or 07
         $flag = 0;
         $file_array = explode(".", $file ["name"]);
@@ -1177,8 +1181,7 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
         return $flag;
     }
 
-    public function doWebUploadExcel()
-    {
+    public function doWebUploadExcel() {
         global $_GPC, $_W;
 
         if ($_GPC['leadExcel'] == "true") {
@@ -1202,5 +1205,101 @@ class Fm_jiaoyuModuleSite extends WeModuleSite {
                 message($msg, '', 'error');
             }
         }
-    }	
+    }
+	
+	public function doMobilePay() {
+		global $_W, $_GPC;
+        checkauth();
+		$schoolid = intval($_GPC['schoolid']);
+		$openid = $_W['openid'];		
+		$cose = $_GPC ['cose'];
+		$wxpayid = intval($_GPC ['wxpay']);	
+        //构造支付请求中的参数
+        $params = array(
+            'tid' => $wxpayid,      //充值模块中的订单号，此号码用于业务模块中区分订单，交易的识别码
+            'ordersn' => time(),  //收银台中显示的订单号
+            'title' => '在线缴费',          //收银台中显示的标题
+            'fee' => $cose,
+            //'user' => $_W['member']['uid'],     //付款用户, 付款的用户名(选填项)
+        );
+        //调用pay方法
+        include $this->template('students/pay');
+	}
+    /**
+     * 支付后触发这个方法
+     * @param $params
+     */
+	public function payResult($params) {
+		
+		global $_W, $_GPC;
+		
+		$orderid = $params['tid'];
+        $wxpay = pdo_fetch("SELECT * FROM " . tablename($this->table_wxpay) . " WHERE id = '{$orderid}'");
+		$kc1 = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id = '{$wxpay['od1']}'");
+		$kc2 = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id = '{$wxpay['od2']}'");
+        $kc3 = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id = '{$wxpay['od3']}'");
+		$kc4 = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id = '{$wxpay['od4']}'");
+		$kc5 = pdo_fetch("SELECT * FROM " . tablename($this->table_order) . " WHERE id = '{$wxpay['od5']}'");
+		$kcs1 = pdo_fetch("SELECT * FROM " . tablename($this->table_tcourse) . " WHERE id = '{$kc1['kcid']}'");
+		$kcs2 = pdo_fetch("SELECT * FROM " . tablename($this->table_tcourse) . " WHERE id = '{$kc2['kcid']}'");
+        $kcs3 = pdo_fetch("SELECT * FROM " . tablename($this->table_tcourse) . " WHERE id = '{$kc3['kcid']}'");
+		$kcs4 = pdo_fetch("SELECT * FROM " . tablename($this->table_tcourse) . " WHERE id = '{$kc4['kcid']}'");
+		$kcs5 = pdo_fetch("SELECT * FROM " . tablename($this->table_tcourse) . " WHERE id = '{$kc5['kcid']}'");
+         
+		$took1 = $kcs1['yibao']+1;		
+		$took2 = $kcs2['yibao']+1;
+		$took3 = $kcs3['yibao']+1;
+		$took4 = $kcs4['yibao']+1;
+		$took5 = $kcs5['yibao']+1;
+				
+		if ($params['result'] == 'success' && $params['from'] == 'notify') {
+					
+			 pdo_update($this->table_wxpay, array('status' => 2), array('id' => $orderid));
+			 pdo_update($this->table_order, array('status' => 2), array('id' => $wxpay['od1']));
+			 pdo_update($this->table_tcourse, array('yibao' => $took1), array('id' => $kc1['kcid']));
+			 if($wxpay['od2'] != 0){
+			 pdo_update($this->table_order, array('status' => 2), array('id' => $wxpay['od2']));
+			 pdo_update($this->table_tcourse, array('yibao' => $took2), array('id' => $kc2['kcid']));			 
+			 }
+             if($wxpay['od3'] != 0){
+             pdo_update($this->table_order, array('status' => 2), array('id' => $wxpay['od3']));
+			 pdo_update($this->table_tcourse, array('yibao' => $took3), array('id' => $kc3['kcid']));			 
+			 }
+			 if($wxpay['od4'] != 0){
+             pdo_update($this->table_order, array('status' => 2), array('id' => $wxpay['od4']));
+			 pdo_update($this->table_tcourse, array('yibao' => $took4), array('id' => $kc4['kcid']));
+			 }
+			 if($wxpay['od5'] != 0){
+             pdo_update($this->table_order, array('status' => 2), array('id' => $wxpay['od5']));
+			 pdo_update($this->table_tcourse, array('yibao' => $took5), array('id' => $kc5['kcid']));
+			 }			
+			 if ($params['fee'] != $cose) {
+				exit('支付失败');
+			 }	
+		}
+		 if (empty($params['result']) || $params['result'] != 'success') {
+			 pdo_update($this->table_wxpay, array('status' => 1), array('id' => $orderid));
+			 pdo_update($this->table_order, array('status' => 1), array('id' => $wxpay['od1']));
+			 if($wxpay['od2'] != 0){
+			 pdo_update($this->table_order, array('status' => 1), array('id' => $wxpay['od2'])); 
+			 }
+             if($wxpay['od3'] != 0){
+             pdo_update($this->table_order, array('status' => 1), array('id' => $wxpay['od3']));
+			 }
+			 if($wxpay['od4'] != 0){
+             pdo_update($this->table_order, array('status' => 1), array('id' => $wxpay['od4']));
+			 }
+			 if($wxpay['od5'] != 0){
+             pdo_update($this->table_order, array('status' => 1), array('id' => $wxpay['od5']));
+			 }
+		 }
+		if ($params['from'] == 'return') {
+			$url = $this->createMobileUrl('order', array('schoolid' => $wxpay['schoolid'], 'od1' => $took1),true);
+			if ($params['result'] == 'success') {
+            message('支付成功！', $url);
+			} else {
+            message('支付失败！', $url);
+			}
+		}
+	}	
 }

@@ -63,7 +63,8 @@
 					<tr>
 						<td>{$item['title']}</td>
 						<td>
-							{$item['from_user']}
+							{php $member = $this->member($item['from_user'])}
+							{php echo $member['realname']}
 						</td>
 						<td>
 							{$item['couponsn']}

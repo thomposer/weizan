@@ -42,7 +42,7 @@
         $item = pdo_fetch("SELECT * FROM " . tablename($this->table_leave) . " WHERE id = :id ", array(':id' => $id));
 						
         if(!empty($openid)){
-        include $this->template('jiaoliu');
+        include $this->template('students/jiaoliu');
 		}else{
 		include $this->template('bangding');	
 		}

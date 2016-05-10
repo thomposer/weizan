@@ -82,6 +82,7 @@ body > .tips{display:none;left:50%;padding:20px;position:fixed;text-align:center
 			<span>{$detail['author']}</span>
 			{if !empty($detail['source'])}<a href="{$detail['source']}">文章来源</a>{/if}
 			{if !empty($subscribeurl)}<a href="{$subscribeurl}">{$_W['account']['name']}</a>{/if}
+			<span>阅读:{$detail['click']}次</span>
 		</span>
 	</div>
 </div>
@@ -91,36 +92,4 @@ body > .tips{display:none;left:50%;padding:20px;position:fixed;text-align:center
 	</div>
 </div>
 </div>
-<div id="mbutton">
-	<span class="" onclick="$('#mcover').show()"><i class="fa fa-share-alt"></i> 转发</span>
-	<span class="" onclick="$('#mcover').show()"><i class="fa fa-group"></i> 分享</span>
-</div>
-<div id="mcover" onclick="$(this).hide()"><img src="./resource/images/guide.png"></div>
-{php $_share = array('content' => $detail['description'], 'title' => $detail['title'], 'imgUrl' => $detail['thumb']);}
-<script>
-	require(['jquery'], function($){
-		$('#category_show').click(function(){
-			$('.head .order').toggleClass('hide');
-		});
- 		//阅读文章后,给分享人加积分
-		var url = "{php echo url('site/site/handsel/', array('id' => $detail['id'], 'action' => 'click', 'u' => $_GPC['u']));}";
-		$.post(url, function(dat){
-			if(dat != 'success') {
-				dat = $.parseJSON(dat);
-			} else {
-			}
-		});
- 
-		//转发成功后事件
-		window.onshared = function(){
-			var url = "{php echo url('site/site/handsel/', array('id' => $detail['id'], 'action' => 'share'));}";
-			$.post(url, function(dat){
-				if(dat != 'success') {
-					dat = $.parseJSON(dat);
-				} else {
-				}
-			});
-		}
-	});
-</script>
 {template 'common/footer'}

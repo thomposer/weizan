@@ -9,17 +9,18 @@
         <div class="panel-body">
             <form action="" method="post" class="form-horizontal" role="form">
                     <div class="form-group">
-                      <label class="col-xs-12 col-sm-2 col-md-2 control-label">手机号码</label>
-                      <div class="col-sm-8 col-md-8 col-lg-4 col-xs-6">
-                        <input class="form-control" name="mobile" id="" type="text" value="{$_GPC['mobile']}" placeholder="请输入查询手机号码">
-                      </div>
-                    </div>
-                    <div class="form-group">
                       <label class="col-xs-12 col-sm-2 col-md-2 control-label">姓名</label>
                       <div class="col-sm-8 col-md-8 col-lg-4 col-xs-12">
                         <input class="form-control" name="username" id="" type="text" value="{$_GPC['username']}" placeholder="请输入查询姓名">
                       </div>
                     </div>
+                    <div class="form-group">
+                      <label class="col-xs-12 col-sm-2 col-md-2 control-label">手机号码</label>
+                      <div class="col-sm-8 col-md-8 col-lg-4 col-xs-6">
+                        <input class="form-control" name="mobile" id="" type="text" value="{$_GPC['mobile']}" placeholder="请输入查询手机号码">
+                      </div>
+                    </div>
+                    
                     <div class="form-group">
                       <label class="col-xs-12 col-sm-2 col-md-2 control-label">是否付费</label>
                       <div class="col-sm-8 col-md-8 col-lg-4 col-xs-12">
@@ -64,7 +65,7 @@
                             <td>{$row['homenumber']}</td>
                             <td>{$row['total']}元</td>
                             <td>
-                            <label data='{$row['status']}' class='label  label-default {if $row['status']=='是'}label-success{/if}' onclick="setProperty(this,{$row['id']},'status')">{if $row['status']=='是'}已缴费{else}未缴费{/if}</label>
+                            <label data='{$row['status']}' class='label  label-default {if $row['status']=='是'}label-success{/if}' onclick="setProperty(this,{$row['id']},status)">{if $row['status']=='是'}已缴费{else}未缴费{/if}</label>
                             </td>
                             <td>
                                 <a href="{php echo $this->createWebUrl('cost',array('op' => 'edit','id' => $row['id']))}" title="详情" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-search"></i>编辑</a>
@@ -98,7 +99,7 @@
     function setProperty(obj,id,type){
         $(obj).html($(obj).html() + "...");
         $.post("{php echo $this->createWebUrl('cost',array('op' => 'setgoodsproperty'))}"
-            ,{id:id,type:type, data: obj.getAttribute("data")}
+            ,{id:id,data: obj.getAttribute("data")}
             ,function(d){
                 $(obj).html($(obj).html().replace("...",""));
                 if(type=='status'){
@@ -107,6 +108,7 @@
                 $(obj).attr("data",d.data);
                 if(d.result==1){
                     $(obj).toggleClass("label-success");
+                    window.location.reload();
                 }
             }
             ,"json"

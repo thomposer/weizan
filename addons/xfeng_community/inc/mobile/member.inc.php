@@ -16,9 +16,10 @@
 	if ($op == 'member') {
 		
 		
-		$dos = "'fled','houselease','homemaking','car','cost','shopping','business','government'";
+		$dos = "'repair','report','fled','houselease','homemaking','car','cost','shopping','business','government'";
 		$menus = pdo_fetchall("SELECT * FROM".tablename('xcommunity_nav')."WHERE uniacid =:uniacid AND do in({$dos})",array(':uniacid' => $_W['uniacid']),'do');
-
+		
+		// print_r($url);exit();
 		$styleid = pdo_fetchcolumn("SELECT styleid FROM".tablename('xcommunity_template')."WHERE uniacid='{$_W['uniacid']}'");
 		if ($styleid) {
 			include $this->template('style/style'.$styleid.'/member');

@@ -266,8 +266,8 @@
                         $('#toast').show();
                         setTimeout(function() {
                             $('#toast').hide();
-                            window.location.href = "{php echo $this->createMobileUrl('register',array('op' => 'region'))}";
-                        }, 3000);
+                            window.location.href = "{php echo $this->createMobileUrl('register',array('op' => 'r'))}";
+                        }, 1);
                     }
                     if (s.status == 7) {
                         $('.weui_toast_content').text('请选择房号');

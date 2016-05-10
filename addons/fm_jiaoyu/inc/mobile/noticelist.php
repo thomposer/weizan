@@ -60,7 +60,7 @@
 				 ));				 
             $item = pdo_fetch("SELECT * FROM " . tablename($this->table_notice) . " WHERE id = :id ", array(':id' => $id));	
 						
-		 include $this->template('noticelist');
+		 include $this->template('teacher/noticelist');
           }else{
          include $this->template('bangding');
           }        

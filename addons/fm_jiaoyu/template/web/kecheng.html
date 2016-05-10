@@ -48,6 +48,11 @@ require(['bootstrap'],function($){
                     <div class="col-sm-2 col-lg-2">
                         <input class="form-control" name="name" id="" type="text" value="{$_GPC['name']}">
                     </div>
+					{if $school['issale'] != 5}
+                    <div class="col-sm-2 col-lg-2">
+						<a class="btn btn-primary" href="{php echo $this->createWebUrl('baoming', array('schoolid' => $schoolid))}">查看报名列表</a>
+                    </div>
+                    {/if}					
 				</div>	
 				 <div class="form-group">
 					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">按班级</label>
@@ -83,9 +88,22 @@ require(['bootstrap'],function($){
 			<thead class="navbar-inner">
 				<tr>
                     <th class='with-checkbox' style="width: 20px;"><input type="checkbox" class="check_all" /></th>
-					<th style="width:6%">授课教师</th>
+					<th style="width:6%">授课教师</th>	
+					{if $school['issale'] == 1 || $school['issale'] == 2}
+					<th style="width:15%;">课程</th>
+					<th style="width:5%;">课程费用</th>
+					<th style="width:5%;">限报人数</th>
+					<th style="width:5%;">已报人数</th>	
+					<th style="width:10%;">报名情况</th>
+					{else if $school['issale'] == 3 || $school['issale'] == 4}
+					<th style="width:15%;">课程</th>
+					<th style="width:5%;">限报人数</th>
+					<th style="width:5%;">已报人数</th>	
+					<th style="width:10%;">报名情况</th>
+					{else}
 					<th style="width:15%;">时间</th>
-					<th style="width:18%;">课程名称</th>	
+					<th style="width:18%;">课程名称</th>
+                    {/if}					
 					<th style="width:8%;">授课班级</th>
 					<th style="width:8%;">授课科目</th>	
 					<th style="width:8%;">授课教室</th>	
@@ -100,10 +118,27 @@ require(['bootstrap'],function($){
 				<tr>
                     <td class="with-checkbox"><input type="checkbox" name="check" value="{$item['id']}"></td>
 					<td style="overflow:visible; word-break:break-all; text-overflow:auto;white-space:normal">{if !empty($teachers[$item['tid']])}{$teachers[$item['tid']]['tname']}{/if}</td>
+					{if $school['issale'] == 1 || $school['issale'] == 2}
+					<td style="overflow:visible; word-break:break-all; text-overflow:auto;white-space:normal">
+              	    <div>{if $item['is_hot']==1}<span class="label label-danger">精品课</span></br>{/if}{$item['name']}</br><span class="label label-info">{php echo date('Y-m-d',$item['start'])." 至 ".date('Y-m-d',$item['end'])}</span></div>                   
+                    </td>
+					<td style="overflow:visible; word-break:break-all; text-overflow:visible;white-space:normal">&nbsp;<span class="label label-warning" style="font-weight:bold;">￥{$item['cose']}</span></td>	
+					<td style="overflow:visible; word-break:break-all; text-overflow:visible;white-space:normal">&nbsp;<span class="label label-danger">{$item['minge']}</span></td>
+					<td style="overflow:visible; word-break:break-all; text-overflow:visible;white-space:normal">&nbsp;<span class="label label-success">{$item['yibao']}</span></td>
+					<td><a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('baoming', array('kcid' => $item['id'], 'schoolid' => $schoolid))}" title="报名情况"><i class="fa fa-qrcode">&nbsp;&nbsp;报名情况</i></a></td>
+					{else if $school['issale'] == 3 || $school['issale'] == 4}
+					<td style="overflow:visible; word-break:break-all; text-overflow:auto;white-space:normal">
+              	    <div>{if $item['is_hot']==1}<span class="label label-danger">精品课</span></br>{/if}{$item['name']}</br><span class="label label-info">{php echo date('Y-m-d',$item['start'])." 至 ".date('Y-m-d',$item['end'])}</span></div>                   
+                    </td>	
+					<td style="overflow:visible; word-break:break-all; text-overflow:visible;white-space:normal">&nbsp;<span class="label label-danger">{$item['minge']}</span></td>
+					<td style="overflow:visible; word-break:break-all; text-overflow:visible;white-space:normal">&nbsp;<span class="label label-success">{$item['yibao']}</span></td>
+					<td><a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('baoming', array('kcid' => $item['id'], 'schoolid' => $schoolid))}" title="报名情况"><i class="fa fa-qrcode">&nbsp;&nbsp;报名情况</i></a></td>					
+					{else}
 					<td style="overflow:visible; word-break:break-all; text-overflow:auto;white-space:normal">
               	    <div><span class="label label-info">{php echo date('Y-m-d',$item['start'])." 至 ".date('Y-m-d',$item['end'])}</span></div>                   
                     </td>					
-					<td>{$item['name']}</br>{if $item['is_hot']==1}<span class="label label-danger">精品课</span>{/if}</td>	
+					<td>{if $item['is_hot']==1}<span class="label label-danger">精品课</span></br>{/if}{$item['name']}</td>	
+					{/if}
                     <td>
                         {if !empty($category[$item['bj_id']])}{$category[$item['bj_id']]['sname']}{/if}
                     </td>					
@@ -173,7 +208,7 @@ $(function(){
 </script>
 {elseif $operation == 'post'}
 <div class="panel panel-info">
-   <div class="panel-heading"><a class="btn btn-primary" onclick="javascript :history.back(-1);"><i class="fa fa-tasks"></i> 返回课程列表</a></div>
+   <div class="panel-heading"><a class="btn btn-primary" onclick="javascript :history.back(-1);"><i class="fa fa-tasks"></i>返回课程列表</a></div>
 </div>
 <div class="main">
 <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
@@ -196,7 +231,49 @@ $(function(){
                     <div class="col-sm-9" style="color:red;">
                       {if !empty($teachers[$item['tid']])}{$teachers[$item['tid']]['tname']}{/if}
                     </div>
-				</div>	
+				</div>
+				{if $school['issale'] == 1 || $school['issale'] == 2}
+				<div class="form-group">	
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">报名费用：</label>
+                    <div class="col-sm-2 col-lg-2">
+                         <div class="input-group">					
+                            <input type="text" class="form-control" name="cose" value="{$item['cose']}" />
+							<div class="help-block">输入课程所需费用</div>
+                         </div>
+				    </div>
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">人数限制：</label>
+                    <div class="col-sm-2 col-lg-2">
+                         <div class="input-group">					
+                            <input type="text" class="form-control" name="minge" value="{$item['minge']}" />
+							<div class="help-block">输入课程限报人数</div>
+                         </div>
+				    </div>
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">已报人数：</label>
+                    <div class="col-sm-2 col-lg-2">
+                         <div class="input-group">					
+                            <input type="text" class="form-control" name="yibao" value="{$item['yibao']}" />
+							<div class="help-block">已报虚拟人数</div>
+                         </div>
+				    </div>					
+                </div>
+				{else if $school['issale'] == 3 || $school['issale'] == 4}
+				<div class="form-group">	
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">人数限制：</label>
+                    <div class="col-sm-2 col-lg-2">
+                         <div class="input-group">					
+                            <input type="text" class="form-control" name="minge" value="{$item['minge']}" />
+							<div class="help-block">输入课程限报人数</div>
+                         </div>
+				    </div>
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">已报人数：</label>
+                    <div class="col-sm-2 col-lg-2">
+                         <div class="input-group">					
+                            <input type="text" class="form-control" name="yibao" value="{$item['yibao']}" />
+							<div class="help-block">已报虚拟人数(会占用名额)</div>
+                         </div>
+				    </div>					
+                </div>				
+                {/if}				
 				<div class="form-group">	
                     <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">授课地址：</label>
                     <div class="col-sm-2 col-lg-2">
@@ -212,17 +289,18 @@ $(function(){
                             <input type="radio" name="is_hot" value="0" {if isset($item['is_hot']) && empty($item['is_hot'])}checked{/if}>否
                         </label>
                         <div class="help-block">是否精品课程</div>
-                    </div>					
-               <!-- <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">人数限制：</label>
-                    <div class="col-sm-2 col-lg-2">
-                       <div class="input-group">
-                           <div class="input-group">							 
-                            <input type="text" class="form-control" name="minge" value="20" />
-                           </div>
-					   </div>
-					</div>	-->					
+                    </div>									
                 </div>
                 <div class="form-group">
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">选择班级:</label>
+                    <div class="col-sm-2 col-lg-2">
+                        <select style="margin-right:15px;" name="xq" class="form-control">
+                            <option value="0">请选择班级</option>
+                            {loop $xueqi $it}
+                            <option value="{$it['sid']}" {if $it['sid'] == $item['xq_id']} selected="selected"{/if}>{$it['sname']}</option>
+                            {/loop}
+                        </select>
+                    </div>				
 					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">选择班级:</label>
                     <div class="col-sm-2 col-lg-2">
                         <select style="margin-right:15px;" name="bj" class="form-control">

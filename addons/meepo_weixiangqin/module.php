@@ -60,6 +60,7 @@ class Meepo_weixiangqinModule extends WeModule {
 			$cfg['tuijiannum'] = intval($_GPC['tuijiannum']);
 			$cfg['baoyue'] = intval($_GPC['baoyue']);
 			$cfg['guize'] = $_GPC['guize'];
+			$cfg['sms_words'] = $_GPC['sms_words'];
 			$cfg['tjstatus'] = intval($_GPC['tjstatus']);
 			$cfg['tjjifen'] = intval($_GPC['tjjifen']);
 			$cfg['woman_free'] = intval($_GPC['woman_free']);

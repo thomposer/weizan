@@ -1,9 +1,11 @@
 {template 'common/header'}
 <div class="main">
     <ul class="nav nav-tabs">
-       <li><a href="{php echo $this->createWebUrl('manage');}">排号管理</a></li>
+     <li><a href="{php echo $this->createWebUrl('manage');}">排号管理</a></li>
+     <li><a href="{php echo $this->createWebUrl('manager',array('rid'=>$rid));}">手机端管理员</a></li>
      <li class="active"><a href="{php echo $this->createWebUrl('queue',array('rid'=>$rid));}">队列管理</a></li>
      <li><a href="{php echo $this->createWebUrl('fans',array('rid'=>$rid));}">排号统计</a></li>
+     
     </ul>
  
     <div clas='panel panel-default'>

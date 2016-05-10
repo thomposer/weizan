@@ -551,8 +551,7 @@
                   'result' => false,
                   'msg' => '发送失败，请联系管理员开启模版消息！' 
 		               ) ) );
-			    }
-	
+			    }	
 			
 		        $data ['result'] = true;
 			

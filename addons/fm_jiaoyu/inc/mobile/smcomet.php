@@ -35,7 +35,7 @@
 			$member = pdo_fetch("SELECT * FROM " . tablename ( 'mc_members' ) . " where uniacid = :uniacid AND uid = :uid", array(':uniacid' => $_W ['uniacid'], 'uid'=> $leave['uid']));
 			$isbzr = pdo_fetch("SELECT * FROM " . tablename($this->table_teachers) . " where weid = :weid AND id = :id", array(':weid' => $_W ['uniacid'], ':id' => $it['tid']));
 			
-		 include $this->template('smcomet');
+		 include $this->template('students/smcomet');
           }else{
          include $this->template('bangding');
           }        

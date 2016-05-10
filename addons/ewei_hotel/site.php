@@ -111,22 +111,11 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 	{
 		global $_GPC, $_W;
 		$weid = $this->_weid;
-
 		$from_user = $this->_from_user;
-
-		$is_clerk = pdo_get('hotel2_member', array('from_user' => $from_user, 'clerk' => 1));
-
-		if (!empty($is_clerk)) {
-			$url = $this->createMobileUrl('clerkindex');
-			header("Location: $url");
-			exit;
-		}
-
 		$set = $this->_set_info;
 		$hid = $_GPC['hid'];
 		$user_info = pdo_fetch("SELECT * FROM " . tablename('hotel2_member') . " WHERE from_user = :from_user AND weid = :weid limit 1", array(':from_user' => $from_user, ':weid' => $weid));
 		//独立用户
-
 		if ($set['user'] == 2) {
 			if (empty($user_info['id'])) {
 				//用户不存在
@@ -182,6 +171,7 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 					exit;
 				}
 			}
+
 			//微信粉丝，可以直接使用
 			$url = $this->createMobileUrl('search', array('hid' => $hid));
 		}
@@ -246,22 +236,278 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 
 	public function doMobileclerkindex()
 	{
+		global $_W;
+		$is_clerk = pdo_get('hotel2_member', array('from_user' => $this->_from_user, 'clerk' => 1, 'weid' => $_W['uniacid']));
+		if ($is_clerk['status'] != 1 || $is_clerk['clerk'] != 1) {
+			message("您没有进行此操作的权限", '', 'error');
+		}
 		include $this->template('clerk_index');
 	}
+	public function doMobileclerkroom(){
+		global $_GPC, $_W;
+		$from_user = $this->_from_user;
+		$is_clerk = pdo_get('hotel2_member', array('from_user' => $this->_from_user, 'clerk' => 1, 'weid' => $_W['uniacid']));
+		if (empty($is_clerk)) {
+			message("您没有进行此操作的权限", '', 'error');
+		}
+		$op=$_GPC['op'];
+		if($op=='room_status' || $op == ''){
+			$weid = $_W['uniacid'];
+			$where = ' WHERE `weid` = :weid';
+			$params = array(':weid' => $_W['uniacid']);
+			$sql = 'SELECT COUNT(*) FROM ' . tablename('hotel2') . $where;
+			$total = pdo_fetchcolumn($sql, $params);
+			if ($total > 0) {
+				$pindex = max(1, intval($_GPC['page']));
+				$psize = 10;
+				$sql = 'SELECT * FROM ' . tablename('hotel2') . $where . ' ORDER BY `displayorder` DESC LIMIT ' .
+					($pindex - 1) * $psize . ',' . $psize;
+				$list = pdo_fetchall($sql, $params);
+				foreach ($list as &$row) {
+					$row['level'] = $this->_hotel_level_config[$row['level']];
+				}
+				$pager = pagination($total, $pindex, $psize);
+			}
+		}elseif ($op=='room_price'){
+			$weid = $_W['uniacid'];
+			$where = ' WHERE `weid` = :weid';
+			$params = array(':weid' => $_W['uniacid']);
+			$sql = 'SELECT COUNT(*) FROM ' . tablename('hotel2') . $where;
+			$total = pdo_fetchcolumn($sql, $params);
+			if ($total > 0) {
+				$pindex = max(1, intval($_GPC['page']));
+				$psize = 10;
+				$sql = 'SELECT * FROM ' . tablename('hotel2') . $where . ' ORDER BY `displayorder` DESC LIMIT ' .
+					($pindex - 1) * $psize . ',' . $psize;
+				$list = pdo_fetchall($sql, $params);
+				foreach ($list as &$row) {
+					$row['level'] = $this->_hotel_level_config[$row['level']];
+				}
+				$pager = pagination($total, $pindex, $psize);
+			}
 
-	public function doMobileclerkroom()
-	{
-		echo '还在开发中...';die;
+		}
 		include $this->template('clerk_room');
+	}
+	public  function doMobileclerk_room_status(){
+		global $_GPC, $_W;
+		$is_clerk = pdo_get('hotel2_member', array('from_user' => $this->_from_user, 'clerk' => 1, 'weid' => $_W['uniacid']));
+		if (empty($is_clerk)) {
+			message("您没有进行此操作的权限", '', 'error');
+		}
+		$hotelid = $_GPC['hotelid'];
+		$weid = $_W['uniacid'];
+		$ac = $_GPC['ac'];
+		if($ac=='getdate'){
+			$pagesize = 1;
+			$page = intval($_GPC['page']);
+			$totalpage = 20;
+			if ($page > $totalpage) {
+				$page = $totalpage;
+			} elseif ($page <= 1) {
+				$page = 1;
+			}
+			$currentindex = ($page - 1) * $pagesize;
+
+			$start = date('Y-m-d', strtotime(date('Y-m-d') . "+$currentindex day"));
+			$btime = strtotime($start);
+			$etime = strtotime(date('Y-m-d', strtotime("$start +$pagesize day")));
+			$date_array = array();
+			$date_array['date'] = $start;
+			$date_array['day'] = date('j', $btime);
+			$date_array['time'] = $btime;
+			$date_array['month'] = date('m', $btime);
+			$params = array();
+			$sql = "SELECT r.* FROM " . tablename('hotel2_room') . "as r";
+			$sql .= " WHERE 1 = 1";
+			$sql .= " AND r.hotelid = $hotelid";
+			$sql .= " AND r.weid = $weid";
+			$list = pdo_fetchall($sql, $params);
+
+			foreach ($list as $key => $value) {
+				$sql = "SELECT * FROM " . tablename('hotel2_room_price');
+				$sql .= " WHERE 1 = 1";
+				$sql .= " AND roomid = " . $value['id'];
+				$sql .= " AND roomdate = ". $date_array['time'];
+				$item = pdo_fetchall($sql);
+				$item = $item[0];
+				if ($item) {
+					$flag = 1;
+				} else {
+					$flag = 0;
+				}
+				$list[$key]['price_list'] = array();
+				if ($flag == 1) {
+					$k = $date_array['time'];
+					//判断价格表中是否有当天的数
+					$list[$key]['price_list']['status'] = $item['status'];
+					if (empty($item['num'])) {
+						$list[$key]['price_list']['num'] = "无房";
+						$list[$key]['price_list']['status'] = 0;
+					} else if ($item['num'] == -1) {
+						$list[$key]['price_list']['num'] = "不限";
+					} else {
+						$list[$key]['price_list']['num'] = $item['num'];
+					}
+					$list[$key]['price_list']['roomid'] = $value['id'];
+					$list[$key]['price_list']['hotelid'] = $hotelid;
+					$list[$key]['price_list']['has'] = 1;
+					//价格表中没有当天数据
+					if (empty($list[$key]['price_list'])) {
+						$list[$key]['price_list']['num'] = "不限";
+						$list[$key]['price_list']['status'] = 1;
+						$list[$key]['price_list']['roomid'] = $value['id'];
+						$list[$key]['price_list']['hotelid'] = $hotelid;
+					}
+				} else {
+					//价格表中没有数据
+					$list[$key]['price_list']['num'] = "不限";
+					$list[$key]['price_list']['status'] = 1;
+					$list[$key]['price_list']['roomid'] = $value['id'];
+					$list[$key]['price_list']['hotelid'] = $hotelid;
+				}
+			}
+		}elseif($ac=='edit'){
+			$hotelid = intval($_GPC['hotelid']);
+			$roomid = intval($_GPC['roomid']);
+			$num = intval($_GPC['num']);
+			$status = $_GPC['status'];
+			$pricetype = $_GPC['pricetype'];
+			$date = $_GPC['date'];
+			$roomprice = $this->getRoomPrice($hotelid, $roomid, $date);
+			if ($pricetype == 'num') {
+				$roomprice['num'] = $num;
+			} else {
+				$roomprice['status'] = $status;
+			}
+			if (empty($roomprice['id'])) {
+				pdo_insert("hotel2_room_price", $roomprice);
+			} else {
+				pdo_update("hotel2_room_price", $roomprice, array("id" => $roomprice['id']));
+			}
+			die(json_encode(array("result" => 1, "hotelid" => $hotelid, "roomid" => $roomid, "pricetype" => $pricetype)));
+		}
+		include $this->template('clerk_room_status');
+	}
+	public function doMobileclerk_room_price(){
+		global $_GPC, $_W;
+		$is_clerk = pdo_get('hotel2_member', array('from_user' => $this->_from_user, 'clerk' => 1, 'weid' => $_W['uniacid']));
+		if (empty($is_clerk)) {
+			message("您没有进行此操作的权限", '', 'error');
+		}
+		$hotelid = $_GPC['hotelid'];
+		$weid = $_W['uniacid'];
+		$ac= $_GPC['ac'];
+		if($ac=='getdate'){
+			//日期列
+			$pagesize = 1;
+			$page = intval($_GPC['page']);
+			$totalpage = 20;
+			$page = intval($_GPC['page']);
+			if ($page > $totalpage) {
+				$page = $totalpage;
+			} else if ($page <= 1) {
+				$page = 1;
+			}
+			$currentindex = ($page - 1) * $pagesize;
+			$start = date('Y-m-d', strtotime(date('Y-m-d') . "+$currentindex day"));
+			$btime = strtotime($start);
+			$etime = strtotime(date('Y-m-d', strtotime("$start +$pagesize day")));
+			$date_array = array();
+			$date_array[0]['date'] = $start;
+			$date_array[0]['day'] = date('j', $btime);
+			$date_array[0]['time'] = $btime;
+			$date_array[0]['month'] = date('m', $btime);
+			for ($i = 1; $i < $pagesize; $i++) {
+				$date_array[$i]['time'] = $date_array[$i - 1]['time'] + 86400;
+				$date_array[$i]['date'] = date('Y-m-d', $date_array[$i]['time']);
+				$date_array[$i]['day'] = date('j', $date_array[$i]['time']);
+				$date_array[$i]['month'] = date('m', $date_array[$i]['time']);
+			}
+			$params = array();
+			$sql = "SELECT r.* FROM " . tablename('hotel2_room') . "as r";
+			$sql .= " WHERE 1 = 1";
+			$sql .= " AND r.hotelid = $hotelid";
+			$sql .= " AND r.weid = $weid";
+			$list = pdo_fetchall($sql, $params);
+			foreach ($list as $key => $value) {
+				$sql = "SELECT * FROM " . tablename('hotel2_room_price');
+				$sql .= " WHERE 1 = 1";
+				$sql .= " AND roomid = " . $value['id'];
+				$sql .= " AND roomdate >= " . $btime;
+				$sql .= " AND roomdate < " . ($etime + 86400);
+				$item = pdo_fetchall($sql);
+				if ($item) {
+					$flag = 1;
+				} else {
+					$flag = 0;
+				}
+				$list[$key]['price_list'] = array();
+				if ($flag == 1) {
+					for ($i = 0; $i <= $pagesize; $i++) {
+						$k = $date_array[$i]['time'];
+						foreach ($item as $p_key => $p_value) {
+							//判断价格表中是否有当天的数据
+							if ($p_value['roomdate'] == $k) {
+								$list[$key]['price_list'][$k]['oprice'] = $p_value['oprice'];
+								$list[$key]['price_list'][$k]['cprice'] = $p_value['cprice'];
+								$list[$key]['price_list'][$k]['mprice'] = $p_value['mprice'];
+								$list[$key]['price_list'][$k]['roomid'] = $value['id'];
+								$list[$key]['price_list'][$k]['hotelid'] = $hotelid;
+								$list[$key]['price_list'][$k]['has'] = 1;
+								break;
+							}
+						}
+						//价格表中没有当天数据
+						if (empty($list[$key]['price_list'][$k]['oprice'])) {
+							$list[$key]['price_list'][$k]['oprice'] = $value['oprice'];
+							$list[$key]['price_list'][$k]['cprice'] = $value['cprice'];
+							$list[$key]['price_list'][$k]['mprice'] = $value['mprice'];
+							$list[$key]['price_list'][$k]['roomid'] = $value['id'];
+							$list[$key]['price_list'][$k]['hotelid'] = $hotelid;
+						}
+					}
+				} else {
+					//价格表中没有数据
+					for ($i = 0; $i <= $pagesize; $i++) {
+						$k = $date_array[$i]['time'];
+						$list[$key]['price_list'][$k]['oprice'] = $value['oprice'];
+						$list[$key]['price_list'][$k]['cprice'] = $value['cprice'];
+						$list[$key]['price_list'][$k]['mprice'] = $value['mprice'];
+						$list[$key]['price_list'][$k]['roomid'] = $value['id'];
+						$list[$key]['price_list'][$k]['hotelid'] = $hotelid;
+					}
+				}
+			}
+		}elseif ($ac=="edit"){
+			$hotelid = intval($_GPC['hotelid']);
+			$roomid = intval($_GPC['roomid']);
+			$price = intval($_GPC['price']);
+			$pricetype = $_GPC['pricetype'];
+			$date = $_GPC['date'];
+			$roomprice = $this->getRoomPrice($hotelid, $roomid, $date);
+			if ($pricetype == 'oprice') {
+				$roomprice['oprice'] = $price;
+			} else {
+				$roomprice['cprice'] = $price;
+			}
+			if (empty($roomprice['id'])) {
+				pdo_insert("hotel2_room_price", $roomprice);
+			} else {
+				pdo_update("hotel2_room_price", $roomprice, array("id" => $roomprice['id']));
+			}
+			die(json_encode(array("result" => 1, "hotelid" => $hotelid, "roomid" => $roomid, "pricetype" => $pricetype)));
+		}
+		include $this->template('clerk_room_price');
 	}
 
 	public function doMobileclerkorder()
 	{
 		global $_GPC, $_W;
 		$from_user = $this->_from_user;
-		$is_clerk = pdo_get('hotel2_member', array('from_user' => $from_user, 'clerk' => 1));
+		$is_clerk = pdo_get('hotel2_member', array('from_user' => $this->_from_user, 'clerk' => 1, 'weid' => $_W['uniacid']));
 		if (empty($is_clerk)) {
-			exit('您不是店员，请先成为店员后再进行操作');
+			message("您没有进行此操作的权限", '', 'error');
 		}
 		$op = $_GPC['op'];
 		if ($op == 'list' || $op == '') {
@@ -337,7 +583,7 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 					'msg' => $_GPC['msg']
 				);
 				pdo_update('hotel2_order', $data, array('id' => $id));
-				message('订单信息处理完成！', $this->createMobileUrl('clerk', array('op' => 'list')), 'success');
+				message('订单信息处理完成！', $this->createMobileUrl('clerkorder', array('op' => 'list')), 'success');
 			}
 			if (!empty($id)) {
 				$item = pdo_fetch("SELECT * FROM " . tablename('hotel2_order') . " WHERE id = :id", array(':id' => $id));
@@ -1656,6 +1902,12 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 	public function check_login()
 	{
 		$check = check_hotel_user_login($this->_set_info);
+		$is_clerk = pdo_get('hotel2_member', array('from_user' => $this->_from_user, 'clerk' => 1));
+		if (!empty($is_clerk)) {
+			$url = $this->createMobileUrl('clerkindex');
+			header("Location: $url");
+			exit;
+		}
 		if ($check == 0) {
 			$url = $this->createMobileUrl('index');
 			header("Location: $url");
@@ -1679,10 +1931,8 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 		global $_W,$_GPC;
 		//立即支付
 		$orderid = intval($_GPC['id']);
-		$order = pdo_fetch("SELECT * FROM " . tablename('hotel2_order') . " WHERE id = :id", array(':id' => $orderid));
-
+		//$order = pdo_fetch("SELECT * FROM " . tablename('hotel2_order') . " WHERE id = :id", array(':id' => $orderid));
 		message('抱歉，您的订单已付款或是被关闭！', $this->createMobileUrl('orderdetail',array("id"=>$order['id'])), 'error');
-
 		$params['ordersn'] = $order['ordersn'];
 		$params['tid'] = $orderid;
 		$params['user'] = $_W['fans']['from_user'];
@@ -1693,10 +1943,19 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 
 	public function payResult($params) {
 		global $_GPC, $_W;
+		if($params['type']=='credit'){
+			$paytype=1;
+		}elseif($params['type']=='wechat'){
+			$paytype=21;
+		}elseif($params['type']=='alipay'){
+			$paytype=22;
+		}elseif($params['type']=='delivery'){
+			$paytype=3;
+		}
 		$weid = $this->_weid;
 		$sql = 'SELECT * FROM ' . tablename('hotel2_order') . ' WHERE `id` = :id AND `weid` = :weid';
 		$order = pdo_fetch($sql, array(':id' => $params['tid'], ':weid' => $weid));
-		pdo_update('hotel2_order', array('paystatus' => 1), array('id' => $params['tid']));
+		pdo_update('hotel2_order', array('paystatus' => 1,'paytype'=>$paytype), array('id' => $params['tid']));
 
 		$sql = 'SELECT `email`, `mobile`,`template`,`templateid` FROM ' . tablename('hotel2_set') . ' WHERE `weid` = :weid';
 		$setInfo = pdo_fetch($sql, array(':weid' => $_W['uniacid']));
@@ -3078,7 +3337,7 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 					'status' => $_GPC['status'],
 					'clerk' => $_GPC['clerk'],
 					'nickname' => trim($_GPC['nickname'])
- 				);
+				);
 				if (!empty($data['clerk'])) {
 					if (empty($id)) {
 						if (empty($data['nickname'])) {
@@ -3092,6 +3351,9 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 					}
 					$from_user = pdo_get('mc_mapping_fans', array('nickname' => $data['nickname'], 'uniacid' => $_W['uniacid']));
 					$data['from_user'] = $from_user['openid'];
+					if (empty($data['from_user'])) {
+						message('关注公众号后才能成为店员', referer(), 'info');
+					}
 				}
 				if (!empty($_GPC['password'])) {
 					$data['salt'] = random(8);
@@ -3108,7 +3370,7 @@ class Ewei_hotelModuleSite extends WeModuleSite {
 				} else {
 					pdo_update('hotel2_member', $data, array('id' => $id));
 				}
-				message('用户信息更新成功！', $this->createWebUrl('member'), 'success');
+				message('用户信息更新成功！', $this->createWebUrl('member',array('clerk' => $data['clerk'])), 'success');
 			}
 			include $this->template('member_form');
 		} else if ($op == 'delete') {

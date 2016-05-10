@@ -24,5 +24,5 @@
                 }
             }
 		
-        include $this->template('cook');
+        include $this->template('common/cook');
 ?>

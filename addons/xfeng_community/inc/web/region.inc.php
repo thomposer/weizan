@@ -16,13 +16,17 @@
 	if ($op == 'add') {
 
 
-		$user = pdo_fetch("SELECT * FROM".tablename('xcommunity_users')."as u left join".tablename('xcommunity_users_group')."as g on u.groupid = g.id WHERE u.uid=:uid",array(':uid' => $uid));
-		if ($user) {
-			$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}'");
-			if($total == $user['maxaccount']){
-				message("已经达到添加小区上限",$this->createWebUrl('region',array('op' => 'list')),'success');exit();
+		if (empty($id)) {
+			$user = pdo_fetch("SELECT * FROM".tablename('xcommunity_users')."as u left join".tablename('xcommunity_users_group')."as g on u.groupid = g.id WHERE u.uid=:uid",array(':uid' => $uid));
+
+			if ($user) {
+				$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}'");
+				if($total == $user['maxaccount']){
+					message("已经达到添加小区上限",$this->createWebUrl('region',array('op' => 'list')),'success');exit();
+				}
 			}
 		}
+		
 
 		if ($id) {
 				$item = pdo_fetch("SELECT * FROM".tablename('xcommunity_region')."WHERE weid=:weid AND id=:id",array(":id" => $id,":weid" => $_W['weid']));
@@ -193,7 +197,7 @@
 		$pager  = pagination($total, $pindex, $psize);
 		//删除用户
 		if (checksubmit('delete')) {
-
+			
 			if (!empty($ids)) {
 				foreach ($ids as $key => $id) {
 					pdo_delete('xcommunity_room',array('id' => $id));

@@ -16,5 +16,5 @@
         $school = pdo_fetch("SELECT * FROM " . tablename($this->table_index) . " where weid = :weid AND id=:id ORDER BY ssort DESC", array(':weid' => $_W['uniacid'], ':id' => $schoolid));
 		$monarr = iunserializer($item['monday']);//取周一早餐图片
 				
-        include $this->template('cooklist');
+        include $this->template('common/cooklist');
 ?>

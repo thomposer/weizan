@@ -923,7 +923,7 @@ a{color:black;}
 .mall-our{padding:0.1rem;border-bottom:1px solid #dedede;overflow:hidden;text-align:center;font-size:0;background-color:white;}
 .mall-our .mall-fen{ min-width:0.8rem; padding:0 0.2rem; height: 0.3rem; line-height: 0.3rem;background:white; font-size: 0.14rem; color:#2fbdaa; text-align: center;border:1px solid #2fbdaa; border-radius: 0.03rem;display:inline-block; margin:0 0.08rem;}
 .mall-our .mall-fen .ico{ display:inline-block; font-size:0; width:0.18rem; height:0.18rem; background-repeat:no-repeat; vertical-align:middle; margin-right:0.05rem;}
-.mall-our .mall-fen .ico.ico_1{background-image:url(../img/goto.png); background-position:left top; background-size:100% auto;}
+.mall-our .mall-fen .ico.ico_1{background-image:url(../image/goto.png); background-position:left top; background-size:100% auto;}
 .mall-our .mall-fen .ico.ico_2{background-image:url(../img/sqlunIco.png); background-position:center top;background-size:100% auto;}
 /*抢购详情-分店地址开始-新增*/
 .fendianAddr{ border-top:0.01rem solid #e5e5e5; border-bottom:0.01rem solid #e5e5e5; background:#fff;}

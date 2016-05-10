@@ -2,10 +2,10 @@
 /**
  * By 高贵血迹
  */
-if (!empty($_W['openid']) && intval($_W['account']['level']) >= 3) {
-	$accObj = WeiXinAccount::create($_W['account']);
-	$userinfo = $accObj->fansQueryInfo($_W['openid']);			
-}
+//if (!empty($_W['openid']) && intval($_W['account']['level']) >= 3) {
+//	$accObj = WeiXinAccount::create($_W['account']);
+//	$userinfo = $accObj->fansQueryInfo($_W['openid']);			
+//}
 
 // 获取当期公众号设置
 $sql = "SELECT * FROM ".tablename('uni_settings')." WHERE `uniacid`=:uniacid";

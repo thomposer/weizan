@@ -48,6 +48,12 @@ if ($op == 'list') {
 			$regions = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}' AND pid=:pid",array(':pid' => $user['companyid']));
 
 		}
+		if ($user['regionid']) {
+			$cate = pdo_fetch("SELECT * FROM".tablename('xcommunity_category')."WHERE regionid=:regionid",array(':regionid' => $user['regionid']));
+			if (empty($cate)) {
+				message('先添加缴费类型',$this->createWebUrl('cost',array('op'=>'category','operation' => 'add')),'success');exit();
+			}
+		}
 	}else{
 		$regions = $this->regions();	
 	}
@@ -162,7 +168,7 @@ include $this->template('web/cost/add');
 	if($_GPC['username']){
 		$condition .= " AND username='{$_GPC['username']}'";
 	}
-	if (intval($_GPC['status'])) {
+	if ($_GPC['status']) {
 		$condition .= " AND status='{$_GPC['status']}'";
 	}
 	// print_r($condition);exit();
@@ -248,16 +254,16 @@ include $this->template('web/cost/add');
 	}
 	include $this->template('web/cost/detail');
 }elseif ($op == 'setgoodsproperty') {
-		$type = $_GPC['type'];
-		$data = intval($_GPC['data']);
-
-		if (in_array($type, array('status'))) {
-			$data = ($data=='是'?'否':'是');
-			pdo_update("xcommunity_cost_list", array($type => $data), array("id" => $id, "weid" => $_W['uniacid']));
-			die(json_encode(array("result" => 1, "data" => $data)));
+		$data = $_GPC['data'];
+		if (empty($data)) {
+			$data = '否';
 		}
+		$data = ($data=='是'?'否':'是');
+		pdo_update("xcommunity_cost_list", array('status' => $data), array("id" => $id, "weid" => $_W['uniacid']));
+		die(json_encode(array("result" => 1, "data" => $data)));
 
-		die(json_encode(array("result" => 0)));
+
+
 }elseif($op == 'order'){
 		//物业订单
 		if (empty($id)) {
@@ -270,7 +276,7 @@ include $this->template('web/cost/add');
 			$condition .= "AND p.mobile='{$_GPC['mobile']}'";
 		}
 		if($_GPC['realname']){
-			$condition .= "AND p.realname='{$_GPC['realname']}'";
+			$condition .= "AND p.username='{$_GPC['realname']}'";
 		}
 		$list = pdo_fetchall("SELECT o.* ,p.username as username ,p.mobile as mobile FROM".tablename('xcommunity_order')."as o left join (".tablename('xcommunity_cost_list')."as p left join ".tablename('xcommunity_cost')."as r on p.cid = r.id) on o.pid = p.id WHERE o.weid=:weid AND r.id = :id $condition LIMIT ".($pindex - 1) * $psize.','.$psize,array(':id' => $id,':weid' => $_W['weid']));
 		$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_order')."as o left join (".tablename('xcommunity_cost_list')."as p left join ".tablename('xcommunity_cost')."as r on p.cid = r.id) on o.pid = p.id  WHERE o.weid=:weid AND r.id = :id $condition",array(':id' => $id,':weid' => $_W['weid']));

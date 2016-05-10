@@ -27,6 +27,7 @@ if (checksubmit('submit')) {
 				'other_tplid' => $_GPC['other_tplid'],
 				'good_tplid' => $_GPC['good_tplid'],
 				'grab_wc_tplid' => $_GPC['grab_wc_tplid'],
+				'report_wc_tplid' => $_GPC['report_wc_tplid'],
 				'homemaking_tplid' => $_GPC['homemaking_tplid'],
 			);
 		if (empty($id)) {

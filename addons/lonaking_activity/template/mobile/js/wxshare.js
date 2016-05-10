@@ -61,7 +61,7 @@ function shareCallback(){
     $.get(url,function(result){
         var json = eval('(' + result + ')');
         if(json.message != null){
-            
+
         }
     });
 }

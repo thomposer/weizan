@@ -14,7 +14,7 @@
         $url = $this->createWebUrl($action, array('op' => 'display'));
         $area = pdo_fetchall("SELECT * FROM " . tablename($this->table_area) . " where weid = '{$_W['uniacid']}' ORDER BY ssort DESC", array(':weid' => $weid));
         $schooltype = pdo_fetchall("SELECT * FROM " . tablename($this->table_type) . " where weid = '{$_W['uniacid']}' ORDER BY ssort DESC", array(':weid' => $weid));
-
+        $set = pdo_fetch("SELECT * FROM " . tablename($this->table_set) . " WHERE :weid = weid", array(':weid' => $_W['uniacid'])); 
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
 		$quyu = pdo_fetchall("SELECT * FROM " . tablename($this->table_area) . " WHERE weid = '{$_W['uniacid']}' ORDER BY id ASC, ssort DESC", array(':weid' => $_W['uniacid']), 'id');
         if (!empty($quyu)) {
@@ -74,6 +74,7 @@
                     'gonggao' => trim($_GPC['gonggao']),
                     'logo' => trim($_GPC['logo']),
 					'thumb' => trim($_GPC['thumb']),
+					'qroce' => trim($_GPC['qroce']),
                     'address' => trim($_GPC['address']),
                     'location_p' => trim($_GPC['location_p']),
                     'location_c' => trim($_GPC['location_c']),
@@ -87,6 +88,7 @@
                     'is_sms' => intval($_GPC['is_sms']),
                     'is_hot' => intval($_GPC['is_hot']),
 					'isopen' => intval($_GPC['isopen']),
+					'issale' => intval($_GPC['issale']),
 					'style1' => intval($_GPC['style1']),
 					'ssort' => intval($_GPC['ssort']),
                     'dateline' => TIMESTAMP,

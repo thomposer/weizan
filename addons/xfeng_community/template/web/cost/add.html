@@ -7,10 +7,12 @@
 <div class="panel panel-default">
   <div class="panel-heading">导入费用</div>
   <div class="panel-body">
-    <!-- <div class="alert alert-info" role="alert">
-        默认导入格式:姓名/手机号码/房号/房屋面积/时间/物业费/其他费用/总计/是否缴费,用是代表缴费，否或者默认空代表未缴费。查询已房号为准。注意：没有其中的费用，请上传的表格留空。
-        <p>(<a href="{MODULE_URL}template/upFile/wuyefei-weixiaoqu.wang.zip" target="_blank" style="font-size:16px;color:red">点击下载物业费用Excel上传格式示例</a>)</p>
-    </div> -->
+  {if $user['regionid']}
+    <div class="alert alert-info" role="alert">
+        默认导入格式:当前小区费用,请按照此格式导入：姓名|手机号码|房号|房屋面积|时间|{$cate['name']}|总计|是否缴费,用是代表缴费，否或者默认空代表未缴费。查询已房号为准。。
+      
+    </div>
+  {/if}
     <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
     {if !$user['regionid']}
       <div class="form-group">

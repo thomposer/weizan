@@ -27,5 +27,5 @@
  //           message('参数错误！');
  //       }
 		
-        include $this->template('teachers');
+        include $this->template('common/teachers');
 ?>

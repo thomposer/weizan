@@ -1614,7 +1614,7 @@ margin-left:5px;
 .flower_news img{width:30px;height:30px;border-radius:100%;}
 .gj-go-top {
     background-color: rgba(0, 0, 0, 0.4);
-    bottom: 83px;
+    bottom: 135px;
     display: none;
     position: fixed;
     right: 14px;
@@ -1636,6 +1636,34 @@ margin-left:5px;
   top:0px;
   right:0px;
   background-image:url("change.png");
+  background-size: 32px 32px;
+  background-position:center;
+   background-repeat: no-repeat;
+  }
+.gj-go-top_true {
+    background-color: rgba(0, 0, 0, 0.4);
+    bottom: 83px;
+    display: none;
+    position: fixed;
+    right: 14px;
+    text-align: center;
+    z-index: 11;
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+	}
+.gj-go-top_true i {
+	color: White;
+	font-size: 20px;
+	display: block;
+	height: 50px;
+    width: 50px;
+}
+.back_top{ 
+  position:absolute;
+  top:0px;
+  right:0px;
+  background-image:url("top.png");
   background-size: 32px 32px;
   background-position:center;
    background-repeat: no-repeat;

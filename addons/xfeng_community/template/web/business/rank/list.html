@@ -12,6 +12,8 @@
                         <th width="100">编号</th>
                         <th width="100">用户</th>
                         <th width="100">平均花费</th>
+                        <th width="100">评分</th>
+                        <th width="100">评价内容</th>
                         <th width="80">评价时间</th>
                         <!-- <th width="100" style="text-align:right">操作</th> -->
                     </tr>
@@ -28,13 +30,27 @@
                         ?>
                         元
                         </td>
-                        <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
-                        <!-- <td style="text-align:right">
+                        <td>
+                        <?php 
+
+                            for ($i=0; $i < $rank['score']; $i++) { 
+                                echo "<img src=\"".MODULE_URL."template/mobile/style/style1/static/image/star-on.png\" >";
+                            }
+
+
+                        ?>
                             
-                        </td> -->
-                    </tr>
-                    <tr>
-                        <td colspan='4'><span>评价</span>&nbsp;&nbsp;&nbsp;<span>{$rank['contents']}</span></td>
+                            
+                     
+ 
+
+                        </td>
+                        <td>
+                                {$rank['contents']}
+
+                        </td>
+                        <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+
                     </tr>
                     {/loop}
                 </tbody>

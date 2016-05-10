@@ -38,9 +38,9 @@
             $item = pdo_fetch("SELECT * FROM " . tablename($this->table_score) . " WHERE id = :id", array(':id' => $id));
         
 		
-		 include $this->template('chaxun');
+		 include $this->template('students/chaxun');
           }else{
-          include $this->template('404');
+          include $this->template('common/404');
           }	
        
 ?>

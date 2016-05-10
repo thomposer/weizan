@@ -12,7 +12,7 @@
                     <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
                         <select name="regionid" class="form-control">
                                 {loop $regions $region}
-                                <option value="{$region['id']}" {if $region['id']==$_GPC[ 'regionid']} selected{/if}>{$region['city']}{$region['dist']}{$region['title']}</option>
+                                <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['city']}{$region['dist']}{$region['title']}</option>
                                 {/loop}
                         </select>
                     </div>

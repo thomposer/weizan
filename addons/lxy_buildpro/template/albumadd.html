@@ -1,4 +1,5 @@
 {template 'common/header'}
+<script type="text/javascript " src="../addons/lxy_buildpro/template/js/jquery-1.10.1.min.js"></script>
 <script type="text/javascript " src="../addons/lxy_buildpro/template/js/jquery.json-2.4.min.js"></script>
 <div class="main">
 <ul class="nav nav-tabs">
@@ -56,7 +57,7 @@ padding: 0 2px;
 }
 </style>
   <label class="col-xs-12 col-sm-3 col-md-2 control-label">相册图片</label>
-  <input id="hxpiclist"  name="hxpiclist" type="hidden"  value="{$jsonpic}" />
+  <input id="hxpiclist"  name="hxpiclist" type="hidden"   value="{$jsonpic}" />
   <div class="col-xs-12 col-sm-9"> {php echo $this->tpl_multi_image_withsize('pic',$arrPic)} <span class="help-block">*要求图片大小650*650，图片大小不超过300K</span> </div>
 </div>
 <div class="form-group col-sm-12">

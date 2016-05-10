@@ -33,7 +33,7 @@ if($do == 'index') {
 	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM' . tablename('paycenter_order') . $condition, $params);
 	$orders = pdo_fetchall('SELECT * FROM ' . tablename('paycenter_order') . $condition . $limit, $params);
 	$pager = pagination($total, $pindex, $psize);
-	$status = pc_order_status();
+	$status = paycenter_order_status();
 	if(!empty($orders)) {
 		foreach ($orders as &$value) {
 			$operator = mc_account_change_operator($value['clerk_type'], $value['store_id'], $value['clerk_id']);
@@ -52,9 +52,9 @@ if($do == 'detail') {
 		} elseif($order['status'] == 0) {
 			$info = '订单尚未支付';
 		} else {
-			$types = pc_order_types();
-			$trade_types = pc_order_trade_types();
-			$status = pc_order_status();
+			$types = paycenter_order_types();
+			$trade_types = paycenter_order_trade_types();
+			$status = paycenter_order_status();
 			$info = template('paycenter/payinfo', TEMPLATE_FETCH);
 		}
 		message(error(0, $info), '', 'ajax');

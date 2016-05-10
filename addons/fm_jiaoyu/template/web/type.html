@@ -1,8 +1,10 @@
 {template 'common/header'}
+<div class="panel panel-info">
+     <div class="panel-heading">类型设置</div>
         <ul class="nav nav-tabs">
           <li {if $operation == 'display'}class="active"{/if}><a href="{php echo $this->createWebUrl('type', array('op' => 'display'))}">管理学校类型</a></li>
         </ul>
-
+</div>
 {if $operation == 'post'}
 <div class="panel panel-info">
      <div class="panel-heading"><a class="btn btn-primary" href="{php echo $this->createWebUrl('type', array('op' => 'display'))}"><i class="fa fa-tasks"></i> 返回类型列表</a></div>

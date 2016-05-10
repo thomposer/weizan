@@ -2,9 +2,7 @@
 defined('IN_IA') or exit('Access Denied');
 class Msyou_meituzoneModuleSite extends WeModuleSite
 {
-    public $baiduhtml_leftright = '<script type="text/javascript">/*马上You-秀图空间-后台*/var cpro_id = "u2419813";</script><script src="http://cpro.baidustatic.com/cpro/ui/f.js" type="text/javascript"></script>';
-    public $baiduhtml_bottom = '<script type="text/javascript">/*马上You-秀图空间-后台-底部*/var cpro_id = "u2419835";</script><script src="http://cpro.baidustatic.com/cpro/ui/c.js" type="text/javascript"></script>';
-    function tables_check($tablestr = '')
+function tables_check($tablestr = '')
     {
         global $_W;
         require 'create_tables.php';
@@ -105,7 +103,7 @@ class Msyou_meituzoneModuleSite extends WeModuleSite
             $where2 = ' b.nickname LIKE "%{$_GPC["keyword"]}%" or b.mobile LIKE "%{$_GPC["keyword"]}%"';
         }
         $reply  = pdo_fetch("SELECT * FROM " . tablename('msyou_meituzone_reply') . " WHERE " . $where, $params);
-        $bh     = "(select ifnull(count(1),0)+1 from " . tablename('msyou_meituzone_lists') . " WHERE a.createtime>createtime and rid=" . $_GPC['rid'] . ") bh ";
+        $bh     = "1";
         $pm     = "(select ifnull(count(1),0)+1 from " . tablename('msyou_meituzone_lists') . " WHERE zancount*" . $reply['zanx'] . "+sharecount*" . $reply['sharex'] . "+viewcount*" . $reply['viewx'] . ">a.zancount*" . $reply['zanx'] . "+a.sharecount*" . $reply['sharex'] . "+a.viewcount*" . $reply['viewx'] . " and rid=" . $_GPC['rid'] . ") pm ";
         $df     = "(zancount*" . $reply['zanx'] . "+sharecount*" . $reply['sharex'] . "+viewcount*" . $reply['viewx'] . ") sumcount ";
         $total  = pdo_fetchcolumn("SELECT count(*) FROM " . tablename('msyou_meituzone_lists') . " WHERE " . $where . "", $params);
@@ -230,9 +228,98 @@ class Msyou_meituzoneModuleSite extends WeModuleSite
     private function get_sysset()
     {
         global $_W;
-        return pdo_fetch('SELECT * FROM ' . tablename('msyou_meituzone_paraset') . ' WHERE uniacid = :uniacid', array(
+        return pdo_fetch("SELECT * FROM " . tablename('msyou_meituzone_paraset') . " WHERE uniacid = :uniacid", array(
             ':uniacid' => $_W['uniacid']
         ));
+    }
+    public function doMobileUploadimage()
+    {
+        global $_GPC, $_W;
+        $setting = $_W['setting']['upload'][$type];
+        $result  = array(
+            'jsonrpc' => '2.0',
+            'id' => 'id',
+            'error' => array(
+                'code' => 1,
+                'message' => ''
+            )
+        );
+        load()->func('file');
+        if (empty($_FILES['file']['tmp_name'])) {
+            $binaryfile = file_get_contents('php://input', 'r');
+            if (!empty($binaryfile)) {
+                mkdirs(ATTACHMENT_ROOT . '/temp');
+                $tempfilename = random(5);
+                $tempfile     = ATTACHMENT_ROOT . '/temp/' . $tempfilename;
+                if (file_put_contents($tempfile, $binaryfile)) {
+                    $imagesize      = @getimagesize($tempfile);
+                    $imagesize      = explode('/', $imagesize['mime']);
+                    $_FILES['file'] = array(
+                        'name' => $tempfilename . '.' . $imagesize[1],
+                        'tmp_name' => $tempfile,
+                        'error' => 0
+                    );
+                }
+            }
+        }
+        if (!empty($_FILES['file']['name'])) {
+            if ($_FILES['file']['error'] != 0) {
+                $result['error']['message'] = '上传失败，请重试！';
+                die(json_encode($result));
+            }
+            $ext  = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+            $ext  = strtolower($ext);
+            $file = file_upload($_FILES['file']);
+            if (is_error($file)) {
+                $result['error']['message'] = $file['message'];
+                die(json_encode($result));
+            }
+            $pathname = $file['path'];
+            $fullname = ATTACHMENT_ROOT . '/' . $pathname;
+            $thumb    = empty($setting['thumb']) ? 0 : 1;
+            $width    = intval($setting['width']);
+            if ($thumb == 1 && $width > 0) {
+                $thumbnail = file_image_thumb($fullname, '', $width);
+                @unlink($fullname);
+                if (is_error($thumbnail)) {
+                    $result['message'] = $thumbnail['message'];
+                    die(json_encode($result));
+                } else {
+                    $filename = pathinfo($thumbnail, PATHINFO_BASENAME);
+                    $pathname = $thumbnail;
+                    $fullname = ATTACHMENT_ROOT . '/' . $pathname;
+                }
+            }
+            $info           = array(
+                'name' => $_FILES['file']['name'],
+                'ext' => $ext,
+                'filename' => $pathname,
+                'attachment' => $pathname,
+                'url' => tomedia($pathname),
+                'is_image' => 1,
+                'filesize' => filesize($fullname)
+            );
+            $size           = getimagesize($fullname);
+            $info['width']  = $size[0];
+            $info['height'] = $size[1];
+            setting_load('remote');
+            if (!empty($_W['setting']['remote']['type'])) {
+                $remotestatus = file_remote_upload($pathname);
+                if (is_error($remotestatus)) {
+                    $result['message'] = '远程附件上传失败，请检查配置并重新上传';
+                    file_delete($pathname);
+                    die(json_encode($result));
+                } else {
+                    file_delete($pathname);
+                    $info['url'] = tomedia($pathname);
+                }
+            }
+            $info['cc'] = $fullname;
+            die(json_encode($info));
+        } else {
+            $result['error']['message'] = '请选择要上传的图片！';
+            die(json_encode($result));
+        }
     }
     public function doMobileIndex()
     {
@@ -288,7 +375,7 @@ class Msyou_meituzoneModuleSite extends WeModuleSite
             'rid' => $reply['rid']
         ), true);
         $_share['imgUrl']   = tomedia($reply["thumburl"]);
-        $bh                 = "(select ifnull(count(1),0)+1 from " . tablename('msyou_meituzone_lists') . " WHERE a.createtime>createtime and rid=" . $_GPC['rid'] . ") bh ";
+        $bh                 = "1";
         $pm                 = "(select ifnull(count(1),0)+1 from " . tablename('msyou_meituzone_lists') . " WHERE zancount*" . $reply['zanx'] . "+sharecount*" . $reply['sharex'] . "+viewcount*" . $reply['viewx'] . ">a.zancount*" . $reply['zanx'] . "+a.sharecount*" . $reply['sharex'] . "+a.viewcount*" . $reply['viewx'] . " and rid=" . $_GPC['rid'] . ") pm ";
         $df                 = "(zancount*" . $reply['zanx'] . "+sharecount*" . $reply['sharex'] . "+viewcount*" . $reply['viewx'] . ") sumcount ";
         if ($_W['isajax']) {
@@ -300,13 +387,26 @@ class Msyou_meituzoneModuleSite extends WeModuleSite
                         $listcount = pdo_fetch("SELECT zancount,sharecount,viewcount FROM " . tablename('msyou_meituzone_lists') . " WHERE " . $where . " and id=" . $_GPC['pageid'], $params);
                         $listid    = $_GPC['pageid'];
                     }
-                    pdo_query('update ' . tablename('msyou_meituzone_reply') . ' set sharecount=sharecount+1 WHERE ' . $where, $params);
+                    pdo_query("update " . tablename('msyou_meituzone_reply') . " set sharecount=sharecount+1 WHERE " . $where, $params);
                 }
                 if ($_GPC['dianzan']) {
-                    pdo_query("update " . tablename('msyou_meituzone_lists') . " set zancount=zancount+1 WHERE " . $where . " and id=" . $_GPC['lid'], $params);
-                    $listcount = pdo_fetch("SELECT zancount,sharecount,viewcount FROM " . tablename('msyou_meituzone_lists') . " WHERE " . $where . " and id=" . $_GPC['lid'], $params);
-                    $listid    = $_GPC['lid'];
-                    pdo_query('update ' . tablename('msyou_meituzone_reply') . ' set zancount=zancount+1 WHERE ' . $where, $params);
+                    $zan = pdo_fetch("select * FROM " . tablename('msyou_meituzone_lists_log') . " where uniacid=" . $_W['uniacid'] . " and listsid=" . $_GPC['lid'] . " and uid=0" . $_W['member']['uid']);
+                    if (!empty($zan)) {
+                        $errstr = "曾经已点赞！";
+                    } else {
+                        $zandata['uniacid']    = $_W['uniacid'];
+                        $zandata['uid']        = '0' . $_W['member']['uid'];
+                        $zandata['listsid']    = $_GPC['lid'];
+                        $zandata['createtime'] = time();
+                        if (pdo_insert('msyou_meituzone_lists_log', $zandata)) {
+                            pdo_query("update " . tablename('msyou_meituzone_lists') . " set zancount=zancount+1 WHERE " . $where . " and id=" . $_GPC['lid'], $params);
+                            $listcount = pdo_fetch("SELECT zancount,sharecount,viewcount FROM " . tablename('msyou_meituzone_lists') . " WHERE " . $where . " and id=" . $_GPC['lid'], $params);
+                            $listid    = $_GPC['lid'];
+                            pdo_query("update " . tablename('msyou_meituzone_reply') . " set zancount=zancount+1 WHERE " . $where, $params);
+                        } else {
+                            $errstr = "点赞 错误！";
+                        }
+                    }
                 }
                 if ($_GPC['usersubmit']) {
                     $memberinfo['nickname'] = $_GPC['nickname'];
@@ -324,9 +424,10 @@ class Msyou_meituzoneModuleSite extends WeModuleSite
                     $data['imgurl']      = $_GPC['imglist1'];
                     $data['content']     = json_encode($content);
                     $data['createtime']  = time();
+                    $data['bh']          = intval("0" . pdo_fetchcolumn("select max(bh) from " . tablename('msyou_meituzone_lists') . " WHERE " . $where, $params)) + 1;
                     if (pdo_insert('msyou_meituzone_lists', $data)) {
                         $list['id'] = pdo_insertid();
-                        pdo_query('update ' . tablename('msyou_meituzone_reply') . ' set joincount=(select count(1) from ' . tablename('msyou_meituzone_lists') . ' where rid=' . $_GPC['rid'] . " ) WHERE " . $where, $params);
+                        pdo_query("update " . tablename('msyou_meituzone_reply') . " set joincount=(select count(1) from " . tablename('msyou_meituzone_lists') . " where rid=" . $_GPC['rid'] . " ) WHERE " . $where, $params);
                     } else {
                         $errstr = "发送内容，存储失败！";
                     }
@@ -339,14 +440,13 @@ class Msyou_meituzoneModuleSite extends WeModuleSite
                             $list[$k]['createtime'] = date('Y-m-d H:i', $v['createtime']);
                         }
                     } else {
-                        $total    = pdo_fetchcolumn("SELECT count(*) FROM " . tablename('msyou_meituzone_lists') . " WHERE " . $where, $params);
                         $pindex   = max(1, intval($_GPC['pageIndex']));
                         $psize    = intval($_GPC['pageSize']);
                         $orderstr = $_GPC['orderstr'];
                         $start    = ($pindex - 1) * $psize;
-                        $limit .= " LIMIT {$start},{$psize}";
-                        $list = pdo_fetchall("SELECT " . $bh . "," . $pm . "," . $df . ",a.* FROM " . tablename('msyou_meituzone_lists') . " a WHERE " . $where . " ORDER BY " . $orderstr . $limit, $params);
-                        $fans = array();
+                        $limit    = " LIMIT {$start},{$psize}";
+                        $list     = pdo_fetchall("SELECT " . $bh . "," . $pm . "," . $df . ",a.* FROM " . tablename('msyou_meituzone_lists') . " a WHERE " . $where . " ORDER BY " . $orderstr . $limit, $params);
+                        $fans     = array();
                         foreach ($list as $v) {
                             array_push($fans, $v['fanid']);
                         }
@@ -362,13 +462,14 @@ class Msyou_meituzoneModuleSite extends WeModuleSite
                         ));
                         foreach ($list as $k => $v) {
                             $list[$k]['nickname']   = $members[$list[$k]['fanid']]['nickname'];
+                            $list[$k]['avatar']     = $members[$list[$k]['fanid']]['avatar'];
                             $list[$k]['createtime'] = date('Y-m-d H:i', $v['createtime']);
                         }
                     }
                 }
                 if ($_GPC['showpage']) {
                     pdo_query("update " . tablename('msyou_meituzone_lists') . " set viewcount=viewcount+1 WHERE " . $where . " and id=" . $_GPC['lid'], $params);
-                    pdo_query('update ' . tablename('msyou_meituzone_reply') . ' set viewcount=viewcount+1 WHERE ' . $where, $params);
+                    pdo_query("update " . tablename('msyou_meituzone_reply') . " set viewcount=viewcount+1 WHERE " . $where, $params);
                     $list               = pdo_fetch("SELECT " . $bh . "," . $pm . "," . $df . ",a.* FROM " . tablename('msyou_meituzone_lists') . " a WHERE " . $where . " and id=" . $_GPC['lid'], $params);
                     $members            = mc_fetch($list['fanid'], array(
                         'nickname',
@@ -381,8 +482,10 @@ class Msyou_meituzoneModuleSite extends WeModuleSite
                         'nationality'
                     ));
                     $list['nickname']   = $members['nickname'];
-                    $list['createtime'] = date('Y-m-d H:i', $v['createtime']);
-                    $_share["title"]    = '<' . $list['nickname'] . '>排名第' . $list['pm'] . '，快来帮我点赞吧！';
+                    $list['avatar']     = $members['avatar'];
+                    $list['createtime'] = date('Y-m-d H:i', $list['createtime']);
+                    $_share["title"]    = ($list['nickname'] ? $list['nickname'] : '我') . ' 现在排名第' . $list['pm'] . '，快来帮我点赞吧！';
+                    $_share['desc']     = preg_replace('/\s/i', '', str_replace('	', '', cutstr(str_replace('&nbsp;', '', ihtmlspecialchars(strip_tags($reply["contact"]))), 60)));
                     $_share["link"]     = $_W['siteroot'] . 'app/' . $this->createMobileUrl($_GPC['do'], array(
                         'id' => $_GPC['id'],
                         'rid' => $reply['rid'],
@@ -395,7 +498,7 @@ class Msyou_meituzoneModuleSite extends WeModuleSite
             }
             $replycount = pdo_fetch("SELECT * FROM " . tablename('msyou_meituzone_reply') . " WHERE " . $where, $params);
             die(json_encode(array(
-                'error' => $errstr,
+                "error" => $errstr,
                 "list" => $list,
                 "p_share" => $_share,
                 "replycount" => $replycount,
@@ -410,6 +513,12 @@ class Msyou_meituzoneModuleSite extends WeModuleSite
             }
             $error = mc_oauth_userinfo();
         }
+        load()->model('reply');
+        $keyword = reply_keywords_search("rid=:rid and uniacid = :uniacid and type=:type", array(
+            ":rid" => $_GPC['rid'],
+            ":uniacid" => $_W['uniacid'],
+            ":type" => 1
+        ));
         load()->model('account');
         $acc          = WeAccount::create($_W['acid']);
         $access_token = $acc->getAccessToken();

@@ -17,6 +17,7 @@
 		        <label for="uploadExcel" class="col-sm-2 control-label">小区</label>
 		        <div class="col-sm-4">
 		          <select name='regionid' class="form-control">
+		          	<option value='0' > 请选择小区</option>
 		            {loop $regions $region}
 		            <option value='{$region['id']}' {if $item['regionid'] == $region['id']}selected = 'selected'{/if}>{$region['city']}{$region['dist']}{$region['title']}</option>
 

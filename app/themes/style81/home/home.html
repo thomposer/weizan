@@ -1,4 +1,4 @@
-{template 'common/header2'}
+{template 'common/header'}
 <link href="./themes/style81/style/mobile.css" rel="stylesheet" type="text/css" />
 
 {template 'slide'}
@@ -15,9 +15,17 @@ a:active {color:#fb8600;}
 
 </style>
 <section class="home clearfix">
-	<ul class="icon-items clearfix">
+	<ul class="icon-items clearfix" style="padding-left:0px;">
 {loop $navs $nav}
-		<li class="icon-items"><a href="{$nav['url']}"><i style="background:url({$_W['attachurl']}{$nav['icon']}) no-repeat center center;"></i>{$nav['name']}</a></li>
+		<li class="icon-items" style="list-style-type:none"><a href="{$nav['url']}">
+		{if !empty($nav['icon'])}
+		<i style="background:url({$_W['attachurl']}{$nav['icon']}) no-repeat center center;"></i>
+		{else}
+		<i class="{$nav['css']['icon']['icon']}" style="{$nav['css']['icon']['style']}"></i>
+		{/if}
+		{$nav['name']}</a>
+		</li>
 {/loop}
 	</ul>
 </section>
+{template 'common/footer'}

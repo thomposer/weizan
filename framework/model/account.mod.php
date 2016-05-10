@@ -74,7 +74,7 @@ function uni_permission($uid = 0, $uniacid = 0) {
 function uni_accounts($uniacid = 0) {
 	global $_W;
 	$uniacid = empty($uniacid) ? $_W['uniacid'] : intval($uniacid);
-	$accounts = pdo_fetchall("SELECT w.*, a.type, a.isconnect FROM " . tablename('account') . " a INNER JOIN " . tablename('account_wechats') . " w USING(acid) WHERE a.uniacid = :uniacid ORDER BY a.acid ASC", array(':uniacid' => $uniacid), 'acid');
+	$accounts = pdo_fetchall("SELECT w.*, a.type, a.isconnect FROM " . tablename('account') . " a INNER JOIN " . tablename('account_wechats') . " w USING(acid) WHERE a.uniacid = :uniacid AND a.isdeleted <> 1 ORDER BY a.acid ASC", array(':uniacid' => $uniacid), 'acid');
 	return $accounts;
 }
 
@@ -421,7 +421,7 @@ function uni_setting_load($name = '', $uniacid = 0) {
 								'recharge', 'tplnotice', 'mcplugin');
 			foreach ($unisetting as $key => &$row) {
 				if (in_array($key, $serialize)) {
-					$row = iunserializer($row);
+					$row = (array)iunserializer($row);
 				}
 			}
 		}
@@ -660,7 +660,7 @@ function account_create($uniacid, $account) {
 
 
 function account_fetch($acid) {
-	$account = pdo_fetch("SELECT w.*, a.type, a.isconnect FROM " . tablename('account') . " a INNER JOIN " . tablename('account_wechats') . " w USING(acid) WHERE acid = :acid", array(':acid' => $acid));
+	$account = pdo_fetch("SELECT w.*, a.type, a.isconnect FROM " . tablename('account') . " a INNER JOIN " . tablename('account_wechats') . " w USING(acid) WHERE acid = :acid AND a.isdeleted = '0'", array(':acid' => $acid));
 	$uniacid = $account['uniacid'];
 	$owneruid = pdo_fetchcolumn("SELECT uid FROM ".tablename('uni_account_users')." WHERE uniacid = :uniacid AND role = 'owner'", array(':uniacid' => $uniacid));
 	load()->model('user');
@@ -953,6 +953,96 @@ function uni_is_multi_acid($uniacid = 0) {
 	}
 	if($nums == 1) {
 		return false;
+	}
+	return true;
+}
+
+function account_delete($acid) {
+	global $_W;
+	load()->func('file');
+		$account = pdo_get('uni_account', array('default_acid' => $acid));
+	if ($account) {
+		$uniacid = $account['uniacid'];
+		$state = uni_permission($_W['uid'], $uniacid);
+		if($state != 'founder' && $state != 'manager') {
+			message('没有该公众号操作权限！', url('accound/display'), 'error');
+		}
+		if($uniacid == $_W['uniacid']) {
+			isetcookie('__uniacid', '');
+		}
+		cache_delete("unicount:{$uniacid}");
+		$modules = array();
+				$rules = pdo_fetchall("SELECT id, module FROM ".tablename('rule')." WHERE uniacid = '{$uniacid}'");
+		if (!empty($rules)) {
+			foreach ($rules as $index => $rule) {
+				$deleteid[] = $rule['id'];
+			}
+			pdo_delete('rule', "id IN ('".implode("','", $deleteid)."')");
+		}
+
+		$subaccount = pdo_fetchall("SELECT acid FROM ".tablename('account')." WHERE uniacid = :uniacid", array(':uniacid' => $uniacid));
+		if (!empty($subaccount)) {
+			foreach ($subaccount as $account) {
+				@unlink(IA_ROOT . '/attachment/qrcode_'.$account['acid'].'.jpg');
+				@unlink(IA_ROOT . '/attachment/headimg_'.$account['acid'].'.jpg');
+				file_remote_delete('qrcode_'.$account['acid'].'.jpg');
+				file_remote_delete('headimg_'.$account['acid'].'.jpg');
+			}
+			if (!empty($acid)) {
+				rmdirs(IA_ROOT . '/attachment/images/' . $uniacid);
+				@rmdir(IA_ROOT . '/attachment/images/' . $uniacid);
+				rmdirs(IA_ROOT . '/attachment/audios/' . $uniacid);
+				@rmdir(IA_ROOT . '/attachment/audios/' . $uniacid);
+			}
+		}
+
+				$tables = array(
+			'account','account_wechats', 'activity_coupon',
+			'activity_coupon_allocation','activity_coupon_modules','activity_clerks',
+			'activity_coupon_record','activity_exchange','activity_exchange_trades','activity_exchange_trades_shipping',
+			'activity_modules', 'core_attachment','core_paylog','core_queue','core_resource',
+			'wechat_attachment','coupon','coupon_modules',
+			'coupon_record','coupon_setting','cover_reply', 'mc_card','mc_card_members','mc_chats_record','mc_credits_recharge','mc_credits_record',
+			'mc_fans_groups','mc_groups','mc_handsel','mc_mapping_fans','mc_mapping_ucenter','mc_mass_record',
+			'mc_member_address','mc_member_fields','mc_members','menu_event',
+			'qrcode','qrcode_stat', 'rule','rule_keyword','site_article','site_category','site_multi','site_nav','site_slide',
+			'site_styles','site_styles_vars','stat_keyword','stat_msg_history',
+			'stat_rule','uni_account','uni_account_modules','uni_account_users','uni_settings', 'uni_group', 'uni_verifycode','users_permission',
+			'mc_member_fields',
+		);
+		if (!empty($tables)) {
+			foreach ($tables as $table) {
+				$tablename = str_replace($GLOBALS['_W']['config']['db']['tablepre'], '', $table);
+				pdo_delete($tablename, array( 'uniacid'=> $uniacid));
+			}
+		}
+	} else {
+		$account = account_fetch($acid);
+		if (empty($account)) {
+			message('子公众号不存在或是已经被删除');
+		}
+		$uniacid = $account['uniacid'];
+		$state = uni_permission($_W['uid'], $uniacid);
+		if($state != 'founder' && $state != 'manager') {
+			message('没有该公众号操作权限！', url('accound/display'), 'error');
+		}
+		$uniaccount = uni_fetch($account['uniacid']);
+		if ($uniaccount['default_acid'] == $acid) {
+			message('默认子公众号不能删除');
+		}
+		pdo_delete('account', array('acid' => $acid));
+		pdo_delete('account_wechats', array('acid' => $acid, 'uniacid' => $uniacid));
+		cache_delete("unicount:{$uniacid}");
+		cache_delete('account:auth:refreshtoken:'.$acid);
+		$oauth = uni_setting($uniacid, array('oauth'));
+		if($oauth['oauth']['account'] == $acid) {
+			$acid = pdo_fetchcolumn('SELECT acid FROM ' . tablename('account_wechats') . " WHERE uniacid = :id AND level = 4 AND secret != '' AND `key` != ''", array(':id' => $uniacid));
+			pdo_update('uni_settings', array('oauth' => iserializer(array('account' => $acid, 'host' => $oauth['oauth']['host']))), array('uniacid' => $uniacid));
+		}
+		@unlink(IA_ROOT . '/attachment/qrcode_'.$acid.'.jpg');
+		@unlink(IA_ROOT . '/attachment/headimg_'.$acid.'.jpg');
+		file_remote_delete('qrcode_'.$acid.'.jpg');
+		file_remote_delete('headimg_'.$acid.'.jpg');
 	}
 	return true;
 }

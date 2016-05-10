@@ -53,7 +53,7 @@ if ($do == 'upload') {
 			$pathname = $file['path'];
 			$fullname = ATTACHMENT_ROOT . '/' . $pathname;
 
-			$thumb = empty($setting['thumb']) ? 0 : 1; 			$width = intval($setting['width']); 			if ($thumb == 1 && $width > 0) {
+			$thumb = empty($setting['thumb']) ? 0 : 1; 			$width = intval($setting['width']); 			if ($thumb == 1 && $width > 0 && (!isset($_GPC['thumb']) || (isset($_GPC['thumb']) && !empty($_GPC['thumb'])))) {
 				$thumbnail = file_image_thumb($fullname, '', $width);
 				@unlink($fullname);
 				if (is_error($thumbnail)) {
@@ -65,7 +65,6 @@ if ($do == 'upload') {
 					$fullname = ATTACHMENT_ROOT .'/'.$pathname;
 				}
 			}
-
 			$info = array(
 				'name' => $_FILES['file']['name'],
 				'ext' => $ext,

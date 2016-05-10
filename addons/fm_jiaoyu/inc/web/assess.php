@@ -12,6 +12,7 @@
 
         $category = pdo_fetchall("SELECT * FROM " . tablename($this->table_teachers) . " WHERE weid = :weid And schoolid=:schoolid ORDER BY id ASC, sort DESC", array(':weid' => $weid, ':schoolid' => $schoolid), 'id');
 		
+		$school = pdo_fetch("SELECT * FROM " . tablename($this->table_index) . " where id = :id ORDER BY ssort DESC", array(':id' => $schoolid));
 
         $operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
 		
@@ -147,11 +148,14 @@
 
             $pager = pagination($total, $pindex, $psize);
         } elseif ($operation == 'delete') {
-            $id = intval($_GPC['id']);
-            $row = pdo_fetch("SELECT id, thumb FROM " . tablename($this->table_teachers) . " WHERE id = :id", array(':id' => $id));
+            $tid = intval($_GPC['id']);
+            $row = pdo_fetch("SELECT * FROM " . tablename($this->table_teachers) . " WHERE id = :id", array(':id' => $tid));
             if (empty($row)) {
                 message('抱歉，教师不存在或是已经被删除！');
             }
+            if (!empty($row['openid'])) {
+                message('请先解绑该教师的微信！');
+            }			
             if (!empty($row['thumb'])) {
                 load()->func('file');
                 file_delete($row['thumb']);
@@ -211,11 +215,13 @@
 				    'weid' => $_W['uniacid'],
 					'schoolid' => $schoolid,
 					'tid' => intval($_GPC['id']),
+					'xq_id' => trim($_GPC['xq']),					
 					'km_id' => trim($_GPC['km']),
 					'bj_id' => trim($_GPC['bj']),
 					'name' => trim($_GPC['name']),
 					'is_hot' => intval($_GPC['is_hot']),
 					'minge' => trim($_GPC['minge']),
+					'cose' => trim($_GPC['cose']),
 					'dagang' => trim($_GPC['dagang']),
 					'adrr' => trim($_GPC['adrr']),
 					'start' => strtotime($_GPC['start']),

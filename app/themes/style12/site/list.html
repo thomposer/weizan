@@ -51,15 +51,5 @@
 	</li>
 	{/loop}
 </ul>
-<script>
-	require(['jquery'], function($){
-		$(function(){
-			$('#category_show').click(function(){
-				$('.head .order').toggleClass('hide');
-				return false;
-			});
-		});
-	});
-</script>
 <div class="pager-position">{$result['pager']}</div>
 {template 'common/footer'}

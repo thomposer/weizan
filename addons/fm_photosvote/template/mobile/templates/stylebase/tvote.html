@@ -1,3 +1,5 @@
+{if $rvote['iscode'] == 1}
+{if ($_GPC['do'] == 'tuser' || $_GPC['do'] == 'tuserphotos' || $_GPC['do'] == 'photosvote' || $_GPC['do'] == 'comment')}
 <div class="geetest">
     <div class="bg"></div>
     <div class="wrap">
@@ -7,7 +9,7 @@
           请滑动验证
         </div>
       </div>		
-		<script type="text/javascript" src="http://api.geetest.com/get.php?gt={$reply['codekey']}&width=300" async></script>
+		<script type="text/javascript" src="http://api.geetest.com/get.php?gt={$rvote['codekey']}&width=300" async></script>
     </div>
 	
   </div>
@@ -59,7 +61,7 @@
   }
 
   .exit {
-    background-image: url('../addons/fm_photosvote/api/validate/img/return_hover.png');
+    background-image: url('{FM_STATIC_PLUGIN}api/validate/img/return_hover.png');
     -moz-background-size: 12px auto;
     -o-background-size: 12px auto;
     -webkit-background-size: 12px auto;
@@ -75,10 +77,11 @@
     z-index: 10;
   }
   .exit:active {
-    background-image: url('../addons/fm_photosvote/api/validate/img/return_hover.png');
+    background-image: url('{FM_STATIC_PLUGIN}api/validate/img/return_hover.png');
   }
 </style>
-
+{/if}
+{/if}
 
 <div class="modal fade" id="subsribe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style=" margin-top: 60px;z-index:1000000000">
 	<div class="modal-dialog">
@@ -90,17 +93,17 @@
 				<div class="modal-body">
 					<div class="form-group">							
 						<div style="text-align:center; background-color: transparent;" id = "ewmcode">
-							<div style="word-break: break-all;width:100%">{if !empty($reply['subscribedes'])}{$reply['subscribedes']}{else}请长按二维码关注或点击“关注投票”，前往{$_W['account']['name']}为您的好友投票。如已关注，请关闭此对话框，为Ta点赞或拉票。{/if}</div>
+							<div style="word-break: break-all;width:100%">{if !empty($rshare['subscribedes'])}{$rshare['subscribedes']}{else}请长按二维码关注或点击“关注投票”，前往{$_W['account']['name']}为您的好友投票。如已关注，请关闭此对话框，为Ta点赞或拉票。{/if}</div>
 						</div>
 					</div>
 					<div class="form-group">							
 						<div style="text-align:center; background-color: transparent;" id = "ewmcode">
-							<a href="{$reply['shareurl']}"><img src="{$_W['attachurl']}qrcode_{$_W['acid']}.jpg?{php echo time()}" class="img-rounded" style="cursor:pointer; text-align: center;width:150px;" /></a>
+							<a href="{$rshare['shareurl']}"><img src="{$_W['attachurl']}qrcode_{$_W['acid']}.jpg?{php echo time()}" class="img-rounded" style="cursor:pointer; text-align: center;width:150px;" /></a>
 						</div>
 					</div>
 					<div class="form-group">							
 						<div style="text-align:center; background-color: transparent;  font-size: 20px;">
-							<a href="{$reply['shareurl']}" class="btn btn-info" style='color:#fff;width:100%'>关注</a>
+							<a href="{$rshare['shareurl']}" class="btn btn-info" style='color:#fff;width:100%'>关注</a>
 							<strong></strong>
 						</div>
 					</div>
@@ -127,14 +130,14 @@
 					</div>
 				</div>
 				{if $_GPC['do'] == 'photosvote' || $_GPC['do'] == 'tuser'|| $_GPC['do'] == 'tuserphotos' }
-					{if !empty($reply) && !empty($reply['huodongname']) && !empty($reply['hhhdpicture']) && ($reply['ishuodong'] == 1 && !empty($reply['huodongurl'])) }
+					{if !empty($rhuihua['huodongname']) && !empty($rhuihua['hhhdpicture']) && ($rhuihua['ishuodong'] == 1 && !empty($rhuihua['huodongurl'])) }
 						<div class="form-group huodong"  style="display:none;background:#EC4933;height:50px;line-height:50px;">
-							<a href="{$reply['huodongurl']}&from=fm_photosvote&oid={$from_user}"  >
+							<a href="{$rhuihua['huodongurl']}&from=fm_photosvote&oid={$from_user}"  >
 							<div style="width:50px;height:50px;overflow:hidden;margin-right:20px;margin-left:10px;float:left;">
-								<img src="{php echo toimage($reply['hhhdpicture'])}" width="50" style="">
+								<img src="{php echo toimage($rhuihua['hhhdpicture'])}" width="50" style="">
 							</div>						
 							<div style="text-align:left; background-color: transparent;color:#fff;font-size:15px;" class=" text-info">
-								{$reply['huodongname']}
+								{$rhuihua['huodongname']}
 							</div>
 							</a>
 						</div>
@@ -203,7 +206,7 @@
             margin: 16px 0 0;
         }
         #bodyhidden {
-		  background: url({FMURL}/mobile/templates/stylebase/style/images/overlay.png) repeat 0 0;
+		  background: url({FM_STATIC_MOBILE}stylebase/images/overlay.png) repeat 0 0;
 		  opacity: 0.9;
 		  filter: alpha(opacity = 90);
 		  position: fixed;
@@ -220,7 +223,7 @@
             <header class="dzptit">长按二维码，关注后参与活动</header>
             <section class="dzpwrapcont dzpwrapcontent">
             	<p><img src="{$_W['attachurl']}qrcode_{$_W['acid']}.jpg?{php echo time()}" style="width:100%"></p>
-                <a href="{$reply['shareurl']}" class="btndzp btnRed"><img src="{FMURL}/mobile/templates/stylebase/style/images/follow.png" width="30" style="position: relative; top: 8px;">  如何关注 ?</a>
+                <a href="{$rshare['shareurl']}" class="btndzp btnRed"><img src="{FM_STATIC_MOBILE}stylebase/images/follow.png" width="30" style="position: relative; top: 8px;">  如何关注 ?</a>
                 <a id="dzpclose" class="btndzp btnRed" onclick="closeid('dzpwrap');">取消,继续浏览</a>
             </section>
         </article>
@@ -354,20 +357,20 @@ function fmloadding(id, text) {
 	$('#toast').html(text);
 }
 function tvote() {
-	var iscode = "{$reply['iscode']}";
+	var iscode = "{$rvote['iscode']}";
 	var now = "{$now}";
-	var tstart_time = "{$reply['tstart_time']}";
-	var tend_time = "{$reply['tend_time']}";
-	var ttipstart = "{$reply['ttipstart']}";
-	var ttipend = "{$reply['ttipend']}";
-	var subscribe = "{$reply['subscribe']}";
+	var tstart_time = "{$rbasic['tstart_time']}";
+	var tend_time = "{$rbasic['tend_time']}";
+	var ttipstart = "{$rbasic['ttipstart']}";
+	var ttipend = "{$rbasic['ttipend']}";
+	var subscribe = "{$rshare['subscribe']}";
 	var follow = "{$follow}";
 	var tfrom_user = "{$tfrom_user}";
 	var vfrom = "{$vfrom}";
 
-	var isdaojishi = "{$reply['isdaojishi']}";
-	var votetime = "{$reply['votetime']}";
-	var ttipvote = "{$reply['ttipvote']}";
+	var isdaojishi = "{$rbasic['isdaojishi']}";
+	var votetime = "{$rbasic['votetime']}";
+	var ttipvote = "{$rbasic['ttipvote']}";
 	var ucreatetime = "{$user['createtime']}";
 
 	var votetime = votetime*3600*24;
@@ -414,15 +417,15 @@ function tvote() {
 	}
 }
 function tvotep(tfrom_user,ljtp) {
-	var iscode = "{$reply['iscode']}";
+	var iscode = "{$rvote['iscode']}";
 	var now = "{$now}";
-	var tstart_time = "{$reply['tstart_time']}";
-	var tend_time = "{$reply['tend_time']}";
-	var ttipstart = "{$reply['ttipstart']}";
-	var ttipend = "{$reply['ttipend']}";
-	var ttipvote = "{$reply['ttipvote']}";
+	var tstart_time = "{$rbasic['tstart_time']}";
+	var tend_time = "{$rbasic['tend_time']}";
+	var ttipstart = "{$rbasic['ttipstart']}";
+	var ttipend = "{$rbasic['ttipend']}";
+	var ttipvote = "{$rbasic['ttipvote']}";
 	var ucreatetime = $("#ucreatetime" + tfrom_user).val();
-	var subscribe = "{$reply['subscribe']}";
+	var subscribe = "{$rshare['subscribe']}";
 	var follow = "{$follow}";
 	var vfrom = "photosvote";
 	
@@ -430,13 +433,13 @@ function tvotep(tfrom_user,ljtp) {
 	if (now <= tstart_time) {
 		//u.message(ttipstart, '', 'success');		
 		//fminfo(ttipstart);
-		fmloadding('.overlay_container', data.msg);
+		fmloadding('.overlay_container', ttipvote);
 		return false;
 	}
 	if (now >= tend_time) {
 		//u.message(ttipend, '', 'success');	
 		//fminfo(ttipend);
-		fmloadding('.overlay_container', data.msg);
+		fmloadding('.overlay_container',ttipend);
 		return false;
 	}
 	
@@ -464,7 +467,7 @@ function tvotep(tfrom_user,ljtp) {
 	
 }
 function tvotestart(tfrom_user, vfrom, iscode, ljtp) {
-	{if !empty($reply['iplocallimit']) && ($_GPC['do'] == 'photosvote' || $_GPC['do'] == 'tuser'|| $_GPC['do'] == 'tuserphotos') }
+	{if !empty($rvote['iplocallimit']) && ($_GPC['do'] == 'photosvote' || $_GPC['do'] == 'tuser'|| $_GPC['do'] == 'tuserphotos') }
 		var tdw = sessionStorage.getItem("dw");
 		if (!tdw) {
 			var userlocal = sessionStorage.getItem("userlocal");
@@ -511,7 +514,8 @@ function tvotestart(tfrom_user, vfrom, iscode, ljtp) {
 						$(photosnumf).html(data.photosnum);
 						$(photosnum).html(data.photosnum);
 						$("#acount").html(data.ljtp);
-						{if !empty($reply) && !empty($reply['huodongname']) && !empty($reply['hhhdpicture']) && ($reply['ishuodong'] == 1 && !empty($reply['huodongurl'])) }
+						$("#acountcyrs").html(data.cyrs);
+						{if !empty($rhuihua['huodongname']) && !empty($rhuihua['hhhdpicture']) && ($rhuihua['ishuodong'] == 1 && !empty($rhuihua['huodongurl'])) }
 							fminfo(data.msg);
 							$(".huodongt").show();
 							$(".huodong").show();
@@ -545,7 +549,7 @@ function tvotestart(tfrom_user, vfrom, iscode, ljtp) {
 						}
 						if (data.success == 9) {
 							//windows.location.href = data.msg;
-							 window.location.href = "{$reply['shareurl']}";
+							 window.location.href = "{$rshare['shareurl']}";
 						}
 					}
 				},"json")
@@ -565,7 +569,8 @@ function tvotestart(tfrom_user, vfrom, iscode, ljtp) {
 				$(photosnum).html(data.photosnum);
 				$(photosnumf).html(data.photosnum);
 				$("#acount").html(data.ljtp);
-				{if !empty($reply) && !empty($reply['huodongname']) && !empty($reply['hhhdpicture']) && ($reply['ishuodong'] == 1 && !empty($reply['huodongurl'])) }
+				$("#acountcyrs").html(data.cyrs);
+				{if !empty($rhuihua['huodongname']) && !empty($rhuihua['hhhdpicture']) && ($rhuihua['ishuodong'] == 1 && !empty($rhuihua['huodongurl'])) }
 					fminfo(data.msg);
 					$(".huodongt").show();
 					$(".huodong").show();
@@ -599,7 +604,7 @@ function tvotestart(tfrom_user, vfrom, iscode, ljtp) {
 				}
 				if (data.success == 9) {
 					//windows.location.href = data.msg;
-					 window.location.href = "{$reply['shareurl']}";
+					 window.location.href = "{$rshare['shareurl']}";
 				}
 			}
 		},"json")
@@ -694,7 +699,7 @@ function bbsreply(content, iscode, bbstype) {
 	}
 	
 }
-{if !empty($reply['iplocallimit'])}
+{if !empty($rvote['iplocallimit'])}
 	function getlocaltion() {
 			wx.getLocation({
 			    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
@@ -716,9 +721,9 @@ function bbsreply(content, iscode, bbstype) {
 					      success : function(json){
 					      		
 					          if (json.status=="0"){
-					          	sessionStorage.setItem("getLocation", "{$reply["iplocallimit"]}"); 
+					          	sessionStorage.setItem("getLocation", "{$rvote["iplocallimit"]}"); 
 					            var address=json.result.addressComponent;
-					            var diqu="{$reply["iplocallimit"]}".split(",");
+					            var diqu="{$rvote["iplocallimit"]}".split(",");
 					            var str=address.province+","+address.city+","+address.district;
 					          
 					         	sessionStorage.setItem("userlocal", str); 

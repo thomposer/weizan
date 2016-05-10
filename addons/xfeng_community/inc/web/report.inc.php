@@ -52,7 +52,7 @@
 		//显示投诉记录
 		$pindex = max(1, intval($_GPC['page']));
 		$psize  = 10;
-		$sql = "SELECT m.content,m.comment,m.category,m.createtime,m.status,b.realname,b.mobile,m.id,r.title,r.city,r.dist,b.address FROM".tablename('xcommunity_report')."as m left join(".tablename('xcommunity_region')."as r left join".tablename('xcommunity_member')."as b on b.regionid = r.id ) on m.openid = b.openid WHERE $condition AND m.type = 2 order by createtime desc LIMIT ".($pindex - 1) * $psize.','.$psize;
+		$sql = "SELECT m.content,m.comment,m.category,m.createtime,m.status,b.realname,b.mobile,m.id,r.title,r.city,r.dist,b.address FROM".tablename('xcommunity_report')."as m left join(".tablename('xcommunity_region')."as r left join".tablename('xcommunity_member')."as b on b.regionid = r.id ) on m.openid = b.openid WHERE $condition AND m.type = 2 order by m.createtime desc LIMIT ".($pindex - 1) * $psize.','.$psize;
 		// print_r($sql);exit();
 		$list = pdo_fetchall($sql,$params);
 		// print_r($list);
@@ -141,19 +141,25 @@
 				if ($data['status'] == 1) {
 					//模板消息通知
 					$tpl = pdo_fetch("SELECT * FROM".tablename('xcommunity_wechat_tplid')."WHERE uniacid=:uniacid",array(':uniacid' => $_W['uniacid']));
-					$template_id = $tpl['grab_wc_tplid'];
+					$template_id = $tpl['report_wc_tplid'];
 					$content = array(
 								'first' => array(
 										'value' => '您的意见建议已处理',
 									),
 								'keyword1' => array(
-										'value' => $item['content'],
+										'value' =>  $item['realname'],
 									),
 								'keyword2' => array(
-										'value' => $item['realname'],
+										'value' => $item['category'],
 									),
-								'keyword3'	=> array(
-										'value' => date('Y-m-d H:i',TIMESTAMP),
+								'keyword3' => array(
+										'value' => $item['content'],
+									),
+								'keyword4' => array(
+										'value' => $item['content'],
+									),
+								'keyword5' => array(
+										'value' => $item['resolve'],
 									),
 								'remark'    => array(
 									'value' => '请到微信我的意见建议给我们评价，谢谢使用！',

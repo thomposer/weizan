@@ -6,7 +6,7 @@
 
 define('IN_GW', true);
 
-if(in_array($action, array('profile', 'device', 'callback', 'appstore', 'appstore2'))) {
+if(in_array($action, array('profile', 'device', 'callback', 'appstore', 'sms'))) {
 	$do = $action;
 	$action = 'redirect';
 }

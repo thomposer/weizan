@@ -15,7 +15,6 @@ if($_W['isajax']) {
 		if(!empty($key_word)) {
 			$condition = " AND content LIKE '%{$key_word}%' ";
 		}
-		
 		$data = pdo_fetchall('SELECT content FROM ' . tablename('rule_keyword') . " WHERE (uniacid = 0 OR uniacid = :uniacid) AND status != 0 " . $condition . ' ORDER BY uniacid DESC,displayorder DESC LIMIT 15', array(':uniacid' => $_W['uniacid']));
 		$exit_da = array();
 		if(!empty($data)) {
@@ -61,6 +60,7 @@ if($do == 'display') {
 					'menuid' => $menu['menuid'],
 					'status' => 1,
 				);
+
 				if(empty($menu['matchrule'])) {
 					$id = pdo_fetchcolumn('SELECT id FROM ' . tablename('uni_account_menus') . ' WHERE uniacid = :uniacid AND type = 1', array(':uniacid' => $_W['uniacid']));
 				} else {
@@ -74,9 +74,9 @@ if($do == 'display') {
 			}
 		}
 	}
-
-	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('uni_account_menus') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
-	$data = pdo_fetchall('SELECT * FROM ' . tablename('uni_account_menus') . ' WHERE uniacid = :uniacid ORDER BY type ASC, id DESC', array(':uniacid' => $_W['uniacid']));
+	$isdeleted = $_GPC['status'] == 'history' ? 1 : 0;
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('uni_account_menus') . ' WHERE uniacid = :uniacid AND isdeleted = :isdeleted', array(':uniacid' => $_W['uniacid'], ':isdeleted' => $isdeleted));
+	$data = pdo_fetchall('SELECT * FROM ' . tablename('uni_account_menus') . ' WHERE uniacid = :uniacid AND isdeleted = :isdeleted ORDER BY type ASC, id DESC', array(':uniacid' => $_W['uniacid'], ':isdeleted' => $isdeleted));
 	$names = array(
 		'sex' => array(
 			0 => '不限',
@@ -172,7 +172,7 @@ if($do == 'push') {
 			pdo_update('uni_account_menus', array('status' => 1, 'type' => 1), array('uniacid' => $_W['uniacid'], 'id' => $data['id']));
 		}
 		pdo_update('uni_account_menus', array('status' => 1, 'menuid' => $ret, 'data' => base64_encode(iserializer($menu))), array('uniacid' => $_W['uniacid'], 'id' => $id));
-		message('推送成功', referer(), 'success');
+		message('推送成功', url('platform/menu/display'), 'success');
 	}
 }
 
@@ -232,23 +232,39 @@ if($do == 'remove') {
 	if(empty($data)) {
 		message('菜单不存在或已经删除', referer(), 'error');
 	}
-
-	if($data['type'] == 1 || ($data['type'] == 3 && $data['menuid'] > 0)) {
+	if ($_GPC['op'] == 'recover') {
+		if($data['type'] == 1) {
+			pdo_update('uni_account_menus', array('isdeleted' => 0), array('uniacid' => $_W['uniacid']));
+		} else {
+			pdo_update('uni_account_menus', array('isdeleted' => 0), array('uniacid' => $_W['uniacid'], 'id' => $id));
+		}
+		message('恢复菜单成功，是否推送到微信？<a href="'.url('platform/menu/push', array('id' => $id)).'" class="btn btn-primary">是</a> <a href="'.url('platform/menu/display').'" class="btn btn-default">取消</a>', url('platform/menu/display'), 'success');
+	}
+	$status =  $_GPC['status'];
+	if($data['type'] == 1 || ($data['type'] == 3 && $data['menuid'] > 0) && $status != 'history') {
 		$account = WeAccount::create($_W['acid']);
 		$ret = $account->menuDelete($data['menuid']);
 		if(is_error($ret) && empty($_GPC['f'])) {
 			$url = url('platform/menu/remove', array('id' => $id, 'f' => 1));
 			$url_display = url('platform/menu/display', array('id' => $id, 'f' => 1));
 			$message = "调用微信接口删除失败:{$ret['message']}<br>";
-			$message .= "强制删除本地数据? <a href='{$url}' class='btn btn-primary'>是</a> <a href='{$url_display}' class='btn btn-default'>取消</a>";
 			message($message, '', 'error');
 		}
 	}
-	if($data['type'] == 1) {
-		pdo_delete('uni_account_menus', array('uniacid' => $_W['uniacid']));
+	if ($status == 'history') {
+		if($data['type'] == 1) {
+			pdo_delete('uni_account_menus', array('uniacid' => $_W['uniacid']));
+		} else {
+			pdo_delete('uni_account_menus', array('uniacid' => $_W['uniacid'], 'id' => $id));
+		}
 	} else {
-		pdo_delete('uni_account_menus', array('uniacid' => $_W['uniacid'], 'id' => $id));
+		if($data['type'] == 1) {
+			pdo_update('uni_account_menus', array('isdeleted' => 1), array('uniacid' => $_W['uniacid']));
+		} else {
+			pdo_update('uni_account_menus', array('isdeleted' => 1), array('uniacid' => $_W['uniacid'], 'id' => $id));
+		}
 	}
+
 	message('删除菜单成功', url('platform/menu/display'), 'success');
 }
 

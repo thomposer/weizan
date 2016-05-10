@@ -1,5 +1,5 @@
 {template 'common/header'}
-{if $op == "cz"}
+{if $do == "cz"}
 <style type="text/css">
     .panel-body > ul{list-style:none;margin: 0px;padding: 0px}
     .panel-body > ul li{display: inline-block}
@@ -12,7 +12,6 @@
 		{if $_W['isfounder']}
     <li><a href="{php echo url('members/record');}">会员消费</a></li>
 	<li><a href="{php echo url('members/configs');}">服务配置</a></li>
-    <li class="active"><a href="{php echo url('members/test');}">测试服务</a></li>
     {/if}
 </ul>
     <div style="width: 100%" >
@@ -62,7 +61,7 @@
         </aside>
     </div>
 </div>
-{elseif $op == "xf"}
+{elseif $do == "xf"}
 <style type="text/css">
     .panel-body > ul{list-style:none;margin: 0px;padding: 0px}
     .panel-body > ul li{display: inline-block}
@@ -171,8 +170,8 @@
                             <td>￥{$item["credit2"]}</td>
                             <td style="text-align: right">
                                 <div class="btn-group text-left">
-                                    <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('Users',array('op'=>'cz','uid'=>$item[uid]))}" title="充值记录"><i class="fa fa-share"></i>充值记录</a>
-                                    <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('Users',array('op'=>'xf','uid'=>$item[uid]))}" title="消费记录"><i class="fa fa-share"></i>消费记录</a>
+                                    <a class="btn btn-default btn-sm" href="{php echo url('members/users/cz',array('uid'=>$item[uid]))}" title="充值记录"><i class="fa fa-share"></i>充值记录</a>
+                                    <a class="btn btn-default btn-sm" href="{php echo url('members/users/xf',array('uid'=>$item[uid]))}" title="消费记录"><i class="fa fa-share"></i>消费记录</a>
                                     <a data-uid="{$item[uid]}" class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModal"><i class="fa fa-edit"></i>金钱操作</a>
                                 </div>
                             </td>
@@ -228,7 +227,7 @@
             modal.find('button.btn-submit').on("click",function(){
                 $(this).attr("disabled","true");
                 $.ajax({
-                    'url':"{php echo $this->createWebUrl('users')}",
+                    'url':"{php echo url('members/users')}",
                     'data':$("form").serialize(),
                     'type':'POST',
                     'async':'true',

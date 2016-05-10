@@ -40,7 +40,7 @@
 		                <th >分享数</th>
 		                <th >浏览数</th>
 						<th style="width:130px;">起止时间</th>
-						<th style="width:210px;">操作</th>
+						<th style="width:260px;">操作</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -71,6 +71,7 @@
 			                {/if}		                    
 							<a href="{php echo $this->createWebUrl('replydel', array('rid' => $item['rid']))}" onclick="return confirm('此操作不可恢复，确认删除？');return false;" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="删除"><i class="fa fa-times"></i></a>
 							<a href="{php echo $this->createWebUrl('joinlists', array('rid' => $item['rid'],'page' => $_GPC['page']))}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="参与详情"><i class="fa"></i>参与详情</a>
+							<a href="{php echo murl('entry', array('do' =>'index', 'm' => 'msyou_meituzone','rid' => $item['rid']), true, true);}" target="_blank" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="预览">预览</a>
 						</td>
 					</tr>
 					{/loop}

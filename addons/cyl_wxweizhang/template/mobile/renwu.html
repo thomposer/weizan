@@ -1,6 +1,7 @@
 {template 'common/header'}
-
+  <body style="padding-bottom:55px">
 <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+<link rel="stylesheet" type="text/css" href="https://res.wx.qq.com/open/libs/weui/0.4.0/weui.css" />
 <style>
   .list-block{margin:0.8rem 0px;}
   a{color:#000;}
@@ -8,7 +9,7 @@
   <header class="bar bar-nav">
   <h1 class="title">会员中心</h1>
 </header>
-{template 'footer'}
+
 <div class="content">
 
     {loop $listgg $data}
@@ -39,5 +40,5 @@
 {/loop}
      
 </div>
-
+{template 'footer'}
 {template 'common/footer'}

@@ -5,7 +5,7 @@
  * [微赞] Copyright (c) 2013 012wz.com
  */
 /**
- * 后台小区商家
+ * 后台小区控制
  */
 	global $_GPC,$_W;
 	$do = $_GPC['do'];

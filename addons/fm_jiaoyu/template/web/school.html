@@ -1,7 +1,7 @@
 {template 'common/header'}
-<ul class="nav nav-tabs">
-	 <li {if $operation == 'display'}class="active"{/if}><a class="btn btn-primary" href="{php echo $this->createWebUrl('school', array('op' => 'display'))}">学校管理</a></li>
-  </ul>
+<div class="panel panel-info">
+     <div class="panel-heading"><li {if $operation == 'display'}class="active"{/if}><a class="btn btn-primary" href="{php echo $this->createWebUrl('school', array('op' => 'display'))}">学校管理</a></li></div>
+</div>
 
 {if $operation == 'display'}
 <style>
@@ -24,18 +24,22 @@
 </style>
 <div class="main">
     <div class="panel panel-default">
-        <div class="panel-body">         
-		<a class="btn btn-primary" href="{php echo $this->createWebUrl('school', array('op' => 'post'))}"><i class="fa fa-plus"></i> 添加学校</a>
-		<a class="btn btn-primary" href="javascript:location.reload()"><i class="fa fa-refresh"></i>刷新</a>
-        </div>
-    </div>
-    <div class="panel panel-default">
         <div class="panel-body">
             <form action="./index.php" method="get" class="form-horizontal" role="form">
                 <input type="hidden" name="c" value="site" />
                 <input type="hidden" name="a" value="entry" />
                 <input type="hidden" name="m" value="fm_jiaoyu" />
                 <input type="hidden" name="do" value="school" />
+                <div class="form-group">
+                    <div class="col-sm-2 col-lg-2">  
+                        {if $set['guanli'] == 1 && $_W['isfounder']}
+						<a class="btn btn-primary" href="{php echo $this->createWebUrl('school', array('op' => 'post'))}"><i class="fa fa-plus"></i> 添加学校</a>
+						{else if $set['guanli'] == 0 || $_W['isfounder']}
+						<a class="btn btn-primary" href="{php echo $this->createWebUrl('school', array('op' => 'post'))}"><i class="fa fa-plus"></i> 添加学校</a>
+						{/if}
+						<a class="btn btn-primary" href="javascript:location.reload()"><i class="fa fa-refresh"></i>刷新</a>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -54,11 +58,7 @@
 						<th style="width:7%;">学校数据</th>
                         <th style="width:7%;">学校类型</th>
                         <th style="width:5%;">状态</th>
-						{if $_W['isfounder']}
 						<th style="width:12%;text-align: right;">管理/编辑/删除</th>
-						{else}
-                        <th style="width:12%;text-align: right;">管理/编辑/删除</th>
-						{/if}
                     </tr>
                     </thead>
                     <tbody>
@@ -93,13 +93,13 @@
                             {/if}							
                         </td>
 
-                        {if $_W['isfounder']}
+                        {if $set['guanli'] == 0}
 						<td style="max-width:60px;text-align: right;">
                             <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('assess', array('id' => $item['id'], 'schoolid' =>  $item['id']))}" title="管理"><i class="fa fa-cog fa-spin" ></i></a>
 							<a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('school', array('id' => $item['id'], 'schoolid' =>  $item['id'], 'op' => 'post'))}" title="编辑"><i class="fa fa-pencil"></i></a>
                             <a class="btn btn-default btn-sm" onclick="return confirm('确认删除吗？');return false;" href="{php echo $this->createWebUrl('school', array('id' => $item['id'], 'schoolid' =>  $item['id'], 'op' => 'delete'))}" title="删除"><i class="fa fa-times"></i></a>
                         </td>
-						{else}
+						{else if $set['guanli'] == 1}
 						<td style="max-width:60px;text-align: right;"><a class="btn btn-default" href="javascript::;"  data-toggle="tooltip" data-placement="top" title="管理学校" onclick="tankuang('{$item['id']}');">管理学校</a>
 						<a class="btn btn-default" href="javascript::;"  data-toggle="tooltip" data-placement="top" title="管理学校" onclick="tankuang1('{$item['id']}');">编辑学校</a></td>						
 						{/if}
@@ -118,6 +118,7 @@
             </form>
         </div>
     </div>
+
     {$pager}
 </div>
 <input type="hidden" name="rid" id="stylerid" value="" />
@@ -475,8 +476,14 @@ function drop_confirm(msg, url){
                         <input type="text" name="gonggao" value="{$reply['gonggao']}" id="gonggao" class="form-control" />
                         <div class="help-block">在学校详细页显示</div>
                     </div>
-
                 </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">校园二维码</label>
+                    <div class="col-sm-9">
+                        {php echo tpl_form_field_image('qroce', $reply['qroce'])}
+						<div class="help-block">显示在手机端文章、教师中心、通知、公告/不设置直接显示本公众号二维码</div>
+                    </div>					
+                </div>				
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">学校简介</label>
                     <div class="col-sm-9">
@@ -541,19 +548,6 @@ function drop_confirm(msg, url){
                         </label>
                     </div>
                 </div>
-				<!--div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">启用新模版</label>
-                    <div class="col-sm-9">
-                        <label class="radio-inline">
-                            <input type="radio" name="style1" value="1" {if $reply['style1']==1 || empty($reply)}checked{/if}>是
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="style1" value="0" {if isset($reply['style1']) && empty($reply['style1'])}checked{/if}>否
-                        </label>
-                        <div class="help-block">
-                            选择是启用新模板，选择否使用默认模版
-                        </div>
-                </div-->
                 </div>
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否满员</label>
@@ -587,16 +581,45 @@ function drop_confirm(msg, url){
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否审核班级圈</label>
                     <div class="col-sm-9">
                         <label class="radio-inline">
-                            <input type="radio" name="isopen" value="1" {if $reply['isopen']==1 || empty($reply)}checked{/if}>是
+                            <input type="radio" name="isopen" value="1" {if $reply['isopen']==1 && !empty($reply)}checked="true"{/if}>是
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="isopen" value="0" {if isset($reply['isopen']) && empty($reply['isopen'])}checked{/if}>否
+                            <input type="radio" name="isopen" value="0" {if empty($reply['isopen']) || $reply['isopen'] == 0}checked="true"{/if}>否
                         </label>
                         <div class="help-block">
-                            发布班级圈是否需要班主任审核
+                            发布班级圈是否需要班主任审核(各班级必须有班主任或管理员)
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">选课方式</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="issale" value="1" {if $reply['issale']==1 && !empty($reply)}checked="true"{/if}>购买方式1
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="issale" value="2" {if $reply['issale']==2 && !empty($reply)}checked="true"{/if}>购买方式2
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="issale" value="3" {if $reply['issale']==3 && !empty($reply)}checked="true"{/if}>自由选课1
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="issale" value="4" {if $reply['issale']==4 && !empty($reply)}checked="true"{/if}>自由选课2
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="issale" value="5" {if empty($reply['issale']) || $reply['issale'] == 5}checked="true"{/if}>关闭
+                        </label>						
+                        <div class="help-block">
+                            购买方式1：前端购买课程显示在订单列表以及我的在读课程<span style="color:red;font-weight:blod;">（不限制学生在读年级）</span>
+					   </br>购买方式2：前端购买课程显示在订单列表以及我的在读课程<span style="color:red;font-weight:blod;">（限制学生在读年级）</span>
+					   </br>自由选课1：不显示在订单中学,只显示在我的在读课程里<span style="color:red;font-weight:blod;">（不限制年级）</span>
+					   </br>自由选课2：不显示在订单中学,只显示在我的在读课程里<span style="color:red;font-weight:blod;">（限制年级）</span>
+					   </br>说明：
+					   </br>1.必须认证服务号使用在线购买
+					   </br>2.限制年级意思是学生只能选择或购买自己所在年级的课程
+                        </div>
+                    </div>
+                </div>				
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
                     <div class="col-sm-9">

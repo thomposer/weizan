@@ -53,12 +53,13 @@ function activity_coupon_owned($uid, $filter = array(), $pindex = 10, $psize = 0
 	if ($psize > 0) {
 		$limit_sql = ' LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
 	}
-	$total = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 1 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid', array(':uid' => $uid));
-	$data = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 1 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid ORDER BY r.couponid DESC' . $limit_sql, array(':uid' => $uid), 'couponid');
+	$total = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.code, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 1 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid', array(':uid' => $uid));
+	$data = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.code, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 1 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid ORDER BY r.couponid DESC' . $limit_sql, array(':uid' => $uid), 'couponid');
 	if(!empty($data)) {
 		$couponids = implode(', ', array_keys($data));
 		$tokens = pdo_fetchall("SELECT couponid,thumb,couponsn,`condition`,title,discount,type,description,starttime,endtime FROM " . tablename('activity_coupon') . " WHERE couponid IN ({$couponids})", array(), 'couponid');
 		foreach($tokens as &$token) {
+			$token['code'] = $data[$token['couponid']]['code'];
 			$token['status'] = $data[$token['couponid']]['status'];
 			$token['cototal'] = $data[$token['couponid']]['cototal'];
 			$token['thumb'] = tomedia($token['thumb']);
@@ -92,6 +93,7 @@ function activity_coupon_grant($uid, $couponid, $module = '', $remark = '') {
 	$user = mc_fetch($uid, array('groupid'));
 	$groupid = $user['groupid'];
 	$couponid = intval($couponid);
+	$code = base_convert(uniqid(), 16, 10);
 	$coupon = pdo_fetch("SELECT * FROM " . tablename('activity_coupon') . " WHERE `type` = 1 AND `couponid` = :couponid LIMIT 1", array(':couponid' => $couponid));
 	$pcount = pdo_fetchcolumn("SELECT count(*) FROM " . tablename('activity_coupon_record') . " WHERE `uid` = :uid AND `couponid` = :couponid", array(':couponid' => $couponid, ':uid' => $uid));
 	$coupongroup = pdo_fetchall("SELECT * FROM " . tablename('activity_coupon_allocation') . " WHERE `couponid` = :couponid", array(':couponid' => $couponid));
@@ -117,6 +119,7 @@ function activity_coupon_grant($uid, $couponid, $module = '', $remark = '') {
 		'couponid' => $couponid,
 		'uniacid' => $_W['uniacid'],
 		'uid' => $uid,
+		'code' => $code,
 		'grantmodule' => $module,
 		'granttime' => TIMESTAMP,
 		'status' => 1,
@@ -235,12 +238,13 @@ function activity_token_owned($uid, $filter = array(), $pindex = 1, $psize = 10)
 	if ($psize > 0) {
 		$limit_sql = ' LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
 	}
-	$total = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 2 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid', array(':uid' => $uid));
-	$data = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 2 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid ORDER BY r.couponid DESC' . $limit_sql, array(':uid' => $uid), 'couponid');
+	$total = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.code, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 2 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid', array(':uid' => $uid));
+	$data = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.code, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 2 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid ORDER BY r.couponid DESC' . $limit_sql, array(':uid' => $uid), 'couponid');
 	if(!empty($data)) {
 		$couponids = implode(', ', array_keys($data));
 		$tokens = pdo_fetchall("SELECT couponid,thumb,couponsn,`condition`,title,discount,type,description,starttime,endtime FROM " . tablename('activity_coupon') . " WHERE couponid IN ({$couponids})", array(), 'couponid');
 		foreach($tokens as &$token) {
+			$token['code'] = $data[$token['couponid']]['code'];
 			$token['status'] = $data[$token['couponid']]['status'];
 			$token['cototal'] = $data[$token['couponid']]['cototal'];
 			$token['thumb'] = tomedia($token['thumb']);
@@ -273,6 +277,7 @@ function activity_token_grant($uid, $couponid, $module = '', $remark = '') {
 	$user = mc_fetch($uid, array('groupid'));
 	$groupid = $user['groupid'];
 	$couponid = intval($couponid);
+	$code = base_convert(uniqid(), 16, 10);
 	$coupon = pdo_fetch("SELECT * FROM " . tablename('activity_coupon') . " WHERE `type` = 2 AND `couponid` = :couponid", array(':couponid' => $couponid));
 	$pcount = pdo_fetchcolumn("SELECT count(*) FROM " . tablename('activity_coupon_record') . " WHERE `uid` = :uid AND `couponid` = :couponid", array(':couponid' => $couponid, ':uid' => $uid));
 	$coupongroup = pdo_fetchall("SELECT * FROM " . tablename('activity_coupon_allocation') . " WHERE `couponid` = :couponid", array(':couponid' => $couponid));
@@ -298,6 +303,7 @@ function activity_token_grant($uid, $couponid, $module = '', $remark = '') {
 		'couponid' => $couponid,
 		'uniacid' => $_W['uniacid'],
 		'uid' => $uid,
+		'code' => $code,
 		'grantmodule' => $module,
 		'granttime' => TIMESTAMP,
 		'status' => 1,

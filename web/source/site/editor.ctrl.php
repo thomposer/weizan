@@ -71,7 +71,7 @@ if ($do == 'design') {
 		}
 		unset($row);
 	}
-	$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('site_page')." WHERE type = '1'");
+	$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('site_page')." WHERE type = '1' AND uniacid = :uniacid", array(':uniacid' => $_W['uniacid']));
 	$pager = pagination($total, $page, $pagesize);
 	template('site/editor');
 } elseif ($do == 'uc') {

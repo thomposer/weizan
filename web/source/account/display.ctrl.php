@@ -4,7 +4,7 @@
  * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 $_W['page']['title'] = '公众号列表 - 公众号';
-$dos = array('rank', 'package', 'display');
+$dos = array('rank', 'package', 'display', 'delete');
 $do = in_array($_GPC['do'], $dos)? $do : 'display' ;
 if ($do == 'rank' && $_W['isajax']) {
 	$rank = intval($_GPC['rank']);
@@ -69,10 +69,10 @@ if ($do == 'display') {
 	$keyword = trim($_GPC['keyword']);
 	$s_uniacid = intval($_GPC['s_uniacid']);
 	if (!empty($_W['isfounder'])) {
-		$condition .= " WHERE a.default_acid <> 0 ";
+		$condition .= " WHERE a.default_acid <> 0 AND b.isdeleted <> 1";
 		$order_by = " ORDER BY a.`rank` DESC";
 	} else {
-		$condition .= "LEFT JOIN ". tablename('uni_account_users')." as c ON a.uniacid = c.uniacid WHERE a.default_acid <> 0 AND c.uid = :uid";
+		$condition .= "LEFT JOIN ". tablename('uni_account_users')." as c ON a.uniacid = c.uniacid WHERE a.default_acid <> 0 AND c.uid = :uid AND b.isdeleted <> 1";
 		$pars[':uid'] = $_W['uid'];
 		$order_by = " ORDER BY c.`rank` DESC";
 	}
@@ -116,5 +116,42 @@ if ($do == 'display') {
 		$account_platform = new WeiXinPlatform();
 		$authurl = $account_platform->getAuthLoginUrl();
 	}
+}
+if ($do == 'delete') {
+	load()->func('file');
+	$uniacid = intval($_GPC['uniacid']);
+	$acid = intval($_GPC['acid']);
+	if (!empty($acid) && empty($uniacid)) {
+		$account = account_fetch($acid);
+		if (empty($account)) {
+			message('子公众号不存在或是已经被删除');
+		}
+		$state = uni_permission($uid, $uniacid);
+		if($state != 'founder' && $state != 'manager') {
+			message('没有该公众号操作权限！', url('accound/display'), 'error');
+		}
+		$uniaccount = uni_fetch($account['uniacid']);
+		if ($uniaccount['default_acid'] == $acid) {
+			message('默认子公众号不能删除');
+		}
+		pdo_update('account', array('isdeleted' => 1), array('acid' => $acid));
+		message('删除子公众号成功！您可以在回收站中回复公众号', referer(), 'success');
+	}
+	if (!empty($uniacid)) {
+		$account = pdo_fetch("SELECT * FROM ".tablename('uni_account')." WHERE uniacid = :uniacid", array(':uniacid' => $uniacid));
+		if (empty($account)) {
+			message('抱歉，帐号不存在或是已经被删除', url('account/display'), 'error');
+		}
+		$state = uni_permission($uid, $uniacid);
+		if($state != 'founder' && $state != 'manager') {
+			message('没有该公众号操作权限！', url('accound/display'), 'error');
+		}
+		pdo_update('account', array('isdeleted' => 1), array('uniacid' => $uniacid));
+		if($_GPC['uniacid'] == $_W['uniacid']) {
+			isetcookie('__uniacid', '');
+		}
+		cache_delete("unicount:{$uniacid}");
+	}
+	message('公众帐号信息删除成功！，您可以在回收站中回复公众号', url('account/display'), 'success');
 }
 template('account/display');

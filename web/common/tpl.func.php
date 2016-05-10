@@ -280,6 +280,18 @@ function tpl_form_field_link($name, $value = '', $options = array()) {
 					}, page);
 				});
 			}
+			function phoneLinkDialog(elm, page) {
+				require(["util","jquery"], function(u, $){
+					var ipt = $(elm).parent().parent().parent().prev();
+					u.phoneBrowser(function(href, page){
+						if (page != "" && page != undefined) {
+							phoneLinkDialog(elm, page);
+							return false;
+						}
+						ipt.val(href);
+					}, page);
+				});
+			}
 			function mapLinkDialog(elm) {
 				require(["util","jquery"], function(u, $){
 					var ipt = $(elm).parent().parent().parent().prev();
@@ -307,6 +319,7 @@ function tpl_form_field_link($name, $value = '', $options = array()) {
 				<li><a href="javascript:" data-type="article" onclick="articleLinkDialog(this)">文章及分类</a></li>
 				<li><a href="javascript:" data-type="news" onclick="newsLinkDialog(this)">图文回复</a></li>
 				<li><a href="javascript:" data-type="map" onclick="mapLinkDialog(this)">一键导航</a></li>
+				<li><a href="javascript:" data-type="phone" onclick="phoneLinkDialog(this)">一键拨号</a></li>
 			</ul>
 		</span>
 	</div>
@@ -482,7 +495,7 @@ function tpl_form_field_image($name, $value = '', $default = '', $options = arra
 	}
 	if (isset($options['dest_dir']) && !empty($options['dest_dir'])) {
 		if (!preg_match('/^\w+([\/]\w+)?$/i', $options['dest_dir'])) {
-			exit('图片上传目录错误,只能指定最多两级目录,如: "we7_store","we7_store/d1"');
+			exit('图片上传目录错误,只能指定最多两级目录,如: "WZ_store","WZ_store/d1"');
 		}
 	}
 	$options['direct'] = true;
@@ -1072,4 +1085,75 @@ function tpl_ueditor($id, $value = '', $options = array()) {
 				});" : '')."
 	</script>";
 	return $s;
+}
+
+
+function tpl_edit_sms($name, $value, $uniacid, $url) {
+	$s = '
+				<div class="input-group">
+					<input type="text" name="'.$name.'" id="balance" readonly value="'.$value.'" class="form-control" autocomplete="off">
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit_sms">编辑短信条数</button>
+					</span>
+				</div>
+				<span class="help-block">请填写短信剩余条数,必须为整数。</span>
+
+		<div class="modal fade" id="edit_sms" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="">修改短信条数</h4>
+					</div>
+					<div class="modal-body" style="height: 70px;">
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-5 col-md-6 col-lg-3 control-label">短信条数</label>
+							<div class="col-sm-6 col-xs-12">
+								<div class="input-group">
+									<div class="input-group-btn">
+										<button type="button" class="btn btn-defaultlabel label-success" id="edit_alert"  style="color: #f5f5f5">+</button>
+									</div>
+									<!--<span class="input-group-addon label-danger"  id="edit_alert" style="width: 10px;">+ </span>-->
+									<input type="text" class="form-control" id="edit_num">
+								</div>
+								<span class="help-block">点击加号（或减号）修改增减状态</span>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="edit_sms_sub" class="btn btn-primary">保存</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			$(\'#edit_alert\').click(function() {
+				var html = $(this).html() == \'+\' ? \'-\' : \'+\';
+				var css  = $(this).attr(\'class\') == \'btn btn-defaultlabel label-danger\' ? \'btn btn-defaultlabel label-success\' : \'btn btn-defaultlabel label-danger\';
+				$(this).html(html);
+				$(this).attr(\'class\', css);
+			});
+			$(\'#edit_sms_sub\').click(function () {
+				var edit_num = $(\'#edit_num\').val() == \'\' ? 0 : parseInt($(\'#edit_num\').val());
+				if ($(\'#edit_alert\').html() == \'+\') {
+					var status = \'add\';
+				} else {
+					var status = \'minus\';
+				}
+				var uniacid = '.$uniacid.';
+				$.post(\''.$url.'\', {\'balance\' : edit_num, \'uniacid\' : uniacid, \'status\' : status}, function(data) {
+					var data = $.parseJSON(data);
+					if (data.message.errno > 0) {
+						$(\'#balance\').val(data.message.message);
+						$(\'#edit_sms\').modal(\'toggle\');
+					} else {
+						util.message(\'您现有短信数量为0，请联系服务商购买短信\');
+						$(\'#edit_sms\').modal(\'toggle\');
+					}
+				});
+			});
+			</script>
+	';
+	return $s;
+
 }

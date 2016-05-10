@@ -85,7 +85,6 @@
 					<th style="width:5%;">课程数目</th>
 					<th style="width:5%;">课时</th>
                     <th style="width:8%;">手机</th>
-                    <!--th style="width:8%;">入职时间</th-->	
                     <th style="width:8%;">添加课程</th>	
                     <th style="width:8%;">微信绑定</th>	
                     <th style="width:4%;"></th>						
@@ -103,13 +102,13 @@
 					<td>{if $item['sex'] == 1}<span class="label label-info">男</span>{else}<span class="label label-success">女</span>{/if}</br></br>
 					<span class="label label-success">{php echo (date('Y',TIMESTAMP) - date('Y',$item['birthdate']))}岁</span>
 					</td>
-					<td>{if !empty($category[$item['xq_id1']])}{$category[$item['xq_id1']]['sname']}{/if} / {if !empty($category[$item['xq_id2']])}{$category[$item['xq_id2']]['sname']}{/if} / {if !empty($category[$item['xq_id3']])}{$category[$item['xq_id3']]['sname']}{/if}
+					<td>{if !empty($category[$item['xq_id1']])}{$category[$item['xq_id1']]['sname']}{/if}  {if !empty($category[$item['xq_id2']])}/{$category[$item['xq_id2']]['sname']}{/if}  {if !empty($category[$item['xq_id3']])}/{$category[$item['xq_id3']]['sname']}{/if}
 					</br>共{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_students')." WHERE xq_id = '".$item['xq_id1']."'")}人/共{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_students')." WHERE xq_id = '".$item['xq_id2']."'")}人/共{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_students')." WHERE xq_id = '".$item['xq_id3']."'")}人
 					</td>
-					<td>{if !empty($category[$item['bj_id1']])}{$category[$item['bj_id1']]['sname']}{/if} / {if !empty($category[$item['bj_id2']])}{$category[$item['bj_id2']]['sname']}{/if} / {if !empty($category[$item['bj_id3']])}{$category[$item['bj_id3']]['sname']}{/if}
+					<td>{if !empty($category[$item['bj_id1']])}{$category[$item['bj_id1']]['sname']}{/if}  {if !empty($category[$item['bj_id2']])}/{$category[$item['bj_id2']]['sname']}{/if}  {if !empty($category[$item['bj_id3']])}/{$category[$item['bj_id3']]['sname']}{/if}
 					</br>共{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_students')." WHERE bj_id = '".$item['bj_id1']."'")}人/共{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_students')." WHERE bj_id = '".$item['bj_id2']."'")}人/共{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_students')." WHERE bj_id = '".$item['bj_id3']."'")}人
 					</td>
-					<td>{if !empty($category[$item['km_id1']])}{$category[$item['km_id1']]['sname']}{/if} / {if !empty($category[$item['km_id2']])}{$category[$item['km_id2']]['sname']}{/if}</td>
+					<td>{if !empty($category[$item['km_id1']])}{$category[$item['km_id1']]['sname']}{/if}  {if !empty($category[$item['km_id2']])}/{$category[$item['km_id2']]['sname']}{/if}</td>
                     <td><span class="label label-warning">共{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_tcourse')." WHERE tid = '".$item['id']."'")}条</span></td>	
                     <td>
 					<span class="label label-info">共{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_kcbiao')." WHERE tid = '".$item['id']."'")}节</span></br></br>
@@ -119,7 +118,6 @@
            			<td>
                         {$item['mobile']}
                     </td>
-					<!--td>{php echo date('Y-m-d',$item['jiontime'])}</td-->     
                     <td><a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('assess', array('id' => $item['id'], 'op' => 'add', 'schoolid' => $schoolid))}" title="添加课程"><i class="fa fa-qrcode">&nbsp;&nbsp;添加课程</i></a></td>					
 					<td>
 					{if !empty($item['openid'])}
@@ -424,7 +422,35 @@ $(function(){
                     <div class="col-sm-9" style="color:red;">
                        {$item['tname']}
                     </div>
-				</div>	
+				</div>
+				{if $school['issale'] == 1 || $school['issale'] == 2}
+				<div class="form-group">	
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">报名费用：</label>
+                    <div class="col-sm-2 col-lg-2">
+                         <div class="input-group">					
+                            <input type="text" class="form-control" name="cose" value="" />
+							<div class="help-block">输入课程所需费用</div>
+                         </div>
+				    </div>
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">人数限制：</label>
+                    <div class="col-sm-2 col-lg-2">
+                         <div class="input-group">					
+                            <input type="text" class="form-control" name="minge" value="" />
+							<div class="help-block">输入课程限报人数</div>
+                         </div>
+				    </div>			
+                </div>
+                {else if $school['issale'] == 3 || $school['issale'] == 4}
+				<div class="form-group">	
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">人数限制：</label>
+                    <div class="col-sm-2 col-lg-2">
+                         <div class="input-group">					
+                            <input type="text" class="form-control" name="minge" value="" />
+							<div class="help-block">输入课程限报人数</div>
+                         </div>
+				    </div>			
+                </div>		
+                {/if}				
 				<div class="form-group">	
                     <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">授课地址：</label>
                     <div class="col-sm-2 col-lg-2">
@@ -442,17 +468,18 @@ $(function(){
                             <input type="radio" name="is_hot" value="0" {if isset($reply['is_hot']) && empty($reply['is_hot'])}checked{/if}>否
                         </label>
                         <div class="help-block">是否精品课程</div>
-                    </div>
-               <!-- <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">人数限制：</label>
-                    <div class="col-sm-2 col-lg-2">
-                       <div class="input-group">
-                           <div class="input-group">							 
-                            <input type="text" class="form-control" name="minge" value="20" />
-                           </div>
-					   </div>
-					</div>	-->					
+                    </div>				
                 </div>
                 <div class="form-group">
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">选择年级:</label>
+                    <div class="col-sm-2 col-lg-2">
+                        <select style="margin-right:15px;" name="xq" class="form-control">
+                            <option value="0">请选择年级</option>
+                            {loop $xueqi $it}
+                            <option value="{$it['sid']}" {if $row['sid'] == $item['bj_id1']} selected="selected"{/if}>{$it['sname']}</option>
+                            {/loop}
+                        </select>
+                    </div>				
 					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">选择班级:</label>
                     <div class="col-sm-2 col-lg-2">
                         <select style="margin-right:15px;" name="bj" class="form-control">

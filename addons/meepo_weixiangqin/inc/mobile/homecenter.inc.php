@@ -11,6 +11,7 @@ $settings = pdo_fetch("SELECT * FROM ".tablename('meepo_hongniangset')." WHERE w
 $openid = $_W['openid'];
 load()->model('mc');
 $cfg = $this->module['config'];
+checkauth();
 if (!empty($_W['member']['uid'])) {
 	$member = mc_fetch($_W['member']['uid']);	
 }else{

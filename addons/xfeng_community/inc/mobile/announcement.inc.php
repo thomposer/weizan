@@ -18,9 +18,8 @@
 			$pindex = max(1, intval($_GPC['page']));
 			$psize = 6;
 			$sql = "select * from ".tablename("xcommunity_announcement")." where weid='{$_W['weid']}' order by id desc LIMIT ".($pindex - 1) * $psize.','.$psize;
-			$row  = pdo_fetchall($sql);
-			$list = array();
-			foreach ($row as $key => $value) {
+			$list  = pdo_fetchall($sql);
+			foreach ($list as $key => $value) {
 				if ($value['regionid'] != 'N;') {
 					$regions = unserialize($value['regionid']);
 					if (@in_array($member['regionid'], $regions)) {

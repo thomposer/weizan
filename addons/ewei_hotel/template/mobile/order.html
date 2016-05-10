@@ -197,7 +197,7 @@
                                 <a class="clear-input " href="javascript:;" style="display: none;"><span></span></a>
                             </div>
 
-                            <div class="ui-txt" id="btn_paytype">
+                          <!--   <div class="ui-txt" id="btn_paytype">
                                 <div class="ui-grid-a">
                                     <div class="ui-block-a">
                                         {if empty($this->_set_info['paytype1']) && empty($this->_set_info['paytype2'])}
@@ -209,7 +209,7 @@
                                         {/if}
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 	                        <h5>留言</h5>
 	                        <div class="message-box">
 		                        <textarea class="form-control" rows="3" name="remark" placeholder="亲，还有什么能帮助到您吗？就写到这里吧！"></textarea>
@@ -237,7 +237,7 @@
 
             </div>
 
-            <div class="cui-select-float-box cui-form-select-float" tabindex="1" id="paytype_div">
+            <!-- <div class="cui-select-float-box cui-form-select-float" tabindex="1" id="paytype_div">
                 <div class="cui-select-head">
                     <div class="cui-select-close">关闭</div>
                     <div class="cui-select-title">选择支付方式</div>
@@ -278,7 +278,7 @@
                     </div>
                     {/if}
                 </div>
-            </div>
+            </div> -->
 
             <input type="hidden" name="nums" id="nums" value="1"/>
             <input type="hidden" name="submit" value="1"/>
@@ -387,10 +387,10 @@
                 return false;
             }
 
-           if($("#paytype").val()==''){
+          /*  if($("#paytype").val()==''){
                  show_msg("请选择支付方式!", 2000);
                  return false;
-           }
+           } */
 
             $("#button").hide();
             $("#orderAlert").show();

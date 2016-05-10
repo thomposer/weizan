@@ -22,7 +22,7 @@
 			$member = pdo_fetch("SELECT * FROM " . tablename ( 'mc_members' ) . " where uniacid = :uniacid AND uid = :uid", array(':uniacid' => $_W ['uniacid'], 'uid'=> $leave['uid']));
 			$isxz = pdo_fetch("SELECT * FROM " . tablename($this->table_teachers) . " where weid = :weid AND id = :id", array(':weid' => $_W ['uniacid'], ':id' => $it['tid']));
 			
-		 include $this->template('tmcomet');
+		 include $this->template('teacher/tmcomet');
           }else{
          include $this->template('bangding');
           }        

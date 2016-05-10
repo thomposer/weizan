@@ -41,7 +41,7 @@
             
 			$isbzr = pdo_fetch("SELECT * FROM " . tablename($this->table_teachers) . " where weid = :weid AND id = :id", array(':weid' => $_W ['uniacid'], ':id' => $it['tid']));
 			
-		 include $this->template('zfabu');
+		 include $this->template('teacher/zfabu');
          
 		  }else{
          

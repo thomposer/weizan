@@ -30,5 +30,5 @@
             message('参数错误！');
         }
 		
-        include $this->template('tcinfo');
+        include $this->template('common/tcinfo');
 ?>

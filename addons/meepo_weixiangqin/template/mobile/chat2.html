@@ -439,11 +439,10 @@ function getnewMessage2() {
             if (json) {
                 for (var i = 0; i <= json.length; i++) {
                     var uliHtml = "";
-                    
                     var obj = json[i];
 					var sendtime = '<font  style="color:#fff;font-size:10px">'+obj.stime+'</font>';
 					var other_url = "{php echo $this->createMobileUrl('others')}&openid="+obj.sender;
-					var avatar_nickname_url = '<div><span class="head"><a href="'+other_url+'"><img src="' + obj.senderavatar + '" /></span><label class="name" >{$member['nickname']}</label></a></div>';
+					var avatar_nickname_url = '<div><span class="head"><a href="'+other_url+'"><img src="' + obj.senderavatar + '" /></span><label class="name" >'+obj.sendernickname+'</label></a></div>';
                     if(obj.msgtype == 'text'){
                    
 					    uliHtml += '<ul class="ul_talk"><li class="tbox">'+avatar_nickname_url+'<div></div><div><article class="content">' + obj.content + '<br>'+sendtime+'</article></div></li></ul>';

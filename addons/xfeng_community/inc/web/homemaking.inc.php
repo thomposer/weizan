@@ -34,24 +34,10 @@
 			$condition .=" AND h.createtime between '{$starttime}' and '{$endtime}'";
 		}
 		$regions = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}'");
-		//判断是否是操作员
-		// $user = $this->user();
-		// if ($user) {
-		// 	$condition .=" AND regionid=:regionid";
-		// 	$params[':regionid'] = $user['regionid'];
-		// }
-		// if (!$user) {
-		// 		$regions = pdo_fetchall("SELECT * FROM".tablename('xcommunity_region')."WHERE weid='{$_W['weid']}'");
-		// 		$regionid = intval($_GPC['regionid']);
-		// 		if ($regionid) {
-		// 			$condition .=" AND regionid =:regionid";
-		// 			$params[':regionid'] = $regionid;
-		// 		}
-		// }
 		$user = $this->user();
 		if ($user) {
 			if ($user['regionid']) {
-				$condition .="AND h.regionid=:regionid";
+				$condition .=" AND h.regionid=:regionid";
 				$params[':regionid'] = $user['regionid'];
 			}else{
 				$condition .=" AND r.pid =:pid";

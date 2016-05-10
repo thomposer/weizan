@@ -13,10 +13,10 @@ $item = get_settings();
 if($_W["ispost"] && checksubmit()) {
     $save_db["value"] = @iserializer($_GPC["save"]);
     if(empty($item)) {
-        $save_db["key"] = "kim_financial";
+        $save_db["key"] = "members";
         pdo_insert("core_settings",$save_db);
     }else{
-        pdo_update("core_settings",$save_db, array("key"=>"kim_financial"));
+        pdo_update("core_settings",$save_db, array("key"=>"members"));
     }
     $packages = $_GPC["packages"];
     foreach($packages as $k=>$v){
@@ -26,7 +26,7 @@ if($_W["ispost"] && checksubmit()) {
     foreach($groups as $k=>$v){
         pdo_update("users_group",array("discount"=>$v["discount"]),array("id"=>$k));
     }
-    message("操作成功",$this->createWebUrl("Configs"));
+    message("操作成功",url("members/configs"));
 }
 if(!empty($item)){
     $save = $item;

@@ -11,7 +11,7 @@ if(empty($uniacid_arr)) {
 }
 
 $receiver = trim($_GPC['receiver']);
-if($receiver == ''){
+if(empty($receiver)){
 	exit('请输入邮箱或手机号');
 } elseif(preg_match(REGULAR_MOBILE, $receiver)){
 	$receiver_type = 'mobile';

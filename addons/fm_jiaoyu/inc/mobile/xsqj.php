@@ -36,7 +36,7 @@
             
 		    $userinfo = iunserializer($it['userinfo']);
 		    
-		 include $this->template('xsqj');
+		 include $this->template('students/xsqj');
           }else{
          include $this->template('bangding');
           }        
