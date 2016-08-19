@@ -40,7 +40,9 @@
         <div class="form-group">
             <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style="color:red">*</span> 音乐链接</label>
             <div class="col-sm-9 col-xs-12">
-                <input type="text" value="{$reply['music']}" class="form-control" name="music">
+                <!--<input type="text" value="{$reply['music']}" class="form-control" name="music">-->
+
+                {php echo tpl_form_field_audio('music', $reply['music'])}
                 <span class="help-block">留空为不播放音乐.</span>
             </div>
         </div>

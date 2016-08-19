@@ -42,10 +42,11 @@ class Wdl_shoppingModule extends WeModule {
                 'noticeemail' => $_GPC['noticeemail'],
                 'mobile' => $_GPC['mobile'],
                 'shopname' => $_GPC['shopname'],
-	            'template' => $_GPC['template'],
-	            'templateid' => $_GPC['templateid'],
+	        'template' => $_GPC['template'],
+	        'templateid' => $_GPC['templateid'],
                 'address' => $_GPC['address'],
                 'phone' => $_GPC['phone'],
+		'sms_id' => $_GPC['sms_id'],
                 'officialweb' => $_GPC['officialweb'],
                 'status' => intval($_GPC['status']),
                 'description'=>  htmlspecialchars_decode($_GPC['description'])

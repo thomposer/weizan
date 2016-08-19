@@ -8,13 +8,69 @@
 <link rel="stylesheet" type="text/css" href="{MODULE_URL}/template/mobile/css/base.css" />
 <link rel="stylesheet" type="text/css" href="{MODULE_URL}/template/mobile/css/wxy-animation.css" />
 <title>{$company['title']}</title>
-
+<style type="text/css">
+    .index_logo2 {
+        width: 160px;
+        height: 160px;
+        position: absolute;
+        left: 50%;
+        margin-left: -80px;
+        bottom: 52%;
+        -webkit-animation: bounceIn 0.3s linear 0.6s 1;
+        -moz-animation: bounceIn 0.3s linear 0.6s 1;
+        -ms-animation: bounceIn 0.3s linear 0.6s 1;
+        animation: bounceIn 0.3s linear 0.6s 1;
+        opacity: 0;
+        -webkit-animation-fill-mode: forwards;
+    }
+    .index_logo2 img{
+        width: 150px;
+        height: 150px;
+    }
+    .index-slogan2 {
+        margin: 15% auto;
+        text-align: center;
+        font-size: 2rem;
+        font-weight: bold;
+        color: #FFF;
+        line-height: 1.5em;
+        -webkit-animation: enterUpBounce 0.6s linear 0s 1;
+        -moz-animation: enterUpBounce 0.6s linear 0s 1;
+        -ms-animation: enterUpBounce 0.6s linear 0s 1;
+        animation: enterUpBounce 0.6s linear 0s 1;
+        opacity: 0;
+        -webkit-animation-fill-mode: forwards;
+    }
+    .more_positions2 {
+        width: 60%;
+        margin: 20px auto;
+        padding: 10px;
+        color: #fff;
+        border: 1px solid #fff;
+        text-align: center;
+        opacity: 0;
+        -webkit-animation: tada3 0.8s linear 0.8s 1;
+        -moz-animation: tada3 0.8s linear 0.8s 1;
+        -ms-animation: tada3 0.8s linear 0.8s 1;
+        animation: tada3 0.8s linear 0.8s 1;
+        -webkit-animation-fill-mode: forwards;
+    }
+    .white-block2 {
+        width: 100%;
+        height: 44%;
+        position: absolute;
+        top: 50%;
+        z-index: 1;
+    }
+</style>
 </head>
 
 <body>
 	<div id="bodybox">
     	<div class="swiper-container"  style="background-image: url({$_W['attachurl']}{$company['banner']}); width:100%">
             <div class="swiper-wrapper">
+
+                
             	<!-- page1 -->
                 <div class="swiper-slide swiper-slide-bg commen"> 
                 	<div class="index-slogan jiuye">
@@ -24,7 +80,11 @@
                     
                     <div class="index_logo jiuye">
                     	<!-- <img src="{MODULE_URL}/template/mobile/images/Cgo8PFT6nR2AEMKgAACESBueViE807.png" /> -->
-                        <img src="{$_W['attachurl']}{$company['logo']}" />
+                        {if !empty($company['logo'])}
+                        <img src="{php echo tomedia($company['logo'])}" />
+                        {else}
+                        <img src="../addons/jy_wei/template/mobile/images/logo.jpg" />
+                        {/if}
                     </div>
                     <div class="index-arrow-down"></div>
                 </div>
@@ -44,8 +104,13 @@
                     
                     <div class="white-block company-white-block">
                        	<div class="company-logo-circle jiuye">
-                            <img class="company-logo" src="{$_W['attachurl']}{$company['logo']}" />
+                            {if !empty($company['logo'])}
+                            <img class="company-logo" src="{php echo tomedia($company['logo'])}" />
+                            {else}
+                            <img class="company-logo" src="../addons/jy_wei/template/mobile/images/logo.jpg" />
+                            {/if}
                         </div>
+
                         {loop $newkeyword $key $item}
                         <div class="company-icon{$keywordcss[$newkeywordcss[$key]]} jiuye">
                             <p>{$keyword[$item]['name']}</p>
@@ -56,8 +121,12 @@
                 </div>
                 
                 <!-- page3 -->
-                <div class="swiper-slide swiper-slide-bg"> 
-                	<img src="{$_W['attachurl']}{$company['banner']}" width="100%" />
+                <div class="swiper-slide swiper-slide-bg">
+                    {if !empty($company['banner'])}
+                	<img src="{php echo tomedia($company['banner'])}" width="100%" />
+                    {else}
+                    <img src="../addons/jy_wei/template/mobile/images/company_default01.jpg" width="100%" />
+                    {/if}
 					<div class="white-tri intro-tri"></div>
                     
                     <div class="white-block">
@@ -91,14 +160,46 @@
                         <a href="{php echo $_W['siteroot'].'app/'.substr($this->createMobileUrl('position',array('id'=>$item['id'])),2)}" target="_blank"><p class="jiuye">{$item['name']}</p><span class="jiuye">{$item['payment']}</span></a>
                         {/loop}
                         </div>
-                        {if !empty($company['url'])}
+                        <a href="{php echo $_W['siteroot'].'app/'.substr($this->createMobileUrl('position',array('cid'=>$company['id'])),2)}" target="_blank"><div class="more_positions jiuye">查看该公司全部在招职位</div></a>
+                        <!-- {if !empty($company['url'])}
                         <a href="{$company['url']}" target="_blank"><div class="more_positions jiuye">查看该公司全部在招职位</div></a>
-                        {/if}
+                        {/if} -->
                     </div>
                     <div class="intro-tri-div"></div>
                     <div class="arrow-down"></div>
                 </div>
                 
+                <!-- page5 -->
+                <div class="swiper-slide swiper-slide-bg commen"> 
+                    <div class="index-slogan2 jiuye">
+                        <span>联系我们</span>
+                    </div>
+                    
+                    <div class="index_logo2 jiuye" >
+
+                        {if !empty($company['qrcode'])}
+                        <img  src="{php echo tomedia($company['qrcode'])}" />
+                        {else}
+                        <img src="{php echo tomedia($company['logo'])}" />
+                        {/if}
+                    </div>
+                    <div class="white-block2">
+                    {if !empty($company['tel'])}
+                    <a href="tel:{$company['tel']}" target="_blank"><div class="more_positions2 jiuye">电话：{$company['tel']}</div></a>
+                    {/if}
+                    {if !empty($company['mail'])}
+                    <a href="mailto:{$company['mail']}" ><div class="more_positions2 jiuye" >邮箱：{$company['mail']}</div></a>
+                    {/if}
+                    {if !empty($company['address'])}
+                    {if !empty($company['lng'])}
+                    <a href="http://api.map.baidu.com/marker?location={$company['lat']},{$company['lng']}&title={$company['name']}&content={$company['address']}&output=html&src=weiba|weiweb" target="_blank"><div class="more_positions2 jiuye">地址：{$company['address']}</div></a>
+                    {else}
+                    <a href="javascript:void(0)" ><div class="more_positions2 jiuye">地址：{$company['address']}</div></a>
+                    {/if}
+                    {/if}
+                    </div>
+                    <div class="index-arrow-down"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -152,7 +253,7 @@ var mySwiper = new Swiper('.swiper-container',{
                 {/if}
                 desc: "{$company['sharedescription']}",
                 link: "{php echo $_W['siteroot'].'app/'.substr($this->createMobileUrl('index',array('id'=>$company['id'])),2)}",
-                imgUrl: "{$_W['attachurl']}{$company['shareimage']}",
+                imgUrl: "{php echo tomedia($company['shareimage'])}",
                 trigger: function (res) {},
                 complete: function (res) {},
                 success: function (res) {},

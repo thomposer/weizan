@@ -1,0 +1,26 @@
+
+body{background-color:#eeeef3;font-weight:300;}
+
+
+.weui_tabbar_item {padding: 5px 0 0;}
+.weui_tabbar_icon {width: 24px;height: 24px;}
+
+.weui_cell_bd select::-webkit-input-placeholder,
+.weui_cell_bd input[type="text"]::-webkit-input-placeholder,
+.weui_cell_bd input[type="password"]::-webkit-input-placeholder,
+.weui_cell_bd input[type="datetime"]::-webkit-input-placeholder,
+.weui_cell_bd input[type="datetime-local"]::-webkit-input-placeholder,
+.weui_cell_bd input[type="date"]::-webkit-input-placeholder,
+.weui_cell_bd input[type="month"]::-webkit-input-placeholder,
+.weui_cell_bd input[type="time"]::-webkit-input-placeholder,
+.weui_cell_bd input[type="week"]::-webkit-input-placeholder,
+.weui_cell_bd input[type="number"]::-webkit-input-placeholder,
+.weui_cell_bd input[type="email"]::-webkit-input-placeholder,
+.weui_cell_bd input[type="url"]::-webkit-input-placeholder,
+.weui_cell_bd input[type="search"]::-webkit-input-placeholder,
+.weui_cell_bd input[type="tel"]::-webkit-input-placeholder,
+.weui_cell_bd input[type="color"]::-webkit-input-placeholder,
+.weui_cell_bd-field::-webkit-input-placeholder {
+  color: #999999;font-size:14px;text-align:right;padding-right:10px;line-height:200%;
+}
+.weui_cell_bd textarea::-webkit-input-placeholder{color: #999999;font-size:14px;text-align:left;line-height:200%;}

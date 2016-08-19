@@ -51,7 +51,42 @@
             SHATE_CALLBACK: "{php echo './index.php?i='.$_W['uniacid'].'&c=entry&m=ewei_money&do=share&id='.$rid}",//分享回调
             ICON_CURR_LOGO: '../addons/ewei_money/style/img/curr_logo.png' // 货币图标logo
         };
-     
+        var currency = [];
+        {if !empty($reply['c_rate_one'])}
+        currency.push( {"p":"{$reply['c_rate_one']}","v":"0.1"} );
+        {/if}
+        
+        {if !empty($reply['c_rate_two'])}
+        currency.push( {"p":"{$reply['c_rate_two']}","v":"0.2"} );
+        {/if}
+        
+        {if !empty($reply['c_rate_three'])}
+        currency.push( {"p":"{$reply['c_rate_three']}","v":"0.5"} );
+        {/if}
+        
+        {if !empty($reply['c_rate_four'])}
+        currency.push( {"p":"{$reply['c_rate_four']}","v":1} );
+        {/if}
+        
+        {if !empty($reply['c_rate_five'])}
+        currency.push( {"p":"{$reply['c_rate_five']}","v":5} );
+        {/if}
+        
+        {if !empty($reply['c_rate_six'])}
+        currency.push( {"p":"{$reply['c_rate_six']}","v":10} );
+        {/if}
+        
+        {if !empty($reply['c_rate_seven'])}
+        currency.push( {"p":"{$reply['c_rate_seven']}","v":20} );
+        {/if}
+        {if !empty($reply['c_rate_eight'])}
+        currency.push( {"p":"{$reply['c_rate_eight']}","v":50} );
+        {/if}
+        
+        {if !empty($reply['c_rate_nine'])}
+        currency.push( {"p":"{$reply['c_rate_nine']}","v":100} );
+        {/if}
+        APP.currency = currency; // 金额比例, i为货币图标名称的下标，p为货币百分比, v为货币面额
         
         // 如果只有一个货币，复制一个，否则快速滑动时，无效果！
         if ( APP.currency.length == 1) {

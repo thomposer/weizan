@@ -158,7 +158,6 @@ class WeiZan {
 			}
 			$_W['openid'] = $message['from'];
 			$_W['fans'] = array('from_user' => $_W['openid']);
-			
 			$this->booking($message);
 			if($message['event'] == 'unsubscribe') {
 				$this->receive(array(), array(), array());
@@ -239,9 +238,15 @@ class WeiZan {
 				echo json_encode(array('resp' => $resp, 'process' => $process));
 				exit();
 			}
+			$mapping = array(
+				'[from]' => $this->message['from'],
+				'[to]' => $this->message['to'],
+				'[rule]' => $this->params['rule']
+			);
+			$resp = str_replace(array_keys($mapping), array_values($mapping), $resp);
+			ob_start();
 			echo $resp;
-			ob_flush();
-			flush();
+			ob_start();
 			$this->receive($hitParam, $hitKeyword, $response);
 			ob_end_clean();
 			exit();
@@ -309,7 +314,6 @@ class WeiZan {
 		
 		load()->model('mc');
 		$setting = uni_setting($_W['uniacid'], array('passport'));
-			
 		$fans = mc_fansinfo($message['from']);
 		$default_groupid = cache_load("defaultgroupid:{$_W['uniacid']}");
 		if (empty($default_groupid)) {
@@ -351,7 +355,7 @@ class WeiZan {
 				}
 			}
 		} else {
-			if ($message['event'] == 'subscribe' || $message['event'] == 'text' || $message['event'] == 'image') {
+			if ($message['event'] == 'subscribe' || $message['type'] == 'text' || $message['type'] == 'image') {
 				$rec = array();
 				$rec['acid'] = $_W['acid'];
 				$rec['uniacid'] = $_W['uniacid'];
@@ -617,7 +621,9 @@ EOF;
 					'createtime' => TIMESTAMP,
 				));
 			}
-			return true;
+			$message['content'] = strval($message['eventkey']);
+			$message['source'] = $message['event'];
+			return $this->analyzeText($message);
 		}
 		if (!empty($message['eventkey'])) {
 			$message['content'] = strval($message['eventkey']);

@@ -298,6 +298,7 @@ define(['bootstrap'], function($){
 									_this.user.discount.discount = 1;
 								}
 								money = total * _this.user.discount.discount;
+								money = money.toFixed(1);
 							}
 							if(money < 0) {
 								money = 0;

@@ -43,13 +43,12 @@ if($_W['isajax']){
 			}
 	 }
    if($status == '1'){
-	   pdo_update('hnfans',array('telephone'=>$Mobile),array('from_user'=>$openid,'weid'=>$weid));
-	  $check = pdo_fetchcolumn("SELECT id FROM".tablename('meepo_sms_news')." WHERE openid=:openid AND weid=:weid ORDER BY createtime DESC",array(':openid'=>$openid,':weid'=>$weid));
+	   //pdo_update('hnfans',array('telephone'=>$Mobile),array('from_user'=>$openid,'weid'=>$weid));
+		 $check = pdo_fetchcolumn("SELECT `id` FROM".tablename('meepo_sms_news')." WHERE openid=:openid AND weid=:weid ORDER BY createtime DESC",array(':openid'=>$openid,':weid'=>$weid));
 	  if(empty($check)){
-		
-        pdo_insert('meepo_sms_news',array('weid'=>$weid,'openid'=>$openid,'createtime'=>time(),'news'=>$num));
+				pdo_insert('meepo_sms_news',array('weid'=>$weid,'openid'=>$openid,'createtime'=>time(),'news'=>$num));
 	  }else{
-	    pdo_update('meepo_sms_news',array('news'=>$num),array('id'=>$check,'weid'=>$weid));
+				pdo_update('meepo_sms_news',array('news'=>$num),array('id'=>$check,'weid'=>$weid));
 	  }
    }
    echo $status;

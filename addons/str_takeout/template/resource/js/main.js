@@ -1,3 +1,4 @@
+var init =1;
 $.fn.amount = function(num, callback){
 	var num = typeof num === 'undefined' ? 0 : num,
 		callback = callback || $.noop,
@@ -11,6 +12,17 @@ $.fn.amount = function(num, callback){
 
 		var data_obj = obj.parent();
 		var max = data_obj.attr("max");
+		var is_first_order = data_obj.data("first-order");
+		var buy_limit = data_obj.data("buy-limit");
+		var first_order_limit = data_obj.data("first-order-limit");
+		if(first_order_limit == 1 && !is_first_order) {
+			alert('仅限新用户购买');
+			return false;
+		}
+		if(buy_limit > 0 && curNum >= buy_limit) {
+			alert('每人仅限购' + buy_limit + '份');
+			return false;
+		}
 		if(null != max && max != "" && max != "-1" && curNum >= max)
 		{
 			return false;
@@ -18,11 +30,41 @@ $.fn.amount = function(num, callback){
 		
 		_num.text(++curNum);
 		data_obj.next(".number").val(curNum);
+		$(".h_num",data_obj.parent()).val(curNum);
 		if(curNum > 0){
 			obj.show();
 			$(this).addClass(activeClass);
 		}
-		return callback.call(this, '+');
+
+		if(init==1){
+			var id=obj.parent().parent().parent().parent().get(0).id;
+			var ishas = obj.parent().parent().parent().parent().parent().hasClass("xian");
+			var lis =$("#menuWrap #"+id+"");
+			for(var i = 0; i < lis.length; i++){
+				if(ishas){
+					if(!$(lis[i]).parent().hasClass("xian"))
+					{
+						init=0;
+						$(".add",$(lis[i])).click();
+						
+					}
+				}
+				else{
+					if($(lis[i]).parent().hasClass("xian"))
+					{
+						init=0;
+						$(".add",$(lis[i])).click();
+					}
+					return callback.call(this, '+');
+				}
+			}
+		}
+		else{
+			init=1;
+			if(!obj.parent().parent().parent().parent().parent().hasClass("xian")){
+				return callback.call(this, '+');
+			}
+		}
 	}
 
 	function del(){
@@ -33,17 +75,47 @@ $.fn.amount = function(num, callback){
 
 		_num.text(--curNum);
 		obj.parent().next(".number").val(curNum);
+		$(".h_num",obj.parent()).val(curNum)
 		if(curNum < 1){
 			obj.hide();
 			_add.removeClass(activeClass);
 		}else{
 			_add.addClass(activeClass);
 		}
-		return callback.call(this, '-');
+		if(init==1){
+			var id=obj.parent().parent().parent().parent().get(0).id;
+			var ishas = obj.parent().parent().parent().parent().parent().hasClass("xian");
+			var lis =$("#menuWrap #"+id+"");
+			for(var i = 0; i < lis.length; i++){
+				if(ishas){
+					if(!$(lis[i]).parent().hasClass("xian"))
+					{
+						init=0;
+						$(".del",$(lis[i])).click();
+						
+					}
+				}
+				else{
+					if($(lis[i]).parent().hasClass("xian"))
+					{
+						init=0;
+						$(".del",$(lis[i])).click();
+					}
+					return callback.call(this, '-');
+				}
+			}
+		}
+		else{
+			init=1;
+			if(!obj.parent().parent().parent().parent().parent().hasClass("xian")){
+				return callback.call(this, '-');		
+			}
+		}
+
 	}
 
 	return this.each(function(){
-		$(this).before('<span'+ isShow +'><a href="javascript:void(0);" class="btn_n del '+ activeClass +'"></a><span class="num">'+ num +'</span></span>').bind('click', add);
+		$(this).before('<span'+ isShow +'><a class="btn_n del '+ activeClass +'"></a><span class="num">'+ num +'</span></span>').bind('click', add);
 		
 		$(this).prev().find('.del').bind('click', del);
 

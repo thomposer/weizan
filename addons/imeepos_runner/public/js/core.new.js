@@ -1,6 +1,5 @@
-var core = {};
 define(['jquery','weixin'],function($,wx){
-	
+	var core = {};
 	/**
 	 * Dialog
 	 * */
@@ -49,7 +48,6 @@ define(['jquery','weixin'],function($,wx){
 	            templates += '<div class="weui_dialog_bd">' + this.settings.content + '</div>';
 	            templates += '<div class="weui_dialog_ft">';
 	            templates += '</div>';
-	            
 	            // 追回到body
 	            this.dialog = $('<div>').addClass('weui_dialog').html(templates).prependTo('body');
 	            // 设置cancel按钮
@@ -199,6 +197,25 @@ define(['jquery','weixin'],function($,wx){
 	var core = core || {
 	    version: '1.0.0'
 	};
+	
+	core.isWeiXin = function(){
+		var ua = window.navigator.userAgent.toLowerCase();
+	    if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+	        return true;
+	    }else{
+	        return false;
+	    }
+	}
+
+    var u = navigator.userAgent;
+    core.android = false;
+    if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
+        core.android = true;
+    }
+    core.iphone = false;
+    if(u.indexOf('iPhone') > -1){
+        core.iphone = true;
+    }
 	
 	var $actionSheetWrapper = null;
 
@@ -351,6 +368,7 @@ define(['jquery','weixin'],function($,wx){
         left + $element.width() >= windowLeft && 
         left - options.leftOffset <= windowLeft + $win.width()) ;
     };
+    
     
     core.ohSnap = function(text, options) {
         var defaultOptions = {
@@ -746,6 +764,7 @@ define(['jquery','weixin'],function($,wx){
     
     //ok
     core.cancel = function(content,cancel) {
+    	console.log('cancel');
         $.dialog({
             title: '温馨提示',
             content: content,
@@ -755,6 +774,7 @@ define(['jquery','weixin'],function($,wx){
     }
     
     core.ok = function(content, ok,cancel) {
+    	console.log('ok');
         $.dialog({
             title: '温馨提示',
             content: content,

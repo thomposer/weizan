@@ -130,7 +130,7 @@ function BodyOnLoad() {
 					</div>
 
                     <div class="row">
-                        <p><span class="tag">单价或总价：</span>
+                        <p><span class="tag">单价总价：</span>
                           <input type="text" id="price" name="price" placeholder="请填写总价，单位：万元"/>
                         </p>
                     </div>
@@ -144,10 +144,10 @@ function BodyOnLoad() {
 						<span class="tag">户型：</span>
 						<input type="text" id="house_type" name="house_type" placeholder="请填写户型 如：两室两厅一厨一卫"/>
                       </div>
-                    <div class="row">
+                    <!--<div class="row">
                         <span class="tag">合作佣金：</span>
                         <input type="text" id="brokerage" name="brokerage" placeholder=""/>
-                    </div>
+                    </div>-->
 					<div class="row">
 						<span class="tag">朝向：</span>
 						<input type="text" id="orientation" name="orientation" placeholder="请填写朝向如：南"/>
@@ -169,15 +169,14 @@ function BodyOnLoad() {
 						</select>
 					</div>
 
-					<div class="row">
-						<span class="tag">图片1：</span>
-						<input type="file" id="file1" name="file" accept="image/*">
+					<div class="row" id="face1">
+					<span class="tag">图片1：</span>
 						<input type='hidden' id='pic_url1' name='thumb1' value=" "/>
 						<label for="headUpload"><span id="img1"></span><img style="display:block" id="fileimg1" src="{AMOUSE_HOUSE_RES}images/home.png" width="120px;" class="hl-bdrs-16 fileimg"></label>
 					</div>
-					<div class="row">
+					<div class="row" id="face2">
 						<span class="tag">图片2：</span>
-						<input type="file" id="file" name="file" accept="image/*">
+
 						<input type='hidden' id='pic_url' name='thumb2' value=" "/>
 						<label for="headUpload"><span id="img2"></span>
 							<img id="fileimg" style="display:block" src="{AMOUSE_HOUSE_RES}images/home.png" width="120px;" class="hl-bdrs-16 fileimg"></label>
@@ -185,9 +184,9 @@ function BodyOnLoad() {
 					<div class="msg" style="margin-top:0; margin-bottom:0; margin-left:80px; color:red;">
 						建议图片为330px:220px
 					</div>
-					<div class="row">
+					<div class="row" id="face3">
 						<span class="tag">图片3：</span>
-						<input type="file" id="file2" name="file" accept="image/*">
+
 						<input type='hidden' id='pic_url2' name='thumb3' value=" "/>
 						<label for="headUpload"><span id="ccc"></span><img style="display:block" id="fileimg2" src="{AMOUSE_HOUSE_RES}images/home.png" width="120px;" class="hl-bdrs-16 fileimg"></label>
 					</div>

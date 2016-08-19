@@ -108,10 +108,17 @@ if ($do == 'display') {
 			$account['setmeal'] = uni_setmeal($account['uniacid']);
 		}
 	}
-	if(!$_W['isfounder']) {
+		if (!$_W['isfounder']) {
 		$stat = user_account_permission();
-	}
-	if (!empty($_W['setting']['platform']['authstate'])) {
+		$max_tsql = "SELECT COUNT(*) FROM " . tablename('uni_account'). " as a LEFT JOIN". tablename('account'). " as b ON a.default_acid = b.acid LEFT JOIN ". tablename('uni_account_users')." as c ON a.uniacid = c.uniacid WHERE a.default_acid <> 0 AND c.uid = :uid AND b.isdeleted <> 1";
+		$max_pars[':uid'] = $_W['uid'];
+		$max_total = pdo_fetchcolumn($max_tsql, $max_pars);
+		$maxaccount = pdo_fetchcolumn('SELECT `maxaccount` FROM '. tablename('users_group') .' WHERE id = :groupid', array(':groupid' => $_W['user']['groupid']));
+		if($max_total >= $maxaccount) {
+			$authurl = "javascript:alert('您所在会员组最多只能添加 {$maxaccount} 个公众号');";
+		}
+	} 
+	if (empty($authurl) && !empty($_W['setting']['platform']['authstate'])) {
 		load()->classs('weixin.platform');
 		$account_platform = new WeiXinPlatform();
 		$authurl = $account_platform->getAuthLoginUrl();
@@ -151,6 +158,7 @@ if ($do == 'delete') {
 			isetcookie('__uniacid', '');
 		}
 		cache_delete("unicount:{$uniacid}");
+		cache_delete("unisetting:{$uniacid}");
 	}
 	message('公众帐号信息删除成功！，您可以在回收站中回复公众号', url('account/display'), 'success');
 }

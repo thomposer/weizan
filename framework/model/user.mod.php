@@ -160,15 +160,13 @@ function user_single($user_or_uid) {
 			return false;
 		}
 	}
-	if(!empty($record['agentid'])){
-		$url=$_SERVER['SERVER_NAME'];
-		$ids=$record['agentid'];
-		$sqla='select * from '.tablename('agent')." where id=$ids ";
-		$record1 = pdo_fetch($sqla, $params);
-		if($record1['siteurl']!=$url){
-			message('登录失败，请检查您访问的域名是否正确！');
-		}
-	}
+//	if(!empty($record['agentid'])){
+//		$url=$_SERVER['SERVER_NAME'];
+//		$record1 = pdo_get('agent_copyright', array('uid'=>$record['agentid']));
+//		if($record1['yuming']!=$url){
+//			message('登录失败，账户不存在或者密码错误！');
+//		}
+//	}
 	if($record['type'] == ACCOUNT_OPERATE_CLERK) {
 		$clerk = pdo_get('activity_clerks', array('uid' => $record['uid']));
 		if(!empty($clerk)) {
@@ -312,12 +310,19 @@ function user_permission($uid, $uniacid = '') {
 function user_account_permission() {
 	global $_W;
 	$group = pdo_fetch('SELECT * FROM ' . tablename('users_group') . ' WHERE id = :id', array(':id' => $_W['user']['groupid']));
-	$uniacid_num = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('uni_account_users') . ' WHERE uid = :uid AND role = :role', array(':uid' => $_W['uid'], ':role' => 'owner'));
+	$uniacocunts = pdo_getall('uni_account_users', array('uid' => $_W['uid'], 'role' => 'owner'), array(), 'uniacid');
+	if (empty($uniacocunts)) {
+		$uniacid_num = 0;
+	} else {
+				$sql = "SELECT COUNT(*) FROM ". tablename('uni_account'). " AS u RIGHT JOIN " .
+			tablename('account')." AS a on u.default_acid = a.acid WHERE u.uniacid IN(". implode(',', array_keys($uniacocunts)). ")";
+		$uniacid_num = pdo_fetchcolumn($sql);
+	}
 	$data = array(
 		'group_name' => $group['name'],
 		'maxaccount' => $group['maxaccount'],
 		'uniacid_num' => $uniacid_num,
-		'uniacid_limit' => $group['maxaccount'] - $uniacid_num,
+		'uniacid_limit' => intval($group['maxaccount']) - $uniacid_num,
 	);
 	return $data;
 }

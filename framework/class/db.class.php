@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 define('PDO_DEBUG', true);
@@ -226,10 +226,18 @@ class DB {
 				$limitsql = strexists(strtoupper($limit), 'LIMIT') ? " $limit " : " LIMIT $limit";
 			}
 		}
-		
 		$sql = "SELECT {$select} FROM " . $this->tablename($tablename) . (!empty($condition['fields']) ? " WHERE {$condition['fields']}" : '') . $limitsql;
-		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename($tablename) . (!empty($condition['fields']) ? " WHERE {$condition['fields']}" : ''));
+		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename($tablename) . (!empty($condition['fields']) ? " WHERE {$condition['fields']}" : ''), $condition['params']);
 		return $this->fetchall($sql, $condition['params'], $keyfield);
+	}
+	
+	public function getcolumn($tablename, $params = array(), $field) {
+		$result = $this->get($tablename, $params, array($field));
+		if (!empty($result)) {
+			return $result[$field];
+		} else {
+			return false;
+		}
 	}
 
 	
@@ -282,6 +290,7 @@ class DB {
 		$result = array('fields' => ' 1 ', 'params' => array());
 		$split = '';
 		$suffix = '';
+		$allow_operator = array('>', '<', '<>', '!=', '>=', '<=', '+=', '-=', 'LIKE', 'like');
 		if (in_array(strtolower($glue), array('and', 'or'))) {
 			$suffix = '__';
 		}
@@ -292,11 +301,35 @@ class DB {
 		if (is_array($params)) {
 			$result['fields'] = '';
 			foreach ($params as $fields => $value) {
+				$operator = '';
+				if (strpos($fields, ' ') !== FALSE) {
+					list($fields, $operator) = explode(' ', $fields, 2);
+					if (!in_array($operator, $allow_operator)) {
+						$operator = '';
+					}
+				}
+				if (empty($operator)) {
+					$fields = trim($fields);
+					if (is_array($value)) {
+						$operator = 'IN';
+					} else {
+						$operator = '=';
+					}
+				} elseif ($operator == '+=') {
+					$operator = " = `$fields` + ";
+				} elseif ($operator == '-=') {
+					$operator = " = `$fields` - ";
+				}
 				if (is_array($value)) {
-					$result['fields'] .= $split . "`$fields` IN ('".implode("','", $value)."')";
+					$insql = array();
+					foreach ($value as $k => $v) {
+						$insql[] = ":{$suffix}{$fields}_{$k}";
+						$result['params'][":{$suffix}{$fields}_{$k}"] = is_null($v) ? '' : $v;
+					}
+					$result['fields'] .= $split . "`$fields` {$operator} (".implode(",", $insql).")";
 					$split = ' ' . $glue . ' ';
 				} else {
-					$result['fields'] .= $split . "`$fields` =  :{$suffix}$fields";
+					$result['fields'] .= $split . "`$fields` {$operator}  :{$suffix}$fields";
 					$split = ' ' . $glue . ' ';
 					$result['params'][":{$suffix}$fields"] = is_null($value) ? '' : $value;
 				}

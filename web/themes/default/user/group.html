@@ -35,6 +35,28 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">充值比例</label>
+					<div class="col-sm-10 col-xs-12">
+						<input type="text" class="form-control" name="discount" value="{$group['discount']}" />
+						<span class="help-block">用户充值余额时的比率。例如如果为2，则用户支付100元可以购买到200余额，余额可以用来续费和购买模块</span>
+					</div>
+				</div>
+				<div class="form-group">
+			        <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">是否开启版权设置</label>
+			        <div class="col-sm-10 col-xs-12">
+				        <label for="showhomepage_1" class="radio-inline"><input type="radio" name="domain" value="1" id="showhomepage_1" {if !empty($group['domain'])} checked{/if}> 是</label>&nbsp;&nbsp;&nbsp;
+				        <label for="showhomepage_2" class="radio-inline"><input type="radio" name="domain" value="0" id="showhomepage_2" {if empty($group['domain'])} checked{/if}> 否</label>
+				        <span class="help-block">设置为‘是’，该用户组下的用户将可设置独立域名和站点版权信息。</span>
+			        </div>
+		        </div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">用户组年费</label>
+					<div class="col-sm-10 col-xs-12">
+						<input type="text" class="form-control" name="price" value="{$group['price']}" />
+						<span class="help-block">用户升级用户组或者续费时，费用直接从账户余额划扣</span>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">有效期限</label>
 					<div class="col-sm-10 col-xs-12">
 						<div class="input-group">

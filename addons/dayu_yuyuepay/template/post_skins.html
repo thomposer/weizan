@@ -1,36 +1,140 @@
 
+<div class="panel panel-default">
+	<div class="panel-heading">显示与自定义名称 <span style="color:red;">蓝色按钮为激活状态</span></div>
+		<div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">提交页头部</label>
+                    <div class="col-xs-12 col-sm-9">
+					<div class="btn-group" data-toggle="buttons">
+						<label class="btn btn-default {if $activity['isthumb'] == 1}active{/if}"><input type="radio" name="isthumb" value="1" {if $activity['isthumb'] == 1} checked="checked"{/if} >显示封面</label>
+						<label class="btn btn-default {if $activity['isthumb'] == 2}active{/if}"><input type="radio" name="isthumb" value="2" {if empty($activity) || $activity['isthumb'] == 2} checked="checked"{/if}>显示文字</label>
+						<label class="btn btn-default {if $activity['isthumb'] == 0}active{/if}"><input type="radio" name="isthumb" value="0" {if empty($activity) || $activity['isthumb'] == 0} checked="checked"{/if}>关闭</label>
+						<span class="btn btn-success" disabled>仅在 WEUI 系列模板中有效，开启后封面图作为头部背景。</span>
+					</div>
+                    </div>
+                </div>
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否使用地址组</label>
+				<div class="col-sm-9 col-xs-12">
+				<div class="btn-group" data-toggle="buttons">	
+					<label class="btn btn-default {if $activity['is_addr'] == 1}active{/if}"><input type='radio' name='is_addr' value='1' {if $activity['is_addr']==1}checked{/if} />启用</label>
+					<label class="btn btn-default {if $activity['is_addr'] == 0}active{/if}"><input type='radio' name='is_addr' value='0' {if $activity['is_addr']==0}checked{/if} />关闭</label>
+						<span class="btn btn-success" disabled>启用：使用地址组（姓名/手机/地址）；关闭：使用姓名、手机输入框</span>
+				</div>
+				</div>
+			</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">同步会员资料</label>
+					<div class="col-sm-9 col-xs-12">
+					<div class="btn-group" data-toggle="buttons">					  
+						<label class="btn btn-default {if $activity['isreplace'] == 1}active{/if}"><input type="radio" name="isreplace" value="1" {if $activity['isreplace'] == 1} checked="checked"{/if} >启用</label>
+						<label class="btn btn-default {if $activity['isreplace'] == 0}active{/if}"><input type="radio" name="isreplace" value="0" {if empty($activity) || $activity['isreplace'] == 0} checked="checked"{/if}>关闭</label>
+						<span class="btn btn-success" disabled>关闭【地址组】状态下启用，用户填写的姓名、手机将同步至会员中心的真实姓名、手机</span>
+                    </div>
+					</div>
+				</div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">列表名称</label>
+                    <div class="col-xs-12 col-sm-9">
+                    <div class="input-group">
+                    <input type="text" name="mname" class="form-control" value="{$activity['mname']}" /><span class="input-group-addon">例：我的表单 或是 我的预约、我的报名等</span>
+                    </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态名称设置</label>
+                    <div class="col-xs-12 col-sm-9">
+                    <div class="input-group">
+                    <span class="input-group-addon">待受理/待跟进</span><input type="text" name="state1" class="form-control" value="{$activity['state1']}" />
+                    <span class="input-group-addon">已受理/跟进中</span><input type="text" name="state2" class="form-control" value="{$activity['state2']}" />
+                    </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                    <div class="col-xs-12 col-sm-9">
+                    <div class="input-group">
+                    <span class="input-group-addon">已完成</span><input type="text" name="state3" class="form-control" value="{$activity['state3']}" />
+                    <span class="input-group-addon">拒绝受理</span><input type="text" name="state4" class="form-control" value="{$activity['state4']}" />
+                    <span class="input-group-addon">已取消</span><input type="text" name="state5" class="form-control" value="{$activity['state5']}" />
+                    </div>
+                    </div>
+                </div>
+	</div>
+</div>
         <div class="panel panel-default">
-            <div class="panel-heading">前台名称设置（留空不显示）</div>
-            <div class="panel-body">
-		
-                <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">预约列表名称设置</label>
-                    <div class="col-xs-12 col-sm-5 col-md-8 input-group">
-                    <span class="input-group-addon">例：我的预约：</span><input type="text" name="mname" class="form-control" value="{$activity['mname']}" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">服务项目名称设置</label>
-                    <div class="col-xs-12 col-sm-5 col-md-8 input-group">
-                    <span class="input-group-addon">例：请选择服务项目</span><input type="text" name="xmname" class="form-control" value="{$activity['xmname']}" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">前台预约时间设置</label>
-                    <div class="col-xs-12 col-sm-5 col-md-8 input-group">
-                    <span class="input-group-addon">例：预约时间、到店时间等</span><input type="text" name="yuyuename" class="form-control" value="{$activity['yuyuename']}" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">前台模板设置</div>
+            <div class="panel-heading">提交页模板选择</div>
             <div class="panel-body">
         <div class="form-group">
-          <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">选择模板</label>
+          <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">WEUI模板</label>
           <div class="col-sm-8 col-xs-12">
             <div class="row row-fix">
-              {template 'skins'}
+  <div class="col-xs-6 col-sm-6 col-md-3 template_picker">
+    <div class="thumbnail" style="text-align:center;width:140px;">
+        <span style="display:block;white-space: nowrap;text-overflow:ellipsis; overflow:hidden">WEUI</span>
+      <div class="radio">
+        <label>
+          <input type="radio" name="skins" value="weui" {if $activity['skins'] == 'weui' || empty($activity['skins'])} checked="checked"{/if}>
+          选择
+        </label>
+      </div>
+    </div>
+  </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">选择模板(请使用weui模板)</label>
+          <div class="col-xs-2 col-md-2">
+            <div class="row row-fix">
+  <div class="col-xs-6 col-sm-6 col-md-3 template_picker">
+    <div class="thumbnail" style="text-align:center;width:140px;">
+      <img  class="imgtip" style="height:100px;overflow:hidden;" src="/addons/dayu_yuyuepay/template/img/flat.jpg" bigimg="/addons/dayu_yuyuepay/template/img/flat.jpg">
+        <span style="display:block;white-space: nowrap;text-overflow:ellipsis; overflow:hidden">UI2.0</span>
+      <div class="radio">
+        <label>
+          <input type="radio" name="skins" value="flat" {if $activity['skins'] == 'flat' || empty($activity['skins'])} checked="checked"{/if}>
+          选择
+        </label>
+      </div>
+    </div>
+  </div> 
+            </div>
+          </div>
+		  
+			<div class="col-xs-8 col-md-8">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">预约开始时间</label>
+					<div class="col-sm-5 col-xs-12 input-group">
+						<input type="text" name="kaishi" class="form-control" value="{$activity['kaishi']}" /><span class="input-group-addon">小时后(如1)</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">预约时间结束</label>
+					<div class="col-sm-5 col-xs-12 input-group">
+						<input type="text" name="jieshu" class="form-control" value="{$activity['jieshu']}" /><span class="input-group-addon">点结束(如22)</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">最多可预约多少天后</label>
+					<div class="col-sm-5 col-xs-12 input-group">
+						<input type="text" name="tianshu" class="form-control" value="{$activity['tianshu']}" /><span class="input-group-addon">天(如15)</span>
+					</div>
+				</div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">上传图片缩略 宽</label>
+                    <div class="col-sm-5 col-xs-12 input-group">
+						<input type="number" name="upsize" class="form-control" value="{$activity['upsize']}" /><span class="input-group-addon">像素</span>
+                    </div>
+                </div>
+			</div>
+			
+        </div>
+        <div class="form-group">
+          <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">定制模板</label>
+          <div class="col-sm-8 col-xs-12">
+            <div class="row row-fix">
+			{template 'dingzhi'}
             </div>
           </div>
         </div>

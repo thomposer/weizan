@@ -56,7 +56,7 @@ if($do == 'details') {
 		preg_match_all('/<img.*?src=[\'|\"](.*?(?:[\.png|\.jpg]))[\'|\"].*?[\/]?>/i', $val['val'], $match);
 		if(!empty($match[1])) {
 			foreach($match[1] as $val) {
-				if(strexists($val, 'http://') || strexists($val, 'https://')) {
+				if((strexists($val, 'http://') || strexists($val, 'https://')) && !strexists($val, 'mmbiz.qlogo.cn') && !strexists($val, 'mmbiz.qpic.cn')) {
 					$images[] = $val;
 				} else {
 					if(strexists($val, './attachment/images/')) {
@@ -116,6 +116,10 @@ if($do == 'submit') {
 	$post = $_GPC['__input'];
 	$hasimgs = $post['hasimgs'];
 	$wximgs = $post['wximgs'];
+	foreach($post['items'] as $key=>$val) {
+		$displayorder[$key] = $val['displayorder'];
+	}
+	array_multisort($displayorder, SORT_DESC, SORT_NUMERIC, $post['items']);
 	foreach($post['items'] as &$reply) {
 		if(!empty($hasimgs)) {
 			$reply['content'] =  str_replace($hasimgs, $wximgs, $reply['content']);

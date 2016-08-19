@@ -6,7 +6,6 @@
 defined('IN_IA') or exit('Access Denied');
 uni_user_permission_check('site_article');
 $do = in_array($do, array('display', 'post', 'delete')) ? $do : 'display';
-
 $category = pdo_fetchall("SELECT id,parentid,name FROM ".tablename('site_category')." WHERE uniacid = '{$_W['uniacid']}' ORDER BY parentid ASC, displayorder ASC, id ASC ", array(), 'id');
 $parent = array();
 $children = array();
@@ -41,7 +40,7 @@ if($do == 'display') {
 	}
 	
 	$list = pdo_fetchall("SELECT * FROM ".tablename('site_article')." WHERE uniacid = '{$_W['uniacid']}' $condition ORDER BY displayorder DESC, id DESC LIMIT ".($pindex - 1) * $psize.','.$psize, $params);
-	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('site_article') . " WHERE uniacid = '{$_W['uniacid']}'");
+	$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('site_article') . " WHERE uniacid = '{$_W['uniacid']}'".$condition);
 	$pager = pagination($total, $pindex, $psize);
 	template('site/article');
 } elseif($do == 'post') {
@@ -85,15 +84,15 @@ if($do == 'display') {
 			'ishot' => intval($_GPC['option']['hot']),
 			'pcate' => intval($_GPC['category']['parentid']),
 			'ccate' => intval($_GPC['category']['childid']),
-			'template' => $_GPC['template'],
-			'title' => $_GPC['title'],
-			'description' => $_GPC['description'],
+			'template' => addslashes($_GPC['template']),
+			'title' => addslashes($_GPC['title']),
+			'description' => addslashes($_GPC['description']),
 			'content' => htmlspecialchars_decode($_GPC['content'], ENT_QUOTES),
 			'incontent' => intval($_GPC['incontent']),
-			'source' => $_GPC['source'],
-			'author' => $_GPC['author'],
+			'source' => addslashes($_GPC['source']),
+			'author' => addslashes($_GPC['author']),
 			'displayorder' => intval($_GPC['displayorder']),
-			'linkurl' => $_GPC['linkurl'],
+			'linkurl' => addslashes($_GPC['linkurl']),
 			'createtime' => TIMESTAMP,
 			'click' => intval($_GPC['click'])
 		);

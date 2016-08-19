@@ -39,6 +39,10 @@ function template_page($id, $flag = TEMPLATE_DISPLAY) {
 		mkdirs($path);
 	}
 	$content = template_parse($page['html']);
+	if (!empty($page['params'][0]['params']['bgColor'])) {
+		$content .= '<style>body{background-color:'.$page['params'][0]['params']['bgColor'].' !important;}</style>';
+	}
+	$content .= '<script type="text/javascript"> var scale = 1, marginLeft, marginTop; var width = window.screen.width; var height = window.screen.height; width / height > 320 / 480 ? (scale = height / 568,  marginLeft = (width / scale - 320) / 2) : (scale = width / 320, marginTop = (height / scale - 568) / 2); window != window.top && $(".container").css({width: "100%", height: "100%", overflow: "hidden", "transform-origin": "top left", transform: "scale(" + scale + ")"}); $(".container div").eq(0).css({"marginTop" : marginTop, "marginLeft": marginLeft}); $("meta[name='."'".'viewport'."'".']").attr("content", "width=320, initial-scale=" + scale + ", maximum-scale=" + scale + ", user-scalable=no"); </script>';
 	$content .= "<script type=\"text/javascript\" src=\"./resource/js/app/common.js\"></script>";
 	file_put_contents($compile, $content);
 	switch ($flag) {
@@ -238,7 +242,7 @@ function template_parse($str) {
 	$str = str_replace('{##', '{', $str);
 	$str = str_replace('##}', '}', $str);
 	if (!empty($GLOBALS['_W']['setting']['remote']['type'])) {
-		$str = str_replace('</body>', "<script>var imgs = document.getElementsByTagName('img');for(var i=0, len=imgs.length; i < len; i++){imgs[i].onerror = function() {if (!this.getAttribute('check-src') && (this.src.indexOf('http://') > -1 || this.src.indexOf('https://') > -1)) {this.src = this.src.indexOf('{$GLOBALS['_W']['attachurl']}') == -1 ? this.src.replace('{$GLOBALS['_W']['attachurl_remote']}', '{$GLOBALS['_W']['attachurl']}') : this.src.replace('{$GLOBALS['_W']['attachurl']}', '{$GLOBALS['_W']['attachurl_remote']}');this.setAttribute('check-src', true);}}}</script></body>", $str);
+		$str = str_replace('</body>', "<script>var imgs = document.getElementsByTagName('img');for(var i=0, len=imgs.length; i < len; i++){imgs[i].onerror = function() {if (!this.getAttribute('check-src') && (this.src.indexOf('http://') > -1 || this.src.indexOf('https://') > -1)) {this.src = this.src.indexOf('{$GLOBALS['_W']['attachurl_local']}') == -1 ? this.src.replace('{$GLOBALS['_W']['attachurl_remote']}', '{$GLOBALS['_W']['attachurl_local']}') : this.src.replace('{$GLOBALS['_W']['attachurl_local']}', '{$GLOBALS['_W']['attachurl_remote']}');this.setAttribute('check-src', true);}}}</script></body>", $str);
 	}
 	$str = "<?php defined('IN_IA') or exit('Access Denied');?>" . $str;
 	return $str;
@@ -544,28 +548,28 @@ function site_category($params = array()) {
 	}
 	$category = array();
 	$result = pdo_fetchall("SELECT * FROM ".tablename('site_category')." WHERE uniacid = '{$_W['uniacid']}' $condition ORDER BY parentid ASC, displayorder ASC, id ASC ");
-	if (!isset($parentid)) {
-		if (!empty($result)) {
-			foreach ($result as $row) {
-				if(empty($row['linkurl'])) {
-					$row['linkurl'] = url('site/site/list', array('cid' =>$row['id']));
-				}
-				$row['icon'] = tomedia($row['icon']);
+	if (!empty($result)) {
+		foreach ($result as $row) {
+			if(empty($row['linkurl'])) {
+				$row['linkurl'] = url('site/site/list', array('cid' =>$row['id']));
+			}
+			$row['icon'] = tomedia($row['icon']);
+			$row['css'] = unserialize($row['css']);
+			if(empty($row['css']['icon']['icon'])){
+				$row['css']['icon']['icon'] = 'fa fa-external-link';
+			}
+			$row['css']['icon']['style'] = "color:{$row['css']['icon']['color']};font-size:{$row['css']['icon']['font-size']}px;";
+			$row['css']['name'] = "color:{$row['css']['name']['color']};";
+			if (!isset($parentid)) {
 				if (empty($row['parentid'])) {
 					$category[$row['id']] = $row;
 				} else {
 					$category[$row['parentid']]['children'][$row['id']] = $row;
 				}
+			} else {
+				$category[] = $row;
 			}
 		}
-	} else {
-		foreach($result as $k => $v) {
-			if(empty($result[$k]['linkurl'])) {
-				$result[$k]['linkurl'] = url('site/site/list', array('cid' => $result[$k]['id']));
-			}
-			$result[$k]['icon'] = tomedia($result[$k]['icon']);
-		}
-		$category = $result;
 	}
 	return $category;
 }
@@ -621,7 +625,7 @@ function site_slide_search($params = array()) {
 		foreach($list as &$row) {
 			if (!strexists($row['url'], './')) {
 				if (!strexists($row['url'], 'http')) {
-					$row['url'] = 'http://' . $row['url'];
+					$row['url'] = $_W['sitescheme'] . $row['url'];
 				}
 			}
 			$row['thumb'] = tomedia($row['thumb']);
@@ -731,7 +735,7 @@ function fournet_pcwidget_link($params = array()) {
 }
 function site_quickmenu() {
 	global $_W, $_GPC;
-	
+
 	if ($_GPC['c'] == 'mc' || $_GPC['c'] == 'activity') {
 		$quickmenu = pdo_fetch("SELECT html, params FROM ".tablename('site_page')." WHERE uniacid = :uniacid AND type = '4' AND status = '1'", array(':uniacid' => $_W['uniacid']));
 	} elseif ($_GPC['c'] == 'auth') {
@@ -739,7 +743,9 @@ function site_quickmenu() {
 	} else {
 		$multiid = intval($_GPC['t']);
 		if (empty($multiid) && !empty($_GPC['__multiid'])) {
-			$multiid = intval($_GPC['__multiid']);
+			$id = intval($_GPC['__multiid']);
+			$site_multi_info = pdo_get('site_multi', array('id' => $id,'uniacid' => $_W['uniacid']));		
+			$multiid = empty($site_multi_info) ? '' : $id;
 		} else {
 			isetcookie('__multiid', '');
 		}
@@ -753,7 +759,13 @@ function site_quickmenu() {
 		return false;
 	}
 	$quickmenu['params'] = json_decode($quickmenu['params'], true);
-	if ($_GPC['c'] == 'home' && empty($quickmenu['params']['position']['homepage'])) {
+	if ($_GPC['c'] == 'home' && $_GPC['a'] != 'page' && empty($quickmenu['params']['position']['homepage'])) {
+		return false;
+	}
+	if ($_GPC['c'] == 'home' && $_GPC['a'] == 'page' && empty($quickmenu['params']['position']['page'])) {
+		return false;
+	}
+	if ($_GPC['c'] == 'site' && empty($quickmenu['params']['position']['article'])) {
 		return false;
 	}
 	if (!empty($_GPC['m']) && !empty($quickmenu['params']['ignoreModules'][$_GPC['m']])) {

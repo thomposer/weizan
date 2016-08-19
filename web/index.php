@@ -59,6 +59,7 @@ $acl = array(
 	),
 	'system' => array(
 		'founder' => array(
+			'site',
 			'common',
 			'attachment',
 			'copyright',
@@ -75,10 +76,8 @@ $acl = array(
 			'register',
 			'logout'
 		),
-		'founder' => array(
-			'display',
+		'founder' => array(		
 			'edit',
-			'create',
 			'fields',
 			'group',
 			'registerset',
@@ -146,13 +145,34 @@ $acl = array(
 			'logout'
 		)
 	),
+	'fournet' => array(
+		'direct' => array(
+			'wxauth_api'
+		)
+	),
+	'shop' => array(
+		'direct' => array(
+		),
+		'founder' => array(
+			'module',
+			'muser',
+			'mkdel',
+			'mpayset',
+			'maddmod',
+
+			'mpayresult',
+			'mgetpayresult',
+			'mmodset',
+		)
+	),
 	'cron' => array(
 		'direct' => array(
 			'entry',
 		)
 	)
+
 );
-if (($_W['setting']['copyright']['status'] == 1) && empty($_W['isfounder']) && $controller != 'cloud' && $controller != 'utility') {
+if (($_W['setting']['copyright']['status'] == 1) && empty($_W['isfounder']) && $controller != 'cloud' && $controller != 'utility' && $controller != 'account') {
 	$_W['siteclose'] = true;
 	if ($controller == 'account' && $action == 'welcome') {
 		template('account/welcome');
@@ -236,7 +256,7 @@ if ((ENDTIME - STARTTIME) > $_W['config']['setting']['maxtimeurl']) {
 	$data = array(
 		'type' => '1',
 		'runtime' => ENDTIME - STARTTIME,
-		'runurl' => 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
+		'runurl' => $_W['sitescheme'].$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
 		'createtime' => TIMESTAMP
 	);
 	pdo_insert('core_performance', $data);

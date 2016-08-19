@@ -54,11 +54,12 @@ function activity_coupon_owned($uid, $filter = array(), $pindex = 10, $psize = 0
 		$limit_sql = ' LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
 	}
 	$total = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.code, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 1 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid', array(':uid' => $uid));
-	$data = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.code, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 1 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid ORDER BY r.couponid DESC' . $limit_sql, array(':uid' => $uid), 'couponid');
+	$data = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.code, r.recid, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 1 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid ORDER BY r.couponid DESC' . $limit_sql, array(':uid' => $uid), 'couponid');
 	if(!empty($data)) {
 		$couponids = implode(', ', array_keys($data));
 		$tokens = pdo_fetchall("SELECT couponid,thumb,couponsn,`condition`,title,discount,type,description,starttime,endtime FROM " . tablename('activity_coupon') . " WHERE couponid IN ({$couponids})", array(), 'couponid');
 		foreach($tokens as &$token) {
+			$token['recid'] = $data[$token['couponid']]['recid'];
 			$token['code'] = $data[$token['couponid']]['code'];
 			$token['status'] = $data[$token['couponid']]['status'];
 			$token['cototal'] = $data[$token['couponid']]['cototal'];
@@ -134,6 +135,12 @@ function activity_coupon_grant($uid, $couponid, $module = '', $remark = '') {
 
 function activity_coupon_use($uid, $couponid, $operator, $clerk_id = 0, $recid = '', $module = 'system', $clerk_type = 1, $store_id = 0) {
 	global $_W;
+	$length = strlen($couponid); 
+	if ($length == '16') {
+		$coupon_record = pdo_get('activity_coupon_record', array('code' => $couponid), array('couponid'));
+		$code = $couponid;
+		$couponid = $coupon_record['couponid'];
+	}
 	$coupon = pdo_fetch("SELECT * FROM " . tablename('activity_coupon') . " WHERE `type` = 1 AND `couponid` = :couponid LIMIT 1", array(':couponid' => $couponid));
 	if (empty($coupon)) {
 		return error(-1, '没有指定的折扣券信息');
@@ -150,7 +157,13 @@ function activity_coupon_use($uid, $couponid, $operator, $clerk_id = 0, $recid =
 		$where = ' AND `recid` = :recid';
 		$params[':recid'] = $recid;
 	}
-	$precord = pdo_fetch("SELECT * FROM " . tablename('activity_coupon_record') . " WHERE `uid` = :uid AND `couponid` = :couponid AND `status` = 1 $where", $params);
+	if ($length == '16') {
+		$code_params[':uid'] = $uid;
+		$code_params['code'] = $code;
+		$precord = pdo_fetch("SELECT * FROM " . tablename('activity_coupon_record') . " WHERE `uid` = :uid AND `code` = :code AND `status` = 1 $where", $code_params);
+	} else {
+		$precord = pdo_fetch("SELECT * FROM " . tablename('activity_coupon_record') . " WHERE `uid` = :uid AND `couponid` = :couponid AND `status` = 1 $where", $params);
+	}
 	if (empty($precord)) {
 		return error(-1, '没有可使用的折扣券');
 	}
@@ -239,11 +252,12 @@ function activity_token_owned($uid, $filter = array(), $pindex = 1, $psize = 10)
 		$limit_sql = ' LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
 	}
 	$total = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.code, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 2 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid', array(':uid' => $uid));
-	$data = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.code, r.status FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 2 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid ORDER BY r.couponid DESC' . $limit_sql, array(':uid' => $uid), 'couponid');
+	$data = pdo_fetchall("SELECT COUNT(*) AS cototal, r.couponid, r.code, r.status,r.recid FROM " . tablename('activity_coupon_record') . " AS r LEFT JOIN " . tablename('activity_coupon') . " AS c ON r.couponid = c.couponid WHERE c.type = 2 AND r.uid = :uid " . $condition . ' GROUP BY r.couponid ORDER BY r.couponid DESC' . $limit_sql, array(':uid' => $uid), 'couponid');
 	if(!empty($data)) {
 		$couponids = implode(', ', array_keys($data));
 		$tokens = pdo_fetchall("SELECT couponid,thumb,couponsn,`condition`,title,discount,type,description,starttime,endtime FROM " . tablename('activity_coupon') . " WHERE couponid IN ({$couponids})", array(), 'couponid');
 		foreach($tokens as &$token) {
+			$token['recid'] =$data[$token['couponid']]['recid'];
 			$token['code'] = $data[$token['couponid']]['code'];
 			$token['status'] = $data[$token['couponid']]['status'];
 			$token['cototal'] = $data[$token['couponid']]['cototal'];
@@ -317,6 +331,12 @@ function activity_token_grant($uid, $couponid, $module = '', $remark = '') {
 
 function activity_token_use($uid, $couponid, $operator, $clerk_id = 0, $recid = '', $module = 'system', $clerk_type = 1, $store_id = 0) {
 	global $_W;
+	$length = strlen($couponid); 
+	if ($length == '16') {
+		$coupon_record = pdo_get('activity_coupon_record', array('code' => $couponid), array('couponid'));
+		$code = $couponid;
+		$couponid = $coupon_record['couponid'];
+	}
 	$coupon = pdo_fetch("SELECT * FROM " . tablename('activity_coupon') . " WHERE `type` = 2 AND `couponid` = :couponid LIMIT 1", array(':couponid' => $couponid));
 	if (empty($coupon)) {
 		return error(-1, '没有指定的代金券信息');
@@ -333,7 +353,14 @@ function activity_token_use($uid, $couponid, $operator, $clerk_id = 0, $recid = 
 		$where = ' AND `recid` = :recid';
 		$params[':recid'] = $recid;
 	}
-	$precord = pdo_fetch("SELECT * FROM " . tablename('activity_coupon_record') . " WHERE `uid` = :uid AND `couponid` = :couponid AND `status` = 1 $where", $params);
+	if ($length == '16') {
+		$code_params[':uid'] = $uid;
+		$code_params['code'] = $code;
+		$precord = pdo_fetch("SELECT * FROM " . tablename('activity_coupon_record') . " WHERE `uid` = :uid AND `code` = :code AND `status` = 1 $where", $code_params);
+	} else {
+		$precord = pdo_fetch("SELECT * FROM " . tablename('activity_coupon_record') . " WHERE `uid` = :uid AND `couponid` = :couponid AND `status` = 1 $where", $params);
+	}
+	
 	if (empty($precord)) {
 		return error(-1, '没有可使用的代金券');
 	}

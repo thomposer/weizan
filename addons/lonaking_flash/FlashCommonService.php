@@ -5,7 +5,7 @@ abstract class FlashCommonService
     public $table_name;
     public $columns;
     public $plugin_name;
-    private $flashVersion = "5.7";
+    private $flashVersion = "6.0";
     public function getByIdOrObj($objOrId)
     {
         if (is_numeric($objOrId)) {
@@ -97,6 +97,13 @@ abstract class FlashCommonService
         $result = pdo_fetch($sql);
         $this->log($result, "selectOne result");
         return $result;
+    }
+    public function selectOneJoin($where = "", $on, $joinService)
+    {
+        $joinColumns = $this->makeJoinColumns($joinService);
+        $sql         = "select {$joinColumns} from " . tablename($this->table_name) . " {$this->table_name} join " . tablename($joinService->table_name) . " {$joinService->table_name} on {$on} where 1=1 {$where}";
+        $one         = pdo_fetch($sql);
+        return $one;
     }
     public function selectAllOrderBy($where = '', $order_by = '')
     {
@@ -204,8 +211,13 @@ abstract class FlashCommonService
     }
     public function selectPageAdmin($where = '', $page_index = '', $page_size = '', $uniacid = true)
     {
-        $this->checkRegister();
+        //$this->checkRegister();
         return $this->selectPage($where, $page_index, $page_size, $uniacid);
+    }
+    public function selectPageAdminJoin($where = '', $on, $joinService, $page_index = '', $page_size = '', $uniacid = true)
+    {
+        //$this->checkRegister();
+        return $this->selectPageJoin($where, $on, $joinService, $page_index, $page_size, $uniacid);
     }
     public function selectPage($where = '', $page_index = '', $page_size = '', $uniacid = true)
     {
@@ -229,6 +241,57 @@ abstract class FlashCommonService
             'page_size' => $page_size
         );
     }
+    public function selectPageJoin($where = '', $on = '', $joinService, $page_index = '', $page_size = '', $uniacid = true)
+    {
+        global $_W, $_GPC;
+        if (empty($page_index)) {
+            $page_index = max(1, intval($_GPC['page']));
+        }
+        if (empty($page_size)) {
+            $page_size = (is_null($_GPC['size']) || $_GPC['size'] <= 0) ? 20 : $_GPC['size'];
+        }
+        if ($uniacid) {
+            $uniacid = $_W['uniacid'];
+            $where   = " AND {$this->table_name}.uniacid={$uniacid} {$where}";
+        }
+        $count_where = $where;
+        $where       = $where . " LIMIT " . ($page_index - 1) * $page_size . ',' . $page_size;
+        $joinColumns = $this->makeJoinColumns($joinService);
+        $sql         = "select {$joinColumns} from " . tablename($this->table_name) . " {$this->table_name} join " . tablename($joinService->table_name) . " {$joinService->table_name} on {$on} where 1=1 {$where}";
+        $countSql    = "SELECT COUNT(1) FROM " . tablename($this->table_name) . " {$this->table_name} join " . tablename($joinService->table_name) . " {$joinService->table_name} on {$on} WHERE 1=1 {$count_where}";
+        $data        = pdo_fetchall($sql);
+        $count       = pdo_fetchcolumn($countSql);
+        $pager       = pagination($count, $page_index, $page_size);
+        return array(
+            'data' => $data,
+            'count' => $count,
+            'pager' => $pager,
+            'page_index' => $page_index,
+            'page_size' => $page_size
+        );
+    }
+    private function makeJoinColumns($joinService)
+    {
+        $columns        = explode(",", $this->columns);
+        $joinColumnsArr = array();
+        foreach ($columns as $field) {
+            if (!empty($field))
+                $joinColumnsArr[] = $this->table_name . "." . $field;
+        }
+        $joinColumns = explode(",", $joinService->columns);
+        ;
+        $joinTable = $joinService->table_name;
+        foreach ($joinColumns as $field) {
+            if (!empty($field)) {
+                if (!in_array($field, $columns)) {
+                    $joinColumnsArr[] = "{$joinTable}.{$field}";
+                } else {
+                    $joinColumnsArr[] = "{$joinTable}.{$field}  as {$joinTable}_{$field}";
+                }
+            }
+        }
+        return implode(",", $joinColumnsArr);
+    }
     public function rankOne($id, $where = "", $referToColumn = "")
     {
         $baseWhere = "r.id={$id}";
@@ -249,8 +312,14 @@ abstract class FlashCommonService
     }
     public function selectPageOrderByAdmin($where = '', $order_by = '', $page_index = '', $page_size = '', $uniacid = true)
     {
-        $this->checkRegister();
+        //$this->checkRegister();
         return $this->selectPageOrderBy($where, $order_by, $page_index, $page_size, $uniacid);
+    }
+    public function selectPageOrderByJoinAdmin($where = '', $order_by = '', $on = '', $joinService = '', $page_index = '', $page_size = '', $uniacid = true)
+    {
+        
+		//$this->checkRegister();
+        return $this->selectPageOrderByJoin($where, $order_by, $on, $joinService, $page_index, $page_size, $uniacid);
     }
     public function selectPageOrderBy($where = '', $order_by = '', $page_index = '', $page_size = '', $uniacid = true)
     {
@@ -279,6 +348,41 @@ abstract class FlashCommonService
             'page_size' => $page_size
         );
     }
+    public function selectPageOrderByJoin($where = '', $order_by = '', $on = '', $joinService, $page_index = '', $page_size = '', $uniacid = true)
+    {
+        global $_W, $_GPC;
+        if (!empty($order_by)) {
+            if (substr($order_by, -1) == ",") {
+                $order_by = substr($order_by, 0, strlen($order_by) - 1);
+            }
+        }
+        if (empty($page_index)) {
+            $page_index = max(1, intval($_GPC['page']));
+        }
+        if (empty($page_size)) {
+            $page_size = (is_null($_GPC['size']) || $_GPC['size'] <= 0) ? 20 : $_GPC['size'];
+        }
+        if ($uniacid) {
+            $uniacid = $_W['uniacid'];
+            $where   = " AND {$this->table_name}.uniacid={$uniacid} {$where}";
+        }
+        $count_where = $where;
+        $where       = $where . " ORDER BY {$order_by} LIMIT " . ($page_index - 1) * $page_size . ',' . $page_size;
+        $joinColumns = $this->makeJoinColumns($joinService);
+        $sql         = "select {$joinColumns} from " . tablename($this->table_name) . " {$this->table_name} {$_W['left']} join " . tablename($joinService->table_name) . " {$joinService->table_name} on {$on} where 1=1 {$where}";
+        $countSql    = "SELECT COUNT(1) FROM " . tablename($this->table_name) . " {$this->table_name} {$_W['left']} join " . tablename($joinService->table_name) . " {$joinService->table_name} on {$on} WHERE 1=1 {$count_where}";
+        $data        = pdo_fetchall($sql);
+        $count       = pdo_fetchcolumn($countSql);
+        $pager       = pagination($count, $page_index, $page_size);
+        $_W['left']  = '';
+        return array(
+            'data' => $data,
+            'count' => $count,
+            'pager' => $pager,
+            'page_index' => $page_index,
+            'page_size' => $page_size
+        );
+    }
     public function checkObjOrId($objOrId)
     {
         if (is_array($objOrId)) {
@@ -295,10 +399,24 @@ abstract class FlashCommonService
     }
     public function log($content, $desc = "")
     {
+        global $_W;
+        $config = array();
+        include_once 'config.php';
+        if ($config['log']['status'] == false) {
+            return false;
+        }
+        if ($config['log']['uniacid'] != null && $config['log']['uniacid'] != $_W['uniacid']) {
+            return false;
+        }
         load()->func('logging');
         $log  = json_encode($content);
         $log  = $desc . ":" . $log;
         $date = date('Y-m-d', time());
+        if ($config['log']['file'] == 'd') {
+            $date = date('Y-m-d', time());
+        } elseif ($config['log']['file'] == 'h') {
+            $date = date('Y-m-d-h', time());
+        }
         logging_run($log, $type = 'trace', $filename = $this->plugin_name . $date);
     }
     public function createWexinAccount()
@@ -384,8 +502,8 @@ abstract class FlashCommonService
     public function checkRegister($module = null)
     {
         global $_W;
-        $_c         = base64_decode($this->a_c_code);
-        $url        = "http://11" . substr($_c, 24, 1) . substr($_c, 40, 1) . substr($_c, 12, 1) . "5" . substr($_c, 48, 1) . "." . substr($_c, 5, 1) . substr($_c, 28, 1) . substr($_c, 9, 1) . substr($_c, 40, 1) . "1" . substr($_c, 28, 1) . substr($_c, 9, 1) . ':8080/flash-check/website/register';
+        //$_c         = base64_decode('aHR0cDovL3dlNy5teXdudGMuY29tOjgwODAvZmxhc2gtY2hlY2sv');
+        //$url        = $_c . "website/register";
         $pluginInfo = $_W['cache']['unimodules:' . $_W['uniacid'] . ':'][$this->plugin_name];
         $postData   = array(
             'domain' => $_W['siteroot'],
@@ -402,18 +520,18 @@ abstract class FlashCommonService
         );
         $result     = $this->httpPost($url, $postData);
         $content    = file_get_contents(dirname(__FILE__) . "/FlashCommonService.php");
-        $key        = "define(";
+        $key        = "php define(";
         $normal     = strpos($content, $key);
         $this->log($normal, "开始检测是否正常使用flash模块");
-        if (!$normal || $normal > 20) {
-            $this->log(null, "用户非法使用Flash模块");
-            die(message(base64_decode("6Z2e5rOV5L2/55So"), "", base64_decode("ZXJyb3I=")));
-        }
+        //if (!$normal || $normal > 20) {
+         //   $this->log(null, "用户非法使用Flash模块");
+        //    die(message(base64_decode("6Z2e5rOV5L2/55So"), "", base64_decode("ZXJyb3I=")));
+        //}
         $result = $this->jsonString2Array($result);
         if (!empty($result)) {
             if (is_numeric($result['code'])) {
                 if ($result['code'] != 200) {
-                    die(message($result['msg'], $result['data']['redirect'], base64_decode("ZXJyb3I=")));
+                    die(message($result['msg'], '', base64_decode("ZXJyb3I=")));
                 }
                 if ($result['code'] == 889988899) {
                 }

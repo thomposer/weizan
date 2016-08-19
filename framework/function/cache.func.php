@@ -35,6 +35,9 @@ function cache_load($key, $unserialize = false) {
 	} elseif ($key == 'modules') {
 		$_W['modules'] = $data;
 		return $_W['modules'];
+	} elseif ($key == 'module_receive_enable' && empty($data)) {
+				cache_build_module_subscribe_type();
+		return cache_read($key);
 	} else {
 		return $unserialize ? iunserializer($data) : $data;
 	}

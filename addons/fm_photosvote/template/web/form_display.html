@@ -193,22 +193,34 @@
 					<input type="text" name="ljtp_total" id="ljtp_total" class="form-control"  value="{$rdisplay['ljtp_total']}" />
 					<span class="input-group-addon">位真实投票数</span>
 				</div>
-			</div>
 			<div class="help-block">请勿随意修改删除</div>
+			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-xs-12 col-sm-2 col-md-2  control-label">人气显示（pv）</label>
+			<label class="col-xs-12 col-sm-2 col-md-2  control-label">点击量（pv）</label>
 			<div class="col-sm-8">
 				<div class="input-group">
-					<span class="input-group-addon">首页显示</span>
+					<span class="input-group-addon">显示</span>
+					<input type="text" name="hits" id="hits" class="form-control" value="{$rdisplay['hits']}" />
+					<span class="input-group-addon">次点击</span>
+				</div>
+				
+			<div class="help-block">实际点击次数，每点击一次计算一次</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-2 col-md-2  control-label">人气</label>
+			<div class="col-sm-8">
+				<div class="input-group">
+					<span class="input-group-addon">显示</span>
 					<input type="text" name="xuninum" id="xuninum" class="form-control" value="{$rdisplay['xuninum']}" />
 					<span class="input-group-addon">位虚拟人气　此数值随虚拟人气设置自动变化。 当前总共</span>
 					<input type="text" name="cyrs_total" id="cyrs_total" class="form-control"  value="{$rdisplay['cyrs_total']}" />
 					<span class="input-group-addon">位真实点击</span>
 				</div>
 				
+			<div class="help-block">参与人数为点击量与人气之和，人气只计算一次，无论一个人点击多少次，只计算一次（当天）</div>
 			</div>
-			<div class="help-block"></div>
 		</div>
 		<div class="form-group">
 			<label class="col-xs-12 col-sm-2 col-md-2  control-label">虚拟人气设置</label>

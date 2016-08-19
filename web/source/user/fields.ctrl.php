@@ -15,6 +15,12 @@ if ($do == 'post') {
 		if (empty($_GPC['title'])) {
 			message('抱歉，请填写资料名称！');
 		}
+		if (empty($_GPC['field'])) {
+			message('请填写字段名!');
+		}
+		if (!preg_match('/^[A-Za-z0-9_]*$/', $_GPC['field'])) {
+			message('请使用字母或数字或下划线组合字段名!');
+		}
 		$data = array(
 			'title' => $_GPC['title'],
 			'description' => $_GPC['description'],
@@ -32,11 +38,19 @@ if ($do == 'post') {
 			if (!pdo_fieldexists('users_profile', $data['field'])) {
 				pdo_query("ALTER TABLE ". tablename('users_profile'). " ADD `". $data['field']."` varchar({$length}) NOT NULL default '';");
 			}
+			if (!pdo_fieldexists('mc_members', $data['field'])) {
+				pdo_query("ALTER TABLE ". tablename('mc_members'). " ADD `". $data['field']."` varchar({$length}) NOT NULL default '';");
+			}
 		} else {
 			if (!pdo_fieldexists('users_profile', $data['field'])) {
 				pdo_query("ALTER TABLE ". tablename('users_profile'). " ADD `". $data['field']."` varchar({$length}) NOT NULL default '';");
 			} else {
 				pdo_query("ALTER TABLE ". tablename('users_profile'). " CHANGE `". $data['field']. "` `". $data['field']."` varchar({$length}) NOT NULL default ''");
+			}
+			if (!pdo_fieldexists('mc_members', $data['field'])) {
+				pdo_query("ALTER TABLE ". tablename('mc_members'). " ADD `". $data['field']."` varchar({$length}) NOT NULL default '';");
+			} else {
+				pdo_query("ALTER TABLE ". tablename('mc_members'). " CHANGE `". $data['field']. "` `". $data['field']."` varchar({$length}) NOT NULL default ''");
 			}
 			pdo_update('profile_fields', $data, array('id' => $id));
 		}

@@ -78,7 +78,7 @@
             <li>
                 <a href="{php echo $this->createMobileUrl("second",array("parentid"=>$nav['parentid'],"cid" => $nav['id']),true)}">
                 {if !empty($nav['thumb'])}
-                <div style="float: left; width: 20%; height: 65px;background: url({php echo strpos($nav['thumb'],'http://')===FALSE?($_W['attachurl'].$nav['thumb']):$nav['thumb']}) center no-repeat;"></div>
+                <div style="float: left; width: 20%; height: 65px;background: url({php echo strpos($nav['thumb'],'http://')===FALSE?tomedia($nav['thumb']):$nav['thumb']}) center no-repeat;"></div>
                 {else}
                 <div class="cate-img"> </div>
                 {/if}

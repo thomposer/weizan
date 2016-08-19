@@ -41,6 +41,10 @@ if ($do == 'upload') {
 				$result['error']['message'] = '上传失败，请重试！';
 				die(json_encode($result));
 			}
+			if (!file_is_image($_FILES['file']['name'])) {
+				$result['message'] = '上传失败, 请重试.';
+				die(json_encode($result));
+			}
 			$ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
 			$ext = strtolower($ext);
 
@@ -99,6 +103,7 @@ if ($do == 'upload') {
 				'type' => $type == 'image' ? 1 : 2,
 				'createtime' => TIMESTAMP,
 			));
+			$info['id'] = pdo_insertid();
 			die(json_encode($info));
 		} else {
 			$result['error']['message'] = '请选择要上传的图片！';

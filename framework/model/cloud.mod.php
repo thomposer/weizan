@@ -82,7 +82,7 @@ function cloud_m_build($modulename) {
 		}
 		$ret['files'] = $files;
 		$schemas = array();
-		if(!empty($ret['schemas'])) {
+		if(!empty($ret['schemas']) && !empty($module)) {
 			load()->func('db');
 			foreach($ret['schemas'] as $remote) {
 				$name = substr($remote['tablename'], 4);
@@ -102,8 +102,10 @@ function cloud_m_build($modulename) {
 		$ret['upgrade'] = true;
 		$ret['type'] = 'module';
 		$ret['schemas'] = $schemas;
-				if(empty($module)) {
+		if(empty($module)) {
 			$ret['install'] = 1;
+			$ret['upgrade'] = false;
+			
 		}
 	}
 	return $ret;
@@ -302,7 +304,20 @@ function cloud_sms_send($mobile, $content) {
 	}
 	return error(-1, '发送短信失败, 请联系系统管理人员. 错误详情: 没有设置短信配额或参数');
 }
-
+function cloud_sms_info() {
+	global $_W;
+	
+	$pars = _cloud_build_params();
+	$pars['method'] = 'sms.info';
+	$dat = cloud_request(ADDONS_URL.'/gateway.php?', $pars);
+	if ($dat['content'] == 'success') {
+		$setting_key = "sms.info";
+		$dat = setting_load($setting_key);
+		return $dat[$setting_key];
+	}
+	
+	return array();
+}
 function cloud_build() {
 	$pars = _cloud_build_params();
 	$pars['method'] = 'application.build';
@@ -433,11 +448,11 @@ function _cloud_shipping_parse($dat, $file) {
 		return error(-1, '补丁程序正在更新中，请稍后再试！');
 	}
 	if(strlen($dat['content']) != 32) {
+		$ip=file_get_contents(ADDONS_URL . '/getip.php');
 		return error(-1, '
 		访问云服务器错误, 可能原因:
 		1、您的服务器防火墙屏蔽了云服务器IP；
-		2、您的服务器IP地址没有授权（请:<a href="http://bbs.012wz.com/forum.php?mod=viewthread&tid=859" target="_blank">点击授权</a>，
-		或联系售后客服授权:<a href="http://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDA4MzA3NV8yMTc1MThfODAwMDgzMDc1XzJf" target="_blank">800083075</a>）');
+		2、您的服务器IP地址没有授权(系统检测到您的服务器IP为:“'.$ip.'”请把这个IP填到“系统管理——注册站点——IP授权管理--填入备用IP栏，进行IP授权)');
 	}
 	$data = @file_get_contents($file);
 	if(empty($data)) {
@@ -478,6 +493,29 @@ function cloud_extra_data() {
 	$data['accounts'] = pdo_fetchall("SELECT name, account, original FROM ".tablename('account_wechats') . " GROUP BY account");
 	return serialize($data);
 }
+
+
+function cloud_extra_module() {
+	$sql = 'SELECT `name` FROM ' . tablename('modules') . ' WHERE `type` <> :type';
+	$modules = pdo_fetchall($sql, array(':type' => 'system'), 'name');
+	if (!empty($modules)) {
+		return base64_encode(iserializer(array_keys($modules)));
+	} else {
+		return '';
+	}
+}
+
+
+function cloud_extra_theme() {
+	$sql = 'SELECT `name` FROM ' . tablename('site_templates') . ' WHERE `name` <> :name';
+	$themes = pdo_fetchall($sql, array(':name' => 'default'), 'name');
+	if (!empty($themes)) {
+		return base64_encode(iserializer(array_keys($themes)));
+	} else {
+		return '';
+	}
+}
+
 
 function cloud_cron_create($cron) {
 	$pars = _cloud_build_params();
@@ -538,4 +576,128 @@ function _cloud_cron_parse($result) {
 		return error(-1, $result['message']);
 	}
 	return $result;
+}
+
+
+function cloud_auth_url($forward, $data = array()){
+	global $_W;
+
+	$auth = array();
+	$auth['key'] = '';
+	$auth['password'] = '';
+	$auth['url'] = rtrim($_W['siteroot'], '/');
+	$auth['referrer'] = intval($_W['config']['setting']['referrer']);
+	$auth['version'] = IMS_VERSION;
+	$auth['forward'] = $forward;
+
+	if(!empty($_W['setting']['site']['key']) && !empty($_W['setting']['site']['token'])) {
+		$auth['key'] = $_W['setting']['site']['key'];
+		$auth['password'] = md5($_W['setting']['site']['key'] . $_W['setting']['site']['token']);
+	}
+	if ($data && is_array($data)) {
+		$auth = array_merge($auth, $data);
+	}
+	$query = base64_encode(json_encode($auth));
+	$auth_url = ADDONS_URL.'/web/index.php?c=auth&a=passwort&__auth=' . $query;
+
+	return $auth_url;
+}
+
+
+function cloud_module_setting_prepare($module, $binding) {
+	global $_W;
+	$auth = _cloud_build_params();
+	$auth['arguments'] = array(
+		'binding' => $binding,
+		'acid' => $_W['uniacid'],
+		'type' => 'module',
+		'module' => $module,
+	);
+	$iframe_auth_url = cloud_auth_url('module', $auth);
+	
+	return $iframe_auth_url;
+}
+
+
+function cloud_resource_to_local($uniacid, $type, $url){
+	global $_W;
+
+	load()->func('file');
+
+	$setting = $_W['setting']['upload'][$type];
+
+	$pathinfo = pathinfo($url);
+	$extension = !empty($pathinfo['extension']) ? $pathinfo['extension'] : 'jpg';
+	$originname = $pathinfo['basename'];
+
+	$setting['folder'] = "{$type}s/{$uniacid}/".date('Y/m/');
+
+	$originname = pathinfo($url, PATHINFO_BASENAME);
+	$filename = file_random_name(ATTACHMENT_ROOT .'/'. $setting['folder'], $extension);
+	$pathname = $setting['folder'] . $filename;
+	$fullname = ATTACHMENT_ROOT . $pathname;
+
+	mkdirs(dirname($fullname));
+	
+	load()->func('communication');
+	$response = ihttp_get($url);
+	if (is_error($response)) {
+		return error(1, $response['message']);
+	}
+	if (file_put_contents($fullname, $response['content']) == false) {
+		return error(1, '提取文件失败');
+	}
+
+	if (!empty($_W['setting']['remote']['type'])) {
+		$remotestatus = file_remote_upload($pathname);
+		if (is_error($remotestatus)) {
+			return error(1, '远程附件上传失败，请检查配置并重新上传');
+		} else {
+			file_delete($pathname);
+		}
+	}
+
+	$data = array(
+		'uniacid' => $uniacid,
+		'uid' => intval($_W['uid']),
+		'filename' => $originname,
+		'attachment' => $pathname,
+		'type' => $type == 'image' ? 1 : 2,
+		'createtime' => TIMESTAMP,
+	);
+	pdo_insert('core_attachment', $data);
+
+	$data['url'] = tomedia($pathname);
+	$data['id'] = pdo_insertid();
+
+	return $data;
+}
+
+function cloud_bakup_files($files) {
+	global $_W;
+	if (empty($files)) {
+		return false;
+	}
+	$map = json_encode($files);
+	$hash  = md5($map.$_W['config']['setting']['authkey']);
+	if ($handle = opendir(IA_ROOT . '/data/patch/' . date('Ymd'))) {
+		while (false !== ($patchpath = readdir($handle))) {
+			if ($patchpath != '.' && $patchpath != '..') {
+				if (strexists($patchpath, $hash)) {
+					return false;
+				}
+			}
+		}
+	}
+	
+	$path = IA_ROOT . '/data/patch/' . date('Ymd') . '/' . date('Hi') . '_' . $hash;
+	load()->func('file');
+	if (!is_dir($path) && mkdirs($path)) {
+		foreach ($files as $file) {
+			mkdirs($path . '/' . dirname($file));
+			file_put_contents($path . '/' . $file, file_get_contents(IA_ROOT . $file));
+		}
+		file_put_contents($path . '/' . 'map.json', $map);
+	}
+	return false;
 }

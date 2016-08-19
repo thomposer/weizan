@@ -60,7 +60,7 @@
 		<div class="form-group">
 			<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">字段</label>
 			<div class="col-sm-10 col-xs-12">
-				<input type="text" class="form-control" name="field"  value="{$item['field']}" {if !empty($item['field'])}readonly{/if}>
+				<input type="text" class="form-control" placeholder="请使用字母或数字或下划线组合字段名" name="field"  value="{$item['field']}" {if !empty($item['field'])}readonly{/if}>
 			</div>
 		</div>
 		<div class="form-group">
@@ -129,5 +129,14 @@
 		</div>
 	</form>
 </div>
+<script>
+	$('input[name="field"]').blur(function() {
+		field_value = $(this).val();
+		reg = /^[A-Za-z0-9_]*$/;
+		if (!reg.test(field_value)) {
+			$(this).val('');
+		}
+	})
+</script>
 {/if}
 {template 'common/footer-gw'}

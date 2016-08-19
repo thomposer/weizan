@@ -85,7 +85,7 @@ if($do == 'post') {
 						'icon' => empty($_GPC['icon']['icon']) ? 'fa fa-external-link' : $_GPC['icon']['icon'],
 					),
 					'name' => array(
-						'color' => $_GPC['name']['color'],
+						'color' => $_GPC['icon']['color'],
 					),
 				)
 			);

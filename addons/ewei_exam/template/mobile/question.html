@@ -106,6 +106,7 @@
         var now_page = '{$pindex}';
 
         var total_time = {$record_info['countdown']};
+		var exam_time = '{$exam_time}' == '' ? 0 : '{$exam_time}';
         //var total_time = 3;
         var int_time;
         var int_countdown;
@@ -118,7 +119,7 @@
             if(m < 10) { m = '0' + m;}
             if(s < 10) { s = '0' + s;}
 
-            if (total_time <= 0) {
+            if (total_time <= 0 && exam_time != 0) {
                 $(".jishi").html( "00:00");
                 window.clearInterval(int_time);
                 update_countdown();

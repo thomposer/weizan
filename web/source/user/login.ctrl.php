@@ -74,6 +74,13 @@ function _login($forward = '') {
 				}
 			}
 		}
+		if(!empty($record['agentid'])){
+		    $url=$_SERVER['SERVER_NAME'];
+		    $record1 = pdo_get('agent_copyright', array('uid'=>$record['agentid']));
+		    if(!empty($record1) && $record1['yuming']!=$url){
+			    message('登录失败，账户不存在或者密码错误！');
+		    }
+	    }
 		$founders = explode(',', $_W['config']['setting']['founder']);
 		$_W['isfounder'] = in_array($record['uid'], $founders);
 		if (!empty($_W['siteclose']) && empty($_W['isfounder'])) {

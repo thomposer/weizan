@@ -44,14 +44,6 @@
                 </div>
             </div>
             {/if}
-            <?php
-                $ershou2 = '../addons/xfeng_community/template/mobile/style/style1/static/image/ershou2.jpg';
-                    if ($ershou2) {
-                        $url = @file_get_contents($ershou2);
-                    }
-
-
-            ?>
             <div class="form-group">
                 <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label"></label>
                 <div class="col-sm-7 col-lg-9 col-xs-12">
@@ -67,19 +59,21 @@
     <table class="table table-hover">
         <thead class="navbar-inner">
             <tr>
+                 <th style="width:50px;">ID</th>
                 <th style="width:100px;">小区名称</th>
                 <th style="width:80px;">姓名</th>
                 <th style="width:130px;">手机</th>
-                <th style="width:140px;">地址</th>               
+                <th>地址</th>               
                 <th style="width:150px;">注册时间</th>
-                <th style="width:120px;">状态(点击修改)</th>
-                <th style="width:150px;">备注</th>
-                <th style="min-width:100px; width:30%;">操作</th>
+                <th style="width:60px;">状态</th>
+                <th>备注</th>
+                <th>操作</th>
             </tr>
         </thead>
         <tbody>
             {loop $list $item}
             <tr>
+                <td>{$item['id']}</td>
                 <td>{$item['title']}</td>
                 <td>{$item['realname']}</td>
                 <td>{$item['mobile']}</td>
@@ -99,15 +93,7 @@
     </table>
     {$pager}
 </div>
-<?php
-    
-    
-    $newbutton = '../addons/xfeng_community/template/mobile/style/style1/static/image/newbutton.jpg';
-    if ($newbutton) {
-        $url1 = @file_get_contents($newbutton);
-    }
 
-    ?>
 <script type="text/javascript">
 function verify(obj, id, type) {
     $(obj).html($(obj).html() + "...");

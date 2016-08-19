@@ -28,6 +28,11 @@
 	<form action="" method="post"  class="form-horizontal" role="form" enctype="multipart/form-data" id="form1">
 		<input type="hidden" name="uniacid" value="{$uniacid}">
 		<input type="hidden" name="step" value="2">
+		{if $_W['setting']['platform']['authstate']}
+		<div class="alert alert-danger">
+			获取公众号信息功能极不稳定，建议您使用<a  class="btn btn-success" style="margin-left:5px;" href="{$authurl}"><i class="fa fa-weixin"></i> 授权登录添加公众号</a>，或是跳过此步，手动添加
+		</div>
+		{/if}
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				一键获取公众号信息
@@ -224,7 +229,7 @@
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">短信剩余条数</label>
 					<div class="col-sm-9 col-xs-12">
-						{php echo tpl_edit_sms('balance', $notify['sms']['balance'], $uniacid , url('account/post/edit_sms'))}
+						{php echo tpl_edit_sms('balance', $notify['sms']['balance'], $uniacid , url('account/post-step/edit_sms', array('step' => 3)))}
 					</div>
 				</div>
 				<div class="form-group">

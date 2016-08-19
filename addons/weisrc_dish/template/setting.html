@@ -242,6 +242,22 @@
                         <input type="password" name="sms_pwd" class="form-control" value="{$setting['sms_pwd']}" />
                     </div>
                 </div>
+                <div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启全局短信</label>
+				<div class="col-sm-9 col-xs-12">
+					<label class='radio-inline'><input type="radio" name="is_sms" value="0" {if $setting['is_sms'] == 0} checked="true" {/if} onclick="$('#sms_id').show();">开启</label>
+					<label class='radio-inline'><input type="radio" name="is_sms" value="1"  {if $setting['is_sms'] == 1} checked="true" {/if} onclick="$('#sms_id').hide();"> 关闭</label>
+				</div>
+			</div>
+                <div class="form-group" id="sms_id" {if $setting['is_sms']!='0'}style="display: none;"{/if}>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">短信平台模板ID</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="sms_id" class="form-control" value="{$setting['sms_id']}" />
+                        <div>
+                            短信模板可使用变量${phone},${name} </div>
+                    </div>
+                    
+                </div>
             </div>
         </div>
         <div class="form-group col-sm-12">

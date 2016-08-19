@@ -1,0 +1,94 @@
+<input type="hidden" name="reply_id" value="{$reply['id']}" />
+<div class="panel panel-default">
+    <div class="panel-heading">
+        活动设置
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 活动名称</label>
+            <div class="col-sm-9 col-xs-12">
+               	<input type="text" id="title" class="form-control" placeholder="" name="title" value="{$reply['title']}">
+            </div>
+        </div>
+ 		<div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 活动图片</label>
+            <div class="col-sm-9 col-xs-12">
+               	{php echo tpl_form_field_image('ad_urlimg',$reply['ad_urlimg']);}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 活动说明</label>
+            <div class="col-sm-9 col-xs-12">
+               	<textarea style="height:60px;" id='description' name="description" class="form-control" cols="60">{$reply['description']}</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 更换灯笼图片 <br>大小640px*690px</label>
+            <div class="col-sm-9 col-xs-12">
+                {php echo tpl_form_field_image('top_banner1',$reply['top_banner1']);}
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 自定义名称</label>
+            <div class="col-sm-4 col-xs-12">
+                <input type="text" id="way" class="form-control" placeholder="" name="way" value="{$reply['way']}">
+            </div>
+            <div class="help-block">自定义首页“这是XXX已经传递多少人”</div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 背景图片 <br>大小640px*1120px</label>
+            <div class="col-sm-9 col-xs-12">
+                {php echo tpl_form_field_image('bgimg',$reply['bgimg']);}
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 背景音乐<br>mp3格式</label>
+            <div class="col-sm-9 col-xs-12">
+                {php echo tpl_form_field_audio('backmusic',$reply['backmusic']);}
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">虚拟数量设置</label>
+            <div class="col-sm-9 col-xs-12">
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <span class="input-group-addon">已传递人数</span>
+                    <input type="text" class="form-control" name="xunimun" value="{$reply['xunimun']}" />
+                </div>
+
+                <!--<div class="input-group" >-->
+                    <!--<span class="input-group-addon">抽中奖品数</span>-->
+                    <!--<input type="text" class="form-control" name="xuniawardmun" value="{$basereply['xuniawardmun']}" />-->
+                <!--</div>-->
+                <div class="help-block">前台显示的参与人数 = 虚拟人数 + 实际参与人数!</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 关注引导链接</label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" id="gzurl" class="form-control" placeholder="请输入关注引导链接,以http://开头" name="gzurl" value="{$reply['gzurl']}">
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+

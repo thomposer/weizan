@@ -1,3 +1,6 @@
+<style type="text/css">
+	.tongji ul li span {color:{if empty($rbody['bodynumcolor'])}#FFF{else}{$rbody['bodynumcolor']}{/if};}
+</style>
 <div class="tongji">
 	<ul>
     	<li>{if empty($rdisplay['csrs'])}参赛作品{else}{$rdisplay['csrs']}{/if}<br /><span>{php echo $rdisplay['csrs_total']}</span></li>

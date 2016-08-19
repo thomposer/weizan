@@ -80,8 +80,13 @@ footer{ background:url({php echo $this->_img_url}footer_bg.PNG) repeat-x; height
 			var username = $.trim( $("#username").val() );
 			var mobile = $.trim($("#mobile").val());
 			var email = $.trim( $("#email").val() );
+			var re_m = /^1\d{10}$/;
 			if (username == '' || mobile == '') {
 				alert("姓名和手机不能为空");
+				return false;
+			}
+			if (!re_m.test(mobile)) {
+				alert("手机号输入不正确");
 				return false;
 			}
 			showloading();
@@ -91,6 +96,8 @@ footer{ background:url({php echo $this->_img_url}footer_bg.PNG) repeat-x; height
 					data = JSON.parse(data);
 					if (data.message.result == 1) {
 						window.location.href = data.message.url;
+					} else {
+						alert(data.message.message);
 					}
 				}
 			});

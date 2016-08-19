@@ -20,11 +20,11 @@ $entries['card']['do'] = '';
 $entries['card']['url'] = url('mc/bond/card', array('i' => $_W['uniacid']));
 $entries['card']['url_show'] = murl('mc/bond/card', array(), true, true);
 
-$entries['clerk']['title'] = '店员操作入口设置';
+$entries['clerk']['title'] = '收银台关键字设置';
 $entries['clerk']['module'] = 'clerk';
 $entries['clerk']['do'] = '';
-$entries['clerk']['url'] = url('clerk/check', array('i' => $_W['uniacid']));
-$entries['clerk']['url_show'] = murl('clerk/check', array(), true, true);
+$entries['clerk']['url'] = url('entry', array('i' => $_W['uniacid'],'do' => 'home', 'm' => 'paycenter'));
+$entries['clerk']['url_show'] = murl('entry', array('m' => 'paycenter', 'do' => 'home'), true, true);
 
 if($do != 'module') {
 	$entry = $entries[$do];
@@ -98,7 +98,6 @@ if(!empty($cover)) {
 if(empty($reply)) {
 	$reply = array();
 }
-
 if (checksubmit('submit')) {
 	if(trim($_GPC['keywords']) == '') {
 		message('必须输入触发关键字.');

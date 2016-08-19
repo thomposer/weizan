@@ -119,6 +119,7 @@ class Mon_OrderformModuleSite extends WeModuleSite
 				'i_desc' => htmlspecialchars_decode($_GPC['i_desc']),
 				'o_tel' => $_GPC['o_tel'],
 				'pay_type' => $_GPC['pay_type'],
+				'ipreview_pg' => $_GPC['ipreview_pg'],
 				'o_num' => $_GPC['o_num'],
 				'displayorder' => $_GPC['displayorder'],
 				'createtime' => TIMESTAMP
@@ -271,7 +272,7 @@ class Mon_OrderformModuleSite extends WeModuleSite
 			}
 			$html .= ($value['createtime'] == 0 ? '' : date('Y-m-d H:i',$value['createtime'])) . "\t ,";
 			$html .= ($value['ordertime'] == 0 ? '' : date('Y-m-d',$value['ordertime'])) . "\t ,";
-			$html .= $this->encode( $value['remark'],$dc )  . "\t ,";
+			$html .= $this->encode( $value['remark'],$dc )  . "\n";
 
 		}
 		header("Content-type:text/csv");

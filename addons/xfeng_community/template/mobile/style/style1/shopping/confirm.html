@@ -90,7 +90,7 @@
                 <span><b id="shopCartvo_logisticssum_sum"></b></span>
                 <span id="shopCartvo_logisticssum_content" style="">本小区免运费,支持货到付款</span>
             </p>
-            <p>赠送积分：<span><b id="discount_sum">{$item['credit']}</b></span></p>
+            <p>赠送积分：<span><b id="discount_sum">{php echo $c = $totalprice*$credit['shop_credit']}</b></span></p>
         </div>
     </section>
     <form class="form-horizontal" method="post" role="form">

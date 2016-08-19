@@ -46,34 +46,41 @@
 		<li><a href="{php echo url('site/editor/page', array('multiid' => $multiid))}">专题管理</a></li>
 		<li class="active"><a href="{php echo url('site/editor/design', array('multiid' => $multiid, 'id' => $id))}">{if empty($id)}添加专题页面{else}编辑专题页面{/if}</a></li>
 	</ul>
-	<form action="" method="post" ng-controller="commonCtrl">
+	<form action="" method="post" ng-controller="commonCtrl" class="form-horizontal">
 		<input type="hidden" name="multiid" value="{$multiid}" />
 		<input type="hidden" name="id" value="{$id}" />
 		<div class="app clearfix" ng-controller="mainCtrl">
 			<input type="hidden" name="wapeditor[params]" id="wapeditor-params" value="{{submit.params}}" />
 			<input type="hidden" name="wapeditor[html]" id="wapeditor-html" value="{{submit.html}}" />
+
 			<div class="app-preview">
 				<div class="app-header"></div>
-				<div class="app-content" ng-style="{'background-color' : activeModules[0].params.bgColor}">
-					<div class="modules">
-						<div ng-if="module['id']" id="module-{{module.index}}" name="{{module.id}}" index="{{module.index}}" ng-class="{'modules-actions': activeItem.index == module.index, 'js-sorttable' : !module.issystem}" ng-repeat="module in activeModules | orderBy:'displayorder'"  ng-style="{'border' : module.issystem ? 'none' : ''}">
+				<div class="app-content" ng-style="{'background-color' : activeModules[0].params.bgColor, 'height' : activeModules[0].params.pageHeight+'px'}">
+					<!--若只有一个页面，就给app-content添加class: only-one-page; 内部样式定义它的高度：height: 1136px * N-->
+					<div class="modules" ng-style="{'height' : activeModules[0].params.pageHeight+'px'}">
+						<div ng-if="module['id']" id="module-{{module.index}}" name="{{module.id}}" index="{{module.index}}" ng-class="{'modules-actions': activeItem.index == module.index, 'js-sorttable' : !module.issystem && !module.isbase}" ng-repeat="module in activeModules | orderBy:'displayorder'"  ng-style="{'border' : module.issystem ? 'none' : ''}">
 							<div ng-init="displayPanel = ('widget-'+(module['id'].toLowerCase())+'-display.html')" ng-include="displayPanel" ng-click="editItem(module.index)"></div>
 							<!--自定义模块编辑部分-->
 							<div class="text-right action-wrap">
-								<span class="label-default action edit" ng-click="editItem(module.index)">编辑</span>
+								<span class="label-default action edit" ng-if="module.id != 'header'" ng-click="editItem(module.index)">编辑</span>
 								<!--span class="label-default action app-add">加内容</span-->
-								<span class="label-default action remove" data-container="body" data-toggle="popover" data-placement="left" ng-click="deleteItem(module.index)">删除</span>
+								<span class="label-default action remove" ng-if="module.id != 'header'" data-container="body" data-toggle="popover" data-placement="left" ng-click="deleteItem(module.index)">删除</span>
 							</div>
 						</div>
 					</div>
 				</div>
+				<div class="app-mask-bottom"></div>
 				<div class="app-region">
 					<div class="arrow-top"></div>
 					<div class="panel panel-default">
 						<div class="panel-body">
-							<h4 class="text-center">添加内容</h4>
+							<h4 class="text-center">基础</h4>
 							<ul class="app-add-filed clearfix">
-								<li ng-repeat="m in modules" ng-if="!m.issystem" ng-click="addItem(m['id'])"><a id="{{m['id']}}" class="btn btn-default" href="#" ng-bind="m['name']"></a></li>
+								<li ng-repeat="m in modules" ng-if="m.isbase == true" ng-click="addItem(m['id'])"><a id="{{m['id']}}" class="btn btn-default" href="#" ng-bind="m['name']"></a></li>
+							</ul>
+							<h4 class="text-center">组件</h4>
+							<ul class="app-add-filed clearfix">
+								<li ng-repeat="m in modules" ng-if="!m.issystem && !m.isbase" ng-click="addItem(m['id'])"><a id="{{m['id']}}" class="btn btn-default" href="#" ng-bind="m['name']"></a></li>
 							</ul>
 						</div>
 					</div>
@@ -81,6 +88,240 @@
 			</div>
 			<div class="app-side">
 				<div ng-init="editorPanel = ('widget-'+(activeItem['id'].toLowerCase())+'-editor.html'.toLowerCase())" ng-show="activeItem.id == editorid" ng-repeat="editorid in editors" ng-include="editorPanel" id="editor{{editorid}}" class="editor"></div>
+				<div class="app-text-edit" ng-if="activeItem.id != 'header'">
+			        <div class="inner">
+			            <div class="panel panel-default">
+			                <div class="panel-body">
+			                    <ul class="nav nav-tabs">
+			                        <li class="active"><a href="#attribute" role="tab" data-toggle="tab">属性</a></li>
+			                        <li><a href="#action" role="tab" data-toggle="tab" >动作</a></li>
+			                    </ul>
+			                    <div class="tab-content">
+			                        <div class="tab-pane active" id="attribute">
+			                            <div class="panel-group" id="accordion">
+			                                <div class="panel panel-default">
+			                                    <div class="panel-heading" role="tab" id="heading-basic">
+			                                        <h4 class="panel-title">
+			                                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-basic" aria-expanded="true" aria-controls="collapse-basic">
+			                                                基础样式
+			                                            </a>
+			                                        </h4>
+			                                    </div>
+			                                    <div id="collapse-basic" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-basic">
+			                                        <div class="panel-body">
+                            	                        <div class="form-group">
+							                                <label class="control-label col-xs-3">位置</label>
+							                                <div class="col-xs-4">
+							                                    <div class="input-group">
+															      <span class="input-group-addon">X</span>
+															      <input type="number" ng-model="activeItem.params.positionStyle.marginleft" class="form-control">
+															      <span class="input-group-addon">px</span>
+															    </div>
+							                                </div>
+							                                <div class="col-xs-4">
+							                                    <div class="input-group">
+															      <span class="input-group-addon">Y</span>
+															      <input type="number" ng-model="activeItem.params.positionStyle.margintop" class="form-control">
+															      <span class="input-group-addon">px</span>
+															    </div>
+							                                </div>
+							                                				                                
+							                            </div>
+							                            
+							                            <div class="form-group" ng-if="activeItem.id == 'onlyText' || activeItem.id == 'image' || activeItem.id == 'shape' || activeItem.id == 'pureLink' || activeItem.id == 'dial' || activeItem.id == 'good' || activeItem.id == 'reward' || activeItem.id == 'countDown'">
+							                            	<label class="control-label col-xs-3">宽高</label>
+							                            	<div class="col-xs-4">
+							                                    <div class="input-group">
+															      <span class="input-group-addon">宽度</span>
+															      <input type="number" ng-model="activeItem.params.positionStyle.width" min="0" max="320" class="form-control">
+															      <span class="input-group-addon">px</span>
+															    </div>
+							                                </div>
+							                                <div class="col-xs-4">
+							                                    <div class="input-group">
+															      <span class="input-group-addon">高度</span>
+															      <input type="number" ng-model="activeItem.params.positionStyle.height" min="0" class="form-control">
+															      <span class="input-group-addon">px</span>
+															    </div>
+							                                </div>
+							                            </div>
+							                            <div class="form-group" ng-if="activeItem.id == 'onlyText'">
+							                            	<label class="control-label col-xs-3">行距</label>
+							                                <div class="col-xs-8">
+							                                    <div class="input-group">
+								                                    <select class="form-control" id="plength" ng-model="lhselected" ng-change="changeLineHeight(lhselected);">
+								                                    	<option></option>
+																  		<option ng-selected="activeItem.params.baseStyle.lineheight == 1">1</option>
+																  		<option ng-selected="activeItem.params.baseStyle.lineheight == 1.25">1.25</option>
+																  		<option ng-selected="activeItem.params.baseStyle.lineheight == 1.5">1.5</option>
+																  		<option ng-selected="activeItem.params.baseStyle.lineheight == 2">2</option>
+																  		<option ng-selected="activeItem.params.baseStyle.lineheight == 2.5">2.5</option>
+																	</select>
+															    	<span class="input-group-addon">倍</span>
+															    </div>
+							                                </div>
+							                            </div>
+							                            <div class="form-group" ng-show="activeItem.id == 'onlyText' || activeItem.id == 'pureLink' || activeItem.id == 'dial' || activeItem.id == 'good' || activeItem.id == 'countDown'">
+							                            	<label class="control-label col-xs-3">字体大小</label>
+							                            	<div class="col-xs-8">
+							                                    <div class="input-group">
+															      <select class="form-control" id="plength" ng-model="fzselected" ng-change="changeFontSize(fzselected);">
+															      		<option></option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 12">12</option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 14">14</option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 16">16</option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 18">18</option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 20">20</option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 22">22</option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 24">24</option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 26">26</option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 28">28</option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 30">30</option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 32">32</option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 34">34</option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 36">36</option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 38">38</option>
+																  		<option ng-selected="activeItem.params.baseStyle.fontsize == 40">40</option>
+																	</select>
+															      <span class="input-group-addon">px</span>
+															    </div>
+							                                </div>							                                
+							                            </div>
+							                            
+			                                        </div>
+			                                    </div>
+			                                </div>
+			                               
+			                            </div>
+			                            
+			                        </div>
+			                        <div class="tab-pane" id="action">
+			                            <div class="form-group">
+			                                <label class="col-xs-3 control-label">速度</label>
+			                                <div class="col-xs-9">
+			                                    <div class="input-group">
+			                                        <input type="number" ng-model="common.speed" max="10" min="0" step="0.1" class="form-control">
+			                                        <span class="input-group-btn">
+			                                            <button class="btn btn-default" type="reset">秒(S)</button>
+			                                        </span>
+			                                    </div>
+			                                </div>
+			                            </div>
+			                            <div class="form-group">
+			                                <label class="col-xs-3 control-label">延迟</label>
+			                                <div class="col-xs-9">
+			                                    <div class="input-group">
+			                                        <input type="number" ng-model="common.delay" max="10" min="0" step="0.1" class="form-control">
+			                                        <span class="input-group-btn">
+			                                            <button class="btn btn-default" type="reset">秒(S)</button>
+			                                        </span>
+			                                    </div>
+			                                </div>
+			                            </div>
+			                            <div class="clearfix icons">
+			                                <div class="icon-container select" ng-click="eleAnimationIns('noEffect')">
+			                                    <div class="icon no-effect"></div>
+			                                    <div class="name">无效果</div>
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('fadeInNormal');">
+			                                    <div class="icon fade-in-normal"></div>
+			                                    <div class="name">淡入</div><!--fadeIn-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('rotateInDownLeft');">
+			                                    <div class="icon rotate-in-down-left"></div>
+			                                    <div class="name">从左滚入</div><!--rotateInDownLeft-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('rotateInDownRight');">
+			                                    <div class="icon rotate-in-down-right"></div>
+			                                    <div class="name">从右滚入</div><!--rotateInDownRight-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('zoomIn');">
+			                                    <div class="icon zoom-in"></div>
+			                                    <div class="name">放大</div><!--zoomIn-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('zoomInDown');">
+			                                    <div class="icon zoom-in-down"></div>
+			                                    <div class="name">下落放大</div><!--zoomInDown-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('fadeIn');">
+			                                    <div class="icon zoom-elastically"></div>
+			                                    <div class="name">弹性放大</div>
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('expandOpen');">
+			                                    <div class="icon shrink-elastically"></div>
+			                                    <div class="name">弹性缩小</div>
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('fadeInRight');">
+			                                    <div class="icon fade-in-left"></div>
+			                                    <div class="name">向右飞入</div><!--fadeInLeft-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('fadeInLeft');">
+			                                    <div class="icon fade-in-right"></div>
+			                                    <div class="name">向左飞入</div><!--fadeInRight-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('fadeInUp');">
+			                                    <div class="icon fade-in-up"></div>
+			                                    <div class="name">向上飞入</div><!--fadeInUp-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('fadeInDown');">
+			                                    <div class="icon fade-in-down"></div>
+			                                    <div class="name">向下飞入</div><!--fadeInDown-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('rotateIn');">
+			                                    <div class="icon rotate-in"></div>
+			                                    <div class="name">旋转出现</div><!--rotateIn-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('flipInY');">
+			                                    <div class="icon flip-in-Y"></div>
+			                                    <div class="name">左右翻转</div><!--flipInY-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('flipInX');">
+			                                    <div class="icon flip-in-X"></div>
+			                                    <div class="name">上下翻转</div><!--flipInX-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('lightSpeedIn');">
+			                                    <div class="icon light-speed-in"></div>
+			                                    <div class="name">刹车</div><!--lightSpeedIn-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('slideRight');">
+			                                    <div class="icon slide-right"></div>
+			                                    <div class="name">向右滑入</div><!--slideInRight-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('slideLeft');">
+			                                    <div class="icon slide-left"></div>
+			                                    <div class="name">向左滑入</div><!--slideInLeft-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('slideUp');">
+			                                    <div class="icon slide-up"></div>
+			                                    <div class="name">向上滑入</div><!--slideInUp-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('slideDown');">
+			                                    <div class="icon slide-down"></div>
+			                                    <div class="name">向下滑入</div><!--slideInDown-->
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('stretchRight');">
+			                                    <div class="icon stretch-right"></div>
+			                                    <div class="name">向右展开</div>
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('stretchLeft');">
+			                                    <div class="icon stretch-left"></div>
+			                                    <div class="name">向左展开</div>
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('pullUp');">
+			                                    <div class="icon stretch-up"></div>
+			                                    <div class="name">向上展开</div>
+			                                </div>
+			                                <div class="icon-container"  ng-click="eleAnimationIns('pullDown');">
+			                                    <div class="icon stretch-down"></div>
+			                                    <div class="name">向下展开</div>
+			                                </div>
+			                            </div>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
 			</div>
 			<div class="shop-preview col-xs-12 col-sm-9 col-lg-10">
 				<div class="text-center alert alert-warning">
@@ -94,7 +335,7 @@
 				$('.modules').click(function(){
 					return false;
 				});
-				require(['wapeditor'], function() {
+				require(['wapeditor', 'bootstrap'], function() {
 					activeModules = {php echo !empty($page['params']) ? $page['params'] : 'null'};
 					angular.bootstrap(document, ['app']);
 				});

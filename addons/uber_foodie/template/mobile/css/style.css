@@ -1,0 +1,60 @@
+@charset "utf-8";
+* {	margin: 0px;padding: 0px;}
+ul,li{list-style:none;}
+a {text-decoration:none;}
+body {width:100%;max-width:640px;min-width:320px;margin:0 auto;font:14px 'Microsoft YaHei','微软雅黑','\5FAE\8F6F\96C5\9ED1';line-height:1.2em;}
+img {border:0px;width:100%;display:block;}
+.banner{max-width:640px;width:100%;margin:0 auto;}
+.banner img{max-width:640%;width:100%;height:auto;}
+.location{max-width:640px;width:100%;overflow:hidden;margin:0 auto;padding:.6em 0;}
+.location .subscribe{float:right;width:50px;padding-right:.5em;}
+.location .subscribe a{background:#093;color:#fff;padding:.3em .6em;font-size:14px;border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px;}
+.location .logo{float:left;width:30px;padding-left:.5em;}
+.location .logo a{border:1px solid #ddd;font-size:8px;border-radius:50px; -moz-border-radius:50px; -webkit-border-radius:50px;color:#ccc;padding:6px 2px;}
+.signin{margin:0 auto;width:100%;max-width:640px;border:1px solid #dedede;border-left:0;border-right:0;}
+.signin ul{overflow:hidden;}
+.signin ul>li.bg{background:#ededed;}
+.signin ul>li dl{overflow:hidden;}
+.signin ul>li dl dt{width:90px;float:left;text-align:right;font-size:12px;color:#999;padding-top:2em;line-height:1.5em;}
+.signin ul>li dl dd{width:220px;float:left;text-align:left;margin-left:1.5em;border-left:3px solid #dedede;font-size:12px;color:#666;padding:1.5em 1em 1em 1.5em;position:relative;}
+.signin ul>li dl dd i{background: url(../images/dd.png) transparent no-repeat 0 0;position:absolute;top:25px;left:-12px;display:inline-block;height:21px;width:21px;}
+.signin ul>li dl dd img{width:35px;height:35px;margin:0 auto;display:inline-block;border:1px solid #903;border-radius:50px; -moz-border-radius:50px; -webkit-border-radius:50px;margin-bottom:.3em;}
+.signin ul>li dl .ddul{overflow:hidden;}
+.signin ul>li dl .ddul li{float:left;margin:0 auto;text-align:center;width:54px;}
+
+.more{margin:0 auto;width:100%;max-width:640px;}
+.more a{display:block;width:100px;text-align:center;border:1px solid #ddd;background:#ededed;border-bottom:0;padding:8px 8px;color:#333;margin:0 auto;margin-top:2em;}
+
+#signinMask{}
+#signinTip{z-index:999;position:fixed;width:200px;height:200px;top:100px;left:50%;margin-left:-100px;display:none;}
+.signinTip{width:200px;height:200px;margin:0 auto;text-align:center;background:#fff;border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px;}
+.signinTip .signincontent{margin:0 auto;padding:2em 0;}
+.signinTip .signincontent img{width:64px;height:64px;margin:0 auto;border:1px solid #903;border-radius:50px; -moz-border-radius:50px; -webkit-border-radius:50px;text-align:center;}
+.signinTip .signincontent p{margin:1em auto;text-align:center;line-height:.8em;}
+.signinTip .signinbutton a{display:block;background:#093;color:#fff;font-size:16px;font-weight:bold;padding:.9em 0 .9em;}
+
+#registerTip{z-index:999;position:fixed;width:300px;height:auto;top:30px;left:50%;margin-left:-150px;display:none;}
+.registerTip{padding:.8em;margin:0 auto;text-align:center;background:#ededed;border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px;}
+.registerTip .registercontent{margin:0 auto;padding-bottom:1em;}
+.registerTip .registercontent img{width:64px;height:64px;margin:0 auto;border:1px solid #903;border-radius:50px; -moz-border-radius:50px; -webkit-border-radius:50px;text-align:center;}
+.registerTip .registercontent p{margin:1em auto;text-align:center;line-height:.8em;}
+.registerTip .registercontent input{border:1px solid #ededed;padding:6px 5px;background:#fff;margin:.8em auto;display:block;width:92%;border-radius:5px;-moz-border-radius:5px; -webkit-border-radius:5px;color:#ccc;}
+.registerTip .registercontent .vcodebox{overflow:hidden;width:92%;margin-left:.3em;}
+.registerTip .registercontent input.vcode{width:96px;float:left;margin:0 auto;padding:5px;display:block;}
+.registerTip .registercontent span#getvcode{background:#2753C2;color:#fff;padding:.5em .8em .5em;margin-top:.2em;display:block;float:right;font-size:12px;cursor:pointer;}
+.registerTip .registerbutton a{display:block;background:#093;color:#fff;font-size:14px;font-weight:bold;padding:.7em 0 .6em;letter-spacing:1px;}
+.registerTip .registerinfo{font-size:12px;color:#999;padding-top:.8em;}
+
+@media screen and (min-width:320px) and (max-width:359px) {
+.signin ul>li dl dt{width:80px;} .signin ul>li dl dd{width:180px;}
+}
+@media screen and (min-width:360px) and (max-width:374px) {
+.signin ul>li dl dt{width:80px;}
+}
+@media screen and (min-width:375px) and (max-width:413px) {
+}
+@media screen and (min-width:414px) and (max-width:900px) {
+}
+
+
+

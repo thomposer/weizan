@@ -23,7 +23,7 @@ class CoreModuleReceiver extends WeModuleReceiver {
 				}
 			}
 			if(empty($qr)) {
-				$sceneid = trim($sceneid = $this->message['scene']);
+				$sceneid = trim($this->message['scene']);
 				if(is_numeric($sceneid)) {
 					$scene_condition = " `qrcid` = '{$sceneid}'";
 				} else {
@@ -44,10 +44,9 @@ class CoreModuleReceiver extends WeModuleReceiver {
 			);
 			pdo_insert('qrcode_stat', $insert);
 		} elseif($this->message['event'] == 'SCAN') {
-			$sceneid = $this->message['scene'];
 			$acid = $this->acid;
 			$uniacid = $this->uniacid;
-			$sceneid = trim($sceneid = $this->message['scene']);
+			$sceneid = trim($this->message['scene']);
 			if(is_numeric($sceneid)) {
 				$scene_condition = " `qrcid` = '{$sceneid}'";
 			} else {

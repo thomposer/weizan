@@ -19,7 +19,7 @@ var volume = document.getElementById("volume");
 audio.controls = false;
 
 audio.addEventListener('timeupdate', function() {
-  	updateProgress();
+  	//updateProgress();
 }, false);
 
 function togglePlayPause() {

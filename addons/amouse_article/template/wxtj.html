@@ -60,7 +60,7 @@
                     {$item['title']}
                 </td>
                 <td  class="qrcode">
-                    <img src="{$_W['attachurl']}{$item['thumb']}" height="45px" width="45px" />
+                    <img src="{php echo tomedia($item['thumb'])}" height="45px" width="45px" />
                 </td>
                 <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
                 <td>

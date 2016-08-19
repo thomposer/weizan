@@ -5,7 +5,7 @@ define('IN_MOBILE', true);
 if(!empty($_POST)) {
 	$out_trade_no = $_POST['out_trade_no'];
 	require '../../framework/bootstrap.inc.php';
-	$_W['uniacid'] = $_W['weid'] = $_POST['body'];
+	$_W['uniacid'] = $_W['weid'] = intval($_POST['body']);
 	$setting = uni_setting($_W['uniacid'], array('payment'));
 	if(is_array($setting['payment'])) {
 		$alipay = $setting['payment']['alipay'];
@@ -21,11 +21,12 @@ if(!empty($_POST)) {
 			$string .= $alipay['secret'];
 			$sign = md5($string);
 			if($sign == $_POST['sign']) {
+				WeUtility::logging('pay-alipay', var_export($_POST, true));
 				$sql = 'SELECT * FROM ' . tablename('core_paylog') . ' WHERE `uniontid`=:uniontid';
 				$params = array();
 				$params[':uniontid'] = $out_trade_no;
 				$log = pdo_fetch($sql, $params);
-				if(!empty($log) && $log['status'] == '0') {
+				if(!empty($log) && $log['status'] == '0' && ($_POST['total_fee'] == $log['card_fee'])) {
 					$log['transaction_id'] = $_POST['trade_no'];
 					$record = array();
 					$record['status'] = '1';

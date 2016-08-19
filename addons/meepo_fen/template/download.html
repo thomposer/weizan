@@ -1,114 +1,73 @@
 {template 'common/header'}
-<div class="main">
-
-	<div style="display:block; overflow:hidden;">
-	<style>
-		.refresh-log ul{margin:10px 0 0 0;}
-		.refresh-log ul em{font-style:normal; float:right;}
-	</style>
-		<div class="panel panel-default" >
-		    <div class="panel-heading">系统消息</div>
-		    <div class="panel-body" id="logs"></div>
-		</div>
-		<div class="panel panel-default">
-	            <div class="panel-heading">
-	                幸运活动
-	            </div>
-	            <div class="panel-body" id="active">
-	            	
-	            </div>
-	    </div>
-	</div>
-    <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" >
+<section>
+    <div class="container-fluid container-fullw bg-white">
         <div class="panel panel-default">
-            <div class="panel-heading">
-                系统升级
-            </div>
             <div class="panel-body">
+            <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" >
+
                 <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">当前版本</label>
-                    <div class="col-sm-9 col-xs-12">
-                        <div class="form-control-static">{$version}<br/> 最后更新日期: {$updatedate}</div>
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">版本</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static"><span class="fa fa-square-o"></span> &nbsp; 当前版本: {$version}</p>
                     </div>
                 </div>
-                 <div class="form-group" >
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">最新版本</label>
-                    <div class="col-sm-9 col-xs-12">
-                        <div class="form-control-static"  id="check">等待检测...</div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">更新日期</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static"><span class="fa fa-square-o"></span> &nbsp; {$updatedate}</p>
                     </div>
                 </div>
-           
-                <div class="form-group" id="upgrade" style="display:none">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
-                    <div class="col-sm-9 col-xs-12">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">更新情况</label>
+                    <div class="col-sm-10" id="upgrade">
+                        <div class="help-block"><strong>注意: {$message}</strong></div>
+                        {if !empty($files)}
+                        <div class="alert alert-info" style="line-height:20px;margin-top:20px;">
+                            {loop $files $f}
+                            <div><span style="display:inline-block; width:30px;">覆盖</span>{$f['path']}</div>
+                            {/loop}
+                        </div>
+                        {/if}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-md-offset-2 col-lg-offset-1 col-xs-12 col-sm-10 col-md-10 col-lg-11">
                         <div class='form-control-static'>
-                            <input type="button" id="upgradebtn" value="立即更新" class="btn btn-primary btn-lg" />
+                            <span id="process"></span>
+                            <button type="button" id="forward" class="btn btn-primary" >立即更新</button>
                             <input type="hidden" name="token" value="{$_W['token']}" />
                         </div>
                     </div>
-            </div>  
+            	</div>
+            </form>
         </div>
-    </form>
+     </div>
 </div>
-<script language='javascript'>
-  
-    function upgrade(){
-        $.ajax({
-            url: "{php $this->createWebUrl('download')}",
-            data:{op:'download'},
-            type:'post',
-            dataType:'json',
-            success:function(ret){
-             if(ret.result==1)      {
-                 $('#process').html("已更新 " + ret.success + "个文件 / 共 " + ret.total +  " 个文件！");
-                 upgrade();
-             }
-             else if(ret.result==2){
-                    alert('更新完成!');
-                    location.reload();
-             }
-            }
-        });
-    }
- 
-    $(function(){
-         $.ajax({
-            url: "{php $this->createWebUrl('download')}",
-            data:{op:'check',verifycode:$('#verifycode').val()}, 
-            type:'post',
-            dataType:'json',
-            success:function(ret){
-                if(ret.result==1){
-                    var html = "";
-                    html+="最新版本: <span style='color:red'>" + ret.version + "</span><br/>";
-                    html+="共检测到需要更新 <span style='color:red'>" + ret.filecount + "</span> 个文件!<br/>";
-                    if(ret.upgrade){
-                       html+="此次更新数据!<br/>";    
-                    }
-                
-                    html+="<div id='process'></div>";
-                    $("#check").html( html);
-                    $('#upgrade').show();
-                      $("#upgradebtn").unbind('click').click(function(){
-                            if($(this).attr('updating')=='1'){
-                                return;
-                            }
-                       
-                           $(this).attr('updating',1).val('正在更新中...');
-                           upgrade();
-                       
-                   });
-                }else{
-                    $("#check").html( ret.message);
+</section>
+<script type="text/javascript">
+    require(['jquery', 'util'], function($, u){
+    	function upgrade(){
+            $.ajax({
+                url: "{php $this->createWebUrl('download')}",
+                data:{op:'download'},
+                type:'post',
+                dataType:'json',
+                success:function(ret){
+                 if(ret.result==1)      {
+                     $('#process').html("已更新 " + ret.success + "个文件 / 共 " + ret.total +  " 个文件！");
+                     upgrade();
+                 }
+                 else if(ret.result==2){
+                	 	u.message("恭喜您，更新成功！", '', 'success');
+                        location.reload();
+                 }
                 }
-            }
+            });
+        }
+        $('#forward').click(function(){
+        	upgrade();
         });
-        var url = '{php echo $this->createWebUrl('log')}';
-        $.get(url,function(data){
-        	$('#logs').html(data);
-        });
-   
-
-    })
+    });
 </script>
 {template 'common/footer'}

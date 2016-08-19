@@ -2,9 +2,6 @@
 /**
  * Created by IntelliJ IDEA.
  * User: user
- * Date: 15-4-5
- * Time: 下午1:31
- * To change this template use File | Settings | File Templates.
  */
 //首页
 defined('IN_IA') or exit('Access Denied');
@@ -13,7 +10,7 @@ load()->func('file');
 load()->func('tpl');
 $from_user = empty($_W['openid'])?$_GPC['wid']:$_W['openid'];
 //如果用户头像为空或不存在，使用高级接口
-/*
+
 $check = pdo_fetchcolumn("SELECT headimg FROM ".tablename('amouse_weicard_member')." WHERE openid='".$from_user."' AND weid=".$_W['uniacid']);
 if (empty($check)) {
     //测试高级接口
@@ -30,7 +27,7 @@ if (empty($check)) {
             header("location:$oauth2_code");
         }
     }
-}*/
+}
 
 $op = trim($_GPC['op']) ? trim($_GPC['op']) : 'list';
 if ($op == 'list') {

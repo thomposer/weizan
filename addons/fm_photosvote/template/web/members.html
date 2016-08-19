@@ -117,9 +117,9 @@
 					<th style="width:50px;">ID</th>
 					<th style="width:260px;">用户</th>
 					<th style="width:80px;">封面</th>				
-					<th style="width:150px;">投稿主题宣言</th>				
+					<th style="width:150px;">{if empty($regtitlearr['cmmphotosname'])}参赛主题宣言{else}{$regtitlearr['cmmphotosname']}{/if}</th>				
 					<th style="width:100px;" class="row-first">活动数据</th>	
-					<th style="width:110px;" class="row-hover">手机</th>
+					<th style="width:110px;" class="row-hover">{if empty($regtitlearr['cmmmobile'])}手机{else}{$regtitlearr['cmmmobile']}{/if}</th>
 					<th style="width:140px;">投稿时间</th>
 					<th style="width:200px; ">操作</th>
 				</tr>

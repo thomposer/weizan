@@ -12,6 +12,11 @@ $psize = 20;
 
 $where = ' WHERE 1 ';
 $params = array();
+if(!$_W['isfounder']){
+	$where .= " AND agentid = :agentid";
+    $params[':agentid'] = $_W['uid'];
+}
+
 if ($_GPC['status'] > 0) {
 	$where .= " AND status = :status";
 	$params[':status'] = intval($_GPC['status']);

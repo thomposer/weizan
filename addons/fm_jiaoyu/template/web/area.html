@@ -60,7 +60,6 @@
                 <table class="table table-hover">
                     <thead class="navbar-inner">
                     <tr>
-                        <th style="width:100px;">显示顺序</th>
                         <th>区域名称</th>
                         <th style="text-align:right;">编辑/删除</th>
                     </tr>
@@ -68,7 +67,6 @@
                     <tbody id="level-list">
                     {loop $area $row}
                     <tr>
-                        <td><input type="text" class="form-control" name="ssort[{$row['id']}]" value="{$row['ssort']}"></td>
                         <td><div class="type-parent">{$row['name']}&nbsp;&nbsp;</div></td>
                         <td style="text-align:right;"><a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('area', array('op' => 'post', 'id' => $row['id']))}" title="编辑"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;<a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('area', array('op' => 'delete', 'id' => $row['id']))}" onclick="return confirm('确认删除此分类吗？');return false;" title="删除"><i class="fa fa-times"></i></a></td>
                     </tr>

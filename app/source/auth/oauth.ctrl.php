@@ -130,42 +130,79 @@ if ($scope == 'userinfo') {
 		}
 		$userinfo['avatar'] = $userinfo['headimgurl'];
 		$_SESSION['userinfo'] = base64_encode(iserializer($userinfo));
-		$fan = mc_fansinfo($oauth['openid']);
+		$fan = pdo_get('mc_mapping_fans', array('openid' => $oauth['openid']));
 		if (!empty($fan)) {
 			$record = array();
 			$record['updatetime'] = TIMESTAMP;
 			$record['nickname'] = stripslashes($userinfo['nickname']);
 			$record['tag'] = base64_encode(iserializer($userinfo));
 			pdo_update('mc_mapping_fans', $record, array('openid' => $fan['openid'], 'acid' => $_W['acid'], 'uniacid' => $_W['uniacid']));
-		}
-		if(!empty($fan['uid']) || !empty($_SESSION['uid'])) {
-			$uid = $fan['uid'];
-			if(empty($uid)){
-				$uid = $_SESSION['uid'];
+				
+			if (!empty($fan['uid']) || !empty($_SESSION['uid'])) {
+				$uid = $fan['uid'];
+				if(empty($uid)){
+					$uid = $_SESSION['uid'];
+				}
+				$user = mc_fetch($uid, array('nickname', 'gender', 'residecity', 'resideprovince', 'nationality', 'avatar'));
+				$record = array();
+				if(empty($user['nickname']) && !empty($userinfo['nickname'])) {
+					$record['nickname'] = stripslashes($userinfo['nickname']);
+				}
+				if(empty($user['gender']) && !empty($userinfo['sex'])) {
+					$record['gender'] = $userinfo['sex'];
+				}
+				if(empty($user['residecity']) && !empty($userinfo['city'])) {
+					$record['residecity'] = $userinfo['city'] . '市';
+				}
+				if(empty($user['resideprovince']) && !empty($userinfo['province'])) {
+					$record['resideprovince'] = $userinfo['province'] . '省';
+				}
+				if(empty($user['nationality']) && !empty($userinfo['country'])) {
+					$record['nationality'] = $userinfo['country'];
+				}
+				if(empty($user['avatar']) && !empty($userinfo['headimgurl'])) {
+					$record['avatar'] = $userinfo['headimgurl'];
+				}
+				if(!empty($record)) {
+					pdo_update('mc_members', $record, array('uid' => intval($user['uid'])));
+				}
 			}
-			$user = mc_fetch($uid, array('nickname', 'gender', 'residecity', 'resideprovince', 'nationality', 'avatar'));
-			$record = array();
-			if(empty($user['nickname']) && !empty($userinfo['nickname'])) {
-				$record['nickname'] = stripslashes($userinfo['nickname']);
+		} else {
+			$record = array(
+				'openid' => $oauth['openid'],
+				'uid' => 0,
+				'acid' => $_W['acid'],
+				'uniacid' => $_W['uniacid'],
+				'salt' => random(8),
+				'updatetime' => TIMESTAMP,
+				'nickname' => $userinfo['nickname'],
+				'follow' => 0,
+				'followtime' => 0,
+				'unfollowtime' => 0,
+				'tag' => base64_encode(iserializer($userinfo))
+			);
+			if (!isset($unisetting['passport']) || empty($unisetting['passport']['focusreg'])) {
+				$default_groupid = pdo_fetchcolumn('SELECT groupid FROM ' .tablename('mc_groups') . ' WHERE uniacid = :uniacid AND isdefault = 1', array(':uniacid' => $_W['uniacid']));
+				$data = array(
+					'uniacid' => $_W['uniacid'],
+					'email' => md5($oauth['openid']).'@012wz.com',
+					'salt' => random(8),
+					'groupid' => $default_groupid,
+					'createtime' => TIMESTAMP,
+					'password' => md5($message['from'] . $data['salt'] . $_W['config']['setting']['authkey']),
+					'nickname' => $userinfo['nickname'],
+					'avatar' => $userinfo['headimgurl'],
+					'gender' => $userinfo['sex'],
+					'nationality' => $userinfo['country'],
+					'resideprovince' => $userinfo['province'] . '省',
+					'residecity' => $userinfo['city'] . '市',
+				);
+				pdo_insert('mc_members', $data);
+				$uid = pdo_insertid();
+				$record['uid'] = $uid;
+				$_SESSION['uid'] = $uid;
 			}
-			if(empty($user['gender']) && !empty($userinfo['sex'])) {
-				$record['gender'] = $userinfo['sex'];
-			}
-			if(empty($user['residecity']) && !empty($userinfo['city'])) {
-				$record['residecity'] = $userinfo['city'] . '市';
-			}
-			if(empty($user['resideprovince']) && !empty($userinfo['province'])) {
-				$record['resideprovince'] = $userinfo['province'] . '省';
-			}
-			if(empty($user['nationality']) && !empty($userinfo['country'])) {
-				$record['nationality'] = $userinfo['country'];
-			}
-			if(empty($user['avatar']) && !empty($userinfo['headimgurl'])) {
-				$record['avatar'] = $userinfo['headimgurl'];
-			}
-			if(!empty($record)) {
-				pdo_update('mc_members', $record, array('uid' => intval($user['uid'])));
-			}
+			pdo_insert('mc_mapping_fans', $record);
 		}
 	} else {
 		message('微信授权获取用户信息失败,错误信息为: ' . $response['message']);

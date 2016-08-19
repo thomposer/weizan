@@ -84,6 +84,7 @@ function getModuleFrames($name){
 	$frames['setting']['items']['syswords']['actions'] = array();
 	$frames['setting']['items']['syswords']['active'] = '';
 	
+
 	
 	return $frames;
 }

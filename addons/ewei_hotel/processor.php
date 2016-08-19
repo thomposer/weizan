@@ -1,9 +1,5 @@
 <?php
 
-/**
- * 微酒店
- *
- */
 defined('IN_IA') or exit('Access Denied');
 
 class Ewei_hotelModuleProcessor extends WeModuleProcessor {

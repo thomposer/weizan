@@ -3,7 +3,7 @@
 	<li class="active"><a href="{php echo url('home/welcome/' . $do);}">账号概况 - {$title}</a></li>
 </ul>
 <div class="clearfix welcome-container">
-	{if $do != 'ext'}
+	{if $do != 'ext' && $do != 'members' &&  $do != 'fournet'}
 	<div class="page-header">
 		<h4><i class="fa fa-plane"></i> 快捷操作</h4>
 	</div>
@@ -41,5 +41,9 @@
 	{if $do == 'solution'}
 	{template 'home/welcome-solution'}
 	{/if}
+	{if $do == 'members'}
+	{template 'home/welcome-members'}
+	{/if}
+
 </div>
 {template 'common/footer'}

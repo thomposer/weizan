@@ -111,6 +111,7 @@ if($do == 'consume') {
 					$discount = $user['discount']['discount'] * 10;
 					$log .= "打【{$discount}】折";
 					$money = $total * $user['discount']['discount'];
+					$money = sprintf("%.1f", $money);
 				}
 				if($money < 0) {
 					$money = 0;
@@ -166,7 +167,6 @@ if($do == 'consume') {
 		$note = "店员备注：{$_GPC['remark']}";
 	}
 	$log = $note.$log;
-
 	if($credit2 > 0) {
 		$status = mc_credit_update($uid, 'credit2', -$credit2, array(0, $log, 'system', $_W['user']['clerk_id'], $_W['user']['store_id'], $_W['user']['clerk_type']));
 		if(is_error($status)) {
@@ -201,13 +201,20 @@ if($do == 'consume') {
 
 	$tips = "用户消费{$money}元,使用{$data['credit1']}积分,抵现{$data['credit1_fee']}元,使用余额支付{$data['credit2']}元,现金支付{$data['final_cash']}元";
 		if(!empty($card) && $card['grant_rate'] > 0 && !empty($member)) {
-		$num = $money * $card['grant_rate'];
+		$num = floor($money * $card['grant_rate']);
 		$tips .= "，积分赠送比率为:【1：{$card['grant_rate']}】,共赠送【{$num}】积分";
 		mc_credit_update($uid, 'credit1', $num, array(0, $tips, 'system', $_W['user']['clerk_id'], $_W['user']['store_id'], $_W['user']['clerk_type']));
 	}
 		$openid = pdo_fetchcolumn('SELECT openid FROM ' . tablename('mc_mapping_fans') . ' WHERE acid = :acid AND uid = :uid', array(':acid' => $_W['acid'], ':uid' => $uid));
+	$consume_tips = array(
+		'uid' => $uid,
+		'credit2_num' => $money,
+		'credit1_num' => $num,
+		'store' => '系统后台',
+		'remark' => $tips,
+	);
 	if(!empty($openid)) {
-		mc_notice_consume($openid, '会员消费通知', $tips);
+		mc_notice_consume($openid, '会员消费通知', $consume_tips);
 	}
 	exit('success');
 }
@@ -220,7 +227,7 @@ if($do == 'credit') {
 	if($num < 0 && abs($num) > $credits[$type]) {
 		exit("会员账户{$names[$type]}不够");
 	}
-	$status = mc_credit_update($uid, $type, $num, array(0, trim($_GPC['remark']), 'system', $_W['user']['clerk_id'], $_W['user']['store_id'], $_W['user']['clerk_type']));
+	$status = mc_credit_update($uid, $type, $num, array($_W['user']['uid'], trim($_GPC['remark']), 'system', $_W['user']['clerk_id'], $_W['user']['store_id'], $_W['user']['clerk_type']));
 	if(is_error($status)) {
 		exit($status['message']);
 	}

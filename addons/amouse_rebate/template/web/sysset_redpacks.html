@@ -1,0 +1,248 @@
+{template 'common/header'}
+<div class="clearfix">
+    {template 'web/tab_header'}
+    <form id="theform" class="form form-horizontal" action="" enctype="multipart/form-data" method="post">
+        <input type='hidden' name='op' value="redpacks"/>
+        <input type='hidden' name='redid' value="{$settings['id']}"/>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                注意事项
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="alert alert-info">
+                            发放红包需要使用
+                            <span class="label label-info">认证服务号并开通微信支付</span> <br>
+                            发放红包全部配置好后可以在名片管理那边测试给自己发送。如果配置不正确会报错.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启发红包功能</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="radio" name="is_open_money" value="0" id="form-oauth-0"  {if $settings['is_open_money'] == 0}checked="true"{/if}  />
+                        <label for="form-oauth-0">是</label>
+                        <input type="radio" name="is_open_money" value="1" id="form-oauth-1"  {if $settings['is_open_money']==1}checked="true"{/if}  />
+                        <label for="form-oauth-1">否</label>
+                        <span class="help-block">
+                            关闭则表示系统暂停发送红包。
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="show_div">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                发红包的接口参数
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">AppID</label>
+
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="appid" value="{$settings['appid']}"   class="form-control">
+                        <span class="help-block">就是本公众号的appid</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">AppSecret</label>
+
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="secret" value="{$settings['secret']}"   class="form-control">
+                        <span class="help-block">就是本公众号的AppSecret</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商户号</label>
+
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="mchid" value="{$settings['mchid']}" class="form-control">
+                        <span class="help-block">微信支付商户号, 开通微信支付才能获得商户号</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商户支付密钥</label>
+
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="password" value="{$settings['password']}" class="form-control">
+                        <span class="help-block">微信支付商户所使用的支付密钥, 开通微信支付才能获得商户号</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">服务器IP</label>
+
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="ip" value="{$settings['ip']}" class="form-control">
+                        <span class="help-block">发放红包接口需要服务器IP. 程序将自动获取你的服务器IP, 如果获取失败, 请手动指定</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">CERT证书文件</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="file" name="weixin_cert_file" class="form-control" />
+                        <span class="help-block">
+                            {if !empty($apisec['cert'])}
+                            <span class='label label-success'>已上传</span>
+                            {else}
+                            <span class='label label-danger'>未上传</span>
+                            {/if}
+                            下载证书 cert.zip 中的 apiclient_cert.pem 文件
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付证书密钥文件</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="file" name="weixin_key_file" class="form-control" />
+                            <span class="help-block">
+                                {if !empty($apisec['key'])}
+                            <span class='label label-success'>已上传</span>
+                            {else}
+                            <span class='label label-danger'>未上传</span>
+                            {/if}
+                            下载证书 cert.zip 中的 apiclient_key.pem 文件
+                            </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付根证书文件</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="file" name="weixin_root_file" class="form-control" />
+                        <span class="help-block">
+                          {if !empty($apisec['root'])}
+                            <span class='label label-success'>已上传</span>
+                            {else}
+                            <span class='label label-danger'>未上传</span>
+                            {/if}
+                            下载证书 cert.zip 中的 rootca.pem 文件
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                红包选项
+            </div>
+            <div class="panel-body">
+                <div class="form-group sendtype" style="">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><font color='red'>*</font>活动名称</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="act_name" value="{$settings['act_name']}" class="form-control">
+                        <span class="help-block">现金红包的活动名称(必填)最多10个汉字 </span>
+                    </div>
+                </div>
+
+                <div class="form-group sendtype" style="">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><font color='red'>*</font>红包发起人</label>
+
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="send_name" value="{$settings['send_name']}" class="form-control">
+                        <span class="help-block">发红包人的名称(必填)</span>
+                    </div>
+                </div>
+
+                <div class="form-group sendtype" style="">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><font color='red'>*</font>红包备注</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="remark" value="{$settings['remark']}" class="form-control">
+                        <span class="help-block">备注(必填)</span>
+                    </div>
+                </div>
+
+                <!--
+                 <div class="form-group">
+                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">红包提现金额</label>
+                     <div class="col-sm-9 col-xs-12">
+                         <input type="text" name="tx_money" value="{$settings['tx_money']}" class="form-control">
+                         <span class="help-block">达到一定金额自动发红包(最低一块钱)</span>
+                     </div>
+                 </div>
+
+                 <div class="form-group">
+                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">关注者获得的红包最小金额（元）</label>
+                     <div class="col-sm-9 col-xs-12">
+                         <input type="text" name="min_money" value="{$settings['min_money']}" class="form-control">
+                         <span class="help-block">拉人关注获得的红包(元为单位)</span>
+                     </div>
+                 </div>
+
+                 <div class="form-group">
+                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">关注者获得的红包最大金额（元）</label>
+                     <div class="col-sm-9 col-xs-12">
+                         <input type="text" name="max_money" value="{$settings['max_money']}" class="form-control">
+                         <span class="help-block">拉人关注获得的红包(元为单位)</span>
+                     </div>
+                 </div>-->
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">红包金额变动通知</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="tplid" class="form-control" value="{$settings['tplid']}" />
+                        <span class="help-block">IT科技 - 互联网|电子商务. 编号:  OPENTM202220432 , 标题:红包金额变动通知，如果不填写，则使用客服消息发送通知</span>
+                    </div>
+                </div>
+                <!--<div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">个人最大提现金额</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="person_max_money" value="{$settings['person_max_money']}" class="form-control">
+                        <span class="help-block">个人最大提现金额(超过的话，则不能再领取金额)</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">发放的总奖金</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="total_money" value="{$settings['total_money']}" class="form-control">
+                        <span class="help-block">超过则提示奖金已经被领完了，留空则不控制。</span>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+            <div class="col-md-2 col-lg-1">
+                <input name="submit" type="submit" value="保存" class="btn btn-primary btn-block"/>
+                <input type="hidden" name="token" value="{$_W['token']}"/>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+
+    require(['jquery', 'util'], function ($, u) {
+        $(function () {
+            $('#theform').submit(function () {
+                var message = '';
+                var is_open_money= $("input[name='is_open_money']:checked").val();
+                if ($.trim(is_open_money) == 0){
+                    if ($.trim($(':text[name=appid]').val()) == '') {
+                        message += '必须输入AppID<br>';
+                    }
+                    if ($.trim($(':text[name=secret]').val()) == '') {
+                        message += '必须输入AppSecret<br>';
+                    }
+                    if ($.trim($(':text[name=mchid]').val()) == '') {
+                        message += '必须输入微信支付商户号<br>';
+                    }
+                    if ($.trim($(':text[name=password]').val()) == '') {
+                        message += '必须输入微信支付商户密钥<br>';
+                    }
+                    if (message) {
+                        u.message(message);
+                        return false;
+                    }
+                }
+                return true;
+            });
+        });
+    });
+
+</script>
+{if $_W['isfounder']}
+{template 'siteinfo'}
+{/if}

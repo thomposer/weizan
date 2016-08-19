@@ -24,7 +24,9 @@ if($do == 'token_qrcode') {
 	$errorCorrectionLevel = "L";
 	$matrixPointSize = "8";
 	$token_id = intval($_GPC['id']);
-	$url = $_W['siteroot'] . 'app' . ltrim(murl('clerk/token', array('uid' => $_W['member']['uid'], 'id' => $token_id)), '.');
+	$recid = intval($_GPC['recid']);
+	$type = intval($_GPC['type']);
+	$url = $_W['siteroot'] . 'app' . ltrim(murl('entry', array('m' => 'paycenter', 'do' => 'syscard', 'op' => 'consume', 'recid' => $recid, 'type' => $type)), '.');
 	QRcode::png($url, false, $errorCorrectionLevel, $matrixPointSize);
 	exit();
 }

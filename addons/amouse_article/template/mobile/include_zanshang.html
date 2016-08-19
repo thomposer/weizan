@@ -44,12 +44,10 @@
             <a href="javascript:;" id="js_reward_total">{php echo count($admires)}</a>人赞赏</p>
         <div id="js_reward_list" class="reward_user_list tl">
             {loop $admires $index $admire}
-
-                                <span class="reward_user_avatar" data-acid="{$admire['id']}">
-                                    <img src="{$admire['thumb']}">
-                                </span>  {if fmod($index,6)==0} <br/>
-            {/if}
-
+                <span class="reward_user_avatar" data-acid="{$admire['id']}">
+                    <img src="{$admire['thumb']}">
+                </span>
+                {if fmod($index,8)==0}{/if}
             {/loop}
         </div>
     </div>

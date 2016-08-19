@@ -15,7 +15,7 @@
             <div class="panel-heading">
                 模版消息通知
             </div>
-			 {if $_W['isfounder']} 
+			 {if $_W['isfounder']}
             <div class="panel-body">
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启模版消息</label>
@@ -27,12 +27,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">学校管理方式</label>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">平台管理方式</label>
                     <div class="col-sm-9">
-                        <label for="isshow3" class="radio-inline"><input type="radio" name="guanli" value="1" id="isshow3" {if $setting['guanli'] == 1}checked="true"{/if} />管理员+密码管理方式</label>
+                        <label for="isshow3" class="radio-inline"><input type="radio" name="guanli" value="1" id="isshow3" {if $setting['guanli'] == 1}checked="true"{/if} />管理员统一方式</label>
                         &nbsp;&nbsp;&nbsp;
                         <label for="isshow4" class="radio-inline"><input type="radio" name="guanli" value="0" id="isshow4"  {if empty($setting) || $setting['guanli'] == 0}checked="true"{/if} />自由管理</label>
-                        <span class="help-block">自由管理：所有账户自由管理添加学校无需密码</br>管理员管理：非管理员账户无法添加学校，管理编辑学校必须输入密码</span>
+                        <span class="help-block">自由管理：所有账户自由管理平台功能,自由添加学校</br>管理员管理：非管理员账户无法查看平台功能，只允许管理员添加学校</span>
                     </div>
                 </div>				
                 <div class="form-group">
@@ -150,7 +150,7 @@
 			</div>
 			</div>
 		</div>
-        {/if}	
+        {/if}
         {if $_W['isfounder']}		
         <div class="form-group col-sm-12">
             <input type="hidden" name="id" value="{$setting['id']}" />

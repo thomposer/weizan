@@ -2,9 +2,48 @@
 <link type="text/css" rel="stylesheet" href="{FM_STATIC_MOBILE}public/photos/style.css?v{php echo time();}" />
 <script type="text/javascript" src="{FM_STATIC_MOBILE}public/photos/js/jquery.js"></script>
 <script type="text/javascript" src="{FM_STATIC_MOBILE}public/photos/js/Tip.js"></script>
+{template 'hnav'}
 <style>
-body{background:#f5f5f5 no-repeat;background-size:100% auto;}
+{if $rbody['des']}
+body{background:{$rbody_des['des_bgcolor']}  url({php echo toimage($rbody_des['des_bgimg'])}) no-repeat;background-size:100% auto;}
+.con {
+  padding: 20px 10px;
+  margin-top: -60px;
+  background-size: 100% auto;
+  max-width: 640px;
+  margin: 0 auto;
+  background:{$rbody_des['des_tj_text_color']}  url({php echo toimage($rbody_des['des_bgimg'])}) no-repeat;
+}
+  .tongji {
+    width: 100%;
+    height: 60px;
+    background-size: auto 100%;
+    position: relative;
+    z-index: 10px;
+    max-width: 640px;
+    margin: 0 auto; 
+    margin-top: -10px;
+    background: {$rbody_des['des_tj_bgcolor']} url({php echo toimage($rbody_des['des_tj_bgcolor'])}) repeat-x -60px 0;
+  }
+  .tongji li {
+      color: {$rbody_des['des_tj_text_color']};
+  }
+  .tongji li span {
+      color: {$rbody_des['des_tj_num_color']};
+  }
 
+  .con .des {color:{$rbody_des['des_des_title_color']}}
+  .con .des i{
+    background: url('{if !empty($rbody_des['des_des_xin_img'])}{php echo tomedia($rbody_des['des_des_xin_img'])}{/if}') no-repeat 0 center;
+    background-size: 24px;
+  }
+  .con .desnr{
+      text-indent:2em;
+      color:{$rbody_des['des_des_text_color']};
+      background: {$rbody_des['des_des_bg_color']};
+      border: 1px solid {$rbody_des['des_des_bg_color']};
+  }
+{else}
 .tongji {
   width: 100%;
   height: 60px;
@@ -16,38 +55,28 @@ body{background:#f5f5f5 no-repeat;background-size:100% auto;}
   margin: 0 auto; 
   margin-top: -10px;
 }
- .top {  overflow: hidden;  font-size: 14px;  line-height: 40px;  padding: 5px 0px;  background: #000;  position: fixed;  z-index: 9999;  width: 100%;  color: #fff;  }
+{/if}
+ .top {  overflow: hidden;  font-size: 14px;  line-height: 40px;  padding: 5px 0px;   position: fixed;  z-index: 9999;  width: 100%;   }
  .top div {
   padding: 0 5px;
 }
 .top span {
-  color: #fff;
 }
 .top a {
   padding: 0 5px;
-  color: #fff;
 }
 .top .topa {
   float: right;
   margin-top: 5px;
-  background:url({FM_STATIC_MOBILE}public/images/bm.png) center no-repeat #fe7160;
   background-size: 100% 100%;
   line-height: 30px;
   height: 30px;
   font-weight: bold;
   border-radius: 5px;
-  color: #fff;
   width: 100px;
 }
 
-.con {
-  background: {$rbody['zbgcolor']} url({php echo toimage($rbody['zbg'])});
-  padding: 20px 10px;
-  margin-top: -60px;
-  background-size: 100% auto;
-  max-width: 640px;
-  margin: 0 auto;
-}
+
 .nav>li>a {
   position: relative;
   display: block;
@@ -61,18 +90,13 @@ body{background:#f5f5f5 no-repeat;background-size:100% auto;}
  .h {height:10px}
 </style>
  	
-{template 'hnav'}
+
 <div class="banner" style=" width:100%; max-height: 100%;"><img src="{php echo toimage($rbasic['picture'])}"></div>
 {template 'tongji'}
-<style type="text/css">
-    .con .tips i{
-        color: {if empty($rbody['bodytextcolor'])}#fff{else}{$rbody['bodytextcolor']}{/if};
-    }
-</style>
 
 <div class="con">
-	<p class="tips"><span><i>活动详情</i></span></p>
-	<div class="neirong">
+	<p class="tips des"><span><i>活动详情</i></span></p>
+	<div class="neirong desnr">
 		{$rbasic['content']}
 	</div>
 	{if $rdisplay['isdes'] == 1}{template 'zanzhu'}{/if}

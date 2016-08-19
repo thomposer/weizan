@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $dos = array('passport', 'oauth', 'sync');
@@ -67,7 +67,7 @@ if($do == 'oauth') {
 	if(checksubmit('submit')) {
 		$host = rtrim($_GPC['host'],'/');
 		if(!empty($host) && !preg_match('/^http(s)?:\/\//', $host)) {
-			$host = 'http://'.$host;
+			$host = $_W['sitescheme'].$host;
 		}
 		$data = array(
 			'host' => $host,

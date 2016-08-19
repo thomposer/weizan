@@ -37,7 +37,7 @@ a:hover{ text-decoration:none; color:#0076DB; transition:all 0.3s ease; -moz-tra
 .xiaoyu_head .nav{float:left; top:0; left:150px; width:980px; height:70px; overflow:hidden}
 .nav li{float:left; width:100px; text-align:center; color:#fff;}
 
-.nav li{width:135px;}            /* add */
+.nav li{width:122px;}            /* add */
 .nav li a{display:inline-block; height:67px; line-height:70px; font-size:14px; color:#fff;border-bottom:3px solid #303031; border-bottom:3px solid  transparent;padding-right:0;}
 .nav li a span{ display:none;}
 .nav li.active{background:#0076db; height:70px;}

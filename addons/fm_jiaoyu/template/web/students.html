@@ -123,19 +123,19 @@ require(['bootstrap'],function($){
                     </td>
                     <td>
 					{if !empty($item['own'])}
-                     <img src="{$member[$item['ouid']]['avatar']}" width="50"  onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$member[$item['ouid']]['nickname']} </br>
+                     <img src="{$item['oavatar']}" width="50"  onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$item['onickname']}</br>
 					 <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('students', array('id' => $item['id'], 'openid' => $item['own'], 'op' => 'own', 'schoolid' => $schoolid))}" onclick="return confirm('此操作不可恢复，确认解绑？');return false;" title="解绑"><i class="fa fa-times"></i>解绑</a>
                     {/if}
 					</td>
                     <td>
 					{if !empty($item['mom'])}
-                     <img src="{$member[$item['muid']]['avatar']}" width="50"  onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$member[$item['muid']]['nickname']} </br>
+                     <img src="{$item['mavatar']}" width="50"  onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$item['mnickname']}</br>
 					 <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('students', array('id' => $item['id'], 'openid' => $item['mom'], 'op' => 'mom', 'schoolid' => $schoolid))}" onclick="return confirm('此操作不可恢复，确认解绑？');return false;" title="解绑"><i class="fa fa-times"></i>解绑</a>
                     {/if}
 				   </td>
                     <td>
 					{if !empty($item['dad'])}
-                     <img src="{$member[$item['duid']]['avatar']}" width="50"  onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$member[$item['duid']]['nickname']} </br>
+                     <img src="{$item['davatar']}" width="50"  onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$item['dnickname']}</br>
 					 <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('students', array('id' => $item['id'], 'openid' => $item['dad'], 'op' => 'dad', 'schoolid' => $schoolid))}" onclick="return confirm('此操作不可恢复，确认解绑？');return false;" title="解绑"><i class="fa fa-times"></i>解绑</a>
                    {/if}
 				   </td>					
@@ -188,7 +188,7 @@ $(function(){
                 url,
                 {idArr:id},
                 function(data){
-                    alert(data.error);
+                    alert('操作成功!');
                     location.reload();
                 },'json'
             );

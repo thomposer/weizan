@@ -21,7 +21,7 @@ if(checksubmit()) {
 	}
 	$user['remark'] = $_GPC['remark'];
 	$user['groupid'] = intval($_GPC['groupid']) ? intval($_GPC['groupid']) : message('请选择所属用户组');
-	$group = pdo_fetch("SELECT id,timelimit FROM ".tablename('users_group')." WHERE id = :id", array(':id' => $user['groupid']));
+	$group = pdo_fetch("SELECT id,timelimit,price FROM ".tablename('users_group')." WHERE id = :id", array(':id' => $user['groupid']));
 	if(empty($group)) {
 		message('会员组不存在');
 	}
@@ -32,10 +32,26 @@ if(checksubmit()) {
 	}
 	$user['starttime'] = TIMESTAMP;
 	$user['endtime'] = $timeadd;
+	if(!$_W['isfounder']){
+		$user['agentid']=$_W['uid'];
+		$price =$group['price'];
+		$credit =$_W['user']['credit2']-$price;
+		if($credit < 0){message('账户余额不足，请充值',url('member/member'));}
+		pdo_update('users',array('credit2'=>$credit),array('uid'=>$_W['uid']));
+		$data =array(
+		'uid'=>$_W['uid'],
+		'credittype'=>'credit2',
+		'num'=>-$price,
+		'createtime'=>TIMESTAMP,
+		'remark'=>'添加用户'
+		);
+		pdo_insert('users_credits_record',$data);
+	}
 	$uid = user_register($user);
 	if($uid > 0) {
 		unset($user['password']);
-		message('用户增加成功！', url('user/edit', array('uid' => $uid)));
+		
+		message('用户增加成功！', url('user/display', array('uid' => $uid)));
 	}
 	message('增加用户失败，请稍候重试或联系网站管理员解决！');
 }

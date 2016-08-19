@@ -572,6 +572,13 @@ class WeiXinAccount extends WeAccount {
 			'45016' => '系统分组，不允许修改',
 			'45017' => '分组名字过长',
 			'45018' => '分组数量超过上限',
+			'45056' => '创建的标签数过多，请注意不能超过100个',
+			'45057' => '该标签下粉丝数超过10w，不允许直接删除',
+			'45058' => '不能修改0/1/2这三个系统默认保留的标签',
+			'45059' => '有粉丝身上的标签数已经超过限制',
+			'45157' => '标签名非法，请注意不能和其他标签重名',
+			'45158' => '标签名长度超过30个字节',
+			'45159' => '非法的标签',
 			'46001' => '不存在媒体数据',
 			'46002' => '不存在的菜单版本',
 			'46003' => '不存在的菜单数据',
@@ -589,7 +596,7 @@ class WeiXinAccount extends WeAccount {
 			'40079' => '基本信息base_info中填写的date_info不合法或核销卡券未到生效时间。',
 			'45021' => '文本字段超过长度限制，请参考相应字段说明。',
 			'40080' => '卡券扩展信息cardext不合法。',
-			'40097' => '基本信息base_info中填写的url_name_type或promotion_url_name_type不合法。',
+			'40097' => '基本信息base_info中填写的参数不合法。',
 			'49004' => '签名错误。',
 			'43012' => '无自定义cell跳转外链权限，请参考开发者必读中的申请流程开通权限。',
 			'40099' => '该code已被核销。',
@@ -630,7 +637,6 @@ class WeiXinAccount extends WeAccount {
 	}
 	
 	public function getAccessToken() {
-		load()->func('communication');
 		$cachekey = "accesstoken:{$this->account['acid']}";
 		$cache = cache_load($cachekey);
 		if (!empty($cache) && !empty($cache['token']) && $cache['expire'] > TIMESTAMP) {
@@ -683,6 +689,12 @@ class WeiXinAccount extends WeAccount {
 		return $this->getVailableAccessToken();
 	}
 	
+	public function clearAccessToken() {
+		$cachekey = "accesstoken:{$this->account['acid']}";
+		cache_delete($cachekey);
+		return true;
+	}
+	
 	
 	public function getJsApiTicket(){
 		$cachekey = "jsticket:{$this->account['acid']}";
@@ -690,7 +702,6 @@ class WeiXinAccount extends WeAccount {
 		if(!empty($cache) && !empty($cache['ticket']) && $cache['expire'] > TIMESTAMP) {
 			return $cache['ticket'];
 		}
-		load()->func('communication');
 		$access_token = $this->getAccessToken();
 		if(is_error($access_token)){
 			return $access_token;
@@ -780,6 +791,7 @@ class WeiXinAccount extends WeAccount {
 			$filename = 'images/'.$_W['uniacid'].'/'.date('Y/m/').$filename;
 			load()->func('file');
 			file_write($filename, $response['content']);
+			file_remote_upload($filename);
 			return $filename;
 		} else {
 			$response = json_decode($response['content'], true);
@@ -1211,6 +1223,14 @@ class WeiXinAccount extends WeAccount {
 		if(is_error($response)) {
 			return error(-1, "访问公众平台接口失败, 错误: {$response['message']}");
 		}
+		if(!empty($response['headers']['Content-disposition'])){
+			global $_W;
+			$filename =str_replace(array('attachment; filename=', '"',' '),'',$response['headers']['Content-disposition']);
+			load()->func('file');
+			$filename = 'images/'.$_W['uniacid'].'/'.date('Y/m/').substr($filename,strripos($filename,'/')+1);
+			file_write($filename, $response['content']);
+			file_remote_upload($filename);
+		}
 		$result = @json_decode($response['content'], true);
 		if(empty($result)) {
 			return error(-1, "接口调用失败, 元数据: {$response['meta']}");
@@ -1345,14 +1365,76 @@ class WeiXinAccount extends WeAccount {
 		}
 		return @json_decode($response['content'], true);
 	}
-	
-	public function getOauthInfo($code) {
+
+	public function getOauthInfo($code = '') {
+		global $_W, $_GPC;
+		if (!empty($_GPC['code'])) {
+			$code = $_GPC['code'];
+		}
+		if (empty($code)) {
+			$unisetting = uni_setting_load();
+			$url = (!empty($unisetting['oauth']['host']) ? ($unisetting['oauth']['host'] . $sitepath . '/') : $_W['siteroot'] . 'app/') . "index.php?{$_SERVER['QUERY_STRING']}";
+			$forward = $this->getOauthCodeUrl(urlencode($url));
+			header('Location: ' . $forward);
+			exit;
+		}
 		$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$this->account['key']}&secret={$this->account['secret']}&code={$code}&grant_type=authorization_code";
 		$response = ihttp_get($url);
 		if (is_error($response)) {
 			return $response;
 		}
 		return @json_decode($response['content'], true);
+	}
+	
+	public function getOauthAccessToken() {
+		$cachekey = "oauthaccesstoken:{$this->account['acid']}";
+		$cache = cache_load($cachekey);
+		if (!empty($cache) && !empty($cache['token']) && $cache['expire'] > TIMESTAMP) {
+			return $cache['token'];
+		}
+		$token = $this->getOauthInfo();
+		if (is_error($token)) {
+			return error(1);
+		}
+		$record = array();
+		$record['token'] = $token['access_token'];
+		$record['expire'] = TIMESTAMP + $token['expires_in'] - 200;
+		cache_write($cachekey, $record);
+		return $token['access_token'];
+	}
+	
+	public function getShareAddressConfig() {
+		global $_W;
+		static $current_url;
+		if (empty($current_url)) {
+			$current_url = $_W['siteurl'];
+		}
+		$token = $this->getOauthAccessToken();
+		if (is_error($token)) {
+			return false;
+		}
+		$package = array(
+			'appid' => $this->account['key'],
+			'url' => $current_url,
+			'timestamp' => strval(TIMESTAMP),
+			'noncestr' => strval(random(8, true)),
+			'accesstoken' => $token
+		);
+		ksort($package, SORT_STRING);
+		$signstring = array();
+		foreach ($package as $k => $v) {
+			$signstring[] = "{$k}={$v}";
+		}
+		$signstring = strtolower(sha1(trim(implode('&', $signstring))));
+		$shareaddress_config = array(
+			'appId' => $this->account['key'],
+			'scope' => 'jsapi_address',
+			'signType' => 'sha1',
+			'addrSign' => $signstring,
+			'timeStamp' => $package['timestamp'],
+			'nonceStr' => $package['noncestr']
+		);
+		return $shareaddress_config;
 	}
 
 	public function getOauthCodeUrl($callback, $state = '') {
@@ -1405,6 +1487,20 @@ class WeiXinAccount extends WeAccount {
 				$key = str_replace('-', '', $row['ref_date']);
 				$result[$key]['cumulate'] = $row['cumulate_user'];
 			}
+		}
+		return $result;
+	}
+	
+	protected function requestApi($url, $post) {
+		$response = ihttp_request($url, $post);
+		$result = @json_decode($response['content'], true);
+		if(is_error($response)) {
+			return error(-1, "访问公众平台接口失败, 错误详情: {$this->error_code($result['errcode'])}");
+		}
+		if(empty($result)) {
+			return error(-1, "接口调用失败, 元数据: {$response['meta']}");
+		} elseif(!empty($result['errcode'])) {
+			return error(-1, "访问公众平台接口失败, 错误: {$result['errmsg']},错误详情：{$this->error_code($result['errcode'])}");
 		}
 		return $result;
 	}

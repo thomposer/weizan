@@ -4,11 +4,7 @@ function showMap(obj,addr,city,latlngData,Zoom){
     $('.map').addClass('active');
     $('.map').show();
 	// 百度地图API功能
-	var map = new BMap.Map(obj);
-	map.setDefaultCursor("default");
-    map.setDraggingCursor("pointer");
-	map.enableDragging();
-	map.enableInertialDragging();    //启用地图惯性拖拽，默认禁用
+	//启用地图惯性拖拽，默认禁用
     var myIcon = new BMap.Icon("../addons/imeepos_runner/public/images/ic_Locate.png", new BMap.Size(36,62));
 	map.addControl(new BMap.NavigationControl());
 	// 创建地址解析器实例

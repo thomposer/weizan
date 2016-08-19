@@ -7,14 +7,20 @@
     </div>
 </div>
 <div id="fmcodekey" {if !$rvote['iscode']}style="display:none"{/if}>
-	<div class="form-group">
-		<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 极验验证ID：</label>
-		<div class="col-sm-9">
-			<input type="text" class="form-control" name="codekey" value="{$rvote['codekey']}" placeholder="如果开启验证码，这里必须设置"/>
-			<div class="help-block">如果开启验证码，此处必须设置, 极速验证 ID,获取ID请点击 <a href="http://my.geetest.com/accounts/register/?inviter_email=cwzbooth@126.com" target="_blank">此处</a>{if $_W['role']=='founder'}，获取方法请点击  <a href="http://bbs.012wz.com/forum.php?mod=viewthread&tid=16&extra=page%3D1"  target="_blank">获取方法</a>{/if}
-		</div>
-		
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 极验验证ID：</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" name="codekey" value="{$rvote['codekey']}" placeholder="如果开启验证码，这里必须设置，极验验证 ID"/>
+            
+        </div>
     </div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 极验验证KEY：</label>
+		<div class="col-sm-9">
+			<input type="text" class="form-control" name="codekeykey" value="{$rvote['codekeykey']}" placeholder="如果开启验证码，这里必须设置，极验验证 KEY"/>
+			<div class="help-block">获取ID,KEY请点击 <a href="http://my.geetest.com/accounts/register/?inviter_email=cwzbooth@126.com" target="_blank">此处</a>{if $_W['role']=='founder'}，获取方法请点击  <a href="http://bbs.012wz.com/forum.php?mod=viewthread&tid=16&extra=page%3D1"  target="_blank">获取方法</a>{/if}
+		    </div>
+        </div>
 	</div>
 </div>
 <div class="form-group">

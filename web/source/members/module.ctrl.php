@@ -6,6 +6,7 @@
 defined('IN_IA') or exit('Access Denied');
 		global $_W, $_GPC;
 		load()->func('tpl');
+		load()->model('module');
         $dos = array('list', 'post');
 		$do = in_array($do, $dos) ? $do : 'list';
         $mid    = $_GPC['mid'];
@@ -16,46 +17,41 @@ defined('IN_IA') or exit('Access Denied');
             $condition .= " and title LIKE '%" . $_GPC['keyword'] . "%'";
         }
         if ($do == 'list') {
-            $modules = pdo_fetchall("SELECT * FROM " . tablename('modules') . " where 1" . $condition, array(), 'name');
-            $total   = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('modules') . " WHERE 1" . $condition);
-            $pager   = pagination($total, $pindex, $psize);
-        } elseif ($do == 'post') {
-            $modules = pdo_fetch("SELECT * FROM " . tablename('modules') . "where mid=:mid", array(
-                ':mid' => $mid
-            ), 'name');
-            $items   = pdo_fetch("SELECT * FROM " . tablename('buymod_modules') . "where module=:module", array(
-                ':module' => $modules['name']
-            ));
-        }
-        if (checksubmit('submit')) {
-            $data = array(
-                'weid' => $_W['uniacid'],
-                'mid' => $_GPC['mid'],
-                'name' => $_GPC['name'],
-                'module' => $_GPC['module'],
-                'price' => $_GPC['price'],
-                'outLink' => $_GPC['outLink']
-            );
-            if (empty($items)) {
-                pdo_insert('buymod_modules', $data);
-                pdo_update('modules', array(
-                    'title' => $_GPC['name']
-                ), array(
-                    'name' => $items['module']
-                ));
-            } else {
-                pdo_update('buymod_modules', $data, array(
-                    'module' => $items['module']
-                ));
-                pdo_update('modules', array(
-                    'title' => $_GPC['name']
-                ), array(
-                    'name' => $items['module']
-                ));
-            }
-            message('设置成功！', url('members/module', array(
-                'op' => 'list'
-            )), 'success');
+           	load()->model('module');
+			load()->model('extension');
+			load()->model('cloud');
+			load()->model('cache');
+			load()->func('file');
+			$modtypes = module_types();
+			$modules = pdo_fetchall("SELECT * FROM " . tablename('modules') .'WHERE mid > 10 ORDER BY `issystem` DESC, `mid` ASC', array(), 'mid');
+				if (!empty($modules)) {
+				foreach ($modules as $mid => $module) {
+				$manifest = ext_module_manifest($module['name']);
+				$modules[$mid]['official'] = empty($module['issystem']) && (strexists($module['author'], 'WeiZan Team') || strexists($module['author'], '微赞团队'));
+				$modules[$mid]['description'] = strip_tags($module['description']);
+				$owner   = pdo_get('uni_account_users',array('uniacid' =>$_W['uniacid'],'role' =>'owner'),'uid');
+				$ownerg  = pdo_get('users',array('uid' =>$owner['uid']),'groupid');
+				$taocmd  =getgroupmodules($ownerg['groupid']);
+				$buymodule = pdo_fetch("SELECT * FROM " . tablename('uni_group') . " WHERE uniacid = :uniacid", array(':uniacid' => $_W['uniacid']));
+			    $moduletime=unserialize($buymodule['moduletime']);
+				
+				if(is_array($manifest) && ver_compare($module['version'], $manifest['application']['version']) == '-1') {
+					$modules[$mid]['upgrade'] = true;
+				}
+				if(in_array($module['name'], $sysmodules)) {
+					$modules[$mid]['imgsrc'] = '../framework/builtin/' . $module['name'] . '/icon-custom.jpg';
+					if(!file_exists($modules[$mid]['imgsrc'])) {
+						$modules[$mid]['imgsrc'] = '../framework/builtin/' . $module['name'] . '/icon.jpg';
+					}
+				} else {
+					$modules[$mid]['imgsrc'] = '../addons/' . $module['name'] . '/icon-custom.jpg';
+					if(!file_exists($modules[$mid]['imgsrc'])) {
+						$modules[$mid]['imgsrc'] = '../addons/' . $module['name'] . '/icon.jpg';
+					}
+				}
+			}
+		}
+		$sysmodules = implode("', '", $sysmodules);
         }
         template('members/plug/module');
 	

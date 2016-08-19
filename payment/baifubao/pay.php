@@ -1,11 +1,11 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 define('IN_MOBILE', true);
 require '../../framework/bootstrap.inc.php';
-$_GPC['i'] = !empty($_GPC['i']) ? $_GPC['i'] : $_GET['extra'];
+$_GPC['i'] = !empty($_GPC['i']) ? intval($_GPC['i']) : intval($_GET['extra']);
 require '../../app/common/bootstrap.app.inc.php';
 load()->app('common');
 load()->app('template');

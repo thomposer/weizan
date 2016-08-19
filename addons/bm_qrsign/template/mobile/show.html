@@ -47,7 +47,7 @@ body {
 }
 .pwd-icon {
 	background:url(/res/images/pwd.png) no-repeat;
-	width:35px;
+	width:20%;
 	height:25px;
 	-webkit-background-size:60%;
 	-moz-background-size:60%;
@@ -206,53 +206,47 @@ body {
 }
 .pwd-icon,.id-icon {
 	position:relative;
-	left:7px;
+	left:4px;
 }
 </style>
 <div class="layout">
 	<div class="container_01 mt20a" style="margin-top: 25px;margin-bottom: 20px;width:200px">
-		<img src="{$qrpicurl}" alt="" class="img-responsive">
+		<img src="{$pic_good}" alt="" class="img-responsive">
 	</div>
 	{if $reply['qrtype'] == 1}
 	<div class="container_02 mb20">
 		<form method="post" id="Form" action="">
 			<input type="hidden" name="op" id="op" value="post">
+			{if $reply['ismemo1'] == 1}
 			<div class="input_box">
-				<em class="id-icon"></em>
-				{if $reply['qrinput'] == 1}
+				<em class="pwd-icon">{$reply['message1']}</em>
+				<input type="text" name="message1" id="message1" placeholder=""/>
+			</div>
+			{/if}
+			{if $reply['ismemo2'] == 1}
+			<div class="input_box">
+				<em class="pwd-icon">{$reply['message2']}</em>
+				<input type="text" name="message2" id="message2" placeholder=""/>
+			</div>
+			{/if}
+			{if $reply['ismemo3'] == 1}
+			<div class="input_box">
+				<em class="pwd-icon">{$reply['message3']}</em>
+				<input type="text" name="message3" id="message3" placeholder=""/>
+			</div>
+			{/if}
+			<div class="input_box">
+				<em class="pwd-icon">金额</em>
+				{if (($isins == 1) || ($reply['openid']==$from_user))}
 				<input type="text" name="qrmoney" id="qrmoney" value="{$reply['qrmoney']}"  placeholder="请输入支付金额"/>
 				{else}
 				<input type="text" name="qrmoney" id="qrmoney" value="{$reply['qrmoney']}" readonly="readonly"/>
 				{/if}
-				<div id="username_tag" class="error_tipsp">
-					<em class="error_ico"></em>
-					<div class="error_tips">
-						<div class="et_con">
-							<p></p>
-							<em></em>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!--div class="input_box">
-				<em class="pwd-icon"></em>
-				<input type="password" name="password" id="userpwd" placeholder="密码"/>
-				<div id="userpwd_tag" class="error_tipsp">
-					<em class="error_ico"></em>
-					<div class="error_tips">
-						<div class="et_con">
-							<p></p>
-							<em></em>
-						</div>
-					</div>
-				</div>
-			</div-->
+			</div>			
 			<div class="btn-reg">
-				<!--input id="sbtn" class="reg_btn orange_linear" value="立即登录" type="button" style="border:none"></div-->
 				<button type="submit" id="submit" class="reg_btn orange_linear">{$reply['button']}</button>
 				<p class="tips_title tl_r"></p>
-			</div>
+			</div>			
 		</form>
 	</div>
 	<p class="tips_title" style="font-size:15px;text-align:center;color:red;">{$reply['title']}</p>
@@ -277,22 +271,7 @@ body {
 					</div>
 				</div>
 			</div>
-
-			<!--div class="input_box">
-				<em class="pwd-icon"></em>
-				<input type="password" name="password" id="userpwd" placeholder="密码"/>
-				<div id="userpwd_tag" class="error_tipsp">
-					<em class="error_ico"></em>
-					<div class="error_tips">
-						<div class="et_con">
-							<p></p>
-							<em></em>
-						</div>
-					</div>
-				</div>
-			</div-->
 			<div class="btn-reg">
-				<!--input id="sbtn" class="reg_btn orange_linear" value="立即登录" type="button" style="border:none"></div-->
 				<button type="submit" id="submit" class="reg_btn orange_linear">{$reply['button']}</button>
 				<p class="tips_title tl_r"></p>
 			</div>
@@ -301,8 +280,9 @@ body {
 	<p class="tips_title" style="font-size:15px;text-align:center;color:red;">{$reply['title']}</p>
 	<p class="tips_title" style="font-size:15px;text-align:center;color:red;">{$reply['desc']}</p>
 	{/if}
+	<div class="container_01 mt20a" style="margin-top: 25px;margin-bottom: 20px;width:200px">
+		<a href="{php echo $reply['linkurl']}"><img src="{$qrpicurl}" alt="" class="img-responsive"></a>
+	</div>
 </div>
-<!--center><div style="font-size:10px">Copyright&copy;<a href="http://www.lanrenmb.com/" target="_blank">
-懒人模板</a> All Rights Reserved (2013-2015) 版权所有</center-->
 </body>
 </html>

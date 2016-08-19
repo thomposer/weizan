@@ -42,4 +42,4 @@
         $pager = pagination($total, $pindex, $psize);
         if ($do == 'post') {
         }
-        template('members/plug/user');
+        template('members/user');

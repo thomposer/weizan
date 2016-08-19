@@ -4,12 +4,22 @@
     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
     <meta content="production" name="env">
     <title>我的订单</title>
-    <link data-turbolinks-track="true" href="{RES}/mobile/diandan/assets/diandanbao/weixin.css?v=1" media="all" rel="stylesheet">
+    <link data-turbolinks-track="true" href="{RES}/mobile/{php echo $this->cur_tpl}/assets/diandanbao/weixin.css?v=1" media="all" rel="stylesheet">
     <style type="text/css">@media screen{.smnoscreen {display:none}} @media print{.smnoprint{display:none}}</style></head>
 <body>
 
-<div ng-view="" style="height: 100%;" class="ng-scope"><div class="ddb-nav-header ng-scope" common-header=""><div class="nav-left-item"  onclick="javascript :history.back(-1);"><i class="fa fa-angle-left"></i></div><div class="header-title ng-binding">我的订单</div></div>
-    {php include $this->template('diandan/_footer');}
+<div ng-view="" style="height: 100%;" class="ng-scope">
+    <div class="ddb-nav-header ng-scope" common-header="">
+    <div class="nav-left-item"  onclick="javascript :history.back(-1);"><i class="fa fa-angle-left"></i></div>
+    <div class="header-title ng-binding">我的订单</div>
+        {if $is_permission == true}
+        <a class="nav-right-item" href="{php echo $this->createMobileUrl('adminorder', array(), true)}">
+            <div class="operation-button red">管理</div>
+        </a>
+        {/if}
+    </div>
+
+    {php include $this->template($this->cur_tpl.'/_menu');}
     <div class="ddb-secondary-nav-header orders-index-secondary-nav ng-scope">
         <div class="filter-switch">
             <div class="filter-tab{if $status==0} active{/if}" onclick="jump(0);">
@@ -47,7 +57,7 @@
             <div class="list-item">
                 <div class="total-amount ng-binding"><span class="amount-label">金额：</span>￥{$items['totalprice']}</div>
                 <div class="operation">
-                    <span class="button ng-binding ng-scope" style="color:{if $items['dining_mode']==1}#28a267{else}#ef4437;{/if}">{if $items['dining_mode']==1}店内{elseif  $items['dining_mode']==2}外卖{else}预订{/if}</span>
+                    <span class="button ng-binding ng-scope" style="color:{if $items['dining_mode']==1}#28a267{else}#ef4437;{/if}">{if $items['dining_mode']==1}堂点{elseif  $items['dining_mode']==2}外卖{elseif $items['dining_mode']==3}预订{elseif $items['dining_mode']==4}快餐{/if}</span>
                 </div>
                 <div class="space"></div>
             </div>

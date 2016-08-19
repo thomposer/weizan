@@ -84,7 +84,7 @@ class weisrc_panoModuleSite extends WeModuleSite
 
         $config = $this->module['config']['weisrc_pano'];
         $share_image = tomedia($config['share_image']);
-        $share_title = empty($config['share_title']) ? $config['title'] : $config['share_title'];
+        $share_title = empty($reply['title']) ? $config['title'] : $reply['title'];
         $share_desc = empty($config['share_desc']) ? $config['title'] : $config['share_desc'];
         $share_url = empty($setting['share_url']) ? $_W['siteroot'] . 'app/' . $this->createMobileUrl('view', array(), true) : $setting['share_url'];
         include $this->template('view');
@@ -111,12 +111,12 @@ class weisrc_panoModuleSite extends WeModuleSite
             <userdata title="360view" datetime="'.TIMESTAMP.'" description="description" copyright="copyright" tags="tags" author="author" source="source" comment="comment" info="info" longitude="0" latitude=""/>
             <media/><input ';
             $outputstr .= '
-                tile0url="' . $attachurl . $reply['picture1'] . '"
-                tile1url="' . $attachurl . $reply['picture2'] . '"
-                tile2url="' . $attachurl . $reply['picture3'] . '"
-                tile3url="' . $attachurl . $reply['picture4'] . '"
-                tile4url="' . $attachurl . $reply['picture5'] . '"
-                tile5url="' . $attachurl . $reply['picture6'] . '"
+                tile0url="'  . tomedia($reply['picture1']) . '"
+                tile1url="' . tomedia($reply['picture2']) . '"
+                tile2url="' . tomedia($reply['picture3']) . '"
+                tile3url="' . tomedia($reply['picture4']) . '"
+                tile4url="' . tomedia($reply['picture5']) . '"
+                tile5url="' . tomedia($reply['picture6']) . '"
                 tilesize="685"
                 tilescale="1.0"/>
             <autorotate speed="0.200" nodedelay="0.00" startloaded="1" returntohorizon="0.000" delay="5.00"/>

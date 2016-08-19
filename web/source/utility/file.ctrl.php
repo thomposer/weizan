@@ -22,10 +22,10 @@ $option = array();
 $option = array_elements(array('uploadtype', 'global', 'dest_dir'), $_POST);
 $option['width'] = intval($option['width']);
 $option['global'] = !empty($_COOKIE['__fileupload_global']);
-if (!empty($option['global']) && empty($_W['isfounder'])) {
-	$result['message'] = '没有向 global 文件夹上传文件的权限.';
-	die(json_encode($result));
-}
+//if (!empty($option['global']) && empty($_W['isfounder'])) {
+//	$result['message'] = '没有向 global 文件夹上传文件的权限.';
+//	die(json_encode($result));
+//}
 
 $dest_dir = $_COOKIE['__fileupload_dest_dir'];
 if (preg_match('/^[a-zA-Z0-9_\/]{0,50}$/', $dest_dir, $out)) {
@@ -115,6 +115,10 @@ if ($do == 'upload') {
 		$result['message'] = '上传失败, 请重试.';
 		die(json_encode($result));
 	}
+	/*if (!file_is_image($_FILES['file']['name'])) {
+		$result['message'] = '上传失败, 请重试.';
+		die(json_encode($result));
+	}*/
 	$ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
 	$ext = strtolower($ext);
 	$size = intval($_FILES['file']['size']);

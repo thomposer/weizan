@@ -63,8 +63,7 @@ class WeSession {
 		$row['openid'] = WeSession::$openid;
 		$row['data'] = $data;
 		$row['expiretime'] = TIMESTAMP + WeSession::$expire;
-
-		return pdo_insert('core_sessions', $row, true) == 1;
+		return pdo_insert('core_sessions', $row, true) >= 1;
 	}
 
 	

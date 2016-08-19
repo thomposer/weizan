@@ -14,7 +14,8 @@
     <script src="{MODULE_URL}template/mobile/style/style1/static/js/jquery-1.7.1.min.js"></script>
     <script src="{MODULE_URL}template/mobile/style/style1/static/js/dp.js"></script>
     <script src="{MODULE_URL}template/mobile/style/style1/static/js/layer.js"></script>
-    <script>
+      <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=77E9802d7cfbcde01b5ea17f1388f35d"></script>
+    <!-- <script>
     function bd_encrypt(gg_lat, gg_lon) // 百度地图测距偏差 问题修复
     {
         var x_pi = 3.14159265358979324 * 3000.0 / 180.0;
@@ -29,7 +30,23 @@
     navigator.geolocation.getCurrentPosition(function(position) {
         bd_encrypt(position.coords.latitude, position.coords.longitude);
     });
-    </script>
+    </script> -->
+    <script>
+            $(document).ready(function() {
+                var geolocation = new BMap.Geolocation();
+                geolocation.getCurrentPosition(function(r){
+                    if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                        var mk = new BMap.Marker(r.point);
+                        var lng = r.point.lng;
+                        var lat = r.point.lat;
+                        dingwei("{php echo $this->createMobileUrl('business',array('op' => 'coupon','operation' => 'detail'))}", lat, lng);
+                    }else {
+                        alert('获取当前位置失败,请确认是否开启定位服务');
+                    }        
+                },{enableHighAccuracy: true})
+               
+            });
+            </script>
 </head>
 
 <body>
@@ -69,6 +86,7 @@
                     <div>
                         <span class="mall-price order-money"><small>￥</small>{$item['marketprice']}</span>
                         <del class="black9">￥{$item['productprice']}</del>
+                        <span>积分:{php echo $c = $item['marketprice']*$credit['business_credit']}</span>
                     </div>
                 </div>
                 <div class="point-right">

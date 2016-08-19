@@ -39,7 +39,8 @@
         }
 
         $(function () {
-            $('.del_question').click(function () {
+            $('#del_question').click(function () {
+            	alert(1111);
                 var id = $(this).attr('this_id');
                 var msg = '您确定要将该题从此试卷删除吗?';
                 var url = "{php echo $this->createWebUrl('question',array('op' => 'deleteFromPaper', 'paperid' => $id))}" + "&id="+id;
@@ -47,7 +48,6 @@
                     window.location = url;
                 }
             })
-
             $('#myTab a').click(function (e) {
                 e.preventDefault();//阻止a链接的跳转行为
                 $(this).tab('show');//显示当前选中的链接及关联的content

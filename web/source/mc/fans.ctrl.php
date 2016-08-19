@@ -97,16 +97,25 @@ if ($do == 'display') {
 					$buffer = array_slice($fans['fans'], $i * 500, 500);
 					$openids = implode("','", $buffer);
 					$openids = "'{$openids}'";
-					$sql = 'SELECT `openid` FROM ' . tablename('mc_mapping_fans') . " WHERE `acid`={$acid} AND `openid` IN ({$openids})";
+					$sql = 'SELECT `openid`, `uniacid`, `acid` FROM ' . tablename('mc_mapping_fans') . " WHERE `openid` IN ({$openids})";
 					$ds = pdo_fetchall($sql, array(), 'openid');
+					$repeat_openids = array();
 					$sql = '';
 					foreach($buffer as $openid) {
 						if(!empty($ds) && !empty($ds[$openid])) {
-							unset($ds[$openid]);
-							continue;
+							if ($ds[$openid]['uniacid'] != $_W['uniacid']) {
+								$repeat_openids[] = $openid;
+							} else {
+								unset($ds[$openid]);
+								continue;
+							}
 						}
+				
 						$salt = random(8);
 						$sql .= "('{$acid}', '{$_W['uniacid']}', 0, '{$openid}', '{$salt}', 1, 0, ''),";
+					}
+					if (!empty($repeat_openids)) {
+						pdo_delete('mc_mapping_fans', array('openid' => $repeat_openids));
 					}
 					if(!empty($sql)) {
 						$sql = rtrim($sql, ',');
@@ -145,7 +154,7 @@ if ($do == 'display') {
 		$condition .= ' AND `uid` = 0';
 		$type = 'unbind';
 	}
-	$nickname = trim($_GPC['nickname']);
+	$nickname = addslashes(trim($_GPC['nickname']));
 	if(!empty($nickname)) {
 		$condition .= " AND ((nickname LIKE '%{$nickname}%') OR (`openid` = '{$nickname}'))";
 	}

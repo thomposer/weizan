@@ -11,7 +11,7 @@ if($_GPC['__auth']) {
 	$auth = @json_decode(base64_decode($_GPC['__auth']), true);
 	if(is_array($auth) && !empty($auth['openid']) && !empty($auth['acid']) && !empty($auth['time']) && !empty($auth['hash'])) {
 		if(($_W['setting']['authmode'] == 2 && abs($auth['time'] - TIMESTAMP) < 180) || $_W['setting']['authmode'] == 1) {
-			$fan = mc_fansinfo($auth['openid'], $auth['acid'], $_W['uniacid']);
+			$fan = mc_fansinfo($auth['openid']);
 			if(!empty($fan)) {
 				$hash = md5("{$auth['openid']}{$auth['time']}{$fan['salt']}{$_W['config']['setting']['authkey']}");
 				if($auth['hash'] == $hash) {

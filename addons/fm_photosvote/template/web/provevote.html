@@ -75,12 +75,13 @@
           <th style="width:50px;">删？</th>
           <th style="width:40px;">ID</th>
           <th style="width:260px;">用户</th>
-          <th style="width:150px;">投稿主题宣言</th>
+		<th style="width:80px;">封面</th>	
+          <th style="width:150px;">{if empty($regtitlearr['cmmphotosname'])}参赛主题宣言{else}{$regtitlearr['cmmphotosname']}{/if}</th>	
           <th style="width:60px;" class="item-hover">票数</th>
           <th style="width:60px;" class="item-hover">人气</th>
           <th style="width:60px;" class="item-hover">分享</th>
           <th style="width:60px;" class="item-hover">点赞</th>
-          <th style="width:110px;" class="item-hover">手机</th>
+          <th style="width:110px;" class="item-hover">{if empty($regtitlearr['cmmmobile'])}手机{else}{$regtitlearr['cmmmobile']}{/if}</th>
           <th style="width:150px;">报名时间</th>
           <th style="width:150px;">操作</th>
         </tr>
@@ -95,8 +96,9 @@
           <td class="info" style="text-align:left;"><img src="{php echo $this->getphotos($fmimage['photos'], $item['avatar'], $reply['picture'], 1)}" width="30px;"/><span {if stristr($item['nickname'],$keyword)}class="active"{/if}>{php echo $this->getusernames($item['realname'], $item['nickname'])}
           <p>
             <span ><a href="javascript::;" class="label label-success" data-toggle="tooltip" data-placement="top" title="性别">{if $item['sex'] == 1}男{elseif $item['sex'] == 2}女{else}未知{/if}</a></span>  <span ><a href="javascript::;" class="label label-info" data-toggle="tooltip" data-placement="top" title="用户参赛组别">{$tagname}</a></span> {if $reply['regpay']}<span >{if $item['ordersn']}<a href="javascript::;" class="label label-success" data-toggle="tooltip" data-placement="top" title="是否付费">已付费</a>{else}<a href="javascript::;" class="label label-warning" data-toggle="tooltip" data-placement="top" title="是否付费">未付费</a>{/if}</span>{/if} {if $item['status']==1}<span ><a href="javascript::;" class="label label-success" data-toggle="tooltip" data-placement="top" title="是否审核">已审核</a></span>{else}<span ><a href="javascript::;" class="label label-warning" data-toggle="tooltip" data-placement="top" title="是否审核">未审核</a></span>{/if}
-          </p></span></a></td>          
-                  <td>{$item['photoname']}</td>
+          </p></span></a></td>  
+          <td ><a href="{php echo $this->getphotos($fmimage['photos'], $fmimage['photos'], $fmimage['photos'])}" target="_blank"><img src="{php echo $this->getphotos($fmimage['photos'], $fmimage['photos'], $fmimage['photos'])}" alt="{php echo $this->getusernames($row['realname'], $row['nickname'])}" height="50"></a></td>        
+          <td>{$item['photoname']}</td>
           <td class="item-hover">{$item['photosnum']}</td>
           <td class="item-hover">{$item['hits']}</td>
           <td class="item-hover">{$sharenum[$mid]}</td>

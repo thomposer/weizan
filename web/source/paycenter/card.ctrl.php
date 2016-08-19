@@ -37,6 +37,10 @@ if($do == 'check') {
 	$member['discount_type'] = 0;
 	$member['discount'] = array();
 	$member['discount_cn'] = '暂无';
+	$member['credit1'] = floatval($member['credit1']);
+	$member['credit2'] = floatval($member['credit2']);
+	$member['offset_rate'] = $set['offset_rate'];
+	$member['offset_max'] = $set['offset_max'];
 	if($set['discount_type'] > 0 && !empty($set['discount'])) {
 		$discount = $set['discount'][$member['groupid']];
 		if(!empty($discount)) {

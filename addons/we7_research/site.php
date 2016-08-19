@@ -329,6 +329,8 @@ class We7_researchModuleSite extends WeModuleSite {
             $record['starttime'] = strtotime($_GPC['starttime']);
             $record['endtime'] = strtotime($_GPC['endtime']);
             $record['noticeemail'] = trim($_GPC['noticeemail']);
+			$record['is_sms'] = $_GPC['is_sms'];
+			$record['sms_id'] = trim($_GPC['sms_id']);
             if (is_numeric($_GPC['mobile'])) {
                 $record['mobile'] = trim($_GPC['mobile']);
             }
@@ -602,9 +604,28 @@ class We7_researchModuleSite extends WeModuleSite {
                 if (!empty($activity['mobile'])) {
                     load()->model('cloud');
                     cloud_prepare();
-                    $body = '项目' . $activity['title'] . '于' . date('Y-m-d H:i') . '有了新的预约信息,请到后台查看具体内容.' . random(3);
-                    cloud_sms_send($activity['mobile'], $body);
+                    cloud_sms_send($activity['mobile'], '800004', array('item' => $activity['title'], 'datetime' => date('Y-m-d H:i')));
                 }
+				//开启全局短信设置
+				load()->func('communication');
+				$target = $_W['siteroot']."framework/model/sendsms/sendmsg.php";
+				$row = pdo_fetchcolumn("SELECT `msg` FROM ".tablename('uni_settings') . " WHERE uniacid = :uniacid", array(':uniacid' => $_W['uniacid']));
+				$msg = iunserializer($row);
+				/*$rerid = intval($_GPC['id']);
+        		$sql = 'SELECT * FROM ' . tablename('research_rows') . " WHERE `rerid`=:rerid";
+        		$params = array();
+        		$params[':rerid'] = $rerid;
+        		$row = pdo_fetch($sql, $params);
+        		$sql = 'SELECT * FROM ' . tablename('research') . ' WHERE `weid`=:weid AND `reid`=:reid';
+        		$params = array();
+        		$params[':weid'] = $_W['uniacid'];
+        		$params[':reid'] = $row['reid'];
+        		$activity = pdo_fetch($sql, $params);
+				*/
+            	$post_data = "appkey=" . $msg['appkey'] . "&secret=" . $msg['secret'] . "&qianming=" . $msg['qianming'] . "&moban=".$activity['sms_id']."&phone=".$activity['mobile']."&phonenum=".$activity['title']."&name=".$activity['title'];
+               if($activity['is_sms']=='0'){
+                $result = ihttp_request($target, $post_data);
+			   }
 
             }
 

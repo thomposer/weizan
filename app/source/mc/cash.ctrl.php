@@ -114,8 +114,29 @@ if(!empty($type)) {
 	}
 	if (empty($log)) {
 		message('系统支付错误, 请稍后重试.');
-	} else {
+	} else { 
+	if(empty($log['plid'])){
+		$fee = $params['fee'];
+		$record = array();
+		$record['uniacid'] = $_W['uniacid'];
+		$record['openid'] = $_W['member']['uid'];
+		$record['module'] = $params['module'];
+		$record['tid'] = $params['tid'];
+		$record['uniontid'] = date('YmdHis').$moduleid.random(8,1);
+		$record['fee'] = $fee;
+		$record['status'] = '0';
+		$record['is_usecard'] = 0;
+		$record['card_id'] = 0;
+		$record['card_fee'] = $fee;
+		$record['encrypt_code'] = '';
+		$record['acid'] = $_W['acid'];
+		pdo_insert('core_paylog', $record);
+		 $plid = pdo_insertid();
+			$record['plid'] = $plid;
+			$log = $record;
+		}else{
 		pdo_update('core_paylog', $record, array('plid' => $log['plid']));
+	}
 		if (!empty($log['uniontid']) && $record['card_fee']) {
 			$log['card_fee'] = $record['card_fee'];
 			$log['card_id'] = $record['card_id'];

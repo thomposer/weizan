@@ -31,14 +31,14 @@
 						<div class="col-sm-9 col-xs-12">
 							<label for="radio_1" class="radio-inline"><input type="radio" name="qrc-model" id="radio_1" onclick="$('#model2').hide();$('#model1').show();" value="1" {if empty($row['model']) || $row['model'] == 1}checked="checked"{/if} /> 临时</label>
 							<label for="radio_0" class="radio-inline"><input type="radio" name="qrc-model" id="radio_0" onclick="$('#model1').hide();$('#model2').show();" value="2" {if $row['model'] == 2}checked="checked"{/if} /> 永久</label>
-								<span class="help-block">目前有2种类型的二维码, 分别是临时二维码和永久二维码, 前者有过期时间, 最大为7天（2592000秒）, 但能够生成较多数量, 后者无过期时间, 数量较少(目前参数只支持1--100000).</span>
+								<span class="help-block">目前有2种类型的二维码, 分别是临时二维码和永久二维码, 前者有过期时间, 最大为30天（2592000秒）, 但能够生成较多数量, 后者无过期时间, 数量较少(目前参数只支持1--100000).</span>
 						</div>
 					</div>
 						<div class="form-group" id="model1">
 							<label class="col-xs-12 col-sm-3 col-md-2 control-label">过期时间</label>
 							<div class="col-sm-9 col-xs-12">
 								<input type="text" id="expire-seconds" class="form-control" placeholder="" name="expire-seconds" value="2592000" />
-								<span class="help-block">临时二维码过期时间, 最大为7天（2592000秒）.</span>
+								<span class="help-block">临时二维码过期时间, 最大为30天（2592000秒）.</span>
 							</div>
 						</div>
 						<div class="form-group" id="model2" style="display:none;">

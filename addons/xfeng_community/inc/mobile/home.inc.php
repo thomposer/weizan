@@ -10,11 +10,15 @@
 	global $_GPC,$_W;	
 	$userinfo = mc_oauth_userinfo();
 	$member = $this->changemember();
+
+	if (empty($member['status'])) {
+		message('耐心等待管理员审核','','success');exit();
+	}
 	$region = $this->mreg();
-	$list1 = pdo_fetchall("SELECT * FROM".tablename('xcommunity_slide')."WHERE weid=:uniacid",array(':uniacid' => $_W['uniacid']));
-	if ($list1) {
-		$slides = array();
-		foreach ($list1 as $key => $value) {
+	$slides = pdo_fetchall("SELECT * FROM".tablename('xcommunity_slide')."WHERE weid=:uniacid",array(':uniacid' => $_W['uniacid']));
+	if ($slides) {
+		//$slides = array();
+		foreach ($slides as $key => $value) {
 			$regions = unserialize($value['regionid']);
 			if (@in_array($member['regionid'], $regions)) {
 				$slides[$key]['id'] = $value['id'];

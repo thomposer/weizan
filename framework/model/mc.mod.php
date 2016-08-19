@@ -14,7 +14,7 @@ function mc_check($data) {
 		}
 		$isexist = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_members') . ' WHERE uniacid = :uniacid AND email = :email AND uid != :uid', array(':uniacid' => $_W['uniacid'], ':email' => $email, ':uid' => $_W['member']['uid']));
 		if ($isexist >= 1) {
-			return error(-1, '邮箱已被注册,请使用其他邮箱');
+			return error(-1, '邮箱已被注册');
 		}
 	}
 	if (!empty($data['mobile'])) {
@@ -24,7 +24,7 @@ function mc_check($data) {
 		}
 		$isexist = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('mc_members') . ' WHERE uniacid = :uniacid AND mobile = :mobile AND uid != :uid', array(':uniacid' => $_W['uniacid'], ':mobile' => $mobile, ':uid' => $_W['member']['uid']));
 		if ($isexist >= 1) {
-			return error(-1, '手机号已被注册,请使用其他手机号');
+			return error(-1, '手机号已被注册');
 		}
 	}
 	return true;
@@ -495,6 +495,11 @@ function mc_credit_update($uid, $credittype, $creditval = 0, $log = array()) {
 	global $_W;
 	$credittype = trim($credittype);
 	$credittypes = mc_credit_types();
+	$clerk_types = array(
+		'1' => '线上操作',
+		'2' => '系统后台',
+		'3' => '店员',
+	);
 	if (!in_array($credittype, $credittypes)) {
 		return error('-1', "指定的用户积分类型 “{$credittype}”不存在.");
 	}
@@ -509,7 +514,38 @@ function mc_credit_update($uid, $credittype, $creditval = 0, $log = array()) {
 		return error('-1', "积分类型为“{$credittype}”的积分不够，无法操作。");
 	}
 		if (empty($log) || !is_array($log)) {
-		$log = array($uid, '未记录', 0, 0);
+		load()->func('logging');
+		if (!empty($GLOBALS['site']) && $GLOBALS['site'] instanceof WeModuleSite) {
+			$log = array(
+				$uid, 
+				$GLOBALS['site']->module['title'] . '模块内消费' . logging_implode($_GET),
+				$GLOBALS['site']->module['name'],
+				0,
+			);
+		} elseif (!empty($GLOBALS['_GPC']['m'])) {
+			$modules = uni_modules();
+			$log = array(
+				$uid,
+				$modules[$GLOBALS['_GPC']['m']]['title'] . '模块内消费' . logging_implode($_GET),
+				$GLOBALS['_GPC']['m'],
+				0,
+			);
+		} else {
+			$log = array($uid, '未记录', 0, 0);
+		}
+	}
+	if ($credittype == 'credit1') {
+		$credittype_name = '积分';
+	} elseif ($credittype == 'credit2') {
+		$credittype_name = '元';
+	}
+	if (empty($log[1])) {
+		if ($creditval > 0) {
+			$log[1] = $clerk_types[$log[5]] . ': 添加' . $creditval . $credittype_name;
+		} else {
+			$log[1] = $clerk_types[$log[5]] . ': 减少' . -$creditval . $credittype_name;
+		}
+		
 	}
 	$clerk_type = intval($log[5]) ? intval($log[5]) : 1;
 	$data = array(
@@ -651,43 +687,16 @@ function _mc_login($member) {
 
 
 function mc_fields() {
-	return array(
-		'mobile' => '手机号码',
-		'email' => '电子邮箱',
-		'realname' => '真实姓名',
-		'nickname' => '昵称',
-		'avatar' => '头像',
-		'qq' => 'QQ号',
-		'gender' => '性别',
-		'birth' => '生日',
-		'constellation' => '星座',
-		'zodiac' => '生肖',
-		'telephone' => '固定电话',
-		'idcard' => '证件号码',
-		'studentid' => '学号',
-		'grade' => '班级',
-		'address' => '地址',
-		'zipcode' => '邮编',
-		'nationality' => '国籍',
-		'reside' => '居住地',
-		'graduateschool' => '毕业学校',
-		'company' => '公司',
-		'education' => '学历',
-		'occupation' => '职业',
-		'position' => '职位',
-		'revenue' => '年收入',
-		'affectivestatus' => '情感状态',
-		'lookingfor' => ' 交友目的',
-		'bloodtype' => '血型',
-		'height' => '身高',
-		'weight' => '体重',
-		'alipay' => '支付宝帐号',
-		'msn' => 'MSN',
-		'taobao' => '阿里旺旺',
-		'site' => '主页',
-		'bio' => '自我介绍',
-		'interest' => '兴趣爱好'
-	);
+	global $_W;
+	$fields = pdo_getall('mc_member_fields', array('uniacid' => $_W['uniacid']));
+	$all_field = array();
+	if (!empty($fields)) {
+		foreach ($fields as $field) {
+			$field = pdo_get('profile_fields', array('id' => $field['fieldid']));
+			$all_field[$field['field']] = $field['title'];
+		}
+	}
+	return $all_field;
 }
 
 
@@ -946,50 +955,44 @@ function mc_notice_recharge($openid, $uid = 0, $num = 0, $url = '', $remark = ''
 	if(is_error($acc)) {
 		return error(-1, $acc['message']);
 	}
-
+	if(empty($acc->noticetpl['recharge']['tpl'])) {
+		return error(-1, '未开启通知');
+	}
 	$credit = mc_credit_fetch($uid);
 	$time = date('Y-m-d H:i');
 	if(empty($url)) {
 		$url = murl('mc/bond/credits', array('credittype' => 'credit2'), true, true);
 	}
-	if(!$acc->noticetpl['recharge']['switch']) {
-		return error(-1, '未开启通知');
+	if($_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
+		$data = array(
+			'first' => array(
+				'value' => "您好，您在{$time}进行会员余额充值，充值金额{$num}元，充值后余额为{$credit['credit2']}元",
+				'color' => '#ff510'
+			),
+			'accountType' => array(
+				'value' => '会员UID',
+				'color' => '#ff510'
+			),
+			'account' => array(
+				'value' => $uid,
+				'color' => '#ff510'
+			),
+			'amount' => array(
+				'value' => $num . '元',
+				'color' => '#ff510'
+			),
+			'result' => array(
+				'value' => '充值成功',
+				'color' => '#ff510'
+			),
+			'remark' => array(
+				'value' => "{$remark}" ,
+				'color' => '#ff510'
+			),
+		);
+		$status = $acc->sendTplNotice($openid, $acc->noticetpl['recharge']['tpl'], $data, $url);
 	}
-	if($_W['account']['level'] == 4) {
-		if($acc->noticetpl['recharge']['type'] == 2) {
-			$data = array(
-				'first' => array(
-					'value' => "您好，您在{$time}进行会员余额充值，充值金额{$num}元，充值后余额为{$credit['credit2']}元",
-					'color' => '#ff510'
-				),
-				'accountType' => array(
-					'value' => '会员UID',
-					'color' => '#ff510'
-				),
-				'account' => array(
-					'value' => $uid,
-					'color' => '#ff510'
-				),
-				'amount' => array(
-					'value' => $num . '元',
-					'color' => '#ff510'
-				),
-				'result' => array(
-					'value' => '充值成功',
-					'color' => '#ff510'
-				),
-				'remark' => array(
-					'value' => "{$remark}" ,
-					'color' => '#ff510'
-				),
-			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['recharge']['tpl'], $data, $url);
-		} else {
-			$content = "您在{$time}进行会员余额充值，充值金额【{$num}】元，充值后余额【{$credit['credit2']}】元";
-			$status = mc_notice_public($openid, '余额充值通知', $_W['account']['name'], $content, $url);
-		}
-	}
-	if($_W['account']['level'] == 3) {
+	if($_W['account']['level'] == ACCOUNT_SUBSCRIPTION_VERIFY) {
 		$info = "【{$_W['account']['name']}】充值通知\n";
 		$info .= "您在{$time}进行会员余额充值，充值金额【{$num}】元，充值后余额【{$credit['credit2']}】元。\n";
 		$info .= !empty($remark) ? "备注：{$remark}\n\n" : '';
@@ -1016,7 +1019,7 @@ function mc_notice_credit2($openid, $uid, $credit2_num, $credit1_num = 0, $store
 	if(is_error($acc)) {
 		return error(-1, $acc['message']);
 	}
-	if(!$acc->noticetpl['credit2']['switch']) {
+	if(empty($acc->noticetpl['credit2']['tpl'])) {
 		return error(-1, '未开启通知');
 	}
 	$credit = mc_credit_fetch($uid);
@@ -1024,45 +1027,40 @@ function mc_notice_credit2($openid, $uid, $credit2_num, $credit1_num = 0, $store
 	if(empty($url)) {
 		$url = murl('mc/bond/credits', array('credittype' => 'credit2'), true, true);
 	}
-	if($_W['account']['level'] == 4) {
-		if($acc->noticetpl['credit2']['type'] == 2) {
-			$data = array(
-				'first' => array(
-					'value' => "您好，您在{$time}有余额消费",
-					'color' => '#ff510'
-				),
-				'keyword1' => array(
-					'value' => abs($credit2_num) . '元',
-					'color' => '#ff510'
-				),
-				'keyword2' => array(
-					'value' => floatval($credit1_num) . '积分',
-					'color' => '#ff510'
-				),
-				'keyword3' => array(
-					'value' => trim($store),
-					'color' => '#ff510'
-				),
-				'keyword4' => array(
-					'value' => $credit['credit2'] . '元',
-					'color' => '#ff510'
-				),
-				'keyword5' => array(
-					'value' => $credit['credit1'] . '积分',
-					'color' => '#ff510'
-				),
-				'remark' => array(
-					'value' => "{$remark}" ,
-					'color' => '#ff510'
-				),
-			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['credit2']['tpl'], $data, $url);
-		} else {
-			$content = "您在{$time}进行会员余额消费，消费金额【{$credit2_num}】元，获得积分【{$credit1_num}】,消费后余额【{$credit['credit2']}】元，消费后积分【{$credit['credit1']}】。";
-			$status = mc_notice_public($openid, '余额消费通知', $_W['account']['name'], $content, $url);
-		}
+	if($_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
+		$data = array(
+			'first' => array(
+				'value' => "您好，您在{$time}有余额消费",
+				'color' => '#ff510'
+			),
+			'keyword1' => array(
+				'value' => abs($credit2_num) . '元',
+				'color' => '#ff510'
+			),
+			'keyword2' => array(
+				'value' => floatval($credit1_num) . '积分',
+				'color' => '#ff510'
+			),
+			'keyword3' => array(
+				'value' => trim($store),
+				'color' => '#ff510'
+			),
+			'keyword4' => array(
+				'value' => $credit['credit2'] . '元',
+				'color' => '#ff510'
+			),
+			'keyword5' => array(
+				'value' => $credit['credit1'] . '积分',
+				'color' => '#ff510'
+			),
+			'remark' => array(
+				'value' => "{$remark}" ,
+				'color' => '#ff510'
+			),
+		);
+		$status = $acc->sendTplNotice($openid, $acc->noticetpl['credit2']['tpl'], $data, $url);
 	}
-	if($_W['account']['level'] == 3) {
+	if($_W['account']['level'] == ACCOUNT_SUBSCRIPTION_VERIFY) {
 		$info = "【{$_W['account']['name']}】消费通知\n";
 		$info .= "您在{$time}进行会员余额消费，消费金额【{$credit2_num}】元，获得积分【{$credit1_num}】,消费后余额【{$credit['credit2']}】元，消费后积分【{$credit['credit1']}】。\n";
 		$info .= !empty($remark) ? "备注：{$remark}\n\n" : '';
@@ -1089,7 +1087,7 @@ function mc_notice_credit1($openid, $uid, $credit1_num, $tip, $url = '', $remark
 	if(is_error($acc)) {
 		return error(-1, $acc['message']);
 	}
-	if(!$acc->noticetpl['credit1']['switch']) {
+	if(empty($acc->noticetpl['credit1']['tpl'])) {
 		return error(-1, '未开启通知');
 	}
 	$credit = mc_credit_fetch($uid);
@@ -1109,55 +1107,50 @@ function mc_notice_credit1($openid, $uid, $credit1_num, $tip, $url = '', $remark
 	if(empty($username)) {
 		$username = $uid;
 	}
-	if($_W['account']['level'] == 4) {
-		if($acc->noticetpl['credit1']['type'] == 2) {
-			$data = array(
-				'first' => array(
-					'value' => "您好，您在{$time}有积分变更",
-					'color' => '#ff510'
-				),
-				'account' => array(
-					'value' => $username,
-					'color' => '#ff510'
-				),
-				'time' => array(
-					'value' => $time,
-					'color' => '#ff510'
-				),
-				'type' => array(
-					'value' => $tip,
-					'color' => '#ff510'
-				),
-				'creditChange' => array(
-					'value' => $type,
-					'color' => '#ff510'
-				),
-				'number' => array(
-					'value' => abs($credit1_num) . '积分',
-					'color' => '#ff510'
-				),
-				'creditName' => array(
-					'value' => '账户积分',
-					'color' => '#ff510'
-				),
-				'amount' => array(
-					'value' => abs($credit['credit1']) . '积分',
-					'color' => '#ff510'
-				),
-				'remark' => array(
-					'value' => "{$remark}" ,
-					'color' => '#ff510'
-				),
-			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['credit1']['tpl'], $data, $url);
-		} else {
-			$content = "您在{$time}有积分{$type}，{$type}积分【{$credit1_num}】，变更原因：【{$tip}】,消费后账户积分余额【{$credit['credit1']}】。";
-			$status = mc_notice_public($openid, '余额消费通知', $_W['account']['name'], $content, $url);
-		}
+	if($_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
+		$data = array(
+			'first' => array(
+				'value' => "您好，您在{$time}有积分变更",
+				'color' => '#ff510'
+			),
+			'account' => array(
+				'value' => $username,
+				'color' => '#ff510'
+			),
+			'time' => array(
+				'value' => $time,
+				'color' => '#ff510'
+			),
+			'type' => array(
+				'value' => $tip,
+				'color' => '#ff510'
+			),
+			'creditChange' => array(
+				'value' => $type,
+				'color' => '#ff510'
+			),
+			'number' => array(
+				'value' => abs($credit1_num) . '积分',
+				'color' => '#ff510'
+			),
+			'creditName' => array(
+				'value' => '账户积分',
+				'color' => '#ff510'
+			),
+			'amount' => array(
+				'value' => abs($credit['credit1']) . '积分',
+				'color' => '#ff510'
+			),
+			'remark' => array(
+				'value' => "{$remark}" ,
+				'color' => '#ff510'
+			),
+		);
+		$status = $acc->sendTplNotice($openid, $acc->noticetpl['credit1']['tpl'], $data, $url);
 	}
-	if($_W['account']['level'] == 3) {
+	if($_W['account']['level'] == ACCOUNT_SUBSCRIPTION_VERIFY) {
 		$info = "【{$_W['account']['name']}】积分变更通知\n";
-		$info .= "您在{$time}有积分{$type}，{$type}积分【{$credit1_num}】元，变更原因：【{$tip}】,消费后账户积分余额【{$credit['credit1']}】。\n";
+		$info .= "您在{$time}有积分{$type}，{$type}积分【{$credit1_num}】，变更原因：【{$tip}】,消费后账户积分余额【{$credit['credit1']}】。\n";
 		$info .= !empty($remark) ? "备注：{$remark}\n\n" : '';
 		$custom = array(
 			'msgtype' => 'text',
@@ -1175,45 +1168,39 @@ function mc_notice_group($openid, $old_group, $now_group, $url = '', $remark = '
 	if(is_error($acc)) {
 		return error(-1, $acc['message']);
 	}
-	if(!$acc->noticetpl['group']['switch']) {
+	if(empty($acc->noticetpl['group']['tpl'])) {
 		return error(-1, '未开启通知');
 	}
-
 	$time = date('Y-m-d H:i');
 	if(empty($url)) {
 		$url = murl('mc/home', array(), true, true);
 	}
-	if($_W['account']['level'] == 4) {
-		if($acc->noticetpl['group']['type'] == 2) {
-			$data = array(
-				'first' => array(
-					'value' => "您好，您的会员组变更为{$now_group}",
-					'color' => '#ff510'
-				),
-				'grade1' => array(
-					'value' => $old_group,
-					'color' => '#ff510'
-				),
-				'grade2' => array(
-					'value' => $now_group,
-					'color' => '#ff510'
-				),
-				'time' => array(
-					'value' => $time,
-					'color' => '#ff510'
-				),
-				'remark' => array(
-					'value' => "{$remark}",
-					'color' => '#ff510'
-				),
-			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['group']['tpl'], $data, $url);
-		} else {
-			$content = "您的会员等级在{$time}由{$old_group}变更为{$now_group}。";
-			$status = mc_notice_public($openid, '会员组变更通知', $_W['account']['name'], $content, $url);
-		}
+	if($_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
+		$data = array(
+			'first' => array(
+				'value' => "您好，您的会员组变更为{$now_group}",
+				'color' => '#ff510'
+			),
+			'grade1' => array(
+				'value' => $old_group,
+				'color' => '#ff510'
+			),
+			'grade2' => array(
+				'value' => $now_group,
+				'color' => '#ff510'
+			),
+			'time' => array(
+				'value' => $time,
+				'color' => '#ff510'
+			),
+			'remark' => array(
+				'value' => "{$remark}",
+				'color' => '#ff510'
+			),
+		);
+		$status = $acc->sendTplNotice($openid, $acc->noticetpl['group']['tpl'], $data, $url);
 	}
-	if($_W['account']['level'] == 3) {
+	if($_W['account']['level'] == ACCOUNT_SUBSCRIPTION_VERIFY) {
 		$info = "【{$_W['account']['name']}】会员组变更通知\n";
 		$info .= "您的会员等级在{$time}由{$old_group}变更为{$now_group}。\n";
 		$info .= !empty($remark) ? "备注：{$remark}\n\n" : '';
@@ -1237,46 +1224,40 @@ function mc_notice_nums_plus($openid, $type, $num, $total_num, $remark = '感谢
 	if(is_error($acc)) {
 		return error(-1, $acc['message']);
 	}
-	if(!$acc->noticetpl['nums_plus']['switch']) {
+	if(empty($acc->noticetpl['nums_plus']['tpl'])) {
 		return error(-1, '未开启通知');
 	}
-
 	$time = date('Y-m-d H:i');
-	if($_W['account']['level'] == 4) {
-		if($acc->noticetpl['nums_plus']['type'] == 2) {
-			$data = array(
-				'first' => array(
-					'value' => "您好，您的{$type}已充次成功",
-					'color' => '#ff510'
-				),
-				'keyword1' => array(
-					'value' => $time,
-					'color' => '#ff510'
-				),
-				'keyword2' => array(
-					'value' => $num . '次',
-					'color' => '#ff510'
-				),
-				'keyword3' => array(
-					'value' => $total_num . '次',
-					'color' => '#ff510'
-				),
-				'keyword4' => array(
-					'value' => '用完为止',
-					'color' => '#ff510'
-				),
-				'remark' => array(
-					'value' => "{$remark}" ,
-					'color' => '#ff510'
-				),
-			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['nums_plus']['tpl'], $data);
-		} else {
-			$content = "您的{$type}已充值成功，本次充次【{$num}】次，总剩余【{$total_num}】次";
-			$status = mc_notice_public($openid, $type . '充值通知', $_W['account']['name'], $content);
-		}
+	if($_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
+		$data = array(
+			'first' => array(
+				'value' => "您好，您的{$type}已充次成功",
+				'color' => '#ff510'
+			),
+			'keyword1' => array(
+				'value' => $time,
+				'color' => '#ff510'
+			),
+			'keyword2' => array(
+				'value' => $num . '次',
+				'color' => '#ff510'
+			),
+			'keyword3' => array(
+				'value' => $total_num . '次',
+				'color' => '#ff510'
+			),
+			'keyword4' => array(
+				'value' => '用完为止',
+				'color' => '#ff510'
+			),
+			'remark' => array(
+				'value' => "{$remark}" ,
+				'color' => '#ff510'
+			),
+		);
+		$status = $acc->sendTplNotice($openid, $acc->noticetpl['nums_plus']['tpl'], $data);
 	}
-	if($_W['account']['level'] == 3) {
+	if($_W['account']['level'] == ACCOUNT_SUBSCRIPTION_VERIFY) {
 		$info = "【{$_W['account']['name']}】-【{$type}】充值通知\n";
 		$info .= "您的{$type}已充值成功，本次充次【{$num}】次，总剩余【{$total_num}】次。\n";
 		$info .= !empty($remark) ? "备注：{$remark}\n\n" : '';
@@ -1300,45 +1281,40 @@ function mc_notice_nums_times($openid, $card_id, $type, $num, $remark = '感谢�
 	if(is_error($acc)) {
 		return error(-1, $acc['message']);
 	}
-	if(!$acc->noticetpl['nums_times']['switch']) {
+	if(empty($acc->noticetpl['nums_times']['tpl'])) {
 		return error(-1, '未开启通知');
 	}
 	$time = date('Y-m-d H:i');
-	if($_W['account']['level'] == 4) {
-		if($acc->noticetpl['nums_times']['type'] == 2) {
-			$data = array(
-				'first' => array(
-					'value' => "您好，您的{$type}已成功使用了【1】次。",
-					'color' => '#ff510'
-				),
-				'keyword1' => array(
-					'value' => $card_id,
-					'color' => '#ff510'
-				),
-				'keyword2' => array(
-					'value' => $time,
-					'color' => '#ff510'
-				),
-				'keyword3' => array(
-					'value' => $num . '次',
-					'color' => '#ff510'
-				),
-				'keyword4' => array(
-					'value' => '用完为止',
-					'color' => '#ff510'
-				),
-				'remark' => array(
-					'value' => "{$remark}" ,
-					'color' => '#ff510'
-				),
-			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['nums_times']['tpl'], $data);
-		} else {
-			$content = "您的{$type}已成功使用了一次，总剩余【{$num}】次，消费时间【{$time}】。";
-			$status = mc_notice_public($openid, $type . '消费通知', $_W['account']['name'], $content);
-		}
+	if($_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
+		$data = array(
+			'first' => array(
+				'value' => "您好，您的{$type}已成功使用了【1】次。",
+				'color' => '#ff510'
+			),
+			'keyword1' => array(
+				'value' => $card_id,
+				'color' => '#ff510'
+			),
+			'keyword2' => array(
+				'value' => $time,
+				'color' => '#ff510'
+			),
+			'keyword3' => array(
+				'value' => $num . '次',
+				'color' => '#ff510'
+			),
+			'keyword4' => array(
+				'value' => '用完为止',
+				'color' => '#ff510'
+			),
+			'remark' => array(
+				'value' => "{$remark}" ,
+				'color' => '#ff510'
+			),
+		);
+		$status = $acc->sendTplNotice($openid, $acc->noticetpl['nums_times']['tpl'], $data);
 	}
-	if($_W['account']['level'] == 3) {
+	if($_W['account']['level'] == ACCOUNT_SUBSCRIPTION_VERIFY) {
 		$info = "【{$_W['account']['name']}】-【{$type}】消费通知\n";
 		$info .= "您的{$type}已成功使用了一次，总剩余【{$num}】次，消费时间【{$time}】。\n";
 		$info .= !empty($remark) ? "备注：{$remark}\n\n" : '';
@@ -1359,48 +1335,43 @@ function mc_notice_times_plus($openid, $card_id, $type, $fee, $days, $endtime = 
 	if(is_error($acc)) {
 		return error(-1, $acc['message']);
 	}
-	if(!$acc->noticetpl['times_plus']['switch']) {
+	if(empty($acc->noticetpl['times_plus']['tpl'])) {
 		return error(-1, '未开启通知');
 	}
-	if($_W['account']['level'] == 4) {
-		if($acc->noticetpl['times_plus']['type'] == 2) {
-			$data = array(
-				'first' => array(
-					'value' => "您好，您的{$type}已续费成功。",
-					'color' => '#ff510'
-				),
-				'keynote1' => array(
-					'value' => $type,
-					'color' => '#ff510'
-				),
-				'keynote2' => array(
-					'value' => $card_id,
-					'color' => '#ff510'
-				),
-				'keynote3' => array(
-					'value' => $fee . '元',
-					'color' => '#ff510'
-				),
-				'keynote4' => array(
-					'value' => $days . '天',
-					'color' => '#ff510'
-				),
-				'keynote5' => array(
-					'value' => $endtime,
-					'color' => '#ff510'
-				),
-				'remark' => array(
-					'value' => "{$remark}" ,
-					'color' => '#ff510'
-				),
-			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['times_plus']['tpl'], $data);
-		} else {
-			$content = "您的{$type}已成功续费，续费时长【{$days}】天，续费金额【{$fee}】元，有效期至【{$endtime}】";
-			$status = mc_notice_public($openid, $type . '续费通知', $_W['account']['name'], $content);
-		}
+	if($_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
+		$data = array(
+			'first' => array(
+				'value' => "您好，您的{$type}已续费成功。",
+				'color' => '#ff510'
+			),
+			'keynote1' => array(
+				'value' => $type,
+				'color' => '#ff510'
+			),
+			'keynote2' => array(
+				'value' => $card_id,
+				'color' => '#ff510'
+			),
+			'keynote3' => array(
+				'value' => $fee . '元',
+				'color' => '#ff510'
+			),
+			'keynote4' => array(
+				'value' => $days . '天',
+				'color' => '#ff510'
+			),
+			'keynote5' => array(
+				'value' => $endtime,
+				'color' => '#ff510'
+			),
+			'remark' => array(
+				'value' => "{$remark}" ,
+				'color' => '#ff510'
+			),
+		);
+		$status = $acc->sendTplNotice($openid, $acc->noticetpl['times_plus']['tpl'], $data);
 	}
-	if($_W['account']['level'] == 3) {
+	if($_W['account']['level'] == ACCOUNT_SUBSCRIPTION_VERIFY) {
 		$info = "【{$_W['account']['name']}】-【{$type}】续费通知\n";
 		$info .= "您的{$type}已成功续费，续费时长【{$days}】天，续费金额【{$fee}】元，有效期至【{$endtime}】。\n";
 		$info .= !empty($remark) ? "备注：{$remark}\n\n" : '';
@@ -1421,36 +1392,32 @@ function mc_notice_times_times($openid, $title, $type, $endtime = '', $remark = 
 	if(is_error($acc)) {
 		return error(-1, $acc['message']);
 	}
-	if(!$acc->noticetpl['times_times']['switch']) {
+	if(empty($acc->noticetpl['times_times']['tpl'])) {
 		return error(-1, '未开启通知');
 	}
-	if($_W['account']['level'] == 4) {
-		if($acc->noticetpl['times_times']['type'] == 2) {
-			$data = array(
-				'first' => array(
-					'value' => $title,
-					'color' => '#ff510'
-				),
-				'name' => array(
-					'value' => $type,
-					'color' => '#ff510'
-				),
-				'expDate' => array(
-					'value' => $endtime,
-					'color' => '#ff510'
-				),
-				'remark' => array(
-					'value' => "{$remark}" ,
-					'color' => '#ff510'
-				),
-			);
-			$status = $acc->sendTplNotice($openid, $acc->noticetpl['times_times']['tpl'], $data);
-		} else {
-			$content = "您的{$type}即将到期，有效期至【{$endtime}】";
-			$status = mc_notice_public($openid, $type . '服务到期通知', $_W['account']['name'], $content);
-		}
+
+	if($_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
+		$data = array(
+			'first' => array(
+				'value' => $title,
+				'color' => '#ff510'
+			),
+			'name' => array(
+				'value' => $type,
+				'color' => '#ff510'
+			),
+			'expDate' => array(
+				'value' => $endtime,
+				'color' => '#ff510'
+			),
+			'remark' => array(
+				'value' => "{$remark}" ,
+				'color' => '#ff510'
+			),
+		);
+		$status = $acc->sendTplNotice($openid, $acc->noticetpl['times_times']['tpl'], $data);
 	}
-	if($_W['account']['level'] == 3) {
+	if($_W['account']['level'] == ACCOUNT_SUBSCRIPTION_VERIFY) {
 		$info = "【{$_W['account']['name']}】-【{$type}】服务到期通知\n";
 		$info .= "您的{$type}即将到期，有效期至【{$endtime}】。\n";
 		$info .= !empty($remark) ? "备注：{$remark}\n\n" : '';
@@ -1472,7 +1439,7 @@ function mc_notice_consume($openid, $title, $content, $url = '') {
 		return error(-1, $acc['message']);
 	}
 	if($_W['account']['level'] == 4) {
-		mc_notice_public($openid, $title, $_W['account']['name'], $content);
+		mc_notice_credit2($openid, $content['uid'], $content['credit2_num'], $content['credit1_num'], $content['store'], '', $content['remark']);
 	}
 	if($_W['account']['level'] == 3) {
 		mc_notice_custom_text($openid, $title, $content);

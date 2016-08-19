@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0, width=device-width">
     <meta name="screen-orientation" content="portrait">
     <title>{$reply['title']}</title>
-    <link href="{RES}mobile/boat/App_Content/Game/Boats/style/index.css?v=2" rel="stylesheet" />
+    <link href="{RES}mobile/boat/App_Content/Game/Boats/style/index.css?v=3" rel="stylesheet" />
     <style>
         #gamepanel {
             width: 100%;
@@ -37,6 +37,9 @@
             text-shadow: 0 0 10px rgba(0, 198, 255, 0.7);
             -webkit-text-shadow: 0 0 10px rgba(0, 198, 255, 0.7);
         }
+        .ruleimg img{
+            width: 100%;
+        }
     </style>
     {php echo register_jssdk(false);}
 </head>
@@ -51,7 +54,7 @@
         <img src="{RES}mobile/boat/App_Content/Game/Boats/style/images/logo.png" id="logo" />
         <footer>
             <a href="#" class="btn-start" data-action="goGamePage" style="display:none;"></a>
-            <p><a href="{php echo $this->createMobileUrl('rank', array('id' => $id), true)}" style="color:#fff;font-size: 20px">活动介绍</a></p>
+            <p><a href="{php echo $this->createMobileUrl('rank', array('id' => $id), true)}" style="color:#fff;font-size: 20px">排行榜</a></p>
             <p><a href="{if !empty($reply['copyrighturl'])}{$reply['copyrighturl']}{else}#{/if}" style="color:#fff;">{if empty($reply['copyright'])}{$_W['account']['name']}{else}{$reply['copyright']}{/if}</a></p>
         </footer>
     </div>
@@ -98,7 +101,7 @@
         <!--弹出层-规则-->
         <div class="pop-box" id="box-rule">
             <h1>规则</h1>
-            <div class="pop-content">
+            <div class="pop-content ruleimg">
                 {php echo htmlspecialchars_decode($reply['rule']);}
             </div>
             <a href="#" class="pop-a-share" data-action="share">喊上小伙伴一起玩吧！</a>
@@ -244,7 +247,6 @@
         });
         seajs.use("script/index.js?v=10");
     </script>
-
     <script>
         wx.ready(function () {
             sharedata = {

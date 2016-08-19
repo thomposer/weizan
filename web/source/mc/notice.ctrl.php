@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 $_W['page']['title'] = '发送客服消息 - 粉丝管理 - 粉丝管理';
@@ -181,7 +181,7 @@ if($do == 'log') {
 			$fans['tag'] = iunserializer($fans['tag']);
 		}
 		if(!empty($fans['tag']['headimgurl'])) {
-			$avatar = rtrim($fans['tag']['headimgurl'], '0') . 132;
+			$avatar = rtrim($fans['tag']['headimgurl'], '0');
 		} else {
 			$avatar = 'resource/images/noavatar_middle.gif';
 		}
@@ -200,7 +200,8 @@ if($do == 'log') {
 				if($da['msgtype'] == 'text') {
 					$str .= tpl_chats_log(emotion($da['content']), $da['createtime']);
 				} elseif($da['msgtype'] == 'image') {
-					$content = '<a href="'.$da['content'].'" target="_blank"><img src="'.$da['content'].'" width="200"></a>';
+					$imageurl = tomedia($da['content'], true);
+					$content = '<a href="'.$imageurl.'" target="_blank"><img src="'.$imageurl.'" width="200"></a>';
 					$str .= tpl_chats_log($content, $da['createtime']);
 				} elseif($da['msgtype'] == 'link') {
 					$content = '<a href="'.$da['content'].'" target="_blank">'.$da['content'].'</a>';

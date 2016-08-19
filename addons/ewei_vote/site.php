@@ -25,7 +25,13 @@ class Ewei_voteModuleSite extends WeModuleSite {
         if (empty($rid)) {
             message('抱歉，参数错误！', '', 'error');
         }
+	    if ($this->module['config']['isconcern']) {
+		    if (empty($_W['fans']['from_user'])) {
+			    message('请先关注公众号后，再来参加投票', '', 'info');
+		    }
+	    }
         $from_user = $_W['fans']['from_user'];
+
         if (substr($from_user, 0, 4) == 'we7_') {
             message('请在微信端打开！', '', 'error');
         }
@@ -115,7 +121,7 @@ class Ewei_voteModuleSite extends WeModuleSite {
     public function doMobileSubmit() {
         global $_GPC, $_W;
         //判断用户是否存在
-        $rid = $_GPC['id'];
+        $rid = intval($_GPC['id']);
         $from_user =$_W['fans']['from_user'];
         if (substr($from_user, 0, 4) == 'we7_'){
             die("请不要在微信以外环境下投票");
@@ -166,8 +172,9 @@ class Ewei_voteModuleSite extends WeModuleSite {
             //投票记录
             $item_ids = explode(",", $ids);
             foreach ($item_ids as $item_id) {
+                $item_id = intval($item_id);
                 //查找投票项是否存在
-                $vote = pdo_fetch("SELECT * FROM " . tablename('vote_option') . " WHERE rid = :rid and id=" . $item_id . " ORDER by `id` ASC", array(':rid' => $rid));
+                $vote = pdo_fetch("SELECT * FROM " . tablename('vote_option') . " WHERE rid = :rid and id= :id ORDER by `id` ASC", array(':rid' => $rid, ':id' => $item_id));
                 if ($vote) {
                     pdo_update('vote_option', array('vote_num' => ($vote['vote_num'] + 1)), array('id' => $item_id));
                 }

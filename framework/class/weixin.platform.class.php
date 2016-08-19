@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -12,6 +12,7 @@ define('ACCOUNT_PLATFORM_API_QUERY_AUTH_INFO', 'https://api.weixin.qq.com/cgi-bi
 define('ACCOUNT_PLATFORM_API_ACCOUNT_INFO', 'https://api.weixin.qq.com/cgi-bin/component/api_get_authorizer_info?component_access_token=');
 define('ACCOUNT_PLATFORM_API_REFRESH_AUTH_ACCESSTOKEN', 'https://api.weixin.qq.com/cgi-bin/component/api_authorizer_token?component_access_token=');
 define('ACCOUNT_PLATFORM_API_OAUTH_CODE', 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&component_appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=%s#wechat_redirect');
+define('ACCOUNT_PLATFORM_API_OAUTH_USERINFO', 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=%s&component_appid=%s#wechat_redirect');
 define('ACCOUNT_PLATFORM_API_OAUTH_INFO', 'https://api.weixin.qq.com/sns/oauth2/component/access_token?appid=%s&component_appid=%s&code=%s&grant_type=authorization_code&component_access_token=');
 
 load()->classs('weixin.account');
@@ -54,7 +55,7 @@ class WeiXinPlatform extends WeiXinAccount {
 			);
 			$response = $this->request(ACCOUNT_PLATFORM_API_ACCESSTOKEN, $data);
 			if (is_error($response)) {
-				$errormsg = $this->error_code($response['errno'], $response['errmsg']);
+				$errormsg = $this->error_code($response['errno'], $response['message']);
 				return error($response['errno'], $errormsg);
 			}
 			$accesstoken = array(
@@ -172,10 +173,10 @@ class WeiXinPlatform extends WeiXinAccount {
 	}
 
 	public function getOauthUserInfoUrl($callback, $state = '') {
-		return sprintf(ACCOUNT_PLATFORM_API_OAUTH_CODE, $this->account['account_appid'], $this->appid, $callback, $state);
+		return sprintf(ACCOUNT_PLATFORM_API_OAUTH_USERINFO, $this->account['account_appid'], $callback, $state, $this->appid);
 	}
 
-	public function getOauthInfo($code) {
+	public function getOauthInfo($code = '') {
 		$component_accesstoken = $this->getComponentAccesstoken();
 		if (is_error($component_accesstoken)) {
 			return $component_accesstoken;
@@ -190,7 +191,7 @@ class WeiXinPlatform extends WeiXinAccount {
 	}
 	
 	public function getJsApiTicket(){
-		$cachename = 'account:jsapi_ticket';
+		$cachekey = "jsticket:{$this->account['acid']}";
 		$js_ticket = cache_load($cachename);
 		if (empty($js_ticket) || empty($js_ticket['value']) || $js_ticket['expire'] < TIMESTAMP) {
 			$access_token = $this->getAccessToken();
@@ -200,8 +201,8 @@ class WeiXinPlatform extends WeiXinAccount {
 			$apiurl = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={$access_token}&type=jsapi";
 			$response = $this->request($apiurl);
 			$js_ticket = array(
-					'value' => $response['ticket'],
-					'expire' => TIMESTAMP + $response['expires_in'] - 200,
+				'value' => $response['ticket'],
+				'expire' => TIMESTAMP + $response['expires_in'] - 200,
 			);
 			cache_write('account:jsapi_ticket', $js_ticket);
 		}

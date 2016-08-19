@@ -2,9 +2,6 @@
 /**
  * 龙舟大赛
  *
- * 作者:迷失卍国度
- *
- * qq : 15595755
  */
 defined('IN_IA') or exit('Access Denied');
 include "model.php";
@@ -36,7 +33,7 @@ class weisrc_dragonboatModuleSite extends WeModuleSite
         global $_W, $_GPC;
         $this->_weid = $_W['uniacid'];
         $this->_fromuser = $_W['fans']['from_user']; //debug
-        if ($_SERVER['HTTP_HOST'] == '127.0.0.1' || $_SERVER['HTTP_HOST'] == 'localhost:8888' || $_SERVER['HTTP_HOST'] == '192.168.1.102:8888') {
+        if ($_SERVER['HTTP_HOST'] == '127.0.0.1' || $_SERVER['HTTP_HOST'] == '192.168.1.102:8888') {
             $this->_fromuser = 'debug';
         }
 
@@ -48,8 +45,11 @@ class weisrc_dragonboatModuleSite extends WeModuleSite
         $this->_appsecret = '';
         $this->_accountlevel = $_W['account']['level']; //是否为高级号
         
-        if (!empty($_SESSION['oauth_openid'])) {
-            $this->_fromuser = $_SESSION['oauth_openid'];
+//        if (!empty($_SESSION['oauth_openid'])) {
+//            $this->_fromuser = $_SESSION['oauth_openid'];
+//        }
+        if (isset($_COOKIE[$this->_auth2_openid])) {
+            $this->_fromuser = $_COOKIE[$this->_auth2_openid];
         }
 
         if ($this->_accountlevel < 4) {
@@ -101,15 +101,6 @@ class weisrc_dragonboatModuleSite extends WeModuleSite
                 }
             }
         }
-
-//        if (empty($this->_account)) { //非借用
-//
-//        }
-//        echo 'from_user:' . $from_user;
-//        echo '<br/>oauth_openid:' . $_SESSION['oauth_openid'] . '<br/>';
-//
-//        print_r($_W['fans']);
-//        exit;
 
         $reply = pdo_fetch("SELECT * FROM " . tablename($this->table_reply) . " WHERE rid = :rid ORDER BY `id` DESC", array(':rid' => $id));
         if ($reply == false) {
@@ -200,9 +191,10 @@ class weisrc_dragonboatModuleSite extends WeModuleSite
                 $condition = ' totalcredit ';
             }
         }
-        $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_fans) . " WHERE rid=:rid ORDER BY {$condition} DESC LIMIT " . $reply['showusernum'], array(':rid' => $id));
+        $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_fans) . " WHERE rid=:rid AND status=1 ORDER BY {$condition} DESC LIMIT
+" . $reply['showusernum'], array(':rid' => $id));
 
-        $list2 = pdo_fetchall("SELECT * FROM " . tablename($this->table_fans) . " WHERE rid=:rid ORDER BY {$condition} DESC ", array(':rid' => $id));
+        $list2 = pdo_fetchall("SELECT * FROM " . tablename($this->table_fans) . " WHERE rid=:rid AND status=1 ORDER BY {$condition} DESC ", array(':rid' => $id));
 
         foreach($list2 as $key => $value) {
             if ($from_user == $value['from_user']) {
@@ -342,7 +334,7 @@ class weisrc_dragonboatModuleSite extends WeModuleSite
             }
         }
 
-        $fanslist = pdo_fetchall("SELECT * FROM " . tablename($this->table_fans) . " WHERE rid=:rid ORDER BY {$condition} DESC LIMIT " . $reply['showusernum'], array(':rid' => $id));
+        $fanslist = pdo_fetchall("SELECT * FROM " . tablename($this->table_fans) . " WHERE rid=:rid AND status=1 ORDER BY {$condition} DESC LIMIT " . $reply['showusernum'], array(':rid' => $id));
         $rank = array();
         $myrank = array();
         foreach($fanslist as $key => $value) {
@@ -367,10 +359,14 @@ class weisrc_dragonboatModuleSite extends WeModuleSite
         $from_user = $this->_fromuser;
         $id = intval($_GPC['id']);
         $point = floatval($_GPC['point']);
+        $md5sign = trim($_GPC['md5sign']);
+        $val_md5sign = md5('md5game' . $point);
+        if ($md5sign != $val_md5sign) {
+            $this->showMsg('抱歉，参数有问题！');
+        }
         if (empty($id)) {
             $this->showMsg('抱歉，参数错误！');
         }
-
         if ($point > 500) {
             $this->showMsg('抱歉，参数错误！');
         }
@@ -560,7 +556,7 @@ class weisrc_dragonboatModuleSite extends WeModuleSite
                 $weisrc_dragonboat = pdo_fetch("SELECT * FROM " . tablename($this->table_reply) . " WHERE rid = :rid ", array(':rid' => $item['id']));
                 $item['viewnum'] = $item['viewnum`'];
                 $item['starttime'] = date('Y-m-d H:i', $weisrc_dragonboat['starttime']);
-                $endtime = $weisrc_dragonboat['endtime'] + 86399;
+                $endtime = $weisrc_dragonboat['endtime'];
                 $item['endtime'] = date('Y-m-d H:i', $endtime);
                 $nowtime = time();
                 if ($weisrc_dragonboat['starttime'] > $nowtime) {
@@ -637,7 +633,7 @@ class weisrc_dragonboatModuleSite extends WeModuleSite
         $url = $this->createWebUrl('fanslist', array('op' => 'display', 'rid' => $rid));
 
         if ($operation == 'display') {
-
+            $status = intval($_GPC['status']);
             $reply = pdo_fetch("SELECT * FROM " . tablename($this->table_reply) . " WHERE rid = :rid ORDER BY `id` DESC", array(':rid' => $rid));
             $condition = ' credit ';
             if ($reply == false) {
@@ -647,11 +643,18 @@ class weisrc_dragonboatModuleSite extends WeModuleSite
                     $condition = ' totalcredit ';
                 }
             }
+            $strwhere = '';
+            if (isset($_GPC['status'])) {
+                $strwhere = " AND status={$status} ";
+            } else {
+                $strwhere = " AND status=1 ";
+            }
+
             $pindex = max(1, intval($_GPC['page']));
             $psize = 12;
 
             if ($_GPC['out_put'] == 'output') {
-                $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_fans) . " WHERE rid = :rid ORDER BY {$condition} DESC,id DESC ", array(':rid' => $rid));
+                $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_fans) . " WHERE rid = :rid {$strwhere} ORDER BY {$condition} DESC,id DESC ", array(':rid' => $rid));
 
                 $i = 0;
                 foreach ($list as $key => $value) {
@@ -672,9 +675,9 @@ class weisrc_dragonboatModuleSite extends WeModuleSite
             $start = ($pindex - 1) * $psize;
             $limit = "";
             $limit .= " LIMIT {$start},{$psize}";
-            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_fans) . " WHERE rid = :rid ORDER BY {$condition} DESC,id DESC " . $limit, array(':rid' => $rid));
+            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_fans) . " WHERE rid = :rid {$strwhere} ORDER BY {$condition} DESC,id DESC " . $limit, array(':rid' => $rid));
 
-            $total = pdo_fetchcolumn("SELECT count(1) FROM " . tablename($this->table_fans) . " WHERE rid = :rid  ", array(':rid' => $rid));
+            $total = pdo_fetchcolumn("SELECT count(1) FROM " . tablename($this->table_fans) . " WHERE rid = :rid {$strwhere} ", array(':rid' => $rid));
             $pager = pagination($total, $pindex, $psize);
         } else if ($operation == 'post') {
             $id = intval($_GPC['id']);
@@ -689,6 +692,7 @@ class weisrc_dragonboatModuleSite extends WeModuleSite
                     'tel' => trim($_GPC['tel']),
                     'credit' => floatval($_GPC['credit']),
                     'totalcredit' => floatval($_GPC['totalcredit']),
+                    'status' => floatval($_GPC['status']),
                     'dateline' => TIMESTAMP
                 );
                 if (!empty($_GPC['headimgurl'])) {
@@ -762,17 +766,17 @@ class weisrc_dragonboatModuleSite extends WeModuleSite
             $start = ($pindex - 1) * $psize;
             $limit = "";
             $limit .= " LIMIT {$start},{$psize}";
-            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_lottery_record) . " WHERE rid = :rid AND fansid=:fansid ORDER BY id DESC " . $limit, array(':rid' => $rid, ':fansid' => $fansid));
+            $list = pdo_fetchall("SELECT * FROM " . tablename($this->table_record) . " WHERE rid = :rid AND fansid=:fansid ORDER BY id DESC " . $limit, array(':rid' => $rid, ':fansid' => $fansid));
 
-            $total = pdo_fetchcolumn("SELECT count(1) FROM " . tablename($this->table_lottery_record) . " WHERE rid = :rid AND fansid=:fansid ", array(':rid' => $rid, ':fansid' => $fansid));
+            $total = pdo_fetchcolumn("SELECT count(1) FROM " . tablename($this->table_record) . " WHERE rid = :rid AND fansid=:fansid ", array(':rid' => $rid, ':fansid' => $fansid));
             $pager = pagination($total, $pindex, $psize);
         } else if ($operation == 'delete') {
             $id = intval($_GPC['id']);
-            $item = pdo_fetch("SELECT id FROM " . tablename($this->table_lottery_record) . " WHERE id = :id", array(':id' => $id));
+            $item = pdo_fetch("SELECT id FROM " . tablename($this->table_record) . " WHERE id = :id", array(':id' => $id));
             if (empty($item)) {
                 message('抱歉，不存在或是已经被删除！', $url, 'error');
             }
-            pdo_delete($this->table_lottery_record, array('id' => $id, 'weid' => $weid));
+            pdo_delete($this->table_record, array('id' => $id, 'weid' => $weid));
             message('删除成功！', $url, 'success');
         }
 
@@ -897,7 +901,6 @@ class weisrc_dragonboatModuleSite extends WeModuleSite
                 $account = $this->_account;
             }
         }
-
         load()->classs('weixin.account');
         $accObj= WeixinAccount::create($account['acid']);
         $access_token = $accObj->fetch_token();

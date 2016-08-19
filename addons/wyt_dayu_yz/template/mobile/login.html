@@ -1,0 +1,145 @@
+{template 'header'}
+<script>
+	require(['angular', 'bootstrap', 'util'], function(angular, $, u){        
+		angular.module('app', []).controller('loginPanel', function($scope, $http){
+			$scope.label = {
+				basic: {
+					error: false
+				},
+				code: {
+					countDown : '',
+					error: false
+				},
+				running: false
+			};
+			$scope.ret = {
+				basic: {
+					username : '',
+					password : ''
+				},
+				code: {
+					username : '',
+					password : ''
+				}
+			};			
+		});
+		angular.bootstrap(document, ['app']);
+        
+         function sendCode(elm, no, callback) {
+		if(!no || !elm || !$(elm).attr('uniacid')) {
+			if($.isFunction(callback)) {
+				callback('failed', '给定的参数有错误');
+			}
+			return;
+		}
+		$(elm).attr("disabled", true);
+		var downcount = 60;
+		$(elm).html(downcount + "秒后重新获取");
+
+		var timer = setInterval(function(){
+			downcount--;
+			if(downcount <= 0){
+				clearInterval(timer);
+				$(elm).html("重新获取验证码");
+				$(elm).attr("disabled", false);
+				downcount = 60;
+			}else{
+				if($.isFunction(callback)) {
+					callback('downcount', downcount);
+				}
+				$(elm).html(downcount + "秒后重新获取");
+			}
+		}, 1000);
+
+		var params = {};
+		params.receiver = no;
+		params.uniacid = $(elm).attr('uniacid');
+		if($(elm).attr('table')) {
+			params.table = $(elm).attr('table');
+		}
+		$.get('{php echo $this->createMobileUrl('Verifycode')}', params).success(function(dat){
+			if(dat == 'success') {
+				if($.isFunction(callback)) {
+					callback('success', null);
+				}
+			} else {
+				if($.isFunction(callback)) {
+					callback('failed', dat);
+				}
+			}
+		});
+	};        
+		$(function(){
+			$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+				if($(e.target).attr('href') == '#code') {
+					$('#code').addClass('fadeInRight');
+				} else {
+					$('#basic').addClass('fadeInLeft');
+				}
+			});
+			$('.btn-sender').on('click', function(){
+				var mode = $('li.active a[data-toggle="tab"]').attr('href') == '#basic' ? 'basic' : 'code';
+				if(mode == 'basic') {
+					return;
+				}
+				var scope = angular.element('.ng-container').scope();
+				if(!scope.ret.code.username) {
+					u.message('请输入手机号.');
+					return;
+				}
+				if(!scope.ret.code.name) {
+					u.message('请输入真实姓名.');
+					return;
+				}
+				sendCode(this, scope.ret.code.username, function(ret, message){
+					if(ret == 'failed') {
+						u.message('发送验证码失败. 详情: ' + message);
+					}
+				});
+			});
+		});
+	});
+</script>
+<style>
+	body{background:#d2e6e9;}
+	.panel{margin:.5em; border:none;}
+	.panel-info>.panel-heading {background: -webkit-gradient(linear, 0 0, 100% 0, from(#ebebeb), to(#f3f9fa), color-stop(30%, #f5f9f9)); color:#666666; border:none;}
+	a{color:#666666;}a:hover{color: #3ebacc;}
+	.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{color: #3ebacc;}
+	.actions{margin:.8em auto;}
+	.nav.nav-tabs{margin-bottom:.8em;}
+	.btn.btn-primary{background: #56c6d6; color: #FFF; border: 0;}
+</style>
+<div class="ng-cloak panel panel-info ng-container" ng-controller="loginPanel">
+	<div class="panel-heading">
+		<h4>完善认证资料</h4>
+	</div>
+	<div class="panel-body">
+       <form id="theform" action="" method="post" class="store-data">
+                <div class="tab-pane animated {if $ltype == 'code'}active{/if}" id="code">
+					<div class="form-group has-feedback" ng-class="{'has-error': label.code.error}">
+						<label class="control-label sr-only"></label>
+						<input name="username" ng-model="ret.code.username" type="text" class="form-control" placeholder="手机号">
+						<span class="glyphicon glyphicon-remove form-control-feedback" ng-show="label.code.error"></span>
+					</div>
+                    <div class="form-group has-feedback" ng-class="{'has-error': label.code.error}">
+						<label class="control-label sr-only"></label>						                   
+                        <input name="name" ng-model="ret.code.name"  type="text" class="form-control" placeholder="真实姓名">
+						<span class="glyphicon glyphicon-remove form-control-feedback" ng-show="label.code.error"></span>
+					</div>
+					<div class="form-group">
+						<button class="btn btn-warning btn-block btn-sender" uniacid="{$_W['uniacid']}">获取验证码</button>
+					</div>
+					<div class="form-group has-feedback" ng-class="{'has-error': label.code.error}">
+						<label class="control-label sr-only"></label>
+						<input name="code" ng-model="ret.code.password" type="text" class="form-control" placeholder="验证码">
+						<span class="glyphicon glyphicon-remove form-control-feedback" ng-show="label.code.error"></span>
+					</div>
+				</div>
+		<input type="submit" name="submit" value="提交"  class="btn btn-warning btn-block"/>
+        <input type="hidden" name="token" value="{$_W['token']}" />
+        <input type="hidden" name="reurl" value="{$_GPC['reurl']}" />
+	</form>
+	</div>
+</div>
+{template 'footer'}

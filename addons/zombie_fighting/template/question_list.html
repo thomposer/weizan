@@ -1,22 +1,12 @@
 {template 'common/header'}
 <div class='container' style='padding:0 5px 10px;margin:0;width:100%'>
     <ul class="nav nav-tabs">
-      <li {if $op == 'post' && empty($id)}class="active"{/if}>
-        <a href="{php echo $this->createWebUrl('questions', array('op' => 'post'));}">添加题库</a>
-      </li>
-      <li {if $op == 'display'}class="active"{/if}>
-        <a href="{php echo $this->createWebUrl('questions',array('op'=>'display'));}">管理题库</a>
-      </li>
+      <li {if $op == 'post' && empty($id)}class="active"{/if}> <a href="{php echo $this->createWebUrl('questions', array('op' => 'post'));}">添加题库</a> </li>
+      <li {if $op == 'display'}class="active"{/if}><a href="{php echo $this->createWebUrl('questions',array('op'=>'display'));}">管理题库</a> </li>
       {if !empty($id) && $op == 'post'}
-      <li class="active">
-        <a href="{php echo $this->createWebUrl('questions',array('op'=>'post','name' => 'zombie_fighting','id'=>$id));}">
-         编辑题库
-        </a>
-      </li>
+      <li class="active"><a href="{php echo $this->createWebUrl('questions',array('op'=>'post','name' => 'zombie_fighting','id'=>$id));}">编辑题库</a></li>
       {/if}
-      <li {if $op == 'list'}class="active"{/if}>
-            <a href="{php echo $this->createWebUrl('questions', array('op' => 'list'));}">活动列表</a>
-      </li>
+      <li {if $op == 'list'}class="active"{/if}><a href="{php echo $this->createWebUrl('questions', array('op' => 'list'));}">活动列表</a></li>
       {if !empty($rid) && $op == 'rankList'}
         <li class="active">
         <a href="{php echo $this->createWebUrl('questions', array('op' => 'rankList','rid'=>$rid));}">排名信息</a>
@@ -48,6 +38,17 @@
                             <input type="text" placeholder="搜索题目" value="{$_GPC['keyword']}" id="" name="keyword" class="form-control">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">活动</label>
+                        <div class="col-sm-8">
+                            <select name="sid"  class="form-control">
+                            {loop $select_question $questions}
+                            <option value="{$questions['id']}">{$questions['title']}</option>
+                            {/loop}
+                                </select>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <div class="pull-right col-xs-12 col-sm-2 col-lg-1">
                             <button class="btn btn-block"><i class="fa fa-search"></i> 搜索</button>

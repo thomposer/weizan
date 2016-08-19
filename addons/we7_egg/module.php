@@ -51,6 +51,7 @@ class We7_eggModule extends WeModule {
             'description' => $_GPC['description'],
             'periodlottery' => intval($_GPC['periodlottery']),
             'maxlottery' => intval($_GPC['maxlottery']),
+	        'maxaward' => intval($_GPC['maxaward']),
             'rule' => htmlspecialchars_decode($_GPC['rule']),
             'default_tips' => $_GPC['default_tips'],
             'hitcredit' => intval($_GPC['hitcredit']),

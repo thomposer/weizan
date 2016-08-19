@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <title>{if $set['copyright']}{$set['copyright']}{else}{$_W['account']['name']}{/if}</title>
+    <link rel="stylesheet" href="{AMOUSE_REBATE_RES}css/foundation.css?version=20150101"/>
+    <link rel="stylesheet" href="{AMOUSE_REBATE_RES}css/main.css?version=20150221"/>
+    <link rel="stylesheet" href="{AMOUSE_REBATE_RES}css/meal.css?version=20150221"/>
+    <script src="{AMOUSE_REBATE_RES}js/modernizr.js?version=20150221"></script>
+    <script src="{AMOUSE_REBATE_RES}js/jquery.js?version=20150221"></script>
+    <script src="{AMOUSE_REBATE_RES}js/foundation.js?version=20150221"></script>
+    <script src="{AMOUSE_REBATE_RES}js/main.js?version=20150221"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="content">
+        <div class="dialog" id="tip">
+            <div class="dialog-cnt">
+                <div class="dialog-bd"><h3>提示</h3>
+                    <p class="text"></p><a class="button correct-btn" id="alert_ok">确&nbsp;&nbsp;定</a>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="payment">
+                <div class="row order2"><p><b>每日签到</b></p>
+                    <p style="font-size:12px;">
+                        每日签到的小伙伴将获得超值{if $custom_set['credittxt']}{$custom_set['credittxt']}{else}积分{/if}！<br>
+                    </p>
+                    <div class="line"></div>
+
+                </div>
+                <div class="row">
+                    <div class="small-12 columns publish">
+                        <p> {if $is_valid_checkin==0}<a class="button btn" href="#">您今天已签到</a>{else}<a class="button btn" id='sign' href="#">立即签到</a>{/if}
+                        </p>
+                        <hr>
+                        <p><a style="font-size:14px;" href="{php echo $this->createMobileUrl('logs',array('op'=>'record'),true)}">查看签到记录</a></p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#sign').click(function () {
+            var ajaxurl = '{php echo $this->createMobileUrl('ajaxSign',array(),true)}&_=' + Math.random();
+            var result=AjaxReturn(ajaxurl,'get');
+            if(result.code==200) {
+                alert(result.msg);
+            }else{
+                alert(result.msg);
+            }
+            return false;
+        });
+    });
+</script>
+
+{template 'footerbar'}
+
+<script>
+    $(document).foundation();
+alert_ok = null;
+function new_alert(msg, cb) {
+    alert_ok = cb;
+    $('#tip .text').html(msg);
+    $('#tip').show();
+}
+old_alert = window.alert;
+window.alert = new_alert;
+$('#alert_ok').click(function () {
+    if (alert_ok) {
+        alert_ok();
+    }
+    $('#tip').hide();
+});
+</script>
+
+</body>
+</html>

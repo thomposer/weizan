@@ -14,24 +14,13 @@
         </style>
         <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
         <title>{$title}</title>
-        <link rel="stylesheet" href="{OSSURL}public/mobile/css/weixin.css?{php echo time()}">
+        <link rel="stylesheet" href="{MODULE_URL}public/mobile/css/weixin.css?{php echo time()}">
 		<link rel="stylesheet" href="{OSSURL}public/mobile/css/reset.css?{php echo time()}">
 		<script src="{OSSURL}public/mobile/js/banner.js?{php echo time()}"></script>
         <script src="{OSSURL}public/mobile/js/jquery.js?{php echo time()}"></script>
 		<script type="text/javascript" src="{OSSURL}public/mobile/js/swipe.js?{php echo time()}"></script>
 </head>
 <body>
-<!--header>
-<div class="main-box">
-        <header>
-            <span class="header-logo"><img src="{php echo tomedia($item['logo']);}"></span>
-            <div class="header-login">
-                <span><a href="#">注册</a></span>
-                <span>|</span>
-                <span><a href="#">登录</a></span>
-            </div>
-</div>
-</header-->
 <div id="wrap" class="count_inf">
 		{if !empty($banners)}
 <div id="wrap" class = "count_ban">	
@@ -182,7 +171,7 @@
         <dl class="count_tips">
             <dt>联系方式</dt>
 			    <dd class="red phone">
-                    <a href="{php echo $this->createMobileUrl('jianjie', array('id' => $schoolid, 'schoolid' => $schoolid), true)}"><i class="fa fa-university"></i>&nbsp;&nbsp;学校简介及招生简章</a>
+                    <a href="{php echo $this->createMobileUrl('jianjie', array('id' => $schoolid), true)}"><i class="fa fa-university"></i>&nbsp;&nbsp;学校简介及招生简章</a>
                 </dd>
                 <dd class="red phone">
                     <a href="tel:{$item['tel']}"><i class="fa fa-phone"></i>&nbsp;&nbsp;{$item['tel']}</a>

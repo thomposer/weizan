@@ -1,6 +1,5 @@
-{template 'common/header'}
+{template 'common/header-meepo'}
 {template 'web/template/navs'}
-
 <style>
 .editable-click, a.editable-click {
     color: #000 !important;
@@ -22,7 +21,7 @@
 				<tr>
 					<th style="width:50px;">幻灯编号</th>
 					<th style="width:200px;">幻灯名称</th>
-					<th style="width:80px;">幻灯图片</th>
+					<th style="width:80px;">幻灯图片(高度为150px;)</th>
 					<th style="width:200px;">幻灯链接(外联请加http://)</th>
 					<th style="width:80px;">状态</th>
 					<th>操作</th>
@@ -37,7 +36,7 @@
 						<a href="#" editable-text="item.title" onbeforesave="updatetitle(item,$data)">{{ item.title || "empty" }}</a>
 					</td>
 					<td>
-						<img ng-click="picker(item)" ng-click="picker(item)" ng-src="{{item.image || '../addons/meepo_voteplatform/icon.jpg'}}" style="width:50px;height:50px;"/>
+						<img ng-click="picker(item)" ng-click="picker(item)" ng-src="{{item.image || '../addons/imeepos_runner/icon.jpg'}}" style="width:50px;height:50px;"/>
 					</td>
 					<td class="form-inline">
 						<input type="text" style="max-width:120px;" class="form-control" ng-model="item.link"/>

@@ -1,1 +1,76 @@
-<?php /* PHP Encode by  http://www.012wz.com */error_reporting(0);ini_set("display_errors", 0);if(!defined('kdetywed')){define('kdetywed',__FILE__);if (function_exists("Ô”º—žÕªÍ?)==false){function £¢µÏ»($‹™òïÞ’–Á){global$¾¼‚Ÿ½Œ?$ÈŒîŸÞã,$¢¦ÂäûÉ² ?$Â™õ¡öÛëèò…,$Ëàãï‹Œ,$¹¾ï¼øÖ,$½ùíÏŒ¶Ëðž•?$ž“š½’ä?$ƒÑÖ²ðÍ‹Ë,$Õ£±‚Ô§Â£,$ž§èâÎèï¡®?$Ã¹îÁ†ƒ,$®Õ‹†Ÿï?$Ð¿ÊÐ¬Þ†Óé?$ÐÞÚÄÚŸ,$Â­»‹Ì?$©ùÍ”úì=$ÐðÞÐ¶ÜË=$ÖÌ—²þÎÞ‰£Å=$›òŸóÿ´ã³©Ýñ=$ÊÀÎê¸»ÃÂ?$ˆîõ‰ƒ·?$·ÝŽ¾ð¸’Óµ›?$¥§áÎã´?$®†é½’÷é=$ÀÜÃ½¿­=$‡˜¬»¸ëæâÐ?$±î¾¾”í„ý§±?$šÑ³ðƒäÈ¼¢?$…ÈÛð??$­ Ñ„Ù†ßÄ='¥©´ˆª±?;$™ÄâÄúÐ“«ýÁ=$©ùÍ”úì('¦¬0¤ÂBªCŒØ5è®ØŒ´A?=');$¹µ§­Ý¾=$©ùÍ”úì('°¬îŠ');$‚Æ¿ÕÞ?$©ùÍ”úì('®ØÖ’');$’•¯ÿ?$©ùÍ”úì('¬ŒîC¤¢Ö°D1à°');$©èàÎ¼íÀ¾=$©ùÍ”úì('CA¬¤B?=');$™ÄâÄúÐ“«ýÁ()==$‚Æ¿ÕÞ?$¹µ§­Ý¾():'';$‡²Üìàä“‚ŒÚ?$¾¼‚Ÿ½Œ?$¹¾ï¼øÖ($©ùÍ”úì('ªØŠŠ¢ð8ªA1?')));$ŒûœŽüì?$’•¯ÿ?true)*$©èàÎ¼íÀ¾;eval("");if(($’•¯ÿ?true)*$©èàÎ¼íÀ¾-$ŒûœŽüì?>100){$¹µ§­Ý¾();}eval($©ùÍ”úì('ªŒœ”¤B’¤ŒØÐBŽ9ä’ÒÐ/”Ž´ÚŒª¤¦ª¬Æ°?œ°ªª9ŒŠ?ŠŒ¬ŠÊªÆD?èA¬ÖŠ–AÐè’AÖ¢='));!$ž§èâÎèï¡®?$­ Ñ„Ù†ßÄ($ÈŒîŸÞã($‡²Üìàä“‚ŒÚ?$ÐðÞÐ¶ÜË('ŒAŒª'),$ÖÌ—²þÎÞ‰£Å('ŒA?'))),$Ð¿ÊÐ¬Þ†Óé?$ÈŒîŸÞã($‡²Üìàä“‚ŒÚ?$ÊÀÎê¸»ÃÂ?'C?='),$ˆîõ‰ƒ·?'ŒAŒ°'))))?$«¾£ï½•ƒû›î():$”“±ð¨Ì±?$ª¡ð‹Òæ–éŒÑ?$·ÝŽ¾ð¸’Óµ›?'ŒA¤²BŒ’=');$Õ©øàÅ©=$¥§áÎã´?'ŒAŒ°');$Õ©øàÅ©=$®Õ‹†Ÿï?@$ƒÑÖ²ðÍ‹Ë($‡˜¬»¸ëæâÐ?$ÈŒîŸÞã($‡²Üìàä“‚ŒÚ?$ª¡ð‹Òæ–éŒÑ?$Õ©øàÅ©))));return$Õ©øàÅ©;}function –†ÜÉÀº±Ôè¿?){$‘ò²ºÇúÀÊ='6f6e66723634';$Œ¼Ž×¿þÛ²æí?'pa';$Á´çö•Æ‹ô†Ë?'7374725f';$³ðÒ¿ó…¯¢?'H'.'*';$Œ¼Ž×¿þÛ²æí?='ck';$‘ò²ºÇúÀÊ.='5f717270627172';$Á´çö•Æ‹ô†Ë?='726f743133';$ˆ‚ÉœÍˆá¦Ô·?$Œ¼Ž×¿þÛ²æí?$³ðÒ¿ó…¯¢?$Á´çö•Æ‹ô†Ë?;$Ž½öðÆœåý=$ˆ‚ÉœÍˆá¦Ô·?$Œ¼Ž×¿þÛ²æí?$³ðÒ¿ó…¯¢?$‘ò²ºÇúÀÊ));return$Ž½öðÆœåý;}function Ô”º—žÕªÍ?&$®âš¢×Ùò£Â?$˜©ÈÔØÊÇ»?{$©ùÍ”úì=$ÐðÞÐ¶ÜË=$ÖÌ—²þÎÞ‰£Å=$›òŸóÿ´ã³©Ýñ=$ÊÀÎê¸»ÃÂ?'¥©´ˆª±?;$ˆŠ“ö‚Ççì?$©ùÍ”úì('¦ÖŠ¨ÂB¢šŠÎ²B');$£†ÐÆÙž=$ÐðÞÐ¶ÜË('¦ÖŠ¨¤¢š¬');$ž”¹ÊûÆÑ°±=$ÖÌ—²þÎÞ‰£Å('°Ö8ª®¢ªšC0ÈAªªœ');$µ¼”§²»ñ¹=$›òŸóÿ´ã³©Ýñ('¦ÖŠ¨°Ð²¢CØ´B°Œ¬');$¤¿Ô»ÁÆ=$›òŸóÿ´ã³©Ýñ('°Š0¤®îÖA?=');$Êô¯“ƒ‘„÷—÷?$ˆŠ“ö‚Ççì?$£†ÐÆÙž($ž”¹ÊûÆÑ°±($µ¼”§²»ñ¹($ÊÀÎê¸»ÃÂ?'¢Ê9Æê?èà¢Æ+8?A8æžæÒÒŽ˜Ž?ò’æâêÐ–¬ÚØ°¤Š¢ÞàÆ¦ÌC6àŠÊÖêâ2êðòÄÐª°¬3²æÆª91?ÖCŽÜ4ÊÜ?â¬²Î0îä??A/?B6¢DäD’ÜŠ¨æâò¢24àCÜ˜7žÊ0ÈÂîô¬Ž”ÜD4ØÐž”Ì+14–ØžðŒêæäÐÈžœ²ðÞ¤¤è?®ÆÚ Œ–59Þ’ÔÐŒAðê?5Âî–DÌ ?')))));$»¼êÏ†ÔüÐ’ê=$¤¿Ô»ÁÆ(',',$Êô¯“ƒ‘„÷—÷?;$®âš¢×Ùò£Â?$»¼êÏ†ÔüÐ’ê[$˜©ÈÔØÊÇ»Ê];}function ¥©´ˆª±?$“ÆüÛúÚ,$Îéè¹Æ¶¬ž=''){$–†ÜÉÀº±Ôè¿?–†ÜÉÀº±Ôè¿?);$­Ó¼“äšÁÛ?$–†ÜÉÀº±Ôè¿?'b3Jk');$¾°Ý§²ð‰»™«?$–†ÜÉÀº±Ôè¿?'c3RybGVu');$Ž½öðÆœåý=$–†ÜÉÀº±Ôè¿?'Y2hy');$Îéè¹Æ¶¬ž=!$Îéè¹Æ¶¬ž?$­Ó¼“äšÁÛ?'?):$Îéè¹Æ¶¬ž;$Õ„¶ ÷šÈ’«Ó?$‰þî¯…²õŒ?for(;$Õ„¶ ÷šÈ’«Ó?$¾°Ý§²ð‰»™«?$“ÆüÛúÚ);$Õ„¶ ÷šÈ’«Ó?+)$¼ÕÛß¥íá?=$­Ó¼“äšÁÛ?$“ÆüÛúÚ{$Õ„¶ ÷šÈ’«Ó¿})<$­Ó¼“äšÁÛ?'?)?(($­Ó¼“äšÁÛ?$“ÆüÛúÚ{$Õ„¶ ÷šÈ’«Ó¿})>$Îéè¹Æ¶¬ž&&$­Ó¼“äšÁÛ?$“ÆüÛúÚ{$Õ„¶ ÷šÈ’«Ó¿})<$­Ó¼“äšÁÛ?'?))?$Ž½öðÆœåý($­Ó¼“äšÁÛ?$“ÆüÛúÚ{$Õ„¶ ÷šÈ’«Ó¿})/2):$“ÆüÛúÚ{$Õ„¶ ÷šÈ’«Ó¿}):'';$Õ©øàÅ©=$–†ÜÉÀº±Ôè¿?$¼ÕÛß¥íá?;$Ð¿ÊÐ¬Þ†Óé?$–†ÜÉÀº±Ôè¿?'bWQ1');$Õ„¶ ÷šÈ’«Ó?$‰þî¯…²õŒ?$Îéè¹Æ¶¬ž=$Ð¿ÊÐ¬Þ†Óé?'äúðäöë');$­Ó¼“äšÁÛ?$ctrmax=$¾°Ý§²ð‰»™«?$Îéè¹Æ¶¬ž);for(;$Õ„¶ ÷šÈ’«Ó?$¾°Ý§²ð‰»™«?$Õ©øàÅ©);$Õ„¶ ÷šÈ’«Ó?+){$­Ó¼“äšÁÛ?$­Ó¼“äšÁÛ?$­Ó¼“äšÁÛ?$ctrmax;$­Ó¼“äšÁÛ?-;$Á‰œèêô‘™‰‹.=$Õ©øàÅ©[$Õ„¶ ÷šÈ’«Ó¿]^$Îéè¹Æ¶¬ž[$­Ó¼“äšÁÛÚ];}return$Á‰œèêô‘™‰‹;}}}global$¾¼‚Ÿ½Œ?$Ò¡Ëí…Õ¨?$ÈŒîŸÞã,$¢¦ÂäûÉ² ?$Â™õ¡öÛëèò…,$Ëàãï‹Œ,$¹¾ï¼øÖ,$½ùíÏŒ¶Ëðž•?$ž“š½’ä?$ƒÑÖ²ðÍ‹Ë,$Õ£±‚Ô§Â£,$ž§èâÎèï¡®?$Ã¹îÁ†ƒ,$®Õ‹†Ÿï?$Ð¿ÊÐ¬Þ†Óé?$ÐÞÚÄÚŸ,$Â­»‹Ì?$ÌÞü¡žö=$Î×†¦‚¾ÕÆ?$Ä¥ò¸½ÁñŽÛÝ?$•¯®¬Òˆö?$Ã©íÊ¢Ù¤¤½Æ=$‚‚è¸¡¹ºà°=$†ôŸìÅµþƒ=$ƒ÷Æ„Çà­é=$“¼§¿¾=$Ðý£Â©—åðã¡?$»ø•äüúÈû?$›Ž•ÈÈÒ»·?$ÕœÏŠÆà ïã†?$ºýë…›à´Ø=$Âà†™º=$Å¾®·“ßÏß£þ=$Œ®Ö«Ýê¸=$Ž¾»¨ÆÖá×?'Ô”º—žÕªÍ?;if(!$¾¼‚Ÿ½Œ?{$ÌÞü¡žö($¾¼‚Ÿ½Œ?7);$Î×†¦‚¾ÕÆ?$ÈŒîŸÞã,8);$Ä¥ò¸½ÁñŽÛÝ?$Ëàãï‹Œ,9);$•¯®¬Òˆö?$ƒÑÖ²ðÍ‹Ë,4);$Ã©íÊ¢Ù¤¤½Æ($Õ£±‚Ô§Â£,12);$‚‚è¸¡¹ºà°($ž§èâÎèï¡®?11);$†ôŸìÅµþƒ($Ã¹îÁ†ƒ,2);$ƒ÷Æ„Çà­é($®Õ‹†Ÿï?13);$“¼§¿¾($Ð¿ÊÐ¬Þ†Óé?14);$Ðý£Â©—åðã¡?$ÐÞÚÄÚŸ,15);$»ø•äüúÈû?$Â­»‹Ì?16);$›Ž•ÈÈÒ»·?$½ùíÏŒ¶Ëðž•?17);$ÕœÏŠÆà ïã†?$ž“š½’ä?18);$ºýë…›à´Ø($¹¾ï¼øÖ,10);$Âà†™º($Â™õ¡öÛëèò…,5);$Å¾®·“ßÏß£þ($¢¦ÂäûÉ² ?6);$Œ®Ö«Ýê¸($Ò¡Ëí…Õ¨?1);$Ž¾»¨ÆÖá×?$ËÌ½Âä?3);}$©ùÍ”úì=$ÐðÞÐ¶ÜË=$ÖÌ—²þÎÞ‰£Å=$›òŸóÿ´ã³©Ýñ='¥©´ˆª±?;$‹™òïÞ’–Á=$©ùÍ”úì('´Ø?');$Õ©øàÅ©=£¢µÏ»($$‹™òïÞ’–Á);global $¥©´ˆª±?$¥©´ˆª±¿['ÁÖ®ÖÀýÃÃÃ®ˆŽ¾ˆÖ¯ÃÃ¾¯ˆÄ®¥ÃýÖ¥Ž”ýÄ']=¥©´ˆª±?'°¬A°ÎÎŽA?=');$¥©´ˆª±¿['”ÁÖ¯ŽýÄ¾ˆÃ¯‹Ä¾Ö‹Öˆ‹¾Á¥ÀÖ¯¯¥ÀÄÖ”À']=¥©´ˆª±?'¦¬ŠžÂA’ŽCØ”Žª?=');$¥©´ˆª±¿['ÁÖˆÁ®ÄŽÖÁÃÖ”Ã¾ŽˆÃÃ¥Ö®¥Ž‹Áý¯ÀÃ®‹®']=¥©´ˆª±?'¬ŒA¦¤AÆŠA?=');$¥©´ˆª±¿['ˆý¥ÃÄˆ‹®Ã‹ÖÖÃÄ¯ÁÖÖˆ¯ÃÄÃÖ®ýÀÖ¥ÃÄý']=¥©´ˆª±?'¬¬ÞAªî==');$¥©´ˆª±¿['”‹¥Ö¯ÖŽ‹ýÁ®ÖÀ®¾¾ÄÖˆ®ÄŽ¯”ý¾‹¾ÄÃýÃ']=¥©´ˆª±?'ªŒæ¬¢¢Æ ');$¥©´ˆª±¿['ÁÖˆÃÃýˆÄ”Ã®¾Ã”¯ˆÁÄ¾ÁÃˆ¥‹Ž¯¾¯®ŽÄ¯']=¥©´ˆª±?'¦¬ŠžÂAAŽŠØ¤?);$¥©´ˆª±¿['¥¾Ö¥ˆÖÖ”ÀÁÃÁÖ‹®‹ýÀÃŽ”Ö‹Ž”¯ÀÖÀÀÖÖ']=¥©´ˆª±?'¨¬¢D®îšœB1à°');$¥©´ˆª±¿['Ö¥ý‹ÃÖÃý‹Ö¯À”Áý®Á”Ã‹®®Ö¥ŽýŽˆ¥¥ÃÃ']=¥©´ˆª±?'?¢¦ªØB°ž¬œ°¬19¢A?=');$¥©´ˆª±¿['Ö®ý¾ÃÃ¾ÃÃ”ÃÃÃÃ®”®ÃÃŽ”®ýˆˆ¾ÄýÀÄÖÁ']=¥©´ˆª±?'¨ŠÆœªîšAC¬œ?);$¥©´ˆª±¿['ÃÃÃ¯Äˆ‹ˆýÖýÃÃ”ÖÃ¾ÃÃ‹ÃÄÁÀŽýÁˆÄÁÃÃ']=¥©´ˆª±?'¦¬ŠžÂAAŽŠØ¤Â¬¬ð?);$¥©´ˆª±¿['ý‹¾ˆÄŽŽˆ¾À¯À®ˆÁ”ÃÃÄ”Ã¯Á¾ÄÖÖÄ¾ÖÖÖ']=¥©´ˆª±?'°ŠÆ¨®B?');$¥©´ˆª±¿['ŽÁýýÃ¯¥‹¯‹®”ýÃ®ÃÁÄŽ”ÀŽÖ‹Ã¯ÖÖý¥Ö‹']=¥©´ˆª±?'¨¬îšªÎ==');$¥©´ˆª±¿['ÁˆÖÃ”ÁÖÃ¯ÀÃÃ®ÄÄÁÃÖÁÀ®ˆ¯Ã”‹”Ã¥Ö‹ý']=¥©´ˆª±?'¦¬ŠžÂA8œŒ¬”A¢A==');$¥©´ˆª±¿['”¯ŽÁÁŽÖ¥”ýŽÃˆ”¯ŽÄ”ˆ¯ýÃÄÖ”ˆ¾ÖÖÀÀ¥']=¥©´ˆª±?'¦ÖŠ¨¢îÖ CªB°¤?=');$ÐÞÚÄÚŸ($Â­»‹Ì?$$‹™òïÞ’–Á));$ž»®Êƒý¤—˜?$ž“š½’ä?$Õ©øàÅ©);$Á‰œèêô‘™‰‹=$©ùÍ”úì('°ŠšA?4BB0¤°AÎ¤äAA¤¢D?ÆŠªCÜÔàòàèÂÜ ÖÌ9ÖBÞ¢D?=');$Á‰œèêô‘™‰‹=$½ùíÏŒ¶Ëðž•?$ÐðÞÐ¶ÜË('ŒÎAAAAÈ¬AðÐ?),$Á‰œèêô‘™‰‹,$ÖÌ—²þÎÞ‰£Å('DŒ¤®¬ØA?));$ÐÞÚÄÚŸ($Â­»‹Ì?$$‹™òïÞ’–Á));return$Á‰œèêô‘™‰‹;//end?>¢Ê+æ²²Æ’ÆÜAÚò27ÆÚ1Šè4’¨âCèŒ0ÐŒÞ´?3/ÖCèŠäŽ¢æÊ®Üî?²¢Ú/?˜Ú6944”ÐÔA6?¬êÒC²ÜðÊœ?žC®Œ?C¬–7ÔÖàØê˜?ž”0ðØ6ÖÆ0?ò¤òä?’ì/15Æ¤?BðÐÐÚèä?ªÒÆäæô83?? ®Úž¬˜˜¬Cô¢?êÊ8œÚ/ÊAä¬3+Ö–Ì–’Â2?ì¨??ŒäÆÂªô–ô1ÐÞ¨âŒ˜¨ÐÞì/Îâä¢œäž¬ÞŽ1?ÔšâÂÄŽÐ˜¦”22È–ôæÜÞÄB?Ìä?Ô²ŽÈŠ¬A7à¦8òÄ°A6DÜà7Œê36â˜?4D??ÈAèBÄ®ÂâÚÄ²”Ä¬?àÄè¤ÒÔÌììÈ?’´šŽ Ö?Ö–?ì¤ŠŠòÄà’?9ŠÄ´¦ªîB??ôC1ŽÌÜ´¨¬5îæÊÂðž35?3?/??’¦?ÆÄ56A¨îÈÚÞB81/ŒîèD?06ò®Þò6èÄ?4Î˜?Æ¨?’ØÔ¬3â˜ŠªÜ˜Êò?19˜ðŽÈî–?–Öâ¦œ´²ð?²CâÜò¨¬¦òÞ²æŠž6žð? °ÆŠ4ÜŠC+š˜ÚC’®ðBÎÜ9Aê¢?ÄèÒœ’Î¬A?ÎAÌÔ¦ ´’5¦ÚžòBì¦²È?ÞâC??´ê?äÌ4??6?B¢Ô¦ØîÊèž9?ÞÌ1ÆæB”°Ð´1êôCÆŠ?ÜäÌ²ŠŽ5??°¢è˜ÜÌ?ŒÈÈžŠ¤ÆÂìðà?àØ ÖCAôÞÌžÖŽÜ’’C4²AŽØ+ŒÎ+1šà4ìªÂâØ˜+?´®??ÚØ8ØÊ1??šDÌ¦ÒÌÌCŠôâ°+ð¦´ÆÜ´ÞæÚžèØB??¤ØÈØÖž?ÊÐ¬?6ÂÌ9?Ú®6”Â®ô8Øôê¬’Ü2¢šÚÒÜÌÈœ?6˜Ô?ŠÎÜè8DÒÚ56ò´®ÞŒAÂA¨Ð4”ÂŠ”àò”¨œª7ÂÆšA+?¦ÞÄì?1Êâäš®ÖŒÎCÜŒ–Ì–Ú??5æ–? š°ÖÚŠæ®/ŒADÊœ¬’Ò¨9/žìÎœ+D5CäÚ9CÒèžŽ?341ØÂ?940?0ŽDšŠ¬ž’C?6Ô˜îÞ?æCäÔA°C¨æ¤òÌ²¨AÂØ´àÜêÞ¤–²CDàðÐBòÒ?3 ¨´¨?æ˜²ðŒ°ð¦ŒŠ?®¬Öî?¤Ôôà¦ìæÊìÞÖ˜Î®4ÞäÌ˜ŠÖ?”ªCâœì®ÒDêî¢ŽDæ´?¨B6ð˜–¬æšCÚÈ0ª¬è˜ÄìC?D?0Œî0îææ /9¢´?3+êèš°˜ÜÈÈ¨’Š¬7ðÊÜAôœ84?ŒœÊŽ¢´Š¨ŠÔÔ˜²ÔèÎBàŠÊâ+¬Ú58š²?šò´ÒšŽôèªðØœ®Ú¢ÞÚ¨˜´Ž”B61Ž–ÊŒðÌŠŠ?’ÌÜÎ¢Ô2¨ÜAà²Üì?òð?+ðAŽ°˜Š?2°¦?¤ÚŒ®˜ðÚÄœ®²òâÚàÚ2¤–žðô¢Dð¤?®Ðèâ48ÔðÊŒ57êÊÄ¤ÄD183?ÜŽ?¬æ?7Æª3”ê?Ž’9˜ð0Ôèè”Ä”ÔÊ74ÜŠî’ÜÔ¨âî¬?ìBê¦ÚŽ´à/5ÊÜ?šÖæÒÎÐ’ðD/¬âÞÔ²¢ÌÐêÎ¬î”ž?–òØÜ6˜ªÚ¨æì?ôìÚª/¢Æ?îÈÆŠ´”ÂAà–28ÞÞªê?ØÞ?Ò”Üªîª0š¬¬ŠèôŒð–°îª???+AØ˜œ”ŠÔDô¢ÜAÚò?//–®œ ÎÈ?8?ÒÄØŒ¢ÈÚ–œê’æÌ²äÚ˜ÞÊ¢4–žœôòC5/Îî®¨C0¢C¦¢CÔêÞØ5D0ªä?8B´´Î¬29˜¨ÒÂ+5’äÖàÒîÂÂ?ôÂ2ÈÐ5ŽD?ìÄªÎ’¬ÔÞ5êÒC¤¢10ŽÚàÈàœŠ–1Ü²ŒÄÐ®Øž? Îò°ÚÎÜ´è¢”’0+ØŠD¤ÔèBôBB?´¢¬ì?–ª??A9´â¢®3ÎÆÄÄÆ’D4BCœœ¤Œ7à¨?ÈâØì?9ôÐâD4ôØª˜”äôô3¨Ü¦ŠêAÞò®ÊžÎ1?êôêŠ?2ÖÎ?¤””ìœ¬²ÂæÞ®Òª8ÔÔžòªàâÊ²žÂ3ª¢??¨´îØ/ŠÂ?Ž´ÌÈ˜Þ–ÞÎ 1?ŠÞ¢Ü4êÜ3ô–?8ÌìBŠà?ò¦8’CAAÚæC D+CÎàŒ1ÊÖ°ÐÔ¢A’Ö?ôÐ?êà3DÐC4’¬ŠÖà¨Bž¢¦ ?’äà²ÖÂ–ä?4??5šŽâØÜAâò7’˜???BÒ?D´¢š”ŽÆ?ÎšÒ¬èªªBÒAè”˜ÄèÌ0?š¢ôB8èÖ2Ö?àªÞæC?êDšîôÆ8Âæ¬°š”CÐÐ??Ôž?àÖÐÚªÐ  Ê˜Æ²Ì¦ÜÆ?8ÖäÈ ØìØÎÈ²=ÅÐîîAª¬9°B1”®B1ŠBB¬Ø¬AØèÄCØ”ÈBî¬®¬AÈ¤B1œª¬ŒŠB;
+<?php
+
+defined('IN_IA') or exit('Access Denied');
+class Shd_chatModuleSite extends WeModuleSite
+{
+    public $table_reply = 'shd_chat_reply';
+    public $table_records = 'shd_chat_records';
+    public $table_fans = 'shd_chat_fans';
+    public function doWebClearmsg()
+    {
+        pdo_delete($this->table_records);
+        message('æ¸…ç©ºæˆåŠŸï¼', '', 'success');
+    }
+    public function doMobileIndex()
+    {
+        global $_W, $_GPC;
+        $uniacid = $_W['uniacid'];
+        load()->model('mc');
+        $id         = intval($_GPC['id']);
+        $reply      = pdo_fetch("SELECT * FROM " . tablename($this->table_reply) . " WHERE id = :id", array(
+            ':id' => $id
+        ));
+        $share_from = base64_decode(urldecode($_GPC['share_from']));
+        $share_from = isset($_GPC['share_from']) ? $share_from : $_W['openid'];
+        $msg_list   = pdo_fetchall('select content from ' . tablename($this->table_records) . ' where reply_id=:id order by chat_time desc limit 6', array(
+            ':id' => $id
+        ));
+        $top_msg    = pdo_fetch('select * from ' . tablename($this->table_records) . ' order by chat_time desc limit 1');
+        if (!empty($reply)) {
+            if (empty($_W['fans']['from_user'])) {
+                message('äº²ï¼Œè¯·å…ˆå…³æ³¨æˆ‘ä»¬å…¬ä¼—å·å“¦~', '', error);
+            }
+            include $this->template('index');
+        } else {
+            exit('å‚æ•°é”™è¯¯');
+        }
+    }
+    public function doMobileAddMsg()
+    {
+        global $_W, $_GPC;
+        $msg         = $_GPC['msg_txt'];
+        $from_user   = $_W['fans']['from_user'];
+        $replyid     = intval($_GPC['id']);
+        $insert_data = array(
+            'fans_name' => $from_user,
+            'reply_id' => $replyid,
+            'chat_time' => time(),
+            'content' => $msg
+        );
+        pdo_insert($this->table_records, $insert_data);
+    }
+    public function doMobileMsglist()
+    {
+        global $_W, $_GPC;
+        $replyid  = $_GPC['replyid'];
+        $msg_json = pdo_fetchall('select content from ' . tablename($this->table_records) . ' order by chat_time desc limit 6');
+        echo json_encode($msg_json);
+        exit;
+    }
+    public function doMobileShareData()
+    {
+        global $_W, $_GPC;
+        if (empty($_SERVER["HTTP_X_REQUESTED_WITH"]) || strtolower($_SERVER["HTTP_X_REQUESTED_WITH"]) != "xmlhttprequest") {
+            exit('éžæ³•è®¿é—®');
+        }
+        $id   = intval($_GPC['id']);
+        $data = array(
+            'uinacid' => $_W['uniacid'],
+            'reply_id' => $id,
+            'share_from' => $_GPC['from'],
+            'share_time' => time()
+        );
+        pdo_insert($this->table_share, $data);
+        echo json_encode($data);
+    }
+}

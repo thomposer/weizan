@@ -1,0 +1,140 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <title>{if $set['copyright']}{$set['copyright']}{else}{$_W['account']['name']}{/if}</title>
+    <link rel="stylesheet" href="{AMOUSE_REBATE_RES}css/foundation.css?version=20150101"/>
+    <link rel="stylesheet" href="{AMOUSE_REBATE_RES}css/main.css?version=20150221"/>
+    <script src="{AMOUSE_REBATE_RES}js/modernizr.js?version=20150221"></script>
+    <script src="{AMOUSE_REBATE_RES}js/jquery.js?version=20150221"></script>
+    <script src="{AMOUSE_REBATE_RES}js/foundation.js?version=20150221"></script>
+    <script src="{AMOUSE_REBATE_RES}js/main.js?version=20150221"></script>
+    <link rel="stylesheet" href="{AMOUSE_REBATE_RES}css/page.css?version=20150221"/>
+    <style>
+        img {
+            width: 50px;
+            height: 50px;
+            vertical-align: super;
+        }
+
+        ul.round_user {
+            text-align: left;
+            font-size: 10px;
+            line-height: 14px;
+            background-color: #FFF;
+            margin-bottom: 11px;
+            display: block;
+            color: #666666;
+            margin: 10px;
+        }
+
+        ul.round_user li {
+            border: solid #F1F1F1;
+            border-width: 0 0 1px 0;
+            padding: 0px 10px 0 10px;
+            height: 70px;
+            list-style: none;
+        }
+
+        .header_right div {
+            margin-top: 0px;
+        }
+
+        .adddiv {
+            max-width: 20%;
+
+        }
+
+        .fansadd {
+            width: 60px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="content">
+        <div class="dialog" id="tip">
+            <div class="dialog-cnt">
+                <div class="dialog-bd"><h3>提示</h3>
+
+                    <p class="text"></p><a class="button correct-btn" id="alert_ok">确&nbsp;&nbsp;定</a></div>
+            </div>
+        </div>
+        <div class="nav-bar">
+            <ul class="row">
+                <li class="small-4 medium-4 columns"><a class="top-nav active" href="{php echo $this->createmobileUrl('friend',array(),true)}">一级好友</a></li>
+                <li class="small-4 medium-4 columns"><a class="top-nav " onclick="new_alert('敬请期待')">二级好友</a></li>
+                <li class="small-4 medium-4 columns"><a class="top-nav " onclick="new_alert('敬请期待')">三级好友</a></li>
+            </ul>
+        </div>
+        <div class="consumption">
+            <ul class="round_user">
+                {loop $friends $friend}
+                <li>
+                    <div style="padding-top:6px; position:relative;"><span style='float:left;margin-left:10px;margin-right:10px;margin-top:5px;'><img
+                            src="{$friend['headimgurl']}"
+                            width='50px;' height='50px;'></span>
+                        <span class="header_right" style="margin-top:5px;"><div class="header_l_di"><span>昵称：{$friend['nickname']}</span>
+                    </div>
+                            <div><span>VIP会员：{if $friend['vipstatus']>0}是{else}否{/if}</span></div>
+                            <div><span>微信号：{$friend['wechatno']}</span></div>
+                            <div>
+                            <span>人脉ID：{$friend['memberid']}</span>
+                            </div>
+                        <data name="fsimg{$friend['mid']}" class="fscode_it{$friend['mid']}"  data-src="{$friend['qrcode']}"/></span>
+
+                        <div class="adddiv" style="position:absolute; top:21px; right:0px;">
+                            <a href="{php echo $this->createMobileUrl('viewperson',array(),true)}&pk={$friend['mid']}" class="fansadd btn button" fansid="{$friend['mid']}">加好友</a>
+                        </div>
+                    </div>
+                </li>
+                {/loop}
+
+            </ul>
+        </div>
+        <div class="pagination" style="margin:0 auto;">
+            <li><a>{$total} 人</a></li>
+            {if $pindex== '1'}
+                {if $pindex+1<=$pageend}
+                <li><a>{$pindex} </a></li>
+                <li><a href='{php echo $this->createmobileUrl('friend',array('page'=>$pindex+1),true)}' class="next">{php echo $pindex+1} </a></li>
+                {/if}
+            {else}
+                {if $pindex+1>=$pageend}
+                <li><a href='{php echo $this->createmobileUrl('friend',array('page'=>$pindex-1),true)}' class="prev">上页</a> </li>
+                {else}
+                <li><a href='{php echo $this->createmobileUrl('friend',array('page'=>$pindex-1),true)}' class="prev">上页</a></li>
+            <li> <a>{$pindex}</a></li>
+                <li><a href='{php echo $this->createmobileUrl('friend',array('page'=>$pindex+1),true)}' class="nxt">下页</a></li>
+
+                {/if}
+            {/if}
+        </div>
+    </div>
+</div>
+
+
+{template 'footerbar'}
+
+
+<script>    $(document).foundation();
+alert_ok = null;
+function new_alert(msg, cb) {
+    alert_ok = cb;
+    $('#tip .text').html(msg);
+    $('#tip').show();
+}
+old_alert = window.alert;
+window.alert = new_alert;
+$('#alert_ok').click(function () {
+    if (alert_ok) {
+        alert_ok();
+    }
+    $('#tip').hide();
+});
+</script>
+
+</body>
+</html>

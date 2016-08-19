@@ -29,6 +29,17 @@
 			</div>
 		</div>
 		<div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 直接访问URL</label>
+            <div class="col-sm-9 col-xs-12">
+				{if $reply['qrtype']=='1'}
+               	<input type="text" id="urlmouth" class="form-control" placeholder="" name="urlmouth" value="{$_W['siteroot']}app/{php echo $this->createmobileurl('pay',array('rid' => $rid))}" readonly>
+               	{elseif $reply['qrtype']=='0'}
+				<input type="text" id="urlmouth" class="form-control" placeholder="" name="urlmouth" value="{$_W['siteroot']}app/{php echo $this->createmobileurl('sign',array('rid' => $rid))}" readonly>
+				{/if}
+				<span class="help-block"></span>
+            </div>
+        </div>		
+		<div class="form-group">
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 客户可否修改金额</label>
 			<div class="col-sm-9 col-xs-12">
 				<label class='radio-inline'>
@@ -39,7 +50,7 @@
 				</label>
 				<span class="help-block">仅在扫码功能为支付时有效！</span>
 			</div>
-		</div>		
+		</div>
 		<div class="form-group">
             <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 扫码支付金额</label>
             <div class="col-sm-9 col-xs-12">
@@ -54,6 +65,70 @@
 				<span class="help-block">微信页面支付/签到按钮文字自定义！</span>
             </div>
         </div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 是否显示留言一</label>
+			<div class="col-sm-9 col-xs-12">
+				<label class='radio-inline'>
+					<input type='radio' value='0' name='ismemo1' {if $reply['ismemo1']=='0'}checked{/if}>否
+				</label> 
+				<label class='radio-inline'>
+					<input type='radio' value='1' name='ismemo1' {if $reply['ismemo1']=='1'}checked{/if}>是
+				</label>
+				<span class="help-block">仅在扫码功能为支付时有效！</span>
+			</div>
+		</div>
+		<div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 留言一标题</label>
+            <div class="col-sm-9 col-xs-12">
+               	<input type="text" id="message1" class="form-control" placeholder="" name="message1" value="{$reply['message1']}">
+				<span class="help-block"></span>
+            </div>
+        </div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 是否显示留言二</label>
+			<div class="col-sm-9 col-xs-12">
+				<label class='radio-inline'>
+					<input type='radio' value='0' name='ismemo2' {if $reply['ismemo2']=='0'}checked{/if}>否
+				</label> 
+				<label class='radio-inline'>
+					<input type='radio' value='1' name='ismemo2' {if $reply['ismemo2']=='1'}checked{/if}>是
+				</label>
+				<span class="help-block">仅在扫码功能为支付时有效！</span>
+			</div>
+		</div>		
+		<div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 留言二标题</label>
+            <div class="col-sm-9 col-xs-12">
+               	<input type="text" id="message2" class="form-control" placeholder="" name="message2" value="{$reply['message2']}">
+				<span class="help-block"></span>
+            </div>
+        </div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 是否显示留言三</label>
+			<div class="col-sm-9 col-xs-12">
+				<label class='radio-inline'>
+					<input type='radio' value='0' name='ismemo3' {if $reply['ismemo3']=='0'}checked{/if}>否
+				</label> 
+				<label class='radio-inline'>
+					<input type='radio' value='1' name='ismemo3' {if $reply['ismemo3']=='1'}checked{/if}>是
+				</label>
+				<span class="help-block">仅在扫码功能为支付时有效！</span>
+			</div>
+		</div>		
+		<div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 留言三标题</label>
+            <div class="col-sm-9 col-xs-12">
+               	<input type="text" id="message3" class="form-control" placeholder="" name="message3" value="{$reply['message3']}">
+				<span class="help-block"></span>
+            </div>
+        </div>
+		<div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 产品图片</label>
+            <div class="col-sm-9 col-xs-12">
+               	{php echo tpl_form_field_image('pic_good',$reply['pic_good']);}
+				<span class="help-block"></span>
+            </div>
+        </div>		
 		<div class="form-group">
             <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 二维码</label>
             <div class="col-sm-9 col-xs-12">
@@ -165,12 +240,19 @@
             </div>
         </div>
 		<div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 大屏抽奖Logo</label>
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> Logo</label>
             <div class="col-sm-9 col-xs-12">
                	{php echo tpl_form_field_image('logo',$reply['logo']);}
 				<span class="help-block"></span>
             </div>
         </div>
+		<div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> LOGO链接URL</label>
+            <div class="col-sm-9 col-xs-12">
+               	<input type="text" id="linkurl" class="form-control" placeholder="" name="linkurl" value="{$reply['linkurl']}">
+				<span class="help-block">首页底部LOGO点击跳转URL</span>
+            </div>
+        </div>		
 		<div class="form-group">
             <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 粉丝中奖通知模板消息ID</label>
             <div class="col-sm-9 col-xs-12">

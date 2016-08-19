@@ -65,6 +65,29 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 是否开启会员折扣</label>
+			<div class="col-sm-9 col-xs-12">
+				<label class='radio-inline'>
+					<input type='radio' value='0' name='member' {if $reply['member']=='0'}checked{/if}>否
+				</label> 
+				<label class='radio-inline'>
+					<input type='radio' value='1' name='member' {if $reply['member']=='1'}checked{/if}>是
+				</label>
+				<span class="help-block">仅在扫码功能为支付时有效！</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">所属店铺</label>
+			<div class="col-sm-9 col-xs-12">
+				<select class='form-control' id='store' name='store'>
+					<option value='-1'>请选择</option>
+					{loop $stores $store}
+					<option value='{$store['store']}' {if $reply['store'] == $store['store']}selected{/if}>{$store['store']}</option>
+					{/loop}
+				</select>				
+			</div>
+		</div>		
+		<div class="form-group">
             <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 商家电话</label>
             <div class="col-sm-9 col-xs-12">
                	<input type="text" id="tel" class="form-control" placeholder="" name="tel" value="{$reply['tel']}">
@@ -109,10 +132,14 @@
 		<div class="form-group">
             <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 直接访问URL</label>
             <div class="col-sm-9 col-xs-12">
-               	<input type="text" id="urlmouth" class="form-control" placeholder="" name="urlmouth" value="{$_W['siteroot']}app/{php echo $this->createmobileurl('show',array('rid' => $rid))}" readonly>
+				{if $reply['qrtype']=='1'}
+               	<input type="text" id="urlmouth" class="form-control" placeholder="" name="urlmouth" value="{$_W['siteroot']}app/{php echo $this->createmobileurl('pay',array('rid' => $rid))}" readonly>
+				{else}
+				<input type="text" id="urlmouth" class="form-control" placeholder="" name="urlmouth" value="{$_W['siteroot']}app/{php echo $this->createmobileurl('sign',array('rid' => $rid))}" readonly>
+				{/if}
 				<span class="help-block"></span>
             </div>
-        </div>		
+        </div>
 		<div class="form-group">
             <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 引导关注URL</label>
             <div class="col-sm-9 col-xs-12">
@@ -187,7 +214,19 @@
                	<input type="text" id="url2" class="form-control" placeholder="" name="url2" value="{$reply['url2']}">
 				<span class="help-block"></span>
             </div>
-        </div>		
+        </div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 赠送积分类型</label>
+			<div class="col-sm-9 col-xs-12">
+				<label class='radio-inline'>
+					<input type='radio' value='0' name='ntype' {if $reply['ntype']=='0'}checked{/if}>固定
+				</label> 
+				<label class='radio-inline'>
+					<input type='radio' value='1' name='ntype' {if $reply['ntype']=='1'}checked{/if}>比例
+				</label>
+				<span class="help-block">仅在扫码功能为支付时有效！选择比例则赠送积分=支付金额*比例/100</span>
+			</div>
+		</div>		
 		<div class="form-group">
             <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 签到/支付奖励积分</label>
             <div class="col-sm-9 col-xs-12">
@@ -263,6 +302,46 @@
             <div class="col-sm-9 col-xs-12">
 				<input type="text" id="openid" class="form-control" placeholder="" name="openid" value="{$reply['openid']}">
 				<span class="help-block">客人订单支付成功后向掌柜的发送模板消息！</span>
+            </div>
+        </div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 是否实时到账</label>
+			<div class="col-sm-9 col-xs-12">
+				<label class='radio-inline'>
+					<input type='radio' value='0' name='payout' {if $reply['payout']=='0'}checked{/if}>否
+				</label> 
+				<label class='radio-inline'>
+					<input type='radio' value='1' name='payout' {if $reply['payout']=='1'}checked{/if}>是
+				</label>
+				<span class="help-block">支付后是否直接将钱打到掌柜账上，目前使用的是微信红包方式，每次提现只支持1-200元。</span>
+			</div>
+		</div>
+		<div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 手续费率</label>
+            <div class="col-sm-9 col-xs-12">
+				<input type="text" id="payrate" class="form-control" placeholder="" name="payrate" value="{$reply['payrate']}">
+				<span class="help-block">例如手续费千分之六时输入：0.6。实时到账时有效！</span>
+            </div>
+        </div>
+		<div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 商户编码</label>
+            <div class="col-sm-9 col-xs-12">
+				<input type="text" id="membercode" class="form-control" placeholder="" name="membercode" value="{$reply['membercode']}">
+				<span class="help-block"></span>
+            </div>
+        </div>
+		<div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> API密钥</label>
+            <div class="col-sm-9 col-xs-12">
+				<input type="text" id="feyinkey" class="form-control" placeholder="" name="feyinkey" value="{$reply['feyinkey']}">
+				<span class="help-block"></span>
+            </div>
+        </div>
+		<div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 终端编号</label>
+            <div class="col-sm-9 col-xs-12">
+				<input type="text" id="deviceno" class="form-control" placeholder="" name="deviceno" value="{$reply['deviceno']}">
+				<span class="help-block"></span>
             </div>
         </div>
 	</div>

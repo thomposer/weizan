@@ -27,6 +27,7 @@
             </li>
             {/loop}
             <li class="list-group-item">合计：{$item['total']}元</li>
+            <li class="list-group-item">赠送积分：{php echo $c = $item['total']*$credit['cost_credit']}</li>
         </ul>
         {if $item['status'] == '否' || empty($item['status'])}
         <div style="margin:0 auto;text-align:center;">

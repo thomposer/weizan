@@ -80,6 +80,7 @@ if ($do == 'display') {
 			'styleid' => intval($_GPC['styleid']),
 			'linkurl' => $_GPC['linkurl'],
 			'ishomepage' => intval($_GPC['ishomepage']),
+			'enabled' => intval($_GPC['enabled'])
 		);
 		
 		$data['icontype'] = intval($_GPC['icontype']);
@@ -156,6 +157,7 @@ if ($do == 'display') {
 			pdo_update('site_nav', $nav_url, array('id' => $data['nid'], 'uniacid' => $_W['uniacid']));
 		}
 		message('更新分类成功！', url('site/category'), 'success');
+
 	}
 	template('site/category');
 } elseif ($do == 'fetch') {

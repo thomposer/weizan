@@ -141,7 +141,7 @@ if ($do == 'forward') {
 		'level' => $level,
 		'key' => $auth_appid,
 	), array('acid' => $acid));
-	pdo_update('account', array('isconnect' => '1', 'type' => '3'), array('acid' => $acid));
+	pdo_update('account', array('isconnect' => '1', 'type' => '3', 'isdeleted' => 0), array('acid' => $acid));
 	cache_delete("uniaccount:{$uniacid}");
 	cache_delete("unisetting:{$uniacid}");
 	cache_delete("accesstoken:{$acid}");
@@ -161,7 +161,9 @@ if ($do == 'forward') {
 	if (empty($ticket_xml)) {
 		exit('fail');
 	}
-	cache_write('account:ticket', strval($ticket_xml->ComponentVerifyTicket));
+	if (!empty($ticket_xml->ComponentVerifyTicket) && $ticket_xml->InfoType == 'component_verify_ticket') {
+		cache_write('account:ticket', strval($ticket_xml->ComponentVerifyTicket));
+	}
 	exit('success');
 } elseif ($do == 'test') {
 	$authurl = $account_platform->getAuthLoginUrl();

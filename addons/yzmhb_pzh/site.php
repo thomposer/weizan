@@ -8,8 +8,11 @@
 defined('IN_IA') or exit('Access Denied');
 
 
-
+include_once("CommonUtil.php");
+include_once("MD5SignUtil.php");
+include_once("PZHSendMoney.php");
 require_once  ('phpexcel/Classes/PHPExcel.php');
+
 define('MB_ROOT', IA_ROOT . '/addons/yzmhb_pzh');
 class Yzmhb_pzhModuleSite extends WeModuleSite {
 
@@ -73,79 +76,189 @@ class Yzmhb_pzhModuleSite extends WeModuleSite {
 
 	}
 	//增删改查口令
-    public	function doWebRebuild()
-    {
-         load()->func('tpl');
-         $this->init();
-         $createBgTime=$this->module['config']['kouling']['createBgTime'];
-    	$createEdTime = $this->module['config']['kouling']['createEdTime'];
+	public	function doWebRebuild()
+	{
+		load()->func('tpl');
+		$this->init();
+		$createBgTime=$this->module['config']['kouling']['createBgTime'];
+		$createEdTime = $this->module['config']['kouling']['createEdTime'];
 		include $this->template('adssetting');
-    }
+	}
     //查询现有口令
-    public function dowebSearch()
-    {
-    	global $_W,$_GPC;
+	public function dowebSearch()
+	// public function dowebSearch2()
+	{
+		global $_W,$_GPC;
 
-    	$this->module['config']['kouling']['createBgTime'] =$_GPC['createBgTime'];
-    	$this->module['config']['kouling']['createEdTime'] =$_GPC['createEdTime'];
-    	$this->module['config']['kouling']['content'] =$_GPC["content"];
-    	$createBgTime=$this->module['config']['kouling']['createBgTime'];
-    	$createEdTime = $this->module['config']['kouling']['createEdTime'];
+		$this->module['config']['kouling']['createBgTime'] =$_GPC['createBgTime'];
+		$this->module['config']['kouling']['createEdTime'] =$_GPC['createEdTime'];
+		$this->module['config']['kouling']['content'] =$_GPC["content"];
+		$createBgTime=$this->module['config']['kouling']['createBgTime'];
+		$createEdTime = $this->module['config']['kouling']['createEdTime'];
     	// and `time` >= \''.$startTime.'\' and `time` <= \''.$endTime.'\' 
-    	$sql = 'SELECT kouling ,moneyCount ,count, createtime  FROM ' . tablename('pzh_kouling4') . ' WHERE `uniacid` = :uniacid  and `createtime` >= :createBgTime and `createtime` <= :createEdTime ';
-        if(!empty($_GPC["content"]))
-        {
-        	$sql=$sql . ' and `kouling` like \'%'.$_GPC["content"].'%\'';
-        }
-    	$params = array(':uniacid' => $_W['uniacid'],':createBgTime'=> $createBgTime,':createEdTime' =>$createEdTime);
-    	$this->saveSettings($this->module['config']);
-    	$account = pdo_fetchall($sql, $params);
-    	 $result = array();
-        for ($i=0; $i <count($account) ; $i++) 
-	       { 
-	       	array_push($result, array_merge(array('id'=>$i+1),$account[$i]));
-	       }
-    	if($_GPC['submit']=='导出')
-    	{
+		$sql = 'SELECT kouling ,moneyCount ,count, createtime  FROM ' . tablename('pzh_kouling4') . ' WHERE `uniacid` = :uniacid  and `createtime` >= :createBgTime and `createtime` <= :createEdTime ';
+		if(!empty($_GPC["content"]))
+		{
+			$sql=$sql . ' and `kouling` like \'%'.$_GPC["content"].'%\'';
+		}
+		$params = array(':uniacid' => $_W['uniacid'],':createBgTime'=> $createBgTime,':createEdTime' =>$createEdTime);
+		$this->saveSettings($this->module['config']);
+		$account = pdo_fetchall($sql, $params);
+		$result = array();
+		for ($i=0; $i <count($account) ; $i++) 
+		{ 
+			array_push($result, array_merge(array('id'=>$i+1),$account[$i]));
+		}
 
-    		
-    		$excel = new PHPExcel();
-    		
-    		$letter = array('A','B','C','D','E');
-    		$tableheader = array('序号','口令','金额','剩余使用次数','创建日期');
-    		for($i = 0;$i < count($tableheader);$i++) {
-    			$excel->getActiveSheet()->setCellValue("$letter[$i]1","$tableheader[$i]");
-    		}
-    		$data = $result;
+
+		if($_GPC['submit']=='导出')
+		{
+
+
+			$excel = new PHPExcel();
+
+			$letter = array('A','B','C','D','E');
+			$tableheader = array('序号','口令','金额','剩余使用次数','创建日期');
+			for($i = 0;$i < count($tableheader);$i++) {
+				$excel->getActiveSheet()->setCellValue("$letter[$i]1","$tableheader[$i]");
+			}
+			$data = $result;
               //填充表格信息
-    		for ($i = 2;$i <= count($data) + 1;$i++) {
-    			$j = 0;
-    			foreach ($data[$i - 2] as $key=>$value) {
-    				$excel->getActiveSheet()->setCellValue("$letter[$j]$i","$value");
-    				$j++;
-    			}
-    		}
-    		$write = new PHPExcel_Writer_Excel5($excel);
-    		header("Pragma: public");
-    		header("Expires: 0");
-    		header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
-    		header("Content-Type:application/force-download");
-    		header("Content-Type:application/vnd.ms-execl");
-    		header("Content-Type:application/octet-stream");
-    		header("Content-Type:application/download");;
-    		header('Content-Disposition:attachment;filename="koulingData.xls"');
-    		header("Content-Transfer-Encoding:binary");
-    		$write->save('php://output');
-    	
-    		return;
+			for ($i = 2;$i <= count($data) + 1;$i++) {
+				$j = 0;
+				foreach ($data[$i - 2] as $key=>$value) {
+					$excel->getActiveSheet()->setCellValue("$letter[$j]$i","$value");
+					$j++;
+				}
+			}
+			$write = new PHPExcel_Writer_Excel5($excel);
+			header("Pragma: public");
+			header("Expires: 0");
+			header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+			header("Content-Type:application/force-download");
+			header("Content-Type:application/vnd.ms-execl");
+			header("Content-Type:application/octet-stream");
+			header("Content-Type:application/download");;
+			header('Content-Disposition:attachment;filename="koulingData.xls"');
+			header("Content-Transfer-Encoding:binary");
+			$write->save('php://output');
 
+			return;
+
+		}
+		if($_GPC['submit']=='导入'){
+
+			if (! empty ( $_FILES ['excelfile'] ['name'] ))
+			{
+				$tmp_file = $_FILES ['excelfile'] ['tmp_name'];
+				$file_types = explode ( ".", $_FILES ['excelfile'] ['name'] );
+				$file_type = $file_types [count ( $file_types ) - 1];
+
+				/*判别是不是.xls文件，判别是不是excel文件*/
+				if (strtolower ( $file_type ) != "xls" && strtolower ( $file_type ) != "xlsx")              
+				{
+					$this->error ( '不是Excel文件，重新上传' );
+					echo  strtolower ( '不是Excel文件，重新上传' );
+				}
+				/*设置上传路径*/
+				$savePath =  IA_ROOT.'/excel/';
+				/*以时间来命名上传的文件*/
+				$str = 'lastExcel'; 
+				$file_name = $str . "." . $file_type;
+				/*是否上传成功*/
+				load()->func('file');
+
+				if (! file_move($tmp_file, $savePath . $file_name)) 
+				{
+					$this->error ( '上传失败' );
+					echo  ( '上传失败:tmp_file '.$tmp_file . ' savePath:' .$savePath . $file_name );
+				}
+
+      $objPHPExcel = PHPExcel_IOFactory::load($savePath . $file_name ); 
+$sheet = $objPHPExcel->getSheet(0); // 读取第一個工作表
+$highestRow = $sheet->getHighestRow(); // 取得总行数
+$highestColumm = $sheet->getHighestColumn(); // 取得总列数
+/** 循环读取每个单元格的数据 */
+$time = date('Y-m-d H:i:s',time());
+for ($row = 2; $row <= $highestRow; $row++){//行数是以第1行开始
+    for ($column = 'A'; $column <= $highestColumm; $column++) {//列数是以A列开始
+    	$dataset[] = $sheet->getCell($column.$row)->getValue();
+    	// if ($column == 'A'){
+     //    	//客户姓名
+    	// 	$userName = $sheet->getCell($column.$row)->getValue();
+    	// }
+    	// if ($column == 'B') {
+     //    	//客户电话
+    	// 	$userPhone = $sheet->getCell($column.$row)->getValue();
+    	// }
+    	if ($column == 'A'){
+        	//口令号
+    		$userIDCard = $sheet->getCell($column.$row)->getValue();
     	}
-	   
-	        load()->func('tpl');
-		include $this->template('adssetting');
+    	// if ($column == 'B') {
+     //    	//成功开户时间
+    	// 	$userAccountTime = $sheet->getCell($column.$row)->getValue();
+    	// }
+    	if ($column == 'B') {
+           //红包金额
+    		$moneyNumber = $sheet->getCell($column.$row)->getValue();
+    	}
+    	if ($column == 'C') {
+           //红包使用次数
+    		$count = $sheet->getCell($column.$row)->getValue();
+    	}
+	}
 
-    }
-    //批量增加口令
+	$kouling =  $userIDCard;
+	if (empty($moneyNumber) || empty($kouling)) {
+		continue;
+		}
+    	$sql = 'INSERT INTO'.tablename('pzh_kouling4') .' (`uniacid`,`createtime`,`kouling`,`count`,`moneyCount`) values ('.
+    		strval($_W['uniacid']).',\''.$time.'\',\''.$kouling.'\','.$count.' ,\''.$moneyNumber.'\')';
+       $result = pdo_query($sql);
+}
+message('导入成功','','success');
+return;
+}
+
+}
+
+
+load()->func('tpl');
+
+include $this->template('adssetting');
+
+}
+//查询领取信息入口
+public function doWebLookexcel(){
+// public	 function dowebSearch(){
+global $_W,$_GPC;
+
+		$this->module['config']['kouling']['createBgTime'] =$_GPC['createBgTime'];
+		$this->module['config']['kouling']['createEdTime'] =$_GPC['createEdTime'];
+		$this->module['config']['kouling']['content'] =$_GPC["content"];
+		$createBgTime=$this->module['config']['kouling']['createBgTime'];
+		$createEdTime = $this->module['config']['kouling']['createEdTime'];
+    	// and `time` >= \''.$startTime.'\' and `time` <= \''.$endTime.'\' 
+		$sql = 'SELECT `createtime` ,`username` ,`userphone`, `idcard`,`money` ,`openacounttime`,`state`,`receivetime` FROM ' . tablename('pzh_excelinfo') . ' WHERE `uniacid` = :uniacid  and `createtime` >= :createBgTime and `createtime` <= :createEdTime ';
+		if(!empty($_GPC["content"]))
+		{
+			$sql=$sql . ' and `idcard` like \'%'.$_GPC["content"].'%\'';
+		}
+		$params = array(':uniacid' => $_W['uniacid'],':createBgTime'=> $createBgTime,':createEdTime' =>$createEdTime);
+		$this->saveSettings($this->module['config']);
+		$account = pdo_fetchall($sql, $params);
+		$result = array();
+		for ($i=0; $i <count($account) ; $i++) 
+		{ 
+			array_push($result, array_merge(array('id'=>$i+1),$account[$i]));
+		}
+
+load()->func('tpl');
+include $this->template('searchexcel');
+}
+
+ //批量增加口令
 public function doWebMassadd()
 {
     global $_GPC,$_W;
@@ -253,8 +366,8 @@ public function doWebBrandkouling()
         return ;
         }
         
-              $time = date('Y-m-d H:i:s',time());
-              $kouling =  $num;
+        $time = date('Y-m-d H:i:s',time());
+        $kouling =  $num;
         $sql = 'INSERT INTO'.tablename('pzh_kouling4') .' (`uniacid`,`createtime`,`kouling`,`count`,`moneyCount`) values ('.
             strval($_W['uniacid']).',\''.$time.'\',\''.$kouling.'\','.$count.' ,\''.strval($minmoney/100).'-'.strval($maxmoney/100).'\')'; 
 
@@ -685,39 +798,37 @@ public function doMobileSendkouling()
             	}
             	//地区限制
             	
-            	$addressLimit = $this->module['config']['kouling']['addressLimit'];
+            $addressLimit = $this->module['config']['kouling']['addressLimit'];
 
-      //   	if(!empty($addressLimit))
-      //   	{
-		    //     $url = 'http://www.ip138.com/ips1388.asp?ip='.CLIENT_IP.'&action=2'; //这儿填页面地址
+        	if(!empty($addressLimit))
+        	{
+		        $url = 'http://www.ip138.com/ips1388.asp?ip='.CLIENT_IP.'&action=2'; //这儿填页面地址
              
-		    //     $info=file_get_contents($url);
+		        $info=file_get_contents($url);
 
-		    //      // message(json_encode($url),'','error');
-		    //     $content2=iconv("GBK", "UTF-8//IGNORE", $info);
+		         // message(json_encode($url),'','error');
+		        $content2=iconv("GBK", "UTF-8//IGNORE", $info);
 
-		    //     preg_match('|<li>(.*?)<\/li>|i',$content2,$userAddress);
+		        preg_match('|<li>(.*?)<\/li>|i',$content2,$userAddress);
 		        
-		    //     $limit = explode('，',$addressLimit); 
-		    //     $flag = 0;
-		    //     for ($i=0; $i < count($limit); $i++) 
-		    //     { 
-		    //     	if(strpos($userAddress[1],$limit[$i]))
-		    //     	{
+		        $limit = explode('，',$addressLimit); 
+		        $flag = 0;
+		        for ($i=0; $i < count($limit); $i++) 
+		        { 
+		        	if(strpos($userAddress[1],$limit[$i]))
+		        	{
 
-		    //     		$flag=1;
-		    //     		break;
-		    //     	}
-		    //     	echo $errorMsg;
-		    //     	return;
-		    //     }
-		    //     if($flag == 0)
-		    //     {
-		    //     	$errorMsg='您的位置不在本活动范围内哦~';
-		    //     	echo $errorMsg;
-		    //     	return;
-		    //     }
-		    // }
+		        		$flag=1;
+		        		break;
+		        	}
+		        }
+		        if($flag == 0)
+		        {
+		        	$errorMsg='您的位置不在本活动范围内哦~';
+		        	echo $errorMsg;
+		        	return;
+		        }
+		    }
 		    $this ->init();
 		 
 
@@ -813,31 +924,32 @@ public function doMobileSendkouling()
 		}  
 	
         //减去口令个数
-		  include_once("PZHSendMoney.php");
         $sql = 'SELECT beginer,moneyCount,count FROM ' . tablename('pzh_kouling4') . ' WHERE `uniacid` = :uniacid  and `kouling` = :kouling';
         $params = array(':uniacid' => $_W['uniacid'] , ':kouling' => $content);
         $result = pdo_fetch($sql, $params);
         $kouling_count=$result['count'];
         $sql = 'update '.tablename('pzh_kouling4') .' set `count` = '.strval($kouling_count-1).'  WHERE `uniacid` = '.$_W['uniacid'].' and `kouling` = \''.$content.'\''; 
         pdo_query($sql);
-
+       
 		$packet = new  PZHSend();
 	     $weid = $_W['uniacid'];
-
+        
 		$result = $packet->pay($_COOKIE['pzh_openid'.$weid],$nick_name,$send_name,$total_amount,$wishing,$act_name,$remark,$this->module['config']['mchid'],$this->module['config']['appid'],$this->module['config']['password']);
-
-		if($result->return_code == 'FAIL' || $result ==  'fail'||!$result->return_code )
+        // echo json_encode($result);
+        // return ;
+		if($result->result_code == 'FAIL' || $result ==  'fail'||!$result->result_code )
 		{
-         
+           
         //加回口令个数
         $sql = 'SELECT beginer,moneyCount,count FROM ' . tablename('pzh_kouling4') . ' WHERE `uniacid` = :uniacid  and `kouling` = :kouling';
         $params = array(':uniacid' => $_W['uniacid'] , ':kouling' => $content);
-
+      
         $result2 = pdo_fetch($sql, $params);
         $kouling_count=$result2['count'];
         $sql = 'update '.tablename('pzh_kouling4') .' set `count` = '.strval($kouling_count+1).'  WHERE `uniacid` = '.$_W['uniacid'].' and `kouling` = \''.$content.'\''; 
         pdo_query($sql);
-        if (!$result->return_code) {
+       
+        if (!$result->result_code) {
          	echo "系统错误，请稍后再试";
          	return;
          }
@@ -867,9 +979,9 @@ public function doMobileSendkouling()
 			$sql = 'INSERT INTO'.tablename('pzh_record') .' (`uniacid`,`openid`,`moneyCount`,`time`,`type`,`state`) values ('.
 				strval($_W['uniacid']).',\''.$re_openid.'\','.strval($total_amount/100.0).',\''.$time.'\',\'kouling\',\'success\')'; 
 			pdo_query($sql);
-           
 
-           
+              $sql = 'update  '.tablename('pzh_excelinfo').' set `state` = \'已领取\' , `receivetime` = \''.$time.'\' where `uniacid` = '.strval($_W['uniacid']).' and `idcard` = \''.$content.'\''; 
+			pdo_query($sql);
 			
 			if(!empty($this->module['config']['kouling']['successMsg']))
 			{
@@ -1033,6 +1145,26 @@ public function doMobileSendkouling()
 		pdo_run($sql);
 		}
 
+		$tableName = $_W['config']['db']['tablepre'].'pzh_excelinfo';
+		$exists= pdo_tableexists('pzh_excelinfo');
+		if(!$exists)
+		{
+			$sql = 'CREATE TABLE '.$tableName.' (
+				`uniacid` int(10)  NOT NULL,
+				`createtime` varchar(35) ,
+				`username` varchar(35) ,
+				`userphone` varchar(35) ,
+				`idcard` varchar(35) ,
+				`money` varchar(35) ,
+				`openacounttime`  varchar(50),
+				`state`  varchar(50),
+				`receivetime` varchar(35) ,
+				`remark`   varchar(50)
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8;';
+
+		pdo_run($sql);
+		}
+
 	}
 	 //输入口令界面设置
     public function doWebInput()
@@ -1109,6 +1241,10 @@ public function doMobileSendkouling()
 	}
 	else return false;
 
+}
+//php导入excel
+public function doWebInsertphp(){
+	
 }
 
 }

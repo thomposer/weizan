@@ -21,14 +21,6 @@ if(empty($receiver)){
 	exit('您输入的邮箱或手机号格式错误');
 }
 
-$table = trim($_GPC['table']);
-if(!empty($table)) {
-	$isexist = pdo_get($table, array($receiver_type => $receiver, 'uniacid' => $_W['uniacid'] ));
-	if(!empty($isexist)) {
-		exit('手机或邮箱已被注册');
-	}
-}
-
 $sql = 'DELETE FROM ' . tablename('uni_verifycode') . ' WHERE `createtime`<' . (TIMESTAMP - 1800);
 pdo_query($sql);
 

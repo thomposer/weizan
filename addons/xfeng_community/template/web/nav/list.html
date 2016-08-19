@@ -56,8 +56,8 @@
 						{if $key >2}
 						<a onclick="del({$row['id']})"  class="btn btn-default btn-sm" title="删除"><i class="fa fa-times"></i>删除</a>
 						{/if}
-						 <input type="checkbox" value="1"{if intval($row[status])==1} checked="checked"{/if} data="{$row[id]}"/>
-						
+						<!--  <input type="checkbox" value="1"{if intval($row[status])==1} checked="checked"{/if} data="{$row[id]}"/>开启 -->
+						<input type="checkbox" name="status" onclick="verify(this,{$row['id']},'status')" data="{$row['status']}" {if $row['status'] == 1 }checked="checked"{/if}> 开启
 					</td>
 				</tr>
 				
@@ -90,13 +90,18 @@
 						<label data="{$item['isshow']}" class='label label-default {if $item['isshow']==1}label-info{else}{/if}' onclick="setProperty(this,{$item['id']},'isshow')">{if $item['isshow']==1}首页推荐{else}首页关闭{/if}</label>
 						<a href="{php echo $this->createWebUrl('nav', array('op' => 'add', 'id'=>$item['id']))}" title="编辑" class="btn btn-default btn-sm">
 						<i class="fa fa-edit" data-toggle="tooltip" data-placement="top"></i>编辑</a>
-						{if $k>5}
+					
+						
 						<a onclick="del({$item['id']})"  class="btn btn-default btn-sm" title="删除"><i class="fa fa-times"></i>删除</a>
-						{/if}
+					
+
 						<a href="{php echo $this->createWebUrl('nav', array('op' => 'cover', 'id'=>$item['id']))}" title="设置入口" class="btn btn-default btn-sm">
 						<i class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="top"></i>设置入口</a>
 
-						 <input type="checkbox" value="1"{if intval($item[status])==1} checked="checked"{/if} data="{$item[id]}"/>
+						 <!-- <input type="checkbox" value="1"{if intval($item[status])==1} checked="checked"{/if} data="{$item[id]}"/>开启 -->
+						 <input type="checkbox" name="status" onclick="verify(this,{$item['id']},'status')" data="{$item['status']}" {if $item['status'] == 1 }checked="checked"{/if}> 开启
+						 <!-- <input type="checkbox" name="view" onclick="verify(this,{$item['id']},'view')" data="{$item['view']}" {if $item['view'] == 1 }checked="checked"{/if}> 查看
+						 <input type="checkbox" name="add" onclick="verify(this,{$item['id']},'add')" data="{$item['add']}" {if $item['add'] == 1 }checked="checked"{/if}> 发布 -->
 					</td>
 				</tr>
 				{/loop}
@@ -114,33 +119,33 @@
 	</div>
 </div>
 <script type="text/javascript">
-	require(['bootstrap.switch', 'util'], function($, u){
-        $(function(){
-            $(':checkbox').bootstrapSwitch();
-            $(':checkbox').on('switchChange.bootstrapSwitch', function(e, state){
-                $this = $(this);
-                var id = $this.attr('data');
-                var status = this.checked ? 1 : 0;
-                // alert(hid);return false;
-                $.post(location.href, {status: status, id: id}, function(resp){
-                    if(resp != 'success') {
-                        u.message('操作失败, 请稍后重试.')
-                    }
-                    {if !empty($module)}
-                    else {
-                        u.message('操作成功！');
-                        window.setTimeout(function(){location.href = location.href;}, 800);
-                    }
-                    {/if}
-                });
-            });
-            $('.btn').hover(function(){
-                $(this).tooltip('show');
-            },function(){
-                $(this).tooltip('hide');
-            });
-        });
-    });
+	// require(['bootstrap.switch', 'util'], function($, u){
+ //        $(function(){
+ //            $(':checkbox').bootstrapSwitch();
+ //            $(':checkbox').on('switchChange.bootstrapSwitch', function(e, state){
+ //                $this = $(this);
+ //                var id = $this.attr('data');
+ //                var status = this.checked ? 1 : 0;
+ //                // alert(hid);return false;
+ //                $.post(location.href, {status: status, id: id}, function(resp){
+ //                    if(resp != 'success') {
+ //                        u.message('操作失败, 请稍后重试.')
+ //                    }
+ //                    {if !empty($module)}
+ //                    else {
+ //                        u.message('操作成功！');
+ //                        window.setTimeout(function(){location.href = location.href;}, 800);
+ //                    }
+ //                    {/if}
+ //                });
+ //            });
+ //            $('.btn').hover(function(){
+ //                $(this).tooltip('show');
+ //            },function(){
+ //                $(this).tooltip('hide');
+ //            });
+ //        });
+ //    });
 function del(id){
   var id = id;
   var url = "{php echo $this->createWebUrl('nav',array('op' => 'delete'))}";
@@ -175,5 +180,23 @@ function setProperty(obj,id,type){
             ,"json"
         );
     }
+     function verify(obj, id, type) {
+		    $.post("{php echo $this->createWebUrl('nav',array('op' => 'verify'))}", {
+		        id: id,
+		        type: type,
+		        data: obj.getAttribute("data")
+		    }, function(d) {
+		    	// if (d.data== 2) {
+		    	// 	alert('已启用');
+		    	// }else{
+		    	// 	alert('已禁用');
+		    	// }
+		        // if (type == 'status') {
+		        //     $(obj).html(d.data == '1' ? '启用' : '禁止');
+		        // }
+		        // $(obj).attr("data", d.data);
+
+			 }, "json");
+	}
 </script>
 {template 'common/footer'}

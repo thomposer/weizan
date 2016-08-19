@@ -21,7 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta content="telephone=no" name="format-detection">
     <title>门店列表</title>
-    <link data-turbolinks-track="true" href="{RES}/mobile/diandan/assets/diandanbao/weixin.css?v=1" media="all" rel="stylesheet">
+    <link data-turbolinks-track="true" href="{RES}/mobile/{php echo $this->cur_tpl}/assets/diandanbao/weixin.css?v=1" media="all" rel="stylesheet">
     <style type="text/css">
         @media screen {
             .smnoscreen {
@@ -103,7 +103,7 @@
         {/loop}
     </div>
     <!--footer-->
-    {php include $this->template('diandan/_footer');}
+    {php include $this->template($this->cur_tpl.'/_menu');}
 </div>
 </body>
 </html>

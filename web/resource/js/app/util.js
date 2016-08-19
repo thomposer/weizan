@@ -640,7 +640,7 @@
 		var events = $.extend({}, defaultevents, events);
 
 		var footer = (typeof events['confirm'] == 'function' ? '<a href="#" class="btn btn-primary confirm">确定</a>' : '') + '<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">关闭</a><iframe id="_formtarget" style="display:none;" name="_formtarget"></iframe>';
-		var modalobj = util.dialog(title, '正在加载中', footer, {'containerName' : 'modal-panel-ajax'});
+		var modalobj = util.dialog(title ? title : '系统信息', '正在加载中', footer, {'containerName' : 'modal-panel-ajax'});
 
 		if (typeof option['width'] != 'undeinfed' && option['width'] > 0) {
 			modalobj.find('.modal-dialog').css({'width' : option['width']});
@@ -653,13 +653,26 @@
 				}
 			}
 		}
-		modalobj.find('.modal-body').load(url, function(){
+		var ajaxresult;
+		modalobj.find('.modal-body').load(url, function(data){
+			try {
+				ajaxresult = $.parseJSON(data);
+				modalobj.find('.modal-body').html('<div class="modal-body"><i class="pull-left fa fa-4x '+(ajaxresult.message.errno ? 'fa-info-circle' : 'fa-check-circle')+'"></i><div class="pull-left"><p>'+ajaxresult.message.message+'</p></div><div class="clearfix"></div></div>');
+			} catch (error) {
+				modalobj.find('.modal-body').html(data);
+			}
 			$('form.ajaxfrom').each(function(){
 				$(this).attr('action', $(this).attr('action') + '&isajax=1&target=formtarget');
 				$(this).attr('target', '_formtarget');
-			})
+			});
 		});
-		modalobj.on('hidden.bs.modal', function(){modalobj.remove();});
+		modalobj.on('hidden.bs.modal', function(){
+			if (ajaxresult && ajaxresult.redirect) {
+				location.href = ajaxresult.redirect;
+				return false;
+			}
+			modalobj.remove();
+		});
 		if (typeof events['confirm'] == 'function') {
 			modalobj.find('.confirm', modalobj).on('click', events['confirm']);
 		}
@@ -766,6 +779,24 @@
 			}, opts);
 		});
 	};
+
+    util.encrypt = function (str) {
+        str = $.trim(str);
+        if (typeof str == 'string' && str.length > 3) {
+            var reg = /^./;
+            var start = reg.exec(str);
+            var reg = /.$/;
+            var end = reg.exec(str)[0];
+            var content = '';
+            for (var i =0;i < str.length -2 ;i++) {
+                content += '*';
+            }
+            str = start + content + end;
+            return str;
+        } else {
+            return str;
+        }
+    };
 
 	if (typeof define === "function" && define.amd) {
 		define(['bootstrap'], function(){

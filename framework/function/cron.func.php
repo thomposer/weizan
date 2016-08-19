@@ -1,7 +1,7 @@
 <?php
 /**
- * 计划任务
- * [Weizan System] Copyright (c) 2013 012wz.com
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -46,7 +46,7 @@ function cron_run($id) {
 	load()->func('communication');
 	$urlset = parse_url($_W['siteurl']);
 	$urlset = pathinfo($urlset['path']);
-	$response = ihttp_request('http://127.0.0.1/'. $urlset['dirname'] . '/' . url('cron/entry', array('id' => $cron['cloudid'])), array(), $extra);
+	$response = ihttp_request($_W['sitescheme'] . '127.0.0.1/'. $urlset['dirname'] . '/' . url('cron/entry', array('id' => $cron['cloudid'])), array(), $extra);
 	$response = json_decode($response['content'], true);
 	if (is_error($response['message'])) {
 		return $response['message'];

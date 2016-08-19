@@ -21,7 +21,7 @@
                     <div class="col-sm-6">
                         {loop $company $key $item}
                         <div class="checkbox col-sm-4">
-                            <label><input type="checkbox" name="company[]" value="{$item['id']}" {if in_array($item['id'],$companycache)}checked{/if}/>{$item['name']}</label>
+                            <label><input type="checkbox" name="company[]" value="{$item['id']}" {if !empty($companycache) && in_array($item['id'],$companycache)}checked{/if}/>{$item['name']}</label>
                         </div>
                         {/loop}
                         {if empty($company)}

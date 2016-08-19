@@ -1,0 +1,344 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>返利茶赠会员</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="http://yanzhi666.com/Application/Tpl/App/default/Public/Static/css/foods.css?t=333" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="http://yanzhi666.com/Application/Tpl/App/default/Public/Static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="http://yanzhi666.com/Application/Tpl/App/default/Public/Static/js/wemall.js?222"></script>
+    <script type="text/javascript" src="http://yanzhi666.com/Application/Tpl/App/default/Public/Static/js/area.js"></script>
+    <script type="text/javascript" src="http://yanzhi666.com/Application/Tpl/App/default/Public/Static/js/jquery.cityselect.js"></script>
+    <style type="text/css">
+    .viptype {
+        min-height: 40px;
+    }
+
+    .viptype label {
+        display: inline-block;
+        float: left;
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        margin-top: 5px;
+        margin-left: 10px;
+    }
+
+    .viptype input {
+        width: 20px;
+        height: 20px;
+        margin: 5px;
+        float: left;
+    }
+
+    .viptype span {
+        float: left;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .btn {
+        background: #d00a0a none repeat scroll 0 0;
+        border-radius: 5px;
+        color: #fff;
+        display: inline-block;
+        float: left;
+        height: 40px;
+        line-height: 40px;
+        margin-left: 5%;
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .subdh {
+        float: right;
+        margin-right: 5%;
+    }
+
+    .editnum {
+        display: block;
+        float: left;
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        text-align: center;
+        border: 1px solid #eee;
+    }
+
+    .shownum {
+        border-left: none;
+        border-right: none;
+    }
+
+    </style>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript">
+        var gid = "5";
+        var checkjifen = "/index.php?m=Index&a=checkjifen";
+        var uid = "o03uHxFACmrGr4HucOx9bb_URZKw";
+        var storage = window.localStorage;
+
+    // 配置微信jsdk
+    wx.config({
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: 'wx045f8ef0eddab4ba', // 必填，公众号的唯一标识
+        timestamp: '1460979585', // 必填，生成签名的时间戳
+        nonceStr: 'pfBIfiJ2tCh2mPdb', // 必填，生成签名的随机串
+        signature: 'bb7b80a05aff38206eaf38a2afe1abb187927b8c',// 必填，签名，见附录1
+        jsApiList: ['closeWindow'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+
+
+    $(function () {
+
+        $("input[name=viptype]").click(function () {
+            var img = $(this).val();
+            $(".vipimg").attr('src', '/Application/Tpl/App/default/Public/Static/images/vido_' + img + '.jpg?v=0218');
+        });
+
+        $("a.subms").click(function () {
+
+            var username = $.trim($('input[name=username]').val());
+            if (username == '') {
+                alert('请填写真实姓名');
+                return;
+            }
+            var moblie = $.trim($('input[name=moblie]').val());
+            if (moblie == '') {
+                alert('请填写手机号码');
+                return;
+            }
+            var mobliepreg = /^1[3|4|5|8|7][0-9]\d{8}$/;
+            if (!mobliepreg.test($("input[name=moblie]").val())) {
+                alert('手机号码有误');
+                return;
+            }
+            var address = $.trim($('input[name=address]').val());
+            if (address == '') {
+                alert('请填写您的详细街道信息');
+                return;
+            }
+            var province = $(".prov").val();
+            var city = $(".city").val();
+            var dist = $(".dist").val();
+
+            var vidotype = $("input[name=viptype]:checked").val();
+
+            var buynum = 0;
+
+            if ($('input[name=buynum]').val()) {
+                buynum = parseInt($('input[name=buynum]').val());
+            }
+
+            $.get("/index.php?m=Index&a=buyvip", {
+                'username': username,
+                'moblie': moblie,
+                'gid': gid,
+                'buynum': buynum,
+                'vidotype': vidotype,
+                'province': province,
+                'city': city,
+                'dist': dist,
+                'address': address
+            }, function (data) {
+
+                var info = eval(data);
+                if (info.s == 'ok') {
+                    window.location.href = info.msg;
+                } else {
+                    alert(info.msg);
+                }
+            }, 'json');
+
+        });
+
+
+        // 兑换小视频
+        $("a.subdh").click(function () {
+            var username = $.trim($('input[name=username]').val());
+            if (username == '') {
+                alert('请填写真实姓名');
+                return;
+            }
+            var moblie = $.trim($('input[name=moblie]').val());
+            if (moblie == '') {
+                alert('请填写手机号码');
+                return;
+            }
+            var mobliepreg = /^1[3|4|5|8|7][0-9]\d{8}$/;
+            if (!mobliepreg.test($("input[name=moblie]").val())) {
+                alert('手机号码有误');
+                return;
+            }
+            $.get("/index.php?m=Index&a=vidodh", {
+                'username': username,
+                'moblie': moblie,
+                'gid': gid,
+                'uid': uid,
+                'vidotype': 1
+            }, function (data) {
+
+                var info = eval(data);
+                if (info.s == 'ok') {
+                    alert(info.msg);
+
+                    $("input[name=alert_type]").val(1);
+
+                    // window.location.href=info.msg;
+                } else {
+                    alert(info.msg);
+                }
+            }, 'json');
+
+        });
+
+
+        var myprovince = "";
+        var mycity = "";
+        $("#set_city").citySelect({
+            prov: myprovince,
+            city: mycity
+        });
+
+        // 编辑购买数量
+        $(".addnum").click(function () {
+            if (parseInt($('.shownum').val()) > 100) {
+                $('.shownum').val(100);
+                $('input[name=buynum]').val(100);
+            } else {
+                $('.shownum').val(parseInt($('.shownum').val()) + 1);
+                $('input[name=buynum]').val(parseInt($('.shownum').val()));
+            }
+        });
+
+        $(".decnum").click(function () {
+            if (parseInt($('.shownum').val()) <= 1) {
+                $('.shownum').val(1);
+                $('input[name=buynum]').val(1);
+            } else {
+                $('.shownum').val(parseInt($('.shownum').val()) - 1);
+                $('input[name=buynum]').val(parseInt($('.shownum').val()));
+            }
+        });
+
+        $(".shownum").blur(function () {
+            var buynum = $(this).val();
+            if (parseInt(buynum) > 0) {
+                $('input[name=buynum]').val(buynum);
+            } else {
+                $('input[name=buynum]').val(1);
+            }
+        });
+
+
+    })
+
+    </script>
+</head>
+<body style="background:#fff">
+<div class="body">
+
+    <article>
+        <div class="scroll relative">
+            <div class="scroll_box" id="scroll_img">
+                <ul class="scroll_wrap">
+                    <li><a href="#"><img src="http://yanzhi666.com/Public/Uploads/56fd114814525.jpg" class="vipimg" width="100%"/></a></li>
+
+                </ul>
+            </div>
+        </div><!--scroll-->
+    </article>
+
+    <ul class="mso_ul" style="margin-top:0px;">
+        <li class="vipinfo" style="border:none">
+            <span style="margin-top:5px;">返利茶赠会员&nbsp;&nbsp;&nbsp;&nbsp;￥98</span>
+        </li>
+        <li class="vipdesc" style="margin-bottom:5px;"><a href="detail.html"
+                                                          style="float:right;margin-right:15px;color:#666;font-size:small;">查看详情</a>
+        </li>
+        <li class="g_input"><span class="lf">					购买数量
+				</span><span class="rt"><input type="hidden" name="buynum" value="1"><span
+                class="editnum decnum">—</span><input type="tel"
+                                                      style="width:36px;height:36px;padding:0px;margin:0px;float:left;border:none"
+                                                      name="shownum" class="editnum shownum" value="1"/><span
+                class="editnum addnum">+</span></span></li>
+        <li class="g_input"><span class="lf">					真实姓名
+				</span><span class="rt"><input type="text" value="" name="username" placeholder="真实姓名"></span></li>
+        <li class="g_input"><span class="lf">					手机号码
+				</span><span class="rt"><input type="tel" value="" name="moblie" placeholder="18677778888"></span></li>
+        <!-- 	<li class="g_input" style="padding-top:10px;"><span style="display:inline-block;float:left;line-height:30px;height:30px;" class='lf'>充值方式</span><select class="card_type" name="" style="font-size:14px;float:left;margin-left:5px;"><option value="1">虚拟卡在线充值</option><option value="2">邮寄实体充值卡</option></select></li> --><!--
+			<li class="g_input"><span class="lf">					微信号
+				</span><span class="rt"><input type="text" value="" name="weixin" placeholder="填写您的微信号方便卖家联系"></span></li> -->
+        <li class="g_input citys" style="min-height:70px;padding-bottom:5px;"><span
+                style="display:inline-block;float:left;width:100%;line-height:30px;height:30px;" class='lf'>收货城市</span>
+            <div id="set_city" style="margin-top:10px;font-size:16px;float:left"><select class="prov" name="province"
+                                                                                         style="font-size:14px;float:left;margin-left:5px;">
+                <option value="北京">北京</option>
+                <option value="天津">天津</option>
+                <option value="河北">河北</option>
+                <option value="山西">山西</option>
+                <option value="内蒙古">内蒙古</option>
+                <option value="辽宁">辽宁</option>
+                <option value="吉林">吉林</option>
+                <option value="黑龙江">黑龙江</option>
+                <option value="上海">上海</option>
+                <option value="江苏">江苏</option>
+                <option value="浙江">浙江</option>
+                <option value="安徽">安徽</option>
+                <option value="福建">福建</option>
+                <option value="江西">江西</option>
+                <option value="山东">山东</option>
+                <option value="河南">河南</option>
+                <option value="湖北">湖北</option>
+                <option value="湖南">湖南</option>
+                <option value="广东">广东</option>
+                <option value="广西">广西</option>
+                <option value="海南">海南</option>
+                <option value="重庆">重庆</option>
+                <option value="四川">四川</option>
+                <option value="贵州">贵州</option>
+                <option value="云南">云南</option>
+                <option value="西藏">西藏</option>
+                <option value="陕西">陕西</option>
+                <option value="甘肃">甘肃</option>
+                <option value="青海">青海</option>
+                <option value="宁夏">宁夏</option>
+                <option value="新疆">新疆</option>
+                <option value="香港">香港</option>
+                <option value="澳门">澳门</option>
+                <option value="台湾">台湾</option>
+                <option value="国外">国外</option>
+            </select><select class="city" name="city" style="font-size:14px;margin-left:5px;;float:left">
+                <option value="东城区">东城区</option>
+                <option value="西城区">西城区</option>
+                <option value="崇文区">崇文区</option>
+                <option value="宣武区">宣武区</option>
+                <option value="朝阳区">朝阳区</option>
+                <option value="丰台区">丰台区</option>
+                <option value="石景山区">石景山区</option>
+                <option value="海淀区">海淀区</option>
+                <option value="门头沟区">门头沟区</option>
+                <option value="房山区">房山区</option>
+                <option value="通州区">通州区</option>
+                <option value="顺义区">顺义区</option>
+                <option value="昌平区">昌平区</option>
+                <option value="大兴区">大兴区</option>
+                <option value="平谷区">平谷区</option>
+                <option value="怀柔区">怀柔区</option>
+                <option value="密云县">密云县</option>
+                <option value="延庆县">延庆县</option>
+            </select><select class="dist" style="margin-left:5px;" name="dist" disabled="disabled"></select></div>
+        </li>
+        <li class="g_input citys">
+            <span class="lf">详细地址</span>
+            <span class="rt"><input type="text" value="" name="address" placeholder="街道等详细地址确保能收到货"></span>
+        </li>
+        <li style="border:none;height:60px;text-align:center"><a href="javascript:;" class="subms btn"
+                                                                 style="width:90%">立即购买</a>
+            <!-- <a href="javascript:;" class="subdh btn" style="width:40%;">免费兑换</a> -->
+        </li>
+    </ul>
+</div>
+<script type="text/javascript" src="http://yanzhi666.com/Public/js/alert_vidodh.js"></script>
+<input type="hidden" name="alert_type" value="0"></body>
+</html>

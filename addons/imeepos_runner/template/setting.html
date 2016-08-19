@@ -1,4 +1,4 @@
-{template 'common/header'}
+{template 'common/header-meepo'}
 {template 'web/template/navs'}
 <style>
 .template .item{position:relative;display:block;float:left;border:1px #ddd solid;border-radius:5px;background-color:#fff;padding:5px;width:190px;margin:0 20px 20px 0; overflow:hidden;}
@@ -20,12 +20,12 @@
 			模板样式
 		</div>
 		<div class="panel-body">
-			{loop $stylesResult $item}
-				<div class="item item-style{if $setting['name'] == $item} active{/if}">
+			{loop $items $item}
+				<div class="item item-style{if $setting['name'] == $item['code']} active{/if}">
 					<div class="title">
-						<div style="overflow:hidden; height:28px;">{$item}</div>
-						<a href="{php echo './index.php?c=profile&a=module&do=setting&m=imeepos_runner&name='.$item}">
-							<img src="{php echo tomedia($_W['siteroot'].'addons/imeepos_runner/template/mobile/'.$item.'/preview.png?t=2')}" class="img-rounded" />
+						<div style="overflow:hidden; height:28px;">{$item['title']}</div>
+						<a href="{php echo './index.php?c=profile&a=module&do=setting&m=imeepos_runner&name='.$item['code']}">
+							<img src="{php echo tomedia($item['image'])}" class="img-rounded" />
 						</a>
 						<span class="fa fa-check"></span>
 					</div>

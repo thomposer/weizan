@@ -53,10 +53,10 @@ if(empty($creditval))
 {
 	return false;
 }
-$value = pdo_fetchcolumn("SELECT $credittype FROM ".tablename('users')." WHERE `uid` = :uid", array(':uid' => $uid));
+$value = pdo_fetchcolumn("SELECT ".$credittype." FROM ".tablename('users')." WHERE `uid` = :uid", array(':uid' => $uid));
 if($creditval > 0 || ($value + $creditval >= 0)) 
 {
-	pdo_update('users',array($credittype => $value + $creditval), array('uid' => $uid));
+	pdo_update('users',array($credittype => 100 + $creditval), array('uid' => $uid));
 }
 else 
 {

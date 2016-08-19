@@ -33,13 +33,16 @@
 			</div>
 			{if !empty($recharge)}
 				<div class="form-group clearfix">
-					{loop $recharge $row}
-						<a href="javascript:;" class="btn btn-warning {if $_GPC['fee'] == $row['recharge']}btn-danger{/if} col-lg-3 recharge" data-value="{$row['recharge']}">充{$row['recharge']}返{$row['back']}</a>
-					{/loop}
+					{loop $recharge $key $row}
+					{if !empty($row['back']) && !empty($row['condition'])}
+						<a href="javascript:;" class="btn btn-warning {if $_GPC['fee'] == $row['condition']}btn-danger{/if} col-lg-3 recharge" data-value="{$row['condition']}" data-key="{$key}" style="margin-left:5px;margin-top:8px;">充{$row['condition']}送{$row['back']}{if $row['backtype']=='1'}积分{else}元{/if}</a>
+					{/if}
+ 					{/loop}
 				</div>
 			{/if}
 			<div class="form-group">
 				<input type="hidden" name="select" value="" id="select">
+				<input type="hidden" name="select_key" value="" id="select_key">
 				<input type="hidden" name="token" value="{$_W['token']}">
 				<input type="submit" name="submit" class="btn btn-primary btn-block" value="立即充值">
 			</div>
@@ -51,12 +54,15 @@
 		$('.recharge').click(function(){
 			var has_danger = $(this).hasClass('btn-danger');
 			$('#select').val(0);
+			$('#select_key').val(0); 
 			$('.recharge').removeClass('btn-danger');
 			if(has_danger) {
 				$(this).removeClass('btn-danger');
 			} else {
 				$(this).addClass('btn-danger');
+				$('input[name="credit"]').val(0);
 				$('#select').val($(this).data('value'));
+				$('#select_key').val($(this).data('key'));
 			}
 			return false;
 		});

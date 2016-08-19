@@ -1,6 +1,6 @@
 require.config({
 	baseUrl: '../addons/imeepos_runner/public/',
-	urlArgs: "v=" +  (new Date()).getTime(),
+	urlArgs: "v=7.1.8",
 	paths: {
 		'map': 'http://api.map.baidu.com/getscript?v=2.0&ak=F51571495f717ff1194de02366bb8da9&services=&t=20140530104353',
 		'jquery': './libs/jquery.min',
@@ -17,7 +17,9 @@ require.config({
 		'weixin':'http://res.wx.qq.com/open/js/jweixin-1.0.0',
 		'index':'./js/index',
 		'appointment':'./js/appointment',
-		'tool':'./js/tool'
+		'tool':'./js/tool',
+		'touch':'./js/touch',
+		'vue':'./libs/vue.min'
 	},
 	shim:{
 		'angular': {

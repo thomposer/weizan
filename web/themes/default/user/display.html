@@ -106,16 +106,18 @@
 	<table class="table table-hover">
 		<thead class="navbar-inner">
 			<tr>
-				<th style="width:150px;">用户名</th>
-				<th style="width:200px;">身份</th>
+				<th style="width:120px;">用户名</th>
+				<th style="width:120px;">身份</th>
 				<th style="width:100px;">状态</th>
 				<th style="min-width:180px;">注册时间</th>
 				<th style="min-width:180px;">服务开始时间 ~~ 结束时间</th>
 				<th></th>
-				<th style="width:50px;">操作</th>
-				<th style="width:100px;"></th>
+				<th style="width:70px;">余额</th>
+				<th style="width:180px;">操作</th>
+				<th style="width:50px;"></th>
+				<th style="width:50px;"></th>
 				<th style="width:70px;"></th>
-				<th style="width:100px;"></th>
+				<th style="width:70px;"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -125,10 +127,10 @@
 				<td>
 				{if $user['founder']}
 					<span class="label label-success">管理员</span>
-				{elseif isset($usergroups[$user['groupid']])}
+				{elseif $usergroups[$user['groupid']]}
 					<span class="label label-info">{$usergroups[$user['groupid']]['name']}</span>
 				{else}
-					<span class="label label-error">未分配</span>
+					<span class="label label-info">未分配</span>
 				{/if}
 				</td>
 				<td>
@@ -154,16 +156,27 @@
 					{/if}
 				</td>
 				<td>
+					{$user['credit2']}
+				</td>
+				<td>
+					<a class="btn btn-default btn-sm" href="{php echo url('shop/mrecord/paylist',array('uid'=>$user[uid]))}" title="充值记录"><i class="fa fa-share"></i>充值记录</a>
+
+                    <a class="btn btn-default btn-sm" href="{php echo url('shop/mrecord/modlist',array('uid'=>$user[uid]))}" title="消费记录"><i class="fa fa-share"></i>消费记录</a>
+				</td>
+				{if $_W['isfounder']}
+				<td>
 					<div>
 						<a href="{php echo url('user/edit', array('uid' => $user['uid']))}">编辑</a>&nbsp;&nbsp;
 					</div>
 				</td>
+				{/if}
 				{if empty($user['founder'])}
 				<td>
 					<div>
-						<a href="{php echo url('user/permission', array('uid' => $user['uid']))}">查看操作权限</a>
+						<a href="{php echo url('user/sq',array('uid'=>$user[uid]))}">授权</a>
 					</div>
 				</td>
+				{if $_W['isfounder']}
 				<td>
 					<div>
 						<a href="javascript:;" onclick="u.deny('{$user['uid']}');">{if intval($user['status']) == 2}禁止{else}启用{/if}用户</a>&nbsp;&nbsp;
@@ -174,6 +187,7 @@
 						<a href="javascript:;" onclick="u.del('{$user['uid']}');">删除用户</a>
 					</div>
 				</td>
+				{/if}
 				{/if}
 			</tr>
 			{/loop}

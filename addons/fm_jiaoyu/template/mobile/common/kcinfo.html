@@ -16,7 +16,7 @@
         </style>
         <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
         <title>课程详情</title>
-		<link rel="stylesheet" href="{OSSURL}public/mobile/css/weixin.css?{php echo time()}">
+		<link rel="stylesheet" href="{MODULE_URL}public/mobile/css/weixin.css?{php echo time()}">
         <link rel="stylesheet" href="{OSSURL}public/mobile/css/reset.css?{php echo time()}">
 		<link type="text/css" rel="stylesheet" href="{OSSURL}public/mobile/css/greenStyle.css?v=4.80120" />
         <script src="{OSSURL}public/mobile/js/jquery.js?{php echo time()}"></script>
@@ -34,7 +34,7 @@
                 </div>
                 <ul>
                     <li><label>日期：</label>{php echo date('Y/m/d',$item['start'])}-{php echo date('Y/m/d',$item['end'])}</li>
-                    <li><label>科目：</label>{if $school['issale'] == 2 || $school['issale'] == 4}{if !empty($category[$item['bj_id']])}{$category[$item['bj_id']]['sname']}{/if}/{if !empty($category[$item['km_id']])}{$category[$item['km_id']]['sname']}{/if}{else if $school['issale'] == 1 || $school['issale'] == 3}{if !empty($category[$item['km_id']])}{$category[$item['km_id']]['sname']}{/if}{else}{if !empty($category[$item['bj_id']])}{$category[$item['bj_id']]['sname']}{/if}/{if !empty($category[$item['km_id']])}{$category[$item['km_id']]['sname']}{/if}{/if}</li>
+                    <li><label>科目：</label>{if !empty($item['xq_id'])}{$category[$item['xq_id']]['sname']}/{$category[$item['bj_id']]['sname']}/{$category[$item['km_id']]['sname']}{else}{$category[$item['km_id']]['sname']}{/if}</li>
                     <li><label>教室：</label>{$item['adrr']}</li>
                 </ul>               
                 <div style="clear:both"></div>
@@ -76,19 +76,19 @@
         <dl class="count_tips">
             <dt>服务中心</dt>
                             <dd class="count_add"><a href="#" id="map">{$school['address']}</a></dd>
-                            <dd class="count_phone"><a href="tel:64611463" class="phone">{$school['tel']}</a></dd>
+                            <dd class="count_phone"><a href="tel:{$school['tel']}" class="phone">{$school['tel']}</a></dd>
         </dl>
         <!--dl class="count_eval">
             <dt><a href="javascript:void(0)" id="allPinglun">老师评价<span>(0人评价)</span></a></dt>
         </dl-->
         <dl class="count_outline">
-            <dt><a href="{php echo $this->createMobileUrl('kcdg', array('id' => $item['id']), true)}" >课程大纲 <span class="outline_link" id="syllabus">查看详情</span></a></dt>
+            <dt><a href="{php echo $this->createMobileUrl('kcdg', array('id' => $item['id'],'schoolid' => $schoolid), true)}" >课程大纲 <span class="outline_link" id="syllabus">查看详情</span></a></dt>
         </dl>
         <dl class="counts">
             <dt>课程表</dt>
             <div>
 			{loop $list $item1}
-                      <dd class="{if $item['date'] > TIMESTAMP}click{/if}">第<span>{$item1['nub']}</span>课<br/>{php echo date('m月d',$item['date'])}</br>{if !empty($category[$item1['sd_id']])}{$category[$item1['sd_id']]['sname']}{/if}</dd>           
+                      <dd class="{if $item['date'] > TIMESTAMP}click{/if}">第<span>{$item1['nub']}</span>课<br/>{php echo date('m月d',$item1['date'])}</br>{if !empty($category[$item1['sd_id']])}{$category[$item1['sd_id']]['sname']}{/if}</dd>           
 			{/loop}
                                 <div style="clear:both"></div>
             </div>
@@ -110,7 +110,7 @@
 			
 			if (satr == 3 || satr == 4){
 			
-				var url = "{php echo $this->createMobileUrl('myclass', array('schoolid' => $schoolid), true)}";
+				var url = "{php echo $this->createMobileUrl('myclass', array('schoolid' => $schoolid, 'bj_id' => $student['bj_id'], 'xq_id' => $student['xq_id']), true)}";
 			
 			}			
        		

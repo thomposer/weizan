@@ -104,7 +104,6 @@ font-weight:bold;
                     <thead class="navbar-inner">
                     <tr>
 					    <th style="width:100px;">序号</th>
-                        <th style="width:100px;">排序</th>
                         <th>年级名称</th>
                         <th style="text-align:right;">编辑/删除</th>
                     </tr>
@@ -113,7 +112,6 @@ font-weight:bold;
                     {loop $semester $row}
                     <tr>
 					    <td><div class="type-parent">{$row['sid']}</div></td>
-                        <td><input type="text" class="form-control" name="ssort[{$row['ssort']}]" value="{$row['ssort']}"></td>
                         <td><div class="type-parent">{$row['sname']}&nbsp;&nbsp;</div></td>
                         <td style="text-align:right;"><a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('semester', array('op' => 'post', 'sid' => $row['sid'], 'schoolid' => $schoolid))}" title="编辑"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;<a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('semester', array('op' => 'delete', 'sid' => $row['sid'], 'schoolid' => $schoolid))}" onclick="return confirm('确认删除此分类吗？');return false;" title="删除"><i class="fa fa-times"></i></a></td>
                     </tr>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-cn" class="no-js">
+	<head>
+		<meta http-equiv="Content-Type">
+		<meta content="text/html; charset=utf-8">
+		<meta charset="utf-8">
+		<title>{$title}</title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="format-detection" content="email=no">
+		<link rel="stylesheet" type="text/css" href="{UBER_RES}/css/reset.css" />
+		<link rel="stylesheet" type="text/css" href="{UBER_RES}/css/index.css" />
+		<link rel="stylesheet" type="text/css" href="{UBER_RES}/css/animations.css" />
+        <link rel="stylesheet" type="text/css" href="{UBER_RES}/css/load.css" />
+		<link rel="prefetch" href="{UBER_RES}/images/bg1.jpg" />         
+	</head>
+	<body>
+
+    <div id="loading">
+     	<div class="spinner">
+  			<div class="double-bounce1"></div>
+  			<div class="double-bounce2"></div>
+		</div>
+	</div>
+		<div id="content" style="display:none">
+			<div class="page scan page-current">
+				<div class="wrap">
+					<div class="shouzhi">
+						<div class="shouzhi_info">
+							<div class="part p5__print-wrap">
+											<i class="part p5__print"></i>
+											<i class="part p5__scanner scanner"></i>
+							 </div>
+						 </div>
+					 </div>
+				</div>
+			</div>
+		
+
+
+    </div>
+	<div id="audiocontainer"></div>
+	<div id="textsuper">
+	<div id="textsub"><img id="fontimg" />
+    </div></div>
+    <div id="share" onClick="closeDialog()">
+    	<div class="shareImg"></div>
+    </div>
+		{template 'share'}
+        <script type="text/javascript">
+		gSound = '{UBER_RES}/audio/bg.mp3';
+		</script>
+        <script src="{UBER_RES}/js/zepto.min.js"></script>
+		<script src="{UBER_RES}/js/touch.js"></script>
+		<script src="{UBER_RES}/js/index.js"></script>
+        <script type="text/javascript">
+		document.onreadystatechange = loading;
+		function loading(){
+			if(document.readyState == "complete")
+			{
+				$("#loading").hide();
+				$("#content").show();
+			}
+		}
+	
+
+$(document).ready(function(){
+	$(".shouzhi_info").on("touchstart",function(){
+		$(".p5__print").css("opacity","1");
+			setTimeout(function(){
+				location.href="{php echo $this->createMobileUrl('shake',array())}";
+			},1000);
+	});
+
+})
+
+	
+	 
+	
+</script>
+
+{template 'footer'}

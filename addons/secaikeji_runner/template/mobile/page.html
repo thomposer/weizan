@@ -1,0 +1,248 @@
+{template 'mui/common/header'}
+<link href="../addons/secaikeji_runner/plugin/system/view/static/style.css" rel="stylesheet">
+<script src="../addons/secaikeji_runner/template/mobile/mui/libs/jquery.min.js"></script>
+<style type="text/css">
+.fe-mod:hover {
+    border: none;
+}
+.fe-mod{
+    border: none;
+}
+.item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+    overflow: hidden;
+    text-overflow: initial;
+    white-space: normal;
+}
+.item .badge {
+    right: 32px;
+}
+.item.item-button-right .badge {
+    right: 20px;
+}
+.item-button-right, a.item.item-button-right, button.item.item-button-right {
+    padding-right: 110px;
+}
+.has-header{
+	top:44px !important;
+}
+</style>
+
+<div class="pane" ng-app="myApp" ng-controller="MainCtrl">
+	<div class="fe-floatico" style="position: fixed;" ng-style="{'width':pages[0].params.floatwidth,'top':pages[0].params.floattop}" ng-class="{'fe-floatico-right':pages[0].params.floatstyle=='right'}" ng-show="pages[0].params.floatico==1">
+		<a href="{{pages[0].params.floathref || 'javascript:;'}}">
+			<img ng-src="{{pages[0].params.floatimg || '../addons/secaikeji_runner/plugin/system/view/static/init-data/init-image-7.png'}}" style="width:100%;" />
+		</a>
+	</div>
+	<ion-header-bar ng-if="page.params.bar_style!='bar-clear'" ng-repeat="page in pages" class="{{page.class}}" ng-include="'../addons/secaikeji_runner/plugin/system/view/temp/show-'+page.temp+'.html'" on-finish-render-filters>
+	</ion-header-bar>
+	<div class="scroll-content overflow-scroll" ng-class="{'has-footer has-header':pages[0].params.footer==1 && pages[0].params.bar_style!='bar-clear','has-footer':pages[0].params.footer==1 && pages[0].params.bar_style=='bar-clear'}">
+		<div class="scroll">
+			<ion-header-bar ng-if="page.params.bar_style=='bar-clear'" ng-repeat="page in pages" class="{{page.class}}" ng-include="'../addons/secaikeji_runner/plugin/system/view/temp/show-'+page.temp+'.html'" on-finish-render-filters>
+			</ion-header-bar>
+			{if $_W['fans']['follow']!=1}
+		        <div style="height: 50px;" ng-show="pages[0].params.guide==1"></div>
+		        <a href="{$guide['followurl']}">
+		            <div class="fe-guide" style="position: fixed;" ng-style="{'display':'block','background-color':pages[0].params.guidebgcolor,'opacity':pages[0].params.guideopacity}" ng-show="pages[0].params.guide==1">
+		                <div class="fe-guide-faceimg" ng-style="{'border-radius':pages[0].params.guidefacestyle}">
+		                    <img src="{$guide['logo']}" ng-style="{'border-radius':pages[0].params.guidefacestyle}" />
+		                </div>
+		                <div class="fe-guide-sub" ng-style="{'color':pages[0].params.guidenavcolor,'background-color':pages[0].params.guidenavbgcolor}">{{pages[0].params.guidesub ||'立即关注'}}</div>
+		                <div class="fe-guide-text"  ng-style="{'font-size':pages[0].params.guidesize,'color':pages[0].params.guidecolor}">
+		                    <p {if empty($guide['title2'])} style="line-height:40px;"{/if}>{$guide['title1']}</p>
+		                    <p {if empty($guide['title1'])} style="line-height:40px;"{/if}>{$guide['title2']}</p>
+		                </div>
+		            </div>
+		        </a>
+		    {/if}
+			<meepo ng-repeat="Item in Items" >
+				<meepo ng-if="Item.class != 'footer-item' && Item.temp != 'newstask' && Item.temp != 'newsservice' && Item.temp != 'newsshop'" class="{{Item.class}}" ng-include="'../addons/secaikeji_runner/plugin/system/view/temp/show-'+Item.temp+'.html'" on-finish-render-filters>
+				</meepo>
+				<meepo ng-cloak ng-if="Item.temp == 'newstask'" on-finish-render-filters>
+					<div class="card" ng-if="orders" ng-repeat="order in orders">
+						<div ng-cloak class="item item-avatar-left item-button-right" ng-click="userInfo(order.uid)">
+							<img ng-src="{{order.avatar}}" alt=""/>
+							<h2 class="title">{{order.ctitle}}</h2>
+							<p>{{order.nickname}}</p>
+							<i class="badge badge-assertive" ng-if="order.fee">{{order.fee}}元</i>
+						</div>
+						<div class="item item-body">
+							<div class="item item-icon-left" ng-if="order.desc" ng-click="taskDetail(order.id)">
+								<i class="icon ion-ios-list-outline calm"></i>
+								{{order.desc}}
+							</div>
+							<div class="item item-icon-left" ng-if="order.startaddress" ng-click="taskDetail(order.id)">
+								<i class="icon ion-ios-navigate-outline calm"></i>
+								{{order.startaddress}}
+							</div>
+							<div class="item item-icon-left" ng-if="order.endaddress" ng-click="taskDetail(order.id)">
+								<i class="icon ion-ios-location-outline calm"></i>
+								{{order.endaddress}}
+							</div>
+							<div class="item item-icon-left" ng-if="order.starttimestr" ng-click="taskDetail(order.id)">
+								<i class="icon ion-ios-time-outline calm"></i>
+								{{order.starttimestr}}开始
+							</div>
+							<div class="item item-icon-left" ng-if="order.endtimestr" ng-click="taskDetail(order.id)">
+								<i class="icon ion-ios-stopwatch-outline calm"></i>
+								{{order.endtimestr}}截止
+							</div>
+							<div class="item item-icon-left" ng-if="order.peoplelimit" ng-click="taskDetail(order.id)">
+								<i class="icon ion-ios-people-outline calm"></i>
+								需要：{{order.peoplelimit}}人
+							</div>
+							<div class="item item-icon-left" ng-if="order.kglimit" ng-click="taskDetail(order.id)">
+								<i class="icon ion-ios-calculator calm"></i>
+								重量：{{order.kglimit}}公斤
+							</div>
+							<div class="item item-icon-left" ng-if="order.createtime" ng-click="taskDetail(order.id)">
+								<i class="icon ion-ios-alarm-outline calm"></i>
+								发布时间：{{order.createtime}}
+							</div>
+							<div class="item">
+								<a class="subdued">
+			                    {{order.look_num || 0 | number:0}}浏览
+			               		</a>
+								<a class="subdued">
+			                    {{order.share_num || 0 | number:0}}分享
+			                	</a>
+								<a class="subdued" ng-if="order.peoplelimit > 0 ">
+				                                        还需要{{order.peoplelimit || 0}}人
+				                </a>
+								<a class="subdued" ng-if="order.timelimit > 0 ">
+		                    	总时长{{order.timelimit || 0}}小时
+		               	 		</a>
+								<a class="subdued" ng-if="task.addresslimit > 0">
+		                    	总路程{{task.addresslimit || 0}}公里
+		                		</a>
+								<a class="subdued" ng-if="task.kglimit > 0">
+		                    	重量：{{task.kglimit || 0}}公斤
+		                		</a>
+							</div>
+							<div class="item">
+								<button class="button button-calm button-block" ng-click="reciveTask(order.id)">
+									立即接单
+								</button>
+							</div>
+							
+						</div>
+					</div>
+					<div class="card" ng-if="!orders">
+						<div class="item">
+							<h2 class="title">
+								暂无数据
+							</h2>
+						</div>
+					</div>
+				</meepo>
+			</meepo>
+		</div>
+	</div>
+	<ion-footer-bar ng-if="Item.class == 'footer-item'" ng-repeat="Item in Items" class="{{Item.class}}" ng-include="'../addons/secaikeji_runner/plugin/system/view/temp/show-'+Item.temp+'.html'" on-finish-render-filters>
+	</ion-footer-bar>
+</div>
+
+<script type="text/javascript" src="../addons/secaikeji_runner/plugin/system/view/static/angular.min.js"></script>
+<script type="text/javascript" src="../addons/secaikeji_runner/plugin/system/view/static/hhSwipe.js"></script>
+<script type="text/javascript">
+    function initswipe(jobj){
+        var bullets = jobj.next().get(0).getElementsByTagName('a');
+        var banner = Swipe(jobj.get(0), {
+            auto: 4000,
+            continuous: true,
+            disableScroll:false,
+            callback: function(pos) {
+                var i = bullets.length;
+                while (i--) {
+                    $(bullets[i]).css("opacity",0.4);
+                }
+                $(bullets[pos]).css("opacity",0.6);
+            }
+        })
+    }
+    var app = angular.module('myApp', []);
+    app.controller('MainCtrl', ['$scope','$http','$timeout', function($scope,$http,$timeout){
+    	
+            $scope.pages = [{$pageinfo}];
+            $scope.system = [{$system}];
+            $scope.Items = [{$data}];
+            $scope.show = '1';
+            $scope.userinfo = {php echo json_encode($userinfo)};
+            
+            $scope.toast = function(message,time){
+				require(['core'],function(core){
+					core.$ionicLoading.show(message);
+					if(!time){
+						time = 1000;
+					}
+					$timeout(function(){
+						core.$ionicLoading.hide();
+					},time);
+				});
+			}
+            
+            $scope.taskDetail = function(id){
+            	//任务详情
+            	var url = "{php echo $this->createMobileUrl('task',array('act'=>'detail'))}&id="+id;
+            	window.location.href = url;
+            }
+            
+            $scope.taskMap = function(t){
+            	//任务地图
+            	var url = "{php echo $this->createMobileUrl('task',array('act'=>'taskmap'))}&id="+id;
+            	window.location.href = url;
+            }
+            
+            $scope.userInfo = function(id){
+            	//用户信息
+            	var url = "{php echo $this->createMobileUrl('runner',array('act'=>'info'))}&uid="+id;
+            	window.location.href = url;
+            }
+            
+            $scope.reciveTask = function(id){
+            	//抢订单
+            	var url = "{php echo $this->createMobileUrl('task',array('act'=>'recive'))}&id="+id;
+            	$http.post(url,{}).success(function(data){
+            		$scope.toast(data.message);
+            		$timeout(function(){
+            			$scope.taskDetail(id);
+            		},1000);
+            	});
+            }
+            
+            $scope.orders = {php echo json_encode($orders)};
+            
+            $scope.$on('ngRepeatFinished',function(ngRepeatFinishedEvent){
+                $('.fe-mod-2 .swipe').each(function(){
+                    initswipe($(this));
+                 });
+                 $('.fe-mod-8-main-img img').each(function(){
+                    $(this).height($(this).width());    
+                 });
+                 $('.fe-mod-12 img').each(function(){
+                    $(this).height($(this).width());    
+                 });
+            });
+    }]);
+    app.directive('stringHtml' , function(){
+        return function(scope , el , attr){
+            if(attr.stringHtml){
+                scope.$watch(attr.stringHtml , function(html){
+                    el.html(html || '');
+                });
+            }
+        };
+    });
+    app.directive("onFinishRenderFilters",function($timeout){
+        return{
+            restrict: 'A',
+            link: function(scope,element,attr){
+                if(scope.$last === true){
+                    $timeout(function(){
+                        scope.$emit('ngRepeatFinished');
+                    });
+                }
+            }
+        };
+    });
+</script>
+{template 'mui/common/footer'}

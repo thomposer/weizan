@@ -17,8 +17,15 @@
 			}
 		{loop $ds $row}
 		{if $row['essential']}
-		{if in_array($row['type'], array('number', 'text', 'calendar', 'email'))}
+		{if in_array($row['type'], array('text', 'calendar', 'email'))}
 		if($.trim($(':text[name="field_{$row['refid']}_{$row['bind']}"]').val()) == '') {
+			u.message('{$row['title']} 必须填写.');
+			return false;
+		}
+		{/if}
+		
+		{if in_array($row['type'], array('number'))}
+		if($.trim($(':number[name="field_{$row['refid']}_{$row['bind']}"]').val()) == '') {
 			u.message('{$row['title']} 必须填写.');
 			return false;
 		}

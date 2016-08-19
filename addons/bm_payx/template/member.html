@@ -1,0 +1,94 @@
+{template 'common/header'}
+<style type='text/css'>
+.red { float:left;color:red}
+.white {float:left;color:white}
+.tooltipbox {
+	background:#fef8dd;border:1px solid #c40808; position:absolute; left:0;top:0; text-align:center;height:20px;
+	color:#c40808;padding:2px 5px 1px 5px; border-radius:3px;z-index:1000;
+}
+</style>
+<ul class="nav nav-tabs">
+  <li {if $op == 'display'}class="active"{/if}>
+    <a href="{php echo $this->createWebUrl('member', array('id' => $id ,'op' => 'display'))}">会员优惠管理</a>
+  </li>
+  <li {if $op == 'post'}class="active"{/if}>
+    <a href="{php echo $this->createWebUrl('member', array('id' => $id ,'op' => 'post'))}">新增会员优惠</a>
+  </li>
+</ul>
+{if $op == 'post'}
+<form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return formcheck()">
+	<input type="hidden" name="id" value="{$id}">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			会员优惠设置
+		</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">会员组名称</label>
+				<div class="col-sm-9 col-xs-12">
+					<select class='form-control' id='membername' name='membername'>
+						<option value='-1'>请选择</option>
+						{loop $members $member}
+						<option value='{$member['title']}' {if $item['membername'] == $member['title']}selected{/if}>{$member['title']}</option>
+						{/loop}
+					</select>				
+				</div>
+			</div>					
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">会员组ID</label>
+				<div class="col-sm-9 col-xs-12">
+					<input type="text" name="memberid" id="memberid"  class="form-control" value="{$item['memberid']}" readonly>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">会员组折扣</label>
+				<div class="col-sm-9 col-xs-12">
+					<input type="text" name="memberrate" id="memberrate"  class="form-control" value="{$item['memberrate']}">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="form-group col-sm-12">
+		<input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1" />
+		<input type="hidden" name="token" value="{$_W['token']}" />
+	</div>
+</form>
+
+<script type="text/javascript">
+    require(['jquery', 'util'], function($, u){
+		$(function(){
+            u.editor($('#spotinfo')[0]);
+		});
+    });   
+</script>
+{elseif $op == 'display'}
+<div style="padding:15px;">
+  <table class="table table-hover">
+    <thead class="navbar-inner">
+      <tr>
+        <th style="width:20%;text-align:center;" >序号</th>
+        <th style="width:10%;text-align:center;" >会员组ID</th>
+        <th style="width:30%;text-align:center;" >会员组名称</th>
+        <th style="width:20%;text-align:center;" >折扣</th>
+        <th style="width:20%;text-align:center;" >操作</th>
+  </tr>
+</thead>
+{loop $list $item}
+<tr>
+  <td style="width:20%;text-align:center;" >{$item['id']}</td>
+  <td style="width:30%;text-align:center;" >{$item['memberid']}</td>
+  <td style="width:30%;text-align:center;" >{$item['membername']}</td>
+  <td style="width:30%;text-align:center;" >{$item['memberrate']}</td>
+  <td style="width:20%;text-align:center;" >
+    <a href="{php echo $this->createWebUrl('member',array('id' => $id ,'mid' => $item['id'] ,'op' => 'post'))}">编辑
+    </a>
+    <a href="{php echo $this->createWebUrl('member',array('id' => $id ,'mid' => $item['id'],'op' => 'delete'))}">删除
+    </a>
+  </td>
+</tr>
+{/loop}
+</table>
+</div>
+{/if}
+
+{template 'common/footer'}

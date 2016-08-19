@@ -17,13 +17,15 @@ class dayu_yuyuepayModuleProcessor extends WeModuleProcessor {
             $reply = pdo_fetch("SELECT * FROM " . tablename('dayu_yuyuepay_reply') . " WHERE rid = :rid", array(':rid' => $rid));
             if ($reply) {
                 $sql = 'SELECT * FROM ' . tablename('dayu_yuyuepay') . ' WHERE `weid`=:weid AND `reid`=:reid';
-                $activity = pdo_fetch($sql, array(':weid' => $_W['uniacid'], ':reid' => $reply['reid']));
+                $activity = pdo_fetch($sql, array(':weid' => $_W['uniacid'], ':reid' => $reply['reid']));				
+				$link = $activity['is_time']==2 ? $this->createMobileUrl('timelist',array('id' => $activity['reid'], 'weid' => $_W['uniacid'])) : $this->createMobileUrl('dayu_yuyuepay',array('id' => $activity['reid'], 'weid' => $_W['uniacid']));
                 $news = array();
                 $news[] = array(
                     'title' => $activity['title'],
                     'description' => strip_tags($activity['description']),
                     'picurl' => tomedia($activity['thumb']),
-                    'url' => $this->createMobileUrl('dayu_yuyuepay',array('id' => $activity['reid'], 'weid' => $_W['uniacid']))
+//					'url' => $this->createMobileUrl('dayu_yuyuepay',array('id' => $activity['reid'], 'weid' => $_W['uniacid']))
+                    'url' => $link
                 );
                 return $this->respNews($news);
             }

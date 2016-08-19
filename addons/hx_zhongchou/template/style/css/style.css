@@ -17,8 +17,8 @@ body {
 }
 @font-face {
 	font-family: 'iconfont';
-	src: url('http://zc.imaumm.com/wap/tpl/default/images/iconfont/iconfont.eot');
-	src: url('http://zc.imaumm.com/wap/tpl/default/images/iconfont/iconfont.eot?#iefix') format('embedded-opentype'), url('http://zc.imaumm.com/wap/tpl/default/images/iconfont/iconfont.woff') format('woff'), url('http://zc.imaumm.com/wap/tpl/default/images/iconfont/iconfont.ttf') format('truetype'), url('http://zc.imaumm.com/wap/tpl/default/images/iconfont/iconfont.svg#iconfont') format('svg');
+	src: url('../fonts/iconfont.eot');
+	src: url('../fonts/iconfont.eot?#iefix') format('embedded-opentype'), url('../fonts/iconfont.woff') format('woff'), url('../fonts/iconfont.ttf') format('truetype'), url('../fonts/iconfont.svg#iconfont') format('svg');
 	/* iOS 4.1-*/
 }
 .iconfont {
@@ -818,7 +818,7 @@ nav.tab_hd a ,.selectbox1 .search ,.selectbj .search_cate {
 	height: 32px;
 	display: block;
 	margin:15px auto 5px;
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/icon_plus.png) 0 0 no-repeat;
+	background:url(../images/icon_plus.png) 0 0 no-repeat;
 	background-size:32px;
 }
 .uploadbox .fileupload .filebox {
@@ -1133,7 +1133,7 @@ nav.tab_hd a ,.selectbox1 .search ,.selectbj .search_cate {
 	text-align:center;
 }
 .banner .bd li img {
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/loading.gif) center center no-repeat;
+	background:url(../images/loading.gif) center center no-repeat;
 	vertical-align:top;
 	width:100%;
 	/* 图片宽度100%，达到自适应效果*/
@@ -1303,7 +1303,7 @@ nav.tab_hd a ,.selectbox1 .search ,.selectbj .search_cate {
 	padding-top:7px;
 }
 .foot .invest_plus .icon_plus {
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/invest_plus.gif) no-repeat;
+	background:url(../images/invest_plus.gif) no-repeat;
 	display:block;
 	width:23px;
 	height:23px;
@@ -1379,10 +1379,10 @@ nav.tab_hd a ,.selectbox1 .search ,.selectbj .search_cate {
 	margin-bottom:6px;
 }
 #gotop {
-	background-image: url(http://zc.imaumm.com/wap/tpl/default/images/goTop.png);
+	background-image: url(../images/goTop.png);
 }
 #gobot {
-	background-image: url(http://zc.imaumm.com/wap/tpl/default/images/goBottom.png);
+	background-image: url(../images/goBottom.png);
 }
 /* 返回顶部 结束*/
 	/* index 开始*/
@@ -3012,7 +3012,7 @@ input.edit_select[type=radio]:checked:after {
 	margin-bottom: 17px;
 }
 .timeline-time-mark-t p, .timeline-time-mark-t span {
-	background: url(http://zc.imaumm.com/wap/tpl/default/images/time_line.png) no-repeat;
+	background: url(../images/time_line.png) no-repeat;
 	display: block;
 	float: left;
 	height: 25px;
@@ -3028,7 +3028,7 @@ input.edit_select[type=radio]:checked:after {
 	padding-left: 42px;
 }
 .deal_update .timeline-time-mark-t span {
-	background: url(http://zc.imaumm.com/wap/tpl/default/images/time_line.png) no-repeat;
+	background: url(../images/time_line.png) no-repeat;
 	background-position: -292px -29px;
 	width: 16px;
 }
@@ -3063,7 +3063,7 @@ input.edit_select[type=radio]:checked:after {
 	overflow:hidden;
 }
 .deal_update .projects-dynamic-open {
-	background: url(http://zc.imaumm.com/wap/tpl/default/images/time_line.png);
+	background: url(../images/time_line.png);
 	background-position: left -374px;
 	height: 23px;
 	margin: -11px 0 0 511px;
@@ -3276,7 +3276,7 @@ input.edit_select[type=radio]:checked:after {
 	position:relative;
 }
 .deal_info .timeline-left-gray {
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/time_line.png) no-repeat;
+	background:url(../images/time_line.png) no-repeat;
 	background-position:left -116px;
 	height:29px;
 	left:-38px;
@@ -3301,7 +3301,7 @@ input.edit_select[type=radio]:checked:after {
 	text-decoration:none;
 }
 .deal_info .projects-dynamic-open {
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/time_line.png);
+	background:url(../images/time_line.png);
 	background-position:left -374px;
 	height:23px;
 	margin:-11px 0 0 511px;
@@ -3568,7 +3568,7 @@ input.edit_select[type=radio]:checked:after {
 	top:10px;
 	width:25px;
 	height:25px;
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/investor_num.png) no-repeat;
+	background:url(../images/investor_num.png) no-repeat;
 	background-size:25px auto;
 	text-align: center;
 }
@@ -3777,6 +3777,9 @@ input.edit_select[type=radio]:checked:after {
 	white-space: pre-wrap;
 	vertical-align: middle;
 	line-height: 1.2;
+}
+.index_category .items .bg0 {
+	background:#1c5e8e;
 }
 .index_category .items .bg1 {
 	background:#ffa54b;
@@ -4174,7 +4177,7 @@ input.edit_select[type=radio]:checked:after {
 	width:36px;
 	height:36px;
 	display:block;
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/protype_icon.png) no-repeat;
+	background:url(../images/protype_icon.png) no-repeat;
 	background-size:36px;
 }
 .project_choose .cp_icon {
@@ -4350,7 +4353,7 @@ input.edit_select[type=radio]:checked:after {
 /* leader_info 结束*/
 	/** * weebox.css * * weebox style * * @category javascript * @package jquery * @author Jack <xiejinci@gmail.com> * @copyright Copyright (c) 2006-2008 9wee Com. (http://www.9wee.com) * @license http://www.9wee.com/license/ * @version*/
 	.dialog-loading {
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/loading.gif) no-repeat center;
+	background:url(../images/loading.gif) no-repeat center;
 	width:32px;
 	height:32px;
 	margin:20px auto;
@@ -4387,7 +4390,7 @@ input.edit_select[type=radio]:checked:after {
 	margin:3px 3px 0 0;
 	height:11px;
 	width:11px;
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/close.gif) no-repeat;
+	background:url(../images/close.gif) no-repeat;
 }
 .dialog-box .dialog-content {
 	clear:both;
@@ -4408,37 +4411,37 @@ input.edit_select[type=radio]:checked:after {
 	border:1px solid #924949;
 }
 .errorbox .dialog-content {
-	background:#fff url(http://zc.imaumm.com/wap/tpl/default/images/e_bg.jpg) bottom right no-repeat;
+	background:#fff url(../images/e_bg.jpg) bottom right no-repeat;
 }
 .errorbox .dialog-header {
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/e_hd.gif) repeat-x;
+	background:url(../images/e_hd.gif) repeat-x;
 	color:#6f2c2c;
 }
 .warningbox {
 	border:1px solid #c5a524;
 }
 .warningbox .dialog-content {
-	background:#fff url(http://zc.imaumm.com/wap/tpl/default/images/w_bg.jpg) bottom right no-repeat;
+	background:#fff url(../images/w_bg.jpg) bottom right no-repeat;
 }
 .warningbox .dialog-header {
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/w_hd.gif) repeat-x;
+	background:url(../images/w_hd.gif) repeat-x;
 	color:#957c17;
 }
 .successbox {
 	border:1px solid #60a174;
 }
 .successbox .dialog-content {
-	background:#fff url(http://zc.imaumm.com/wap/tpl/default/images/s_bg.jpg) bottom right no-repeat;
+	background:#fff url(../images/s_bg.jpg) bottom right no-repeat;
 }
 .successbox .dialog-header {
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/s_hd.gif) repeat-x;
+	background:url(../images/s_hd.gif) repeat-x;
 	color:#3c7f51;
 }
 .promptbox {
 	border:1px solid #cccccc;
 }
 .promptbox .dialog-content {
-	background:#fff url(http://zc.imaumm.com/wap/tpl/default/images/p_bg.jpg) bottom right no-repeat;
+	background:#fff url(../images/p_bg.jpg) bottom right no-repeat;
 }
 .promptbox .dialog-header {
 	background:#edf3f7;
@@ -4523,8 +4526,8 @@ input.edit_select[type=radio]:checked:after {
 	top:0px;
 	width:8px;
 	height:8px;
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/lb_left_top.png) no-repeat;
-	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="http://zc.imaumm.com/wap/tpl/default/images/lb_left_top.png");
+	background:url(../images/lb_left_top.png) no-repeat;
+	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="../images/lb_left_top.png");
 	_background:none;
 }
 .weedialog .dialog-tc {
@@ -4532,8 +4535,8 @@ input.edit_select[type=radio]:checked:after {
 	margin-right:8px;
 	width:auto;
 	height:8px;
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/lb_border.png) repeat-x;
-	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="http://zc.imaumm.com/wap/tpl/default/images/lb_border.png");
+	background:url(../images/lb_border.png) repeat-x;
+	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="../images/lb_border.png");
 	_background:none;
 	overflow:hidden;
 }
@@ -4543,20 +4546,20 @@ input.edit_select[type=radio]:checked:after {
 	top:0px;
 	width:8px;
 	height:8px;
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/lb_right_top.png) no-repeat;
-	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="http://zc.imaumm.com/wap/tpl/default/images/lb_right_top.png");
+	background:url(../images/lb_right_top.png) no-repeat;
+	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="../images/lb_right_top.png");
 	_background:none;
 }
 .weedialog .dialog-close {
 	cursor:pointer;
-	/*background:url(http://zc.imaumm.com/wap/tpl/default/images/light_box_close_btn.png) no-repeat;
+	/*background:url(../images/light_box_close_btn.png) no-repeat;
 	font-size:0px;*/
 	line-height:0px;
 	height:15px;
 	width:15px;
 	float:right;
 	margin:8px 10px 0 0;
-	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="http://zc.imaumm.com/wap/tpl/default/images/light_box_close_btn.png");
+	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="../images/light_box_close_btn.png");
 	_background:none;
 }
 .weedialog .dialog-close .fa-times {
@@ -4578,14 +4581,14 @@ input.edit_select[type=radio]:checked:after {
 }
 .weedialog .dialog-cl {
 	width:8px;
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/lb_border.png);
-	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="http://zc.imaumm.com/wap/tpl/default/images/lb_border.png");
+	background:url(../images/lb_border.png);
+	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="../images/lb_border.png");
 	_background:none;
 }
 .weedialog .dialog-cr {
 	width:8px;
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/lb_border.png);
-	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="http://zc.imaumm.com/wap/tpl/default/images/lb_border.png");
+	background:url(../images/lb_border.png);
+	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="../images/lb_border.png");
 	_background:none;
 }
 .weedialog .dialog-button {
@@ -4622,8 +4625,8 @@ input.edit_select[type=radio]:checked:after {
 	top:0px;
 	width:8px;
 	height:8px;
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/lb_left_bottom.png) no-repeat;
-	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="http://zc.imaumm.com/wap/tpl/default/images/lb_left_bottom.png");
+	background:url(../images/lb_left_bottom.png) no-repeat;
+	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="../images/lb_left_bottom.png");
 	_background:none;
 }
 .weedialog .dialog-bc {
@@ -4631,8 +4634,8 @@ input.edit_select[type=radio]:checked:after {
 	margin-right:8px;
 	width:auto;
 	height:8px;
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/lb_border.png) repeat-x;
-	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="http://zc.imaumm.com/wap/tpl/default/images/lb_border.png");
+	background:url(../images/lb_border.png) repeat-x;
+	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="../images/lb_border.png");
 	_background:none;
 }
 .weedialog .dialog-br {
@@ -4641,8 +4644,8 @@ input.edit_select[type=radio]:checked:after {
 	top:0px;
 	width:8px;
 	height:8px;
-	background:url(http://zc.imaumm.com/wap/tpl/default/images/lb_right_bottom.png) no-repeat;
-	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="http://zc.imaumm.com/wap/tpl/default/images/lb_right_bottom.png");
+	background:url(../images/lb_right_bottom.png) no-repeat;
+	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod="scale", src="../images/lb_right_bottom.png");
 	_background:none;
 }
 /*.ui-button {

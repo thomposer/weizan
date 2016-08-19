@@ -1,28 +1,20 @@
 {template 'concise/headers'}
-<link type="text/css" rel="stylesheet" href="../web/resource/components/datetimepicker/bootstrap-datetimepicker.min.css" />
-<script type="text/javascript" src="../web/resource/components/datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <link rel="stylesheet" href="../addons/dayu_yuyuepay/template/mobile/concise/style.css">
 <link rel="stylesheet" href="../addons/dayu_yuyuepay/template/mobile/concise/sky-forms.css">
- {if $initCalendar}
-<script type="text/javascript">
-	$(function(){
-		$('.datepicker').each(function(){
-			$(this).datetimepicker({
-				format: "yyyy-mm-dd",
-				minView: "2",
-				pickerPosition: "top-right",
-				autoclose: true
-			});
-		});
-	});
-</script>
-{/if}
+    <script src="{TEMPLATE_PATH}time/js/mobiscroll_002.js" type="text/javascript"></script>
+	<script src="{TEMPLATE_PATH}time/js/mobiscroll_004.js" type="text/javascript"></script>
+	<link href="{TEMPLATE_PATH}time/css/mobiscroll_002.css" rel="stylesheet" type="text/css">
+	<script src="{TEMPLATE_PATH}time/js/mobiscroll.js" type="text/javascript"></script>
+	<script src="{TEMPLATE_PATH}time/js/mobiscroll_003.js" type="text/javascript"></script>
+	<script src="{TEMPLATE_PATH}time/js/mobiscroll_005.js" type="text/javascript"></script>
+	<link href="{TEMPLATE_PATH}time/css/mobiscroll_003.css" rel="stylesheet" type="text/css">
 <style>
 label.checkbox{font-size:14px;font-weight:normal}
 .sky-form header a{position:absolute;bottom:3px;right:3px;float:right;display:inline-block;font-size:12px;border:1px solid #499a68;background-color:#5cbbc1;color:#fff;line-height:22px;-webkit-border-radius: 1px;-moz-border-radius: 1px;-o-border-radius: 1px;padding:2px 10px;margin:5px 0 0;}
 .sky-form label.checkbox {width:100%;}
 .sky-form section.fuwu label{height:28px;}
 .sky-form label.checkbox span{float:right;width:58px;text-align:right;margin:0px 10px 0 0;color:#ff0000;font-size:14px;border-bottom:1px solid #e5e5e5;line-height:25px;}
+.dw {position: absolute;top: 0;height:25rem;left: 0;}
 </style>
 
 		<div class="body body-s">	
@@ -57,14 +49,53 @@ label.checkbox{font-size:14px;font-weight:normal}
 						</select>
 							<i></i>
 						</label>
-					</section>					
-					<section{if $activity['is_time'] == 1} style="display:none"{/if}>{$activity['yuyuename']}
+					</section>
+					
+	{if $activity['is_time']==0}
+	<section>{$activity['yuyuename']}
+						<label class="input">
+							<i class="icon-append fa-tablet"></i>
+							<input type="text" placeholder="{$yuyuetime}" name="yuyuetime" value="{$yuyuetime}" id="appDateTime" required>
+							<b class="tooltip tooltip-bottom-right">选择预约时间</b>
+						</label>
+	</section>
+	<script type="text/javascript">
+        $(function () {
+			var currYear = (new Date()).getFullYear();	
+			var opt={};
+			opt.date = {preset : 'date'};
+			opt.datetime = {preset : 'datetime'};
+			opt.time = {preset : 'time'};
+	var nowData=new Date();
+			opt.default = {
+				theme: 'wp', //皮肤样式
+		        display: 'bottom', //显示方式 
+		        mode: 'scroller', //日期选择模式
+				dateFormat: 'yyyy-mm-dd',
+				lang: 'zh',
+				showNow: true,
+				nowText: "今天",
+        cancelText: '取消',
+        setText: '确定',
+		    //    startYear: currYear - 0, //开始年份
+		    //    endYear: currYear + 0 //结束年份
+		minDate: new Date(nowData.getFullYear(),nowData.getMonth(),nowData.getDate(),nowData.getHours()+{$activity['kaishi']},00), 
+		maxDate: new Date(nowData.getFullYear(),nowData.getMonth(),nowData.getDate()+{$activity['tianshu']},{$activity['jieshu']},00), 
+			};
+
+		  	var optDateTime = $.extend(opt['datetime'], opt['default']);
+		    $("#appDateTime").mobiscroll(optDateTime).datetime(optDateTime);
+        });
+    </script>
+	{elseif $activity['is_time']==2}	
+	<section>{$activity['yuyuename']}
 						<label class="input">
 							<i class="icon-append fa fa-calendar"></i>
-							{php echo tpl_form_field_dateyy('yuyuetime', $yuyuetime, true)}
-							<b class="tooltip tooltip-bottom-right">请选择预约时间</b>
+							<input type="text" name="restime" id="restime" data-prompt-position="bottomLeft" readonly value="{$srvtime}" required>
+							<b class="tooltip tooltip-bottom-right">选择预约时间</b>
 						</label>
-					</section>
+	</section>
+	{/if}
 					<section>
 						<label class="select">
 						<select name="paytype">

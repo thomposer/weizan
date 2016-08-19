@@ -11,7 +11,7 @@ function ver_compare($version1, $version2) {
 	$version2 = str_replace('.', '', $version2);
 	$oldLength = istrlen($version1);
 	$newLength = istrlen($version2);
-	if(is_numeric($version1) && is_numeric($version2)) {	
+	if(is_numeric($version1) && is_numeric($version2)) {
 		if ($oldLength > $newLength) {
 			$version2 .= str_repeat('0', $oldLength - $newLength);
 		}
@@ -187,11 +187,16 @@ function range_limit($num, $downline, $upline, $returnNear = true) {
 }
 
 
-function ijson_encode($value) {
+function ijson_encode($value, $options = 0) {
 	if (empty($value)) {
 		return false;
 	}
-	return addcslashes(json_encode($value), "\\\'\"");
+	if (version_compare(PHP_VERSION, '5.4.0', '<') && $options == JSON_UNESCAPED_UNICODE) {
+		$json_str = preg_replace("#\\\u([0-9a-f]{4})#ie", "iconv('UCS-2', 'UTF-8', pack('H4', '\\1'))", json_encode($value));
+	} else {
+		$json_str = json_encode($value, $options);
+	}
+	return addcslashes($json_str, "\\\'\"");
 }
 
 
@@ -295,6 +300,7 @@ function wurl($segment, $params = array()) {
 	return $url;
 }
 
+
 function murl($segment, $params = array(), $noredirect = true, $addhost = false) {
 	global $_W;
 	list($controller, $action, $do) = explode('/', $segment);
@@ -321,11 +327,12 @@ function murl($segment, $params = array(), $noredirect = true, $addhost = false)
 		$queryString = http_build_query($params, '', '&');
 		$url .= $queryString;
 		if ($noredirect === false) {
-			$url .= '&wxref=mp.weixin.qq.com#wechat_redirect';
+						$url .= '&wxref=mp.weixin.qq.com#wechat_redirect';
 		}
 	}
 	return $url;
 }
+
 
 function pagination($total, $pageIndex, $pageSize = 15, $url = '', $context = array('before' => 5, 'after' => 4, 'ajaxcallback' => '')) {
 	global $_W;
@@ -344,7 +351,7 @@ function pagination($total, $pageIndex, $pageSize = 15, $url = '', $context = ar
 	}
 
 	$pdata['tcount'] = $total;
-	$pdata['tpage'] = ceil($total / $pageSize);
+	$pdata['tpage'] = (empty($pageSize) || $pageSize < 0) ? 1 : ceil($total / $pageSize);
 	if ($pdata['tpage'] <= 1) {
 		return '';
 	}
@@ -432,22 +439,19 @@ function tomedia($src, $local_path = false){
 	if (empty($src)) {
 		return '';
 	}
-	if (strpos($src, './addons') === 0) {
-		return $_W['siteroot'] . str_replace('./', '', $src);
+	if (strexists($src, 'addons/')) {
+		return $_W['siteroot'] . substr($src, strpos($src, 'addons/'));
 	}
 		if (strexists($src, $_W['siteroot']) && !strexists($src, '/addons/')) {
 		$urls = parse_url($src);
 		$src = $t = substr($urls['path'], strpos($urls['path'], 'images'));
 	}
 	$t = strtolower($src);
-	if (strexists($t, 'https://mmbiz.qlogo.cn')) {
+	if (strexists($t, 'https://mmbiz.qlogo.cn') || strexists($t, 'http://mmbiz.qpic.cn')) {
 		return url('utility/wxcode/image', array('attach' => $src));
 	}
 	if (strexists($t, 'http://') || strexists($t, 'https://')) {
 		return $src;
-	}
-	if (strexists($src, 'https://mmbiz.qlogo.cn')) {
-		return url('utility/wxcode/image', array('attach' => $src));
 	}
 	if ($local_path || empty($_W['setting']['remote']['type']) || file_exists(IA_ROOT . '/' . $_W['config']['upload']['attachdir'] . '/' . $src)) {
 		$src = $_W['siteroot'] . $_W['config']['upload']['attachdir'] . '/' . $src;
@@ -771,7 +775,7 @@ function xml2array($xml) {
 		if (is_array($result)) {
 			return $result;
 		} else {
-			return array();
+			return '';
 		}
 	} else {
 		return $result;
@@ -842,17 +846,17 @@ function media2local($media_id, $all = false){
 
 function aes_decode($message, $encodingaeskey = '', $appid = '') {
 	$key = base64_decode($encodingaeskey . '=');
-	
+
 	$ciphertext_dec = base64_decode($message);
 	$module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
 	$iv = substr($key, 0, 16);
-	
+
 	mcrypt_generic_init($module, $key, $iv);
 	$decrypted = mdecrypt_generic($module, $ciphertext_dec);
 	mcrypt_generic_deinit($module);
 	mcrypt_module_close($module);
 	$block_size = 32;
-	
+
 	$pad = ord(substr($decrypted, -1));
 	if ($pad < 1 || $pad > 32) {
 		$pad = 0;
@@ -875,11 +879,11 @@ function aes_decode($message, $encodingaeskey = '', $appid = '') {
 function aes_encode($message, $encodingaeskey = '', $appid = '') {
 	$key = base64_decode($encodingaeskey . '=');
 	$text = random(16) . pack("N", strlen($message)) . $message . $appid;
-	
+
 	$size = mcrypt_get_block_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
 	$module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
 	$iv = substr($key, 0, 16);
-	
+
 	$block_size = 32;
 	$text_length = strlen($text);
 		$amount_to_pad = $block_size - ($text_length % $block_size);
@@ -920,9 +924,33 @@ function iarray_change_key_case($array, $case = CASE_LOWER){
 	}
 	$array = array_change_key_case($array, $case);
 	foreach ($array as $key => $value){
-		if (is_array($value)) {
+		if (empty($value) && is_array($value)) {
+			$array[$key] = '';
+		}
+		if (!empty($value) && is_array($value)) {
 			$array[$key] = iarray_change_key_case($value, $case);
 		}
 	}
 	return $array;
+}
+
+function strip_gpc($values, $type = 'g') {
+	$filter = array(
+		'g' => "'|(and|or)\\b.+?(>|<|=|in|like)|\\/\\*.+?\\*\\/|<\\s*script\\b|\\bEXEC\\b|UNION.+?SELECT|UPDATE.+?SET|INSERT\\s+INTO.+?VALUES|(SELECT|DELETE).+?FROM|(CREATE|ALTER|DROP|TRUNCATE)\\s+(TABLE|DATABASE)",
+		'p' => "\\b(and|or)\\b.{1,6}?(=|>|<|\\bin\\b|\\blike\\b)|\\/\\*.+?\\*\\/|<\\s*script\\b|\\bEXEC\\b|UNION.+?SELECT|UPDATE.+?SET|INSERT\\s+INTO.+?VALUES|(SELECT|DELETE).+?FROM|(CREATE|ALTER|DROP|TRUNCATE)\\s+(TABLE|DATABASE)",
+		'c' => "\\b(and|or)\\b.{1,6}?(=|>|<|\\bin\\b|\\blike\\b)|\\/\\*.+?\\*\\/|<\\s*script\\b|\\bEXEC\\b|UNION.+?SELECT|UPDATE.+?SET|INSERT\\s+INTO.+?VALUES|(SELECT|DELETE).+?FROM|(CREATE|ALTER|DROP|TRUNCATE)\\s+(TABLE|DATABASE)",
+	);
+	if (!isset($values)) {
+		return '';
+	}
+	if(is_array($values)) {
+		foreach($values as $key => $val) {
+			$values[addslashes($key)] = strip_gpc($val, $type);
+		}
+	} else {
+		if (preg_match("/".$filter[$type]."/is", $values, $match) == 1) {
+			$values = '';
+		}
+	}
+	return $values;
 }

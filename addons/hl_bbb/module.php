@@ -51,8 +51,8 @@ class Hl_bbbModule extends WeModule {
 			'end_time' => strtotime($_GPC['end_time']),
 
 		);
-		if (intval($insert['maxlottery']) < 2) {
-			$insert['maxlottery'] = 2;
+		if (intval($insert['maxlottery']) < 1) {
+			$insert['maxlottery'] = 1;
 
 		}
 		if (empty($id)) {
@@ -61,7 +61,7 @@ class Hl_bbbModule extends WeModule {
 			if (!empty($_GPC['picture'])) {
 				file_delete($_GPC['picture-old']);
 			} else {
-				unset($insert['picture']);
+//				unset($insert['picture']);
 			}
 			pdo_update($this->tablename, $insert, array('id' => $id));
 		}

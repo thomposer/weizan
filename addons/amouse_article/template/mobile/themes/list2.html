@@ -51,7 +51,7 @@
             {loop $advlist $adv}
             <div class="swipe-item ui-swipeslide-slide" style="width: 338px;">
                 <a href="{$adv[link]}">
-                    <img align="absmiddle" src="{php echo strpos($adv['thumb'], 'http://') === FALSE ? ($_W['attachurl'].$adv['thumb']) : $adv['thumb']}" style="height:154px" >
+                    <img align="absmiddle" src="{php echo strpos($adv['thumb'], 'http://') === FALSE ? tomedia($adv['thumb']) : $adv['thumb']}" style="height:154px" >
                 </a>
                 <div class="bottom">
                     <div class="title">{$adv[title]}</div>
@@ -123,7 +123,7 @@
                 <p class="title" title="{$row[title]}">{php echo cutstr($row[title],12)} </p>
                 <p class="summary" title="{$row[description]}">{php echo cutstr($row[description],12)}</p>
                 {if !empty($row['thumb'])}
-                <img src="{php echo strpos($row['thumb'],'http://')===FALSE?($_W['attachurl'].$row['thumb']):$row['thumb']}" height="65" width="45"/>
+                <img src="{php echo strpos($row['thumb'],'http://')===FALSE?tomedia($row['thumb']):$row['thumb']}" height="65" width="45"/>
                 {/if}
                 <div class="right-arrow"></div>
                 </a>
@@ -136,7 +136,7 @@
                 <p class="title">{$row[name]}</p>
                 <p class="summary">{$row[description]}</p>
                 {if !empty($row['thumb'])}
-                <img src="{php echo strpos($row['thumb'],'http://')===FALSE?($_W['attachurl'].$row['thumb']):$row['thumb']}" height="65" width="45"/>
+                <img src="{php echo strpos($row['thumb'],'http://')===FALSE?tomedia($row['thumb']):$row['thumb']}" height="65" width="45"/>
                 {/if}
                 <div class="right-arrow"></div>
                 </a>
@@ -148,7 +148,7 @@
 
     <div id="footer">
         {if !empty($set['footlogo'])}
-        <img align="absmiddle" src="{php echo strpos($set['footlogo'],'http://')=== FALSE?($_W['attachurl'].$set['footlogo']):$set['footlogo']}" style="height:54px;width: 100%;" >
+        <img align="absmiddle" src="{php echo strpos($set['footlogo'],'http://')=== FALSE?tomedia($set['footlogo']):$set['footlogo']}" style="height:54px;width: 100%;" >
         {else} @Copyright {$_W['account']['name']}
         {/if}
     </div>

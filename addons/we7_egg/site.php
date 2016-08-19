@@ -221,7 +221,7 @@ class We7_eggModuleSite extends WeModuleSite {
 		$uid = intval($_W['member']['uid']);
 		$id = intval($_GPC['id']);
 
-		$sql = 'SELECT `id`, `periodlottery`, `maxlottery`, `default_tips`, `misscredit`, `hitcredit` FROM '
+		$sql = 'SELECT `id`, `periodlottery`, `maxlottery`,`maxaward`, `default_tips`, `misscredit`, `hitcredit` FROM '
 				. tablename('egg_reply') . ' WHERE `rid` = :rid';
 		$params = array(':rid' => $id);
 		$egg = pdo_fetch($sql, $params);
@@ -251,7 +251,10 @@ class We7_eggModuleSite extends WeModuleSite {
 				message($result, '', 'ajax');
 			}
 		}
-
+		$count_award = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('egg_winner')." WHERE uniacid = :uniacid AND rid = :rid AND uid = :uid", array(':uniacid' => $_W['uniacid'], ':rid' => $id, ':uid' => $uid));
+		if ($count_award + 1 > $egg['maxaward'] && !empty($egg['maxaward'])) {
+			message(error(-1, '你已达到最大领奖限制'), '', 'ajax');
+		}
 		$sql = 'SELECT * FROM ' . tablename('egg_award') . ' WHERE `rid` = :rid ORDER BY `probalilty`';
 		$gifts = pdo_fetchall($sql, array(':rid' => $id));
 

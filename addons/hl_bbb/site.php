@@ -188,7 +188,7 @@ class Hl_bbbModuleSite extends WeModuleSite {
 		mc_oauth_userinfo($_W['acid']);
 
 		$bbb['descriptions'] = str_replace(array("\r\n"), "", $bbb['description']);
-		$bbb['rule'] = preg_replace('/color:\s+\#\w+;/i', '', $bbb['rule']);
+//		$bbb['rule'] = preg_replace('/color:\s+\#\w+;/i', '', $bbb['rule']);
 		$followInfo = empty($_W['fans']['openid']) ? '提示：必须关注公众号才可以进入游戏' : '';
 		$sql = 'SELECT * FROM ' . tablename('bbb_user') . ' WHERE `rid` = :rid AND `from_user` = :from_user';
 		$params = array(':rid' => $id, ':from_user' => $_W['fans']['openid']);

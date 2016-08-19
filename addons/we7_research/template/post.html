@@ -99,6 +99,20 @@
 						<input type="text" class="form-control" name="mobile" value="{$activity['mobile']}" maxlength="11" />
 					</div>
 				</div>
+        <div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启全局短信</label>
+				<div class="col-sm-9 col-xs-12">
+					<label class='radio-inline'><input type="radio" name="is_sms" value="0" {if $activity['is_sms'] == 0} checked="true" {/if} onclick="$('#sms_id').show();">开启</label>
+					<label class='radio-inline'><input type="radio" name="is_sms" value="1"  {if $activity['is_sms'] == 1} checked="true" {/if} onclick="$('#sms_id').hide();"> 关闭</label>
+				</div>
+			</div>
+    <div class="form-group " id="sms_id" {if $activity['is_sms']!='0'}style="display: none;"{/if}>
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">短信模板ID<div class="help-block">编号：SMS_10275471</div></label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" class="form-control" name="sms_id" value="{$activity['sms_id']}" >
+                <div class="help-block">在阿里大鱼设置的短信模板，可设置变量${phone},${name}</div>
+            </div>
+        </div>
             </div>
         </div>
         <div class="panel panel-default">

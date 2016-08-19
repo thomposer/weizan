@@ -236,6 +236,9 @@ if($do == 'optimize') {
 
 if($do == 'run') {
 	$_W['page']['title'] = '运行SQL - 数据库 - 系统管理';
+	if (!DEVELOPMENT) {
+		message('请先开启开发模式后再使用此功能', referer(), 'info');
+	}
 	if(checksubmit()) {
 		$sql = $_POST['sql'];
 		pdo_run($sql);

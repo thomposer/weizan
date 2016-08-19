@@ -31,7 +31,7 @@
 				);
 			if(pdo_insert('auction_record',$data)){
 				pdo_update('auction_goodslist', $s_data, array('id' => $_GPC['id']));
-				$records = pdo_fetchall("SELECT * FROM ".tablename('auction_record')." WHERE uniacid = '{$weid}' and sid= '{$sid}' order by id desc LIMIT 0,1 ");
+				$records = pdo_fetchall("SELECT * FROM ".tablename('auction_record')." WHERE uniacid = '{$weid}' and sid= '{$sid}' order by id desc LIMIT 0,2 ");
 				load()->model('account');
 				$sendinfo = '您参与的拍品：\n';
 				$sendinfo .= $goods['title'].'\n';
@@ -39,7 +39,7 @@
 				$send['msgtype'] = 'text';
 				$send['text'] = array('content' => urlencode($sendinfo));
 				$acc = WeAccount::create($_W['acid']);
-				$send['touser'] = trim($records[0]['from_user']);
+				$send['touser'] = trim($records[1]['from_user']);
 				$s_mess = $acc->sendCustomNotice($send);
 				message('出价成功！',$this->createMobileUrl('record'),'success');
 			}else{
@@ -76,7 +76,7 @@
 			if(pdo_insert('auction_record',$data)){
 				pdo_update('auction_goodslist', $s_data, array('id' => $_GPC['id']));
 				pdo_update('auction_member', $m_data, array('id' => $proplemess['id']));
-				$records = pdo_fetchall("SELECT * FROM ".tablename('auction_record')." WHERE uniacid = '{$weid}' and sid= '{$sid}' order by id desc LIMIT 0,1 ");
+				$records = pdo_fetchall("SELECT * FROM ".tablename('auction_record')." WHERE uniacid = '{$weid}' and sid= '{$sid}' order by id desc LIMIT 0,2 ");
 				load()->model('account');
 				$sendinfo = '您参与的拍品：\n';
 				$sendinfo .= $goods['title'].'\n';
@@ -84,7 +84,7 @@
 				$send['msgtype'] = 'text';
 				$send['text'] = array('content' => urlencode($sendinfo));
 				$acc = WeAccount::create($_W['acid']);
-				$send['touser'] = trim($records[0]['from_user']);
+				$send['touser'] = trim($records[1]['from_user']);
 				$s_mess = $acc->sendCustomNotice($send);
 				message('出价成功！',$this->createMobileUrl('record'),'success');
 			}else{

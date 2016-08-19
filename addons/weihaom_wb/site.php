@@ -34,9 +34,11 @@ class Weihaom_wbModuleSite extends WeModuleSite {
             }
             message($user['score'], '', 'ajax');
         }
-
+        
         if (empty($user)) {
-        	$result = mc_fetch($_W['member']['uid'], array('nickname'));
+        	// 必须设置昵称才能踩白块
+        	mc_require($_W['member']['uid'], array('nickname') , '需要完善资料后才能踩白块.');
+			$result = mc_fetch($_W['member']['uid'], array('nickname'));
             $insert = array(
                 'weid' => $_W['uniacid'],
                 'rid' => $params[':rid'],

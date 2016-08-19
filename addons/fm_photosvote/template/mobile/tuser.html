@@ -3,6 +3,65 @@
 <link rel="stylesheet" type="text/css" href="{FM_STATIC_MOBILE}public/css/tuser.css?v=1">
 {template 'hnav'}
 <style type="text/css">
+{if $rbody['tuser']}
+	.container-fill {
+		 background: {$rbody_tuser['tuser_bgcolor']};
+	}
+	.tongji {
+      background: {$rbody_tuser['tuser_tj_bgcolor']} url({php echo toimage($rbody_tuser['tuser_tj_bgimg'])}) repeat-x -60px 0;
+    }
+    .tongji li span strong{
+        color: {$rbody_tuser['tuser_tj_num_color']};
+    }
+    .tongji li .tj_display{
+        color: {$rbody_tuser['tuser_tj_text_color']};
+    }
+
+	.product .uli .paihangcha {
+		position: relative;top: -20px;padding: 5px;
+	    border-bottom: 0;
+	    background-color: {$rbody_tuser['tuser_level_bg_color']};
+	    border-top: 1px solid {$rbody_tuser['tuser_level_bg_color']};
+	    color: {$rbody_tuser['tuser_level_text_color']};
+	}
+	.product .uli .paihangcha strong{
+		color: {$rbody_tuser['tuser_level_num_color']};
+	}
+	.center .lititle strong {
+		color: {$rbody_tuser['tuser_xq_title_color']};
+		border-bottom: 1px {$rbody_tuser['tuser_xq_title_down_color']} solid;
+	}
+	.product .uli dd .pull-right a {
+		color: {$rbody_tuser['tuser_xq_title_ck_color']};
+	}
+	.center .licon {
+	    color: {$rbody_tuser['tuser_xq_content_color']};
+	}
+
+	.product .uli{background: {if empty($rbody_tuser['tuser_xq_bg_color'])} #FFFFFF{else}{$rbody_tuser['tuser_xq_bg_color']}{/if}; }
+	.product .uli dd{
+		color: {if empty($rbody_tuser['tuser_xq_content_color'])}#555555{else}{$rbody_tuser['tuser_xq_content_color']}{/if};
+	    border-bottom: 15px {$rbody_tuser['tuser_xq_jg_color']} solid;
+	 }
+
+	.product .uli dl .bnum{ color:{if empty($rbody_tuser['tuser_level_num_color'])}#fff{else}{$rbody_tuser['tuser_level_num_color']}{/if}; }
+	.product .uli dd .ulis {
+	    background-color: {if empty($rbody_tuser['tuser_xq_bg_color'])} #FFFFFF{else}{$rbody_tuser['tuser_xq_bg_color']}{/if}; };
+	}
+	.lapiao {
+	  background: {if empty($rbody_tuser['tuser_bottom_bg_color'])}#942768{else}{$rbody_tuser['tuser_bottom_bg_color']}{/if};
+	}
+	.lapiao .l {
+	    color: {$rbody_tuser['tuser_bottom_text_color']};
+	    background:url({FM_STATIC_MOBILE}public/photos/lapiao.png) no-repeat 20px 12px;background-size:24px;
+	}
+	.lapiao .r{ background:url({FM_STATIC_MOBILE}public/photos/lapiao.png) no-repeat 20px -25px;background-size:24px;}
+	.addl .i {
+	    background: {$rbody_tuser['tuser_bottom_yuan_bg_color']};
+	    border: 5px solid {$rbody_tuser['tuser_bottom_yuan_border_color']};
+	    color: {$rbody_tuser['tuser_bottom_yuan_text_color']};
+	}
+{else}
 	.product .uli{background: {if empty($rbody['bodytscolor'])} #FFFFFF{else}{$rbody['bodytscolor']}{/if} url({php echo toimage($rbody['bodytsbg'])}) center no-repeat {$rbody['bodytscolor']}; }
 	.product .uli dl .bnum{ color:{if empty($rbody['bodynumcolor'])}#fff{else}{$rbody['bodynumcolor']}{/if}; }
 	.product .uli dd{color: {if empty($rbody['bodytextcolor'])}#555555{else}{$rbody['bodytextcolor']}{/if}; }
@@ -24,7 +83,26 @@
 	    color: #fff;
 	    border-bottom: 0;
 	}
-
+	.lapiao {
+	  background: {if empty($rbody_tuser['tuser_bottom_bg_color'])}#942768{else}{$rbody_tuser['tuser_bottom_bg_color']}{/if};
+	}
+	.lapiao .l {
+	    color: {$rbody_tuser['tuser_bottom_text_color']};
+	    background:url({FM_STATIC_MOBILE}public/photos/lapiao.png) no-repeat 20px 12px;background-size:24px;
+	}
+	.lapiao .r{ background:url({FM_STATIC_MOBILE}public/photos/lapiao.png) no-repeat 20px -25px;background-size:24px;}
+{/if}
+	.videoadv {
+		    position: relative;
+    /* top: 21%; */
+    /* left: 10%; */
+    width: 200px;
+    margin: 0px auto;
+    /* background-color: rgb(255, 255, 255); */
+    margin-top: -200px;
+    /* z-index: 11111111111; */
+    height: 200px;
+	}
 </style>
  <div class="center">
  	<div class="product">
@@ -47,9 +125,9 @@
 						<div class="tongji" >
 							<ul>
 						    	<li><span class="tj_display"><i class="fa fa-list-ul"></i> 编号 ID</span><br /><span><strong>{$user['uid']}</strong></span></li>
-						    	<li><span class="tj_display"><i class="fa fa-cubes"></i> {$rdisplay['tpsname']}</span><br /><span id="">{php echo $user['photosnum'] + $user['xnphotosnum']}</span></li>
-						    	<li><span class="tj_display"><i class="fa fa-eye"></i> {$rdisplay['rqname']}</span><br /><span id="">{php echo $user['hits'] + $user['xnhits']}</span></li>
-						    	<li><span class="tj_display"><i class="fa fa-external-link-square"></i> 转发量</span><br /><span id="">{php echo $sharenum}</span></li>
+						    	<li><span class="tj_display"><i class="fa fa-cubes"></i> {$rdisplay['tpsname']}</span><br /><span id=""><strong>{php echo $user['photosnum'] + $user['xnphotosnum']}</strong></span></li>
+						    	<li><span class="tj_display"><i class="fa fa-eye"></i> {$rdisplay['rqname']}</span><br /><span id=""><strong>{php echo $user['hits'] + $user['xnhits']}</strong></span></li>
+						    	<li><span class="tj_display"><i class="fa fa-external-link-square"></i> 转发量</span><br /><span id=""><strong>{php echo $sharenum}</strong></span></li>
 						    </ul>
 						</div>
 						
@@ -93,7 +171,7 @@
 							{if !empty($picarrs)}
 								<dd>
 									<div >
-										<span class="lititle" style="color:#555555;"><strong><i class="fa fa-photo"></i> 相册</strong></span>
+										<span class="lititle" ><strong><i class="fa fa-photo"></i> 相册</strong></span>
 										<span class="pull-right"><a href="{php echo $this->createMobileUrl('tuserphotos', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}">查看 <i class="fa fa-angle-right"></i></a></span>
 									</div>
 									<div class="licon">
@@ -149,12 +227,54 @@
 										<div class="lititle"><strong><i class="fa fa-video-camera"></i> 展示视频</strong></div>
 										<div class="licon" style="  text-align: center;  margin: 0 auto; ">
 											
-											<video controls width="100%" height="264" poster="{php echo $this->getphotos($fmimage['photos'], $user['avatar'], $rbasic['picture'])}">
+											<video id="videocon" controls width="100%"  height="264" poster="{php echo $this->getphotos($fmimage['photos'], $user['avatar'], $rbasic['picture'])}" webkit-playsinline>
 												<source src="{php echo tomedia($user['vedio'])}" type='video/mp4' />
 												<p class="vjs-no-js">你的浏览器不支持该视频</a></p>
 											</video>
-											
-										</div>
+											<div class="videoadv" id="wd" style=" display: none;">
+                          					
+					                          <div><a href="{$zanzhu['link']}" target="_blank"><img src="{php echo tomedia($zanzhu['thumb'])}" style="width:100%"></a></div>
+                          					
+					                        </div>
+					                        <script type="text/javascript">
+					                          /**var video = document.getElementById("videocon");
+					                          video.addEventListener("contextmenu", function (e) { e.preventDefault(); e.stopPropagation(); }, false); 
+					                          video.onloadedmetadata = function () { 
+					                              var vLength = video.duration; 
+					                             // console.log(vLength); 
+					                          }
+				                          	setInterval(function(){
+												var vTime = parseInt(video.currentTime);
+
+												//console.log(vTime); 
+				                              	if (vTime == '2') {
+				                              		$("#wd").show();
+				                                	video.pause();
+				                                	video.controls=false;
+				                              		setTimeout(function(){
+				                              			$("#wd").hide();
+					                                	video.play();
+					                                	video.controls=true;
+				                              		},3000);
+				                              	}
+											},1000);
+											video.loop = false;
+					                          video.ontimeupdate = function (e) { 
+					                              var vTime = video.currentTime;
+					                              if (vTime < '2' && vTime > '1') {
+					                              	$("#wd").show();
+					                                video.pause();
+					                                video.controls=false;
+					                              	setTimeout(function(){
+					                              		$("#wd").hide();
+						                                video.play();
+						                                video.controls=true;
+					                              	},3001110);
+					                              }
+					                          };
+					                          **/
+					                        </script>
+					                    </div> 
 									{/if}
 									{if $user['youkuurl']}
 										<div class="lititle"><strong><i class="fa fa-video-camera"></i> 网络视频</strong></div>	
@@ -212,7 +332,7 @@
 						{if $rdisplay['isvoteusers']}
 							<dd>
 								<div>
-									<span class="lititle" style="color:#555555;"><strong><i class="fa fa-user"></i> {if ($tfrom_user <> $from_user && !empty($from_user))}投Ta的人{else}投我的人{/if}</strong></span>
+									<span class="lititle" ><strong><i class="fa fa-user"></i> {if ($tfrom_user <> $from_user && !empty($from_user))}投Ta的人{else}投我的人{/if}</strong></span>
 									{if ($tfrom_user == $from_user && !empty($from_user))}
 										<span class="pull-right"><a href="{php echo $this->createMobileUrl('paihang', array('rid' => $rid, 'tfrom_user'=> $tfrom_user, 'votelog' => '1'))}">查看 <i class="fa fa-angle-right"></i></a></span>
 									{/if}
@@ -237,7 +357,7 @@
 						{if ($rvote['isbbsreply'] == 1) }
 							<dd class="reply" >
 								<div >
-									<span class="lititle" style="color:#555555;">
+									<span class="lititle" >
 										<strong ><i class="fa fa-comments-o"></i> {if ($tfrom_user <> $from_user && !empty($from_user))}Ta的评论{else}我的评论{/if}  
 											<a class="bnum" style="font-size:15px;color:#31708f">{if !empty($btotal)}( {$btotal} ){else}( 0 ){/if}</a>
 										</strong> 
@@ -248,7 +368,7 @@
 								<div class="licon" style="text-align: center;">
 									<div class="input-group" style="width: 100%;margin:0 auto">
 										<textarea style="height:50px; " class="form-control richtext-clone w" id="content" name="content" cols="70"></textarea>
-										<span class="input-group-btn">
+										<span class="input-group-btn" style="vertical-align: initial;">
 											<button type="submit" class="btn btn-default submit pull-right" style="height:50px;    text-shadow: 0px 0px 0px #000;" value="快捷回复" name="submit" ><i class="fa fa-comment-o"></i> 快捷回复</button>
 										</span>
 									</div>
@@ -289,33 +409,26 @@
 	
  	
 </div>
-<style type="text/css">
-	.lapiao .l{ background:url({FM_STATIC_MOBILE}public/photos/lapiao.png) no-repeat 20px 12px;background-size:24px;}
-	.lapiao .r{ background:url({FM_STATIC_MOBILE}public/photos/lapiao.png) no-repeat 20px -25px;background-size:24px;}
-	.lapiao {
-	  background: {if empty($rbody['foobg1'])}#942768{else}{$rbody['foobg1']}{/if};
-	}
-</style>
-<div class="lapiao">
+<div class="lapiao" style="background: {if empty($rbody_tuser['tuser_bottom_bg_color'])}#942768{else}{$rbody_tuser['tuser_bottom_bg_color']}{/if};">
 	<a href="{php echo $this->createMobileUrl('photosvote', array('rid'=> $rid))}" class="l">主页</a>
 	{if !empty($rdisplay['lapiao'])}<em class="r" onclick="button2()">{$rdisplay['lapiao']}</em>{/if}
     <div id="mcover" onclick="weChat()" style="display:none;">
             <img src="{FM_STATIC_MOBILE}public/photos/guide.png">
     </div>
-    {if ($tfrom_user <> $from_user && !empty($from_user))}
+    {if ($tfrom_user <> $from_user)}
 		{if $uallonetp >= $rvote['allonetp']}
-			<a href="Javescript:;"> <div class="addl" id="id"><div class="i"><i><img src="{FM_STATIC_MOBILE}public/photos/xin.png"></i>已投</div><span class="jia"></span></div></a>
+			<a href="Javescript:;"> <div class="addl" id="id"><div class="i"><i><img src="{if empty($rbody_tuser['tuser_bottom_yuan_image'])}{FM_STATIC_MOBILE}public/photos/xin.png{else}{php echo tomedia($rbody_tuser['tuser_bottom_yuan_image'])}{/if}"></i>已投</div><span class="jia"></span></div></a>
 			
 		{else}	
 			{if $udayonetp >= $rvote['dayonetp']}							
-				<a href="Javescript:;"> <div class="addl" id="id"><div class="i"><i><img src="{FM_STATIC_MOBILE}public/photos/xin.png"></i>已投</div><span class="jia"></span></div></a>
+				<a href="Javescript:;"> <div class="addl" id="id"><div class="i"><i><img src="{if empty($rbody_tuser['tuser_bottom_yuan_image'])}{FM_STATIC_MOBILE}public/photos/xin.png{else}{php echo tomedia($rbody_tuser['tuser_bottom_yuan_image'])}{/if}"></i>已投</div><span class="jia"></span></div></a>
 			{else}	
-				 <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" onclick="tvote()"> <div class="addl" id="id"><div class="i"><i><img src="{FM_STATIC_MOBILE}public/photos/xin.png"></i>投票</div><span class="jia"></span></div></a>
+				 <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" onclick="tvote()"> <div class="addl" id="id"><div class="i"><i><img src="{if empty($rbody_tuser['tuser_bottom_yuan_image'])}{FM_STATIC_MOBILE}public/photos/xin.png{else}{php echo tomedia($rbody_tuser['tuser_bottom_yuan_image'])}{/if}"></i>投票</div><span class="jia"></span></div></a>
 						
 			{/if}								
 		{/if}
 	{else}
-		<a href="{php echo $this->createMobileUrl('paihang', array('rid' => $rid, 'tfrom_user'=> $tfrom_user, 'votelog' => '1'))}"> <div class="addl" id="id"><div class="i"><i><img src="{FM_STATIC_MOBILE}public/photos/xin.png"></i>我的</div><span class="jia"></span></div></a>
+		<a href="{php echo $this->createMobileUrl('paihang', array('rid' => $rid, 'tfrom_user'=> $tfrom_user, 'votelog' => '1'))}"> <div class="addl" id="id"><div class="i"><i><img src="{if empty($rbody_tuser['tuser_bottom_yuan_image'])}{FM_STATIC_MOBILE}public/photos/xin.png{else}{php echo tomedia($rbody_tuser['tuser_bottom_yuan_image'])}{/if}"></i>我的</div><span class="jia"></span></div></a>
 		
 	{/if}
 	

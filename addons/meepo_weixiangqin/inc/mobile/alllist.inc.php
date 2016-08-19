@@ -28,6 +28,13 @@
 				       header("location:$url");
 				       exit;
 					}else{
+						if($cfg['telephoneconfirm'] == '1'){
+								if($res['telephoneconfirm'] == '0' || empty($res['telephone'])){
+									$smsurl=$this->createMobileUrl('sms');			
+									header("location:$smsurl");
+									exit;
+								} 
+						}
 						if(empty($res['nickname'])){
 							 $this->insertit();//录入
 						}

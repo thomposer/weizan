@@ -69,8 +69,8 @@
             <div class="header_div">
                 <div id="left_div" onClick="javascript:history.back();"></div>
                 <div id="middle_div">
-                    <form action="{php echo $this->createMobileUrl('register',array('op' => 'region'))}" method="post" id="suggest_form">
-                        <input type="search" name="keywords" id="suggest_input" class="search_css" placeholder="请填写您的小区名" />
+                    <form action="#" method="post" id="suggest_form">
+                        <input type="search" name="keyword" id="suggest_input" class="search_css" placeholder="请填写您的小区名" />
                         <input type="submit" id="suggest_submit" value="" />
                     </form>
                 </div>
@@ -124,10 +124,21 @@
                     wd = point.lat;
                     jd = point.lng;
                     keyw = "";
+                    var keyword = "{$_GPC['keyword']}";
+                    if (keyword) {
+                        keyw = keyword;
+                    };
                     xqAjax(wd, jd, keyw)
                 }
             }else{
-                xqAjax();
+                wd = 0;
+                jd = 0;
+                keyw = "";
+                var keyword = "{$_GPC['keyword']}";
+                if (keyword) {
+                    keyw = keyword;
+                };
+                xqAjax(wd, jd, keyw)
             }
             
                

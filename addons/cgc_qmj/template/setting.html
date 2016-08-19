@@ -1,0 +1,320 @@
+{template 'common/header'}
+
+
+
+<div class="main">
+	<form action="" method="post" class="form-horizontal form"  enctype="multipart/form-data"  id="setting-form">
+		<div class="panel panel-default">
+			<div class="panel-heading">参数设置</div>
+			<div class="panel-body">
+				<ul class="nav nav-tabs" id="myTab">
+				
+				
+					<li class="active"><a href="#tab_share2">分享设置(需要有js分享权限)</a></li>
+				<li><a href="#tab_share1">图片自定义设置</a></li>
+					<li><a href="#tab_share3">其他设置</a></li>
+				</ul>
+				<div class="tab-content">
+				
+					
+					<div class="tab-pane  active" id="tab_share2">
+										
+					  <div class="form-group" style="display:">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">分享标题</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="share_title" value="{$settings['share_title']}" class="form-control">
+                      <span class="help-block"><mark>#num#代表第几位.</mark>为在天堂的故亲，送上一份思念，点燃一段心香！(微信后台设置好js分享安全接口)</span>
+                    </div>
+                </div> 
+                
+                 <div class="form-group" style="display:">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">分享描述</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="share_desc" value="{$settings['share_desc']}" class="form-control">
+                      <span class="help-block"><mark>#num#代表第几位.</mark>清明季，寄哀思，燃心香，只为那份永远的怀想</span>
+                    </div>
+                </div> 
+    
+            <div class="form-group model0">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">分享的图片</label>
+                  <div class="col-sm-9 col-xs-12">            
+                    {php echo tpl_form_field_image('share_thumb',$settings['share_thumb']);}
+                     <div class="help-block">
+                     </div>  
+                </div>            
+          </div>
+          
+          
+            <div class="form-group" style="display:">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">分享成功跳转链接</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="success_url" value="{$settings['success_url']}" class="form-control">
+                      <span class="help-block">分享成功跳转链接，http开头</span>
+                    </div>
+                </div> 
+                
+           
+			</div>	
+			
+			
+			
+				
+			<div class="tab-pane" id="tab_share1">
+										
+		         <div class="form-group model0">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">图片1</label>
+                    <div class="col-sm-9 col-xs-12">            
+                    {php echo tpl_form_field_image('pic1',$settings['pic1'],'../addons/cgc_qmj/template/style/1-1.png');}
+                    <span class="help-block"> 默认图片，如果没有好的图片，可以设置默认值  。  
+                      <a href="../addons/cgc_qmj/template/style/1-1.png" target=_blank>点此查看图片 </a>                         
+                    <img src="../addons/cgc_qmj/template/style/1-1.png" width="60px" height="60px"> 
+                         
+                    </span> 
+                   </div>            
+                </div>
+                
+                 <div class="form-group model0">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">浮层1</label>
+                    <div class="col-sm-9 col-xs-12">            
+                    {php echo tpl_form_field_image('fpic1',$settings['fpic1'],'../addons/cgc_qmj/template/style/f1-1.jpg');}
+                    <span class="help-block"> 默认图片，如果没有好的图片，可以设置默认值  。  
+                      <a href="../addons/cgc_qmj/template/style/f1-1.jpg" target=_blank>点此查看图片 </a>                         
+                    <img src="../addons/cgc_qmj/template/style/f1-1.jpg" width="60px" height="60px"> 
+                         
+                    </span> 
+                   </div>            
+                </div>
+                
+                
+                   <div class="form-group model0">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">图片2</label>
+                    <div class="col-sm-9 col-xs-12">            
+                    {php echo tpl_form_field_image('pic2',$settings['pic2'],'../addons/cgc_qmj/template/style/2-1.png');}
+                    <span class="help-block"> 默认图片，如果没有好的图片，可以设置默认值  。  
+                      <a href="../addons/cgc_qmj/template/style/2-1.png" target=_blank>点此查看图片 </a>                         
+                    <img src="../addons/cgc_qmj/template/style/2-1.png" width="60px" height="60px"> 
+                         
+                    </span> 
+                   </div>            
+                </div>
+                
+                     <div class="form-group model0">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">浮层2</label>
+                    <div class="col-sm-9 col-xs-12">            
+                    {php echo tpl_form_field_image('fpic2',$settings['fpic2'],'../addons/cgc_qmj/template/style/f2-1.jpg');}
+                    <span class="help-block"> 默认图片，如果没有好的图片，可以设置默认值  。  
+                      <a href="../addons/cgc_qmj/template/style/f2-1.jpg" target=_blank>点此查看图片 </a>                         
+                    <img src="../addons/cgc_qmj/template/style/f2-1.jpg" width="60px" height="60px"> 
+                         
+                    </span> 
+                   </div>            
+                </div>
+                
+                
+                 <div class="form-group model0">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">图片3</label>
+                    <div class="col-sm-9 col-xs-12">            
+                    {php echo tpl_form_field_image('pic3',$settings['pic3'],'../addons/cgc_qmj/template/style/3-1.png');}
+                    <span class="help-block"> 默认图片，如果没有好的图片，可以设置默认值  。  
+                      <a href="../addons/cgc_qmj/template/style/3-1.png" target=_blank>点此查看图片 </a>                         
+                    <img src="../addons/cgc_qmj/template/style/3-1.png" width="60px" height="60px"> 
+                         
+                    </span> 
+                   </div>            
+                </div>
+                
+                     <div class="form-group model0">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">浮层3</label>
+                    <div class="col-sm-9 col-xs-12">            
+                    {php echo tpl_form_field_image('fpic3',$settings['fpic3'],'../addons/cgc_qmj/template/style/f3-1.jpg');}
+                    <span class="help-block"> 默认图片，如果没有好的图片，可以设置默认值  。  
+                      <a href="../addons/cgc_qmj/template/style/f3-1.jpg" target=_blank>点此查看图片 </a>                         
+                    <img src="../addons/cgc_qmj/template/style/f3-1.jpg" width="60px" height="60px"> 
+                         
+                    </span> 
+                   </div>            
+                </div>
+                
+                
+                  <div class="form-group model0">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">图片4</label>
+                    <div class="col-sm-9 col-xs-12">            
+                    {php echo tpl_form_field_image('pic4',$settings['pic4'],'../addons/cgc_qmj/template/style/4-1.png');}
+                    <span class="help-block"> 默认图片，如果没有好的图片，可以设置默认值  。  
+                      <a href="../addons/cgc_qmj/template/style/4-1.png" target=_blank>点此查看图片 </a>                         
+                    <img src="../addons/cgc_qmj/template/style/4-1.png" width="60px" height="60px"> 
+                         
+                    </span> 
+                   </div>            
+                </div>
+                
+                
+                 <div class="form-group model0">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">点灯按钮图片自定义</label>
+                    <div class="col-sm-9 col-xs-12">            
+                    {php echo tpl_form_field_image('dian',$settings['dian'],'../addons/cgc_qmj/template/style/dian.png');}
+                      <span class="help-block"> 默认图片，如果没有好的图片，可以设置默认值  。  
+                        <a href="../addons/cgc_qmj/template/style/dian.png" target=_blank>点此查看图片 </a>                         
+                        <img src="../addons/cgc_qmj/template/style/dian.png" width="60px" height="60px">                        
+                    </span> 
+                   </div>            
+                </div>
+                
+                 
+                 <div class="form-group model0">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">让更多人点亮按钮图片自定义</label>
+                    <div class="col-sm-9 col-xs-12">            
+                    {php echo tpl_form_field_image('dian3',$settings['dian3'],'../addons/cgc_qmj/template/style/dian3.png');}
+                       <span class="help-block"> 默认图片，如果没有好的图片，可以设置默认值  。  
+                         <a href="../addons/cgc_qmj/template/style/dian3.png" target=_blank>点此查看图片 </a>                         
+                        <img src="../addons/cgc_qmj/template/style/dian3.png" width="60px" height="60px">                        
+                      </span> 
+                   </div>            
+                </div>
+          
+          
+                
+                 <div class="form-group model0">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">点灯前图片</label>
+                    <div class="col-sm-9 col-xs-12">            
+                    {php echo tpl_form_field_image('fpic42',$settings['fpic42'],'../addons/cgc_qmj/template/style/f4-12.jpg');}
+                    <span class="help-block"> 默认图片，如果没有好的图片，可以设置默认值  。  
+                      <a href="../addons/cgc_qmj/template/style/f4-12.jpg" target=_blank>点此查看图片 </a>                         
+                    <img src="../addons/cgc_qmj/template/style/f4-12.jpg" width="60px" height="60px"> 
+                         
+                    </span> 
+                   </div>            
+                </div>
+            
+    
+                 <div class="form-group model0">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">点灯后图片</label>
+                    <div class="col-sm-9 col-xs-12">            
+                    {php echo tpl_form_field_image('fpic41',$settings['fpic41'],'../addons/cgc_qmj/template/style/f4-11.jpg');}
+                    <span class="help-block"> 默认图片，如果没有好的图片，可以设置默认值  。  
+                      <a href="../addons/cgc_qmj/template/style/f4-11.jpg" target=_blank>点此查看图片 </a>                         
+                    <img src="../addons/cgc_qmj/template/style/f4-11.jpg" width="60px" height="60px"> 
+                         
+                    </span> 
+                   </div>            
+                </div>
+           
+			</div>	
+			
+			
+			
+			
+			
+					
+		<div class="tab-pane" id="tab_share3">
+		                                    
+     
+             <div class="form-group" style="display:">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">手机页面标题</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="title" value="{$settings['title']}" class="form-control">
+                      <span class="help-block">比如:某某品牌祈福点灯</span>
+                    </div>
+                </div> 
+                
+                 <div class="form-group" style="display:">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">页面纪念文字</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="wz" value="{$settings['wz']}" class="form-control">
+                      <span class="help-block">已有#num#人为故亲点灯祈福</span>
+                    </div>
+                </div> 
+                
+                    
+                <div class="form-group" style="display:">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">点灯人数</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="dd_num" value="{$settings['dd_num']}" class="form-control">
+                      <span class="help-block"></span>
+                    </div>
+                </div> 
+        
+             <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否必须关注</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="must_guanzhu" value="0"
+                         {if empty($settings['must_guanzhu'])} checked="checked" {/if}>否</label>
+	         			<label class="radio-inline"><input type="radio" name="must_guanzhu" value="1" 
+	         			 {if !empty($settings['must_guanzhu'])} checked="checked" {/if}>是</label>
+	         			  <span class="help-block">如果不是认证服务号，必须用关键字回复才可以判断关注</span>
+                    </div>
+                </div>
+                
+                     <div class="form-group" style="display:">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">诱导关注链接</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="guanzhu_url" value="{$settings['guanzhu_url']}" class="form-control">
+                      <span class="help-block">http开头,没关注的粉丝会跳转到这里</span>
+                    </div>
+                </div> 
+                
+                
+                	<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">音频链接</label>
+					<div class="col-sm-9 col-xs-12">
+						{php echo tpl_form_field_audio('music_url',$settings['music_url'], array('MP3'));}
+						<span class="help-block">如果没有素材，可不填。选择上传的音频文件或直接输入URL地址，必须格式：mp3.其他格式不一定兼容</span>
+					</div>
+				</div>
+				
+						
+				 <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">开始时间</label>
+                    <div class="col-xs-12 col-sm-9">
+                        {php echo tpl_form_field_date('starttime', $settings['starttime'], true)}
+                    </div>
+                </div>
+                
+         
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">结束时间</label>
+                    <div class="col-xs-12 col-sm-9">
+                        {php echo tpl_form_field_date('endtime', $settings['endtime'], true)}
+                    </div>
+                </div>
+                
+                 
+                
+              <div class="form-group" style="display:none">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">统计代码</label>                    
+                       <div class="col-sm-9 col-xs-12">
+            <textarea id="cnzz" name="cnzz"
+             class="form-control" rows="5" cols="60">{$settings['cnzz']}</textarea>                   
+                    
+                    </div>         
+                </div>     
+         
+			</div>	
+								
+				</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group col-sm-12">
+			<input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1" />
+			<input type="hidden" name="token" value="{$_W['token']}" />
+		</div>
+	</form>
+</div>
+
+
+<script>
+
+$(function () {
+		window.optionchanged = false;
+		$('#myTab a').click(function (e) {
+			e.preventDefault();//阻止a链接的跳转行为
+			$(this).tab('show');//显示当前选中的链接及关联的content
+		});
+		
+		$('.tpl-district').remove();
+
+	});
+	
+</script>
+{template 'common/footer'}

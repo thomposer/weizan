@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-cn" class="no-js">
+	<head>
+		<meta http-equiv="Content-Type">
+		<meta content="text/html; charset=utf-8">
+		<meta charset="utf-8">
+		<title>{$title}</title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="format-detection" content="email=no">
+		<link rel="stylesheet" type="text/css" href="{UBER_RES}/css/reset.css" />
+		<link rel="stylesheet" type="text/css" href="{UBER_RES}/css/index.css" />
+		<link rel="stylesheet" type="text/css" href="{UBER_RES}/css/animations.css" />
+        <link rel="stylesheet" type="text/css" href="{UBER_RES}/css/load.css" />
+	</head>
+	<body>
+    <div id="loading">
+     	<div class="spinner">
+  			<div class="double-bounce1"></div>
+  			<div class="double-bounce2"></div>
+		</div>
+	</div>
+		<div id="content" style="display:none">
+			   <div class="page page-{$shake_pic}-2 page-current">
+				<div class="wrap">
+					<a href="{php echo $this->createMobileUrl('index',array())}" class="replay  pt-page-moveFromBottom hide" ><img src="{UBER_RES}/images/replay.png" /></a>
+                    {if $guideUrl}
+					<a href="{$guideUrl}" class="quan  pt-page-moveFromBottom hide"><img src="{UBER_RES}/images/quan.png" /></a>
+                    {else}
+                    <a href="javascript:;" id="addCard" class="quan pt-page-moveFromBottom hide"><img src="{UBER_RES}/images/quan.png" /></a>
+                    {/if}
+				</div>
+			</div>
+    </div>
+	<div id="audiocontainer"></div>
+	<div id="textsuper">
+	<div id="textsub"><img id="fontimg" />
+    </div></div>
+    <div id="share" onClick="closeDialog()">
+    	<div class="shareImg"></div>
+    </div>
+       {template 'share'}
+        <script type="text/javascript">		
+		gSound = '{UBER_RES}/audio/bg.mp3';
+		</script>
+        <script src="{UBER_RES}/js/zepto.min.js"></script>
+		<script src="{UBER_RES}/js/touch.js"></script>
+		<script src="{UBER_RES}/js/index.js"></script>
+        <script type="text/javascript">
+		document.onreadystatechange = loading;
+		function loading(){
+			if(document.readyState == "complete")
+			{
+				$("#loading").hide();
+				$("#content").show();
+				playbksound();
+			}
+		}
+		function playbksound() {
+            var audiocontainer = $$('audiocontainer');
+            if (audiocontainer != undefined) {
+                audiocontainer.innerHTML = '<audio id="bgsound" autoplay="autoplay"> <source src="' + gSound + '" /> </audio>';
+            }
+
+            var audio = $$('bgsound');
+            audio.play();
+		}
+		$(document).ready(function(){
+			setTimeout(function(){
+				$(".page-current").find(".hide").removeClass("hide");
+			},600);
+		})
+
+		</script>
+
+
+{php echo register_jssdk(false);}
+<script>
+var link = lineLink;
+var img = imgUrl;
+
+var title = shareTitle;
+var desc = descContent;
+
+
+wx.ready(function(){
+    //
+    wx.onMenuShareTimeline({
+        title: title,
+        link: link, // 
+        imgUrl: img, // 
+        success: function () {},
+        cancel: function () {}
+    });
+
+    //
+    wx.onMenuShareAppMessage({
+        title: title, // 
+        desc: desc, // 
+        link: link, // 
+        imgUrl: img, // 
+        type: 'link', //
+        dataUrl: '', // 
+        success: function () {},
+        cancel: function () {}
+    });
+	
+	/////////////////////////////////////////
+		//添加卡券
+                document.querySelector('#addCard').onclick = function () {
+                    wx.addCard({
+                      cardList: [
+                        {
+                          cardId: "{$card_id}",
+						  cardExt: '{"timestamp": "{$_W['account']['jssdkconfig']['timestamp']}","nonce_str":"{$_W['account']['jssdkconfig']['nonce_str']}", "signature":"{$card_signature}"}'
+                        }
+                      ],
+                      success: function (res) {
+                        alert('已添加卡券：' + JSON.stringify(res.cardList));
+                      }
+                    });
+                };
+		////////////////////////////////////////
+});
+</script>
+	</body>
+</html>

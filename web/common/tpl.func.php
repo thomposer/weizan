@@ -8,26 +8,21 @@ defined('IN_IA') or exit('Access Denied');
 
 function _tpl_form_field_date($name, $value = '', $withtime = false) {
 	$s = '';
-	if (!defined('TPL_INIT_DATA')) {
-		$s = '
-			<script type="text/javascript">
-				require(["datetimepicker"], function(){
-					$(function(){
-						$(".datetimepicker").each(function(){
-							var option = {
-								lang : "zh",
-								step : "10",
-								timepicker : ' . (!empty($withtime) ? "true" : "false") .
-			',closeOnDateSelect : true,
-			format : "Y-m-d' . (!empty($withtime) ? ' H:i:s"' : '"') .
-			'};
-			$(this).datetimepicker(option);
-		});
-	});
-});
-</script>';
-		define('TPL_INIT_DATA', true);
-	}
+	$s = '
+		<script type="text/javascript">
+			require(["datetimepicker"], function(){
+				$(function(){
+						var option = {
+							lang : "zh",
+							step : 5,
+							timepicker : ' . (!empty($withtime) ? "true" : "false") .',
+							closeOnDateSelect : true,
+							format : "Y-m-d' . (!empty($withtime) ? ' H:i"' : '"') .'
+						};
+					$(".datetimepicker[name = \'' . $name . '\']").datetimepicker(option);
+				});
+			});
+		</script>';
 	$withtime = empty($withtime) ? false : true;
 	if (!empty($value)) {
 		$value = strexists($value, '-') ? strtotime($value) : $value;
@@ -1088,7 +1083,7 @@ function tpl_ueditor($id, $value = '', $options = array()) {
 }
 
 
-function tpl_edit_sms($name, $value, $uniacid, $url) {
+function tpl_edit_sms($name, $value, $uniacid, $url, $num) {
 	$s = '
 				<div class="input-group">
 					<input type="text" name="'.$name.'" id="balance" readonly value="'.$value.'" class="form-control" autocomplete="off">
@@ -1105,18 +1100,22 @@ function tpl_edit_sms($name, $value, $uniacid, $url) {
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<h4 class="modal-title" id="">修改短信条数</h4>
 					</div>
-					<div class="modal-body" style="height: 70px;">
+					<div class="modal-body" style="height: 100px;">
 						<div class="form-group">
 							<label class="col-xs-12 col-sm-5 col-md-6 col-lg-3 control-label">短信条数</label>
-							<div class="col-sm-6 col-xs-12">
-								<div class="input-group">
+							<div class="col-sm-6 col-xs-12 col-md-7">
+								<div class="input-group" style="width: 180px;">
 									<div class="input-group-btn">
-										<button type="button" class="btn btn-defaultlabel label-success" id="edit_alert"  style="color: #f5f5f5">+</button>
+										<button type="button" class="btn btn-defaultt label-success" id="edit_add">+</button>
 									</div>
 									<!--<span class="input-group-addon label-danger"  id="edit_alert" style="width: 10px;">+ </span>-->
-									<input type="text" class="form-control" id="edit_num">
+									<input type="text" class="form-control" id="edit_num" value="+">
+									<div class="input-group-btn">
+										<button type="button" class="btn btn-default" id="edit_minus">-</button>
+									</div>
 								</div>
-								<span class="help-block">点击加号（或减号）修改增减状态</span>
+
+								<div class="help-block">点击加号或减号切换修改短信条数方式<br>最多可添加<span id="count_sms">'.$num.'</span>条短信</div>
 							</div>
 						</div>
 					</div>
@@ -1127,33 +1126,81 @@ function tpl_edit_sms($name, $value, $uniacid, $url) {
 			</div>
 		</div>
 		<script>
-			$(\'#edit_alert\').click(function() {
-				var html = $(this).html() == \'+\' ? \'-\' : \'+\';
-				var css  = $(this).attr(\'class\') == \'btn btn-defaultlabel label-danger\' ? \'btn btn-defaultlabel label-success\' : \'btn btn-defaultlabel label-danger\';
-				$(this).html(html);
-				$(this).attr(\'class\', css);
+		var status = \'add\';
+			$(\'#edit_add\').click(function() {
+				status = \'add\';
+				var sign = status == \'add\' ? \'+\' : \'-\';
+				var edit_num = $(\'#edit_num\').val();
+				if (edit_num == \'\') {
+					$(\'#edit_num\').val(sign)
+					return;
+				}
+				if (isNaN(edit_num.substr(1)) || edit_num.substr(1) == \'\') {
+					edit_num = \'\';
+				}
+				$(\'#edit_num\').val(\'+\'+Math.abs(edit_num));
+				if (edit_num == \'\') {
+					$(\'#edit_num\').val(sign);
+				}
+				$(\'#edit_add\').attr(\'class\', \'btn btn-defaultt label-success\');
+				$(\'#edit_minus\').attr(\'class\', \'btn btn-default\');
+			});
+			$(\'#edit_num\').keyup(function() {
+				var sign = status == \'add\' ? \'+\' : \'-\';
+				if ($(\'#edit_num\').val() == \'\') {
+					return ;
+				}
+				if (isNaN($(\'#edit_num\').val()) && $(\'#edit_num\').val() != sign) {
+					$(\'#edit_num\').val(\'\');
+					return;
+				}
+				if ($(\'#edit_num\').val().indexOf(sign) < 0) {
+				var val = parseInt(Math.abs($(\'#edit_num\').val()));
+				if (val == 0) {
+					$(\'#edit_num\').val(sign);
+				} else {
+					$(\'#edit_num\').val(sign + val);
+				}
+				}
+
+			});
+			$(\'#edit_minus\').click(function() {
+				status = \'minus\';
+				var sign = status == \'add\' ? \'+\' : \'-\';
+				var edit_num = $(\'#edit_num\').val();
+				if (edit_num == \'\') {
+					$(\'#edit_num\').val(sign)
+					return;
+				}
+				if (isNaN(edit_num.substr(1)) || edit_num.substr(1) == \'\') {
+					edit_num = \'\';
+				}
+				$(\'#edit_num\').val(\'-\'+Math.abs(edit_num));
+				if (edit_num == \'\') {
+					$(\'#edit_num\').val(sign);
+				}
+				$(\'#edit_minus\').attr(\'class\', \'btn btn-defaultt label-danger\');
+				$(\'#edit_add\').attr(\'class\', \'btn btn-default\');
 			});
 			$(\'#edit_sms_sub\').click(function () {
-				var edit_num = $(\'#edit_num\').val() == \'\' ? 0 : parseInt($(\'#edit_num\').val());
-				if ($(\'#edit_alert\').html() == \'+\') {
-					var status = \'add\';
-				} else {
-					var status = \'minus\';
-				}
+				var edit_num = $(\'#edit_num\').val() == \'\' ? 0 : Math.abs(parseInt($(\'#edit_num\').val()));
 				var uniacid = '.$uniacid.';
 				$.post(\''.$url.'\', {\'balance\' : edit_num, \'uniacid\' : uniacid, \'status\' : status}, function(data) {
 					var data = $.parseJSON(data);
+
+					$(\'#count_sms\').html(data.message.message.count);
 					if (data.message.errno > 0) {
-						$(\'#balance\').val(data.message.message);
+						$(\'#balance\').val(data.message.message.num);
 						$(\'#edit_sms\').modal(\'toggle\');
 					} else {
 						util.message(\'您现有短信数量为0，请联系服务商购买短信\');
 						$(\'#edit_sms\').modal(\'toggle\');
 					}
+					$(\'#edit_num\').val(\'\');
+					$(\'#edit_add\').trigger(\'click\');
 				});
 			});
 			</script>
 	';
 	return $s;
-
 }

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no">
+<link href="../addons/haoman_cdzf/images/laternrelay.css?v=1" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../addons/haoman_cdzf/images/jquery-2.1.0.min.js"></script>
+<title>{$reply['title']}</title>
+</head>
+<style type="text/css">
+    html,body{
+        position:relative;
+        width:100%;height:100%;overflow:hidden;
+    }
+    body{
+   		background:url({if empty($reply['bgimg'])}../addons/haoman_cdzf/images/bg2.jpg{else}{php echo tomedia($reply['bgimg'])}{/if}) no-repeat 0 0;background-size:100% 100%;
+    }
+</style>
+<body>
+     	<audio id="bgMusic" src="{if empty($reply['backmusic'])}../addons/haoman_cdzf/images/night.mp3{else}{php echo tomedia($reply['backmusic'])}{/if}" preload="auto" loop=""></audio>
+    
+	<header style="color: #333;text-align: center;">
+                       这<span>{if empty($reply['way'])}{else}{$reply['way']}{/if}</span>已传递了<span id="total">{php echo $reply['xunimun']+$reply['totalnum']}</span>人，你是第 <em id="order">
+{php echo $reply['totalnum']+$reply['xunimun']+1}
+     </em> 位，请你把祝福继续传递下去。
+    </header>
+    <article class="main">
+        <div class="msg">
+            <ul>
+                {loop $fans $row}
+                <li style="color: #fff;">{$row['content']}</li>
+                {/loop}
+            </ul>
+        </div>
+        <em class="light"></em>
+        
+     		<img class="latern" src="{if empty($reply['top_banner1'])}../addons/haoman_cdzf/images/latern2.png{else}{php echo tomedia($reply['top_banner1'])}{/if}" style="margin-top: 25%;">
+
+     	
+        
+    </article>
+    <footer>
+    		<a id="relay" onclick="$('#inputMsg').show();">传递祝福</a>
+    </footer>
+
+
+    <!-- 填写信息 -->
+    <div class="popup" id="inputMsg">
+        <div class="cont">
+            <p>留下你的祝福：</p>
+            <input id="newMsg" type="text" maxlength="14"/>
+            <div class="btns">
+                <a onclick="skip();" style="background-color: #999999;">跳 过</a>
+                <a onclick="inputMsg(this);">提 交</a>
+            </div>
+            <div class="space_10"></div>
+        </div>
+    </div>
+
+
+    <!-- 提醒 -->
+    <div class="popup" id="popup">
+        <div class="cont">
+            <p>祝福语不能为空哦！</p>
+            <div class="btns">
+                <a onclick="$('#popup').hide();">我知道啦</a>
+            </div>
+            <div class="space_10"></div>
+        </div>
+    </div>
+
+    
+    <!-- 分享 -->
+    <div id="share" class="share_box" onclick="$('#share').hide();">
+        <img src="../addons/haoman_cdzf/images/share.png">
+        <div class="clear"></div>
+        <div class="space_10"></div>
+        <p class="tr">点击右上角</p>
+        <p class="tr">传递给其他人吧</p>
+    </div>
+
+</body>
+<script type="text/javascript">
+    var path = "";
+    var tpPath = "/tp";
+    $(function(){
+        $('#bgMusic')[0].play();
+    });
+    function skip(){
+    	$('#inputMsg').hide();
+    	$('#relay').attr("onclick","$('#share').show();");
+    }
+
+    function playMsg(){
+        $('.msg ul').animate({
+            marginLeft:"-100%"
+        },1000,function(){
+            $('.msg ul li:first-child').appendTo($('.msg ul'));
+            $('.msg ul').attr("style","margin-left:0;");
+        });
+    }
+
+    var playState = setInterval(function(){
+            playMsg();
+        },2000);
+
+    function inputMsg(obj){
+   		var newmsg = $.trim($('#newMsg').val());
+   		if(newmsg == ""){
+   			 $('#popup').show();
+   			 return false;
+   		}
+    	$.post("{php echo $this->createMobileUrl('setzf', array('id' => $id))}",{content:newmsg}, function(data){  //这部分为ajax传递的开始部分，“tpPath+"/laternrelay/writeBless"”这个为要传递到后台的地址链接。其实就是访问模块site.php文件里面的一个mobile的方法。比如：{php echo $this->createMobileUrl('settel', array('id' => $id))}，在site.php弄个doMobliesettel的方法。然后这个方法里面写上接受和处理的代码就行。
+            var dataJson = JSON.parse(data);
+            if(dataJson.success == 1){  //这部分site.php方法返回的数据，返回的data为数组。
+	    		$('#inputMsg').hide();
+	            $('#relay').attr("onclick","$('#share').show();");
+	            if(newmsg.length*1 > 7){
+	                $('.msg ul').prepend('<li><p>'+newmsg.substr(0,7)+'</p><p>'+newmsg.substr(7,newmsg.length*1)+'</p></li>');
+	            }else{
+	                $('.msg ul').prepend('<li style="color: #fff;">'+newmsg.substr(0,newmsg.length*1)+'</li>');
+	            }
+    		}else{
+   			alert(dataJson.msg);
+
+    		}
+    	});
+    }
+
+</script>
+</html>
+<script id="countScript" type="text/javascript" src="../addons/haoman_cdzf/images/countAct.js" data="7839"></script>

@@ -1,0 +1,35 @@
+{template 'default/common/header'}
+<div class="bar bar-header bar-light bar-calm">
+	<h2 class="title">粉丝榜</h2>
+</div>
+<div class="tabs tabs-top tabs-stable">
+	<a class="tab-item {if $order == 'credit1'}active{/if}" href="{php echo $this->createMobileUrl('index',array('order'=>'credit1'))}">积分榜</a>
+	<a class="tab-item {if $order == 'credit2'}active{/if}" href="{php echo $this->createMobileUrl('index',array('order'=>'credit2'))}">余额榜</a>
+</div>
+<script>
+	$('.tabs .tab-item').click(function(){
+		$('.tabs .tab-item').removeClass('active');
+		$(this).addClass('active');
+	});
+</script>
+<div class="content has-tabs-top scroll-content">
+	<div class="scroll overflow-scroll">
+		<ul class="list">
+			{loop $fans $fan}
+			<li class="item item-avatar">
+				<img class="avatar" src="{php echo tomedia($fan['avatar'])}" data-uid="{$fan['uid']}"/>
+				<h2 class="title">{$fan['nickname']}</h2>
+				<p class="location" data-uid="{$fan['uid']}">{$fan['resideprovince']}{$fan['residecity']}</p>
+				<span class="badge badge-calm">{$fan[$order]}</span>
+			</li>
+			{/loop}
+		</ul>
+	</div>
+</div>
+<script>
+	$('.avatar').click(function(){
+		var uid = $(this).data('uid');
+		window.location.href = "{php echo $this->createMobileUrl('userinfo')}&uid="+uid;
+	});
+</script>
+{template 'default/common/footer'}

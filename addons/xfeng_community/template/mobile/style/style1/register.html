@@ -12,7 +12,7 @@
     }
     
     .weui_label {
-        font-size: 14px;
+        font-size: 16px;
         color: #a9a9a9;
         width: 5em;
     }
@@ -135,7 +135,17 @@
             </div>
         </div> -->
     </div>
-     <div class="weui_cells_tips" style="margin: 0 auto;text-align:center">(输入对应的楼栋单元房号，如1栋1单元201室)</div>
+     <div class="weui_cells_tips" style="margin: 0 auto;text-align:center">
+     {if $set['room_enable']}
+        {if $set['code_status']}
+            (请输入正确的注册码获取房号)
+        {else}
+            (请输入正确的手机号码获取房号)
+        {/if}
+     {else}
+     (输入对应的楼栋单元房号，如1栋1单元201室)
+     {/if}
+     </div>
     <div class="bd spacing" style="text-align:center;margin-top:10px;">
         <a href="javascript:;" class="weui_btn weui_btn_primary" id="showToast" style="margin-bottom:-10px;width:80%">确认注册</a>
         <a href="javascript:history.go(-1)" class="weui_btn weui_btn_default" style="margin-bottom:40px;width:80%">返回</a>

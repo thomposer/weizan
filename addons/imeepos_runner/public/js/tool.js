@@ -1,4 +1,4 @@
-define(['js/zepto.min'],function($){
+define(['js/zepto.min','weixin'],function($,wx){
 	/**
 	 * Created with JetBrains WebStorm.
 	 * User: Administrator
@@ -754,18 +754,7 @@ define(['js/zepto.min'],function($){
 	 */
 	R.wxinit = (function($){
 		function init(){
-			$.ajax({
-				type : "POST",
-				dataType : "json",
-				url : _wxconfig,
-				data : {
-					url : window.location.href
-				},
-				success : function(result) {
-					if(!result){return;}
-					wx.config(result);
-				}
-			});
+			wx.config(jssdkconfig);
 		}
 		if(typeof wx != 'undefined'){
 			init();

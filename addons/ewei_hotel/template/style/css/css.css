@@ -90,6 +90,11 @@ header .h_line2_t {
 	background:url(comm_bg.png) no-repeat -100px -105px;
 	background-size:242px 260px;
 }
+.header_clerk {
+	background:url(my_fill.png) no-repeat 3px 10px;
+	background-size:40px 30px;
+	padding-top: 20px;
+}
 .lefthead:active,.header_tel:active,.header_home:active,.header_order:active,.btn_blue:active {
 	opacity:0.7;
 }
@@ -1276,7 +1281,7 @@ body .ui-icon-searchfield {
 	width:86px;
 	display:block;
 }
-.header_home,.header_tel,.header_order {
+.header_home,.header_tel,.header_order,.header_clerk {
 	width:42px;
 	height:100%;
 	top:0;
@@ -1304,6 +1309,12 @@ body .ui-icon-searchfield {
 	top:16px;
 	right:10px; 
 	background-position:-216px -33px;
+}
+.header_clerk:before {
+	width:20px;
+	height:60px;
+	top:16px;
+	right:10px;
 }
 .lefthead {
 	position:absolute;

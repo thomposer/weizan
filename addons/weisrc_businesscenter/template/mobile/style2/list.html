@@ -118,7 +118,7 @@
     <a href="{php echo $this->createMobileurl('shop', array('id' => $item['id'], true))}">
         <div class='main01'>
             <div class='main1'>
-                <div class='list00' style="position:relative">
+                <div class='list00 morelist' style="position:relative">
                     <!--这个图片就是认证后添加的-->
                     <h3><span class="fr" style="color:#ccc;" id="shopspostion"></span>{$item['title']}</h3>
                     <input id="showlan" type="hidden" value="{$item['lng']},{$item['lat']}"/>
@@ -199,7 +199,7 @@
     });
 </script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5PESLgvMcSbSUbPjmDKgvGZ3"></script>
-<script type="text/javascript" src="{RES}/mobile/{php echo $this->cur_tpl}/js/postion.js?v=5"></script>
+<script type="text/javascript" src="{RES}/mobile/{php echo $this->cur_tpl}/js/postion.js?v=6"></script>
 <script type="text/javascript">
     var size = document.getElementsByClassName("d").length;
     for (i = 0; i < size; i++) {

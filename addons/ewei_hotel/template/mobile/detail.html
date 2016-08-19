@@ -579,7 +579,7 @@
         <div class="conlist" style="width:100%; padding:0px; display:inline-block;">
             <ul class="ui-grid-b" id="menu">
                 <li class="ui-block-a tab-click hover" id="liOrder">房型预订</li>
-                <!--<li class="ui-block-b" id="liDp">客户点评</li>-->
+                <li class="ui-block-b tab-click" id="liDp">客户点评</li>
                 <li class="ui-block-c tab-click" id="liMore">酒店详情</li>
             </ul>
             <div id="content" style="padding:0px;">
@@ -589,6 +589,12 @@
                         <a href="javascript:;" id="d_more" class="ui-link" style="height:45px; line-height:45px;">点击加载更多房型</a>
                     </div>
                 </ul>
+	            <ul class="block" id="comment" style="display: none;">
+		            {loop $comments $comment}
+		            <div>{$comment['username']}</div>
+		            <p><span class="bold size15">{$comment['comment']}</span></p>
+		            {/loop}
+		        </ul>
                 <ul id="detail">
                     <li>
                         <div class="conlist">
@@ -634,9 +640,15 @@
             if ($(this).attr("id") == "liOrder") {
                 $("#room").show();
                 $("#detail").hide();
+	            $("#comment").hide();
             } else if ($(this).attr("id") == "liMore") {
                 $("#room").hide();
+	            $("#comment").hide();
                 $("#detail").show();
+            } else if ($(this).attr("id") == "liDp") {
+	            $("#room").hide();
+	            $("#detail").hide();
+	            $("#comment").show();
             }
         });
     });

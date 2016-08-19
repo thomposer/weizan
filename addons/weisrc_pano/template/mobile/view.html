@@ -103,7 +103,8 @@
     pano.readConfigUrl("{php echo $this->createMobileurl('getimagexml', array('rid' => $rid), true)}");
     hideUrlBar();
 </script>
-{if !empty($reply['music'])}<audio id="song_player" src="{$reply['music']}" preload="auto" autoplay="autoplay"></audio>{/if}
+{if !empty($reply['music'])}<audio id="song_player" src="{php echo tomedia($reply['music']);}" preload="auto"
+                                   autoplay="autoplay"></audio>{/if}
 <script>
     function displayit(n){
         var count = document.getElementById("top_menu").getElementsByTagName("ul").length;

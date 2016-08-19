@@ -19,8 +19,8 @@
          MsgImg: _fromCode + "addons/wl_heka/style/images/onlyyou.jpg",
          TLImg: _fromCode + "addons/wl_heka/style/images/onlyyou.jpg",
          path: siteurl + "{php echo $this->createMobileUrl('show', array('card' => $card,'id'=>$_GET['id'],'cid'=>$show['id']));}",
-         title: "微赞祝福",
-         desc: "使用微赞助手可以在朋友圈或聊天对话框发送更丰富的祝福类型",
+         title: "{$nikename}祝福",
+         desc: "使用{$nikename}可以在朋友圈或聊天对话框发送更丰富的祝福类型",
          fakeid: "",
          callback: function () {
          }
@@ -161,8 +161,8 @@
    var siteurl = "{php echo $_W['siteroot']}app";
    var _wid = 13777, _PUBLIC = "../addons/wl_heka/style/", _cardName = "示爱贺卡", _cardType = "onlyyou";
    (function () {
-      dataForWeixin.title = "使用微赞助手在微信发送" + _cardName;
-      dataForWeixin.desc = "通过微赞助手的发送贺卡功能，向亲友传递最美好的祝福！";
+      dataForWeixin.title = "使用{$nikename}在微信发送" + _cardName;
+      dataForWeixin.desc = "通过{$nikename}的发送贺卡功能，向亲友传递最美好的祝福！";
    })();
    String.prototype.innerText = function () {
       return this.replace(/(<[^>]+>)|(&nbsp;)/ig, "");

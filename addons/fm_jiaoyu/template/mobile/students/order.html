@@ -16,7 +16,7 @@
         </style>
         <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
         <title>缴费中心</title>
-        <link rel="stylesheet" href="{OSSURL}public/mobile/css/weixin.css?{php echo time()}">
+        <link rel="stylesheet" href="{MODULE_URL}public/mobile/css/weixin.css?{php echo time()}">
 		<link rel="stylesheet" href="{OSSURL}public/mobile/css/reset.css?{php echo time()}">
         <script src="{OSSURL}public/mobile/js/jquery.js"></script>
 </head>
@@ -81,7 +81,7 @@
                                 <dd>开始:{php echo date('Y-m-d',$kecheng[$item['kcid']]['start'])}</dd>
                                 <dd>结束:{php echo date('Y-m-d',$kecheng[$item['kcid']]['end'])}</dd>
                                 <input type="hidden" value="{$item['id']}" class="coupon_cid"/>
-                                <div class="order_close"></div>
+                                <div class="order_close" style="background-image:url({OSSURL}public/mobile/img/mask_close.png)"></div>
                             </dl>
                             <p class="order_time">请于{php echo date('Y年m月d日',$kecheng[$item['kcid']]['start'])}之前缴费哦~</p>
                             <div class="mask"></div>
@@ -93,7 +93,7 @@
 						</section>
 					{/if}	
                 <ul class="order_sum">
-                    <li><span id="quanxuan">全选</span>未付（<b></b>个)</li>
+                    <li><span id="quanxuan" style="background-image:url({OSSURL}public/mobile/img/user-uc.png)">全选</span>未付（<b></b>个)</li>
                     <li><div class="btn" id="jiesuan">去结算</div></li>
                 </ul>
             </section>

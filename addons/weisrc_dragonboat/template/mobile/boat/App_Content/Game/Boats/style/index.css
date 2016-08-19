@@ -384,7 +384,7 @@ a {
 .btn-start {
     width: 150px;
     height: 48px;
-    background: url(images/btn-start.png) 0 0 no-repeat;
+    background: url(images/btn-start.png?v=1) 0 0 no-repeat;
     background-size: 150px auto;
     display: inline-block;
 }
@@ -699,7 +699,7 @@ a {
                      position:absolute;left:50%;top:50%;margin-left:-40px;margin-top:-40px;line-height:80px;
 
 
-} 
+}
 
 
 .post-tip,.div-share{position:absolute;top:0;left:0;bottom:0;right:0;width:100%;height:100%;z-index:11000;text-shadow:0 0 3px #eee;-webkit-text-shadow:0 0 3px #eee;background:rgba(0, 0, 0, 0.6);text-align:center;color:#fff;line-height:550px;display:none;}

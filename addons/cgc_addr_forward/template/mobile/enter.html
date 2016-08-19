@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=1.0">
+<script type="text/javascript" src="{MODULE_URL}/template/style/jquery.min.js"></script>
+<script type="text/javascript" src="{MODULE_URL}/template/style/jquery-weui.js"></script>
+ <link href="{MODULE_URL}/template/style/weui.min.css"  rel="stylesheet"/>
+</head>
+
+<title></title>
+</head>
+<body style="background-color:;">
+
+
+	<script>
+$(function(){
+	
+	$.showLoading("正在加载...");	
+	
+	getLocation();
+	
+	function addr_pd(addr){
+	  var ret=false;
+	  {loop $item['fans_regional'] $fans_regional}
+	    var set_addr= "{$fans_regional['fans_regional_addr']}";
+	    if (addr.indexOf(set_addr)>-1){
+	       ret=true;
+	       window.location.href="{$fans_regional['fans_regional_url']}";
+	    }
+	
+	  {/loop}
+	      if (ret==false){
+		    window.location.href="{$item['default_url']}";
+	      }
+	}
+
+	function getLocation(){
+	    var options={
+	        enableHighAccuracy:true, 
+	        maximumAge:1000
+	    }
+	    if(navigator.geolocation){
+	        //浏览器支持geolocation
+	        navigator.geolocation.getCurrentPosition(showPosition,errorPosition,options);	        
+	    }else{	    	
+	    	alert("浏览器不支持geolocation");
+	    }
+	}
+
+
+	function errorPosition(error){
+	  	alert("获取地理位置失败");
+	}
+
+	function showPosition(position)
+	{
+		console.log(position.coords.latitude +
+		"<br />Longitude: " + position.coords.longitude);
+	
+		var location= position.coords.latitude+"," + position.coords.longitude;
+	
+	
+		//百度接口
+		var url="http://api.map.baidu.com/geocoder/v2/"+
+		 "?ak=qen1OGw9ddzoDQrTX35gote2&callback=renderReverse&location="+location+"&output=json&pois=0";
+		$.ajax({
+		      type : "get",
+		      async:false,
+		      url : url,
+		      dataType : "jsonp",
+		      jsonp: "callback",//传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(默认为:callback)
+		      jsonpCallback:"renderReverse",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
+		      success : function(json){    	
+		          if (json.status=="0"){
+		        	  var address=json.result.addressComponent;
+		        	 // var diqu="{$item["iplimit"]}".split(",");
+		        	  var str=address.province+","+address.city+","+address.district;
+		             // alert("你的地址:"+str+".会跳到这个地址后台对应的链接去");
+		        	  addr_pd(str);
+		        	  $.hideLoading();
+		          } else {
+		        	  alert("获取定位失败");
+		        	  $.hideLoading();
+		        	  
+		        }
+		      },
+		      error:function(){
+		          alert('fail');
+		      }
+		  });
+	
+		}
+	
+	
+	});	
+
+
+</script>
+</body>
+</html>

@@ -7,13 +7,13 @@
 	.panel{padding:.5em; margin-bottom:10px;}
 	.nav.nav-tabs{margin-bottom:.8em;}
 	.alert .form-group{margin-bottom:0;}
-	label.form-group{display:block;}
-	label.form-group{font-weight:normal; overflow:hidden; border-top:1px #DDD solid; padding-top:10px;padding-bottom:0;margin-bottom:0 }
-	label.form-group .col-xs-2{margin-top:0px;}
-	label.form-group input[name="type"]{opacity:0; width:0;}
-	#wq_card .form-group{border-top:none;border-bottom:1px solid #ccc;}
-	#wq_card .form-group .col-xs-2{margin-top:15px;}
-	#wq_card .form-group:last-child{border-bottom:none}
+	#wq_card label.form-group{display:block; font-weight:normal; overflow:hidden; border-top:1px #DDD solid; padding-top:10px;padding-bottom:0;margin-bottom:0 }
+	#wq_card label.form-group:first-child{border-top:0;}
+	#wq_card label.form-group .col-xs-2{margin-top:0; position:relative; height:50px;}
+	#wq_card label.form-group .col-xs-2 .fa{font-size:24px; color:#717171; position:absolute; top:50%; left:50%; -webkit-transform:translate(-50%, -50%); -moz-transform:translate(-50%, -50%); transform:translate(-50%, -50%);}
+	#wq_card label.form-group .col-xs-2 .fa.fa-check-circle{color:#5cb85c;}
+	#wq_card label.form-group .col-xs-10{padding-right:0;}
+	#wq_card label.form-group input[name="type"]{opacity:0; width:0;}
 	form .btn.btn-block{padding:10px 12px; margin-bottom:10px;}
 </style>
 <script>
@@ -96,7 +96,7 @@
 							{loop $cards $li}
 							<label class="form-group">
 								<div class="col-xs-2">
-									<i class="fa fa-check-circle fa-lg" data-id="{$li['couponid']}"></i>
+									<i class="fa fa-circle-thin" data-id="{$li['couponid']}"></i>
 								</div>
 								<div class="col-xs-10">
 									{if $li['type'] == 1}
@@ -122,7 +122,7 @@
 <h4>选择支付方式</h4>
 <ul class="nav nav-tabs" role="tablist" style="margin-bottom:0;">
 	<li class="active" data-id="direct"><a href="#direct" role="tab" data-toggle="tab" style="border-left:0;">直接到账</a></li>
-	{if $pay['delivery']['switch']}<li data-id="delivery" class="delivery"><a href="#collect" role="tab" data-toggle="tab">货到付款</a></li>{/if}
+	{if $pay['delivery']['switch']}<li data-id="delivery" class="delivery"><a href="#collect" role="tab" data-toggle="tab">{if !empty($params['delivery']['title'])}{$params['delivery']['title']}{else}货到付款{/if}</a></li>{/if}
 	{if $pay['line']['switch']}<li data-id="line" class="line"><a href="#line" role="tab" data-toggle="tab">线下汇款</a></li>{/if}
 	<!--li><a href="#">微赞担保</a></li-->
 </ul>
@@ -206,7 +206,7 @@
 					<input type="hidden" name="encrypt_code" value="" />
 					<input type="hidden" name="card_id" value="{php echo base64_encode($card_id);}" />
 					<input type="hidden" name="coupon_id" value="" />
-					<button class="btn btn-warning btn-block col-sm-12" type="submit" value="delivery">货到付款</button>
+					<button class="btn btn-warning btn-block col-sm-12" type="submit" value="delivery">{if !empty($params['delivery']['title'])}{$params['delivery']['title']}{else}货到付款{/if}</button>
 				</form>
 			</div>
 			{/if}
@@ -295,17 +295,19 @@
 			cards_str = {};
 		}
 		$('#wq_card .form-group').click(function(){
-			var status = $(this).find('.fa').hasClass('text-danger');
-			$(this).siblings().find('.fa').removeClass('text-danger');
+			var status = $(this).find('.fa').hasClass('fa-circle-thin');
+			$(this).siblings().find('.fa').removeClass('fa-check-circle').addClass("fa-circle-thin");
 			if(status) {
-				$(this).find('.fa').removeClass('text-danger');
+				$(this).find('.fa').removeClass('fa-circle-thin');
+				$(this).find('.fa').addClass('fa-check-circle');
 			} else {
-				$(this).find('.fa').addClass('text-danger');
+				$(this).find('.fa').removeClass('fa-check-circle');
+				$(this).find('.fa').addClass('fa-circle-thin');
 			}
 		});
 
 		$('#wq_card .btn-primary').click(function(){
-			var checked_card = $('#wq_card .fa.text-danger').attr('data-id');
+			var checked_card = $('#wq_card .fa.fa-check-circle').attr('data-id');
 			if(checked_card && cards_str[checked_card]) {
 				$('#wq_card_info').html('已抵用'+cards_str[checked_card].discount_cn+'元');
 				$('#order_card span:first').html('-￥'+cards_str[checked_card].discount_cn+'元');

@@ -1,4 +1,4 @@
-{template 'common/header'}
+{template 'header'}
 <link rel="stylesheet" type="text/css" href="../addons/str_takeout/template/resource/css/main.css">
 <script src="../addons/str_takeout/template/resource/js/dialog.js"></script>
 <style type="text/css">
@@ -6,47 +6,49 @@
 </style>
 <div class="container">
 	<section>
-		{if ($order['status'] == 2)}
-			<h2 class="order_detail_tt">逾期未支付订单会自动取消</h2>
-		{/if}
 		<ul class="my_order">
 			<li>
-				<a href="{php echo $this->createMobileUrl('store', array('sid' => $sid))}">
+				<a href="{php echo $this->createMobileUrl('store', array('sid' => $order['sid']))}">
 					<div>
 						{if $order['status'] == 1}
-							<div class="ico_status complete"><i></i>已完成</div>
+							<div class="ico_status pending"><i></i>待确认</div>
 						{elseif $order['status'] == 2}
-							<div class="ico_status pending"><i></i>待付款</div>
+							<div class="ico_status inhand"><i></i>处理中</div>
 						{elseif $order['status'] == 3}
-							<div class="ico_status inhand"><i></i>待送餐</div>
-						{elseif $order['status'] == 6}
-							<div class="ico_status confirm"><i></i>送餐中</div>
+							<div class="ico_status complete"><i></i>已完成</div>
 						{elseif $order['status'] == 4}
-							<div class="ico_status confirm"><i></i>待收餐</div>
-						{elseif $order['status'] == 5}
 							<div class="ico_status cancle"><i></i>已取消</div>
 						{/if}
 					</div>
 					<div>
 						<h3 class="highlight">{$store['title']}</h3>
 						<p>{$order['num']}份/￥{$order['price']}</p>
-						<div>{php echo date('Y-m-d H:i', $order['addtime']);} {php echo date('', $order['addtime'])}</div>
+						<div>{php echo date('Y-m-d H:i', $order['addtime']);}</div>
 					</div>
 					<div class="w14"><i class="ico_arrow"></i></div>
 				</a>
 			</li>
 		</ul>
-		<div class="detail_tools">
-			{if ($order['status'] == 2)}
-				<div><a href="{php echo $this->createMobileUrl('pay', array('id' => $order['id']))}" class="comm_btn">立即付款(还剩{$minute}分钟)</a></div>
+		{if empty($order['pay_type'])}
+			<div class="detail_tools">
+				<div><a href="{php echo $this->createMobileUrl('pay', array('id' => $order['id']))}" class="comm_btn">在线支付</a></div>
+				<div><a href="javascript:;" onclick="alert('请到收银台付款')" id="cash" class="comm_btn" style="background:#4fb07c">现金支付</a></div>
+			</div>
+		{/if}
+		{if $order['status'] == 3 && $store['comment_status'] == 1}
+			<div class="detail_tools">
+			{if $order['comment'] == 1}
+				<div><a href="{php echo $this->createMobileUrl('comment', array('id' => $order['id'], 'sid' => $order['sid']))}" class="comm_btn">查看评价</a></div>
+			{else}
+				<div><a href="{php echo $this->createMobileUrl('comment', array('id' => $order['id'], 'sid' => $order['sid']))}" class="comm_btn">去评价</a></div>
 			{/if}
-			{if ($order['status'] == 6) || ($order['pay_type'] == 'delivery')}
-				<div><a href="javascript:void(0);" class="comm_btn" id="confirmBtn">确认送达</a></div>
-			{/if}
-			{if ($order['status'] == 1)}
-				<div><a href="javascript:void(0);" class="normal_link" id="deleteOrder">删除订单</a></div>
-				<div><a href="{php echo $this->createMobileUrl('comment', array('id' => $oid))}" class="comm_btn">{if $order['comment'] == 1}查看评分{else}我要评分{/if}</a></div>
-			{/if}
+			</div>
+		{/if}
+		{if $order['order_type'] == 2 && $order['status'] == 2}
+			<div class="detail_tools">
+				<div><a href="javascript:;" class="comm_btn" id="confirmBtn">确认收货</a></div>
+			</div>
+		{/if}
 		</div>
 		<style type="text/css">
 			.my_menu_list th{width:0;}
@@ -63,48 +65,70 @@
 				{if !empty($order['dish'])}
 					{loop $order['dish'] $da}
 						<tr>
-							<td>{$da['title']}</td>
-							<td>X{$da['num']}</td>
-							<td>￥{$da['price']}</td>
+							<td>{$da['dish_title']}</td>
+							<td>X{$da['dish_num']}</td>
+							<td>￥{$da['dish_price']}</td>
 						</tr>
 					{/loop}
 				{/if}
 			</tbody>
 		</table>
-		<ul class="box">
-			<li>预定人：{$order['username']}</li>
-			<li>手机：{$order['mobile']}</li>
-			<li>送餐地址：{$order['address']}</li>
-			<li>送餐时间：{if $order['delivery_time']}{$order['delivery_time']}{else}尽快送出{/if}</li>
-			<li>支付方式：{$pay_types[$order['pay_type']]}</li>
-			<li>订单状态：
-				{if $order['status'] == 1}
-					已完成
-				{elseif $order['status'] == 2}
-					待付款
-				{elseif $order['status'] == 3}
-					待送餐
-				{elseif $order['status'] == 4}
-					待收餐
-				{elseif $order['status'] == 5}
-					已取消
-				{elseif $order['status'] == 6}
-					送餐中
+		<ul class="box pay_box">
+			<li>订单信息</li>
+			<li>订单金额:{$order['price']} 元</li>
+			{if $order['is_usecard'] == 1}
+				<li>使用优惠券减免金额:{php echo $order['price'] - $order['card_fee']} 元</li>
+				<li>实际支付金额:{$order['card_fee']} 元</li>
+			{/if}
+			<li>
+				支付方式：
+				{if empty($order['pay_type'])}
+					<label class="label label-danger">未支付</label>
+				{else}
+					<label class="label label-success">{$pay_types[$order['pay_type']]}</label>
 				{/if}
 			</li>
 		</ul>
-		<ul class="box">
+		<ul class="box pay_box">
+			<li>订单类型：
+				<span class="{$types[$order['order_type']]['css']}">{$types[$order['order_type']]['text']}</span>
+			</li>
+			<li>送餐时间：{php echo date('Y-m-d H:i', $order['addtime']);}</li>
+			<li>预定人：{$order['username']}</li>
+			<li>手机：{$order['mobile']}</li>
+			{if $order['order_type'] == 1}
+				<li>桌号：{$order['table_info']} </li>
+				<li>就餐人数：{$order['person_num']} 人</li>
+			{else}
+				<li>送餐地址：{$order['address']}</li>
+				<li>送餐时间：{if $order['delivery_time']}{$order['delivery_time']}{else}尽快送出{/if}</li>
+				<li>配送费：<span class="text-strong">{$order['delivery_fee']}元</span></li>
+			{/if}
+			<li>总计：<span class="text-strong">{php echo $order['delivery_fee'] + $order['price']}元</span></li>
+			<li>
+				赠送积分：<span class="text-strong">{$order['grant_credit']}积分</span>
+				{if empty($order['is_grant'])}
+					<label class="label label-danger">未赠送</label>
+				{else}
+					<label class="label label-success">已赠送</label>
+				{/if}
+			</li>
+		</ul>
+		<ul class="box pay_box">
 			<li>备注</li>
 			<li>{if $order['note']}{$order['note']}{else}无{/if}</li>
 		</ul>
+		{if !empty($logs)}
+		<ul class="box pay_box">
+			<li>订单日志</li>
+			{loop $logs $log}
+				<li><i class="fa fa-info-circle"></i> {php echo date('Y-m-d H:i', $log['addtime']);} {$log['note']}</li>
+			{/loop}
+		</ul>
+		{/if}
 		<div class="my_order_tips">如需取消订单，请与商家联系，谢谢！</div>
 	</section>
-	<footer class="order_btns">
-		<div class="fixed">
-			<a href="{php echo $this->createMobileUrl('index');}"><i class="ico_takeout"></i>叫外卖</a>
-			<a href="{php echo $this->createMobileUrl('myorder');}" class="on"><i class="ico_order"></i>我的订单</a>
-		</div>
-	</footer>
+	{template 'footerbar'}
 </div>
 <div class="confirm_box" id="confirmBox">
 	<p>您确定已经收到该餐厅的外卖了吗？</p>

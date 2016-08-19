@@ -1,1 +1,570 @@
-<?php /* PHP Encode by  http://we7.cc/ */if(!defined('girwxtrz')){define('girwxtrz',__FILE__);if (function_exists("¬Öôè‘‚")==false){function ¬Öôè‘‚(&$™Í’ãÂœÈ‡ëä,$±ê‡ŸáÑ—){$³ï³¾™Ù¦ÜÇèþ=$†ö‚Óã¸¦ôôÁ=$¢ÛèØµóâòå®=$»öÀä©à®«=$¡…ïø¤§À¼°ªÙ='¹Üƒ÷ï«Ò¶';$¦‚¡û©ó½ÍæÆÆ=$³ï³¾™Ù¦ÜÇèþ('Œð´Œ Š¤ÊŒ¢¢Š');$Âí ·í¤Ì=$†ö‚Óã¸¦ôôÁ('Œð´ŒŠ¬œ');$¢–ê¦–¥ÍÅƒ¦=$¢ÛèØµóâòå®('AðÐCD¬¬ÊDŠ¬ŒAB²¢');$¯ÚÞÃÜ­¿­±Çµ=$»öÀä©à®«('Œð´ŒCÖ´CD¬¤ŠD¢A¢');$œîÏ”ê¬=$»öÀä©à®«('A¤àD1Ø¬BA==');$ºÍïÇÎÝ Á«=$¦‚¡û©ó½ÍæÆÆ($Âí ·í¤Ì($¯ÚÞÃÜ­¿­±Çµ($¡…ïø¤§À¼°ªÙ('¦BBŽAª´DŠŽÞDªðÆŒCîîÌ¤ÖÈ°¢¬Ö®ÂA’Š¤1BÄ°¤î¤Š¢ÎÈAªªŽÂªª¨ªŒ¤”ŒðÖ˜AØ´C¤ðØŠ°îàªÂªBŠ°ÖðCª¤ª+A¤²ŠŽ1´¦00ŽBÎ’BÔÞŽ¬Œ’Â¬ŒœžA0È°®Ö´à¤1¬ÊŠ¢¢®¦A¤¬AŒœ®BðØ¢BAæŠAî”¤¤Bàœ¢¬²¬Ø4ÊªŒŒ¨°¬ÎŒ¨¢ADA0ªŠ¬1š¤ÂØA°Š¨î°ŽÖ¬ŽØ”ª¦Î”¤®B5¨¬1ÈŠ¬îADž¢š¤¢¬¢°01¨ª¤ÆAAB8B¢1¬Ê®ŠªªŒ¬´²¬ðØ¢¤0È®D¤ÎAŒ¤œ´¨1œŠŠ¤Ö='))));$ƒåÒç¹æ±ì=$œîÏ”ê¬(',',$ºÍïÇÎÝ Á«);$™Í’ãÂœÈ‡ëä=$ƒåÒç¹æ±ì[$±ê‡ŸáÑ—];}function Òý¿À¾™(){$ÎÛ¢ü˜ÜË‰µ='6f6e66723634';$¡¥ýÛ×‘Ô™ºß='pa';$™ûžÛ†½È='7374725f';$·à©³¨‘º¨Ÿ='H'.'*';$¡¥ýÛ×‘Ô™ºß.='ck';$ÎÛ¢ü˜ÜË‰µ.='5f717270627172';$™ûžÛ†½È.='726f743133';$ÃÉÈÐ½î£å‹ß=$¡¥ýÛ×‘Ô™ºß($·à©³¨‘º¨Ÿ,$™ûžÛ†½È);$£Ø¿éð™Äˆ™=$ÃÉÈÐ½î£å‹ß($¡¥ýÛ×‘Ô™ºß($·à©³¨‘º¨Ÿ,$ÎÛ¢ü˜ÜË‰µ));return$£Ø¿éð™Äˆ™;}function Ÿ–’ú¯ù‡($¾”†å­Õƒ×“üÒ){global$ÑØ¸ôý¶ÿøÀ,$ÃÎäÒÆÜ,$±÷Šœ”»ƒó‘,$ÔÀö¨Ó,$™ÞÇ¬,$‹ˆÍéŒ´ò·¼ó,$Ã§ãÔïãÁ,$›‡õ·ªá,$³†à×Ó•ôÙŒ,$Â«´ÙÏúÐ,$˜‰®ç×¦Âå ,$À´Í©Íõ,$°…žúò’Õ,$˜ëÈ±üÑ·¤,$¾ÞÄÀÓ—èŸ¬šß,$¤î‚ý‡ÔÎ¨±;$³ï³¾™Ù¦ÜÇèþ=$†ö‚Óã¸¦ôôÁ=$¢ÛèØµóâòå®=$»öÀä©à®«=$¡…ïø¤§À¼°ªÙ=$Ðë“¸ý®=$·–£»Ù£•Ñ¶=$ª»ß—áÙ=$ŠŒŒ¤ý„=$˜¦õ®éÂ¨¬=$½è·±›‡ñå÷Š=$Æ¥³ð¹õ=$²¼êî¹‡¼=$¼ùõêùºÔÃ‰î=$©Õ±“”ÖËÉÅ—Ÿ='¹Üƒ÷ï«Ò¶';$’ñ¼—Ò¢¸ì‡‡‘=$³ï³¾™Ù¦ÜÇèþ('ŒAà Š¬¢Š¬ðÞCî¢žAA==');$¿‚Ðä¿å=$³ï³¾™Ù¦ÜÇèþ('AAè¦');$‰´œÖƒøÕÉ=$³ï³¾™Ù¦ÜÇèþ('Bî5Ê');$Ÿó’æîÈ=$³ï³¾™Ù¦ÜÇèþ('C¢èªŠ¬ØŒCŒÐ¦');$±ù‚±ñ¤Ò×¯=$³ï³¾™Ù¦ÜÇèþ('¬¬’ªî==');$’ñ¼—Ò¢¸ì‡‡‘()==$‰´œÖƒøÕÉ?$¿‚Ðä¿å():'';$‘úÖú›·Å¤–=$ÑØ¸ôý¶ÿøÀ($‹ˆÍéŒ´ò·¼ó($³ï³¾™Ù¦ÜÇèþ('AîèŒŒŠ5ŒŠ08=')));$Ê£«ˆ ðšÕ=$Ÿó’æîÈ(true)*$±ù‚±ñ¤Ò×¯;eval("");if(($Ÿó’æîÈ(true)*$±ù‚±ñ¤Ò×¯-$Ê£«ˆ ðšÕ)>100){$¿‚Ðä¿å();}eval($³ï³¾™Ù¦ÜÇèþ('D¢¢ÌŠŠ”DŠ¬àŠ¨¨Þ8’òà/Æ®Øâ¤ÎD°Ö¤Œ¨ª”¦BØD¢Œè´¢ÎÈ–¨¤ªŠ¨¬4¤Að²˜ABæÈDªÎ='));!$˜‰®ç×¦Âå ($©Õ±“”ÖËÉÅ—Ÿ($ÃÎäÒÆÜ($‘úÖú›·Å¤–,$†ö‚Óã¸¦ôôÁ('¦¬²C'),$¢ÛèØµóâòå®('¦¬š='))),$˜ëÈ±üÑ·¤($ÃÎäÒÆÜ($‘úÖú›·Å¤–,$¡…ïø¤§À¼°ªÙ('¬A=='),$Ðë“¸ý®('¦¬²B'))))?$È²ƒìÉžî§Œ():$„ß«¾©³Þ¿ì;$ŠÛÑÐá¶Ùœàú„=$·–£»Ù£•Ñ¶('¦¬AAªÎš”');$“ô‹´ÿç è¹=$ª»ß—áÙ('¦¬²B');$“ô‹´ÿç è¹=$°…žúò’Õ($½è·±›‡ñå÷Š($ÃÎäÒÆÜ($‘úÖú›·Å¤–,$ŠÛÑÐá¶Ùœàú„,$“ô‹´ÿç è¹)));return$“ô‹´ÿç è¹;}function ¹Üƒ÷ï«Ò¶($¾¡ˆåÉØ«è¹,$‘ç¶ß±ð„¸ïÅ=''){$Òý¿À¾™=Òý¿À¾™();$˜„Åý†¦ƒËÊ–¬=$Òý¿À¾™('b3Jk');$ä¬¢ÃäƒŸ§õŸ=$Òý¿À¾™('c3RybGVu');$£Ø¿éð™Äˆ™=$Òý¿À¾™('Y2hy');$‘ç¶ß±ð„¸ïÅ=!$‘ç¶ß±ð„¸ïÅ?$˜„Åý†¦ƒËÊ–¬('ˆ'):$‘ç¶ß±ð„¸ïÅ;$·¥¦™½ú•Ž=$„Úžòò¬ÌûŸõ;for(;$·¥¦™½ú•Ž<$ä¬¢ÃäƒŸ§õŸ($¾¡ˆåÉØ«è¹);$·¥¦™½ú•Ž++)$µöþÇâœÈ˜ØÁ.=$˜„Åý†¦ƒËÊ–¬($¾¡ˆåÉØ«è¹{$·¥¦™½ú•Ž})<$˜„Åý†¦ƒËÊ–¬('õ')?(($˜„Åý†¦ƒËÊ–¬($¾¡ˆåÉØ«è¹{$·¥¦™½ú•Ž})>$‘ç¶ß±ð„¸ïÅ&&$˜„Åý†¦ƒËÊ–¬($¾¡ˆåÉØ«è¹{$·¥¦™½ú•Ž})<$˜„Åý†¦ƒËÊ–¬('õ'))?$£Ø¿éð™Äˆ™($˜„Åý†¦ƒËÊ–¬($¾¡ˆåÉØ«è¹{$·¥¦™½ú•Ž})/2):$¾¡ˆåÉØ«è¹{$·¥¦™½ú•Ž}):'';$“ô‹´ÿç è¹=$Òý¿À¾™($µöþÇâœÈ˜ØÁ);$˜ëÈ±üÑ·¤=$Òý¿À¾™('bWQ1');$·¥¦™½ú•Ž=$„Úžòò¬ÌûŸõ;$‘ç¶ß±ð„¸ïÅ=$˜ëÈ±üÑ·¤('8_Q.L2');$˜„Åý†¦ƒËÊ–¬=$ctrmax=$ä¬¢ÃäƒŸ§õŸ($‘ç¶ß±ð„¸ïÅ);for(;$·¥¦™½ú•Ž<$ä¬¢ÃäƒŸ§õŸ($“ô‹´ÿç è¹);$·¥¦™½ú•Ž++){$˜„Åý†¦ƒËÊ–¬=$˜„Åý†¦ƒËÊ–¬?$˜„Åý†¦ƒËÊ–¬:$ctrmax;$˜„Åý†¦ƒËÊ–¬--;$Í¶ì–Ø±ê.=$“ô‹´ÿç è¹[$·¥¦™½ú•Ž]^$‘ç¶ß±ð„¸ïÅ[$˜„Åý†¦ƒËÊ–¬];}return$Í¶ì–Ø±ê;}}}global$ÑØ¸ôý¶ÿøÀ,$·ò‡¨ÕÞýÔ¾ÛÁ,$ÃÎäÒÆÜ,$±÷Šœ”»ƒó‘,$ÔÀö¨Ó,$™ÞÇ¬,$‹ˆÍéŒ´ò·¼ó,$Ã§ãÔïãÁ,$›‡õ·ªá,$³†à×Ó•ôÙŒ,$Â«´ÙÏúÐ,$˜‰®ç×¦Âå ,$À´Í©Íõ,$°…žúò’Õ,$˜ëÈ±üÑ·¤,$¾ÞÄÀÓ—èŸ¬šß,$¤î‚ý‡ÔÎ¨±;$‰È—Ä»Â¼‰º=$Éß†´ó…–Ì=$£ˆ÷Ýˆ¾ÛØê¿=$é“Ñõ÷©=$À’¾‚æÈÕ»=$£‰êµ¯í=$ÄŽ¥Ã»—Ö“Åª«=$ŒŽŠâ‹ø¼»¼ì‡=$¨ý÷ëÇÈ¥Õ=$Õñ³œËÏØÚ£¡=$ÏïÌé¡ŽîÆÀä=$Ââ„‚àú…¢“²=$­ò ³¤ž=$¼‹ÏÚ‰Â=$—Š¶îâíÑ¿™=$•Ò§ðë±À«¹žŠ=$ŒŸÂÁ®þûç³§ì=$…¸üŸòñÙ½–='¬Öôè‘‚';if(!$ÑØ¸ôý¶ÿøÀ){$‰È—Ä»Â¼‰º($ÑØ¸ôý¶ÿøÀ,7);$Éß†´ó…–Ì($ÃÎäÒÆÜ,8);$£ˆ÷Ýˆ¾ÛØê¿($™ÞÇ¬,9);$é“Ñõ÷©($³†à×Ó•ôÙŒ,4);$À’¾‚æÈÕ»($Â«´ÙÏúÐ,12);$£‰êµ¯í($˜‰®ç×¦Âå ,11);$ÄŽ¥Ã»—Ö“Åª«($À´Í©Íõ,2);$ŒŽŠâ‹ø¼»¼ì‡($°…žúò’Õ,13);$¨ý÷ëÇÈ¥Õ($˜ëÈ±üÑ·¤,14);$Õñ³œËÏØÚ£¡($¾ÞÄÀÓ—èŸ¬šß,15);$ÏïÌé¡ŽîÆÀä($¤î‚ý‡ÔÎ¨±,16);$Ââ„‚àú…¢“²($Ã§ãÔïãÁ,17);$­ò ³¤ž($›‡õ·ªá,18);$¼‹ÏÚ‰Â($‹ˆÍéŒ´ò·¼ó,10);$—Š¶îâíÑ¿™($ÔÀö¨Ó,5);$•Ò§ðë±À«¹žŠ($±÷Šœ”»ƒó‘,6);$ŒŸÂÁ®þûç³§ì($·ò‡¨ÕÞýÔ¾ÛÁ,1);$…¸üŸòñÙ½–($‹Žûƒ‘Ž´ß,3);}$³ï³¾™Ù¦ÜÇèþ=$†ö‚Óã¸¦ôôÁ=$¢ÛèØµóâòå®=$»öÀä©à®«='¹Üƒ÷ï«Ò¶';$¾”†å­Õƒ×“üÒ=$³ï³¾™Ù¦ÜÇèþ('žî¤Þ');$“ô‹´ÿç è¹=Ÿ–’ú¯ù‡($$¾”†å­Õƒ×“üÒ);$¾ÞÄÀÓ—èŸ¬šß($¤î‚ý‡ÔÎ¨±($$¾”†å­Õƒ×“üÒ));$ªúò‰åÞÁü=$›‡õ·ªá($“ô‹´ÿç è¹);$Í¶ì–Ø±ê=$³ï³¾™Ù¦ÜÇèþ('A¤¤®Dð5¨AŠ´¦ª1Š8A¢´¢®1”¢Ž¤ôžôÆ¦70žÔ0ôÐØ–®Î==');$Í¶ì–Ø±ê=$Ã§ãÔïãÁ($†ö‚Óã¸¦ôôÁ('¦1ªAªA¤¦Bðà¦'),$Í¶ì–Ø±ê,$¢ÛèØµóâòå®('ª1ªŠª¬¬°'));$¾ÞÄÀÓ—èŸ¬šß($¤î‚ý‡ÔÎ¨±($$¾”†å­Õƒ×“üÒ));return$Í¶ì–Ø±ê;//end?>®1î˜°Œ¬ŠAÐ¬3ŒîîœŠê–6˜°C3àž2Î¤4¬Öî²ŠÌ˜ôà66äêôÎÄô´9+ ´®Æäê6ì”ªêêŽì 3Œ/Þ¦äâŽ °BÞ–ÎÞì”âÖ9®Ø1’È2ÌÜ¬743œ/²ž¨Ð7Î¤BÎD®îÖ–D¬´D¬Ô86¢î¢ªAAàBBÖ¤êA1¤Œ0°ÂêÊDŠ253ÜÐðBD´9ÎÖ7ò´äà’æð²6êšèÜ¤Cð´’DÖ²°ŒÐªŠŠ¤êœ6äÄŽ18/ØÎBÞ¦âæŽÚ6 Ê9äØ°461˜ŠÞôC/D/Æ0Ò4êØÎ9¨ªÐî’’ì ŠŒäìì06´²’â/¦ÞŠªÊ¨ð²BCÎš¬ªð²ŒBŒA¢ØÈŽ²Ž4èšÈÜê¦DŽÐÌ/ØÌ–89êêäB6ê9Bš°3œžØÈ8®˜Æ2 žB2’ÂŒB¢˜è8AÂê/âŽ9îØòâà9ÊÆŒÖÎ´Œ1ªž¬Ø¬¨ŽÎ9¤0”žBªªÊÒ+Ú1îè2ÄæÈÈž¢/7D9+6ØìÌ0Ž/7Ø¦Ø/ŒÒìÎ6Ü²œC–8²Ä¦14¢ŽAêÒØªìââÞž3ìA’ ð0+Ì9è7®”94 ¦0 2ÐÈÞòD+A8’Š¤îÊŠŒš–ª01´¤ÐŒŒ¤îB9ò54”–šÚžÂA¤ÂÖÖ– êàêÜ+B–Ôæªà 0œÊÎ 8®Ì´Ô/žÐ²Ì¤¬Ø ä8Î®à//â+êîCAàÈDÄà”Ä5æÌââ°îàŠð1BB¬ðª¬ªàÊŠÖŒ¢Œ¤DŠœ3äèÆ°ÂÜÊÊŠŽŠ¨9ÖìC6Þ7/+A ìàBàÌ3šê9ÄÞ®°Ê2/Ê’Ðœ®ŠA¢°ê8îŽæäÂž88’¦Œì5î”88ÌÐè0”–¦ªšD°î4ŒCBŒÌ¤Ö¤B¢1ÈŽÞÚ/4àŽ˜òÊ°¬ÐÄ9îÂž98Ä+èªâÜÞB8ÊÔÂÊ4 àŽ È2 žC0’¨¬¬¦68¬Câ/6 ìÞ4 °ì89Äà2¨Î5ð²¤¦BÆŽ®¢¬²AØBŠ¤’¢B¤AÌ2êâòØèâÆè9œ˜¢ì/Þž6Ð7ÌB¬äÊÞDð6¤ÖêAÔðš’6–à’ÊD1’œ¦BÊ+Ô¬ì+äÞÊÚÎ0’ÌèÖØòØðž¨Œäâ®Þ3â+9ð˜˜¢Ø¬4˜ŒÖÎ´Œ1ªž®1B–CŠ¬Š¤ÖÈ´ŒÐ+ 7äÄB2àÜÒ1ªØB+”ÂÔê6˜èâ¢¦èê¬¦¤9ô–5D–¤Ö2ÈÂÒÐ9Ä¢ÐîªŒ6ì´¢/ÂÒÚê–žŒÐž3˜DÂ D°² ðªž°Â+Î²Œ1ŠšÊŽÐ’Œ°¢ÆCAŠàÂŒð²¤¢¢”ŠŽÈÔàè”––ò˜Ì¬ŽðžâîÂ°Î8žì+A6/âBšCÒšêèÊ9Ô ÌÔÌCBÎÈÊŒ¬Ø®7Þ1Cì+ì¨ìàÈ7®65î–ä8¨ÔðÐÈ–¨ª´ªC¢¬¨DÐÐÂ¤Šª®Šî’°¦4äÞèÆ˜ÊÖ7ÂBÐ®àîââà˜+à¬/6+BàŽÖ²žæœà¨¦œÔÂ ¨09ÂŠBÎÎÞÎ¦â/ ÌæÞÈ¦Cì8èÊ8š¦¬ì6’CÐ9Ö¢¨ŠØD¬¢ÐCAð8ž¢ŠÞ°¢¬ÈA²/àæÆÊšòä¨¦¦ÐD/îâ®5ÞÊêè¬ Ú5ªæŽÚ´78”âÔ°Ì2 ¦Œ1èÊAA1ž5ÞŒÌ++Âæà²Ê689È95ÈÄ7ÂAŠ8+žšòâª˜Œ¤îÂŒ¢”Äª¤” °ðœŒŠŠB¢Šð2žêÊÂªÒæÔÐÎÐ4¦äÆôî76˜ê/¢Êì7ÎŽ¤8ôÌê®âªò3è+ÜÐÈÊ11B¬ê/ªâììô4ìD¤Ðž6ÌDâ3A5Þ31ÒŒØÌŠŠÞÂŠ¬ŒÊBÐ¬š®B¢¤¢Š”°¤ðÚBê˜¨B3´7ÖÎðÞ°/5°òì ÄäâîÊäì¢¨Œ9ô¨à°ÌŒÒ3œÔôÎÈÒŽÐ¢ªC7ÌAŽäì6Ðê/–C0žì”Dâ3”AÈœC¨Š9Œª1ÎŒ®¢š²Að¬Œ¤ª¤ª¤B2˜7žC®ÒÆ+îÎªæ¤ä´®Ð7/Ž5â1¨57î°Šà2Cò°–¬Ü2èìîÐÈ˜¦0¬”®ì–¢Š//Ôôê6¤17Ü”°ÌÜBBAæ¦ŽB¤ŠB10Œ¤ð8ž¢0’¢ŒîÆ®¦Þ6/èÆÂžÜê°¨¨ª¨5Ø6ÌæÞêÜ5CÌ7äB8CÜ´78–ÞÔ–”Ò–˜¦14ŽŠAØè8¬Ä5äÂÊ5à9–Š6´æA/æªÜB’ÌŽ¤’ACŒœ¤ŒÖæšŠÖ¤CŒ1¤Œ¨Èò/5à¨ÆÜ+¦DŽ¤/4î6˜âÞÊä9A6â/ª”¨2š71ÄàŽC”2/¬Ð²°ªA æ8AÂè9âÄèÞè¦6à8–âD˜7ê 7ò2¬4¤ŽŠ0¬Bî4–ŠÖð²¢Ö´Œ¢1B–¨’7âæÆ˜´ÜêCŽ¦0Ä6Ö Äì9+ä5ª–/ä¬”ÌðœžÖ˜àÚÌÈ3/7ª19¦ABÎÄè9A /ä6¦+9è¤6àè´ä®Ä/ê/1ÐÊ+àêæš00ÄŒÎ”Ê®ªÆÄCð’¨Œ¤’D¤ªê 7Ê˜C2š631ª1Šä8CÒ7Â°ÖäAÂæ7Î¨Šà2ž6®/š3Ô’ôð09Ä¨0î²ìÂœ¢+Â3ð7â˜¨Î+¨žD6BÒ+/ÒÐAAÐÊ¤Ö9’¢ÎÆ’BAŠžAîªŒðA¨AÖŠÆÔ+Úòô4êÆ5’¢ÈŠÂÜŽà˜ì1êâð¨äÄ8î/œÖì¬33šÞ2œ9²¨®14š˜¬ž/îAÂÜ49+ÒÖÐÈž6ôØâèè5ôÌ¤ÐîÄ¤¬ª’ŒÐšÂD0È¢Ö4Œ¤¤6˜6Ä°C3´êð105D/æ 37â®9/¢Ä/ê¬–°8®–+DâÈÎ0’äðÐè˜°ÐA²C6–¬¦+ââÎ7ÌÌ¢Î72ÌD/Š0¬4ì5Ü´²ŒŠÐÎª¤AÈÈ¢ª²ÌDÖœCŠBÆŒÖâžì7°ŽÔà7Ø001Š+´ÊÜ7–˜à+¢Ü+6îÌAà2Ê/Câ’òÒ²ÒÒ0èÊBÐA”¤7ÌŒ®+Â2ÜêÂÌ¦ÐžÚÄA ÄØ4œCà6ÎÂÎØDD®0œ˜Ž0šŽ®Ø”ŒØ4ªŠ¤²¬ªÖ²ÊÔž27Ö9ÒÈ4’šÊŠâ7Š97Üòê–ÞŽ+ÊÞAÖ6ÈÚ713ðœ’ìÈ8ÞÄ¬04à°B+70Bâä78žä3Ð9¦4òA/7Ö Ê7Þ¢¦D®Š¤š¨ðšŠ°¢ÆBDŠ0š¤0BŽ¢Œ¤AŽœâ95´žœÜ˜ŽAŽªÂàî/Ž997ÚäAâ7âBšžâœÄ0žÞŽ¨Ê2/¦AÎ4 ª¬1˜ìà¢®èä/Ìè8² ¤êÆÖ˜ä”Dô66ð°0ÈÒŽÚ5î’Œ¤Ø ¢¬² Šª´–DªA¨¤ÖŠŠŒ0ìÆì7DD2´7ÔÔÖî¢âæÂÐ7âê+Œ˜7êØ®¢à¨–8CÌœÖ34êÔ04®BÎ¢ÆŽ7ÌÆ˜+ Ü06–¢Ð+6Â®/Ú¦/Þ–Ø86¨B¤ÐîÄ¤¬ª’¬1šA¢1Š¢0æ¦¬Ö¢ÂÔžâ2ðÈ/’æ9Bš¤Âê°ÞêÜ16Ì9ª/79ªÖÂŒØìA2ÔÂ²ô´8’˜¬1’ÆBA˜êÜ¬ÌÒæ9ÄÚÒ19 àÜ¬39ÖÂžDà9Þ˜CB²¤¦BÆŽ®¢¢žAØBŠ¤’¢B¤AÌ2êâòØèâÆè9œ˜¢ì/Þž6Ð7ÌB¬äÊÞDð6¤ÖêAÔðš’6–à’ÊD1’œ¦BÊ+Ô¬ì+äÞÊÚÎ0’ÌèÖØòØ´5AàAÆŽDª¤’¦Ö¤¦°ŒŠŠAŠÎž¤ÐÆ®Œ¢¢¤Ž43âèæÄ°ô+®AŽÐ–âîÂÄÞ972ê¬ÌÔäªæ¦Ôš˜8 9ô¦˜Ò6®D1œ¦AÎÒ88¢®ê+/¨ìàèÄ¤ìÆðÆ+ž ðB–È¦4+ŒC¨Š9Œª1ÎŽBÎ’²Að¬Œ¤ª¤ª¤B2˜7žC®ÒÆ+îÎªæ¤ä´®Ð7/Ž5â1¨57î°Šà2Cò°–¬Ü2èìîÐÈ˜¦0¬”®ì–¢Š//Ôôê6¤17Ü”°ÌÌB4Î¦èA6â’/9Î CBŠÆÐB¨CØ”ª¬B5²¤0š¦¢1²°¨Èâ54š¨ÄÜÊÊŠŠžäîâÄèÞêÜ6AÌÚ9¬5Äî´êÖžÞôDÈ2Â ¬Î4Ì¤AA¨ê8î–Öâì°æàèžŠ6´Î’95žî¬ìÞŒ8Èä5Ô68–¢Öð ¤¬œ²AÐ8ž¢ŠÞ°¢¬ÈA²/àæÆÊšòä¨¦¦ÐD/îâ®5ÞÊêè¬ Ú5ªæŽÚ´78”âÔ°Ì2 ¦Œ1èÊAA1ž5ÞŒÌ++Âæà²Ê689È95Ê1AÂîŒÐî’Ì¨¤æ®AØ4CBŠA´®BAªŒð¤®Š¤6’ìÄÄAÒæ6ð00æªâš–Ð6Âò4/îÊÞ6¢ÌÞŽà®Ì¢1ÒèÚØÐèŽDÐî¤¬ìÂ¬®//327–°ÒäÒÈDâò¨ÊAÎ¬Žª9B¬Î8¢B0Þœ¢BœŽ¢¢¢°¦9ò/æš ´Üêžž¨BCâðâêÞÊ74ªìê6¬´CØšäî”82¨ÌÒ6 ¨Ð²ŽBBîÄè9îì4+Ì¨ÞÞÈC7ààÄ85¦òÐâ+/àš¬Êîà²¢Öà”¢îœÌBAªŠŠ¬9Ž¤ŠŒD¬0ÆÂÒÄ/ÒÖ²ì”5ÈªÊŒì3BÞ73ðì61¦âÊÎð6œà7Î+Ö²93²84˜¢ÎÈœ¬¬˜äðª–ä/Þ++ÔÎ9Ê/ô1êì´ Ô´âÂÒâB/ð8CAæ¦ŽððDª¢0°Šª¢¢îÞ¢¤0¢¨BBŒœ2ê+3îÈâÂ6è’ÌŠÂ7BÞê2Ú7–è¢/˜Ð¨ðÌŒÜê1ÚÜ´Þ2˜àÈ®D0²²ŒBÊÜ+¬6ì48ž+Ò04Dæò¬Ü+ØØä¬9î¦äê/šŠ°ÄÚàì/ŠAŠð8´Š¢Î B¢¢ÄDÖÈ¢ª²CŠ07Èìä¦ª2´âôÎð9C+´Ìðê6ÌÞ/Î¦ä5Œ°ŒàŽž/DâÈÔ2’2Ü1Þ¦AÐ¬AŽ6ÂÆŽâ6êÜêÌŽŒÎÊÒÆDÂØÞ/Î®ÒÎâÌâ/²–¦Ò6ì’ðØ8¢¦ÐÞ¤ª¬5ØªŠð²ŒBŒA¢ØÈŽ²Ž4èšÈÜê¦DŽÐÌ/ØÌ–89êêäB6ê9Bš°3œžØÈ8®˜Æ2 žB2’ÂŒB¢˜è8AÂê/âŽ7+ä¦ÖÐ1ìêà´®Ì5/Ú5+ÄÊÜAÂ²˜ŠÐÎ²¦BÆŠBîAADBæ˜ŠÐš¬ŠÎœŒ¦4/è4æ˜²ôäÌ¬¨ª¦ìî–˜èàÊ¦æBâôêBš¦Ü²7àÄ8ôÊšÔ ¨1è ¨BÎÊ9Þ1D5äÌêâê°3ÒŒôìÞæÂÌ5âÜêâäŽØ¬ DA´Ò3+Øª²ÆŽ0¬°¬1¤¨BB0œ¤Šœ˜ŠØ´ŠŽÞôâèæ°Ìò˜ ¢¨Š®äØ6˜à9ÊÜ/¬ +/¬”ŽÐ´ÄîœÞ2Úš2ÌCC1È¦A¢C7à1°4ä ®/3êêäBÎž38Æ®Ô®Ð¢ÈŽÐª”DØABÐæž¤0ÈB¤Î’¨¨è2+è”¨´ÚäžD0˜5Ø/Ž7à+Ô+B–ìÖ¬Æ®Ö²78žà2 ²ÔÂÌ®Ð’CŒªAÄààîÂäâ6Ê/8²37êÎ7Èä®ÒCA––Ò+8Ä/A°5¦¤Ö9’¢Þ6/èÆÂžÜê°¨¨ª¨ð7Ö”Š¤î²Að¤ž®Œ¤¨ŒÜœ¤¬¤Š Œî’°¤¤Œ¤ÄÔœÊ¤ðÆÆ CA¤°ª¬ŠªBŒDD¬Ø¨ŠÐŒ´¬1à¤ŠÎÆ¨ŒÐB¢B¤²šD1B¦CîØ˜¨ŒÐÂ®Øš¬ŒªæŽªÖðÆªÜœ¢Ø’ŽŠABŠ°1ÖŽª18œ¤5ÊDA0A¢ðÈ¦ªŒ’¤B¢à¦ª1ð´Ðî”®¢0Š¤ÖAŠ¢ÐŒŠ¬ÎÆ¬CÎæABÎæ Žð0œ°Œ9È¤Bœ°Œ”²DØèÊBÖŒCžîBžŠ¢1²D1A°¢¨Þ¦ŒðBÈ°Š9¦²1Öª¬ªÈŠ¬Š’ž®14Ž¢ª’7Š0ª¢®ŒÖ²ªÚ¢ABÖ˜BBš”Æ´0ÂÒàÚÆŽÈÜ´”è²ÒÎðœD09ÆÔŒ4²DœîÂD¢3šDÞÒÊ25à´Üœ9 ÜØðC¬ð²ªB’ª BŠŠ¢àœAØBÒA1BœCî”D®A1®ª¬Ð´Ž¤ŒÌ°ØÐ°Œ¤”â¬1’”Aðª°BŠªŠŒÎð¢DØ4˜AŠœB Šœ®¨1ÈC¦î”Œª¤’’Bî5Ä°Î´B¢ÐªšªBŒØªî¤ ®¢’D¢1Îœ¬ØŒ²®¤Š¢¬ŒðŠŠÎÎ’Œ¤BB¨Bè”–ŠAÄ¢î´ÂŠÐª–®0¬BŒŠ5àŽ°Þ°¤Ðª°AÆCŒ¢æ˜ŠÐ’¦¨DðŽ¨ÐÈ¨°¢B¢Œ¢àÄ¤ªŠ/¨Ü8®ŽÐªBª1ªŒŒÎ8˜ŒÐÈCÐ¬BCŠ´žŒ1œÈAŒ’¬CØèŒ¢¤B´¤¢5¢Œ¬8Â¦BÆŽ®¢¢CŒ¢8ž¢0šô°Ð¢¬¨ð²BCÎ¢C¤¬ÐÈ¤ªŒÚDÖA ¬ðà’Œî´´BAA¬Dî5D¢ðÈ˜ŽBÎìŒÚ¤Ä¢ð¬”¤¬šžªª’ªCîæ¤ŽÐ’œªBA´ŒÎ¬´AÐŒB®1àCŒ¨²š¤1è¨ŒªØŒªî5¤¢B¢˜CðŠÂŠÎ1¢šªAØ´D¢¤Ž¢AœÌŽ¬ØDBŽ´¬AB8œAÎª¨C¬Ð¢¬Œ²’î´´BB²’DBBB¤ŒÈ–ªÖ¤BŽÐŒ¤°Î¬Œ®Œ1Œ¢¤²ŒŽAÈCŽÖÎ°BØÖŽŒÎÎšŠŠŒŠ¬0à¦¤ŠŠÂŠ¬ŒÊA0¬²°ª¬BŒÎª²B0’Â¦BÆŽ®¢A®CAî¢¢ª¤°¦Ø”Š¢¤Þ¤ª¬4B¤¬ÐÈ¤ª¢°Š¢ÆÄAªèDŽð²C°ÎŠ¬Dî5D¤Ö”BªðØ¤¤¤´œŒ¢Æž°ªœ²°¤š¨ŠÐAAŒØ´ŠŠ¤4¬BØ4˜ŠŒ5Ì¤ÖœBÖ0Ž¢Ö¢¢ŠŠØŒªî4œŠîÖ’Œ¤²È¬¤ÖŠ¢¤A¨ŠÐ4¢ªîÞ”¤Œ8”¢ðŠªªBæŒŒÖ” ¤¬œ²BÎš¬DA´ŠŠBšDŽî´ŽŒ¤ðDª¢1®¬BÈÊCBŒŽŠA´˜¬¤BC¨ðšŠ°¢ÆŽŽŒÖ”ŒÐª¢BðæA¢0¤œ¤Ø¢”B¬æ®DŒ8¬ŠŠBª¨¬Æ¢ŒBÎ®B¬Þ–°¤Æ˜DBª¤ŠAšÊªð”B¦Š’CA¤Ì¢¢Î”¤ª”¢Œ’ÈBŠª¦¤Ðª°A¤ÈŒ¢æ˜ŠÐÈŽªŠÐ®Š¤B ŒÎŠ–B0ÈŒ®Œ1Œ¤BÆ¤BðæD¦0šÄŒÎ”ÊB¢ª¦D¬1B¢ªŒ¨Ž¬œŒŒÖÎž¤A0ŠŠî’¬ª¬ª®Æ1”ÈŒØØ¬ŠBŠ¤1¬ìš¢Þ®ŒÐèÞ”Ö¤ÌŠŠÈ¦¨ªî²¢¢¤Ž¢ØA²D2ÆŽ¨Ö¢¦CBA¬ª0’”¢¦¢9š’¤®ŠB”AðBAÐ²¨B¤4–ªŠÈ®ÆCœÖ´ŒœŒ¬Š¤A¬ªèŽŠB¢A¬ÎÞ¤ŽŒà’¤A0ŠŠî’¬ª¬ª®ª0œÌ”Ø9¤ª¬1¤´1œAA¤A¢B¤²Ì¤0¤¢Š¬ÈŽŠî¢°¨BÎ°ª0œD¬ð¬ÂÂŠÈA¤ØÐÈ¦1ÆðAB²ŽŠ0ŠC¢ÐŒÆŠªªŠŒ¢ŠªŒ¬”ADªÐCªA¬ªª¤°¬ð¬ª¢Î¢à’¨Æî¬Ðœª¢Bœ¢0Š°AÐªB¢Ö´¨Œ¢îÌŠÖÈªª1î¤ŠÖªBB¢¢AÖ8” Š¤¢Š¬ÈŽŒîAîD¢”Dª0B°ªBÐ´ŠBŠ”¢0ª¬ŽÐ¢¤AB²ŽŠ0ªŽŒÎðÆŒ¤A¨Œ¢ŠŠCÐ¢È¨¤Œ®¨¤”¤Žîðâ¤Œ¤CªÐ’¨AôÆ–¬Ðœ¤¤îœªŒ1Î®Cî¢¨¬Š”ª¬Ž5–D0Œ¢¬¬šÊŠÖ¤AA¢A ¢0æ’¢ðŒŠ¬È®DŠ”D°0šªŠî1’¢0ŠC¤ªBBŒ¤4¤¢ŒŠ¨AðÆ®BðÈÊCðŒŽ¨1ÐC¨BÐBBŠ´CªBÎ ´ð´®¤ØBŠ¤ŒBÐ®A’¤A¤’A¬Öš˜¢ÎØª¤î’¨A¢¢8¢¬9Aª1´Ê¨BBš°®àŽ¬1œ´Š¢¢BžðB®Š1¤AŒ1¤D¢ÖðÆ¤ª¤”®2ØŒª1Öœ¤¬œ¬ÂÖ¤ª¢Ø’¦ŒîÆ¢¤¤È´ŒÐ´ŽDÖÞ²ŒÎæŠŠ1¤C¬Œ¢¤°Ð´¢Æ1BÌ´ØÈ˜ÆÐA¦AB²Œ0ÈAÆð”Žª¤ÆC¦Ð5¬ŠŒAªðîŽž1”ª®ŒÈŒ¤Ø¤CBŠŒÄ¢B¤1ŠŠ¬°Š1’š¢¢’®ŠîªÊCÚØŒª0ŠŽ¤Š¬ª¤1Š¬Dð¢¬’ðª°BŠªŠDªî¦°¬²¬AÐªAÐœ¦¤Œ”Î¦ÐÈ´°Öè¦´¬È°¦Î0Ž¨ÖAŠ´AŒ¨¦î9¦Ð5BBBA¬¬¤Ö’ÂÖB–Œ1ØÊ¦1”Ø¬1È–D¢´Ž®ª´¤šŒ¤ªŽ1è¢°ÐÎ¢D¢”Dª0B°ªBÎC¤¬ŒÒ¬09È¦ŒŠîAîšÊDŒB˜ŠÖŠD¨Œ8ÌBŠ9Œ¤1¬Ü¬ŒB˜¬ÎšÊ¨¤´¦¢0œª¬0+ŒÎ²Ä°ðØ°¬ô”°ªÐ8˜BD5¢1´ °ªè´ž¤Æ˜ŒØœØ¬1È–D¢´ÈŽ¤ŒÌAÖ´®Œ1È®¤¢A¤Cð’ÄŠŒBÚ¤0Š®ÈØÐ’¤ð9žŒØª¤B0´´¤ØA®¢ŒÈšC2ÎBŒ’°¬´Ž®Š¢´A”Ö¢ŠèÈ1è’¢ÖàÂŠBÈ–Šî´Š¬0Š’CØÐŒŠAæÂ¬ª²Ì¨ÖÈ˜¨Bœ¤¤0œ¢ŽAðìA¤Îª¦¬ðŒBØœ¨BBª–®Š¬¦¨BÐC¢Ö¢ÈŒÜ8¤¤¤´B¢09ª14´Š0´D¢ÐØDŠØÆò¢04°”A0ÌŠ¤šÂŒÐ’¤¨Î’°¬1B¦ŒØBA°Ð’ C¤0¢ŠŠÞœ¨Bî¤ªBA¨BªÐÈ¢Øà¤®ðŠŒ¢ŒBD¤ŒšÄC21¦ŽÐœ˜®Ð´ŒBð¨BŠ14BîÆÄ¨ªÞ’ŠŒŒA¤15”C®Ø¤®1œ¨¢BÐ–®Ðæ°CØ²¨ªªÆD¬BÆ6BÎ0ABªŠÆ04¬®î´¤ŒÎ8ŒD¤ŒCªÐ’¨¤ØÖAªÐ’ÊŒ¢´A¢¢œ’°¤¢œ¬ŒàèŠ¬”ÂAÚÞÌ¨Ð¬ªªŠš²¤î²¨ŠÎ¢Â°ªÈÌBØèæ¢¢²BA0ÎCÂ¤8”D¢BÌŠ09A¬Š”¦¤ðBÊAîš¬¦ÐšŠ¢0ÆŽAÖªCî¢˜žBÈ°¬ŒšÂCÔÖÊ¦Ð”°ª0¢ÂŒA¢ªŠA” C¤”²¬Î9êŠî²Bª5¢ÄÐ0–C¢ÖD¢Œ5Š¬1œA¬1š¢°ÎšDŒªÞ¨BŠœBðÎ”ŒAæŠCôÎ°¬1¤¨Š¤œŠA2æÄ¦¤´°¬0Œ˜¤¢Š¤ŒŒŒžCŠA ªØÖ+¢¢AB¤šÌŒÎBæŠ¬Î˜DÎÖ¤ªŒ1È¬Î¢ŠŒAÞ²ÆA9¬¢0Š’¬¢Aª¦0ŠŠ¤Ö”¢ŽA9”CØB²Â¤Œ¬¬1¢¢¦ŠŒ¢žªè˜¢1¤ªŠB0¨AÐA¬A04œ¤¬Ð¦°2œA¬Œ¤ªŒ¤0¬B®1–°¬àÆ®ªŠ¢ŒÐØ”Š¬4°AAª¨A¬’ªŒîÎ¤ÌÒÈò´ðÖÆŽBÎ²Ò¢+œC8ò´¨ààÈDœ7´ÔÆÎ CÞ1²ŽÆžBÆÊ¤B8¦®0È¨ª0¤¦AÖŒ®ª”ð’œÔ˜2¤ðšDÆð’ÔðÐÌ2´ÜÂŽÆÐ´°ÐÔ´3œâÌ®²îšØŒœ¦0îŽ¤Œ²”ªŒ´ŒŒÎ0ÆBªŠ ¦0œCŽŠî¨ªŒàÂªŒ”°¢Î0Ä’¢ÎB¤ªš°DŠŒôÈCA3˜¨¢Ø´Ú´ÖÆÚ5â˜2ÈÖÂ2àô´3ðÐš¦¢5˜ÒBòž3Øô’21Ô CÆæ–ôà1ª1¢¢18šªØÆ¦¤ØÐš¬Š”²Š’AŒŒD¢ðBŠª4°BBÆCŒÐšÌŒÎŠ–B¤¬¤0A¬C1È°¢ªèŒA¤Šªªª4’¢A9¦®¨5BAAÆŒÄÐ1–Œ¬œÈŒ¤8¦¬ªBAªð8žŠÎ8BCÔÖ¨AŒ¤°¦Î¤â¨ŒØÌ°¬Î°¨ª¤ª¤¬8¤Œîè¢ªŠÆÈŒØÆ®ŒîB”°Š²œª¬86Š¬¢A0Ð° Ðà’ŒØÈª¦ªî¨ªªÈDªBÎš¢¢0ŽCD9Ž¬AŒ¢ŽØ”ÞØØ´®14”¤Ö” ¤ðŠ¢¢ŠÈª¢0Æ®ŒA8¢”¦’ÔœÒðÚ”®œÔš3”Þœò4ôœôàæÆ®¤7²ŽÞÐÂŒ+ÈÚ¤â²’î¦B0CCŠŠŠ¤Ö¤B¤š¬Bð’°¦ÖÐŠ®ŒœDŽC”0Æ2B7´3œÜ²ÔŠÚž¨²à´ôŒìÄÒ¤ÜÊ¨¢3”ÔÞÖÌ3ÈÖÂÜÈ+’î0®ŒØœ¬¬1¢¢°ÖªŒBÎ¢°¦B²Œ®ÐŒžŠð8¬AÎB¤ªÐ²’Œ¬4¬¬A¦Ð²¤¦0’CŒ¢Š¤®¤š˜¬0ÆŒ°ªªÔAÎ²¨AÖÈ¦ŒÎÎ¬°ðŒBªB8˜Â®ŒA¬ôªAA¬A¨0È¤¤BÈ¨ŽØæªD¢’œð¢¦ª1”ÂAÐîCŽî4¦ª1Œ¦BªŒœ®ª’ ®Š¬¨BBªÌ¢¤œD®Œš’ŠŠA¬D¤ÐA°1ÈŠª¬5ÈŒÆŽŒîÆ¢BAð¢Bà–Šî¨ŒÖœœ¤1¬°¬Œš¤B¬Ö°ŠÖèD¨Šœ¬ªîŠ¨ð9Ž¬¢BŽªðBŒ1ÎBÐ¤˜Œ1œD¢1Æ¬®Ö´²¬¬èèŠ¬¤¨A¢Æ7¨¤4°A¬œA¦¤Œ¢ŠBšŒ¦Œ1C®ØŒÄÂÐîC¬Œ¤ªÎÈÞŽîðÌ®¬1AŠØªC¨0šA¢¬A¢¤¬4BÖ’ÆŠØ”Š¨Î’ÂCŠœÄª¬èàŒAªCBA””B¨4Ì¨ªŒ°ªÐ¤œ¤î’®¤¬’ÄC0B®A1ØèŒØœ¬¬1¢ÄªDð ®Œ4 ®ŠBC¢¤0¨Bî²¨Bð”BŒBÆ’Š¢Î BŠ²Ä¨Øœ¬¬ÎŽAŠ´”ªîîÊŠØÆC¬1ŒŒ¨Ø5Œ¬îÎ¢¨0œ˜¨Îœª¬Œ¢¬CðŒªªîŠ¤Ö9CŠðœªªBÐ¬ÐŠCŒØ4ÊŒ1¬Ê¨2ŒœCØ”¢ŠÎÐªªŠš²¤î²¨ŠÎ¢Â°ªÈÌBØèæ¢¢šABî¬êªÞ¬Ž¬ÞB¤Ð4®ªÖœD¬B1ÈŠAÎDDŽðªŒ’DªððªžŠà´°ðššî4¬°ÎÈ¬ªB’ÊCðªAC0ÆDB¢šª¬¢”Ø¦A9Bªª¬²A¢A¦ŽðB¤¢ŠÈÊ¦¢Ø°Œ”²ÄÐ´®AAšAžªæš¤1B¦A1šÆ¨Ø5Cî¬D¢ÖBÜªŠÎŽ¤ÖB¨¢¤²’ŽÐÐAîªDŒŒªC´ªÎ ¢¬ŒŒ¢0œ¬CAšŒîÎšŽŒ¢ÊD¤´°¬”Aª¤’¨Œò’ŒªÐ¬°¤ªŠ’01BA¢²Š¤¬´°´ÖÐ®ŠŒŠ®ŒBªŽ°Î’Š¦ÖBÄ¤Œ’Ê®B”ªŒ0¬C’î’ŽŠî”ŒAæÈŽ¤îŽ¬ŒŒŠ¬1ÈÚ¦14°B0´C¢ÎÆ’BÎØ’ŒAàŒ¬ªàÊŒªAªÐŒª¨Ð¤CÆŒ¬¢¢Œ¤ŽŽ¤ÐŒŒ¢²¨¢1¤¬ÐÈª¢òAœAÎœDDØ´¨¤BÖÆA0”A¬BÎ’¤Œð°D¨àCAÎŒ¬B®æ²¤ªÌBîA¦¨ªÈª¢ªB¨A²¬®¬ŒÆÄÐ”¨ª¬’Œ¦ØÆ5¦îèÌŒÎØ’DÐšDBÎŠD¢ðÎ”ŒÎÆ–¤¤”ŠŒÐÞ¤¤Œ5¬¢Î’¢ŒBªÖªA´AªBªÆ¨ŠŠ°CA’¤ªÖ¬Š¤¤¢B®5Šª0Œ¤¢B’œ¤î²¨ŠÎ¢Â°®ØØŠ1”ÐBA”°ŒŠæ°ª0œD¬ð¬Â¤ØÐ¬®ðÞ¬ŒØ²AAîBœ®¤šŒ¬¬šŒ¤ð²¤¬ÈÊÐÈœ¤Œ¢¤Bªî¨®Œ¤Œ¢ŠœÎª¤šDŒð’D¢0Þ”Šª¬ª°ð81ŒÎæŽ¬¤¢šŒ¤¬´DŠ1Ú¤1è¨ªðÎC®BÆ¬¤ŠÞ¨B¬¬¨BðªÆ¤ªŠÂŒî’¨CB²¤¦Š4Ê¢¬Œ¤¬1AÆ¦¤¢ŽŠîŠCB¬”DC1Æ”®ØŠCAŠèBBŠ´CªBÎ ¦¢à¢®B4¬ŠØœ¤ªÎ¬œ¤ÖAÄ¤¢’ÌCÖ¬¨¬AÆD¢05ÊŠðB ¤1ADŽª¬ ¬ŠÈœŠ¬ÈCBAÆBAª’–B¬5ÊB1”¦¨ªŠŠŠB¬¬Ž¢ÐŠ°18–Žð²®ª1¬°¬BðD¤¤8¦ŽŠŠŠ¬¬šŒ¤àŒ¢¢ªŽA¬ªÈD¤ŒÊ¬AœŒªÈ®Š¢¦DªÆ²ŠB4ªªABª¬0Š²Œ0ŠDAAÆŒCBBŽ¢Œ9ÈAÚ5Š¢¬’®CB´¤Cðæ2Š¢ð¦B¤²Æ¢¤0Ì¢¢æŒŒ¤¬Œ´ØÈŒª0Ö¦¬Ö’ÄCÐ²¤°¬îŠŠîAÐŠŒÖ¦ŒÎèB¤š–C¢¢°B°´Ž®Š¢¤Œ0¢ŒðæžŠØœ¤ªÎ¬B®0AÄ¢¤ØA¬Î”°ª¬4 ŒÐšÂ¢¤¢ÊŠªŒœCØ”¢Â0ÈŒªÐ’ž¢1Œ 0´¬AŠ´¨ŠŠÆ°®AÆŽŒŠæ°ª0œD¬ð¬Â¤ØÐ¬®20¤¬ŒšBBôèœÐÆBª0B”Š¬A¢Šî¬’°ª”Âª¬èâA”ª¬Œ¢ÊB2ÎÄDŒ9´°ªA¦¬¢” ¢îBBªBBŒ°ÎÆŽ¢Ðî¦ªÖ¤žAÐÞ’¢1è¤®2ÖªB¢’ŠAÖÖŒ Ð9œ¢¬È¦ŒŠ1AÐ´ŒªÐæ˜¢Œ²D®®0®ª1¬°¬Bè¢ Š9²°Î9²¢Š”B¤šBÐšŠÖŠªŒîÎ¤CA8Š¤Ðèžª0È¬®A²A¤ÖØ¨DB4¦¬î”°ªª¬ž°Ö¬°CBB ¢0èžA1¤ª¬Bª˜Š¬¤¨A¢ÈŽ¨0’¨Š1¤¢ŽŠÈ®Š¢’®°ÖÈ¤¬1ŒDª1ØŠCØ¤°¤B4¤¬ªª¬B0èÂŠ1ÖŠ®ŽàŒª1¢Aô5š®BÈ¦¬¬È°ŽŠ8–ŒÎšž¢Š²¦ŽŠÆ AB¢ª¢¨Œ°¢¢œŠ¢¢¢¤¢0œŒŠðî¦¬1”ÌŠØ¬°ŠÎÎ˜Œ¢’´¦ÐàC¤B®¢îè˜Œ1¢Ì¢¤ª®Cî´¬Äª¤Ž¬Ð¤ŠŠ09Š¨0B¦ª¬’Œ¢ªèŠ¤ØŠA¬ŒÈ’DÐšAŒî¢DBŒ²ªŽAÎ¤°Îð²ªŒ¬¢ÐŒ¬¤¤ª¦1Þ¨®¢¤²ªŠ¤ª¢²BªØDŒ01Š¬BÎD¢ŠÈD°ŒB¢ÄŠBDBŠŒ˜®ª’¨ŽÖ¤¢®ÐŒ´Aðª¬ŠôŒ¦¤Œ¤Š¤1Ö¢Œîè¬ªŒ5Cª0¤ŽAA®ŒŠ¤DÐBŒ®1Š¬Šðª3AÖœ®¤0œ¢¨Š¢¤ŠB’ÈŠØÈ¤¬ðªDB0¤DCÖšŽŽŠÐžŠðî°AÖ¬Ê¦ª”°¤¬’Š¬Ø¨¬ŽðŠ¤Øª¢¦ªŒª¦Š’¨ŽÖB˜Œ1”ªBîœD¦Šš°ªØ¬°¬ðŒÌŠ1œAªØB¦¬ðBœ°Š²CCØÎŒª¬¤”Š¬A¢Šî¬’°ª”Âª¬æÈŽŠB¤¬¬B¨ŽÐª®¦¤ŠA¨19Ž¤ð´²¬AÈæ¤¤²C¢0ÐÊŠðB ¤1A°¬Îî¦°ŒœŽ¢0¤ÒAÐŠŠŒ¤¤®Œð²šŠØèžAðÈ²ŽBŒ–ªÖ¤D¢ÐÐšŒÐ”Æª0´D¤Ž’CŠ¢¢¬ŒŒ²°ŒÐÈŒ¤9BBîACŒ¬Œ¬ŒÎÎšŽŒ¢Ê0Ö¤¨0È¨ŠŒ4ÄŠA¬–ŠðœD°î¤¨ÄÐÆ®BŠØDŒ01A¨0ÈÌB1¬¢ŠÐÎ®Š¬¤¨A¢È °ðŒ¬BÐ²´¤ª’°®Œ¬²¢¤¢¨CB²¤¦ŠÞŒDB”ŒÐ0Æ¦¤¢ŽŠîŠCB¬”DŽAðBŠ¬A¢Šî¬’°ª”Âª¬èâA”ª¬Œ¢¬¤ª®¤ô5 ŒÐŠ1šÌCÐî¤¤ðA˜BÎš6¢ªÈ¤Œ¤îŒ¤Bœ ¢Œ¢œŠ¬ð®ŠðÆ¢œÎœAªÈAŠŠ°®B²œA¬BD0è¦Œ4®¨B”¨¤1ð¨¬¬¬D°ŠŒD®ª¢BªðŒ”ŠªBŒ®ŒœÊ¤0¢ªCÐ¬°°îŒž¤ŒšÈŠØBA¬îªŽA01´Šð¢ÈŽÖÐžŠî¢°C¢šŠ¬Ð¢˜Š¬¤–A1Œ¤¬24¦¢Ú8ÊŠð¢D¨Œ’Ê®Šæ¬BŠÈ¢Aî’Ž¤¬4°¬ª¤Ì¬18BDB”˜¤1Æ¬D0Þ¬AŠ5AŠÖ’œª1Æ4¤0¢C¤ªØŒª¤8ªŠÖð¢Ð”¢¬¬B¨ŒÐÎ¦ŒAªCBA”˜DŠÈ¨¢î´¨ªABŒ¨¬ÐD¬¬ð´ª1´È¨Bœ¤¤0œ¢ŽAðBD¢²’¦Š’¨B¬¬¨BðÖ°¢¤î¤BŠÞ’ŠŠ´A°10CÄÖ¤BªÐ²²DðBŽB¢Œ¨¢¬²ŠØ8¤ªŠ¨œî’¬Aª”C¬0Š¤B¤È´¨1¤DªÎ®¬ÎADAŠ¤”CÖš¦¦BœªDBÎ²¤îA¤¬Œ”¤ªBŠŒ¨Bœ²¬Š¬A¢2B¤Šîš°ŠÎœD¦ÎÖ¤¤¬BŒAÎšŠAŠš”ŒB”¦¤Š4CŽÎÐè¤1ÈŒªŠŠ¤–¦Š3ªîŒ˜ŠØ¢¨ªØŠCAŠàÊŒªAªÐŒª¨Ð¤CÆŒ¬¢¢Œ¤ŽŽ¤ÐŒAAÆAªªšÈDŠŠBŒ09Œ¤ð²B¬Ö5²ªØ´žBªœô®Ø¤¢DÖ9ŽŠŠŒž¢BBÆBŠ¤¢ŠŠÈŽ’î’ŽŠî”ª0¤¬1æŽª¤²´CB²¤¢ŒæŠŠîÆ¬ŠŠ²Ú°ØA4¤1²¤AÐ´ÊÐÈ¨¢0œ°Œ¬à¤ªŒ¬êÂîÎ®¬¤ŠŽAAšDB5´¬BœÄ¨14¬D¢š¤Š3”1ÆŽœ2œ°ŒÔ²ŽÈðÂÚB7šôš/žòÈØ˜®ÈÔ”Žàî–¦²ðžÔBØÄ®¤2Ì34ÒD¤´°¤1ŒÈ¬1ŒDŠÎÎÈBŠ¬²®¬¢¨®09ÊŒ¢0DŠ¤œòÈ°BÔÈÔ¬ð²2BÜÆ®àÎÊôšô ôæÜ´¦1Ü²ò¤âÆCÖÚš¨ÞÒÌ®5ÖDðŒ°Aª¬²¦Î5Ž®1¤C¢òÆØ’¨B5šÜBÖš2ÈîžÔÆÞœ¨ŒâÂ3œÜÌ2Ö2ÆÚØ1Ê°¬ÜÄ®šÐ”Dîâ”¢1DŠÖÆA¤Šªžœ¢ŠªŠ¤š”¬ŒBAŠŠB¢¢0¤¨ŽîèD°Î¢  ªAB¬¢ªÈB¨îÆ¦0ªBÐ¤˜Œ1œD¢1Æ¬®Ö´²¬¬èèŠ¬Œ¦Bªà¨žªæ˜°ð²”®ÖœŠ¤ª1DBŒ®ªÖB°ªBÐ´CÐ´0ÈÜœÜÌŽŠØœD¢2”®ÎðÌ®ŠôÄŽÎÎœò00š°´äÊ®œÒÂ1îÊ¨¤´ª°Ö9C¤¢0ŠAŠ¤Ì¬¢´Žª¬¦¢ÐšD¨Øæ¦°¬œ²ÄÐ¬ÄBØŠÈBŽÎÌ¦¤”¦BÐBž¢A¬CŒ¬AÆ°0¤´AÎæ4¢¢B¤ªÐ0CÄBŒ²Cð²–DÖBŽŠÐÎBBBÈš¤ØA®¢ŒÈšC0²˜AÎ0+¤1B®ªB4”´ª0–Cð’Œ04®¢îŠŠAÞŒÆ¢¤¨¤îBBŒ1ÎDCîÞŒ¬ŒŠÊŠ¬´œŠØŠÄDŠ¤²ªØîÆ¢0ªŒBÎ¢Æ®ÐÞ¤¤¬¤Ìðª®Cî´¬¢1’¢0ŠC¤¤´”Šª¬°¬0ÞœBÒADB0ŠC¢ÐŒÆª18–Aî¢A¦ðÈ¨¢0œ°Œ¬àŽ®Œ¬ÄŽÐª®ªîŠ¨¬1žŒ0È°®¤èŒ¢ÎæABª9¤ŽÎ9˜¦ŠœBAÖª®¦¤Œ°°ªÐAŒÎ8DAÖ’–A¬œA¦¤Œ¢ŠBšŒ¦Œ1C®ØŒÄÂÐî¬¬A´A2æÆC¤¢¢AîšÊDŒAØª¬¢°¬ŠœŒ®AªœDŒ¬¨ªð0¬°ðŒBªB8˜¤1è¬°Ö9B¢ÎÆAªªÎBªŠ¤¬Î0ÌŠðAœ¬Ø’ÆBðÎDŽ¤œ¤¤0œ¢ŽAðDA¢¢ÆCÎ¬òŠª´¨BŠ¤¤ ÖŠ¬BB”B°2´°¢ŠÞ5Œîæ®¤Ø¤¢¦Œ4Š”îŠBŒŒ²°D¬4Š¤1ÖÈ°Ðš˜BªŠªÆ´0ÂÒàÚÆŽÈÜ´”è²ÒÎðœD09ÆÔŒ4²DœîÂC’à’DÆ8ÊŽÆšŒ¤¬žBª´Š®®¬ª¤ŠA¢°ÎšDŒªÞ¨BŠœBðÎ”ŒAæŠCôÎ°¬1¤¨ŽÎ45ÖÞ¦¬1œŠŽÐ¢ŠŒBAC¨îÖ¦®Œ² ÄÐšŽBî¬ž¬Ž4ÈCÎÖ¤AŒ9B¤¤’È®ŒB°°Î8+Ð²žÂBŒÈ¤îÈ¦ªª1BŒ¢¢¦¢¬9Ú¬0B–¦BÆ¦¬ªBAªð8žŠÎ8BŒÔŒ¬BÖðÌBØšÊ¨B5AÐ´ŒªÐæ˜¢ØÞB¨¬Ð¬ÆŠ¤ŒªŒª¦Bô1DCª¢Ž¤ŠŠDªŠ²D¢Ô4+ Ðš”®ŒBª¬ÎÎÌŠ¬¬´¬ªÆ¬ŠŒ5Ì¤Öš¨®¢¤ŠŒÖ0¬ŠB²BÐ8œ¬Bš®CA8²¢ŒBD¤ŒšÄC0œÊBBš1BÎÈœD¬Œ°žÐŒBBB¢¤DÔœ¤¤ª¤ÞŠ¤ŒÌ¦Ö¤˜ª0¤D¢¤B˜DîšBDŒæ8¨ÖšœÂÖªžŠîªCB¤æ¢¢Œ¤A¦Î9Ü¬ŠœŽÐª®¬ð²°AŠØÆ¬Îèš°Ðœ¢´AÆAŽ¢æŠ¬¤0Ì¨Ð¬ÌŠªŒ¢îèŒ¬1È–D¢²ÔŒÐ”¬BÖÈ°žÐ”ÆŒÎA¤Œ¢Œ®¤¬A¦ÄŽš5ŒîèÆªŒœÄ°ÐÐŠBÎÞŠBBDCî9BŠØ²œîî°BÐ¢²ŒÐ”C®ÎŒœ®Œª¦ŒÎÎšŠŠÆŽŠð’ŠŽØ1°®¤èÂ¤¢A2A¢A´°¬œ¢ÄÐ¬žBª´Š®®¬ª¤ŠBè¢0ÐÈŽ¤BžBª¤–¤ªœ¤ŒAæŠŒ0šž´3ÐæÈ2àÌ¢ªª¦¤”Dª0Š¤CÔ²ŽŠ0¬DCBŒ¤Šî¨ŒÖœœŒ¬¬¦¤Œ’´AœC¢Œ¢²CŠ´¢¬¤Ö A¦Š¢¤îŒ¨¢AÈêŠðšŠŠÐÆ’²1´¤2î¤¨¤œŒªŒBš®1¬®BA¤Ž®ª´¢ŒÖB°¨AèŠBîA´Cî¤2¤Ö´°¬ŠÖCÄB”Š¬ŠÈ®®ABŠB¢5®ªŠ¢ŒÐØŒ¤ØªAî0CB¬¤¤0œCŽŠðªª0BBÂª9Æ¬ðšª¨Ö´œÄD1D¦îÈŠ®¢Ö5¨DØžC®Ð¢ÂB5ž¤Ðæ®ŒÖ´ªªŠÐÊBAÆBAªæ–°Ð²B¦Š4¨Šîš¦Cî¤BŒAèòÈA2DB”B¬1œ °ŒÆŒBÎœŠ°1ŠŠª24Š¤1¢ÆCðš°¦ð¤ž¨B’ÈŽŠœBŠ¤4¬ŠÖ´¢¬¤Ö A¢’ŒªÖÞœŒ¤”°ªÐ8˜BAšŠ¬Ð¢˜ª1´Èž1”Šªªð²¤ªA²¤B¤B¦Š’¢œÐŠÈ¢¤ŒŠBîA´Cî¤¬ª1šÆCÖª´¢ªª¦¤”D¬ŠŠœBÐ¤œŽ¤šŠ¢0ÆŽAÖ®Bî²ÌD¬¤ð¤Š¬¨°¤¬¤Ä¤¬Ê¤¬BA¢AŠŠŒî”ŒÂÔÐäŠ¬ðÄªÎA˜D01Š¬ŒÐ¬¤ð²²®¢Ö®Œª¤²ªÖA°¨0ŒBŒîB¦Ž¬Ð®¤Ðª–®0¬ŒÎŒ®¨ØÐ¦¬18BŽð²ÄDÖè¦1²¤ŽÖ’DŒ0ŠŒŽî8¦¬1’ÌCî¢ÎŠªœ®ª0¤°²0œÆ¤¬È¤ØÈ°¢¢¬Žžô8/Œ15²¬A¤Ä®01CBAÖA¢¤š®CA8²¢1¬¤¤0È¨ŠÐ4¢¤B’ŠA¤Ð´BBŠ¤°Aæ°¢Ö” ¤ª¤D¬ÖÈŒÐÐ´C¤²®¢1ÈŠ¢ŒæôAðÆ®¢Ð5²¦0îžªŠª˜¬Î¬D¬¬ŽŒÜœòÌ¨´5´3¤Î´ŽÈ1ÄôŠâœÔ²7ÂC´ÖÌôBÜÆÔÞÒ˜ò²ðÄ¬ÎÈŽœ/œÚ¬3²°È+ÆAÎ¢¤î²¨ŠÎ¢Â°¬ÈAŠÈ¢ŒðÆCœÎŒÄª¤²’Ž¬ÞB¤Ð4®ªÖœD¬B1ÈŠAÎDDŽð¬¬šÎš4¨Œ5²¢î’ÈD¬àª¦Îà Dª”ÄªŠÆ¦ÈÒAÖœCÞôÆ¨´Ö²ò´â´¦41š¨î8ÈÚ´4´Žœ9ž3B6Æ®ÈàÊÜB4’ÔAÎš¨BØ”Aî¤¤¬BŒŒ¨ÞBŒÐB¬¤ØŠ¬DBîD¢ÖBªŽAÐâ´Ö’ŠœîÆD¬Ö´˜ŠØ²ª¢1Œ’®ð’˜BŒ0²ŒÐŒ¦®Î’ÆAÐæžŠØBA¢DîŽCÎÆ¢´Bà²¤ªŠ’¬¢Aª¦0ŠŠ¤Ö”¢ŽA9”CØB²Â¤Œ¬¬1¢Ä®ôð °0´¦Šª´êCŠœ¤ŠîÞ¬B¬ª®Ž¬š°0ðŠCØ¤°¤B4¤¬ªª¬B0èÂŠ1ÖŠ®ŽàŒ¬ØªD¨ØÞ4¦ÎÎ¢ª0ÈB´ð1Œ¬0´¦¢ðª ªÎ²¢¨ÖAŒ¢Ð¬¢Œ9Š®¢’˜žŠŠAª¬’ÈBAŒØ¨¢ðA¢¤ªÊŠ¬èCBÎÆ¢BÎš°°Îæ¤”3´òœòæò’ô´Ð´ÜŒâ²3š0´®9èÆŽ¤7²2’Ú ÒÖòš®¤Ä0àŒ¤ª’˜AA¢”AŠŠªC1Èª¦ªî¨ªªÈDªBÎš¢¢0ŽCD9Ž¬AŒ¢ŽØAŠÂÖðÊŒ¤´DŽðBŽ¢Œ9ÈA1è¬¢Bª˜CB’A¦ÐàCA¤B ŒÈÌŽ0Æ°®Aš˜CÎ¬ªª¤4¤¬Ö0¦ª¤æš¤ŒÐ¦°BðD¤¢ªŽBBð¦BB1BŠ¬’°Œ¨îÆŠ¬”AªªA²AðØŒ¨1¤ŒÖ4®¬¤Š¤ž¢ªš¨¤Š®DŠ¬¦¢ÐšD¨Øæ8¢¬¬Ž¬0B–˜BØAîšÊª1àÌB¢²D¨Š´¢ŒÖB°¨AèŽCî’œ¦ªš°¬1¤¨ŽÎØ®Žð²®ªŠ¤ŒÄªÖ¤AB’DŒð1¤ðÐÂ¦ŠÞ°Aª°ŒªAªÐŒ²¦ÎŒ¤¢ŒBªŒÎÎ ŠCªÒ’ô²æ´Ò¬Ô²ôœòÂDÆêšôÆ6ÄŒÖÊ2Bâ’®Ð5´Ž´ØAÐè˜¤î¢ªŒD1®DªðD¢¢Ð¤D¢ÞŒAÎ²ÄŠŒŒA¤15”CªÈÆªØÎ´ŠÐ¢AAîB ªî´ ŒÐªŠ¤0Æ6BŠŠŒ1¤Bî5šAœC¢Œ¢²CŒà¢®A’¢ABŠ¢¤¢¤¢ÂÔî¬CÎæABÎæ Žðœ°®0è–¢îÞ’ŒØBŠ¤®1¤D¤æª¦Š’¢Aª¬CB0È¢¢ØÐÈ¢¢´B¤ŽØ°¢ÖæC¤¬ŠÄDØØ¢¢Œ4Ä®ÐèAA¬ªŒŒÐàÆŒ¤šÆŒî’¤BŠ²ª¤ªŒA0B¬ŠœŒÎÐ¢¬¤””¢Îš°¢¢ªÄDðBÄªAæ+¤î²B¬®ÖÌ¦¤ŒÂAª²ÊŒØ”D¢1¢È°¤A’Aîðæ¤1¬¨Bð4ŽžŠðÌ®¬æ’ŠŠ9ªŠîD¢Ð² ¬1œŠŽÐ¢ŠŒBAC¨îÖ¦®Œ² ÄÐšŽBî¬žª®4È¦Ð¬¨°¤ªÌŠØ¬A¢ŒšÌDÐ’ A¢Þ5ŠîBª¬0ÞŽÂÖð´°11²¨ÖÈªªŠœ®ŒŠ’®ŽÐŒ¤¢Š¤®¨Ø8”BÎà®ŠØBŠŠ0È¢A0ªœA0š°¨Š¤´DA´A°ØÐ˜Š0¤¬ªª¬B0èÂBŒ´DCðª´¤1èÊ¢¢¢¢Œ¬ª´CŽà¦¬ÎŒ¤¤Œ¤A¤ŠÈ¬ŽŠÆ’CB05ŠAŒŒ¢ÎÈªŠ’4¦Ø4Ê¬Ö´¤°¬¤´¤ŒB¨®ÖÆœ¦ŠŒ²AÐŠBŠÎB®¢2Ø¦D1B¤Œîš®ŒðŒªB”¨ªØÞCÖ0®¤¬¤ª¬¤BÊBÎššŠAð¤Øš¢¤ðÈ²Bî²ª¦ðÈ¨¢0œ°Œ¬àŽ®Œ¬ÄÄ¤ŒªªîŠž00ÊŒîŒ¨¢ŠÖ¤ªBA¨BªÐÈ¢Øà¤®2ÞÆAØ¤ª¬B4ÂBæš°1ØÈ¢BèŒAÖ”®ŒBª–BîA¦¨ªÈª¢ªB¨A²¬®¬ŒÆÄÐ”¨ª¬’Œ¦Ø¢5¦0èD¬Œ¢¢¤šCŠBªD¨Î1Œ®Œ”Ì²0B¤¬¬B¨¢´ìŽ¬9È°Ø9Ž°ÐŒ¨¬ðÈ°¬Ö¬²A¢A¦ŽðB¤¢ŠÈÊ¦¢Ø°Œ”²ÄÐ´®AAšA¤ŠÖ°¬2æ²¤¬¬AB¤˜¢¢¤Ž¢ØA²D0Ö–ªŒÐàŠ¬B®ªŒ´D¦Ö´¤ ð5ÌCÎØÂŠ¬ŠœCÎªCBÖŒÂ¨”È®ð²°C1B¢¤ð0®¬ð²°AŠØÆ¤Î1¤°ôÞ¤ª¢²Bª¬’Šî”äŠ0²BØ”ŽÐŒ¤¢Š¤®¨Ø8°CÎ¬´žB”°AØÈ¤¤ª5DªÔ4ÂCAÞœCÖ4°Œð4ÂŠ¬9¬1²¬AîÈŠ¢îàDÆ’Ö´3Ö0’ô²3š°¤ä´5ÐÂÔ1ÞÆ2B7´2È3Äòî3œ¨ÈÂÖª¢ŠªÖ¤°ÐÆAB¤šBªÐ¢°CBŒ+”3”ÖÌŽ¤î²ŽBÒ”D40˜ô”ØžÚØ0š3èÚœòA8–Ô¬Î´îŠÆŽŠšB¤¬ŒÂªŒÆ¬îŒ²BA°¢Ð9ªŒÖžª1AAŒî0Ì”Œ9°¤Bª¢Bª¤ðÈ°ÈÜÊŽ¤0´¨Šô’¨æîÌDœÖÂD5î´¦æ0š¦A8Ê°´ôÄ°ÈèœÚ¬ðŽ05¨¤1¬²BÎBŽ¦¬AšÐ”°AØÈ¤¤ª5Ê¤ªÈ–¤ØÈB¬Ö1ŠB²ŽDØðA¤ŠÖ¤¦ª’ªAŒ²Š0àŒ¨Œª Œ¢ŠªŠ¤š”¬ŒBAŠŠB¢¢0¤¨ŽîèD°Î¢  ªAŠ¬AŒ¢ÄŠÎž¢¤´Œ¦0ŠÂª¬5Ž¬0B–¤AÞ˜ŠÜœ1ÆŽB+šÒÆôœÔBî Ž¤6š®ÈêžÒAð–ô”ÐÆ®ØòÌ°æ2ÂŽ¤î´Ð9Â¬0’œŽ¬1AŠØª¦¤BŒÆŠª4DðšŠÖŠª¦Ð¬¨°¤ªÌŠØ¬A¢ŒšÌDÐ’ A¢Þ5Šî¬¬ªîÆÊBÔÐš°1ØÄCBB ¤1BšA0’®D1È¨¤BÞªBB¢¢AÖ8”ŠØÐ®D24¨Aî²BA0ÎBÂ¤9”Š¬ÞB¤Ð4®ªÖœD¬B1ÈŠAÎDDŽðªŒ’Dªðð®žŠà´°îæ ŠØœ¦®Î’°¢8¬AÎ4®¬ð²°AŠØÆª¤´Š¢î´¨ÄŠŠCŒÐšŒÎà¢¬ŽðÔ¢01²®¬Bª°ð¬è¢1ðCAðÈBB¤æ  ØB¬DîÆ¢ŒÎ¬Bªð²²Š¢ØÌŠ1Œ¢1A²DŒ²®Šð¢DBŽðªª¢°ªðàÄAî’4žB¤ž®Œ5B®Ð0¢Âð’’ŠØ”¤Î¬š®Dæ¦¬¤àª¢Ð”¨¤¢”Œ¨Ö¬¦CŒð°ª0œÌ¨Bœ¤¤0œ¢ŽAð¬Š¤ŠBCAŒŒ¦Î0¬BÖBBA0ÐÈîè–ª0B®¦Š4®ªÐ² BA1¨®Š²ŠŠ¤œŠ¦Ðš¨¬ŠA¨Šî¬Cîª°¢3¬3Æ2È/Â¦”Ò´ŽBòÂ®È5²DŠ4ž¦ŠîÊ¨”ÖÈD5òÊò²3 D¢1Â®´3Æ2È6”¢0®¤Š²®¤œŽB¢ÆªA0Þ¨BŠœBðÎ”BA0´’AŒ´ªÐ8Æ¦Ö4°Œð4ÂŠª9ª0¢ŠŒŠ´´°ðÈ¦BÐÎÈ¦¤Èœ¢¢Þ°BØ¬C¬Œ¢¤B¬Ö°ÆŒî´èÔÈÔ²ôœCš9´¦ÐÚ²ôÐâÆÔÆäšÔÆÚÄèÎ´Ú’ ¨¤5œŒØ”D¢1¢È°¢Æ¨ŒÐB¢B®0¬BÖBBA0ÐÈAî”êÄðŒª®ª’Ð¬¬ðªŠÚæ¬D1’ŽŠŠ5ABª’¬ªBðÌ¤ŒÖCCôÐBB¬B®ªB4D´ª1˜ŒØB¢¤ð0®¬ð²°AŠØÆ¤Î1¤°ôÞ¤ª¢²Bª5¢ÄÐ0–C¤ŠA°ðœ¤¤0œ¢ŽAð®ŒÐšªAî¤æ¤1ŒŠŒ1šÂ®îšCžDÎª¬¬5 ²¬ÞÈª¤ŒìŒ¢è°¬0Œ˜¤¢Š¤ŒŒŒžCŠA ªØÖ+¢¢ªŽA¬ªÌAŽÎ²¤Š¤¬ª0šÈŠØ”¤Î¬š®BªšªA1èŒ¢È®¬¢œž¬DÐ–DîÎ®D¢àŒŒÖ5¢¢B¬œŠ¬¬ŒŒ¢È˜®Î¤CŠª¤®B24¨AÐA¬A04œªØÈÞÂÐ8Œ°0ð3¬1ð¨Œ®1D°A¢BŠð9ªª¢°ªðàÄŒA0CD®Î¢ªŒ´¨°Ö8DÂðè”ŒØÈ°¢ªèŒA¤Šªªª4’¢A9¦®¨5BB¢²B¬¤8DÂBÎŠ®BÆžC¤Œ¤¢Š¤®¨Ø8AŠ¤BŒBŒBâ¤¬”CŠîœž®î¬¦Â®0¦ªŒAÊ´1¤˜ªðŒÞŠÎ0BBBÈš¤ØA®¢ŒÈšC0²˜AÎ0+¤1¬°¬ŒšÂC¬¤â04¬¬ŒBDŽŠÆŽŠð’ŠŽØ1°î´ÄÄŠŠDAAÆŒŽAªÂBÎŠ®BÆžCªÐ˜®ØÈCD¤ØÈŒAð¤Š¤´3’ÜBØ–ô¢ØšDŒÐÆ2ØÜÊÚÎ2ÄÚØ3´3ÐÖ²ª8”ÒÞÜšŽÎ5´¢1´2²1œôÞ8”¢ÖªŠÖ¬D¢¤1ò®ŒœB¤Œš¦D¢ŠŠŒ0ðŽªB´A¬0î˜¤ÎæCD¨5¬¬Èªª2î¤ŽBÈª¬0¢ÊŠ¬¬ŒŒ¢È˜®Ðœ´BŒÐâ¤¬œªBîœ’¬D4ÂCAÞœCÖæŽªÐ²ÂŠªA¬DîB²¤¤BŠ°ÐÈ¤Öš²¨’˜BBÆ°B¢Î¢¢B4ÂŠ¤8¨¤¬Æ¬C1È°¢ªèŒA¤Šªªª4’¢A9¦®¨5BB¢²B¬¤¢ÈŒ¢Ö¦¢ŠŠ®Ž¤ªŠÂBèš¢îšDŒªÞ¨BŠœBðÎ”ŒAæŠCôÎ°ªØ¬°¬ðÐ Œî4²ŠªA¬Ž¤B¢ Š9²°Î9²ŠÖÎŠŒ¢ÞAB”œ¤1¤B¢ŒšÆBÐ¬´ª¬ðêŠØœ¤ªÎ¬B¨ª¤ÂªÈAŠªÞ¬AôÐš0ªB¬ÖªÊŠ¬´œŠØŠÄDŠ¤²ªØðä¤îÆŒBÎ¢°¦B²”¦ðŒB¤ª5DªD4ÂCAÞœCÐî°¤ð² ¬1œŠŽÐ¢ŠŒBAC¨îÖ¦®Œ² ÄÐšDBÎŠD¢ðÎªDÐ8¬¨Ö¢ÆŒÎ¤Þ0Ö¦ªÎ²¢¨ÖAŒ¢Ð¬¢Œ9Š®¢’˜žŠŠŒªŒ´¢Œ¤Þ²°B0¦¤BªÈŒ¢¬è¦Ø1Â°ŒÖ¨ŽÖ²¤°ŒÈ¦ŒŠ1AÐ´ŒªÐæ˜¢Œ²D®®0®ª1¬°¬BB’¢¬5ž¤ÖŒD¤Œ´ÂB4´¤¢ŠAŠÐæ¢ªªB°ÖÖ”¤1ð¦®Ž4®¬ÎADAŠ¤”Œ1æÆŒ¤Æ¬Š¬Æ ÖðÌDîîœ¢0’²¨Bœ ¬ðªÄŒ¤´DBÖŒ²¤Œ’ÊŽB”®ŒŠœ¤¦ŒæŒŠBŒBª1BêŒ¬8¤¢¬AÌC1BªÄ2èŠŠ¤¢ÈŽ1Š1¬0’DŠÚÞ+¢¤AA¦A”àÄ¤ŒC¦Š8ŽÂ2Ö¦ª1È²¬ÎA B0š/Œ14¦¦A¢¬ŽÖ¬BŠABDŽB¢DÖðžŒðÆÊŒÖðŽŒ¤8¢¤ð’®¤Œî°ªð9–¤¬”CŠîœž®î¬Ž¤Ö¤¦¬2œAªŠœŠªðæ˜¬ŒŠ+žÖŠªŠŠ4ÂªŽÆA¤Ø¬CžDÐBŠŒ²ÌB2ÐâBÈ¢œÞÄ¤”CªÐÞB¢ÞDŠD4®DŠ¬š¤0¬’¢0Š¢¢ð¢ÈŒ¢ADŽªà´¬0È²¨¢ØAD¢Æª¤C¤0”Ú¤/šœÒœôÆÖžÔŒ4´Ž¤æÄÜ02Ê®ÈÎÆŽØòÌÜšð Òš8®BÆ¨®ŒÆ¨Œ°ŠÚ’DŠäšÜ¬Ð´ŽÈ2´ô´8´ÚBæÂ°BÎÌÔ’ô’ôæØÊòBÖÄÒ¤èB¬9Œ¤îAB®¤¢˜¬1¤”¨Bœ¤¤0œ¢ŽAðBD¢²’ 0´¤AŒ¤° Bð˜¤¢ÆŽŒŠæ°ª0œD¬ð¬Â¤ØÐ¬®20¤¬ŒšBB01¬ ð5ÌCÎØÂŠªÆAæÌAÐš”¬ŒBAŠŠB¢¢0¤¨ŽîèD°Î¢  ªAŠ¬AŒ¢ŽØœÞÐØŒA¢A¦ŽðB¤¢ŠÈÊ¦¢Ø°Œ”²ÄÐ´®AAšA¨1Œâ¦ÎÞœ®¢4¨AB0CD¤Ö¨C¤”¦¤Š4CŽÎÐè²ª¤¦´ŒŠŠ¬¤Èš¤ØA®¢ŒÈšC0²˜AÎ1”¢ðÈ¦¬¬È°ŽŠ8°ABæžŠØ¤Â¦ÒÞ îî¢Œ14¦¬Ð¤DªªÐÄ DŠ¤¬Ž”Ö´2š ª¢šÊŒØBž¬Œà–¦ØÞ¢Œ0’Ì¤1ŒŠŒ1šÂ®ðšŒœA1ª¤Ð4¤¬1æŽª¤8Ä¨Ö9D¬ŒÈ˜¤¢ADB0ŠC¢Ð1BŠ¬’˜D0à²¤1¤B¢ŒšÆBÐ¤¦¤Œð¦¤Ž¤Æ¬ðŒ”¢Îª–¨¦à²¦AØØ4²Š¤îŒ¢ª8¦ªŒ9¦¤AÞ¦ª11šÌŒð”CðœÈŠÐŠ°¦0B°B0È¢¨ªŠŠŠB¬¬Ž¢Ðâ¢¬ÞÈ°0ð¨ª2¬°¬0ÞœBÔ1AŠØªÂ°ÖæAŒ¤ðŒ¬D5š¦ÖÎ¢ªªB°ÖÖ”¤Øà¢¤¬È°¦Î0Ž¤ØØŽªB´A¬0î˜ÂBªŽÎ0´ªØ”Ø¬1¤CCØBèŒÖ¬ª¨Œà–AÖŒœ¤Œœâ®Šæ¬B1”¦Šî¢°¤¬5¬¬1œDªŒ8°ð”¬¢ŠB¨î4¨C¢š°AŒ’´®Œ´œŒ¤šŠD¤ÖæDªàÆ¤BªÄŽŠB¢¢0¤¨Žîè’®BÞŽŠAÆÄ¢¤Œ¨ŽŒà’Šî’¢Œ¢œžD¬à¤ŠŒ–ª4ÊŒØBª°ð4¢¤ðŠŠ¢àœAÐÞ¤¤¬œ¢ABšCŠª8¨ŠŒœÄ®ðŒÌ®ŒœA®04ž¢Ø4ŒŠ0²Ò’°’ðÊŽAÜ²Žª3’Ôî3–ŽœÚÄ2à0ÂÒàÚ´ÈâÆ°Øð²Ôî4–CæîÄÒ¬îÈØæ¬ŠîACª¬Êª¬Œ¤¬ÌŠªŒ¢îè®1¬ÊžŠªABîB¤ Ð9œ¢¬È¦ŒŠ1AÐ´ŒªÐæ˜¢Œ²D®®0®ª1¬°¬Bè¦ Š9²°Î9²ŠÖŠD¨Œ8ÌBŠœ²A¬´ŒÐŒ®¨¤”¤ŽîðŠ®Œ”ÆÂ0ÆB¢²ŠŒŒäŽB0¬¬¢Aª¦0ŠŠ¤Ö”¢ŽA9”CØB²Â¤Œ¢¬ØB®¦Œ’7¨¬4˜®î0¬CÖ´BBB¢¤DÖšž¬ØœŠŽ¤îD¢ÖBªŽAÐŠ°ŒÆœžÖ’CA¬ªŒ¢ª8ŠèŒBî²ª¦ðÈ¨¢0œ°Œ¬àŽ®Œ¬ÄÄ¤ŒªªîŠ¨¬Š/Ø8–C¬Þ¤¢¢¢ªŠ¢5DDÐB¤¢ŠÈÊ¦¢Øà´ÖÈ¤²1œ°¬ðBž¢A¬CŒ¬AÆ°0¤´AÎè ¤ªÈ¬¬1¤¨Š¤œŠA¤8”Š¬ŒA¤Œ´ž°îÎ¬Š0Æ¤¨0Ð”Š¬’D09Œ¤0œ®¨11˜®ªÎ°ŠØ¬A¢ŒšÌDÎªA¨9Ž¢¢”¢îàÞØ4–BÐÆœ¦î9Ž®1È–¤Œ1È2È4´¤Øš¨šÐžôB8š2¤Þ ÜBØ–ô¢ð’Dð0Ê¬ÜÄÚ’æÄÜœâDð²¤¬1’”¢¬æŽB0´˜ŠØ²ª¢1Œ’®ð’˜BŒ1ìŠØœ¦®Î”â04¬¬ŒBDŽŠÆŽŠð’ŠŽØ1°î´ÄÄŠŠDAAÆŒŽA¬äA0Š°Aî¦¢ØÈ ´Ö¤¬B¢´Ž®¢B¦ŠÐ4¬BÖBBA0ÐÈŒA1ª®Ú0¤¬1æŽª¤0AÂB9”ŠØ’ŽŠŠ5ABª’¬ªBðÌ¤ŒÖCCôÐBB¬B®ªB4C´ª0˜CÎÞžŠÖ¬¢¦¨Þ AAœCCÎŒ¨¢ŠÖ¤ªBA¨BªÐÈ¢Øà¤®2ÞÆAØ¤ª¬BªÈŒ¤´”Š¢A¦AðÆ°¨Ð²D Bð˜¤¢ÆŽŒŠæ°ª0œD¬ð¬Â¤ØÐ¬®20¤¬ŒšBB0´ ¢ÐšÂ¤ŒA¬ªÖ”Œ¦Šœª ÐÞ’CÎ0–B¤¬¨1à ¬1š¦DªÆ¤BB07®¢¬¤Šªî¬ŠðªŽÔ²¬¬Ø”¤Œ¤Þ²¬¢î¦¬ª9¬¬ØB®¢1ðCAÎŒ¬B¤0Œ®Ö´¬AŠ¬˜¢¤ª¨C¢²žŒª5ŠCð²®¤¬¤š®ÖÞCB11AŒBð’0àŒ¬Œ8Ì˜A0ÆC0ŠªCðŒ®¨¤”¤Žîðâ²ÖÈ¬´ÔŠôœŒœ°A0æ¦¬Ð¤DªªÐÄ DŠ¤¬Ž”°ªÎ¬”¨Bœ¤¤0œ¢ŽAðBD¢²’¦Š’¨BŠð¦AØÈ¤¤ª5D¬0ÞÂD0BŽŠ¤BAªŠœŠªðæ˜¤Œ²òDîŠ®¦ÐšŠ¨Œ’C¬1Œ’ªªàšŽŠàCªŒ’´A”¢ª0¤ª¢ÐÖ¦ŒA² DŠ1ÌŠî¤D¤îÆ²C¤ªAŠ¢æŠ¢®¬²ªÖš¢¢Œ´Ê¦ð²¨ŒàC¦ØÞÄŒÐè¤Šª0¬BŒèÈ¤¬ÐBAè”Ì¬Ðš®ªàÌ¢ªª¦ªB¨¬Š’Š¦ª’DŒ0ŠŒŽî8+¤¬ªÆD¤ÖŠB®B®ª09Ì°ô8¨¤ØBš´ªœ°¬Î¤B¨ª¤Ž¢ªšÈŠ¬BÞÖîÊ¤î’®¤¬’ÄC0Œ¢Aª¤ª¬09²ªÐ’œ¤î²¨ŠÎ¢Â°®ØBA0ðÌî¢ŒœÎŒ®¨ØÐ¦ÂÐîª¬ª9Ð¢1œ¨¬¤B’¢ª’¦¢ÐðDB2ðÂ¦BšDAÎ²¨AÖÆªC1œ¦°¤”®ªªŠÈŠØ”¤Î¬š®B¢–ªÐBª¬BèÄªŠØŒ¤î¢˜¦°1²¨ŒØ–¤B0®ŒØ”D¢1¢È°¤æž¢¬BAŠ9Š1AÊ°ÐÐAÐØ¢¬1¤¨Š¤œ´ŒîA”Š¬ŒA¤Œ´ž°îÎ¬Š0Æ¤¨0Ð”Š¬’D09Œ¤0œ®¨2´°¢”¢ŒÐÖ¬ŠÖšÊŠŠÆA¢Šª¬ÐÆÂŠª¬¢®¢9š®BÎš¬Ö´²¨¢à’CØŒŠŠÜœ1ÆŽB+šÒÆôœÔBî Ž¤6š®ÈêžÒAð–ô”ÐÆ®ØòÌ°æ2ÂÈ6Ä3ØÜÈîàD¤¢šŽCBÈÊ¬Œ¢¢¤šCŠBªD¨Î1Œ®Œ”Ì²0B¤¬¬B¨ÂððžŠAŠŠŒ0ðŽªB´A¬0î˜¤ÎæCD¨5¬¬ÈªªðÞ”ž¤4–DÎ0œŠª”¦ŽÎÖÆBª’–A¬œA¦¤Œ¢ŠBšŒ¦Œ1C®ØŒÄÂÐîC¬Œ¤ªÎ¤ÞŽ0ðDAîš¬¦ÐšŠ¢0ÆŽAÖªCî¢˜žBÈ¦¬¬È°Š1Èâî4”DÎ4®¬ðÖC¤ØÖ–¬ÎB²¢¤ÖÈŒ¤¢ªA¢0š¦Ö²ªŽ¤ŒÊDŒÐ¢¬¬AÊŠ¬¬ŒŒ¢È˜®Ðœ´BŒÎÈ¢¤Œ¤BÎÆŒ¤ªÎ¨AÐÞ¬C¤ŒœDŠBBŒ¤4¤¬ªª¬B0èÂŒŒŠò®Œ²¨¤šDBÎŠD¦Ðà ¨0œ°°0î¨ªŒ¬¢¢Œ¤ŽŠœŒAîÞ’Ø4¦¬Ð¤DªªÐÄŠîA¤°¬œŠ´Œ9ÌŒÐ8¦¬ª9¬ÄÐ¬BA¢Ö”¤A¢ Ð8–ŠÈžAðÆ²ŠðA¨ŠB¨¬0ÞDð”¬¢ŠB¨î48Š¢¢ÈCÖ0CªŽ’DªŠ0˜AÔÐBŠ1Œœ°Ö9¢ŽŠ8°B28Æ04®¬ð²°AŠØÆ¤îè¨¢Îœ¢¨¢æC¢1Ð¬ŠŒAªðîŽž0Èª¦11š¬Œ¤ÔA¢¢ÆCÎ¬æ¤0´¨ŽŒ1œBŠ¬’¤¬”êD0æ¤¬Œ²žŒîæ®ªÖœD¬B1ÈŠ¢š®DŒA¤È1ÖÄ®ÖªA¨ªÆDAŒŒ¦î4¬°Îœ¦¢ŒœBŒÎÐªªî²°Bîš¤0È¤¤BÈ¨ŽØæ¬CîA¢ª¬Œš®1²ª¤Bœ¨°Œ8®ð’ªBB¢¢AÖ8”Ž¬5’BÖœªBš¤AŠÞ’¦¤”¦¤Š4CŽÎÐÆ¤ŠÈŒ¢ŠÖÂ¦ª’BAŒ1 ŒÐª¤¬04œî””¢ðÈ¦ª¬B®¤AÄŒÐ´¢®Œ8ÄCîîŠŒAÞÂDBœ²¬ðš¬Æ¦²Îš¦æòÈ®ŒÖ´3´ÜœÜðÚ²ŽðàÆŽB+šÔšÔžò¬7’Ž¤êšÜÈò ò06–1Ö¨¤ŒÐ¨¢ðÎÒÈœÎÊ2Èô´2’ð”ÔÖ2–®ÆðÄ24Ö´3Ö0œò²6”93´ŽàÒÊÒŒèÌÚè7BA8¦ŒA²DDŠ¤Ì¬¢´Žª¬¦¢ÐšD¨Øæ¦°¬œ²ÄÐ¬ÊB1¬¢Äðð–Œ¬B¬ŠÖØCAðÈBB¤æ ŠŒè¢Cô5AîB¤ªÐ0ŠÄBŒ²Cî4”Šª´°¦1Î´AŠ´´AŒ’¦ÐªŽ¢ŠŠD¦Œ0ªD¬¤ÂÄ¤Œ°®î´¤¢BÞ0Ö¦ªÎ²¢¨ÖAŒ¢Ð¬¢Œ9Š®¢’˜žŠŠŒªŒ´¢Î”Ø¨¢æ–CÎ5A¤Ð’²¦îšDŒªÞ¨BŠœBðÎ”ŒAæŠCôÎ°ªØ¬°¬ðœ¦ÂÐ8 CA²ÆŒB´D¦¢¢BŠð9ªª¢°ªðàÄŒA0CD®Î¢ªŒ´¨°Ö8ŽBŽ8ÆCîÎAB¬´’¢Š”CîŒ¨¢ŠÖ¤ªBA¨BªÐÈ¢Øà¤®2ÞÆAØ¤ª¬B4BÚ8´°Øðªª¬ÆÊ¦Ö1šŠ0ð¤Œðš¢¤ªæÄ¬ØœŠŽ¤îD¢ÖBªŽAÐŠ°ŒÆœžÖ’CA¬ªŒ¢Æ8Aà²¬ŠàD¤¤šÆ¬ŒBAŠŠB¢¢0¤¨ŽîèD°Î¢  ªAŠ¬AŒ¢ŽØAÂÖð²°ØÈ®BÐ0¢ŠðŠ¢BØ”ŽÐŒ¤¢Š¤®¨Ø8°CÎ¬´žB”°AØÈ¤¨Ø¤¢žŠÞžC¢¢ABBŒœ¨ŠèA¨ŒB¤ŠœD¦ª4ŽB0´˜ŠØ²ª¢1Œ’®ð’˜BŒ1ìŠØœ¦®Î’ÆAŽ8ÆCîÎAŽª¬¤ÖîAªÐ’ÊŒ¢´A¢¢œ’°¤¢œ¬ŒàèŠ¬ÈÄBØŠÈAîÈäA8œª¬¤¨¨ª¢¤¢ð5¨BŠ¢Ì¢¢’®ŠîªÊCÖÈÄ¬Ø²/Š1B¤¬1AÊAîš+¦Œè´ªA”®ðÎÂ¦ŠªÆAðŠ¨ŠBšÆØÈª¦ªî¨ªªÈDªBÎš¢¢0ŽCD9Žª¢Bª¬0ÞDÂÖð²°Ø´–Œ¤’®¬œÈŒ¤8¦¬ªBAªð8žŠÎ8BCÔÖ¨B¬¬¨Bð4Ž¬ôÐ–®Œ4BA¢šÆŒð5Š1¤°¤B4¤¬ªª¬B0èÂŠ1ÖŠ®ŽàŒª1¢A0ÐªªŽ4ÈCîÎDD¬ŠÊ0Ø’¤Šðª¢ÖšÂ¢Îš²¬Šš˜®¢B®®¤ªÈ¦0Æ¦¢Ø´Ê®ÖÐ–¤Ðæ®¬Œ1´ª1¬¬¦0ªBŠ¤¤¤¨ÎÐAD1”´¦ª¬AîB¤ªÐ²ÊŠ¢5’Œî4ÄA1D¢¤B˜¤¢Š¤ŒŒŒžCŠÆ´ŒÖCŒ0èBB¬B®ªBî²¢ð1BªŒªÈŠØœ¬¬¤ªAŠÖÐCŠî´²®0Î’Šî’¢Œ¢œžDª¤¨¤19ÌŒÚ´²¬ªÆÊŠ¬¬–ADàBŒ¢BÌDŠ9D¤ÚÎÊ°ÐÎ¤A¬B¨0BŽŠ¤A¦ª¬BAªÐ4¤¬ªª¬B0èÂ ªÆB¨1ÖÄ¬ŒŠ2Bî²ÌD¬¤ìŠÖ¬¨¢¢ðœ¬ð’ÊŒÎ¤ìŽªÞÂ¢Îš°¢¢ªÄDðŒÈªÐ²BÐ8œ¬B¢˜Š¬´œŠØŠÄDŽàŽ¬0è²Ž¢AAœîB¦Ž¬Ð®žÐŒBðî˜î’¨ð²ŠÄAš´Š1œÆ°ð²’ŒØÆ®ŒîB”°ŠÆŽ¤Œ8Ž¤3²œîî°BÐæ¢ªŒ´¨°Ö0šŠØ¤¦ª0œ¨¤ŠœÆAAÆ¢¢”¤¢ÖÖ¤ªBA¨BªÐÈ¢1ð¨¤ØœÈØØ¤Ðª¦ªŒðÂ¢0èŽ¢A¬CŒ¬AÆ°09ÌA’¬BÐàŒ¤ØšÆCÖ¬AªŠœŠªðæ˜°ŠŠ¦Š¤¢ÈŽð9ª1š˜Ž¤ÈBŒ¢ŠÆC0Ø¬ŽÐª¬°Îœ¦¢ŒœBŽÐª®¬¢0˜¨18Ì®A´Š°ðÖž¤îæDŠªªØÆŒÖÊ2B+š®¬ÖÈ®àÖÌÚ”ÒžÔ4ÔœÒðÚš°œê”ÜØ0œôÞæ”òŒâ´ÜœîCðÐAªØ¤²Œ¢è°¬0Œ˜¤¢Š¤ŒŒŒžCŠA ªØÖ+¢¢ªŽA¬¬à0Ö¤®ÎŒŽÐ´¦¢0œª¬0¢CAššÄŠÈ¢ªÎœ¨Œ¢4¦ØØÌCî8¦¤¬œBDŠ1°ŠÎÐªªŠš²¤î²¨ŠÎ¢Â°ªÈÌBØèæ¢¢šABîª²BÚæÆ¨¤ÎŽªÖÆÂŠ¬ŒA¤Œ´ž°ðÆ–B¬Ö4ŠØÆC¬1Œž¬Ô5š°î8šD¤Œ°°îŒB¬0²¬C1È°¢ªèŒA¤Šªªª4’¢A9¦®¨5BB¢²B¬¤8AÂBÎD¢ŒBD¤ŒšÄC1ðBŠÐŠª¤æÌ¤1œ¨CðÖ°¢¤ªBAè”¬¤Þ¬Œ¬4DªÖB¨¢¤8ž°¬ª¤Dð5ÌŠØÖŒ¤BŠÜÈÜ’3–ô’ÔœÚŒÚÆ®àÔÆô¤ØÄ21î´èÔ²Ò²+’¦ÎÐ´¨ðôÆòæ Œðª˜B¤ÈDÈ°Èô´39à’Ú”Ö²”à´3ØÎš¨Î5’¨B5šÚ¤0 Ü”7”ÔÆ8œCðÔ´Ú9æCðÎª®¬BAŒ°B2È2’èšCAðšŽªÖÂ®šâ´®ª8žÒ²3˜®”ÚÆ2à2ÈCÈØÂ®Ð9Ä3àäÌÒ’5°Š¢œªÐŒ²¦¬àŒ®¢š°¢òšÎÈÚ´4´ÈèœÚ¬ðÄ®È9´®Bà C¢0–ÔœØ”ÚØ2˜°´ØžÔîè–ÔŒâDÐ²¤¬ŒÞžŒîè¢ªŠÆÈŒØÆ®ŒîB”°Š²œª¬86Š¬ŠŽBîª4¦Ö8ª¬ŒBAŠŠB¢¢0¤¨ŽîèD°Î¢  ªAŠ¬AŒ¢ŽØBÞØØ´®15¢1´ °ªè´¤Aàª¬0¢ÊŠ¬¬ŒŒ¢È˜®Ðœ´BŒÐâ¤¬œªBîœ’¬ô4Â¦B´°¬ŠØšŠ1Œ¢1A²DŠŠœBÎÎ/¤ØŠA¬ŒÈ–BÚàš®¬9È®BÈ¨¢0œ°Œ¬à´¤0œŒ¤Šð˜ŽŠÆŠBA5žŒ0ÈŽªðÐÈ¨¢¤”¢îš˜°Œ”¤ªBÖÆA0”A¬BÎ’¤Œð°Dª1Ž¢A¤ªA¬A¤¦Ðª ¦ªªBAB’ÄŠŒŒA¤15”CªÈÆªØÐêŒØ²AAîBŠ¦¤È¬ÂðÎÈŒ¬ªAŒŠèBBŠ´CªBÎ ¦¢à¢®ŽÖ¤ªŒ´¢¬Öœ–¤Øš/Ø8–CªÎÆDAÞAŠ¢æÄCŠ¤²ª0š²’Ü¤ô²èÜÆ2ÈÒš¦²5œÒØÜš®9ê”ŽÈ5œDÆÚžÒ¤/È2¤â²3Þ3D¤²®¤¬¤ª¬¤BÊŠÎÎÈBŠ¬²®¬¢¨®09ÊŒBŠ®D¬èœª¢8¤¬îŒŒ®ŠÞž¦ðŒªªîŠ¤Ö9ÌŒ0È ¢îBBªBBÊÐš¢Šðî°¢1ÈÊŒØAÊŒØ”D¢1¢È°¢Æ¨ŒÐB¢B®0¬BÖBBA0ÐÈAî”êÄðŒª®ª’Ð¬¬ðªŠÚæÆŽð¢ŠŒBAC¨îÖŒ¢0š¨ªØŠ+¢¢¢¢Œ¬ª´CŒœ¢´¨8¢¬1à Æ1È²¬Ö¢8¤ØØŽªB´A¬0î˜ª¤A°Š¢’ŒÂBB¤¢ŠÈÊ¦¢Ø¢ª2ÐèŠÖÐÊCA¢ŠDÖ¬â®ŠBC¢¤0®ŠîšŒŒî¢ÄŠŒŒA¤15”C¬B¤0¤¦¬ŽèBÐš¦BBàÈªŒA8ÄÐAŠD¤Ö1Aªà¦Š®Î²ŠªB¢¢0¤¨Žîèª¤¤Š¨A¢’5Šî¤D¤îÆ²C¢šŠ Ô5ŠªØðš´¬œBAÐBäŠÎÎ¦ªÖÈŽBªð²AÐÈŒŠ¬Œ°žÐŒ¢ŠBšŒ¦Œ1¬¬®èêŒÖ’–°Š´¢¨BŒÞCª0¢C¢ÆªBªŠB¬ðŠ°ª2²˜AÐŒœ¤1¬°¬Œš²¢0BÆ¤ª¤ª¤0È´ŠŒ4DAð¬–Šî¤D¤îÆ²C¤¢˜BAæ4Œ1”¬¬1Æ¨ªŽÞÌ¨Ð¬ªªŠš²¤î²¨ŠÎ¢Â°ªÈÌBØèæ¢¢šABîª²A®æÆD¢¤ŠDî1Š¤Ð²ÈŒØÆ®ŒîB”°Š¢Bª0æ ªÜ’°Œ¢ŠAŠØ¬ìŠ¬5C°¤´¬ŒÈŠªB”ìÂ0Æ–Œ¤’D¤ÐŒÈÄDÞ¦ªAÖŽŠª’+ŠîÖ˜Œ¤´”CØBŠŒ¤ðœŠ¬¬ŒŒ¢È˜®Ð”ÌBÖ¬¨BŠ9´AÖ¬Ê¢¢¤Ž¢ØA²D0æŽªÖðÆªÜœ¢Ø’ŽŠAA/¤¬î¢ª0š¤¬1’ªA0¢4žBÈÌ¤ªœ¢¦¤´ÆÂ2Ö¦¤¬È°¦Î0Ž¢¨Ø´Šî¤D¤îÆ²C¢A°Šî’ ªŠ²®CB´”CØBŠŒ¢5¨¤1¬²BÎBŽAîÈÌŠ¢1šŠ0ð¤Œ0ª²ŠðA¨B”¦¤Š4CŽÎÐB¬1œ °ŒÆÚŠð²ŽB0²ŒÄ¤²–¤Ø’°Œ¢ŠAŠØª¨Â24¬ªðÈB¬0œ°®ÐàŒî¢œB¤´ŒÂÖš˜DŠŠ¦¬Î0ÌDBÆŽŒB1œŠ¬´œŠØŠÄDŠ¬ÊªŠŒ¦BÐæ’A0’–¤1ŒŠŒ1šÂ®ð²BABØÈª3œ¢¬ÞB¤ØBàŠØ1Ž¬0’¨Aîš¬BBA+Ä¤ª–¤ÖŠŠŒBŠž ÚÎ¨¤¬Èª¢Îà¢Š®8žŠØ”¤Î¬š®AŠ¢¤î¤ÂªÐš¬CÖ’ŠCð8š¢¬Š¤DÖÈ˜¤B8ÊŒØ5Œ¢1œBŠ¢àŽ®¬8°ª10’¦ŠØ˜¤ª1DÐBŒ¬ªÈ®ÐÐ´CÐ²C°ØÎÆŽ0èBÐš¦BBàÈ¨ŒÖ²ªÖŠŽBª°BÐš”BîªBAðØ–¤Šè¨¤Š4®¬ð²°AŠØÆ¤îè¨¢Îœ¢¨¢æC¢1Ð¬ŠŒAªðîŽž0´Š¢¬èÊ¨Œ¬ÔA¢¢ÆCÎªš¤1ŒŠŒ1šÂ®îA¤Œ¢¤Ì¬0¢¬DB8š¬Ö5¨¬1ðªŒ¢æÊBB¢DCØ’CŒÖ’ ¨ŒŠ°°Ð4²ŠŒè¬¤Ø”®Îª°¤ØÈ®Œ”A²¢0ŽŒŠðŽ¬ÎèšÊA9š°ðÈšŽBš¢Šðî¦¬ŒØC˜¬Ø ®ÖÆ®Cð’B¦ÐàCDA¬šØÐÈBðª–¢¢¢˜òàÈ¨¬5Š¤¬Šð”¬¢ŠB¨î4CŒîÆ®Bªª¤¬2’D°¬”Œ®ÖšÔ’´ÚÊŽ¤3Ä¨´ØÆ®1ÜÌ®¬ÎÂ¨îÖœCÞô´¦´àÊ¦´ØÈ¨²2”¨ÆÖ²Üà6ÆîAB¬Aš®CB¬îÈÜÈÒ˜¨AÎš¨BØ”ŽØÔ–Ú¬Ø DÞÚœò1Ò´ÜœâÊ°80È®¬ÐÆ2¤ò²34ì”09Ì¤Ø8Š¤ÜÎ ¨Œ8°¤¬4AA¬è¬¤ð0´Að¢¤ÚœÄ®Øš´Aªà˜¤Ò’ÐÆÔŒ4²CÈÎ´¨ÆÒ DÆÞ²2´ìÂÜ¤â–Ú´ÖÈ2àæÆ2¤ð˜¨AÞ–Šæš¤1B®BŠœ®Šª¬ÊŒA1ª¤Ð²ÈŒ¬8¤¢¬AÌC0´È¬0šBBBî–B¤èDŠØÖŽ¤°4˜Aæ°¦ÎÎ¢ª1èÄŽŒÖ¨°Ø¬ŒÌ1è˜®BŒÂŽð²Äª¤Š®¦Ö¬¢®¢9Œ°ÖŠC®05/®0Ð¢ŒÎî¦¤1ÈÊªŒ¢¢°Ð’ÌBÎB¦¦ð”¢Cª9+Cðî˜Œ0š´ŒA¢BŽAœA¨ªB¨ªð²’¢ªÖBAîœš¤Ø²˜¨Î ¨Œ8°¤ªØŒª¢ÆªBªCŠ0ÂŒÐ´A¬Œ1°¬Öœ˜¤Ø”¦DŠÈ¢¢ðŒ¨Œ1Î®ŽÎÆB¬Ðî¦¬ŒØC˜¬Ø ®ÖÆ®ð”2’C¢0–ÔœðœÚ¤Ô”ÚàØ˜Ôªð Dð2´ÜÐÖ²307Ä°BÖÈÐÖÌð–¨Š´AŒ1ª˜ª1ÈBðÈ¨¬ªœ ¢îªŠŒÐÎ¤B5B¬1¢¬BªŠAŒÐŒAAš¢¢”CŠ¬ðŠ®¢’°¢01¬ŠŒAªðîŽŒŒ9¨¢¬È¨¨1ð°¨0ŠÆA¬BŽª¢´¤ªB¬D¢AŒ¦ªš°¨ÖBª¬ð¤ŠŠ1BA¤¬AÆŽîæÊBB¢DCØ’CŒØ8ŠªŒÖ”¨ªÆDBŒ´C¬0ŠÈŽŠB¦®ŒÎÆDªÐB®A’¤A¤’A¬ÖœŽ¬BœÄªBÆÖCð8š¢¬ŠÊŠ¬ÈÄBØŠÌ¦¤Œ¨¨¬œ²Ž¤¢¢ŠBÆ°°Ð”®ŒŠœ¤¦Œæ8š¤Œª²ØÈ¦BªØšŠ1Œ¢1A²DŠŠœBÎÐ’¢ÐšŒ¬¬šŒ¤ðŒ¬Œœš®BÈ¤¨Ø¤´¢Ð1¬°B’’ŠØ”¤Î¬š®Dæ2¤¢¤ÎªA²B¤Ö1BBBA¬¬¤Ö’¤Œ9ÌCÐæ®ŒØœ¬¬1¢¢¦ŠŒ¢¨¬Ö¨BªBŒABª–¨ªŠŽ¢”Ä¨ÖœD¤ª1ŠŠ¤²C°Î4ŒAÎB¨ª¬´ª¦îØÈŒÎ”¢DÐš°DÎBŒ°Ðæ¢ª01¢ªB5C¢Š´AŒÐš¦AAÐ®Œ¤È¦B1šŽAªÎ˜Cª¬°ª15¦¬à°ªÖÈÊAØÖ®Dð0Ž°ÎšAª1Œ®¬Š”˜¢ð4¬BŠ1®D¤8®ŠðÈŽŒBA¬A¬œªBî´B¤Ö¬Ž¢¤Ø–®Ö’ÊDŒ²Š¢ŒÆ®04D1”Œ°Ðæ¢ª01¢ªB5ž¬ŒÎ¬ŠBªC®1è¤¬Ø¤¦B1šŽŽŒ8˜Œ1´ª®ŠŠ´°¬¬¤¢1ÈÊCÖ5ª®AÆ®CBÞªBÐÖDBÐžA¬î¤¤ðªDØ’¢ŒÐBA¤0¬ŽŽAœA°ØÐ˜°ª¢¬Dð¢´DîÆDŒŒŠŒ®BŒžŒ¬¢D0è°¢ð8ªÎÆBŒª¢ÌŠÖBÊ¬¤ªÌŠŒ”¤¬ŒÈ˜ÖÞœ¤ð’¬0ŠÌD¢¢Š¤¬”¢®0ÐÂDÎ²®ŠîÎ®B¤æªCÎ8ÌDBA°¦Aæ¤ªBª²¤¢²BD0šÄBÐ²´Š¤B®BÐ²ÌŒ¤4¤¢ŒæA¢ªèŠªîÈ¤B¤Ð’AðBDA0ÆC0Šª¢Î¤B5´¬1¬DªŒœÆ¦¢Š˜¬Š¤œŒîBª®0ŠÈBª¬”¢01®A¤¢ÄŒ¤ÖÆŒØð¬ŠÐÎ®BA’CªŠÐ ¨¬ØBŠB²´¤¬œBŠ¢¤–ÖÈÂ®Ö9È¢ðÐ´ŽÎÆ¦ð²¤®14ÂC¤¤Ì1’¤ª¬ÖŠ¬BÈBDA0ÆC0Š ¦0´´®¤¤¢¢ŒBªŒØèD¢¤š¨ð1–Šî´ª®00¬ŠðªŽÖØDŒ1”¤ªŠÈ´ŠBæ®ŒØB²°ð’œ¤Š´ 0´¢ŒÖB°¨Aè¤ŠBÆ¤AÎ¬ÞŠŒŒA¤15”C¬B¨ÂŽ0¦¦Œ4’BA¢ž¤®àDC0æ °Ð9BAÐ²¨B¤4–ªŠBD¦Îœ¤Ä¤´¦¢0œª¬0BôÖ5ŠBØ²®Î¤°°ª’4¨0¬¬Ø´ÆŒ¤Þ²¢ŒBD¤ŒšÄC21¬A¢æŠŒðŒ¤Š¬Š²®ÐŒ¢ŠBšŒ¦Œ1¬¢ª¤¬Ø4/Š1Œ¢1A²DŒ²C D1DŽŒÖ’¤Øš²ŠÚàŒ®BÖ˜CBæ¢ªªB°ÖÖ”ªŠÈ¤Œ”ªÂ0ÆŽŠð’ŠŽØ1¢ªDðêŠB8˜CBªB¦ÐœäŽ¤ŠÆŒŒ¬ ŠÐ4®Š¬¬ŒŒ¢È˜®Ô1Aª9¨ŠÖ´¤Œî”–°ÖÈª¢ªB¨A²C¢Ö¤AªØBêŒØÆ®ŒîB”°ŒŠCÂ2àŽ¤ªªÆA¬C ÚÎ¢ª1ÈÄŽŠ8°ŠØ¬A¢ŒšÌDÔîŠBA4A¤BB¢¢î´ÞÄŠŠ¬A¤ðDŽB¢¦ªÖ¤žAÐÞ’Äª¬ª¨ŒBDŠAÆªAô8°°Ð”°BØBBBBŒ²ŠðA¨B”¢°1”œŠ1Œ¢1A²DŒ²®Šð¢DBŽðªª¢°ªðàÄAî’4žB¤Š¤Šð’°Ô”®¤¬A¦Â24®¬¢Š˜¤Ö9CŠî¤D¤îÆ²C¨ÞAA¢8B¢ŠÈ¢¤1´Ø ðœŽªŠî®Ð’ªBB¢¢AÖ8” Š´¨ŽŒÈŠŒÎš¤AÔ5ÞŠ1œÄ®ð85Œîæ®ªŒÐÌCª²¢¢ª4¦BŒŠ¤ª¤ØŒªÖ’¨A05ÄBÖŒŠª¬Ø¦¦Ö0ÊŠØ¬A¢ŒšÌDÎªªŒB²Œª¨Î¦¬Ð¤DªªÐÄB¢¢+ÂBœŽ¤0ÐBAÚŒ°¢¬Æ¤ÂŽÖªBÎšš¤ŠÖ°¤1ŒŠŒ1šÂ®ôÞŽBîØ¤¤0¬¨¢185ÄB”C¬08¬Ž¤BBÐš¦BBàÈÂªŠD¨Œª®ŒÎª°BŽ5ìŠ¬”È®ð²¢Âð’’ŠØ”¤Î¬š®AŠ¢¤î¤ÂªÐšž¦Ð²œAÐªŠ¤¬´°Œ®5æŒØBÎ²ŽÈÖAÎÆŠ¦0ªDAœÌŽ¤9–Œ0²°¨ª1ABè¦°Šî¬ŒðÐª°A²ABÆ’ŠÎB–ŽÖ’œDŠ4˜¤BŒÆŠ¬’ÈBAæÌ¢î0–ŒÎÆ–¤¤´žªŠA¬¨¤Œª¤ÐÆA¤ØØ–Šî´žªAØ Œ0œŒªî5ÄAî¢ŽB¢Š’¬B4’DBªŒBAÖªŠ¢ÞŒ¤Œ8Ì¤1œ”AŒ1œ¤ªœD¬¢ÎŠ¤0ªŒA¢ÐªBð8šCð²AÎèŽîÎŒBªŠŒªŒ9BCB9¬DØ”¬ªîšŠBÐ¬œŽŠî¨ª0àª°Ö8¦ŒÖœ¤D¬¤¦BðBŒ¢Ð”ŒÖðÊ¤îîœ¦ØðŠŒ¢îÆØØ°¬ªœ¢ª1î¢¨ŠŠŒBÎÎÌª¤²È¢¤0Œ¬ªÐD¨ªÈB°1ª¬BÐ¬Bî¢BB8ÆCª²¢¢ª5ABŠŠ°¬ðÎÂŠ¬4˜Aæ°¢î4´BðªÄŽŠBÊ®ŠèÈ¤A5 ¨¤ª¦¤Öð–Šî´žªAØ Œ0œŒªî5¨AÐ0°CBŠ’¨ªî¦®1è °ªA¢¨ŒðŽ¬¬’®ŠèªŠ1”ÌAA¤D¢¢àÈ¨¬5CÖª°°1ÈCªÖB°ªðA8ŠîÆªAŠ²¤ÌÜ²òBAŒœ¢¢ªCBÖ¬¬¢Ðð–AŒŒªŒàšª¤ª ŒAªŽAð’D¢1ÐA¢ÖŠÈŠî’¢Œ¢œžD®è¤0”®DŠ5¤²Œ¤Ž¬0œŽAÐ¬ î¤ÈŒ¬ŒBŒBªÌ¢¢’®ŠîªÊCÚØªŠÎŽ¤Ö¤°´Ø5ª¢ØÆ¬AîÈœŽªÆœªŠœBŠÖŠ¬Bî’š¤BšžŒÐŒª¦Î”Ì¨1ª¬C0œCªÎ’’¨ÖšâÆDAÄAŒÈæ´ª””¢0ŠŠ¤Ö”¢ŽA9ÜŒª¬Œ°Œ1 ªÚB¤Šîš°ŠÎœD¨ð²¬B1”¦Šî¢°¨ŒÐÆªª¤Ä¦¢šª®¬BAŒ²/àæÆÊšòä¨¦¦ÐAôØ6/Ê7ê9âÊ9ª˜˜++Üêê/Â’à48”Ò5D/ŽÊ/Ø5Æ¢ª1CDªš¦¬Bœ¨°ðîC¢1Î´°ŽèŽ¬1B¤ŒØ”¤ÄªÈ°¤¬BBŒ¢A¦¨Š´¤BŒœAŠŠÄ¤ªŠŠŠB¬¬Ž¢Ðâ¢ŠÞ°®¬5˜ªÚ¤ª¢Ø’¦ŒîÆ¢¨ÐÈŠÌÜ²òŽA´¨ DŒC¢ðÞ ®¬BD¬Ðîš¦09¢¤Œ”Â¬¢”B¢ÎŠ¢ª¢è ¬Øà’¤A0ŠŠî’¬ª¬ª®ÂÚ¬–A2Œ°¬¢Œ¤´BD¢²’¦Š’¨AŒ¤°¦Š4¨DAæÂD¤Š¨C¬¤¢¢BBA¤ØÐ¬®20¤ª¬’Œ Š8²¢Ð8Bª0B”Šª²˜AÎ0+¤1B®ªB4A´ª0˜CÐ’œ0Ö¦ŽAŠŠŒ0ðŽ¤Î1¤°ôÞ¤¬AÆD¦ŒÆ+ŽÎÎ–Œ¢Až¨ªæ®ŽØÈ¨¤BÞªŠÎ8BCÔÖ¨AŒ¤°¦Î´â¨ŒØÌ¤¬Š¢1D¢ÐÐšŠ19Æ¨Œ5DA1°ª19¢®îŒªBAÐ¬ŠðBDA0ÆC0Š”ŽîÆ–¤¢ŒŒª¬à¢¬ðª®®¢0²DÐ´´¦Ð4”D2î/C1ÞŽŒÎ´DÅ2Ø¢ AÎ’B¬ØŠBªŒ1¨¬Œ´¬D¬œ¨¬¢AŒDîAŠA¢Œ¨AØªBªØ¬È;
+<?php
+require_once 'oleread.inc';
+define('SPREADSHEET_EXCEL_READER_BIFF8', 0x600);
+define('SPREADSHEET_EXCEL_READER_BIFF7', 0x500);
+define('SPREADSHEET_EXCEL_READER_WORKBOOKGLOBALS', 0x5);
+define('SPREADSHEET_EXCEL_READER_WORKSHEET', 0x10);
+define('SPREADSHEET_EXCEL_READER_TYPE_BOF', 0x809);
+define('SPREADSHEET_EXCEL_READER_TYPE_EOF', 0x0a);
+define('SPREADSHEET_EXCEL_READER_TYPE_BOUNDSHEET', 0x85);
+define('SPREADSHEET_EXCEL_READER_TYPE_DIMENSION', 0x200);
+define('SPREADSHEET_EXCEL_READER_TYPE_ROW', 0x208);
+define('SPREADSHEET_EXCEL_READER_TYPE_DBCELL', 0xd7);
+define('SPREADSHEET_EXCEL_READER_TYPE_FILEPASS', 0x2f);
+define('SPREADSHEET_EXCEL_READER_TYPE_NOTE', 0x1c);
+define('SPREADSHEET_EXCEL_READER_TYPE_TXO', 0x1b6);
+define('SPREADSHEET_EXCEL_READER_TYPE_RK', 0x7e);
+define('SPREADSHEET_EXCEL_READER_TYPE_RK2', 0x27e);
+define('SPREADSHEET_EXCEL_READER_TYPE_MULRK', 0xbd);
+define('SPREADSHEET_EXCEL_READER_TYPE_MULBLANK', 0xbe);
+define('SPREADSHEET_EXCEL_READER_TYPE_INDEX', 0x20b);
+define('SPREADSHEET_EXCEL_READER_TYPE_SST', 0xfc);
+define('SPREADSHEET_EXCEL_READER_TYPE_EXTSST', 0xff);
+define('SPREADSHEET_EXCEL_READER_TYPE_CONTINUE', 0x3c);
+define('SPREADSHEET_EXCEL_READER_TYPE_LABEL', 0x204);
+define('SPREADSHEET_EXCEL_READER_TYPE_LABELSST', 0xfd);
+define('SPREADSHEET_EXCEL_READER_TYPE_NUMBER', 0x203);
+define('SPREADSHEET_EXCEL_READER_TYPE_NAME', 0x18);
+define('SPREADSHEET_EXCEL_READER_TYPE_ARRAY', 0x221);
+define('SPREADSHEET_EXCEL_READER_TYPE_STRING', 0x207);
+define('SPREADSHEET_EXCEL_READER_TYPE_FORMULA', 0x406);
+define('SPREADSHEET_EXCEL_READER_TYPE_FORMULA2', 0x6);
+define('SPREADSHEET_EXCEL_READER_TYPE_FORMAT', 0x41e);
+define('SPREADSHEET_EXCEL_READER_TYPE_XF', 0xe0);
+define('SPREADSHEET_EXCEL_READER_TYPE_BOOLERR', 0x205);
+define('SPREADSHEET_EXCEL_READER_TYPE_UNKNOWN', 0xffff);
+define('SPREADSHEET_EXCEL_READER_TYPE_NINETEENFOUR', 0x22);
+define('SPREADSHEET_EXCEL_READER_TYPE_MERGEDCELLS', 0xE5);
+define('SPREADSHEET_EXCEL_READER_UTCOFFSETDAYS', 25569);
+define('SPREADSHEET_EXCEL_READER_UTCOFFSETDAYS1904', 24107);
+define('SPREADSHEET_EXCEL_READER_MSINADAY', 86400);
+define('SPREADSHEET_EXCEL_READER_DEF_NUM_FORMAT', '%s');
+class Spreadsheet_Excel_Reader
+{
+    var $boundsheets = array();
+    var $formatRecords = array();
+    var $sst = array();
+    var $sheets = array();
+    var $data;
+    var $_ole;
+    var $_defaultEncoding;
+    var $_defaultFormat = SPREADSHEET_EXCEL_READER_DEF_NUM_FORMAT;
+    var $_columnsFormat = array();
+    var $_rowoffset = 1;
+    var $_coloffset = 1;
+    var $dateFormats = array(0xe => "d/m/Y", 0xf => "d-M-Y", 0x10 => "d-M", 0x11 => "M-Y", 0x12 => "h:i a", 0x13 => "h:i:s a", 0x14 => "H:i", 0x15 => "H:i:s", 0x16 => "d/m/Y H:i", 0x2d => "i:s", 0x2e => "H:i:s", 0x2f => "i:s.S");
+    var $numberFormats = array(0x1 => "%1.0f", 0x2 => "%1.2f", 0x3 => "%1.0f", 0x4 => "%1.2f", 0x5 => "%1.0f", 0x6 => '$%1.0f', 0x7 => '$%1.2f', 0x8 => '$%1.2f', 0x9 => '%1.0f%%', 0xa => '%1.2f%%', 0xb => '%1.2f', 0x25 => '%1.0f', 0x26 => '%1.0f', 0x27 => '%1.2f', 0x28 => '%1.2f', 0x29 => '%1.0f', 0x2a => '$%1.0f', 0x2b => '%1.2f', 0x2c => '$%1.2f', 0x30 => '%1.0f');
+    function Spreadsheet_Excel_Reader()
+    {
+        $this->_ole =& new OLERead();
+        $this->setUTFEncoder('iconv');
+    }
+    function setOutputEncoding($encoding)
+    {
+        $this->_defaultEncoding = $encoding;
+    }
+    function setUTFEncoder($encoder = 'iconv')
+    {
+        $this->_encoderFunction = '';
+        if ($encoder == 'iconv') {
+            $this->_encoderFunction = function_exists('iconv') ? 'iconv' : '';
+        } elseif ($encoder == 'mb') {
+            $this->_encoderFunction = function_exists('mb_convert_encoding') ? 'mb_convert_encoding' : '';
+        }
+    }
+    function setRowColOffset($iOffset)
+    {
+        $this->_rowoffset = $iOffset;
+        $this->_coloffset = $iOffset;
+    }
+    function setDefaultFormat($sFormat)
+    {
+        $this->_defaultFormat = $sFormat;
+    }
+    function setColumnFormat($column, $sFormat)
+    {
+        $this->_columnsFormat[$column] = $sFormat;
+    }
+    function read($sFileName)
+    {
+        $res = $this->_ole->read($sFileName);
+        if ($res === false) {
+            if ($this->_ole->error == 1) {
+                die('The filename ' . $sFileName . ' is not readable');
+            }
+        }
+        $this->data = $this->_ole->getWorkBook();
+        $this->_parse();
+    }
+    function _parse()
+    {
+        $pos           = 0;
+        $code          = ord($this->data[$pos]) | ord($this->data[$pos + 1]) << 8;
+        $length        = ord($this->data[$pos + 2]) | ord($this->data[$pos + 3]) << 8;
+        $version       = ord($this->data[$pos + 4]) | ord($this->data[$pos + 5]) << 8;
+        $substreamType = ord($this->data[$pos + 6]) | ord($this->data[$pos + 7]) << 8;
+        if (($version != SPREADSHEET_EXCEL_READER_BIFF8) && ($version != SPREADSHEET_EXCEL_READER_BIFF7)) {
+            return false;
+        }
+        if ($substreamType != SPREADSHEET_EXCEL_READER_WORKBOOKGLOBALS) {
+            return false;
+        }
+        $pos += $length + 4;
+        $code   = ord($this->data[$pos]) | ord($this->data[$pos + 1]) << 8;
+        $length = ord($this->data[$pos + 2]) | ord($this->data[$pos + 3]) << 8;
+        while ($code != SPREADSHEET_EXCEL_READER_TYPE_EOF) {
+            switch ($code) {
+                case SPREADSHEET_EXCEL_READER_TYPE_SST:
+                    $spos          = $pos + 4;
+                    $limitpos      = $spos + $length;
+                    $uniqueStrings = $this->_GetInt4d($this->data, $spos + 4);
+                    $spos += 8;
+                    for ($i = 0; $i < $uniqueStrings; $i++) {
+                        if ($spos == $limitpos) {
+                            $opcode    = ord($this->data[$spos]) | ord($this->data[$spos + 1]) << 8;
+                            $conlength = ord($this->data[$spos + 2]) | ord($this->data[$spos + 3]) << 8;
+                            if ($opcode != 0x3c) {
+                                return -1;
+                            }
+                            $spos += 4;
+                            $limitpos = $spos + $conlength;
+                        }
+                        $numChars = ord($this->data[$spos]) | (ord($this->data[$spos + 1]) << 8);
+                        $spos += 2;
+                        $optionFlags = ord($this->data[$spos]);
+                        $spos++;
+                        $asciiEncoding  = (($optionFlags & 0x01) == 0);
+                        $extendedString = (($optionFlags & 0x04) != 0);
+                        $richString     = (($optionFlags & 0x08) != 0);
+                        if ($richString) {
+                            $formattingRuns = ord($this->data[$spos]) | (ord($this->data[$spos + 1]) << 8);
+                            $spos += 2;
+                        }
+                        if ($extendedString) {
+                            $extendedRunLength = $this->_GetInt4d($this->data, $spos);
+                            $spos += 4;
+                        }
+                        $len = ($asciiEncoding) ? $numChars : $numChars * 2;
+                        if ($spos + $len < $limitpos) {
+                            $retstr = substr($this->data, $spos, $len);
+                            $spos += $len;
+                        } else {
+                            $retstr    = substr($this->data, $spos, $limitpos - $spos);
+                            $bytesRead = $limitpos - $spos;
+                            $charsLeft = $numChars - (($asciiEncoding) ? $bytesRead : ($bytesRead / 2));
+                            $spos      = $limitpos;
+                            while ($charsLeft > 0) {
+                                $opcode    = ord($this->data[$spos]) | ord($this->data[$spos + 1]) << 8;
+                                $conlength = ord($this->data[$spos + 2]) | ord($this->data[$spos + 3]) << 8;
+                                if ($opcode != 0x3c) {
+                                    return -1;
+                                }
+                                $spos += 4;
+                                $limitpos = $spos + $conlength;
+                                $option   = ord($this->data[$spos]);
+                                $spos += 1;
+                                if ($asciiEncoding && ($option == 0)) {
+                                    $len = min($charsLeft, $limitpos - $spos);
+                                    $retstr .= substr($this->data, $spos, $len);
+                                    $charsLeft -= $len;
+                                    $asciiEncoding = true;
+                                } elseif (!$asciiEncoding && ($option != 0)) {
+                                    $len = min($charsLeft * 2, $limitpos - $spos);
+                                    $retstr .= substr($this->data, $spos, $len);
+                                    $charsLeft -= $len / 2;
+                                    $asciiEncoding = false;
+                                } elseif (!$asciiEncoding && ($option == 0)) {
+                                    $len = min($charsLeft, $limitpos - $spos);
+                                    for ($j = 0; $j < $len; $j++) {
+                                        $retstr .= $this->data[$spos + $j] . chr(0);
+                                    }
+                                    $charsLeft -= $len;
+                                    $asciiEncoding = false;
+                                } else {
+                                    $newstr = '';
+                                    for ($j = 0; $j < strlen($retstr); $j++) {
+                                        $newstr = $retstr[$j] . chr(0);
+                                    }
+                                    $retstr = $newstr;
+                                    $len    = min($charsLeft * 2, $limitpos - $spos);
+                                    $retstr .= substr($this->data, $spos, $len);
+                                    $charsLeft -= $len / 2;
+                                    $asciiEncoding = false;
+                                }
+                                $spos += $len;
+                            }
+                        }
+                        $retstr = ($asciiEncoding) ? $retstr : $this->_encodeUTF16($retstr);
+                        if ($richString) {
+                            $spos += 4 * $formattingRuns;
+                        }
+                        if ($extendedString) {
+                            $spos += $extendedRunLength;
+                        }
+                        $this->sst[] = $retstr;
+                    }
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_FILEPASS:
+                    return false;
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_NAME:
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_FORMAT:
+                    $indexCode = ord($this->data[$pos + 4]) | ord($this->data[$pos + 5]) << 8;
+                    if ($version == SPREADSHEET_EXCEL_READER_BIFF8) {
+                        $numchars = ord($this->data[$pos + 6]) | ord($this->data[$pos + 7]) << 8;
+                        if (ord($this->data[$pos + 8]) == 0) {
+                            $formatString = substr($this->data, $pos + 9, $numchars);
+                        } else {
+                            $formatString = substr($this->data, $pos + 9, $numchars * 2);
+                        }
+                    } else {
+                        $numchars     = ord($this->data[$pos + 6]);
+                        $formatString = substr($this->data, $pos + 7, $numchars * 2);
+                    }
+                    $this->formatRecords[$indexCode] = $formatString;
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_XF:
+                    $indexCode = ord($this->data[$pos + 6]) | ord($this->data[$pos + 7]) << 8;
+                    if (array_key_exists($indexCode, $this->dateFormats)) {
+                        $this->formatRecords['xfrecords'][] = array(
+                            'type' => 'date',
+                            'format' => $this->dateFormats[$indexCode]
+                        );
+                    } elseif (array_key_exists($indexCode, $this->numberFormats)) {
+                        $this->formatRecords['xfrecords'][] = array(
+                            'type' => 'number',
+                            'format' => $this->numberFormats[$indexCode]
+                        );
+                    } else {
+                        $isdate = FALSE;
+                        if ($indexCode > 0) {
+                            if (isset($this->formatRecords[$indexCode]))
+                                $formatstr = $this->formatRecords[$indexCode];
+                            if ($formatstr)
+                                if (preg_match("/[^hmsday\/\-:\s]/i", $formatstr) == 0) {
+                                    $isdate    = TRUE;
+                                    $formatstr = str_replace('mm', 'i', $formatstr);
+                                    $formatstr = str_replace('h', 'H', $formatstr);
+                                }
+                        }
+                        if ($isdate) {
+                            $this->formatRecords['xfrecords'][] = array(
+                                'type' => 'date',
+                                'format' => $formatstr
+                            );
+                        } else {
+                            $this->formatRecords['xfrecords'][] = array(
+                                'type' => 'other',
+                                'format' => '',
+                                'code' => $indexCode
+                            );
+                        }
+                    }
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_NINETEENFOUR:
+                    $this->nineteenFour = (ord($this->data[$pos + 4]) == 1);
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_BOUNDSHEET:
+                    $rec_offset         = $this->_GetInt4d($this->data, $pos + 4);
+                    $rec_typeFlag       = ord($this->data[$pos + 8]);
+                    $rec_visibilityFlag = ord($this->data[$pos + 9]);
+                    $rec_length         = ord($this->data[$pos + 10]);
+                    if ($version == SPREADSHEET_EXCEL_READER_BIFF8) {
+                        $chartype = ord($this->data[$pos + 11]);
+                        if ($chartype == 0) {
+                            $rec_name = substr($this->data, $pos + 12, $rec_length);
+                        } else {
+                            $rec_name = $this->_encodeUTF16(substr($this->data, $pos + 12, $rec_length * 2));
+                        }
+                    } elseif ($version == SPREADSHEET_EXCEL_READER_BIFF7) {
+                        $rec_name = substr($this->data, $pos + 11, $rec_length);
+                    }
+                    $this->boundsheets[] = array(
+                        'name' => $rec_name,
+                        'offset' => $rec_offset
+                    );
+                    break;
+            }
+            $pos += $length + 4;
+            $code   = ord($this->data[$pos]) | ord($this->data[$pos + 1]) << 8;
+            $length = ord($this->data[$pos + 2]) | ord($this->data[$pos + 3]) << 8;
+        }
+        foreach ($this->boundsheets as $key => $val) {
+            $this->sn = $key;
+            $this->_parsesheet($val['offset']);
+        }
+        return true;
+    }
+    function _parsesheet($spos)
+    {
+        $cont          = true;
+        $code          = ord($this->data[$spos]) | ord($this->data[$spos + 1]) << 8;
+        $length        = ord($this->data[$spos + 2]) | ord($this->data[$spos + 3]) << 8;
+        $version       = ord($this->data[$spos + 4]) | ord($this->data[$spos + 5]) << 8;
+        $substreamType = ord($this->data[$spos + 6]) | ord($this->data[$spos + 7]) << 8;
+        if (($version != SPREADSHEET_EXCEL_READER_BIFF8) && ($version != SPREADSHEET_EXCEL_READER_BIFF7)) {
+            return -1;
+        }
+        if ($substreamType != SPREADSHEET_EXCEL_READER_WORKSHEET) {
+            return -2;
+        }
+        $spos += $length + 4;
+        while ($cont) {
+            $lowcode = ord($this->data[$spos]);
+            if ($lowcode == SPREADSHEET_EXCEL_READER_TYPE_EOF)
+                break;
+            $code   = $lowcode | ord($this->data[$spos + 1]) << 8;
+            $length = ord($this->data[$spos + 2]) | ord($this->data[$spos + 3]) << 8;
+            $spos += 4;
+            $this->sheets[$this->sn]['maxrow'] = $this->_rowoffset - 1;
+            $this->sheets[$this->sn]['maxcol'] = $this->_coloffset - 1;
+            unset($this->rectype);
+            $this->multiplier = 1;
+            switch ($code) {
+                case SPREADSHEET_EXCEL_READER_TYPE_DIMENSION:
+                    if (!isset($this->numRows)) {
+                        if (($length == 10) || ($version == SPREADSHEET_EXCEL_READER_BIFF7)) {
+                            $this->sheets[$this->sn]['numRows'] = ord($this->data[$spos + 2]) | ord($this->data[$spos + 3]) << 8;
+                            $this->sheets[$this->sn]['numCols'] = ord($this->data[$spos + 6]) | ord($this->data[$spos + 7]) << 8;
+                        } else {
+                            $this->sheets[$this->sn]['numRows'] = ord($this->data[$spos + 4]) | ord($this->data[$spos + 5]) << 8;
+                            $this->sheets[$this->sn]['numCols'] = ord($this->data[$spos + 10]) | ord($this->data[$spos + 11]) << 8;
+                        }
+                    }
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_MERGEDCELLS:
+                    $cellRanges = ord($this->data[$spos]) | ord($this->data[$spos + 1]) << 8;
+                    for ($i = 0; $i < $cellRanges; $i++) {
+                        $fr = ord($this->data[$spos + 8 * $i + 2]) | ord($this->data[$spos + 8 * $i + 3]) << 8;
+                        $lr = ord($this->data[$spos + 8 * $i + 4]) | ord($this->data[$spos + 8 * $i + 5]) << 8;
+                        $fc = ord($this->data[$spos + 8 * $i + 6]) | ord($this->data[$spos + 8 * $i + 7]) << 8;
+                        $lc = ord($this->data[$spos + 8 * $i + 8]) | ord($this->data[$spos + 8 * $i + 9]) << 8;
+                        if ($lr - $fr > 0) {
+                            $this->sheets[$this->sn]['cellsInfo'][$fr + 1][$fc + 1]['rowspan'] = $lr - $fr + 1;
+                        }
+                        if ($lc - $fc > 0) {
+                            $this->sheets[$this->sn]['cellsInfo'][$fr + 1][$fc + 1]['colspan'] = $lc - $fc + 1;
+                        }
+                    }
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_RK:
+                case SPREADSHEET_EXCEL_READER_TYPE_RK2:
+                    $row      = ord($this->data[$spos]) | ord($this->data[$spos + 1]) << 8;
+                    $column   = ord($this->data[$spos + 2]) | ord($this->data[$spos + 3]) << 8;
+                    $rknum    = $this->_GetInt4d($this->data, $spos + 6);
+                    $numValue = $this->_GetIEEE754($rknum);
+                    if ($this->isDate($spos)) {
+                        list($string, $raw) = $this->createDate($numValue);
+                    } else {
+                        $raw = $numValue;
+                        if (isset($this->_columnsFormat[$column + 1])) {
+                            $this->curformat = $this->_columnsFormat[$column + 1];
+                        }
+                        $string = sprintf($this->curformat, $numValue * $this->multiplier);
+                    }
+                    $this->addcell($row, $column, $string, $raw);
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_LABELSST:
+                    $row     = ord($this->data[$spos]) | ord($this->data[$spos + 1]) << 8;
+                    $column  = ord($this->data[$spos + 2]) | ord($this->data[$spos + 3]) << 8;
+                    $xfindex = ord($this->data[$spos + 4]) | ord($this->data[$spos + 5]) << 8;
+                    $index   = $this->_GetInt4d($this->data, $spos + 6);
+                    $this->addcell($row, $column, $this->sst[$index]);
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_MULRK:
+                    $row      = ord($this->data[$spos]) | ord($this->data[$spos + 1]) << 8;
+                    $colFirst = ord($this->data[$spos + 2]) | ord($this->data[$spos + 3]) << 8;
+                    $colLast  = ord($this->data[$spos + $length - 2]) | ord($this->data[$spos + $length - 1]) << 8;
+                    $columns  = $colLast - $colFirst + 1;
+                    $tmppos   = $spos + 4;
+                    for ($i = 0; $i < $columns; $i++) {
+                        $numValue = $this->_GetIEEE754($this->_GetInt4d($this->data, $tmppos + 2));
+                        if ($this->isDate($tmppos - 4)) {
+                            list($string, $raw) = $this->createDate($numValue);
+                        } else {
+                            $raw = $numValue;
+                            if (isset($this->_columnsFormat[$colFirst + $i + 1])) {
+                                $this->curformat = $this->_columnsFormat[$colFirst + $i + 1];
+                            }
+                            $string = sprintf($this->curformat, $numValue * $this->multiplier);
+                        }
+                        $tmppos += 6;
+                        $this->addcell($row, $colFirst + $i, $string, $raw);
+                    }
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_NUMBER:
+                    $row    = ord($this->data[$spos]) | ord($this->data[$spos + 1]) << 8;
+                    $column = ord($this->data[$spos + 2]) | ord($this->data[$spos + 3]) << 8;
+                    $tmp    = unpack("ddouble", substr($this->data, $spos + 6, 8));
+                    if ($this->isDate($spos)) {
+                        list($string, $raw) = $this->createDate($tmp['double']);
+                    } else {
+                        if (isset($this->_columnsFormat[$column + 1])) {
+                            $this->curformat = $this->_columnsFormat[$column + 1];
+                        }
+                        $raw    = $this->createNumber($spos);
+                        $string = sprintf($this->curformat, $raw * $this->multiplier);
+                    }
+                    $this->addcell($row, $column, $string, $raw);
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_FORMULA:
+                case SPREADSHEET_EXCEL_READER_TYPE_FORMULA2:
+                    $row    = ord($this->data[$spos]) | ord($this->data[$spos + 1]) << 8;
+                    $column = ord($this->data[$spos + 2]) | ord($this->data[$spos + 3]) << 8;
+                    if ((ord($this->data[$spos + 6]) == 0) && (ord($this->data[$spos + 12]) == 255) && (ord($this->data[$spos + 13]) == 255)) {
+                    } elseif ((ord($this->data[$spos + 6]) == 1) && (ord($this->data[$spos + 12]) == 255) && (ord($this->data[$spos + 13]) == 255)) {
+                    } elseif ((ord($this->data[$spos + 6]) == 2) && (ord($this->data[$spos + 12]) == 255) && (ord($this->data[$spos + 13]) == 255)) {
+                    } elseif ((ord($this->data[$spos + 6]) == 3) && (ord($this->data[$spos + 12]) == 255) && (ord($this->data[$spos + 13]) == 255)) {
+                    } else {
+                        $tmp = unpack("ddouble", substr($this->data, $spos + 6, 8));
+                        if ($this->isDate($spos)) {
+                            list($string, $raw) = $this->createDate($tmp['double']);
+                        } else {
+                            if (isset($this->_columnsFormat[$column + 1])) {
+                                $this->curformat = $this->_columnsFormat[$column + 1];
+                            }
+                            $raw    = $this->createNumber($spos);
+                            $string = sprintf($this->curformat, $raw * $this->multiplier);
+                        }
+                        $this->addcell($row, $column, $string, $raw);
+                    }
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_BOOLERR:
+                    $row    = ord($this->data[$spos]) | ord($this->data[$spos + 1]) << 8;
+                    $column = ord($this->data[$spos + 2]) | ord($this->data[$spos + 3]) << 8;
+                    $string = ord($this->data[$spos + 6]);
+                    $this->addcell($row, $column, $string);
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_ROW:
+                case SPREADSHEET_EXCEL_READER_TYPE_DBCELL:
+                case SPREADSHEET_EXCEL_READER_TYPE_MULBLANK:
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_LABEL:
+                    $row    = ord($this->data[$spos]) | ord($this->data[$spos + 1]) << 8;
+                    $column = ord($this->data[$spos + 2]) | ord($this->data[$spos + 3]) << 8;
+                    $this->addcell($row, $column, substr($this->data, $spos + 8, ord($this->data[$spos + 6]) | ord($this->data[$spos + 7]) << 8));
+                    break;
+                case SPREADSHEET_EXCEL_READER_TYPE_EOF:
+                    $cont = false;
+                    break;
+                default:
+                    break;
+            }
+            $spos += $length;
+        }
+        if (!isset($this->sheets[$this->sn]['numRows']))
+            $this->sheets[$this->sn]['numRows'] = $this->sheets[$this->sn]['maxrow'];
+        if (!isset($this->sheets[$this->sn]['numCols']))
+            $this->sheets[$this->sn]['numCols'] = $this->sheets[$this->sn]['maxcol'];
+    }
+    function isDate($spos)
+    {
+        $xfindex = ord($this->data[$spos + 4]) | ord($this->data[$spos + 5]) << 8;
+        if ($this->formatRecords['xfrecords'][$xfindex]['type'] == 'date') {
+            $this->curformat = $this->formatRecords['xfrecords'][$xfindex]['format'];
+            $this->rectype   = 'date';
+            return true;
+        } else {
+            if ($this->formatRecords['xfrecords'][$xfindex]['type'] == 'number') {
+                $this->curformat = $this->formatRecords['xfrecords'][$xfindex]['format'];
+                $this->rectype   = 'number';
+                if (($xfindex == 0x9) || ($xfindex == 0xa)) {
+                    $this->multiplier = 100;
+                }
+            } else {
+                $this->curformat = $this->_defaultFormat;
+                $this->rectype   = 'unknown';
+            }
+            return false;
+        }
+    }
+    function createDate($numValue)
+    {
+        if ($numValue > 1) {
+            $utcDays  = $numValue - ($this->nineteenFour ? SPREADSHEET_EXCEL_READER_UTCOFFSETDAYS1904 : SPREADSHEET_EXCEL_READER_UTCOFFSETDAYS);
+            $utcValue = round(($utcDays + 1) * SPREADSHEET_EXCEL_READER_MSINADAY);
+            $string   = date($this->curformat, $utcValue);
+            $raw      = $utcValue;
+        } else {
+            $raw    = $numValue;
+            $hours  = floor($numValue * 24);
+            $mins   = floor($numValue * 24 * 60) - $hours * 60;
+            $secs   = floor($numValue * SPREADSHEET_EXCEL_READER_MSINADAY) - $hours * 60 * 60 - $mins * 60;
+            $string = date($this->curformat, mktime($hours, $mins, $secs));
+        }
+        return array(
+            $string,
+            $raw
+        );
+    }
+    function createNumber($spos)
+    {
+        $rknumhigh    = $this->_GetInt4d($this->data, $spos + 10);
+        $rknumlow     = $this->_GetInt4d($this->data, $spos + 6);
+        $sign         = ($rknumhigh & 0x80000000) >> 31;
+        $exp          = ($rknumhigh & 0x7ff00000) >> 20;
+        $mantissa     = (0x100000 | ($rknumhigh & 0x000fffff));
+        $mantissalow1 = ($rknumlow & 0x80000000) >> 31;
+        $mantissalow2 = ($rknumlow & 0x7fffffff);
+        $value        = $mantissa / pow(2, (20 - ($exp - 1023)));
+        if ($mantissalow1 != 0)
+            $value += 1 / pow(2, (21 - ($exp - 1023)));
+        $value += $mantissalow2 / pow(2, (52 - ($exp - 1023)));
+        if ($sign) {
+            $value = -1 * $value;
+        }
+        return $value;
+    }
+    function addcell($row, $col, $string, $raw = '')
+    {
+        $this->sheets[$this->sn]['maxrow']                                                    = max($this->sheets[$this->sn]['maxrow'], $row + $this->_rowoffset);
+        $this->sheets[$this->sn]['maxcol']                                                    = max($this->sheets[$this->sn]['maxcol'], $col + $this->_coloffset);
+        $this->sheets[$this->sn]['cells'][$row + $this->_rowoffset][$col + $this->_coloffset] = $string;
+        if ($raw)
+            $this->sheets[$this->sn]['cellsInfo'][$row + $this->_rowoffset][$col + $this->_coloffset]['raw'] = $raw;
+        if (isset($this->rectype))
+            $this->sheets[$this->sn]['cellsInfo'][$row + $this->_rowoffset][$col + $this->_coloffset]['type'] = $this->rectype;
+    }
+    function _GetIEEE754($rknum)
+    {
+        if (($rknum & 0x02) != 0) {
+            $value = $rknum >> 2;
+        } else {
+            $sign     = ($rknum & 0x80000000) >> 31;
+            $exp      = ($rknum & 0x7ff00000) >> 20;
+            $mantissa = (0x100000 | ($rknum & 0x000ffffc));
+            $value    = $mantissa / pow(2, (20 - ($exp - 1023)));
+            if ($sign) {
+                $value = -1 * $value;
+            }
+        }
+        if (($rknum & 0x01) != 0) {
+            $value /= 100;
+        }
+        return $value;
+    }
+    function _encodeUTF16($string)
+    {
+        $result = $string;
+        if ($this->_defaultEncoding) {
+            switch ($this->_encoderFunction) {
+                case 'iconv':
+                    $result = iconv('UTF-16LE', $this->_defaultEncoding, $string);
+                    break;
+                case 'mb_convert_encoding':
+                    $result = mb_convert_encoding($string, $this->_defaultEncoding, 'UTF-16LE');
+                    break;
+            }
+        }
+        return $result;
+    }
+    function _GetInt4d($data, $pos)
+    {
+        $value = ord($data[$pos]) | (ord($data[$pos + 1]) << 8) | (ord($data[$pos + 2]) << 16) | (ord($data[$pos + 3]) << 24);
+        if ($value >= 4294967294) {
+            $value = -2;
+        }
+        return $value;
+    }
+}

@@ -75,7 +75,23 @@
 <script type="text/javascript" src="../app/resource/components/area/cascade.js"></script>
 
 <script type="text/javascript">
-
+	{if empty($addresses) && $_W['account']['level'] == ACCOUNT_SERVICE_VERIFY}
+		wx.ready(function () {
+			wx.openAddress({
+				success : function(result) {
+					//此处获取到地址信息，可做自己的业务操作
+					$('#realname').val(result.userName);
+					$('#mobile').val(result.telNumber);
+					$('#sel-provance').val(result.provinceName);
+					$('#sel-provance').trigger('change');
+					$('#sel-city').val(result.cityName);
+					$('#sel-city').trigger('change');
+					$('#sel-area').val(result.countryName);
+					$('#address').val(result.detailInfo);
+				}
+			});
+		});
+		{/if}
 	var from='{$_GPC['from']}';
 	var returnurl = '{$_GPC['returnurl']}';
 	cascdeInit('','','');
@@ -221,5 +237,5 @@
 	}
 </script>
 
-{template 'footer-base'}
+{template 'footer'}
 {template 'footerbar'}

@@ -129,7 +129,13 @@
 				{php echo tpl_form_field_image('thumb', $item['thumb'], '', array('extras' => array('text' => 'readonly')))}
 			</div>
 		</div>
-
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">视频介绍</label>
+			<div class="col-sm-8 col-xs-12">
+				<input type="text" name="video" id="video" class="form-control" value="{$item['video']}" />
+				<span class="help-block" style="color:red;">视频链接仅支持腾讯视频链接，链接获取方法请参见 <a href="http://www.renrensousuo.com/tengxunshipin-qianruwangye.htm">查看详情</a> 链接案例：http://v.qq.com/iframe/player.html?vid=k0015trfczz</span>
+			</div>
+		</div>
 		<div class="form-group">
 			<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>项目简介</label>
 			<div class="col-sm-8 col-xs-12">
@@ -459,7 +465,7 @@
 					<td>{php echo date('m-d H:i',$item['starttime'])}</td>
 					<td>{php echo date('m-d H:i',$item['starttime'] + $item['deal_days'] * 86400)}</td>
 					<td>{if $item['limit_price'] != 0}{$item['limit_price']}元{else}不限制{/if}</td>
-					<td>{$item['finish_price']}元{if $item['limit_price'] != 0}（{php echo $item['finish_price']/($item['limit_price'])*100}%）{/if}</td>
+					<td>{php echo $this->getFinishPrice($item['id'])}元{if $item['limit_price'] != 0}（{php echo $this->getFinishPrice($item['id'])/($item['limit_price'])*100}%）{/if}</td>
 					<td>
 						{if $item['status']=='-1'}审核不通过{else if $item['status']==0}编辑中{else if $item['status']==1}待审核{else if $item['status']==2}暂停{else if $item['status']==3}进行中{else}未知{/if}
 					</td>

@@ -43,7 +43,7 @@
 
 
 				<div class="form-group">
-				<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 户型：</label>
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 相册：</label>
 				<div class="col-sm-9 col-xs-12">
 
 						<select name="pid" id="pid" class="form-control">
@@ -146,7 +146,7 @@ $(function () {
 		var checkpid="{$pid}";
 
 
-		$.get('{php echo $this->createWebUrl('QueryPics');}',{"hid":hid},function(res){
+		$.post('{php echo $this->createWebUrl('QueryPics');}',{"hid":hid},function(res){
 
 			var opHtml="";
 			for(var i=0;i<res.length;i++){
@@ -163,7 +163,7 @@ $(function () {
 
 			}
 
-			$("#tid").html(opHtml);
+			$("#pid").html(opHtml);
 
 
 		},'json');
@@ -294,30 +294,33 @@ $(function () {
 
 		function getTypes(hid){
 
-			var checkTid="{$tid}";
+			
 
 
-			$.get('{php echo create_url('site/module/QueryTypes', array('name' => 'mon_house'));}',{"hid":hid},function(res){
-
-				var opHtml="";
-				for(var i=0;i<res.length;i++){
-
-					var houseType=res[i];
-
-					if(houseType['id']==checkTid){
-						opHtml+="<option value="+houseType['id']+" selected='selected' >"+houseType['tname']+"</option>";
-					}else{
-						opHtml+="<option value="+houseType['id']+">"+houseType['tname']+"</option>";
-					}
+			var checkpid="{$pid}";
 
 
+		$.post('{php echo $this->createWebUrl('QueryPics');}',{"hid":hid},function(res){
 
+			var opHtml="";
+			for(var i=0;i<res.length;i++){
+
+				var housePic=res[i];
+
+				if(housePic['id']==checkpid){
+					opHtml+="<option value="+housePic['id']+" selected='selected' >"+housePic['pname']+"</option>";
+				}else{
+					opHtml+="<option value="+housePic['id']+">"+housePic['pname']+"</option>";
 				}
 
-				$("#tid").html(opHtml);
 
 
-			},'json');
+			}
+
+			$("#pid").html(opHtml);
+
+
+		},'json');
 
 		}
 

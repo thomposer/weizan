@@ -9,29 +9,36 @@
         $op      = $_GPC['op'];
         $gzh     = pdo_fetchall("SELECT * FROM " . tablename('uni_account_users') . "where uid=$uid");
         $modules = pdo_fetchall("SELECT * FROM " . tablename('modules'));
+		$user    = pdo_get('users',array('uid' =>$uid));
         if (checksubmit('submit')) {
             $credit  = $_GPC['credit'];
             $weid    = $_GPC['weid'];
             $module  = $_GPC['module'];
             $endtime = $_GPC['endtime'];
-            if (!empty($credit)) {
-                $member = pdo_fetch("SELECT * FROM " . tablename('buymod_members') . " where uid=:uid", array(
-                    ':uid' => $uid
-                ));
-                if (empty($member)) {
-                    pdo_insert('buymod_members', array(
-                        'uid' => $uid,
-                        'credit' => $credit
-                    ));
-                } else {
-                    $credit = $member['credit'] + $credit;
-                    pdo_update('buymod_members', array(
-                        'credit' => $credit
+			$credit  +=$user['credit2'];
+			pdo_update('users', array(
+                        'credit2' => $credit
                     ), array(
                         'uid' => $uid
                     ));
-                }
-            }
+//            if (!empty($credit)) {
+//                $member = pdo_fetch("SELECT * FROM " . tablename('buymod_members') . " where uid=:uid", array(
+//                    ':uid' => $uid
+//                ));
+//                if (empty($member)) {
+//                    pdo_insert('buymod_members', array(
+//                        'uid' => $uid,
+ //                       'credit' => $credit
+//                    ));
+//                } else {
+//                    $credit = $member['credit'] + $credit;
+//                    pdo_update('buymod_members', array(
+//                        'credit' => $credit
+//                    ), array(
+//                        'uid' => $uid
+//                    ));
+//                }
+//           }
             if (!empty($weid) && !empty($endtime) && !empty($module)) {
                 $items     = pdo_fetch("SELECT * FROM " . tablename('modules') . "where name=:name", array(
                     ':name' => $module

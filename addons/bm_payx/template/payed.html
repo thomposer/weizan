@@ -20,30 +20,49 @@
 					<input type="hidden" name="id" value="{$rid}">				
 					<div class="form-group">
 						<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">昵称</label>
-						<div class="col-xs-12 col-sm-8 col-md-8 col-lg-3">
+						<div class="col-xs-12 col-sm-8 col-md-8 col-lg-2">
 							<input class="form-control" name="username" id="" type="text" value="{$_GPC['username']}" placeholder="填写粉丝昵称">
 						</div>
 						<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">店员</label>
-						<div class="col-xs-12 col-sm-8 col-md-8 col-lg-3">
+						<div class="col-xs-12 col-sm-8 col-md-8 col-lg-2">
 							<input class="form-control" name="name" id="" type="text" value="{$_GPC['name']}" placeholder="填写店员名称">
+						</div>
+						<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">店铺</label>
+						<div class="col-xs-12 col-sm-8 col-md-8 col-lg-2">
+							<input class="form-control" name="store" id="" type="text" value="{$_GPC['store']}" placeholder="填写店铺名称">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">开始日期</label>
 						<div class="col-xs-12 col-sm-8 col-md-8 col-lg-2">
-							<input class="form-control" name="startdate" id="" type="text" value="{$_GPC['startdate']}" placeholder="例如：2015-01-01">
+							<!--input class="form-control" name="startdate" id="" type="text" value="{$_GPC['startdate']}" placeholder="例如：2015-01-01"-->
+							{php echo tpl_form_field_date('starttime',$starttime,true);}
 						</div>
 						<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">结束日期</label>
 						<div class="col-xs-12 col-sm-8 col-md-8 col-lg-2">
-							<input class="form-control" name="enddate" id="" type="text" value="{$_GPC['enddate']}" placeholder="例如：2016-12-31">
+							<!--input class="form-control" name="enddate" id="" type="text" value="{$_GPC['enddate']}" placeholder="例如：2016-12-31"-->
+							{php echo tpl_form_field_date('endtime',$endtime,true);}
 						</div>					
 						<div class="col-xs-12 col-sm-2 col-md-1 col-lg-1">
 							<button class="btn btn-default" type="submit"><i class="fa fa-search"></i> 搜索</button>
 						</div>
 						<div class="col-xs-12 col-sm-2 col-md-1 col-lg-1">
-							<a class="btn btn-default" href="{php echo $this->createWebUrl('download', array('rid' => $rid , 'op' => 'payed'))}"><i class="fa fa-search"></i> 导出</a>
+							<button class="btn btn-default" type="submit" id="xls" name="xls" value="xls"><i class="fa fa-search"></i> 导出</button>
 						</div>
-					</div>					
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">收款金额</label>
+						<div class="col-xs-12 col-sm-8 col-md-8 col-lg-2">
+							<input class="form-control" name="qrmoney" id="" type="text" value="{$_GPC['qrmoney']}" placeholder="金额">
+						</div>
+						<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">客户条码</label>
+						<div class="col-xs-12 col-sm-8 col-md-8 col-lg-3">
+							<input class="form-control" name="auth_code" id="" type="text" value="{$_GPC['auth_code']}" placeholder="条码">
+						</div>
+						<div class="col-xs-12 col-sm-2 col-md-1 col-lg-1">
+							<button class="btn btn-default" type="submit" id="scanpay" name="scanpay" value="scanpay"><i class="fa fa-search"></i> 收款</button>
+						</div>
+					</div>
 				</form>
 			</div>
 		</div>
@@ -54,30 +73,48 @@
 					<table class="table table-hover">
 						<tbody>
 							<tr>
-								<td style="width:6%;text-align:center;" >编号</td>
-								<td style="width:6%;text-align:center;" >支付码</td>
-								<td style="width:24%;text-align:center;" >昵称</br>openid</br>使用店员</td>
-								<td style="width:20%;text-align:center;" >支付时间</br>提交时间</br>红包时间</td>
-								<td style="width:8%;text-align:center;" >支付金额</br>红包金额</br>付款类型</td>
-								<td style="width:8%;text-align:center;" >收款状态</td>
-								<td style="width:16%;text-align:center;" >红包状态</br>卡券状态</br>提现状态</td>
+								<td style="width:6%;text-align:center;" >编号</br>支付码</br>方式</td>
+								<td style="width:24%;text-align:center;" >昵称</br>openid</br>订单号</td>
+								<td style="width:18%;text-align:center;" >提交时间</br>支付时间</br>红包时间</td>
+								<td style="width:8%;text-align:center;" >会员组</br>折扣</br>原价</td>
+								<td style="width:8%;text-align:center;" >支付金额</br>红包金额</br>提现金额</td>
+								<td style="width:8%;text-align:center;" >收款状态</br>提现状态</br>使用店员</td>
+								<td style="width:18%;text-align:center;" >红包结果</br>卡券结果</br>提现结果</td>
 								<td style="width:6%;text-align:center;" >操作</td>
 								<td style="width:6%;text-align:center;" >处理</td>
 							</tr>
 							{loop $list $row}
 							<tr>
-								<td style="text-align:center;" >{$row['id']}</td>	
-								<td style="text-align:center;" >{$row['paycode']}</td>	
-								<td style="text-align:center;" >{$row['username']}</br>{$row['fromuser']}</br>{$row['name']}</td>
-								<td style="text-align:center;" >{if !strexists('1970',$row['paytime'])}{php echo date("Y-m-d H:i:s" , $row['paytime'] );}{else}----------{/if}</br>{php echo date("Y-m-d H:i:s" , $row['dateline'] );}</br>{if !strexists('1970',$row['redtime'])}{php echo date("Y-m-d H:i:s" , $row['redtime'] );}{else}----------{/if}</td>
-								<td style="text-align:center;" >{$row['qrmoney']}</br>{$row['red']}</br>
+								<td style="text-align:center;" >
+									{$row['id']}</br>
+									{$row['paycode']}</br>
 									{if $row['paytype'] == 1}
-										<span class="label label-success">余额支付</span>
+										<span class="label label-success">余额</span>
 									{elseif $row['paytype'] == 2}
 										<span class="label label-warning">支付宝</span>
 									{else}
-										<span class="label label-info">微信支付</span>
+										<span class="label label-info">微信</span>
 									{/if}
+								</td>	
+								<td style="text-align:center;" >
+									{$row['username']}&nbsp;</br>
+									{$row['fromuser']}&nbsp;</br>
+									{$row['wxorderid']}&nbsp;
+								</td>
+								<td style="text-align:center;" >
+									{php echo date("Y-m-d H:i:s" , $row['dateline'] );}</br>
+									{if !strexists('1970',$row['paytime'])}{php echo date("Y-m-d H:i:s" , $row['paytime'] );}{else}----------{/if}</br>
+									{if !strexists('1970',$row['redtime'])}{php echo date("Y-m-d H:i:s" , $row['redtime'] );}{else}----------{/if}
+								</td>
+								<td style="text-align:center;" >
+									{$row['membername']}&nbsp;</br>
+									{$row['memberrate']}&nbsp;</br>
+									{$row['realmoney']}&nbsp;
+								</td>
+								<td style="text-align:center;" >
+									{$row['qrmoney']}&nbsp;</br>
+									{$row['red']}&nbsp;</br>
+									{$row['getmoney']}&nbsp;
 								</td>
 								<td style="text-align:center;">
 									{if empty($row['status']) || ($row['status'] == 0)}
@@ -87,21 +124,19 @@
 									{elseif $row['status'] == 2}
 									<span class="label label-info">已使用</span>
 									{/if}
-									<!--
 									</br>
-									{if $row['redstatus'] == 0}
-										<span class="label label-warning">成功</span>
-									{else}
-										<span class="label label-info">失败</span>
-									{/if}
-									-->
-								</td>
-								<td style="text-align:center;" >{$row['redmemo']}</br>{$row['cardmemo']}</br>
 									{if $row['getstatus'] == 1}
 										<span class="label label-success">已提现</span>
 									{else}
 										<span class="label label-warning">未提现</span>
-									{/if}						
+									{/if}
+									</br>
+									{$row['name']}&nbsp;
+								</td>
+								<td style="text-align:center;" >
+									{$row['redmemo']}&nbsp;</br>
+									{$row['cardmemo']}&nbsp;</br>
+									{$row['getinfo']}&nbsp;
 								</td>
 								<td style="text-align:center;">
 									<a href="{php echo $this->createWebUrl('payed',array('op' =>'used' , 'id' =>$rid , 'iid' =>$row['id']))}" class="btn btn-info btn-sm" data-original-title="" title="">使用</a></br>
@@ -111,7 +146,12 @@
 								<td style="text-align:center;">
 									<a href="{php echo $this->createWebUrl('payed',array('op' =>'get' , 'id' =>$rid , 'iid' =>$row['id']))}" class="btn btn-info btn-sm" data-original-title="" title="">提现</a></br>
 									<a href="{php echo $this->createWebUrl('payed',array('op' =>'unget' , 'id' =>$rid , 'iid' =>$row['id']))}" class="btn btn-warning btn-sm" data-original-title="" title="">未提</a></br>
-									<a href="{php echo $this->createWebUrl('payed',array('op' =>'delete' , 'id' =>$rid , 'iid' =>$row['id']))}" class="btn btn-success btn-sm" data-original-title="" title="">删除</a></br>
+									<!--a href="{php echo $this->createWebUrl('payed',array('op' =>'delete' , 'id' =>$rid , 'iid' =>$row['id']))}" class="btn btn-success btn-sm" data-original-title="" title="">删除</a></br-->
+									{if empty($row['status']) || ($row['status'] == 0)}
+										<a href="{php echo $this->createWebUrl('payed',array('op' =>'check' , 'id' =>$rid , 'iid' =>$row['id'] , 'clientOrderId' =>$row['clientOrderId']))}" class="btn btn-success btn-sm" data-original-title="" title="">查询</a></br>
+									{else}
+										&nbsp;
+									{/if}
 								</td>						
 							</tr>
 							{/loop}

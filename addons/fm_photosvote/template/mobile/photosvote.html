@@ -1,6 +1,7 @@
 {template 'header'}
 <link type="text/css" rel="stylesheet" href="{FM_STATIC_MOBILE}public/photos/style.css?ver=1.0" />
 <link rel="stylesheet" type="text/css" href="{FM_STATIC_MOBILE}public/css/style.css?ver=1.0">
+{template 'hnav'}
 <style>
     body{background:#f5f5f5 no-repeat;background-size:100% auto;}
      .h {height:10px}
@@ -8,24 +9,87 @@
      .pagination ul > li > a, .pagination ul > li > span {
       padding: 5px 5px;
     }
+    {if $rbody['photosvote']}
     .con {
-      background: {$rbody['zbgcolor']} url({php echo toimage($rbody['zbg'])});
       padding: 15px 0;
       margin-top: -60px;
       background-size: 100% auto; 
       max-width: 640px;
       margin: 0 auto;
+
+      background: {$rbody_photosvote['photosvote_bgcolor']} url({php echo toimage($rbody_photosvote['photosvote_bgimg'])});
     }
     .tongji {
       width: 100%;
       height: 60px;
-      background: url({php echo toimage($rbody['zbgtj'])}) repeat-x -60px 0;
       background-size: auto 100%;
       position: relative;
       z-index: 10px; 
       max-width: 640px;
       margin: 0 auto;
+      background: {$rbody_photosvote['photosvote_tj_bgcolor']} url({php echo toimage($rbody_photosvote['photosvote_tj_bgimg'])}) repeat-x -60px 0;
     }
+    .tongji li {
+        color: {$rbody_photosvote['photosvote_tj_text_color']};
+    }
+    .tongji li span {
+        color: {$rbody_photosvote['photosvote_tj_num_color']};
+    }
+    .con .des {color:{$rbody_photosvote['photosvote_des_title_color']}}
+    .con .des i{
+      background: url('{if !empty($rbody_photosvote['photosvote_des_xin_img'])}{php echo tomedia($rbody_photosvote['photosvote_des_xin_img'])}{/if}') no-repeat 0 center;
+      background-size: 24px;
+    }
+    .con .desnr{
+        text-indent:2em;
+        color:{$rbody_photosvote['photosvote_des_text_color']};
+        background: {$rbody_photosvote['photosvote_des_bg_color']};
+        border: 1px solid {$rbody_photosvote['photosvote_des_bg_color']};
+    }
+    .con .desnr .more {
+        text-decoration: none;
+        color: {$rbody_photosvote['photosvote_des_text_more_color']};
+    }
+    .con .tpq {color:{$rbody_photosvote['photosvote_tp_title_color']}}
+    .con .tpq i{
+      background: url('{if !empty($rbody_photosvote['photosvote_tp_xin_img'])}{php echo tomedia($rbody_photosvote['photosvote_tp_xin_img'])}{/if}') no-repeat 0 center;
+      background-size: 24px;
+    }
+    .con .tpqnr{
+        color:{$rbody_photosvote['photosvote_tp_tag_text_color']};
+        background: {$rbody_photosvote['photosvote_tp_tag_color']};
+        border: 1px solid {$rbody_photosvote['photosvote_tp_tag_color']};
+    }
+    .con .tpqnr a{
+        font-size: 12px;
+        color:{$rbody_photosvote['photosvote_tp_tag_an_text_color']};
+        background-color: {$rbody_photosvote['photosvote_tp_tag_an_color']};
+        border: 1px solid {$rbody_photosvote['photosvote_tp_tag_an_color']};
+    }
+    {else}
+        .con {
+            padding: 15px 0;
+            margin-top: -60px;
+            background-size: 100% auto; 
+            max-width: 640px;
+            margin: 0 auto;
+
+          }
+
+          .con .desnr{
+              text-indent:2em;
+              
+          }
+          .con .desnr .more {
+              text-decoration: none;
+              color: #fff;
+          }
+          .con .tpqnr a{
+            font-size: 12px;
+            color:#fff;
+        }
+    {/if}
+
      .top { font-size: 14px; }
      
      .modal-open .modal {
@@ -45,12 +109,12 @@
       text-align: center;
       font-size: 14px;
       margin-top: 0px;
-      color: #FFFFFF;
       background: rgba(0, 0, 0, 0.4);
+      
     }
 </style>
 
-{template 'hnav'}
+
 {if !empty($banners)}
   <style type="text/css">
       .box_swipe {
@@ -135,24 +199,20 @@
         });
       });
   </script>
-{else}
-  <div style="width:100%;border:0px;">
-    <img style="vertical-align:top; display:block;border:0;width:100%;padding:0;margin:0;width:100%;border:0px;" alt="" src="{php echo tomedia($rbasic['picture'])}">
-  </div>
 {/if}
 
-  {template 'tongji'}
+{template 'tongji'}
 <div class="con">
   {if $rdisplay['isedes'] == 1}
-    <p class="tips"><i>活动简介</i></p>
-      <p class="neirong" style="text-indent:2em;">{php echo cutstr($rbasic['description'], '90', '...')}<a href="{php echo $this->createMobileUrl('des', array('rid' => $rid))}" class="more">[更多]</a>
+    <p class="tips des"><i>活动简介</i></p>
+      <p class="neirong desnr">{php echo cutstr($rbasic['description'], '90', '...')}<a href="{php echo $this->createMobileUrl('des', array('rid' => $rid))}" class="more">[更多]</a>
     </p>
   {/if}
-  <p class="tips"><i>投票区</i></p>
+  <p class="tips tpq"><i>投票区</i></p>
     {if !empty($tags)}
-    <p class="neirong" style="  margin-bottom: 15px;">
+    <p class="neirong tpqnr" style="  margin-bottom: 15px;">
       当前分组： <span >{$tagname}</span>
-        <a href="{php echo $this->createMobileUrl('tags', array('rid' => $rid, 'tagpid' => $_GPC['category']['parentid'] , 'tagid' => $_GPC['category']['childid'], 'from' => $_GPC['do']))}" class="btn  btn-danger pull-right" style="color:#fff;  background-color: #e2216f;  font-size: 12px;">选择分组</a>
+      <a href="{php echo $this->createMobileUrl('tags', array('rid' => $rid, 'tagpid' => $_GPC['category']['parentid'] , 'tagid' => $_GPC['category']['childid'], 'from' => $_GPC['do']))}" class="btn  btn-danger pull-right">选择分组</a>
     </p>
   {/if}
   

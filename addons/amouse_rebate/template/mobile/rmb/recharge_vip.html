@@ -1,0 +1,131 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <title>{if $set['copyright']}{$set['copyright']}{else}{$_W['account']['name']}{/if}</title>
+    <link rel="stylesheet" href="{AMOUSE_REBATE_RES}css/foundation.css?version=20150221"/>
+    <link rel="stylesheet" href="{AMOUSE_REBATE_RES}css/main.css?version=20150221"/>
+    <link rel="stylesheet" href="{AMOUSE_REBATE_RES}css/meal.css?version=20150221"/>
+    <script src="{AMOUSE_REBATE_RES}js/modernizr.js?version=20150221"></script>
+    <script src="{AMOUSE_REBATE_RES}js/jquery.js?version=20150221"></script>
+    <script src="{AMOUSE_REBATE_RES}js/foundation.js?version=20150221"></script>
+    <script src="{AMOUSE_REBATE_RES}js/main.js?version=20150221"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="content">
+        <div class="dialog" id="tip">
+            <div class="dialog-cnt">
+                <div class="dialog-bd"><h3>提示</h3>
+                    <p class="text"></p><a class="button correct-btn" id="alert_ok">确&nbsp;&nbsp;定</a>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="super-ad">
+                <img src="{php echo strpos($set['banner'],'http://')===FALSE?(tomedia($set['banner'])):$set['banner']}" alt="">
+            </div>
+
+            <div class="super-vip">
+                <div class="row order2"><p><b>{$credittxt}充值</b></p>
+                    <p style="font-size:12px;">
+                        1. 购买可以置顶<br>
+                        2. 成功下单后{$credittxt}不可退还噢<br>
+                    </p>
+
+                    <div class="line"></div>
+                    <div class="meal" id="meal">
+                        <span style="font-size: 14px;">选择充值：</span>
+                        {loop $list $k $meal}
+                        <input type="radio" name="top-meal" data-id="{$meal['id']}" value="{$meal['price']}" id="top{$meal['id']}" class="taocan"
+                               data-name="{$meal['title']}">
+                        <label for="top{$meal['id']}" id="meal{$meal['id']}" class="meal-label ">
+                            <img class="meal-img" src="{php echo strpos($meal['img'],'http://')===FALSE ? tomedia($meal['img']):$meal['img']}" alt="">
+                            {$meal['title']}
+                        </label>
+                        <div class="line"></div>
+
+                        {/loop}
+                    </div>
+                    <p>充值价格：<span id='money' style='color:red'></span> 元</p>
+                    <div class="line"></div>
+                    <p>{$credittxt}余额：{php echo intval($info['credit1'])} 个</p>
+                    <div class="line"></div>
+
+                </div>
+
+                <div class="row">
+                    <div class="small-12 columns publish"><p>
+                        <a class="button btn" id="buy">立即购买</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var meal_id="";
+    $('.taocan').click(function () {
+        var value = $(this).val();
+        meal_id= $(this).attr('data-id');
+        $("#money").text(value);
+        $('.meal-label').removeClass('meal-selected');
+        $(this).next().addClass('meal-selected');
+    });
+    $('.taocan:first').click();
+
+    $('#buy').click(function () {
+        $btn = $(this);
+        $btn.prop('disabled', 'disabled');
+
+        $.ajax({
+            type : "POST",
+            url :"{php echo $this->createMobileUrl('ajaxOrder', array(), true)}",
+            data : {'meal_id':meal_id},
+            dataType : "json",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success : function(data){
+                if(data && data.code==200){
+                    var oid= data.oid;
+                    window.location.href="{php echo $this->createMobileUrl('payment',array(),true)}&orderid="+oid;
+                }else{
+                    alert(data.msg);
+                    return;
+                }
+            },
+            error : function(){
+                alert('网络出错');
+            }
+        });
+    });
+
+</script>
+<!--<script>
+    var vipstatus="{$fans['vipstatus']}";
+     if(vipstatus!='2'){
+     new_alert('您还不是超级会员，无法充值!点击此处购买会员', function(){
+     window.location="{php echo $this->createMobileUrl('book',array('op'=>'default'),true)}";
+     });
+     }
+    $(document).foundation();
+        alert_ok = null;
+        function new_alert(msg, cb) {
+            alert_ok = cb;
+            $('#tip .text').html(msg);
+            $('#tip').show();
+        }
+        old_alert = window.alert;
+        window.alert = new_alert;
+        $('#alert_ok').click(function () {
+            if (alert_ok) {
+                alert_ok();
+            }
+            $('#tip').hide();
+        });
+</script>-->
+</body>
+</html>

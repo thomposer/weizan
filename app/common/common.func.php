@@ -57,6 +57,12 @@ function checkauth() {
 	}
 	if(!empty($_W['openid'])) {
 		$fan = mc_fansinfo($_W['openid'], $_W['acid'], $_W['uniacid']);
+				if (empty($fan) && $_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
+			$fan = mc_oauth_userinfo();
+			if (!empty($fan['openid'])) {
+				$fan = mc_fansinfo($fan['openid']);
+			}
+		}
 		if(_mc_login(array('uid' => intval($fan['uid'])))) {
 			return true;
 		}

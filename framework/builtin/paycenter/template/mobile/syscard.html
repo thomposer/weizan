@@ -9,10 +9,9 @@
 	<form action="" method="post">
 		<div class="mui-input-group">
 			<div class="mui-input-row">
-				<input type="text" name="code" value="" placeholder="请输入序列号"/>
+				<input type="text" name="code" value="{$qr_code}" placeholder="请输入序列号"/>
 			</div>
 		</div>
-		<div class="mui-content-padded"><a href="#" class="mui-text-success">请链接扫码枪</a></div>
 		<div class="mui-content-padded">
 			<button class="mui-btn mui-btn-success mui-btn-block syscard-check">核 销</button>
 		</div>
@@ -32,6 +31,7 @@
 				alert(data.message.message);
 			} else {
 				alert('核销成功');
+				location.href = "{php echo $this->createMobileUrl('home')}";
 			}
 		});
 		return false; 

@@ -23,6 +23,9 @@ abstract class WeAccount {
 		} else {
 			$account = account_fetch($acidOrAccount);
 		}
+		if (is_error($account)) {
+			$account = $_W['account'];
+		}
 		if(!empty($account) && isset($account['type'])) {
 			if($account['type'] == self::TYPE_WEIXIN) {
 				load()->classs('weixin.account');
@@ -106,11 +109,12 @@ abstract class WeAccount {
 			}
 	
 			switch ($packet['event']) {
-				case 'SCAN':
-					$packet['type'] = 'qr';
 				case 'subscribe':
 					$packet['type'] = 'subscribe';
 				case 'SCAN':
+					if ($packet['event'] == 'SCAN') {
+						$packet['type'] = 'qr';
+					}
 					if(!empty($packet['eventkey'])) {
 						$packet['scene'] = str_replace('qrscene_', '', $packet['eventkey']);
 						if(strexists($packet['scene'], '\u')) {
@@ -131,14 +135,17 @@ abstract class WeAccount {
 				case 'pic_photo_or_album':
 				case 'pic_weixin':
 				case 'pic_sysphoto':
+					$packet['sendpicsinfo']['piclist'] = array();
 					$packet['sendpicsinfo']['count'] = $message['SendPicsInfo']['Count'];
 					if (!empty($message['SendPicsInfo']['PicList'])) {
 						foreach ($message['SendPicsInfo']['PicList']['item'] as $item) {
-							if (!empty($item)) {
-								$packet['sendpicsinfo']['piclist'][] = $item['PicMd5Sum'];
+							if (empty($item)) {
+								continue;
 							}
+							$packet['sendpicsinfo']['piclist'][] = is_array($item) ? $item['PicMd5Sum'] : $item;
 						}
 					}
+					break;
 				case 'card_pass_check':
 				case 'card_not_pass_check':
 				case 'user_get_card':
@@ -888,6 +895,9 @@ abstract class WeModuleProcessor extends WeBase {
 		}
 		if (uni_is_multi_acid() && strexists($url, './index.php?i=') && !strexists($url, '&j=') && !empty($_W['acid'])) {
 			$url = str_replace("?i={$_W['uniacid']}&", "?i={$_W['uniacid']}&j={$_W['acid']}&", $url);
+		}
+		if ($_W['account']['level'] == ACCOUNT_SERVICE_VERIFY) {
+			return $_W['siteroot'] . 'app/' . $url;
 		}
 		static $auth;
 		if(empty($auth)){

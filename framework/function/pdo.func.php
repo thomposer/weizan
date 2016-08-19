@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -55,6 +55,10 @@ function pdo_getall($tablename, $condition = array(), $fields = array(), $keyfie
 
 function pdo_getslice($tablename, $condition = array(), $limit = array(), &$total = null, $fields = array(), $keyfield = '') {
 	return pdo()->getslice($tablename, $condition, $limit, $total, $fields, $keyfield);
+}
+
+function pdo_getcolumn($tablename, $condition = array(), $field) {
+	return pdo()->getcolumn($tablename, $condition, $field);
 }
 
 

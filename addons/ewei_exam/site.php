@@ -29,6 +29,14 @@ class Ewei_examModuleSite extends WeModuleSite
 		$this->_types_config = $init_param['types_config'];
 		$this->_answer_array = $init_param['answer_array'];
 	}
+	public function read($filename,$encode='utf-8'){
+		require_once IA_ROOT . '/framework/library/phpexcel/PHPExcel.php';
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel = PHPExcel_IOFactory::load($filename);
+		$indata = $objPHPExcel->getSheet(0)->toArray();
+		return $indata;
+			
+	 } 
 
 	public function getItemTiles()
 	{
@@ -961,7 +969,7 @@ class Ewei_examModuleSite extends WeModuleSite
 				$psize = 10;
 
 				$sql = 'SELECT `q`.*, `p`.`title` AS `pooltitle` ' . $where . ' ORDER BY `q`.`id` DESC LIMIT ' .
-						($pindex - 1) * $psize . ',' . $psize;
+					($pindex - 1) * $psize . ',' . $psize;
 				$list = pdo_fetchall($sql, $params);
 
 				foreach ($list as &$row) {
@@ -1872,7 +1880,7 @@ class Ewei_examModuleSite extends WeModuleSite
 				$psize = 15;
 
 				$sql = 'SELECT * FROM ' . tablename('ewei_exam_member') . $where . ' ORDER BY `id` DESC LIMIT ' .
-						($pindex - 1) * $psize . ',' . $psize;
+					($pindex - 1) * $psize . ',' . $psize;
 				$list = pdo_fetchall($sql, $params);
 
 				$pager = pagination($total, $pindex, $psize);
@@ -1894,7 +1902,7 @@ class Ewei_examModuleSite extends WeModuleSite
 			$tmp_name = $_FILES['inputExcel']['tmp_name'];
 
 			$msg = uploadFile($filename, $tmp_name, $_GPC);
-
+			
 			//print_r($msg);exit;
 			if ($msg == 1) {
 				message('导入成功！', referer(), 'success');
@@ -1908,10 +1916,124 @@ class Ewei_examModuleSite extends WeModuleSite
 	{
 		global $_GPC, $_W;
 		$poollist = pdo_fetchall("SELECT id, title from " . tablename('ewei_exam_pool') ." WHERE weid = :weid", array(':weid' => $this->_weid));
+		if (checksubmit('submit')) {
+			
+			if (!empty($_FILES['room']['name'])) {
+				$tmp_file   = $_FILES['room']['tmp_name'];
+						$file_types = explode(".",$_FILES['room']['name']);
+						$file_type  = $file_types[count($file_types)-1];
+						/*判别是不是.xls文件，判别是不是excel文件*/
+						if (strtolower ( $file_type ) !="xls" && strtolower ( $file_type ) !="xlsx") 
+						{
+							message('类型不正确，请重新上传',referer(),'error');
+						}
+						/*设置上传路径*/
+					   $savePath = IA_ROOT.'/addons/ewei_exam/upload/';
+					  /*以时间来命名上传的文件*/
+					   $str = date('Ymdhis'); 
+					   $file_name = $str.".".$file_type;
+					   /*是否上传成功*/
+					   if (!copy($tmp_file,$savePath.$file_name)) {
+					   		message('上传失败');
+					     
+					   }
+					    $res = $this->read($savePath.$file_name);
+						foreach ( $res as $k => $v ) {
+						    if ($k != 0) {
+						    	
+						    	$question_type = $v[0];
+								$level = $v[1];
+								$question = $v[2];
+								$answer = $v[3];
+								$answer1 = $v[4];
+								$answer2 = $v[5];
+								$answer3 = $v[6];
+								$answer4 = $v[7];
+								$answer5 = $v[8];
+								$answer6 = $v[9];
+								$explain = $v[10];
+
+							$row_num = $array['row_num'];
+		
+							$insert = array();
+		//$insert['userid'] = $userid;
+
+		if (empty($question_type) || empty($question) || empty($answer)) {
+			return 0;
+		}
+		if ($question_type == '单选题') {
+			$type = 2;
+			$insert['answer'] = $answer;
+		} elseif ($question_type == '多选题') {
+			$type = 3;
+			$insert['answer'] = $answer;
+		} elseif ($question_type == '判断题') {
+			$type = 1;
+			if ($answer == '正确') {
+				$insert['answer'] = 1;
+			} else {
+				$insert['answer'] = 0;
+			}
+		}
+		if ($type > 1) {
+			$answer_array = array($answer1, $answer2, $answer3, $answer4,$answer5,$answer6);
+			$insert['items'] = serialize($answer_array);
+		}
+		$insert['type'] = $type;
+		$insert['question'] = $question;
+
+		$flag = check_question($insert, 0);
+		if ($flag == 0) {
+			if (!empty($array['poolid'])) {
+				$insert['poolid'] = $array['poolid'];
+			}
+			$insert['level'] = $level;
+			$insert['explain'] = $explain;
+			$insert['weid'] = $_W['uniacid'];
+			$result=pdo_insert('ewei_exam_question', $insert);
+						    }else{
+								message('数据重复，请重新上传！',referer(),'error');
+								}
+							
+							}
+						}
+					
+					  if($result){
+				       		message('导入成功',referer(),'success');
+					  }
+		
+			}
+		}
 
 		include $this->template('upload_question');
 	}
 
+	function check_question($array, $id)
+	{
+		global $_W;
+
+		$params = array();
+		$params[':question'] = $array['question'];
+		$params[':type'] = $array['type'];
+		$params[':weid'] = $_W['uniacid'];
+
+		$sql = "SELECT id FROM " . tablename('ewei_exam_question') . " WHERE weid = :weid AND question = :question AND type = :type";
+
+		if (!empty($id)) {
+			$sql .= " AND id != :id";
+			$params[':id'] = $id;
+		}
+		$sql .= " LIMIT 1";
+		$item = pdo_fetch($sql, $params);
+
+		//print_r($check_flag);exit;
+
+		if ($item) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
 	public function doWebSysset()
 	{
 		global $_GPC, $_W;
@@ -2007,8 +2129,16 @@ class Ewei_examModuleSite extends WeModuleSite
 
 	public function check_member() {
 		global $_W;
-		if ($this->_member) {
-			return true;
+		$sql = 'SELECT * FROM ' . tablename('ewei_exam_member') . ' WHERE `weid` = :weid AND `from_user` = :from_user';
+		$params = array(':weid' => $this->_weid, ':from_user' => $this->_from_user);
+		$member = pdo_fetch($sql, $params);
+		if ($member) {
+			if ($member['status'] < 1) {
+				message('帐号被禁用，请联系管理员', '', 'error');
+			}
+			if (!empty($this->_member)) {
+				return true;
+			}
 		}
 
 		// 开启登录
@@ -2016,9 +2146,6 @@ class Ewei_examModuleSite extends WeModuleSite
 			header('Location:' . $this->createMobileUrl('login'));
 		}
 
-		$sql = 'SELECT * FROM ' . tablename('ewei_exam_member') . ' WHERE `weid` = :weid AND `from_user` = :from_user';
-		$params = array(':weid' => $this->_weid, ':from_user' => $this->_from_user);
-		$member = pdo_fetch($sql, $params);
 
 		if ($member) {
 			if ($member['status'] < 1) {
@@ -2035,11 +2162,12 @@ class Ewei_examModuleSite extends WeModuleSite
 				'createtime' => TIMESTAMP,
 				'status' => 1
 			);
-			pdo_insert('ewei_exam_member', $member);
+			if ($this->_set_info['login_flag'] <= 0) {
+				pdo_insert('ewei_exam_member', $member);
+			}
 			$member['id'] = pdo_insertid();
 		}
-
-		exam_set_userinfo(0, $member);
+//		exam_set_userinfo(0, $member);
 	}
 
 
@@ -2261,7 +2389,7 @@ class Ewei_examModuleSite extends WeModuleSite
 			}
 		}
 		// 查看当前用户是否已经预约过该课程
-		$params = array('courseid' => $id);
+		$params = array(':courseid' => $id);
 		$sql = 'SELECT `id` FROM ' . tablename('ewei_exam_course_reserve') . " WHERE `weid` = :weid AND `courseid` = :courseid AND `memberid` = :memberid";
 		$params[':weid'] = $weid;
 		$params[':memberid'] = $member_info['id'];
@@ -2608,8 +2736,48 @@ class Ewei_examModuleSite extends WeModuleSite
 				'weid' => $_W['uniacid'],
 				'from_user' => $_W['fans']['openid']
 			);
-
-			pdo_update('ewei_exam_member', $update, $params);
+			$user_info = pdo_get('ewei_exam_member', array('from_user' => $_W['fans']['openid'], 'weid' => $_W['uniacid']));
+			if (!empty($user_info)) {
+				foreach($user_info as  $field => $message) {
+					if ($field == 'username') {
+						if (empty($message)) {
+							$update['username'] = trim($_GPC['username']);
+						} else {
+							unset($update['username']);
+						}
+					}
+					if ($field == 'mobile') {
+						if (empty($message)) {
+							$update['mobile'] = trim($_GPC['mobile']);
+						} else {
+							unset($update['mobile']);
+						}
+					}
+					if ($field == 'email') {
+						if (empty($message)) {
+							$update['email'] = trim($_GPC['email']);
+						} else {
+							unset($update['email']);
+						}
+					}
+				}
+			}
+			if (!empty($update)) {
+				pdo_update('ewei_exam_member', $update, $params);
+			}
+			$re = pdo_get('ewei_exam_paper_member_record', array('weid' => $_W['uniacid'], 'memberid' => $member['id'], 'paperid' => $id));
+			if ($re) {
+				pdo_delete('ewei_exam_paper_member_record', array('id' => $re['id'], 'weid' => $_W['uniacid']));
+//				message(array('result' => 0, 'message' => '您已经做个这份试题，不用重复再做'), '', 'ajax');
+			}
+			$member_exist = pdo_get('ewei_exam_member', array('weid' => $_W['uniacid'], 'from_user' => $_W['fans']['openid']));
+			if (empty($member_exist)) {
+				message(array('result' => 0, 'message' => '您的账户不能参加考试'), '', 'ajax');
+			}
+			$member_exist = pdo_get('ewei_exam_member', array('weid' => $_W['uniacid'], 'status' => 0, 'from_user' => $_W['fans']['openid']));
+			if (!empty($member_exist)) {
+				message(array('result' => 0, 'message' => '您的账户已被禁用'), '', 'ajax');
+			}
 
 			// 更新考试人数记录
 			$this->updatePaperMemberNum($id, 1);
@@ -2740,6 +2908,9 @@ class Ewei_examModuleSite extends WeModuleSite
 			exit;
 		}
 		$record_info = $this->getRecordInfo($recordid);
+		$exam_paper = pdo_get('ewei_exam_paper', array('id' => $record_info['paperid']));
+		$exam_category= pdo_get('ewei_exam_paper_type', array('id' => $exam_paper['pcate']));
+		$exam_time = $exam_category['times'];
 		//该试卷已经完成，不能再继续了
 		if ($record_info['did'] == 1) {
 			echo "该试卷已经完成，不能再继续了";

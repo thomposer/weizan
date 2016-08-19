@@ -40,7 +40,7 @@ ul#babyList{position:fixed;top:50px;left:0;background:white;width:100%;height:au
 ul#babyList li{width:100%;height:50px;line-height:50px;border-bottom:1px solid #ccc;}
 ul#babyList li a{color:#333;cursor:pointer;display:block;width:100%;height:100%;}
 .PromptBox {position: fixed;z-index: 2000;top: 30%;color: #fff;padding: 13px 20px;font-size: 16px;display:none;}
-.backOff{background: url(http://wmeiapi-session.stor.sinaapp.com/img/left.svg) no-repeat;background-size: 55% 55%;background-position: 50%;}
+.backOff{background: url(../img/left.svg) no-repeat;background-size: 55% 55%;background-position: 50%;}
 /* 图片自适应 */
 .div-imgMask{overflow: hidden;}
 .img-adaptive{

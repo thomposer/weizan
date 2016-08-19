@@ -30,10 +30,17 @@ class bm_payxModuleProcessor extends WeModuleProcessor
             }
             return $this->respText($msg);
         }
-        $url                      = $_W['siteroot'] . 'app/' . $this->createMobileUrl('pay', array(
-            'rid' => $rid,
-            'from_user' => $this->message['from']
-        ));
+        if ($reply['qrtype'] == '1') {
+            $url = $_W['siteroot'] . 'app/' . $this->createMobileUrl('pay', array(
+                'rid' => $rid,
+                'from_user' => $this->message['from']
+            ));
+        } else {
+            $url = $_W['siteroot'] . 'app/' . $this->createMobileUrl('sign', array(
+                'rid' => $rid,
+                'from_user' => $this->message['from']
+            ));
+        }
         $response['FromUserName'] = $this->message['to'];
         $response['ToUserName']   = $this->message['from'];
         $response['MsgType']      = 'news';
@@ -49,4 +56,3 @@ class bm_payxModuleProcessor extends WeModuleProcessor
         return $response;
     }
 }
-?>

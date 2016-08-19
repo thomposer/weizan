@@ -55,6 +55,11 @@ if($do == 'display') {
 		':endtime' => $endtime,
 		':type' => $type
 	);
+	$code = trim($_GPC['code']);
+	if (!empty($code)) {
+		$where .=' AND a.code=:code';
+		$params[':code'] = $code;
+	}
 	$uid = intval($_GPC['uid']);
 	if (!empty($uid)) {
 		$where .= ' AND a.uid=:uid';
@@ -75,8 +80,7 @@ if($do == 'display') {
 	}
 	$pindex = max(1, intval($_GPC['page']));
 	$psize = 20;
-
-	$list = pdo_fetchall("SELECT a.*, b.title,b.thumb,b.discount,b.type FROM ".tablename('activity_coupon_record'). ' AS a LEFT JOIN ' . tablename('activity_coupon') . ' AS b ON a.couponid = b.couponid ' . " $where ORDER BY a.couponid DESC,a.recid DESC LIMIT ".($pindex - 1) * $psize.','.$psize, $params);
+	$list = pdo_fetchall("SELECT a.*, b.title,b.thumb,b.discount,b.type FROM ".tablename('activity_coupon_record'). ' AS a LEFT JOIN ' . tablename('activity_coupon') . ' AS b ON a.couponid = b.couponid ' . " $where ORDER BY a.usetime DESC LIMIT ".($pindex - 1) * $psize.','.$psize, $params);
 	$total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('activity_coupon_record') . ' AS a LEFT JOIN ' . tablename('activity_coupon') . ' AS b ON a.couponid = b.couponid '. $where , $params);
 	if(!empty($list)) {
 		load()->model('mc');

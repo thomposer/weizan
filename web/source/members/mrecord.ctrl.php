@@ -43,4 +43,4 @@
             }
         }
         $pager = pagination($total, $pindex, $psize);
-        template('members/plug/record');
+        template('members/record');

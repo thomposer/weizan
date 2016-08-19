@@ -64,6 +64,13 @@
         <div class="help-block">天数为0，永远只能砸N次（这里N为设置的次数）。</div>
     </div>
 	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">中奖限制</label>
+		<div class="col-sm-9 col-xs-12">
+			<input class="form-control" name="maxaward" value="{$reply['maxaward']}">
+			<div class="help-block">用户砸蛋最多中奖此时。为0时表示不限制中奖次数。</div>
+		</div>
+	</div>
+	<div class="form-group">
 		<label class="col-xs-12 col-sm-3 col-md-2 control-label">中奖奖励积分</label>
 		<div class="col-sm-9 col-xs-12">
 			<input type="text" value="{$reply['hitcredit']}" class="form-control" name="hitcredit">

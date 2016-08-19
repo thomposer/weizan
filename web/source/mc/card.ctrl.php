@@ -196,9 +196,10 @@ if($do == 'editor') {
 
 if ($do == 'manage') {
 	uni_user_permission_check('mc_card_manage');
+	$cardid = intval($_GPC['cardid']);
 	if ($_W['ispost']) {
 		$status = array('status' => intval($_GPC['status']));
-		if (false === pdo_update('mc_card_members', $status, array('uniacid' => $_W['uniacid'], 'id' => $_GPC['cardid']))) {
+		if (false === pdo_update('mc_card_members', $status, array('uniacid' => $_W['uniacid'], 'id' => $cardid))) {
 			exit('error');
 		}
 		exit('success');

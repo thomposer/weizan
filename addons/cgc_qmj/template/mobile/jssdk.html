@@ -1,0 +1,25 @@
+  {php echo register_jssdk(false);}
+	<script type="text/javascript"> 
+	  wx.ready(function () {        
+	        shareMeta = {      		
+	                imgUrl:"{php echo tomedia($settings['share_thumb'])}",
+	                link:"{php echo murl('entry', array('m' => $this->module['name'], 'do' => 'default'),true,true);}",
+	                desc : "{$settings['share_desc']}",
+	                title : "{$settings['share_title']}",
+	                success: function(){  
+	                	{if !empty($settings['success_url'])}
+	                	  window.location.href='{$settings['success_url']}';
+	                	{/if}
+	                },
+	                cancel: function(){
+	                   
+	                }
+	            };
+	        wx.onMenuShareTimeline(shareMeta);
+	        wx.onMenuShareAppMessage(shareMeta);        	    
+	    });
+	  
+	 
+	
+
+</script>

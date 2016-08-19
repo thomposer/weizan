@@ -16,7 +16,7 @@
 	<div class="panel panel-default">
 		<div class="clearfix table-responsive panel-body">
 			<table class="table">
-				<thead><th>{$account['name']}</th></thead>
+				<tr><th>{$account['name']}</th></tr>
 				{loop $account['del_accounts'] $acid $del_account}
 				<tr>
 					<td style="width:180px;"><image src="{php echo tomedia('headimg_'.$acid.'.jpg');}?time={php echo time()}" width="50" height="50"/></td>

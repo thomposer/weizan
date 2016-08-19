@@ -25,6 +25,7 @@ class Meepo_weixiangqinModule extends WeModule {
 			$cfg['isstatus']=intval($_GPC['isstatus']);
 			$cfg['sharenum'] = intval($_GPC['sharenum']);
 			$cfg['kefuimg'] = $_GPC['kefuimg'];
+			$cfg['tpl_id'] = $_GPC['tpl_id'];
 			/******增加首页图文配置函数****/
 			$cfg['title'] = $_GPC['title'];
 			$cfg['description'] = $_GPC['description'];

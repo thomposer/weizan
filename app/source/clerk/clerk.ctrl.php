@@ -21,6 +21,15 @@ if($do != 'check') {
 if($do == 'card') {
 	load()->model('card');
 	$card_setting = card_setting();
+	$card_params = json_decode($card_setting['params'], true);
+	if (!empty($card_params)) {
+		foreach ($card_params as $key => $value) {
+			if ($value['id'] == 'cardActivity') {
+				$grant_rate = $value['params']['grant_rate'];
+			}
+		}
+	}
+	$card_setting['grant_rate'] = $grant_rate;
 	if(is_error($card_setting)) {
 		message($card_setting['message'], referer(), 'error');
 	}
@@ -31,11 +40,11 @@ if($do == 'card') {
 		$stores = pdo_fetchall('SELECT id,business_name FROM ' . tablename('activity_stores') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']), 'id');
 
 	if(checksubmit()) {
-		$credit = floatval($_GPC['credit']);
+		$credit = max(0, floatval($_GPC['credit']));
 		$discount_credit = $credit;
 		$store_id = intval($_GPC['store_id']);
 		$store_str = (!$store_id || empty($stores[$store_id])) ? '未知' : $stores[$store_id]['business_name'];
-		if(!$credit) {
+		if(!$credit || $credit <= 0) {
 			message('请输入消费金额', referer(), 'error');
 		}
 				if($card_setting['discount_type'] > 0) {

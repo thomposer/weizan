@@ -52,7 +52,8 @@ require(['bootstrap'],function($){
                     <th style="width:8%;">手机</th>
 					<th style="width:15%;">时间</th>
 					{if $school['issale'] == 1 || $school['issale'] == 2}
-                    <th style="width:8%;">支付金额</th>
+                    <th style="width:8%;">金额</th>
+					<th style="width:8%;">支付状态</th>
                     {/if}
 					<th style="text-align:right; width:8%;">操作</th>
 				</tr>
@@ -79,6 +80,9 @@ require(['bootstrap'],function($){
                     <td>
                        ￥{$item['cose']}
                     </td>
+                    <td>
+                       {if $item['status'] == 1}<span class="label label-warning">未支付</span>{else if $item['status'] == 2}<span class="label label-success"><i class="fa fa-check-circle">已支付</i></span>{else if $item['status'] == 3}<span class="label label-danger">已退款</span>{/if}
+                    </td>					
                     {/if}					
 					<td style="text-align:right;">
 						<a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('baoming', array('id' => $item['id'], 'op' => 'delete', 'schoolid' => $schoolid))}" onclick="return confirm('此操作不可恢复，确认删除？');return false;" title="删除"><i class="fa fa-times"></i></a>

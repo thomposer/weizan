@@ -39,7 +39,8 @@ class weisrc_feedbackModuleSite extends WeModuleSite
             $this->_fromuser = 'debug';
         }
         $this->_weid = $_W['uniacid'];
-        $account = account_fetch($this->_weid);
+        //$account = account_fetch($this->_weid);
+        $account = pdo_fetch("SELECT * FROM ".tablename('account_wechats')." WHERE uniacid = '$this->_weid'");
 
         $this->_auth2_openid = 'auth2_openid_'.$_W['uniacid'];
         $this->_auth2_nickname = 'auth2_nickname_'.$_W['uniacid'];
@@ -53,6 +54,9 @@ class weisrc_feedbackModuleSite extends WeModuleSite
             $this->_appid = $account['key'];
             $this->_appsecret = $account['secret'];
         }
+
+        $title = $account['name'];
+        //message("维护中公众号{$title}等级=".$this->_accountlevel. 'secret'. $this->_appsecret);
     }
 
     //首页
@@ -214,7 +218,7 @@ class weisrc_feedbackModuleSite extends WeModuleSite
         $content = trim($_GPC['content']);
 
         if (empty($from_user)) {
-            $this->showMessage('会话已过期，请重新发送关键字!');
+            //$this->showMessage('会话已过期，请重新发送关键字!');
         }
 
         if (empty($content)) {

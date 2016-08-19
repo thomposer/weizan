@@ -40,7 +40,7 @@
 								<td>{$item['phone']}</td>
 								<td>{$item['createtime']}</td>
 								<td>
-									<a onclick="if(!confirm('设定后将不再显示！')) return false;" href="{php echo $this->createWebUrl('user', array('op'=>'delete', 'id'=>$item['id']));}" class="btn btn-default btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="设置已阅"><i class="fa fa-eye"></i></a>
+									<a onclick="if(!confirm('设定后将不再显示！')) return false;" href="{php echo $this->createWebUrl('user', array('op'=>'delete', 'id'=>$item['id']));}" class="btn btn-default btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="" data-original-title="设置已阅"><i class="fa fa-trash-o"></i>删除</a>
 								</td>
 							</tr>
 							{/loop}

@@ -31,86 +31,44 @@
 {/if}
 {if $rvote['iscode'] == 1}
 	{if ($_GPC['do'] == 'tuser' || $_GPC['do'] == 'tuserphotos' || $_GPC['do'] == 'photosvote' || $_GPC['do'] == 'comment')}
-	 <div class="geetest">
-	    <div class="bg"></div>
-	    <div class="wrap">
-	      <div class="top">
-	        <a class="exit" id="close" href="javascript:;"></a>
-	        <div class="title">
-	          请滑动验证
-	        </div>
-	      </div>		
-			<script type="text/javascript" src="http://api.geetest.com/get.php?gt={$rvote['codekey']}&width=300" async></script>
-	    </div>
-		
-	  </div>
+		<style type="text/css">
+				.boxge{
+					    position: fixed;
+				    top: 25%;
+				    left: 20%;
+					width:300px;
+					margin: 30px auto; 
+					    z-index: 1111111;
+				}
+				.header{
+					margin: 80px auto 30px auto;
+					text-align: center;
+					font-size: 34px;
+				}
+				input{
+					width: 200px;
+					padding: 6px 9px;
+				}
+				button{
+					cursor: pointer;
+					line-height: 35px;
+					width: 110px;
+					margin:30px 0 0 90px;
+					border: 1px solid #FFFFF0;
+					background-color: #31C552;
 
-		<style>
-		  .geetest {
-		    display: none;
-		    position: fixed;
-		    left: 0;
-		    top: 0;
-		    width: 100%;
-		    height: 100%;
-			z-index:9999999999;
-		  }
-		  .geetest .bg {
-		    position: absolute;
-		    left: 0;
-		    top: 0;
-		    width: 100%;
-		    height: 100%;
-		    background-color: #000;
-		    opacity: 0.7;
-		  }
-		  .wrap {
-		    width: 300px;
-		    margin: 10px auto;
-		    text-align: center;
-		    background-color: #fff;
-		    z-index: 2;
-		    position: relative;
-			 top: 20%;
-		  }
-		  .gt_wrapper {
-		    margin: 0 auto;
-		  }
-		  .wrap .top {
-		    padding: 0 8px;
-		    height: 44px;
-		    z-index: 1;
-		    position: relative;
-		    text-align: center;
-		    font-weight: 500;
-		  }
+					border-radius: 4px;
+					font-size: 14px;	
+					color: #FFFFF0;	
+				}
+			</style>
+		<div class="boxge" id="div_geetest_lib">
+			<div id="captcha"></div>
+			<script src="http://static.geetest.com/static/tools/gt.js"></script>
+			<script>
 
-		  .wrap .title {
-		    line-height: 45px;
-		    width: 200px;
-		    margin: 0 auto;
-		  }
-
-		  .exit {
-		    background-image: url('{FM_STATIC_PLUGIN}api/validate/img/return_hover.png');
-		    -moz-background-size: 12px auto;
-		    -o-background-size: 12px auto;
-		    -webkit-background-size: 12px auto;
-		    background-size: 12px auto;
-		    width: 12px;
-		    height: 22px;
-		    display: inline-block;
-		    vertical-align: middle;
-		    position: absolute;
-		    left: 8px;
-		    top: 11px;
-		    -webkit-tap-highlight-color: rgba(0,0,0,0);
-		    z-index: 10;
-		  }
-		  .exit:active {
-		    background-image: url('{FM_STATIC_PLUGIN}api/validate/img/return_hover.png');
-		  }
-		</style>
+			</script>
+		</div>
 	{/if}
 {/if}
 {if $rvote['votenumpiao'] || $rvote['voteerinfo']}
@@ -356,6 +314,27 @@
 	  text-align: center;
 	  z-index: 100000;
 	}
+	#bodyhidden {
+		position: fixed;
+	    z-index: 10000;
+	    top: 0;
+	    width: 100%;
+	    height: 100%;
+	    background: rgba(0,0,0,.15);
+	    display: -webkit-box;
+	    display: -webkit-flex;
+	    display: -ms-flexbox;
+	    display: flex;
+	    -webkit-box-orient: vertical;
+	    -webkit-flex-flow: column;
+	    -webkit-flex-direction: column;
+	    -ms-flex-direction: column;
+	    flex-direction: column;
+	    -webkit-transition-property: opacity;
+	    -webkit-transition-duration: 100ms;
+	    -webkit-backface-visibility: hidden;
+	    background: rgba(0, 0, 0, 0.7);
+	}
 </style>
 <div class="loading" style="display: none;"></div>
 <div class="overlay_container j_overlay_container unmasked beforeFadeIn" style="display: none;">
@@ -463,12 +442,15 @@ function tvotep(tfrom_user) {
 		if (subscribe == 1) {
 			if (from_user == '' || from_user == null) {
 				subsribe();
+				return
 			}	
 			if (follow == 1) {
 					
 				tvotestart(tfrom_user, vfrom, iscode);
+				return
 			}else{
 				subsribe();
+				return
 			}
 		}else{
 			tvotestart(tfrom_user, vfrom, iscode);	
@@ -478,11 +460,14 @@ function tvotep(tfrom_user) {
 
 			if (from_user == '' || from_user == null) {
 				subsribe();
+				return
 			}		
 			if (follow == 1) {
 				tvotestart(tfrom_user, vfrom, iscode);
+				return
 			}else{
 				subsribe();
+				return
 			}
 		}else{
 			tvotestart(tfrom_user, vfrom, iscode);
@@ -530,11 +515,14 @@ function tvote() {
 		if (subscribe == 1) {
 			if (from_user == '' || from_user == null) {
 				subsribe();
+				return
 			}	
 			if (follow == 1) {
 				tvotestart(tfrom_user, vfrom, iscode);
+				return
 			}else{
 				 subsribe();
+				 return
 			}
 		}else{
 			tvotestart(tfrom_user, vfrom, iscode);
@@ -543,11 +531,14 @@ function tvote() {
 		if (subscribe == 1) {
 			if (from_user == '' || from_user == null) {
 				subsribe();
+				return
 			}	
 			if (follow == 1) {				
 				tvotestart(tfrom_user, vfrom, iscode);
+				return
 			}else{
 				subsribe();
+				return
 			}
 			
 		}else {
@@ -573,33 +564,39 @@ function tvotestart(tfrom_user, vfrom, iscode) {
 	
 	fmloaddingt('.overlay_container', '投票中……','1');
 	if (iscode == 1) {
-		//alert(votepay);
-		var qs = function(e) {
-		  return document.querySelector(e);
-		};
-		var geetest = qs(".geetest");
-		//button.onclick = function() {
-		  geetest.style.display = "block";
-		//};
-		var close = document.getElementById("close");
-		close.onclick = function() {
-		  geetest.style.display = "none";
-		  fmloaddingt('.overlay_container', '','2');
-		};
-		qs(".bg").onclick = function() {
-		  geetest.style.display = "none";
-		  fmloaddingt('.overlay_container', '','2');
-		};
-		window.gt_custom_ajax = function(result, id, message) {
-
-			if(result) {
-				//geetest.style.display = "none";
-				qs('#' + id).parentNode.parentNode.style.display = "none";
-				
-				post_info(tfrom_user, vfrom, message);
+		document.getElementById("bodyhidden").style.display = "block";
+		 var handler = function (captchaObj) {
+	         // 将验证码加到id为captcha的元素里
+	        captchaObj.appendTo("#captcha");
+	        captchaObj.onSuccess(function () {
+	        	
+	        	var geetest = document.getElementById("geetest_"+captchaObj.id);
+	        	geetest.style.display = "none";
+	        	document.getElementById("bodyhidden").style.display = "none";
+	        	var message = '';
+	        	post_info(tfrom_user, vfrom, message);
 				return false;
-			}
-		}
+			});
+	     };
+	    $.ajax({
+	        // 获取id，challenge，success（是否启用failback）
+	        url: "{php echo $this->createMobileUrl('jiyan', array('rid'=>$rid))}&tfrom_user="+tfrom_user+ "&rand="+Math.round(Math.random()*100),
+	        type: "get",
+	        dataType: "json", // 使用jsonp格式
+	        success: function (data) {
+	        	//console.log(data);
+	            // 使用initGeetest接口
+	            // 参数1：配置参数，与创建Geetest实例时接受的参数一致
+	            // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
+	            initGeetest({
+	                gt: data.gt,
+	                challenge: data.challenge,
+	                product: "embed", // 产品形式
+	                offline: !data.success
+	                //更多前端参数配置 http://www.geetest.com/install/sections/idx-client-sdk.html#config-para
+	            }, handler);
+	        }
+	    });
 	}else {
 		post_info(tfrom_user, vfrom, 'nocode');
 		return false;
@@ -750,25 +747,14 @@ function payresult() {
 
 function bbsreply(content, iscode, bbstype) {
 	if (iscode == 1) {
-		var qs = function(e) {
-		  return document.querySelector(e);
-		};
-		//var button = document.getElementById("tvote");
-
-		var geetest = qs(".geetest");
-		//button.onclick = function() {
-		  geetest.style.display = "block";
-		//};
-		var close = document.getElementById("close");
-		close.onclick = function() {
-		  geetest.style.display = "none";
-		};
-		qs(".bg").onclick = function() {
-		  geetest.style.display = "none";
-		};
-		window.gt_custom_ajax = function(result, id, message) {
-			if(result) {									
-				var submitData = {
+		var handler = function (captchaObj) {
+	         // 将验证码加到id为captcha的元素里
+	        captchaObj.appendTo("#captcha");
+	        captchaObj.onSuccess(function () {
+	        	
+	        	var geetest = document.getElementById("geetest_"+captchaObj.id);
+	        	geetest.style.display = "none";
+	        	var submitData = {
 					content: content
 				};
 				$.post("{php echo $this->createMobileUrl('Tbbsreply', array('isbbsreply' => '1', 'tfrom_user' => $tfrom_user, 'rid' => $rid))}", submitData, function(data) {
@@ -804,8 +790,27 @@ function bbsreply(content, iscode, bbstype) {
 						}
 					}
 				},"json")
-			}
-		}
+			});
+	     };
+	    $.ajax({
+	        // 获取id，challenge，success（是否启用failback）
+	        url: "{php echo $this->createMobileUrl('jiyan', array('rid'=>$rid, 'tfrom_user' => $tfrom_user))}&rand="+Math.round(Math.random()*100),
+	        type: "get",
+	        dataType: "json", // 使用jsonp格式
+	        success: function (data) {
+	        	//console.log(data);
+	            // 使用initGeetest接口
+	            // 参数1：配置参数，与创建Geetest实例时接受的参数一致
+	            // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
+	            initGeetest({
+	                gt: data.gt,
+	                challenge: data.challenge,
+	                product: "embed", // 产品形式
+	                offline: !data.success
+	                //更多前端参数配置 http://www.geetest.com/install/sections/idx-client-sdk.html#config-para
+	            }, handler);
+	        }
+	    });
 	}else {
 		var submitData = {
 			content: content

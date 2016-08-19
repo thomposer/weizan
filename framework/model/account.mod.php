@@ -191,8 +191,10 @@ function uni_modules($enabledOnly = true) {
 		if (!empty($row['handles'])) {
 			$row['handles'] = iunserializer($row['handles']);
 		}
+		$row['isdisplay'] = 1;
 		unset($modules[$name]['description']);
 	}
+	$modules['core'] = array('title' => '系统事件处理模块', 'name' => 'core', 'issystem' => 1, 'enabled' => 1, 'isdisplay' => 0);
 	cache_write($cachekey, $modules);
 	return $modules;
 }
@@ -237,6 +239,37 @@ function uni_modules_app_binding() {
 	cache_write($cachekey, $result);
 	return $result;
 }
+function user_groups($groupids = array()) {
+	$condition = ' WHERE 1 = 1';
+	if (!is_array($groupids)) {
+		$groupids = array($groupids);
+	}
+	$list = pdo_fetchall("SELECT * FROM " . tablename('users_group') . $condition . " ORDER BY id ASC", array(), 'id');
+	if (in_array('-1', $groupids)) {
+		$list[-1] = array('id' => -1, 'name' => '所有服务');
+	}
+	if (in_array('0', $groupids)) {
+		$list[0] = array('id' => 0, 'name' => '基础服务');
+	}
+	if (!empty($list)) {
+		foreach ($list as &$row) {
+			if (!empty($row['modules'])) {
+				$modules = iunserializer($row['modules']);
+				if (is_array($modules)) {
+					$row['modules'] = pdo_fetchall("SELECT name, title FROM " . tablename('modules') . " WHERE name IN ('" . implode("','", $modules) . "')");
+				}
+			}
+			if (!empty($row['templates'])) {
+				$templates = iunserializer($row['templates']);
+				if (is_array($templates)) {
+					$row['templates'] = pdo_fetchall("SELECT name, title FROM " . tablename('site_templates') . " WHERE id IN ('" . implode("','", $templates) . "')");
+				}
+			}
+		}
+	}
+	return $list;
+}
+
 
 
 function uni_groups($groupids = array()) {
@@ -420,7 +453,7 @@ function uni_setting_load($name = '', $uniacid = 0) {
 								'creditnames', 'default_message', 'creditbehaviors', 'shortcuts', 'payment', 
 								'recharge', 'tplnotice', 'mcplugin');
 			foreach ($unisetting as $key => &$row) {
-				if (in_array($key, $serialize)) {
+				if (in_array($key, $serialize) && !empty($row)) {
 					$row = (array)iunserializer($row);
 				}
 			}
@@ -661,6 +694,9 @@ function account_create($uniacid, $account) {
 
 function account_fetch($acid) {
 	$account = pdo_fetch("SELECT w.*, a.type, a.isconnect FROM " . tablename('account') . " a INNER JOIN " . tablename('account_wechats') . " w USING(acid) WHERE acid = :acid AND a.isdeleted = '0'", array(':acid' => $acid));
+	if (empty($account)) {
+		return error(1, '公众号不存在');
+	}
 	$uniacid = $account['uniacid'];
 	$owneruid = pdo_fetchcolumn("SELECT uid FROM ".tablename('uni_account_users')." WHERE uniacid = :uniacid AND role = 'owner'", array(':uniacid' => $uniacid));
 	load()->model('user');
@@ -1002,7 +1038,7 @@ function account_delete($acid) {
 			'activity_coupon_record','activity_exchange','activity_exchange_trades','activity_exchange_trades_shipping',
 			'activity_modules', 'core_attachment','core_paylog','core_queue','core_resource',
 			'wechat_attachment','coupon','coupon_modules',
-			'coupon_record','coupon_setting','cover_reply', 'mc_card','mc_card_members','mc_chats_record','mc_credits_recharge','mc_credits_record',
+			'coupon_record', 'cover_reply', 'mc_card','mc_card_members','mc_chats_record','mc_credits_recharge','mc_credits_record',
 			'mc_fans_groups','mc_groups','mc_handsel','mc_mapping_fans','mc_mapping_ucenter','mc_mass_record',
 			'mc_member_address','mc_member_fields','mc_members','menu_event',
 			'qrcode','qrcode_stat', 'rule','rule_keyword','site_article','site_category','site_multi','site_nav','site_slide',
@@ -1033,6 +1069,7 @@ function account_delete($acid) {
 		pdo_delete('account', array('acid' => $acid));
 		pdo_delete('account_wechats', array('acid' => $acid, 'uniacid' => $uniacid));
 		cache_delete("unicount:{$uniacid}");
+		cache_delete("unisetting:{$uniacid}");
 		cache_delete('account:auth:refreshtoken:'.$acid);
 		$oauth = uni_setting($uniacid, array('oauth'));
 		if($oauth['oauth']['account'] == $acid) {
@@ -1046,3 +1083,27 @@ function account_delete($acid) {
 	}
 	return true;
 }
+function getgroupmodules($groupid){
+	$group   =pdo_get('users_group',array('id'=>$groupid));
+	if(empty($group)){return '';}
+	else{
+		$package =iunserializer($group['package']);
+		$taocmd  =array();
+	    if(in_array(-1,$package)){
+			$modules = pdo_fetchall("SELECT name FROM ". tablename('modules')."WHERE issystem=0");
+	        foreach($modules as $value){
+			    $taocmd[].=$value['name'];
+		    }
+        }
+        else{
+            foreach($package as $value){
+		        $values=pdo_get('uni_group',array('id' =>$value),'modules');
+			    $values=iunserializer($values['modules']);
+			    $taocmd =array_merge($taocmd,$values);
+		    }
+	    }
+		return $taocmd;
+	}
+	
+}
+

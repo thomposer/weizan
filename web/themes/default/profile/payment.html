@@ -114,31 +114,59 @@
 				}
 			}
 		});
-
-		$('#recharge-add').click(function(){
-			var html ='<div class="form-group item">' +
-						'<label class="col-xs-12 col-sm-3 col-md-2 control-label">充值返现</label>' +
-						'<div class="col-sm-4">' +
-							'<div class="input-group">' +
-								'<span class="input-group-addon">充</span>' +
-								'<input type="text" name="recharge[]" value="" class="form-control">' +
-								'<span class="input-group-addon">元</span>' +
-								'<span class="input-group-addon">返</span>' +
-								'<input type="text" name="back[]" value="" class="form-control">' +
-								'<span class="input-group-addon">元</span>' +
+		//设置余额支付开关下拉框选择
+		$('.select-back li a').click(function(){
+			var back = $(this).text();
+			$(this).parent().parent().prev().prev().find('.button-value').text(back);
+			if(back == '元') {
+				$(this).parent().parent().prev().attr('value','credit2');
+			}else{
+				$(this).parent().parent().prev().attr('value','credit1');
+			}
+		})
+		$(document).on('click','.select-back li a',function(){
+			var back = $(this).text();
+			$(this).parent().parent().prev().prev().find('.button-value').text(back);
+			if(back == '元') {
+				$(this).parent().parent().prev().attr('value','credit2');
+			}else{
+				$(this).parent().parent().prev().attr('value','credit1');
+			}
+		});
+		$('#recharge-add-credit2').click(function(){
+			var html = '<div class="form-group item">' +
+							'<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>' +
+							'<div class="col-sm-6">' +
+								'<div class="input-group">' +
+									'<span class="input-group-addon">充</span>' +
+									'<input type="text" name="recharge[items][]" value="" class="form-control">' +
+									'<span class="input-group-addon">元</span>' +
+									'<span class="input-group-addon">返</span>' +
+									'<input type="text" name="back[items][]" value="" class="form-control">' +
+									'<div class="input-group-btn">' +
+									'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:66px;"><span class="button-value">元</span> <span class="caret"></span></button>' +
+									'<input type="hidden" name="rechargeType[items][]" value="credit2"/>' +
+									'<ul class="dropdown-menu dropdown-menu-right select-back">' +
+										'<li><a href="javascript:;">元</a></li>' +
+										'<li><a href="javascript:;">积分</a></li>' +
+									'</ul>' +
+								'</div>' +
 							'</div>' +
-						'</div>' +
-						'<div class="col-sm-1" style="margin-top:5px">' +
-							'<a href="javascript:;" class="recharge-del"><i class="fa fa-times-circle"></i> </a>' +
-						'</div>' +
-					'</div>';
-			if($('#recharge .item').size() >= 4) {
-				util.message('最多可添加4个充值返余额', '', 'error');
+						'</div>' + 
+							'<div class="col-sm-1" style="margin-top:5px">' +
+								'<a href="javascript:;" class="recharge-del"><i class="fa fa-times-circle"></i> </a>' +
+							'</div>' +
+						'</div>';
+			if($('#recharge .recharge-credit2-show .item').size() >= 4) {
+				util.message('最多可添加4个充值规则', '', 'error');
 				return false;
 			}
-			$('#recharge').append(html);
+			$('#recharge .recharge-credit2-show').append(html);
 		});
-
+		$(document).on('click','.recharge-del',function(){
+			$(this).parent().parent().remove();
+			return false;
+		});
 		$('.recharge-del').click(function(){
 			$(this).parent().parent().remove();
 			return false;
@@ -185,34 +213,6 @@
 							关闭
 						</label>
 						<span class="help-block">是否使用粉丝中心的余额直接支付</span>
-					</div>
-				</div>
-				<div id="recharge">
-					{if !empty($recharge)}
-						{loop $recharge $item}
-							<div class="form-group item">
-								<label class="col-xs-12 col-sm-3 col-md-2 control-label">充值返现</label>
-								<div class="col-sm-4">
-									<div class="input-group">
-										<span class="input-group-addon">充</span>
-										<input type="text" name="recharge[]" value="{$item['recharge']}" class="form-control">
-										<span class="input-group-addon">元</span>
-										<span class="input-group-addon">返</span>
-										<input type="text" name="back[]" value="{$item['back']}" class="form-control">
-										<span class="input-group-addon">元</span>
-									</div>
-								</div>
-								<div class="col-sm-1" style="margin-top:5px">
-									<a href="javascript:;" class="recharge-del"><i class="fa fa-times-circle"></i> </a>
-								</div>
-							</div>
-						{/loop}
-					{/if}
-				</div>
-				<div class="form-group">
-					<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
-					<div class="col-sm-9 col-xs-12">
-						<a href="javascript:;" id="recharge-add"><i class="fa fa-plus-circle"></i> 添加充值返余额</a> 最多可添加4个
 					</div>
 				</div>
 			</div>

@@ -136,8 +136,5 @@ function write_cache($filename, $data) {
         pdo_delete('ewei_bonus_fans', array('rid' => $rid));
         pdo_delete('ewei_bonus_fans_help', array('rid' => $rid));
         pdo_delete('ewei_bonus_fans_record', array('rid' => $rid));
-        //删除缓存
-	    $filename = IA_ROOT ."/addons/ewei_bonus/data/".$rid.".txt";
-	    @unlink($filename);
     }
 }

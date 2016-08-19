@@ -1,4 +1,5 @@
  {template 'style/style1/header'}
+
   <script type="text/javascript" src="{$_W['siteroot']}app/resource/js/lib/jquery-1.11.1.min.js"></script>
     <script type="text/javascript">
 
@@ -14,13 +15,15 @@
 
     ];
     </script>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">详情</h3>
     </div>
     <div class="panel-body">
+        <pre>姓名：{$item['realname']}&nbsp;&nbsp;电话：{$item['mobile']}</pre>
         <pre>内容：<span class="label label-info">{$item['content']}</span>&nbsp;状态：<span class="label label-success">{if $item['status'] == 3}处理中{elseif $item['status'] == 1}已处理{elseif $item['status'] == 2}未处理{/if}</span></pre> 
-        <div id="previewImage">
+        <div id="previewImage" onclick="showImg()">
                 {if $imgs}
                      {loop $imgs $img}
                      <img src="{$img['src']}" class="img-thumbnail" width="90" height="90">
@@ -73,10 +76,10 @@
 
 wx.config(jssdkconfig);
 
-$(document).on('click', '#previewImage img',function(event) {
+function showImg(){
         var imgArray = [];
-        var curImageSrc = $(this).attr('src');
-        alert(curImageSrc);
+        var curImageSrc = $('#previewImage img').attr('src');
+        // alert(curImageSrc);
         if (curImageSrc) {
             $('#previewImage img').each(function(index, el) {
                 var itemSrc = $(this).attr('src');
@@ -90,7 +93,8 @@ $(document).on('click', '#previewImage img',function(event) {
         
         }
   
- });
+}
+
 
 
 </script>

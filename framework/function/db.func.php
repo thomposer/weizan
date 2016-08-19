@@ -8,7 +8,7 @@ $GLOBALS['_W']['config']['db']['tablepre'] = empty($GLOBALS['_W']['config']['db'
 
 function db_table_schema($db, $tablename = '') {
 	$result = $db->fetch("SHOW TABLE STATUS LIKE '" . trim($db->tablename($tablename), '`') . "'");
-	if(empty($result)) {
+	if(empty($result) || empty($result['Create_time'])) {
 		return array();
 	}
 	$ret['tablename'] = $result['Name'];
@@ -114,6 +114,10 @@ function db_schema_compare($table1, $table2) {
 	if(!empty($diffs)) {
 		$ret['indexes']['greater'] = array_values($diffs);
 	}
+	$diffs = array_diff($indexes2, $indexes1);
+	if(!empty($diffs)) {
+		$ret['indexes']['less'] = array_values($diffs);
+	}
 	$diffs = array();
 	$intersects = array_intersect($indexes1, $indexes2);
 	if(!empty($intersects)) {
@@ -216,7 +220,7 @@ function db_table_fix_sql($schema1, $schema2, $strict = false) {
 				$index = $schema2['indexes'][$indexname];
 				$piece = _db_build_index_sql($index);
 				
-				$sqls[] = "ALTER TABLE `{$schema1['tablename']}` DROP ".($indexname == 'PRIMARY' ? " PRIMARY KEY " : "{$indexname}").", ADD {$piece}";
+				$sqls[] = "ALTER TABLE `{$schema1['tablename']}` DROP ".($indexname == 'PRIMARY' ? " PRIMARY KEY " : "INDEX {$indexname}").", ADD {$piece}";
 			}
 		}
 		if($strict && !empty($diff['indexes']['greater'])) {

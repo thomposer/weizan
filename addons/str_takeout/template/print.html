@@ -3,14 +3,10 @@
 	.require{color:red;}
 	.info{padding:6px;width:400px;margin:-20px auto 3px auto;text-align:center;}
 </style>
-<div class="alert alert-info info">
-	<i class="fa fa-info-circle"></i>
-	当前门店名称: {$store['title']}
-</div>
 {template 'nav'}
 {if $op == 'print_post'}
 	<form class="form-horizontal form" id="form1" action="" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="sid" value="{$sid}">
+		<input type="hidden" name="type" value="1">
 		<div class="main">
 			<div class="panel panel-default">
 				<div class="panel-heading">添加打印机</div>
@@ -54,11 +50,24 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">头部自定义信息</label>
+						<div class="col-sm-9 col-xs-12">
+							<input type="text" class="form-control" name="print_header" value="{$item['print_header']}">
+							<div class="help-block">建议少于20个字</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">尾部自定义信息</label>
+						<div class="col-sm-9 col-xs-12">
+							<input type="text" class="form-control" name="print_footer" value="{$item['print_footer']}">
+							<div class="help-block">建议少于20个字</div>
+						</div>
+					</div>
+					<div class="form-group">
 						<label class="col-xs-12 col-sm-3 col-md-2 control-label">二维码链接</label>
 						<div class="col-sm-9 col-xs-12">
 							<input type="text" class="form-control" name="qrcode_link" value="{$item['qrcode_link']}">
 							<div class="help-block text-danger">该店铺手机端地址为:<a target="_blank" href="{$_W['siteroot']}app{php echo ltrim($this->createMobileUrl('dish', array('sid' => $sid), true), '.');}">{$_W['siteroot']}app{php echo ltrim($this->createMobileUrl('dish', array('sid' => $sid), true), '.');}</a> 您可以用该地址转为短链接作为二维码的链接地址。</div>
-
 							<div class="help-block">建议使用系统的 <a href="{php echo url('platform/url2qr')}" target="_blank">长连接二维码工具</a> 生成短链接,这样扫描成功率提高</div>
 						</div>
 					</div>
@@ -82,11 +91,17 @@
 {elseif $op == 'print_list'}
 	<div class="clearfix">
 		<form class="form-horizontal" action="" method="post">
+			<div class="form-group">
+				<div class="col-sm-12">
+					<a class="btn btn-success col-lg-1" href="{php echo $this->createWebUrl('manage', array('op' => 'print_post'));}"/><i class="fa fa-plus-circle"> </i>  添加打印机</a>
+				</div>
+			</div>
 			<div class="panel panel-default">
 				<div class="panel-body table-responsive">
 					<table class="table table-hover">
 						<thead class="navbar-inner">
 							<tr>
+								<th>打印机品牌</th>
 								<th>打印机名称</th>
 								<th>机器号</th>
 								<th>打印机key</th>
@@ -98,6 +113,11 @@
 						<tbody>
 							{loop $data $item}
 							<tr>
+								<td>
+									{if $item['type'] == 1}
+										<span class="label label-success">飞蛾打印机</span>
+									{/if}
+								</td>
 								<td>{$item['name']}</td>
 								<td>{$item['print_no']}</td>
 								<td>{$item['key']}</td>
@@ -120,21 +140,17 @@
 					</table>
 				</div>
 			</div>
-			<div class="form-group">
-				<div class="col-sm-12">
-					<a class="btn btn-success col-lg-1" href="{php echo $this->createWebUrl('manage', array('op' => 'print_post'));}"/><i class="fa fa-plus-circle"> </i>  添加打印机</a>
-				</div>
-			</div>
 		</form>
 	</div>
 {elseif $op == 'print_log'} 
 	<div class="clearfix">
+		{if $item['type'] == '1'}
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<span class="text-danger">{$item['name']}</span>
 			</div>
 			<div class="panel-body">
-				<form class="form-horizontal form"
+				<form class="form-horizontal form">
 					<div class="form-group">
 						<label class="col-xs-12 col-sm-3 col-md-2 control-label">打印机状态：</label>
 						<div class="col-sm-9 col-xs-12">
@@ -144,6 +160,7 @@
 				</form>
 			</div>
 		</div>
+		{/if}
 		<div class="panel panel-info">
 			<div class="panel-heading">筛选</div>
 			<div class="panel-body">
@@ -175,6 +192,7 @@
 							<th>订单id</th>
 							<th>预定人</th>
 							<th>手机号</th>
+							<th>打印机品牌</th>
 							<th>打印状态</th>
 							<th>打印时间</th>
 							<th>删除</th>
@@ -184,13 +202,18 @@
 						{loop $data $da}
 							<tr>
 								<td><a title="查看订单" href="{php echo $this->createWebUrl('manage', array('op' => 'orderdetail', 'id' => $da['oid']));}">{$da['oid']}</a></td>
-								<td>{$da['username']}</td>
+								<td>{$da['realname']}</td>
 								<td>{$da['mobile']}</td>
+								<td>
+									{if $da['print_type'] == 1}
+										<span class="label label-success">飞蛾打印机</span>
+									{/if}
+								</td>
 								<td>
 									{if $da['status'] == 1}
 										<span class="label label-success">已打印</span>
 									{else}
-										<span class="label label-success">未打印</span>
+										<span class="label label-danger">未打印</span>
 									{/if}
 								</td>
 								<td>{php echo date('Y-m-d H:i:s', $da['addtime']);}</td>

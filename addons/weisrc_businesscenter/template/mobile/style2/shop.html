@@ -29,13 +29,7 @@
             src="{RES}/mobile/{php echo $this->cur_tpl}/Public/Wap/images/search.png"/></a>
     <a href="javascript:history.go(-1);" id="fan"><img
             src="{RES}/mobile/{php echo $this->cur_tpl}/Public/Wap/images/fan.png"/></a>
-    <h1>{$stores['title']}
-        {if !empty($stores['site_url'])}
-        <span style="float:right;
-font-size: 14px;"><a href="{if empty($stores['site_url'])}#{else}{$stores['site_url']}{/if}">{if
-            !empty($stores['site_name'])}{$stores['site_name']}{else}进入商家微官网{/if}</a></span>
-        {/if}
-    </h1>
+    <h1>{$stores['title']}</h1>
 </div>
 <div id="sj_pic">
     <div class="sj_img d">
@@ -44,7 +38,9 @@ font-size: 14px;"><a href="{if empty($stores['site_url'])}#{else}{$stores['site_
             <div class="swiper-wrapper">
                 {loop $slide $item}
                 <div class="swiper-slide">
+                    <a href="{if empty($item['url'])}#{else}{$item['url']}{/if}">
                     <img src="{php echo tomedia($item['attachment']);}" width="100%"/>
+                    </a>
                 </div>
                 {/loop}
             </div>
@@ -75,7 +71,15 @@ font-size: 14px;"><a href="{if empty($stores['site_url'])}#{else}{$stores['site_
         }
     </style>
     <div class="bor1 arc_li1 bors mar_top1 top_title">
-        <h1>{$stores['title']}</h1>
+        <h1>{$stores['title']}{if !empty($stores['site_url'])}
+        <span style="float:right;
+font-size: 14px;">
+            <a href="{if empty($stores['site_url'])}#{else}{$stores['site_url']}{/if}">
+
+                {if !empty($stores['site_name'])}{$stores['site_name']}{else}进入商家微官网{/if}
+            </a>
+        </span>
+            {/if}</h1>
         {php echo htmlspecialchars_decode($stores['description'])}
     </div>
     {if !empty($stores['discount'])}
@@ -116,6 +120,7 @@ font-size: 14px;"><a href="{if empty($stores['site_url'])}#{else}{$stores['site_
             <h2 class="lisr_bg">{$stores['address']}</h2>
         </div>
     </a>
+
     {if !empty($stores['tel'])}
     <a href="tel:{$stores['tel']}">
         <div class="bor1 bors arc_tel mar_top1 "><h2 class="lisr_bg">{$stores['tel']}</h2></div>

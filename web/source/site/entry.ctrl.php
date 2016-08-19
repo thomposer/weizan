@@ -64,9 +64,10 @@ $_GPC['__state'] = $entry['state'];
 if(!empty($_W['modules'][$entry['module']]['handles']) && (count($_W['modules'][$entry['module']]['handles']) > 1 || !in_array('text', $_W['modules'][$entry['module']]['handles']))) {
 	$handlestips = true;
 }
+$modules = uni_modules();
+$_W['current_module'] = $modules[$entry['module']];
 $site = WeUtility::createModuleSite($entry['module']);
 define('IN_MODULE', $entry['module']);
-
 if(!is_error($site)) {
 	$sysmodule = system_modules();
 	if(in_array($m, $sysmodule)) {
@@ -75,5 +76,5 @@ if(!is_error($site)) {
 	$method = 'doWeb' . ucfirst($entry['do']);
 	exit($site->$method());
 }
-
+  
 exit("访问的方法 {$method} 不存在.");

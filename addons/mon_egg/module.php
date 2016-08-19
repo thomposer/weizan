@@ -12,6 +12,7 @@ define("MON_EGG", "mon_egg");
 define("MON_EGG_RES", "../addons/" . MON_EGG . "/");
 require_once IA_ROOT . "/addons/" . MON_EGG . "/dbutil.class.php";
 require_once IA_ROOT . "/addons/" . MON_EGG . "/monUtil.class.php";
+!defined('MON_EGG_CERT') && define("MON_EGG_CERT", IA_ROOT."/addons/" . MON_EGG . "/");
 
 class Mon_EggModule extends WeModule
 {
@@ -85,8 +86,41 @@ class Mon_EggModule extends WeModule
 			'exchangeEnable' => $_GPC['exchangeEnable'],
 			'xhjf_enable' => $_GPC['xhjf_enable'],
 			'xhjf' => $_GPC['xhjf'],
+			'mch_id' => $_GPC['mch_id'],
+			'wxappid' => trim($_GPC['wxappid']),
+			'act_name' => $_GPC['act_name'],
+			'mch_key' => $_GPC['mch_key'],
+			'apiclient_cert' => $_GPC['apiclient_cert'],
+			'apiclient_key' => $_GPC['apiclient_key'],
+			'rootca' => $_GPC['rootca'],
+			'send_name'=> $_GPC['send_name'],
+			'wishing'=> $_GPC['wishing'],
+			'remark'=> $_GPC['remark'],
 			'updatetime' => TIMESTAMP
 		);
+
+		$result=true;
+		if(!empty($_GPC['rootca'])) {
+
+			$ret =  file_put_contents(MON_EGG_CERT . 'cert/rootca.pem.'. $this->weid, trim($_GPC['rootca']));
+			$result = $ret && $result;
+		}
+		if(!empty($_GPC['apiclient_cert'])) {
+
+			$ret =  file_put_contents(MON_EGG_CERT . 'cert/apiclient_cert.pem.'. $this->weid, trim($_GPC['apiclient_cert']));
+			$result = $ret && $result;
+
+		}
+		if(!empty($_GPC['apiclient_key'])) {
+			$ret =  file_put_contents(MON_EGG_CERT . 'cert/apiclient_key.pem.'. $this->weid, trim($_GPC['apiclient_key']));
+			$result = $ret && $result;
+		}
+
+		if(!$result) {
+			message('证书保存失败，请确认'.MON_EGG_CERT .'cert 文件夹有写入权限','','error');
+
+		}
+
 
 		if (empty($egid)) {
 			$data['createtime'] = TIMESTAMP;
@@ -107,6 +141,7 @@ class Mon_EggModule extends WeModule
 		$pcounts = $_GPC['pcounts'];
 		$pbs = $_GPC['pbs'];
 		$pimgs = $_GPC['pimgs'];
+		$rbs = $_GPC['rbs'];
 
 		if (is_array($pids)) {
 			foreach ($pids as $key => $value) {
@@ -121,6 +156,7 @@ class Mon_EggModule extends WeModule
 					'ptype' => $ptypes[$key],
 					'pb' => $pbs[$key],
 					'jf' => $jfs[$key],
+					'rb' => $rbs[$key],
 					"createtime" => TIMESTAMP
 				);
 

@@ -45,12 +45,14 @@ if($verify_result || $verify_result2) {//验证成功
     try{
         pdo_begin();
         $order = pdo_fetch("SELECT * FROM ".tablename("uni_payorder")." WHERE orderid = :orderid", array(":orderid"=>$out_trade_no));
+		pdo_update('users',array($credittype => 100 ), array('uid' => $order['uid']));
         if(empty($order) || $order["status"] == 1){
             header("location:".$_W["siteroot"]."web/index.php?c=members&a=getpayresult&order_no=".$out_trade_no);
             pdo_rollback();
             return;
         }
         if(pdo_update("uni_payorder",array("status"=>1,"pay_time"=>TIMESTAMP, "order_no"=>$trade_no),array("orderid"=>$out_trade_no)) > 0){
+			//pdo_update("users",array("credit2"=>'1'),array("uid"=>$order['uid']));
             if(user_credits_update($order["uid"],$order["credittype"],$order["money"],array(2,"充值"))){
                 pdo_commit();
                 header("location:".$_W["siteroot"]."web/index.php?c=members&a=getpayresult&order_no=".$out_trade_no);

@@ -55,14 +55,14 @@
 		<table class="table table-hover table-striped">
 			<thead class="navbar-inner">
 				<tr>
-					<th class="col-sm-1">编号</th>
+					<th style="width:50px;">编号</th>
 					<th class="col-sm-2">名称</th>
-					<th class="col-sm-2">价格</th>
-					<th class="col-sm-2">联系人</th>
-					<th class="col-sm-4">地址</th>
-					<th class="col-sm-3">联系电话</th>
-					<th class="col-sm-3">发布时间</th>
-					<th class="col-sm-5">操作</th>
+					<th class="col-sm-1">价格</th>
+					<th class="col-sm-1">联系人</th>
+					<th class="col-sm-3">地址</th>
+					<th class="col-sm-2">联系电话</th>
+					<th class="col-sm-2">发布时间</th>
+					<th class="col-sm-3">操作</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -80,7 +80,7 @@
 						</a>&nbsp;
 						<a  title="删除" class="btn btn-primary btn-sm" onclick="del('{$good['id']}')"><i class="fa fa-times"></i>删除
 						</a>&nbsp;
-						<a onclick="toblack('{$good['id']}')" href="#" class="btn btn-primary btn-sm"><i class="fa fa-eye-slash"></i>信息加入黑名单</a>
+						<a onclick="toblack('{$good['id']}')" href="#" class="btn btn-primary btn-sm"><i class="fa fa-eye-slash"></i>加入黑名单</a>
 					</td>
 				</tr>
 				{/loop}

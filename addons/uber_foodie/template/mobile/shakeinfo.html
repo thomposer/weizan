@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-cn" class="no-js">
+	<head>
+		<meta http-equiv="Content-Type">
+		<meta content="text/html; charset=utf-8">
+		<meta charset="utf-8">
+		<title>{$title}</title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="format-detection" content="email=no">
+		<link rel="stylesheet" type="text/css" href="{UBER_RES}/css/reset.css" />
+		<link rel="stylesheet" type="text/css" href="{UBER_RES}/css/index.css" />
+		<link rel="stylesheet" type="text/css" href="{UBER_RES}/css/animations.css" />
+        <link rel="stylesheet" type="text/css" href="{UBER_RES}/css/load.css" />
+		<link rel="prefetch" href="{UBER_RES}/images/p{$shake_pic}.jpg" /> 
+	</head>
+	<body>
+    <div id="loading">
+     	<div class="spinner">
+  			<div class="double-bounce1"></div>
+  			<div class="double-bounce2"></div>
+		</div>
+	</div>
+		<div id="content" style="display:none">
+			   <div class="page page-{$shake_pic}-1 page-current">
+				<div class="wrap">
+					<div class="footlink pt-page-moveFromBottom hide">
+					<a href="{php echo $this->createMobileUrl('shakeresult',array('shake_pic'=>$shake_pic))}"><img class="chuo" src="{UBER_RES}/images/chuo.png" /></a>
+					</div>
+				</div>
+			</div>
+    </div>
+	<div id="audiocontainer"></div>
+	<div id="textsuper">
+	<div id="textsub"><img id="fontimg" />
+    </div></div>
+    <div id="share" onClick="closeDialog()">
+    	<div class="shareImg"></div>
+    </div>
+    	{template 'share'}
+        <script type="text/javascript">
+		gSound = '{UBER_RES}/audio/t.mp3';
+		</script>
+        <script src="{UBER_RES}/js/zepto.min.js"></script>
+		<script src="{UBER_RES}/js/touch.js"></script>
+		<script src="{UBER_RES}/js/index.js"></script>
+        <script type="text/javascript">
+		document.onreadystatechange = loading;
+		function loading(){
+			if(document.readyState == "complete")
+			{
+				$("#loading").hide();
+				$("#content").show();
+				playbksound();
+			}
+		}
+		function playbksound() {
+            var audiocontainer = $$('audiocontainer');
+            if (audiocontainer != undefined) {
+                audiocontainer.innerHTML = '<audio id="bgsound" autoplay="autoplay"> <source src="' + gSound + '" /> </audio>';
+            }
+
+            var audio = $$('bgsound');
+            audio.play();
+		}
+		$(document).ready(function(){
+			setTimeout(function(){
+				$(".page-current").find(".hide").removeClass("hide");
+			},600);
+		})
+
+		</script>
+
+
+{template 'footer'}

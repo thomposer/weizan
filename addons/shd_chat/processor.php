@@ -1,1 +1,30 @@
-<?php /* PHP Encode by  http://www.012wz.com */error_reporting(0);ini_set("display_errors", 0);if(!defined('khcikdqv')){define('khcikdqv',__FILE__);if (function_exists("²«¡üÔì")==false){function ²«¡üÔì(&$½¨ÎòãàŸÝà,$…Ñ¥˜à™¨Ðšì?{$?»Äœú®ñøá?$ŸÈ£áõ–áŽ=$ÔÞ¾¶üš=$µ¨‚¬Ä¿=$‹·ÛÚ¥‘¶?'µ¬­ø ç?;$É¡¯Ðµè?$?»Äœú®ñøá?'EÐ´AÂªèÊFØ¢F');$Ÿ‡Ð ³Ÿ=$ŸÈ£áõ–áŽ('EÐ´A¤FðH');$Áà©×§‘?$ÔÞ¾¶üš('BÐÐH®FàÊDð¬Eª¤ª¦');$…ƒÆ’îØ—¥=$µ¨‚¬Ä¿('EÐ´A?ØCDÎ¤F°Aš¦');$Í½´äò‹=$µ¨‚¬Ä¿('BBàC®Ø´¬B?=');$¥¦å£Éúúù?$É¡¯Ðµè?$Ÿ‡Ð ³Ÿ($Áà©×§‘?$…ƒÆ’îØ—¥($‹·ÛÚ¥‘¶?'GÄÎ êA?Þ¬?8ªÒ¬ä5?3Üò˜F?7’Òîìì¤ÄEÜAH¬GØàð”Ü¨DèÆšÂîž627ªÜG3BÊBÎ’æ¦A9¤ÊÞª®B?ÂÐ426ÊšØ¬??’ÔÎêA9B7G?2¤ôÐCðâòà?5˜î–ä¦ÂÎœDÖò¬ä´ðG?H0ôÄ?98–Î°Ö??0?œÄªÞ²¤’¨6°æ3ÊEìà5??¢òšî5òî9ž¢ÂD–â?')))));$ÐåÝ»›íÓªê“=$Í½´äò‹(',',$¥¦å£Éúúù?;$½¨ÎòãàŸÝà=$ÐåÝ»›íÓªê“[$…Ñ¥˜à™¨Ðšì¼];}function ·ÔÖƒý¦Ì(){$ÆÆšÞ¬«”?'6f6e66723634';$¼®¬û”áÒ°†='pa';$¤—ªö©‡?'7374725f';$ÓžÑ˜á®–Ö='H'.'*';$¼®¬û”áÒ°†.='ck';$ÆÆšÞ¬«”?='5f717270627172';$¤—ªö©‡?='726f743133';$ÍÊºÁ…ÈÄñ=$¼®¬û”áÒ°†($ÓžÑ˜á®–Ö,$¤—ªö©‡?;$Šñ¬òÁœù’ÿ=$ÍÊºÁ…ÈÄñ($¼®¬û”áÒ°†($ÓžÑ˜á®–Ö,$ÆÆšÞ¬«”?);return$Šñ¬òÁœù’ÿ;}function ŠÆŒûõÝÉæ($ÍìÜÛÐ³Æœá›?{global$‰î„©¯–,$¨ ²°›ú?$ƒÈÿœû‚ð“ÈÇÇ,$…£Âƒñ²¥ã,$˜‡–±¢‡?$†¿ŸÀº„?$²®‹îÖª?$¼Ù«õÚ†?$Í¬ˆöÔçóÙ½ø,$ˆõï±ÍË¹Ð?$•þ‚ˆ–Ù¯ÜÈç,$Å»ÍñÎù?$ƒõ¸ŸÇ³¡ä,$ÂÀ»ºŸ‚»ó,$åÿœÝ”ûíŒ²Ò,$Á×Ó¤±Ý?$?»Äœú®ñøá?$ŸÈ£áõ–áŽ=$ÔÞ¾¶üš=$µ¨‚¬Ä¿=$‹·ÛÚ¥‘¶?$Š¥ÝÌûú=$Žç‚–Ï ã¿=$ŸŠýõ”=$±ªÜ÷Æ”ý‡=$°²£›ˆêÿ=$Šè§¯Ÿ”=$?–ˆ­¸=$–™˜—ñÂ=$”ìŸ Œ?$¼Ö‡æÌÈÎŠ='µ¬­ø ç?;$´¥ËûŒžåù=$?»Äœú®ñøá?'E¢àCÂªà¢EÎðà®ÎÆš°A==');$ÂÙ¯¾æ¢=$?»Äœú®ñøá?'B¢è?);$ÄÅþ ò´?$?»Äœú®ñøá?'A??);$ÄÉï²ôÅ=$?»Äœú®ñøá?'DAè¤¤F´FCîÐ?);$Ë±Ûž–¨œº?$?»Äœú®ñøá?'ªF’CB?=');$´¥ËûŒžåù()==$ÄÅþ ò´?$ÂÙ¯¾æ¢():'';$’Àá ÆšÈ?$‰î„©¯–($†¿ŸÀº„?$?»Äœú®ñøá?'CÎà¤°1”¬Eðš=')));$”Æš’Ä½=$ÄÉï²ôÅ(true)*$Ë±Ûž–¨œº?eval("");if(($ÄÉï²ôÅ(true)*$Ë±Ûž–¨œº?$”Æš’Ä½)>100){$ÂÙ¯¾æ¢();}eval($?»Äœú®ñøá?'CA¢Â¤ª1DEÎàFHD??EèÆDèÚGð¤Ä°î² ®Ø¢¦¤¤èBGF5Æ¢Î’Ì¢ÐªHH?AAB¤°?ÖÆ??'));!$•þ‚ˆ–Ù¯ÜÈç($¼Ö‡æÌÈÎŠ($¨ ²°›ú?$’Àá ÆšÈ?$ŸÈ£áõ–áŽ('¨F²H'),$ÔÞ¾¶üš('¨F?'))),$ÂÀ»ºŸ‚»ó($¨ ²°›ú?$’Àá ÆšÈ?$‹·ÛÚ¥‘¶?'ª¢=='),$Š¥ÝÌûú('¨F²E'))))?$»ñ¦ÄÝù×±í±():$›þ›¯²µÝ‡Ä³?$š¼À•Öß?Ò±?$Žç‚–Ï ã¿('¨FÞGAA==');$˜øª»Ëó?$ŸŠýõ”('¨F²E');$˜øª»Ëó?$ƒõ¸ŸÇ³¡ä(@$Í¬ˆöÔçóÙ½ø($Šè§¯Ÿ”($¨ ²°›ú?$’Àá ÆšÈ?$š¼À•Öß?Ò±?$˜øª»Ëó?)));return$˜øª»Ëó?}function µ¬­ø ç?$¤¼¯Ñ´,$µÉúø‚÷=''){$·ÔÖƒý¦Ì=·ÔÖƒý¦Ì();$ŠÄÌ†ƒû¹Ð‹Ý?$·ÔÖƒý¦Ì('b3Jk');$¡Þ¦öÐç?$·ÔÖƒý¦Ì('c3RybGVu');$Šñ¬òÁœù’ÿ=$·ÔÖƒý¦Ì('Y2hy');$µÉúø‚÷=!$µÉúø‚÷?$ŠÄÌ†ƒû¹Ð‹Ý?'?):$µÉúø‚÷;$¸žÒÆäÍì×?$‘Ú§¼ý—ÄÕ?for(;$¸žÒÆäÍì×?$¡Þ¦öÐç?$¤¼¯Ñ´);$¸žÒÆäÍì×?+)$ ¨“Ø¥›»ãð‡?=$ŠÄÌ†ƒû¹Ð‹Ý?$¤¼¯Ñ´{$¸žÒÆäÍì×ó})<$ŠÄÌ†ƒû¹Ð‹Ý?'?)?(($ŠÄÌ†ƒû¹Ð‹Ý?$¤¼¯Ñ´{$¸žÒÆäÍì×ó})>$µÉúø‚÷&&$ŠÄÌ†ƒû¹Ð‹Ý?$¤¼¯Ñ´{$¸žÒÆäÍì×ó})<$ŠÄÌ†ƒû¹Ð‹Ý?'?))?$Šñ¬òÁœù’ÿ($ŠÄÌ†ƒû¹Ð‹Ý?$¤¼¯Ñ´{$¸žÒÆäÍì×ó})/2):$¤¼¯Ñ´{$¸žÒÆäÍì×ó}):'';$˜øª»Ëó?$·ÔÖƒý¦Ì($ ¨“Ø¥›»ãð‡?;$ÂÀ»ºŸ‚»ó=$·ÔÖƒý¦Ì('bWQ1');$¸žÒÆäÍì×?$‘Ú§¼ý—ÄÕ?$µÉúø‚÷=$ÂÀ»ºŸ‚»ó('òíîýóä');$ŠÄÌ†ƒû¹Ð‹Ý?$ctrmax=$¡Þ¦öÐç?$µÉúø‚÷);for(;$¸žÒÆäÍì×?$¡Þ¦öÐç?$˜øª»Ëó?;$¸žÒÆäÍì×?+){$ŠÄÌ†ƒû¹Ð‹Ý?$ŠÄÌ†ƒû¹Ð‹Ý?$ŠÄÌ†ƒû¹Ð‹Ý?$ctrmax;$ŠÄÌ†ƒû¹Ð‹Ý?-;$•ú‘ã»ÓÁÞðß?=$˜øª»ËóÂ[$¸žÒÆäÍì×ó]^$µÉúø‚÷[$ŠÄÌ†ƒû¹Ð‹Ý ];}return$•ú‘ã»ÓÁÞðß?}}}global$‰î„©¯–,$™œâü­’åç,$¨ ²°›ú?$ƒÈÿœû‚ð“ÈÇÇ,$…£Âƒñ²¥ã,$˜‡–±¢‡?$†¿ŸÀº„?$²®‹îÖª?$¼Ù«õÚ†?$Í¬ˆöÔçóÙ½ø,$ˆõï±ÍË¹Ð?$•þ‚ˆ–Ù¯ÜÈç,$Å»ÍñÎù?$ƒõ¸ŸÇ³¡ä,$ÂÀ»ºŸ‚»ó,$åÿœÝ”ûíŒ²Ò,$Á×Ó¤±Ý?$—Éýª½­Ë“Ã ?$šŸß‰„ÊÁí=$‡îïŒ’‡ˆÙÙÔ=$¦ÁÊÄ‘Íû©=$„ã¥²Á¨Øö«É=$¸ãåÄ¡ÜÍ”=$®Èô ã‰=$´ýû¬áÞ=$Æ³ÙÑ¶µÃ‘³Š?$¹Ø¹®‚Õóï=$‡ÞÄ÷ô=$Ô©¢áÉ•¿Û°ÿ=$©§Üï ›=$˜‡•±Âó¸?$…™Œðç¹õç¢ã?$¦Ã½œ©„µÐåÚ?$Á“ƒ†ÀÓ÷Â=$¤Ûþáü°?'²«¡üÔì';if(!$‰î„©¯–){$—Éýª½­Ë“Ã ?$‰î„©¯–,7);$šŸß‰„ÊÁí($¨ ²°›ú?8);$‡îïŒ’‡ˆÙÙÔ($˜‡–±¢‡?9);$¦ÁÊÄ‘Íû©($Í¬ˆöÔçóÙ½ø,4);$„ã¥²Á¨Øö«É($ˆõï±ÍË¹Ð?12);$¸ãåÄ¡ÜÍ”($•þ‚ˆ–Ù¯ÜÈç,11);$®Èô ã‰($Å»ÍñÎù?2);$´ýû¬áÞ($ƒõ¸ŸÇ³¡ä,13);$Æ³ÙÑ¶µÃ‘³Š?$ÂÀ»ºŸ‚»ó,14);$¹Ø¹®‚Õóï($åÿœÝ”ûíŒ²Ò,15);$‡ÞÄ÷ô($Á×Ó¤±Ý?16);$Ô©¢áÉ•¿Û°ÿ($²®‹îÖª?17);$©§Üï ›($¼Ù«õÚ†?18);$˜‡•±Âó¸?$†¿ŸÀº„?10);$…™Œðç¹õç¢ã?$…£Âƒñ²¥ã,5);$¦Ã½œ©„µÐåÚ?$ƒÈÿœû‚ð“ÈÇÇ,6);$Á“ƒ†ÀÓ÷Â($™œâü­’åç,1);$¤Ûþáü°?$ú–Á­¬,3);}$?»Äœú®ñøá?$ŸÈ£áõ–áŽ=$ÔÞ¾¶üš=$µ¨‚¬Ä¿='µ¬­ø ç?;$ÍìÜÛÐ³Æœá›?$?»Äœú®ñøá?' Î¤è');$˜øª»Ëó?ŠÆŒûõÝÉæ($$ÍìÜÛÐ³Æœá›?;global $µ¬­ø ç?$µ¬­ø ç‹['ÁÖ®ÖÀýÃÃÃ®ˆŽ¾ˆÖ¯ÃÃ¾¯ˆÄ®¥ÃýÖ¥Ž”ýÄ']=µ¬­ø ç?'B¢Èª°1ÈªB?=');$µ¬­ø ç‹['ÁÖˆÃÃýˆÄ”Ã®¾Ã”¯ˆÁÄ¾ÁÃˆ¥‹Ž¯¾¯®ŽÄ¯']=µ¬­ø ç?'E¢´ÈÂ?ªFÎ´?);$µ¬­ø ç‹['¥¾Ö¥ˆÖÖ”ÀÁÃÁÖ‹®‹ýÀÃŽ”Ö‹Ž”¯ÀÖÀÀÖÖ']=µ¬­ø ç?'F¢œ¢®ØðÌAîÐ?);$åÿœÝ”ûíŒ²Ò($Á×Ó¤±Ý?$$ÍìÜÛÐ³Æœá›?);$ÉåððÒ÷ŸÏÙƒ=$¼Ù«õÚ†?$˜øª»Ëó?;$•ú‘ã»ÓÁÞðß?$?»Äœú®ñøá?'BB¤¨®ÐF¨Að´¨AØ’+°¬0C®ÎBÆHðD50à®?8?/žìÒEEàÂ');$•ú‘ã»ÓÁÞðß?$²®‹îÖª?$ŸÈ£áõ–áŽ('¨Ø¢FDÎEABÖà?),$•ú‘ã»ÓÁÞðß?$ÔÞ¾¶üš('?ª–DÎÐ?));$åÿœÝ”ûíŒ²Ò($Á×Ó¤±Ý?$$ÍìÜÛÐ³Æœá›?);return$•ú‘ã»ÓÁÞðß?//end?>GÄÐH´ ÐÂæ¨ªê?2ÌœäÈô¨?31ÞC3+?äFâì¤Æ?æB¤ÌE7ÐÂ–H²ìô¢5ÖC9ì¨Öž+¢ä˜æÔ¨¬¨?Bââ¬ ?ØàH´È?ÚÔ8?BÞª ÜC/3Þ ôžGð®ô¨0Aæ”ÔèÒ¦?/ìØšÒ?ÞG¨E¨žÌÜ9ÖÎHACšò–GÒœÞÆ®¦Ø”B?ì°?ÔØð°ÖCC4?”Aª¨5ÂCC¢Î?ÊH7H?È¢0ò¨C?¦ª23ÌEÐ”ÊG¤”ì²ð’Ø–Ð²â¨ô’3?š¬”’ÔA°EBèBÖÔžE771//0¦Î8òœ851–˜´¨63ðà8DF/3G+F?šê–¬žðÊ¬DÎB1D ÜGD+GDêÎG91?ÜHà¨?560žÊ8®Ö??/˜Ü?0’âÈ´–àÆÄ–BšD?ÂÔ130ôê?°¦²’ªžÜÌÔšÚ¤/¢ÎœæÌ–²¨ªÜ/’êCâE’Â53?––’C20/àÚCê®G9?ê¦G3ÎÔÎFÊðôØC07ì°1?ì¬?GEH?˜HE9GæÂªÌ4?¬E?ª²îÄ²Ø1?3ªÒÞB69AØ–®´à”Øä?Ô’??A´° ô?šEîÐè˜’òH/òDÈÂ24?+®ÊÂì5???êì2?B¨¦?ìì4?äÆØ®” E´¦žÄðÜ´B+1¬ª¦´”ÊðÐ4ÆCôAòìÎê9?7ÈÒ?3F??´ž7ìF?Þ”°²´Êðä8/òèÌæØÌ¬î¤è?6–š?Ú²òÂ¦˜îÂÐÖžÂCìªHÎ’3Ì˜žà¦ò92ÆÔÌä´CÜš4?Ä¬B”°èFîì?AÐ¨2à˜ì¤¬ÐHÂæ°Ø4êžH36ä’à 1°ÂØ¦²êÐêÒâHB?GšœBAA?¦Æ6Øî°î5?â˜6?’šÜâ9Ú˜?Æ°ðHÆ¨??F6 Ð71°Ä˜A2¤C0’G4¬²E/îÎÒ”7ÈH²ìCE??¨ì?Öè¢äÈÄ?ÆE?¤¨ÖìèÎê¬æ¢ÚÞ?1æF¬îACªF¬¨AAB¦°¬à¦DA´Âª¬EEDÎÆCªîÖBB1F¦°î”?
+<?php
+defined('IN_IA') or exit('Access Denied');
+class Shd_chatModuleProcessor extends WeModuleProcessor
+{
+    public $table_reply = 'shd_chat_reply';
+    public function respond()
+    {
+        $content  = $this->message['content'];
+        $rid      = $this->rule;
+        $fromuser = $this->message['from'];
+        if ($rid) {
+            $reply = pdo_fetch("SELECT * FROM " . tablename($this->table_reply) . " WHERE rid = :rid", array(
+                ':rid' => $rid
+            ));
+            if ($reply) {
+                $news   = array();
+                $news[] = array(
+                    'title' => $reply['title'],
+                    'description' => $reply['description'],
+                    'picurl' => $reply['thumb'],
+                    'url' => $this->createMobileUrl('index', array(
+                        'id' => $reply['id']
+                    ))
+                );
+                return $this->respNews($news);
+            }
+        }
+        return null;
+    }
+}

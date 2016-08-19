@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta content="telephone=no" name="format-detection">
     <title>门店搜索</title>
-    <link data-turbolinks-track="true" href="{RES}/mobile/diandan/assets/diandanbao/weixin.css?v=1" media="all" rel="stylesheet">
+    <link data-turbolinks-track="true" href="{RES}/mobile/{php echo $this->cur_tpl}/assets/diandanbao/weixin.css?v=1" media="all" rel="stylesheet">
     <style type="text/css">@media screen {
         .smnoscreen {
             display: none
@@ -27,7 +27,7 @@
 <body>
 <!-- ngView:  -->
 <div ng-view="" style="height: 100%;" class="ng-scope">
-    {php include $this->template('diandan/_footer');}
+    {php include $this->template($this->cur_tpl.'/_menu');}
     <div id="search-word-page" class="ng-scope">
         <div class="ddb-nav-header search-header">
             <div class="search-input">
@@ -70,7 +70,7 @@
         </div>
     </div>
 </div>
-<script src="{RES}/mobile/diandan/assets/diandanbao/jquery-1.11.3.min.js"></script>
+<script src="{RES}/mobile/{php echo $this->cur_tpl}/assets/diandanbao/jquery-1.11.3.min.js"></script>
 <script>
     function searchword(search) {
         window.location.href = "{php echo $this->createMobileUrl('search', array(), true)}" + "&searchword=" + search;

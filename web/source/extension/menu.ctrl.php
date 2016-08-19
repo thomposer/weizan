@@ -81,6 +81,7 @@ if($do == 'display') {
 						'title' => $add_child_title,
 						'name' => $add_child_name,
 						'url' => $add_child_url,
+						'type' => 'url',
 						'displayorder' => intval($_GPC['add_child_displayorder'][$k2]),
 						'is_system' => 0,
 						'permission_name' => trim($_GPC['add_child_permission'][$k2]),

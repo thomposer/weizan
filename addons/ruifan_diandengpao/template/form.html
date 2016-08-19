@@ -1,0 +1,121 @@
+<script language='javascript' src='../addons/ruifan_diandengpao/images/jquery.gcjs.js'></script>
+<script language='javascript' src='../addons/ruifan_diandengpao/images/jquery.form.js'></script>
+<input type="hidden" name="reply_id" value="{$reply['id']}" />
+<div class="panel panel-default">
+    <div class="panel-heading">
+        活动设置
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 活动名称</label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" id="title" class="form-control" placeholder="" name="title" value="{$reply['title']}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 活动图片</label>
+            <div class="col-sm-9 col-xs-12">
+                {php echo tpl_form_field_image('start_picurl',$reply['start_picurl']);}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 活动说明</label>
+            <div class="col-sm-9 col-xs-12">
+                <textarea style="height:60px;" id='description' name="description" class="form-control" cols="60">{$reply['description']}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 活动时间</label>
+            <div class="col-sm-9 col-xs-12">
+                {php echo tpl_form_field_daterange('datelimit', array('starttime'=>date('Y-m-d',$reply['starttime']),'endtime'=>date('Y-m-d',$reply['endtime'])))}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 头部图片
+                <br>大小640px*1136px</label>
+            <div class="col-sm-9 col-xs-12">
+                {php echo tpl_form_field_image('bannerurl',$reply['bannerurl']);}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">难度选择</label>
+            <div class="col-sm-9">
+                <label class="radio-inline">
+                    <input type="radio" name="dengji" value="0" {if $reply['dengji']==0} checked="checked"{/if}/>普通
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="dengji" value="1" {if $reply['dengji']==1} checked="checked"{/if}/>较难
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>关注引导链接</label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" id="share_url" class="form-control" placeholder="" name="share_url" value="{$reply['share_url']}">
+                <div class="help-block">用户未关注公众号会自动跳转到这个引导页面去的。</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        明星头像设置（以下为空将使用默认明星头像）
+    </div>
+    <div class="panel-body">
+       <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 没点状态图片
+                <br>大小56px*56px</label>
+            <div class="col-sm-9 col-xs-12">
+                {php echo tpl_form_field_image('oldimg',$reply['oldimg']);}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 点亮状态图片
+                <br>大小56px*56px</label>
+            <div class="col-sm-9 col-xs-12">
+                {php echo tpl_form_field_image('curimg',$reply['curimg']);}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        广告设置
+    </div>
+    <div class="panel-body">
+    
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 广告图片（80*80）</label>
+            <div class="col-sm-9 col-xs-12">
+                {php echo tpl_form_field_image('ad_img',$reply['ad_img']);}
+            </div>
+        </div>
+         <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 广告标题</label>
+            <div class="col-sm-9 col-xs-12">
+               <input type="text" id="ad_title" class="form-control" placeholder="" name="ad_title" value="{$reply['ad_title']}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 广告链接（http://开头）</label>
+            <div class="col-sm-9 col-xs-12">
+               <input type="text" id="ad_url" class="form-control" placeholder="" name="ad_url" value="{$reply['ad_url']}">
+            </div>
+        </div>
+        
+    
+    </div>
+</div>
+<script language='javascript'>
+function doDeleteItemImage(obj, id) {
+    var filename = $('input#' + id + "-value").val();
+    $('.' + id + "_preview").html("");
+    $(obj).html("正在删除...").attr("disabled", true);
+    ajaxopen('./index.php?act=attachment&do=delete&filename=' + filename, function() {
+        $(obj).html("<i class='icon-upload-alt'></i> 删除").hide().removeAttr("disabled");
+    });
+}
+</script>

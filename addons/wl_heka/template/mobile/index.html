@@ -15,11 +15,8 @@ var dataForWeixin={
    MsgImg:_fromCode+"./addons/wl_heka/style/images/share_msg.png",
    TLImg:_fromCode+"./addons/wl_heka/style/images/share.png",
    path:"",
-
-   title:"微赞助手",
-
-   desc:"使用微赞助手可以在朋友圈或聊天对话框发送更丰富的微赞类型",
-
+   title:"{$nikename}祝福",
+   desc:"使用{$nikename}可以在朋友圈或聊天对话框发送更丰富的微赞类型",
    fakeid:"",
    callback:function(){}
 };
@@ -75,9 +72,7 @@ window.onload=_pic;
 window.onresize=_pic;
 (function(){
    dataForWeixin.path="{php echo $this->createMobileUrl('index', array('id' => $_GPC['id']));}";
-
-   dataForWeixin.title="使用微赞助手在微信发送贺卡";
-
+   dataForWeixin.title="使用{$nikename}在微信发送贺卡";
    dataForWeixin.desc="生日、节日、纪念日，少不了祝福；爱情、友情、亲情，少不了问候";
 })();
 </script>

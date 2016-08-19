@@ -175,7 +175,7 @@ class Ewei_bonusModuleSite extends WeModuleSite {
             $params[':status'] = intval($_GPC['status']);
         }
         if (!empty($_GPC['keywords'])) {
-            $where.=' and mobile like :mobile';
+            $where.=' and and mobile like :mobile';
             $params[':mobile'] = "%{$_GPC['keywords']}%";
         }  
 
@@ -238,7 +238,7 @@ class Ewei_bonusModuleSite extends WeModuleSite {
             $params[':status'] = intval($_GPC['status']);
         }
         if (!empty($_GPC['keywords'])) {
-            $where.=' and f.mobile like :mobile';
+            $where.=' and f.mobile<>\'\' and f.mobile like :mobile';
             $params[':mobile'] = "%{$_GPC['keywords']}%";
         }
         $total = pdo_fetchcolumn("SELECT count(*) FROM " . tablename('ewei_bonus_fans_record') . "r left join " . tablename('ewei_bonus_fans') . " f on f.openid = r.openid WHERE  r.rid = :rid " . $where . "", $params);
@@ -366,10 +366,10 @@ class Ewei_bonusModuleSite extends WeModuleSite {
         $headurl = is_array($cookie)?$cookie['headurl']:"";
         $area =   is_array($cookie)?$cookie['area']:"";
         $access_token="";
-        $snsapi_type = "snsapi_userinfo";
-        //if($followed){
-         //   $snsapi_type = "snsapi_userinfo";
-       // }
+        $snsapi_type = "snsapi_base";
+        if($followed){
+            $snsapi_type = "snsapi_userinfo";
+        }
         load()->func('communication');
         
         //获取openid
@@ -410,7 +410,7 @@ class Ewei_bonusModuleSite extends WeModuleSite {
             }
         
         //获取用户资料
-        //if($followed) {
+        if($followed) {
             if(empty($nickname)){
                $f = array(
                     "uniacid" => $_W['uniacid'],
@@ -431,7 +431,7 @@ class Ewei_bonusModuleSite extends WeModuleSite {
                     setcookie($cookieid, base64_encode(json_encode($f)), time() + 3600 * 24 * 365);
                 }
             }
-       // }
+        }
  
         $newfans = false;
         $fans = pdo_fetch("select * from " . tablename('ewei_bonus_fans') . " where rid=:rid and openid=:openid limit 1", array(":rid" => $id, ":openid" => $openid));

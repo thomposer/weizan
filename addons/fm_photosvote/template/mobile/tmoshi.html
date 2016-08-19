@@ -1,16 +1,33 @@
 {if $rdisplay['tmoshi'] == 0}
  <link href="{FM_STATIC_MOBILE}styleeasy/css/base.css" rel="stylesheet" />
   <style type="text/css">
-    #images .items .bg {background: {if !empty($rbody['bodytscolor'])}{$rbody['bodytscolor']}{else}rgba(46, 1, 68, 0.52){/if};border: 1px solid #c8ab81;}
-    #images .items p .name{color: {if !empty($rbody['bodytextcolor'])}{$rbody['bodytextcolor']}{else}#ffb{/if}}
-    #images .items p .num{color: {if !empty($rbody['bodynumcolor'])}{$rbody['bodynumcolor']}{else}#ffb{/if}}
+    .tab_bd {
+      background:{$rbody_photosvote['photosvote_tp_color']};
+    }
+    #images .items .bg {
+        background: {if !empty($rbody_photosvote['photosvote_tp_user_color'])}{$rbody_photosvote['photosvote_tp_user_color']}{else}rgba(46, 1, 68, 0.52){/if};;
+        border: 1px solid {$rbody_photosvote['photosvote_tp_user_border_color']};
+    }
+    #images .items p .name{color: {if !empty($rbody_photosvote['photosvote_tp_user_text_color'])}{$rbody_photosvote['photosvote_tp_user_text_color']}{else}#ffb{/if}}
+    #images .items p .num{color: {if !empty($rbody_photosvote['photosvote_tp_user_num_color'])}{$rbody_photosvote['photosvote_tp_user_num_color']}{else}#ffb{/if}}
+    #images .items .sort {
+      background: {$rbody_photosvote['photosvote_tp_user_ps_color']};
+      color: {$rbody_photosvote['photosvote_tp_user_ps_text_color']};
+  }
+  #images .items .piao {
+    color: {$rbody_photosvote['photosvote_tp_user_ps_num_color']};
+  }
+  #images .items .vote {
+    color: {$rbody_photosvote['photosvote_tp_user_ps_an_text_color']};
+    background: {$rbody_photosvote['photosvote_tp_user_ps_an_bg_color']} url({php echo toimage($rbody_photosvote['photosvote_tp_user_ps_an_bg_img'])}) no-repeat;
+  }
   </style>
   <div class="tab" id="tab">
         <div class="tab_bd">
             <div class="items" style="display: none"><div class="bg"><div class="sort"></div></div></div>
             <div id="images">
             </div>
-            <p class='masonryload' style="display:none;color: {if !empty($rbody['bodytextcolor'])}{$rbody['bodytextcolor']}{else}#ffb{/if}">数据加载完了</p>
+            <p class='masonryload' style="display:none;color: {if !empty($rbody_photosvote['photosvote_tp_user_text_color'])}{$rbody_photosvote['photosvote_tp_user_text_color']}{else}#ffb{/if}">数据加载完了</p>
         </div>
     </div>
     <script src="{FM_STATIC_MOBILE}styleeasy/js/fastclick.js"></script>
@@ -115,6 +132,27 @@
      
   </script> 
 {else}
+  <style type="text/css">
+    .falls ul {
+      background: {$rbody_photosvote['photosvote_tp_color']};
+  }
+  .falls ul li {
+      background: {if !empty($rbody_photosvote['photosvote_tp_user_color'])}{$rbody_photosvote['photosvote_tp_user_color']}{else}rgba(46, 1, 68, 0.52){/if};;
+      border: 1px solid {$rbody_photosvote['photosvote_tp_user_border_color']};
+  }
+  .falls ul li .toupiao a{
+    color: {$rbody_photosvote['photosvote_tp_user_ps_an_text_color']};
+    background: {$rbody_photosvote['photosvote_tp_user_ps_an_bg_color']} url({php echo toimage($rbody_photosvote['photosvote_tp_user_ps_an_bg_img'])}) no-repeat;
+    border-color: {$rbody_photosvote['photosvote_tp_user_ps_an_bg_color']};
+  }
+  .falls ul li .toupiao .piaoshu{
+    color: {$rbody_photosvote['photosvote_tp_user_ps_text_color']};
+  }
+  .usr_more {
+    color: {$rbody_photosvote['photosvote_tp_user_ps_text_color']};
+    background: {if !empty($rbody_photosvote['photosvote_tp_user_color'])}{$rbody_photosvote['photosvote_tp_user_color']}{else}rgba(0, 0, 0, 0.4){/if};
+  }
+  </style>
   <script type="text/javascript">  
     $(document).ready(function() {
         var track_click = 0; //track user click on "load more" button, righ now it is 0 click  

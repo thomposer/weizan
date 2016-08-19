@@ -3,6 +3,7 @@
  jslover@20150504
  */
 define(function (require, exports, module) {
+    require('script/md5.js');
     var $ = require('zepto');
     var Music = require('script/music.js');
     var isTouch = 'ontouchstart' in document;
@@ -138,38 +139,27 @@ define(function (require, exports, module) {
             $('#result-count').html(this.score);
             $('#beyound-count').html(per + '%');
 
-
-
-
             try {
                 //玩完自动提交分数
                 var point = 10 * this.distance;
-                //提交结果
-                //alert('玩完自动提交分数' + this.distance);
 
-                //$.ajax
-                //({
-                //    url: "/Boats/Sigunp",
-                //    type: "post",
-                //    data: { MinigameId: $("#MinigameId").val(), point: point },
-                //    error: function () {
-                //
-                //    },
-                //    success: function (result) {
-                //        //console.log(result);
-                //    }
-                //});
+
+                //提交结果
+                //alert('玩完自动提交分数' + this.score);
 
                 var ruleid = $("#ruleid").val();
                 var weid = $("#weid").val();
-
+                var md5sign = MD5('md5game' + this.distance);
                 var url = 'index.php?i='+weid+'&c=entry&id='+ruleid+'&do=AutoSaveCredit&m=weisrc_dragonboat#';
-
+                window.sharedata['title'] = window.sharedata['title'].replace("#score#", this.distance);
                 $.ajax
                 ({
                     url: url,
                     type:'POST',
-                    data: {point:this.distance},
+                    data: {
+                        point:this.distance,
+                        md5sign:md5sign
+                    },
                     dataType:'json',
                     error: function () {
                         //alert('网络通讯异常，请稍后再试！');
@@ -178,7 +168,7 @@ define(function (require, exports, module) {
                         if (result.success == 1) {
 
                         } else if (result.success == 0) {
-
+                            //alert(result.msg);
                         } else {
                             alert('未知状态');
                         }

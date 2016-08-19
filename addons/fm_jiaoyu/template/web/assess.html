@@ -40,7 +40,11 @@
                         <input class="form-control" name="keyword" id="" type="text" value="{$_GPC['keyword']}">
                     </div>
                     <div class="col-sm-2 col-lg-2">
-                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>&nbsp;&nbsp;<a class="btn btn-primary" href="{php echo $this->createWebUrl('assess', array('op' => 'post', 'schoolid' => $schoolid))}"><i class="fa fa-plus"></i> 添加教师信息</a>
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+						&nbsp;&nbsp;<a class="btn btn-primary" href="{php echo $this->createWebUrl('assess', array('op' => 'post', 'schoolid' => $schoolid))}"><i class="fa fa-plus"></i> 添加教师信息</a>
+					</div>
+					<div class="col-sm-2 col-lg-2">	
+						&nbsp;&nbsp;<a class="btn btn-danger" href="{php echo $this->createWebUrl('assess', array('op' => 'clear', 'schoolid' => $schoolid))}"><i class="fa fa-trash-o"></i> 清除垃圾信息</a>
                     </div>
                 </div>
             </form>
@@ -121,7 +125,7 @@
                     <td><a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('assess', array('id' => $item['id'], 'op' => 'add', 'schoolid' => $schoolid))}" title="添加课程"><i class="fa fa-qrcode">&nbsp;&nbsp;添加课程</i></a></td>					
 					<td>
 					{if !empty($item['openid'])}
-					<img src="{$member[$item['uid']]['avatar']}" width="50"  onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$member[$item['uid']]['nickname']} </br>
+					<img src="{$item['avatar']}" width="50"  onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></br>{$item['nickname']} </br>
 					<a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('assess', array('id' => $item['id'], 'op' => 'jiebang', 'schoolid' => $schoolid))}" onclick="return confirm('此操作不可恢复，确认解绑？');return false;" title="解绑"><i class="fa fa-times"></i>解绑</a>
 					{else}
 					<span title="{$item['code']}">绑定码:{$item['code']}</span>
@@ -130,8 +134,8 @@
 					
 					<td>
 
-                    {if $item['status'] == 2}<span class="label label-danger">校长</span>{else if $item['status'] == 1}<span class="label label-success">教员</span>{/if}
-
+                    {if $item['status'] == 2}<span class="label label-danger">校长</span>{else if $item['status'] == 1}<span class="label label-success">教员</span>{/if}</br></br>
+                    {if $item['is_show'] == 1}<span class="label label-danger">隐藏</span>{else if $item['is_show'] == 0}<span class="label label-success">显示</span>{/if}
 					</td>
 					
 					<td style="text-align:right;">
@@ -176,7 +180,7 @@ $(function(){
                 url,
                 {idArr:id},
                 function(data){
-                    alert(data.error);
+                    alert('操作成功!');
                     location.reload();
                 },'json'
             );
@@ -213,6 +217,15 @@ $(function(){
                         <span class="help-block"></span>
                     </div>
                 </div>
+				<div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">前端是否显示</label>
+                    <div class="col-sm-9">
+                        <label for="isshow1" class="radio-inline"><input type="radio" name="is_show" value="1" id="isshow1" {if empty($item) || $item['is_show'] == 1}checked="true"{/if} /> 否</label>
+                        &nbsp;&nbsp;&nbsp;
+                        <label for="isshow2" class="radio-inline"><input type="radio" name="is_show" value="0" id="isshow2"  {if !empty($item) && $item['is_show'] == 0}checked="true"{/if} /> 是</label>
+                        <span class="help-block"></span>
+                    </div>
+                </div>				
 				<div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">选择性别</label>
                     <div class="col-sm-9">
@@ -285,8 +298,8 @@ $(function(){
             </div>
 			   <div class="panel-heading">
                 录入教学信息
-               </div>
-            <div class="panel-body">
+               </div>					 
+            <div class="panel-body">		
 			    <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">选择授课年级</label>
 					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">授课年级1</label>

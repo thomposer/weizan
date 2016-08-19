@@ -4,7 +4,7 @@
 <script type="text/javascript" src="../addons/yzmhb_pzh/js/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="../addons/yzmhb_pzh/js/king-table.js"></script>
 <div class="main">
-<form id="redSet" class="form form-horizontal" action="{php echo $this->createWebUrl('search')}" method="post">
+<form id="redSet" class="form form-horizontal" action="{php echo $this->createWebUrl('search')}" method="post" enctype="multipart/form-data">
  <div class="panel panel-default">
      <div class="panel-heading">
        现有口令查询
@@ -43,22 +43,38 @@
                        <span class="help-block">可以输入包含的关键字</span>
                     </div>
                 </div>
-        </div>
+              </div>
 
-       <div class="panel-body">
-       <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-1 control-label"></label>
-                     
-                    <div class="col-md-2 col-lg-1" >
-                        <input name="submit" type="submit" value="查询" class="btn btn-primary btn-block" />
-                        
-                        <input type="hidden" name="token" value="{$_W['token']}" />
-                    </div>
-                     <div class="col-md-2 col-lg-1" >
-                      <input name="submit" type="submit" value="导出" class="btn btn-primary btn-block" />
-                     </div>
+              <div class="panel-body">
+               <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-1 control-label"></label>
+
+                <div class="col-md-2 col-lg-1" >
+                  <input name="submit" type="submit" value="查询" class="btn btn-primary btn-block" />
+
+                  <input type="hidden" name="token" value="{$_W['token']}" />
                 </div>
-        </div>
+                <div class="col-md-2 col-lg-1" >
+                  <input name="submit" type="submit" value="导出" class="btn btn-primary btn-block" />
+                </div>
+                <div class="col-md-2 col-lg-1" >
+                  <input name="submit" type="submit" value="导入" class="btn btn-primary btn-block" />
+                </div>
+
+              </div>
+              <div class="form-group">
+
+               <label class="col-xs-12 col-sm-3 col-md-1 control-label"></label>
+               <div class="col-md-2 col-lg-1" >
+
+                <input name="submit" type="submit" value="导入" class="btn btn-primary btn-block" />
+              </div>
+                <div class="col-md-2 col-lg-3" >
+                 <input  type="file" name="excelfile" />
+               </div>
+              
+            </div>
+          </div>
 
 </form> 
 <div class="panel-body">

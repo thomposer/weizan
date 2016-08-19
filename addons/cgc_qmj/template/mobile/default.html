@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>{$settings['title']}</title>
+<link rel="stylesheet" href="{STYLE_PATH}/jquery.fullPage.css">
+<link href="{STYLE_PATH}/c.css" rel="stylesheet" type="text/css">
+
+<script src="{STYLE_PATH}/jquery.1.10.2.min.js"></script>
+<script src="{STYLE_PATH}/jquery-ui.min.js"></script>
+<!--<script src="http://578app.oss-cn-hangzhou.aliyuncs.com/2015xd/jquery-ui-1.10.3.min.js"></script>-->
+<script src="{STYLE_PATH}/jquery.fullPage.min.js"></script>
+{template 'jssdk'}
+ <script language="javascript">
+
+function addcount(x){
+    $.ajax({   
+        type: "get",   
+        url: "{php echo $this->createMobileUrl('addcount')}",
+		success: function() {   
+		  localStorage["addcount"]=1;		 
+        }  		
+      });  
+	}
+</script> 
+<script>
+$(document).ready(function() {
+	$('#wz').text("{$settings['wz']}".replace("#num#","{$settings['dd_num']}"));
+	$.fn.fullpage({
+	 	//slidesColor: ['#88c70a', '#ffcc1b', '#3498db', '#456087','#ff7878','#37144b'],
+		anchors: ['page1', 'page2', 'page3', 'page4' ],
+		//navigation: true 
+		afterRender: function(){
+				$('.p11').animate({top:'0px',opacity:'1'},300);
+			},
+			
+		afterLoad: function(anchorLink, index){
+				if(index == 1 ){
+					$('.p11').animate({top:'0px',opacity:'1'},300);
+				}
+				
+				if(index == 2 ){
+					$('.p21').animate({top:'0px',opacity:'1'},300);
+				}
+				
+				if(index == 3 ){
+					$('.p31').animate({top:'0px',opacity:'1'},300);
+ 
+				}
+				if(index == 4 ){
+					$('.p41').animate({top:'0px',opacity:'1'},300);
+					//addcount(44);
+		 
+				}
+				 
+				 
+			},
+		onLeave: function( index,anchorLink){
+				if(index == 1 ){
+					$('.p11').animate({top:'20px',opacity:'0'},300);
+				}
+				
+				if(index == 2 ){
+					$('.p21').animate({top:'20px',opacity:'0'},300);
+				}
+				
+				if(index == 3 ){
+					$('.p31').animate({top:'20px',opacity:'0'},300);
+				 
+				}
+				if(index == 4 ){
+					$('.p41').animate({top:'20px',opacity:'0'},300);
+					
+					 
+				}
+			}
+			
+	});
+});
+ 
+
+function playVid()
+{
+  document.getElementById("video1").play();
+}
+  
+ function cmusic(){
+ 	if(document.getElementById("video1").paused){
+		document.getElementById("video1").play();
+	 	$("#musicx").addClass("xxxx");
+		return;
+	}
+	document.getElementById("video1").pause();
+	$("#musicx").removeClass("xxxx");
+	 
+  }
+  
+  
+   function dododo(){		 
+	 	$('.p42').animate({top:'0px',opacity:'1'},3300);	
+		$('#s2').fadeOut(500);	
+		$('#s3').delay(300).animate({opacity:'1'},3300);	
+		if (localStorage["addcount"] ==1){
+	      return;
+	     }		
+		$('#wz').text("{$settings['wz']}".replace("#num#","{php echo $settings['dd_num']+1}"));	
+		addcount();
+		
+  }
+  var m = 1;
+  function lh(){
+	cgpic(m);
+	}
+	
+function cgpic(mmmm){
+
+	if(mmmm==1){
+		$('#pp1').fadeOut(500);
+		$('#pp2').delay(500).fadeIn(500);
+		m=2
+		return false;
+	}
+	
+	if(mmmm==2){
+		$('#pp2').fadeOut(500);
+		$('#pp3').delay(500).fadeIn(500);
+		m=3
+		return false;
+	}
+	
+	if(mmmm==3){
+		$('#pp3').fadeOut(500);
+		$('#pp1').delay(500).fadeIn(500);
+		m=1
+		return false;
+	}
+	
+	
+	 
+	 
+}
+  
+  function show(){
+	showBg();
+	$("#twindow").css({"top":""+parseInt($(document).scrollTop()+30)+"px"});
+	$("#twindow").fadeIn(500);
+	$("#fullbg").fadeIn(500);
+	//addcount(40);
+	mytime = setInterval("lh()",3000);
+	}
+	
+	function showBg() {
+    var bh = $("body").height();
+    var bw = $("body").width();
+    $("#fullbg").css({
+        height:bh,
+        width:bw,
+        display:"none"
+    });
+	
+	 
+
+}
+
+function bi(){
+	$("#twindow").fadeOut(500);
+	$("#fullbg").fadeOut(500);	
+	clearInterval(mytime)
+}
+ 
+</script>
+
+</head>
+
+<body onLoad="playVid()">
+<div style="display:none">
+<audio controls loop  id="video1" style="display: none; position: fixed; top:20px; z-index:40 ">
+ 
+  <source src="{$settings['music_url']}" type="audio/mpeg">
+</audio>
+</div>
+
+<div id="musicx" class="xxxx" style=" background:url({STYLE_PATH}/firstpage-icon.png) -28px -3px; width: 24px; height:24px; position:fixed; right:20px; top:20px; z-index:30; background-size:100px 300px; " onclick="cmusic();" ></div>
+
+<div class="section">
+
+	<div class="upupup" style=" background:url({STYLE_PATH}/firstpage-icon.png) 0px -93px; width: 70px; height:130px;   background-size:100px 300px; 	position: absolute; bottom:15px; left:50%; margin-left:-35px; z-index:30;  " ></div>
+
+    <img src="{if $settings['pic1']}{php echo tomedia($settings['pic1'])}{else}{STYLE_PATH}/1-1.png{/if}" width="100%" height="100%" class="p11" style=" z-index:10"   >
+	<img src="{if $settings['fpic1']}{php echo tomedia($settings['fpic1'])}{else}{STYLE_PATH}/f1-1.jpg{/if}" width="100%" height="108%" style=" position:absolute; top:0px; z-index:2">
+</div>
+
+<div class="section">
+	<img src="{STYLE_PATH}/jt.png" width="35" height="20"  class="upupup" style="z-index:30">
+	 <img src="{if $settings['pic2']}{php echo tomedia($settings['pic2'])}{else}{STYLE_PATH}/2-1.png{/if}" width="100%" height="100%" class="p21" style=" z-index:10">
+	<img src="{if $settings['fpic2']}{php echo tomedia($settings['fpic2'])}{else}{STYLE_PATH}/f2-1.jpg{/if}" width="100%" height="108%"  style=" position:absolute; top:0px; z-index:2">	
+</div>
+
+<div class="section">
+<img src="{STYLE_PATH}/jt.png" width="35" height="20"  class="upupup" style="z-index:30">
+ 
+	<img src="{if $settings['pic3']}{php echo tomedia($settings['pic3'])}{else}{STYLE_PATH}/3-1.png{/if}" width="100%" height="100%"  class="p31" style=" z-index:10">
+	<img src="{if $settings['fpic3']}{php echo tomedia($settings['fpic3'])}{else}{STYLE_PATH}/f3-1.jpg{/if}" width="100%" height="108%"  style=" position:absolute; top:0px; z-index:2">	
+</div>
+
+
+
+<div class="section">
+	<div id="mcover" onclick="this.style.display='none';"><img src="{STYLE_PATH}/guide.png"></div> 
+    
+
+<div id="fullbg"></div>
+
+  <div id="s1" style=" position: absolute; height:24px; bottom:110px; width:100%; color:#FFF; z-index:10; text-align:center">
+   <span id="wz">
+     
+   </span>
+  
+<!--    已有<span id="renshu">{$settings['wz']}</span>人为周总理点灯祈福  -->
+  </div>
+ 	<div id="s2" style=" position: absolute; height:24px; bottom:70px; width:100%; color:#FFF; z-index:20; text-align:center; border:0px  " ><a onClick="dododo();">
+ 	<img src="{if $settings['dian']}{php echo tomedia($settings['dian'])}{else}{STYLE_PATH}/dian.png{/if}" width="115" height="34" border="0" ></a></div>
+ 	<div id="s3" style=" position: absolute; height:24px; bottom:70px; width:100%; z-index:15; opacity:0  "><table width="115" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>  
+    <td width="115"><a onClick="document.getElementById('mcover').style.display='block';addcount();">
+    <img src="{if $settings['dian3']}{php echo tomedia($settings['dian3'])}{else}{STYLE_PATH}/dian3.png{/if}"
+    width="115" height="34"   border="0"></a></td>
+  </tr>
+</table>
+</div>
+  <img src="{if $settings['pic4']}{php echo tomedia($settings['pic4'])}{else}{STYLE_PATH}/4-1.png{/if}" width="100%" height="100%"  class="p41" style=" z-index:10">
+  <img src="{if $settings['fpic41']}{php echo tomedia($settings['fpic41'])}{else}{STYLE_PATH}/f4-11.jpg{/if}" width="100%" height="108%"  class="p42" style=" z-index:8">
+  <img src="{if $settings['fpic42']}{php echo tomedia($settings['fpic42'])}{else}{STYLE_PATH}/f4-12.jpg{/if}" width="100%" height="108%"  style=" position:absolute; top:0px; z-index:2">	
+</div>
+
+ 
+<div style="display: none;">
+    {php echo htmlspecialchars_decode($settings['cnzz'])}
+</div>
+</body>
+</html>

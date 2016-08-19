@@ -1,0 +1,72 @@
+{template 'common/header'}
+{template 'navs/setting'}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        老友归来
+    </div>
+    <div class="panel-body">
+        <form action="" method="post"  class="form-horizontal" enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">欢迎语</label>
+                <div class="col-sm-8 col-lg-9 col-xs-12">
+                    <textarea name="welcome"  class="form-control" id="" cols="30" rows="10">{$item['welcome']}</textarea>
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">奖励开关</label>
+                <div class="col-sm-8 col-lg-9 col-xs-12">
+                    <label class="radio-inline">
+                        <input type="radio" name="leave_time_open" value="1" {if $item['leave_time_open']==1}checked="checked"{/if}> 开启
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="leave_time_open" value="0" {if $item['leave_time_open']==0}checked="checked"{/if}> 关闭
+                    </label>
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div id="leave_time_open" style="display:{if $item['leave_time_open']==1}block;{else}none;{/if}">
+                <div class="form-group" >
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">离开时间</label>
+                    <div class="col-sm-8 col-lg-9 col-xs-12">
+                        <input type="text" name="leave_time" placeholder="" value="{$item['leave_time']}" class="form-control"/>
+                        <span class="help-block">单位为天</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">奖励积分</label>
+                    <div class="col-sm-8 col-lg-9 col-xs-12">
+                        <input type="text" name="credit1" placeholder="" value="{$item['credit1']}" class="form-control"/>
+                        <span class="help-block"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">奖励余额</label>
+                    <div class="col-sm-8 col-lg-9 col-xs-12">
+                        <input type="text" name="credit2" placeholder="" value="{$item['credit2']}" class="form-control"/>
+                        <span class="help-block"></span>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                $('input[name="leave_time_open"]').on('change keyup',function(){
+                    var _value = $(this).val();
+                    if(_value == 1){
+                        $('#leave_time_open').show();
+                    }else{
+                        $('#leave_time_open').hide();
+                    }
+                });
+            </script>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-md-offset-2 col-lg-offset-1 col-xs-12 col-sm-10 col-md-10 col-lg-11">
+                    <input name="submit" type="submit" value="提交" class="btn btn-primary span3" />
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{template 'common/footer'}

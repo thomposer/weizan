@@ -53,9 +53,9 @@ if(!function_exists('insert_cookie')) {
 	{
 		global $_W, $_GPC;
 		$session = base64_encode(json_encode($data));
-		isetcookie($key, $session, !empty($_GPC['rember']) ? 7 * 86400 : 0);
+		setcookie($_W['config']['cookie']['pre'].$key, $session);
 	}
-	}
+}
 
 //检查用户是否登录
 if(!function_exists('check_hotel_user_login')) {

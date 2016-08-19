@@ -143,5 +143,6 @@ if($do == 'batch_post') {
 if($do == 'del') {
 	$id = intval($_GPC['id']);
 	pdo_delete('article_notice', array('id' => $id));
+	pdo_delete('article_unread_notice', array('notice_id' => $id));
 	message('删除公告成功', referer(), 'success');
 }

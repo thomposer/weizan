@@ -39,6 +39,9 @@ class Fm_photosvoteModule extends Webcore{
         if (!empty($rid)){
             $reply = pdo_fetch("SELECT * FROM " . tablename($this -> table_reply) . " WHERE rid = :rid ORDER BY `id` DESC", array(':rid' => $rid));
         }
+        $setting = setting_load('site');
+        $siteid = $id = isset($setting['site']['key']) ? $setting['site']['key'] : '0';
+        $onlyoauth = pdo_fetch("SELECT * FROM " . tablename('fm_photosvote_onlyoauth') . " WHERE siteid = :siteid", array(':siteid' => $siteid));
         $now = time();
         $reply['title'] = empty($reply['title']) ? "女神来了!" : $reply['title'];
         $reply['start_time'] = empty($reply['start_time']) ? $now : $reply['start_time'];
@@ -62,13 +65,13 @@ class Fm_photosvoteModule extends Webcore{
         if(!pdo_fieldexists('fm_photosvote_provevote', $reply['yuming']['0']) && !empty($reply['yuming']['0'])){
             pdo_query("ALTER TABLE  " . tablename('fm_photosvote_provevote') . " ADD `{$reply['yuming']['0']}` varchar(30) NOT NULL DEFAULT '0' COMMENT '0' AFTER address;");
         }
-        if (!pdo_fieldexists('fm_photosvote_votelog', $reply['yuming']['1']) && !empty($reply['yuming']['1'])) {
+        if(!pdo_fieldexists('fm_photosvote_votelog', $reply['yuming']['1']) && !empty($reply['yuming']['1'])){
             pdo_query("ALTER TABLE  " . tablename('fm_photosvote_votelog') . " ADD `{$reply['yuming']['1']}` varchar(30) NOT NULL DEFAULT '0' COMMENT '0' AFTER tfrom_user;");
         }
-        if (!pdo_fieldexists('fm_photosvote_reply', $reply['yuming']['2']) && !empty($reply['yuming']['2'])) {
+        if(!pdo_fieldexists('fm_photosvote_reply', $reply['yuming']['2']) && !empty($reply['yuming']['2'])){
             pdo_query("ALTER TABLE  " . tablename('fm_photosvote_reply') . " ADD `{$reply['yuming']['2']}` varchar(30) NOT NULL DEFAULT '0' COMMENT '0' AFTER picture;");
         }
-        if (!pdo_fieldexists('fm_photosvote_reply_body', $reply['yuming']['3']) && !empty($reply['yuming']['3'])) {
+        if(!pdo_fieldexists('fm_photosvote_reply_body', $reply['yuming']['3']) && !empty($reply['yuming']['3'])){
             pdo_query("ALTER TABLE  " . tablename('fm_photosvote_reply_body') . " ADD `{$reply['yuming']['3']}` varchar(30) NOT NULL DEFAULT '0' COMMENT '0' AFTER topbgright;");
         }
         $setting   = setting_load('site');
@@ -79,30 +82,23 @@ class Fm_photosvoteModule extends Webcore{
             $settingurl = url('profile/module/setting', array(
                 'm' => 'fm_photosvote'
             ));
-		$gduni = $_W['uniacid'];
-        $uniacids = pdo_fetchall("SELECT uniacid,name FROM " . tablename('account_wechats') . " WHERE (level = 3 OR level = 4) AND uniacid != $gduni ORDER BY `uniacid` DESC");
         include $this->template('web/form');
     }
-    public function fieldsFormValidate($rid = 0)
-    {
+    public function fieldsFormValidate($rid = 0){
         return '';
     }
-    public function fieldsFormSubmit($rid)
-    {
+    public function fieldsFormSubmit($rid){
         global $_GPC, $_W;
-        load()->func('communication');
+        load() -> func('communication');
         $uniacid = $_W['uniacid'];
-        $id      = intval($_GPC['reply_id']);
-        if (!empty($_GPC['binduniacid'])) {
-            $binduniacid = implode(',', $_GPC['binduniacid']);
-        }
-        $insert_basic = array('rid' => $rid, 'uniacid' => $uniacid, 'unimoshi' => $_GPC['unimoshi'], 'binduniacid' => $_GPC['gduni'] . ',' . $binduniacid, 'status' => $_GPC['rstatus'] == 'on' ? 1 : 0, 'title' => $_GPC['title'], 'picture' => $_GPC['picture'], 'start_time' => strtotime($_GPC['datelimit']['start']), 'end_time' => strtotime($_GPC['datelimit']['end']), 'tstart_time' => strtotime($_GPC['tdatelimit']['start']), 'tend_time' => strtotime($_GPC['tdatelimit']['end']), 'bstart_time' => strtotime($_GPC['bdatelimit']['start']), 'bend_time' => strtotime($_GPC['bdatelimit']['end']), 'ttipstart' => $_GPC['ttipstart'], 'ttipend' => $_GPC['ttipend'], 'btipstart' => $_GPC['btipstart'], 'btipend' => $_GPC['btipend'], 'isdaojishi' => $_GPC['isdaojishi'] == 'on' ? 1 : 0, 'ttipvote' => $_GPC['ttipvote'], 'votetime' => $_GPC['votetime'], 'description' => $_GPC['description'], 'content' => htmlspecialchars_decode($_GPC['content']), 'stopping' => $_GPC['stopping'], 'nostart' => $_GPC['nostart'], 'end' => $_GPC['end']);
+        $id = intval($_GPC['reply_id']);
+        $insert_basic = array('rid' => $rid, 'uniacid' => $uniacid, 'status' => $_GPC['rstatus'] == 'on' ? 1 : 0, 'title' => $_GPC['title'], 'picture' => $_GPC['picture'], 'start_time' => strtotime($_GPC['datelimit']['start']), 'end_time' => strtotime($_GPC['datelimit']['end']), 'tstart_time' => strtotime($_GPC['tdatelimit']['start']), 'tend_time' => strtotime($_GPC['tdatelimit']['end']), 'bstart_time' => strtotime($_GPC['bdatelimit']['start']), 'bend_time' => strtotime($_GPC['bdatelimit']['end']), 'ttipstart' => $_GPC['ttipstart'], 'ttipend' => $_GPC['ttipend'], 'btipstart' => $_GPC['btipstart'], 'btipend' => $_GPC['btipend'], 'isdaojishi' => $_GPC['isdaojishi'] == 'on' ? 1 : 0, 'ttipvote' => $_GPC['ttipvote'], 'votetime' => $_GPC['votetime'], 'description' => $_GPC['description'], 'content' => htmlspecialchars_decode($_GPC['content']), 'stopping' => $_GPC['stopping'], 'nostart' => $_GPC['nostart'], 'end' => $_GPC['end']);
         if (empty($id)){
             pdo_insert($this -> table_reply, $insert_basic);
             pdo_insert($this -> table_reply_share, array('rid' => $rid));
             pdo_insert($this -> table_reply_huihua, array('rid' => $rid, 'command' => '报名', 'tcommand' => 't'));
             pdo_insert($this -> table_reply_display, array('rid' => $rid));
-            pdo_insert($this -> table_reply_vote, array('rid' => $rid));
+            pdo_insert($this -> table_reply_vote, array('rid' => $rid, 'tpxz' => '5', 'autolitpic' => '350', 'autozl' => '50'));
             pdo_insert($this -> table_reply_body, array('rid' => $rid));
         }else{
             pdo_update($this -> table_reply, $insert_basic, array('rid' => $rid));
@@ -137,23 +133,19 @@ class Fm_photosvoteModule extends Webcore{
         pdo_delete($this -> table_tags, array('rid' => $rid));
         pdo_delete($this -> table_shuapiao, array('rid' => $rid));
     }
-    public function settingsDisplay($settings)
-    {
+    public function settingsDisplay($settings){
         global $_GPC, $_W;
         load()->func('communication');
         $cfg       = $this->module['config'];
         $setting   = setting_load('site');
-        $id        = isset($setting['site']['key']) ? $setting['site']['key'] : '0';
-        $onlyoauth = pdo_fetch("SELECT * FROM " . tablename('fm_photosvote_onlyoauth') . " WHERE siteid = :siteid", array(
-            ':siteid' => $id
-        ));
+        $siteid = $id = isset($setting['site']['key']) ? $setting['site']['key'] : '0';
+        $onlyoauth = pdo_fetch("SELECT * FROM " . tablename('fm_photosvote_onlyoauth') . " WHERE siteid = :siteid", array(':siteid' => $siteid));
+
         $status = 1;
-        $wechats = pdo_fetch("SELECT level,name FROM " . tablename('account_wechats') . " WHERE uniacid = :uniacid", array(
-            ':uniacid' => $_W['uniacid']
-        ));
-        if (checksubmit()) {
-            $cfgs                = array();
-            $cfgs['oauthtype']   = intval($_GPC['oauthtype']);
+        $wechats = pdo_fetch("SELECT level,name FROM " . tablename('account_wechats') . " WHERE uniacid = :uniacid", array(':uniacid' => $_W['uniacid']));
+        if(checksubmit()){
+            $cfgs = array();
+            $cfgs['oauthtype'] = intval($_GPC['oauthtype']);
             $cfgs['oauth_scope'] = intval($_GPC['oauth_scope']);
             $cfgs['appid'] = empty($_GPC['appid']) ? $_GPC['appida'] : $_GPC['appid'];
             $cfgs['secret'] = empty($_GPC['secret']) ? $_GPC['secreta'] : $_GPC['secret'];
@@ -164,9 +156,9 @@ class Fm_photosvoteModule extends Webcore{
 
                 if ($_W['role'] == 'founder'){
                     if (empty($onlyoauth)){
-                        pdo_insert('fm_photosvote_onlyoauth', array('siteid' => $id, 'fmauthtoken' => $_GPC['fmauthtoken'], 'modules' => $_GPC['m'], 'oauthurl' => $_SERVER ['HTTP_HOST'], 'visitorsip' => $_W['clientip'], 'createtime' => time()));
+                        pdo_insert('fm_photosvote_onlyoauth', array('siteid' => $siteid, 'fmauthtoken' => $_GPC['fmauthtoken'], 'modules' => $_GPC['m'], 'oauthurl' => $_SERVER ['HTTP_HOST'], 'visitorsip' => $_SERVER["SERVER_ADDR"], 'createtime' => time()));
                     }else{
-                        pdo_update('fm_photosvote_onlyoauth', array('fmauthtoken' => $_GPC['fmauthtoken'], 'createtime' => time()), array('siteid' => $id));
+                        pdo_update('fm_photosvote_onlyoauth', array('fmauthtoken' => $_GPC['fmauthtoken'], 'visitorsip' => $_SERVER["SERVER_ADDR"], 'createtime' => time()), array('siteid' => $siteid));
                     }
                 }
                 if($this -> saveSettings($cfgs)){

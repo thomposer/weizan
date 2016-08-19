@@ -64,7 +64,25 @@
 				{template 'web/form_vote'}
 			</div>
 {elseif $op == 'rbody'}
-			<div class="panel-heading">自定义页面设置</div>
+			<div class="panel-heading">
+				<a class="btn btn-default" href="javascript:;" onclick="openbody('photosvote')">首页</a>
+				<a class="btn btn-default" href="javascript:;" onclick="openbody('tuser')">用户详情</a>
+				<a class="btn btn-default" href="javascript:;" onclick="openbody('paihang')">排行榜</a>
+				<a class="btn btn-default" href="javascript:;" onclick="openbody('reg')">报名页</a>
+				<a class="btn btn-default" href="javascript:;" onclick="openbody('des')">活动详情</a>
+				<a class="btn btn-default" href="javascript:;" onclick="openbody('tags')">选择分组</a>
+				<a class="btn btn-default" href="javascript:;" onclick="openbody('other')">其他</a>
+			</div>
+			<script type="text/javascript">
+				function openbody(type) {
+					$(".bodyclose").hide();
+					$("#" + type + "_open").show();
+					//if (status == true) {
+						$("#" + type).show();
+					//}
+					
+				}
+			</script>
 			<div class="panel-body">
 				{template 'web/form_body'}
 			</div>

@@ -23,7 +23,23 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="pull-right col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                    <label class="col-xs-12 col-sm-2 col-md-2 control-label">房号</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" name="room" id="" type="text" value="{$_GPC['room']}">
+                    </div>
+            </div>
+            <div class="form-group">
+                      <label class="col-xs-12 col-sm-2 col-md-2 control-label">是否注册</label>
+                      <div class="col-sm-8 col-md-8 col-lg-4 col-xs-12">
+                        <select name='status' class="form-control">
+                            <option value="1" {if $_GPC['status'] == '1'} selected="selected" {/if}>已注册</option>
+                            <option value="2" {if $_GPC['status'] == '2'} selected="selected" {/if}>未注册</option>
+                        </select>
+                      </div>
+                    </div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label"></label>
+                <div class="col-sm-4">
                     <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
                 </div>
             </div>
@@ -86,6 +102,7 @@
                 <td class="text-left">
                     <input name="token" type="hidden" value="{$_W['token']}" />
                     <input type="submit" class="btn btn-primary span2" name="delete" value="删除" /> &nbsp;
+                    <button type="submit" class="btn btn-success" onclick="return confirm('确认短信通知用户吗？'); return false;" name="sms" value="yes">短信通知</button>
                     <a class="btn btn-default btn-sm" href="javascript:;" data-toggle="modal" data-target="#room_{$id}"><i class='glyphicon glyphicon-plus'></i>添加房号</a>
                     <button type="submit" name="export" value="1" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-download-alt"></i>导出房号</button>
                     <!-- <a href="{php echo $this->createWebUrl('region',array('op' => 'room','rid' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-download-alt"></i>导出房号</a> -->

@@ -47,7 +47,9 @@
 	<div class="swiper-wrapper">
 		{loop $slide $item}
 		<div class="swiper-slide">
+			<a href="{if empty($item['url'])}#{else}{$item['url']}{/if}">
 			<img src="{php echo tomedia($item['attachment']);}" width="100%"/>
+			</a>
 		</div>
 		{/loop}
 	</div>

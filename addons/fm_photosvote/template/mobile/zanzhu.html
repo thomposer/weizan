@@ -1,14 +1,15 @@
 {if !empty($advs)}
 <style>
-.con .tips { height: 50px;  line-height: 50px;  color: #fff45c;}
-.con .tips i{ height:50px;background:url({if empty($rbody['xinbg'])}{FM_STATIC_MOBILE}public/photos/xin.png{else}{php echo toimage($rbody['xinbg'])}{/if}) no-repeat 0 center;display:block;background-size:24px;padding-left:30px;margin:0 auto;font-size:16px;}
-.zanzhu{ background:{if empty($bgarr['bodytscolor'])}rgba(46, 1, 68, 0.46){else}{$bgarr['bodytscolor']}{/if} url({php echo toimage($bgarr['bodytsbg'])}) center no-repeat;
-border:0px solid #5a009c;padding:10px 10px 0;margin-bottom:10px;overflow:hidden;}
-
+.zz { height: 50px;  line-height: 50px;  color: {$rbody['bodytextcolor']};}
+ .zz i{ height:50px;background:url({if empty($rbody['xinbg'])}{FM_STATIC_MOBILE}public/photos/xin.png{else}{php echo toimage($rbody['xinbg'])}{/if}) no-repeat 0 center;display:block;background-size:24px;padding-left:30px;margin:0 auto;font-size:16px;}
+.zanzhu{border:0;padding:10px 10px 0;margin-bottom:10px;overflow:hidden;}
+ .zz i {
+    color: {$rbody['bodytextcolor']};
+}
 .zanzhu li{ 
-{if $rbody['zanzhums'] == 1}
+{if $rdisplay['zanzhums'] == 1}
 width:49%;
-{elseif $rbody['zanzhums'] == 2}
+{elseif $rdisplay['zanzhums'] == 2}
 width:100%;
 {else}
 width:49%;
@@ -19,7 +20,7 @@ float:left;margin:0 2% 10px 0;overflow:hidden;}
 .zanzhu li img{ width:100%;}
 </style>
 
-<p class="tips"><i>活动赞助商</i></p>
+<p class="tips zz"><i>活动赞助商</i></p>
 <ul class="zanzhu">
 	 {loop $advs $adv}
 		<li>

@@ -1,0 +1,15 @@
+<div class="bottom-bar">
+    <ul class="row">
+        <li class="small-4 medium-4 columns">
+            <a class="bottom-nav {if $op=='b'} current{/if}" href="{php echo $this->createMobileUrl('board',array('op'=>'b'),true)}"><span>挂机加粉</span></a>
+        </li>
+        <li class="small-4 medium-4 columns ">
+            <a class="bottom-nav free_vip {if $op=='default'} current{/if}" href="{php echo $this->createMobileUrl('book',array('op'=>'default'),true)}"><span>{if $fans['vipstatus']=='2'}{$credittxt}充值{else}购买会员{/if}</span>
+            </a>
+        </li> 
+        <li class="small-4 medium-4 columns ">
+            <a class="bottom-nav free_vip {if $op=='me'} current{/if}" href="{php echo $this->createMobileUrl('me',array('op'=>'me'),true)}"><span>个人中心</span>
+            </a>
+        </li>
+    </ul>
+</div>

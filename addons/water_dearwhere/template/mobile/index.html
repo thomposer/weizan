@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{$system['theme']}</title>
+<meta name="description" content="在哪呢" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<link   type="text/css"		  href="../addons/water_dearwhere/template/css/style.css" rel="stylesheet" />
+<script type="text/javascript" src="../addons/water_dearwhere/template/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../addons/water_dearwhere/template/js/jquery.masonry.min.js"></script>
+<script type="text/javascript" src="../addons/water_dearwhere/template/js/common.js"></script></head>
+<body>
+{if !empty($frommy)}
+ {if $frommy!= $opendi }
+ <input type="hidden" id="same" value="0">
+ {else}
+  <input type="hidden" id="same" value="1">
+ {/if}
+
+{else}
+ <input type="hidden" id="same" value="1">
+{/if}
+{php $shareurl = $_W['siteroot'].'app/'.$this->createMobileUrl('index');}
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key={$system['mapkey']}"></script> 
+    <script>
+        var appid = '{$_W['account']['jssdkconfig']['appId']}';
+        var timestamp = '{$_W['account']['jssdkconfig']['timestamp']}';
+        var nonceStr = '{$_W['account']['jssdkconfig']['nonceStr']}';
+        var signature = '{$_W['account']['jssdkconfig']['signature']}';
+
+        wx.config({
+            debug: false,
+            appId: appid,
+            timestamp: timestamp,
+            nonceStr: nonceStr,
+            signature: signature,
+            jsApiList: [
+                'checkJsApi',
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                'onMenuShareQQ',
+                'getLocation',
+                'openLocation',
+            ]
+        });
+
+        var shareData = {
+                title: '在哪你',
+                desc: '在哪呢',
+                link: '{php echo $shareurl}',
+                imgUrl: 'http://www.zc1987.cn/attachment/images/2/2016/03/UZui8JYOY6ofkZ8J2KKKrIoJ8oKJk8.png'
+            };
+        
+        wx.ready(function () {
+        	
+        	wx.onMenuShareAppMessage({
+                title: shareData.title,
+                desc: shareData.desc,
+                link: shareData.link,
+                imgUrl: shareData.imgUrl,
+                trigger: function (res) {
+                },
+                success: function (res) {
+                },
+                cancel: function (res) {
+                },
+                fail: function (res) {
+                }
+            });
+
+            wx.onMenuShareTimeline({
+                title: shareData.title,
+                link: shareData.link,
+                imgUrl: shareData.imgUrl,
+                success: function () {
+                },
+                cancel: function () {
+                }
+            });
+        	
+        	var same = $("#same").val();
+        	if(same == 0){
+        		
+	            wx.getLocation({
+					type: 'gcj02',
+				    success: function (res) {
+				        var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+				        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+				        var speed = res.speed; // 速度，以米/每秒计
+				        var accuracy = res.accuracy; // 位置精度
+				        // 更新用户坐标为实时坐标
+						doSynclnglat(longitude,latitude);
+				    },
+				    fail:function() {
+				    	alert('fail');
+				    }
+				});
+        	}
+
+
+        });
+
+        wx.error(function (res) {
+        });
+        function doSynclnglat(lng,lat){
+        	
+        	$.ajax({
+    		 	async:true,
+    		 	type:'post',
+    		 	data:{'lat':lat,'lng':lng},
+    		 	url:"{php echo $this->createMobileUrl('setlocation',array('frommy'=>$frommy))}",
+    		 	success:function(data){
+    		 		var json = eval("("+data+")");
+		      	  	if(json.result == 1){
+		      	  	 	  alert('{$system['tips']}');
+		       		  }else{
+		       			  alert(2);
+		       			  
+		       		}
+    	        }
+    		})
+        	//alert(lng+'---'+lat);
+/* 	        AMap.service('AMap.Geocoder',function(){//回调函数
+	            //实例化Geocoder
+	            geocoder = new AMap.Geocoder({
+	                city: "010"//城市，默认：“全国”
+	            });
+	            //TODO: 使用geocoder 对象完成相关功能
+	            var lnglatXY=[lng, lat];//地图上所标点的坐标
+	            geocoder.getAddress(lnglatXY, function(status, result) {
+	                if (status === 'complete' && result.info === 'OK') {
+	                   //获得了有效的地址信息:
+	                   var address = result.regeocode.formattedAddress;
+	                	alert(address);   
+	                	//$("#address").val(address);
+	                }else{
+	                   //获取地址失败
+	                   alert('稍后再试');
+	                }
+	            });  
+	        }); */
+        }
+
+    </script>
+<div class="main">
+<!-- <ul class="squared">
+    <li class="s_xz"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/tj/1.jpg"></a><span>写真</span></li>
+    <li class="s_xg"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/tj/2.jpg"></a><span>性感</span></li>
+    <li class="s_qc"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/tj/3.jpg"></a><span>清纯</span></li>
+    <li class="s_ns"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/tj/4.jpg"></a><span>宅男女神</span></li>
+    <li class="s_sj"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/tj/5.jpg"></a><span>手机壁纸</span></li>
+    <li class="s_pg"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/tj/6.jpg"></a><span>苹果壁纸</span></li>
+    <li class="s_zp"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/tj/7.jpg"></a><span>自拍</span></li>
+</ul> -->
+<div class="container">
+{if empty($simgs)}
+
+  		<div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/539287ebdce69_200_300.jpg"></a><span>热度14</span><p>可爱卡通简约iPhone手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/5391859ee9e44_200_300.jpg"></a><span>热度15</span><p>非主流唯美甜蜜情侣手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/539184db4e676_200_300.jpg"></a><span>热度11</span><p>唯美大自然美丽鲜花手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/5391840f73b94_200_300.jpg"></a><span>热度10</span><p>大自然励志花朵向日葵特写手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/5391830866ca3_200_300.jpg"></a><span>热度6</span><p>诱人甜品黑色朱古力蛋糕图片手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/5392892e2cdf6_200_300.jpg"></a><span>热度5</span><p>张俪王阳明情侣甜蜜写真手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/539287ebdce69_200_300.jpg"></a><span>热度14</span><p>可爱卡通简约iPhone手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/5391859ee9e44_200_300.jpg"></a><span>热度15</span><p>非主流唯美甜蜜情侣手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/539184db4e676_200_300.jpg"></a><span>热度11</span><p>唯美大自然美丽鲜花手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/5391840f73b94_200_300.jpg"></a><span>热度10</span><p>大自然励志花朵向日葵特写手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/5391830866ca3_200_300.jpg"></a><span>热度6</span><p>诱人甜品黑色朱古力蛋糕图片手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/5392892e2cdf6_200_300.jpg"></a><span>热度5</span><p>张俪王阳明情侣甜蜜写真手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/539287ebdce69_200_300.jpg"></a><span>热度14</span><p>可爱卡通简约iPhone手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/5391859ee9e44_200_300.jpg"></a><span>热度15</span><p>非主流唯美甜蜜情侣手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/539184db4e676_200_300.jpg"></a><span>热度11</span><p>唯美大自然美丽鲜花手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/5391840f73b94_200_300.jpg"></a><span>热度10</span><p>大自然励志花朵向日葵特写手机壁纸</p></div>
+        <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/5391830866ca3_200_300.jpg"></a><span>热度6</span><p>诱人甜品黑色朱古力蛋糕图片手机壁纸</p></div>
+ 
+
+{else}
+
+		{php $index = 5;}
+		{loop $simgs $item}
+		
+        <div class="items"><a href="javascript:void(0);"><img src="{$_W['attachurl']}{$item}"></a><span>热度{php echo $index++;}</span><p>{$system['theme']}</p></div>
+		{/loop}
+{/if}
+    </div>
+
+<!-- <div class="container">
+    <div id="images">
+                <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/ea28458647.jpg_195.jpg"></a><span>7张</span><p>温柔美女性感私房照</p></div>
+                <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/b288458643.jpg_195.jpg"></a><span>4张</span><p>甜美可爱美女</p></div>
+                <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/c39c458637.jpg_195.jpg"></a><span>10张</span><p>2014世界杯足球宝贝美女图片</p></div>
+                <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/de16458627.jpg_195.jpg"></a><span>5张</span><p>婚纱美女户外写真</p></div>
+                <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/e1bb458623.jpg_195.jpg"></a><span>5张</span><p>徐冬冬足球宝贝美女图片</p></div>
+                <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/b41e458617.jpg_195.jpg"></a><span>5张</span><p>唯美清纯可爱女生</p></div>
+                <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/6d14458609.jpg_195.jpg"></a><span>12张</span><p>手捧花束的清纯美女</p></div>
+                <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/bb1f458594.jpg_195.jpg"></a><span>11张</span><p>清纯少女清凉一夏</p></div>
+                <div class="items"><a href="javascript:void(0);"><img src="../addons/water_dearwhere/template/images/bed2458586.jpg_195.jpg"></a><span>13张</span><p>裴秀智（Suzy）清纯写真</p></div>
+     </div>
+</div> -->
+
+<script type="text/javascript">
+var tagId=0, offset=9;
+</script>
+<script type="text/javascript" src="../addons/water_dearwhere/template/js/load.js"></script>
+</div>
+
+</body>
+</html>

@@ -41,8 +41,13 @@ session_id($_W['session_id']);
 load()->classs('wesession');
 WeSession::start($_W['uniacid'], CLIENT_IP);
 if (!empty($_GPC['j'])) {
-	$_W['acid'] = intval($_GPC['j']);
-	$_W['account'] = account_fetch($_W['acid']);
+	$acid = intval($_GPC['j']);
+	$_W['account'] = account_fetch($acid);
+	if (is_error($_W['account'])) {
+		$_W['account'] = account_fetch($_W['acid']);
+	} else {
+		$_W['acid'] = $acid;
+	}
 	$_SESSION['__acid'] = $_W['acid'];
 	$_SESSION['__uniacid'] = $_W['uniacid'];
 }
@@ -150,11 +155,13 @@ if ($_W['container'] == 'wechat') {
 		}
 	}
 	if (!empty($jsauth_acid)) {
-		$accountObj = WeAccount::create($jsauth_acid);
-		$_W['account']['jssdkconfig'] = $accountObj->getJssdkConfig();
-		$_W['account']['jsauth_acid'] = $jsauth_acid;
+		$account_api = WeAccount::create($jsauth_acid);
+		if (!empty($account_api)) {
+			$_W['account']['jssdkconfig'] = $account_api->getJssdkConfig();
+			$_W['account']['jsauth_acid'] = $jsauth_acid;
+		}
 	}
-	unset($jsauth_acid, $accountObj);
+	unset($jsauth_acid, $account_api);
 }
 
 $_W['card_permission'] = 0;

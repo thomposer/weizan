@@ -179,8 +179,6 @@ function file_wechat_upload($file, $type = 'image', $name = '') {
 
 function file_remote_upload($filename, $auto_delete_local = true) {
 	global $_W;
-
-
 	if (empty($_W['setting']['remote']['type'])) {
 		return false;
 	}
@@ -233,10 +231,33 @@ function file_remote_upload($filename, $auto_delete_local = true) {
 		$putpolicy = Qiniu\base64_urlSafeEncode(json_encode(array('scope' => $_W['setting']['remote']['qiniu']['bucket'].':'. $filename)));
 		$uploadtoken = $auth->uploadToken($_W['setting']['remote']['qiniu']['bucket'], $filename, 3600, $putpolicy);
 		list($ret, $err) = $uploadmgr->putFile($uploadtoken, $filename, ATTACHMENT_ROOT. '/'.$filename);
+		if ($auto_delete_local) {
+			file_delete($filename);
+		}
 		if ($err !== null) {
 			return error(1, '远程附件上传失败，请检查配置并重新上传');
 		} else {
 			return true;
+		}
+	} elseif ($_W['setting']['remote']['type'] == '4') {
+		require(IA_ROOT.'/framework/library/cos/include.php');
+		$uploadRet = \Qcloud_cos\Cosapi::upload($_W['setting']['remote']['cos']['bucket'], ATTACHMENT_ROOT .$filename,'/'.$filename,'',3 * 1024 * 1024, 0);
+		if ($uploadRet['code'] != 0) {
+			switch ($uploadRet['code']) {
+				case -62:
+					$message = '输入的appid有误';
+					break;
+				case -79:
+					$message = '输入的SecretID有误';
+					break;
+				case -97:
+					$message = '输入的SecretKEY有误';
+					break;
+				case -166:
+					$message = '输入的bucket有误';
+					break;
+			}
+			return error(-1, $message);
 		}
 	}
 }
@@ -313,6 +334,16 @@ function file_remote_delete($file) {
 		} else {
 			return true;
 		}
+	}  elseif ($_W['setting']['remote']['type'] == '4') {
+		require(IA_ROOT.'/framework/library/cos/include.php');
+		$bucketName = $_W['setting']['remote']['cos']['bucket'];
+		$path = "/".$file;
+		$result = Qcloud_cos\Cosapi::delFile($bucketName, $path);
+		if (!empty($result['code'])) {
+			return error(-1, '删除cos远程文件失败');
+		} else {
+			return true;
+		}
 	}
 	return true;
 }
@@ -322,6 +353,9 @@ function file_image_thumb($srcfile, $desfile = '', $width = 0) {
 	global $_W;
 
 	if (!file_exists($srcfile)) {
+		return error('-1', '原图像不存在');
+	}
+	if (!file_is_image($srcfile)) {
 		return error('-1', '原图像不存在');
 	}
 	if (intval($width) == 0) {
@@ -587,4 +621,10 @@ function file_fetch($url, $limit = 0, $path = '') {
 		return error(-1, '提取失败.');
 	}
 	return $pathname;
+}
+
+function file_is_image($url) {
+	$pathinfo = pathinfo($url);
+	$extension = strtolower($pathinfo['extension']);
+	return !empty($extension) && in_array($extension, array('jpg', 'jpeg', 'gif', 'png'));
 }

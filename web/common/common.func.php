@@ -236,7 +236,7 @@ function buildframes($frame = array('platform')){
 		);
 		if($module['isrulefields'] || $module['settings']) {
 			$navs['rule'] = array(
-				'title' => "{$module['title']}回复规则",
+				'title' => "回复规则",
 			);
 			if($module['isrulefields']) {
 				$navs['rule']['items'][] = array(
@@ -253,7 +253,7 @@ function buildframes($frame = array('platform')){
 		}
 		if($entries['home'] || $entries['profile'] || $entries['shortcut']) {
 			$navs['nav'] = array(
-				'title' => "{$module['title']}导航菜单",
+				'title' => "导航菜单",
 			);
 			if($entries['home']) {
 				$navs['nav']['items'][] = array(
@@ -275,13 +275,15 @@ function buildframes($frame = array('platform')){
 			}
 		}
 		$menus = array(
-			'menu' => "{$module['title']}业务菜单",
-			'cover' => "{$module['title']}封面入口",
-			'mine' => "{$module['title']}自定义菜单",
+			'menu' => "业务菜单",
+			'cover' => "封面入口",
+			'mine' => "自定义菜单",
 		);
+
 		foreach($entries_filter as $key => $row) {
 			if(empty($row)) continue;
 			if(!isset($navs[$key])) {
+
 				$navs[$key] = array(
 					'title' => $menus[$key],
 				);
@@ -333,3 +335,24 @@ function filter_url($params) {
 	return './index.php?' . $query;
 }
 
+
+function site_profile_perfect_tips(){
+	global $_W;
+
+	if ($_W['isfounder'] && (empty($_W['setting']['site']['token']))) {
+		if (!defined('SITE_PROFILE_PERFECT_TIPS')) {
+			$url = url('cloud/profile');
+			return <<<EOF
+$(function() {
+	var html = 
+		'<div id="siteinfo-tips" class="upgrade-tips">'+
+			'<a href="{$url}" target="_blank">请尽快完善您在微赞云服务平台的站点注册信息。</a>'+
+		'</div>';
+	$('body').prepend(html);
+});
+EOF;
+			define('SITE_PROFILE_PERFECT_TIPS', true);
+		}
+	}
+	return '';
+}

@@ -42,6 +42,18 @@
 					<span class="help-block">用户是微信粉丝还是独立的用户, 独立用户需要注册</span>
 				</div>
 			</div>
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">申请退款</label>
+				<div class="col-sm-9 col-xs-12">
+					<label class="radio-inline">
+						<input type="radio" value="0" name="refund" class="user" {if empty($set['refund'])}checked{/if}/> 可以
+					</label>
+					<label class="radio-inline">
+						<input type="radio" value="1" name="refund" class="user" {if $set['refund']==1}checked{/if}/> 不可以
+					</label>
+					<span class="help-block">用户没有入住前是否可以申请退款</span>
+				</div>
+			</div>
 			<div class="form-group" id='trbind' {if $set['user']!=2}style="display:none"{/if}>
 				<label class="col-xs-12 col-sm-3 col-md-2 control-label">绑定设置</label>
 				<div class="col-sm-9 col-xs-12">
@@ -130,6 +142,20 @@
 				<div class="col-sm-9 col-xs-12">
 					<input type="text" name="templateid" class="form-control" value="{$set['templateid']}" />
 					<span class="help-block">请在“微信公众平台”选择行业为：“酒店旅游 - 酒店”，添加标题为：”酒店预订确认通知“，编号为：“TM00217”的模板</span>
+				</div>
+			</div>
+            <div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启短信</label>
+				<div class="col-sm-9 col-xs-12">
+					<label class='radio-inline'><input type="radio" name="is_sms" value="0" {if $set['is_sms'] == 0} checked="true" {/if} onclick="$('#sms_id').show();">开启</label>
+					<label class='radio-inline'><input type="radio" name="is_sms" value="1"  {if $set['is_sms'] == 1} checked="true" {/if} onclick="$('#sms_id').hide();"> 关闭</label>
+				</div>
+			</div>
+            <div class="form-group" id="sms_id" {if $set['is_sms']!='0'}style="display: none;"{/if}>
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">短信模板ID</label>
+				<div class="col-sm-9 col-xs-12">
+					<input type="text" name="sms_id" class="form-control" value="{$set['sms_id']}" />
+					<span class="help-block">请在"阿里大鱼"设置模板，例如SMS_9626548.可设置变量${name}姓名,${phone}电话</span>
 				</div>
 			</div>
 			<div class="form-group">

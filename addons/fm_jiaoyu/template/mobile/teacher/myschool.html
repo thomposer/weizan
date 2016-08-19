@@ -61,10 +61,10 @@
 				</div>
 				<div onclick="qingjia();" class="unbound">请假</div>
 			</div>
-			<div class="stuServer">
-				<label>班级</label>
-				<div class="server">
-					<span>{$category[$teacher['bj_id1']]['sname']}丨{$category[$teacher['bj_id2']]['sname']}丨{$category[$teacher['bj_id3']]['sname']}</span>
+			<div class="stuServer" style="height:auto;">
+				<label style="height:auto;">班级</label>
+				<div class="server" style="height:auto;">
+					<span>{if !empty($teacher['bj_id1'])}{$category[$teacher['bj_id1']]['sname']}{/if}{if !empty($teacher['bj_id2'])}丨{$category[$teacher['bj_id2']]['sname']}{/if}{if !empty($teacher['bj_id3'])}丨{$category[$teacher['bj_id3']]['sname']}{/if}</span>
 				</div>
 			</div>			
 		</div>

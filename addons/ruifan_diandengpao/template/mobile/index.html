@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="full-screen" content="true">
+    <meta name="screen-orientation" content="portrait">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="360-fullscreen" content="true">
+    <title>{$reply['title']}</title>
+    <style type="text/css">
+    .btn {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 12px;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        background-color: #3498db;
+        color: #fff;
+        display: inline;
+        margin-right: 10px;
+    }
+    
+    .result-container {
+        display: none;
+    }
+    
+    .result-container {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        padding-top: 50px;
+    }
+    
+    .result-container>p {
+        margin: 20px 0 40px 0;
+        font-size: 18px;
+    }
+    
+    .play-again {
+        background-color: #1abc9c;
+    }
+    
+    .title {
+        color: #fff;
+        font-size: 13px;
+    }
+    
+    #switchBtn {
+        background: #1abc9c;
+    }
+    
+    .rcontainer {
+        position: relative;
+        top: 20%;
+        width: 80%;
+        margin: auto;
+    }
+    </style>
+    <script type="text/javascript">
+    	var i, j, IsOver, Size = {if $reply['dengji']==0}4{else}5{/if}, StartTime, EndTime, Moves, IsRepeat;
+		Pic = new Array(2);
+		Pic[0] = new Image();
+		Pic[0].src = "{if empty($reply['oldimg'])}../addons/ruifan_diandengpao/img/light0.png{else}{php echo tomedia($reply['oldimg'])}{/if}";
+		Pic[1] = new Image();
+		Pic[1].src = "{if empty($reply['curimg'])}../addons/ruifan_diandengpao/img/light103.png{else}{php echo tomedia($reply['curimg'])}{/if}";
+
+	function gzurl() {
+    	window.location = '{$reply['share_url']}';
+    }
+
+      function draw() {
+        var list = [];
+        for (j=0; j<Size; j++)
+        { 
+            list.push("<tr>");
+          for (i=0; i<Size; i++)
+            list.push("<td><IMG src='{if empty($reply['curimg'])}../addons/ruifan_diandengpao/img/light103.png{else}{php echo tomedia($reply['curimg'])}{/if}' border=0 onclick=\"Clicked("+i+","+j+")\"></td>");
+          
+          list.push('</tr>');
+        }
+        $('#table').html(list.join(''));
+        
+    }
+    </script>
+    <script type="text/javascript" src="../addons/ruifan_diandengpao/img/game.js"></script>
+
+    <style type="text/css">
+    body{
+       
+        background-color: #1abc9c;
+        background-size:100%;
+    }
+</style>
+</head>
+
+<body>
+	<div>
+		<img src="{if empty($reply['bannerurl'])}../addons/ruifan_diandengpao/img/top.png{else}{php echo tomedia($reply['bannerurl'])}{/if}" style="width:100%;height:auto;">
+	</div>
+
+    <div ALIGN=center style="margin-bottom: 90px;">
+        <div style="font-weight: bold; color: #3498db;">
+           已经用了 <span id="movecount">0</span> 步 </div>
+        <h1 class="title">
+				把所有头像都点亮吧!
+			</h1>
+        <table border=4 cellpadding=0 cellspacing=2 bgcolor=#CCCCCC id="table">
+        </table>
+        <br>
+        <table>
+            <tr>
+                <td>
+                    <div class="btn play-again" onclick="javascript:Init(true)">
+                        重新开始
+                    </div>
+                </td>
+                <td>
+                    <div class="btn" onclick="gzurl();">一键关注</div>
+                </td>
+            </tr>
+        </table>
+        <div class="result-container" id="result_container" style="display:block;">
+            <div class="rcontainer">
+                <p id="result"></p>
+                <div class="btn play-again" onclick="Init(true)">
+                    再来一盘
+                </div>
+                <div class="btn" onclick="gzurl();">一键关注</div>
+            </div>
+        </div>
+    </div>
+  
+    <div id="share" style="display: none">
+        <img width=100% src="../addons/ruifan_diandengpao/img/share.png" style="position: fixed; z-index: 9999; top: 0; left: 0; display: " ontouchstart="document.getElementById('share').style.display='none';" />
+    </div>
+
+    <div style="background:rgba(0,0,0,0.4); z-index:999; position:fixed; bottom:0; left:0; width:100%;height:60px; line-height: 60px;">
+        <div style="width:25%;float: left;margin-top:5px;">
+            <img src="{php echo toimage($reply['ad_img'])}" style="width:50px;height:50px;margin-left: 25px;">
+        </div>
+        <div style="width:70%;display: inline-block;">
+            <span style="margin-left: 15px;width:90%;overflow: hidden;white-space: nowrap;display: block">
+		<a href="{$reply['ad_url']}" style="font-size: 16px;color: #FCEF59;">
+			{$reply['ad_title']}
+		</a>
+		</span>
+        </div>
+    </div>
+    <script src="../addons/ruifan_diandengpao/img/jquery.min.js"></script>
+    <div style="display: none;">
+
+        <script language="JavaScript">
+        draw();
+        Init(true);
+        </script>
+</body>
+</html>

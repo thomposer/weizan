@@ -3,7 +3,6 @@
     <div class="rich_tips with_line title_tips">
         <span class="tips">推广</span>
     </div>
-
     <div class="js_ad_link extra_link" data-aid="{$randAdv['id']}">
         {if $randAdv['type']==2}
         <a href="{$randAdv['link']}">
@@ -14,7 +13,7 @@
             <div class="preview_group_inner">
                 <div class="preview_group_info append_btn">
                     <strong class="preview_group_title">{$randAdv['title']}</strong>
-                    <div class="preview_group_desc">{$randAdv['title']}</div>
+                    <div class="preview_group_desc">{php echo cutstr($randAdv['description'],7)}</div>
                     <img class="preview_group_avatar br_radius" src="{$randAdv['thumb']}" alt="{$randAdv['title']}">
                 </div>
                 <div class="preview_group_opr">
@@ -42,6 +41,37 @@
         </div>
         {/if}
 
+    </div>
+</div>
+{/if}
+
+{if !empty($randtj)}
+<div class="rich_media_extra" id="gdt_area">
+    <div class="rich_tips with_line title_tips">
+        <span class="tips">公众号推荐</span>
+    </div>
+
+    <div class="js_ad_link extra_link" data-aid="{$randtj['id']}">
+        <div class="preview_group">
+            <div class="preview_group_inner">
+                <div class="preview_group_info append_btn">
+                    <strong class="preview_group_title">{$randtj['title']}</strong>
+                    <div class="preview_group_desc">{php echo cutstr($randtj['description'],7)} </div>
+                    <img class="preview_group_avatar br_radius" src="{$randtj['thumb']}" alt="{$randtj['title']}">
+                </div>
+                <div class="preview_group_opr">
+
+                    <a id="js_add_contact" onclick="add_contact()" class="btn btn_inline btn_line  btn_primary js_ad_btn" href="javascript:void(0);">
+                        关注
+                    </a>
+                    <script type="text/javascript">
+                        function add_contact(){
+                            window.location.href='{$randtj['guanzhuUrl']}';
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {/if}

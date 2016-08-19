@@ -58,7 +58,7 @@
     <div class="header">
         <div class="js-mp-info share-mp-info ">
             <a class="page-mp-info" href="#">
-                <img class="mp-image" width="24" height="24" src="{$_W['attachurl']}headimg_{$account['acid']}.jpg?time=1440833826"/>
+                <img class="mp-image" width="24" height="24" src="{php echo tomedia('headimg_'.$account['acid'].'.jpg');}?time={php echo time()}"/>
                 <i class="mp-nickname">
                     {$_W['account']['name']}
                 </i>
@@ -79,7 +79,7 @@
             <div class="custom-audio js-audio" data-src="{$detail['musicurl']}" data-reload="false" data-loop="false">
                 <div class="custom-audio-weixin clearfix">
                     <div>
-                        <img class="custom-audio-logo js-not-share" src="{$_W['attachurl']}headimg_{$account['acid']}.jpg?time=1440833826" alt="音频播放logo" width="40"
+                        <img class="custom-audio-logo js-not-share" src="{php echo tomedia('headimg_'.$account['acid'].'.jpg');}?time={php echo time()}" alt="音频播放logo" width="40"
                              height="40">
                         <span class="custom-audio-bar">
                         <img class="js-animation custom-audio-animation hide js-not-share" src="{RES}youzan/player.gif" alt="播放器动画" width="13" height="17">
@@ -121,7 +121,7 @@
                 <a class="media_tool_meta meta_primary"  href="{$detail['outLink']}">阅读原文</a>
                 {/if}
                 <div class="media_tool_meta tips_global meta_primary">阅读
-                    <span id="readNum">{if $detail['clickNum']>=100000}100000+{else}{$detail['clickNum']}{/if}</span>
+                    <span id="readNum">{$readnum}</span>
                 </div>
 
                <!-- <span class="media_tool_meta meta_primary tips_global meta_praise" id="like">
@@ -140,13 +140,12 @@
             <![endif]-->
             <footer class="mt20 pb5 w900 center">
                  <section class="related mt20 mb15  oh rel">
-                     {template 'rec_adv'}
+                     
                 </section>
             </footer>
 
             {if $detail && $detail['iscomment']=='0'}
-
-            {template 'include_comment'}
+                {template 'include_comment'}
             {/if}
 
             <!-- 魔方 -->
@@ -204,7 +203,7 @@
             <a href=" " class="link">
                 <div class="sidebar-section shop-card">
                     <div class="table-cell">
-                        <img src="{$_W['attachurl']}headimg_{$account['acid']}.jpg?time=1440833826" width="60" height="60"
+                        <img src="{php echo tomedia('headimg_'.$account['acid'].'.jpg');}?time={php echo time()}" width="60" height="60"
                              class="shop-img" alt="公众号头像">
                     </div>
                     <div class="table-cell">

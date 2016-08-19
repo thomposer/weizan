@@ -32,7 +32,6 @@
 <body>
 <div style="height: 100%;" class="ng-scope">
     <div class="ddb-nav-header ng-scope">
-        <a class="nav-left-item" href="javascript:history.back(-1);"><i class="fa fa-angle-left"></i></a>
         <div class="header-title ng-binding">学校列表</div>
     </div>
     <div class="ddb-secondary-nav-header ng-isolate-scope" on-pickup="onPickupFilter">
@@ -180,7 +179,7 @@
         var id = $(this).attr("data-id");
         window.location.href = "{php echo $this->createMobileurl('wapindex', array('schoolid' => $schoolid, 'sortid' => $sortid, 'typeid' => $typeid), true)}" + '&areaid=' + id;
     });
-    //商家类型
+    //类型
     $('.shoptype > li').click(function () {
         var id = $(this).attr("data-id");
         window.location.href = "{php echo $this->createMobileurl('wapindex', array('schoolid' => $schoolid, 'sortid' => $sortid, 'areaid' => $areaid), true)}" + '&typeid=' + id;

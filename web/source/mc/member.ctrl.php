@@ -19,8 +19,9 @@ if($do == 'display') {
 	$condition .= " AND createtime >= {$starttime} AND createtime <= {$endtime}";
 	$condition .= empty($_GPC['username']) ? '' : " AND (( `realname` LIKE '%".trim($_GPC['username'])."%' ) OR ( `nickname` LIKE '%".trim($_GPC['username'])."%' ) OR ( `mobile` LIKE '%".trim($_GPC['username'])."%' )";
 	if (!empty($_GPC['username'])) {
-		if (strlen(trim($_GPC['username'])) == 28) {
-			$condition .= " OR ( `uid` = (SELECT `uid` FROM". tablename('mc_mapping_fans')." WHERE openid = '".trim($_GPC['username'])."')))";
+		if (!is_numeric(trim($_GPC['username']))) {
+			$uid = pdo_fetchcolumn('SELECT `uid` FROM'. tablename('mc_mapping_fans')." WHERE openid = :openid", array(':openid' => trim($_GPC['username'])));
+			$condition .= " OR ( `uid` = '$uid'))";
 		} else {
 			$condition .= ")";
 		}
@@ -124,7 +125,6 @@ if($do == 'post') {
 			pdo_update('mc_member_address', array('isdefault' => 1), array('id' => $id, 'uniacid' => $_W['uniacid']));
 			message(error(1), '', 'ajax');
 		}
-		$uid = $_GPC['uid'];
 		$password = $_GPC['password'];
 		$sql = 'SELECT `uid`, `salt` FROM ' . tablename('mc_members') . " WHERE `uniacid`=:uniacid AND `uid` = :uid";
 		$user = pdo_fetch($sql, array(':uniacid' => $_W['uniacid'], ':uid' => $uid));
@@ -255,9 +255,20 @@ if($do == 'del') {
 	$_W['page']['title'] = '删除会员资料 - 会员 - 会员中心';
 	if(checksubmit('submit')) {
 		if(!empty($_GPC['uid'])) {
-			$instr = implode(',',$_GPC['uid']);
-			pdo_query("DELETE FROM ".tablename('mc_members')." WHERE `uniacid` = {$_W['uniacid']} AND `uid` IN ({$instr})");
-			message('删除成功！', referer(), 'success');
+			$delete_uids = array();
+			foreach ($_GPC['uid'] as $uid) {
+				$uid = intval($uid);
+				if (!empty($uid)) {
+					$delete_uids[] = intval($uid);
+				}
+			}
+			if (!empty($delete_uids)) {
+				$tables = array('mc_members', 'mc_card_members', 'mc_card_notices', 'mc_card_notices_unread', 'mc_card_record', 'mc_card_sign_record', 'mc_cash_record', 'mc_credits_recharge', 'mc_credits_record', 'mc_mapping_fans', 'mc_member_address', 'mc_mapping_ucenter');
+				foreach ($tables as $key => $value) {
+					pdo_delete($value, array('uniacid' => $_W['uniacid'], 'uid' => $delete_uids));
+				}
+				message('删除成功！', referer(), 'success');
+			}
 		}
 		message('请选择要删除的项目！', referer(), 'error');
 	}

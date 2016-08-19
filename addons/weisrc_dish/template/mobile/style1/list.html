@@ -235,7 +235,7 @@
                     var rnd = Math.random();
                     for(key in dishList) {
                         var dish = dishList[key];
-
+						//alert(dish['thumb']);
 
                         if (dish['dPrice'] != '') {
                             var priceHtml = "<em class='sale'>"+dish['dSpecialPrice']+"元/"+dish['unitname']+"<br/><del>"+dish['dPrice']+"元/"+dish['unitname']+"</del></em>";
@@ -259,7 +259,7 @@
                         }
 
                         var attrList = " dUnitName='"+dish['unitname']+"' dSubCount='"+dish['dSubCount']+"' dishid='"+dish['id']+"' dName='"+dish['title']+"' dTaste='"+dish['dTaste']+"' dDescribe='"+dish['dDescribe']+"' dPrice='"+dish['dPrice']+"' dIsHot='"+dish['dIsHot']+"' dSpecialPrice='"+dish['dSpecialPrice']+"' dIsSpecial='"+dish['dIsSpecial']+"' ";
-                        str += "<dl shopInfo='' "+attrList+"' "+dlstyle+"><dt><h3>"+dish['title']+"</h3></dt><dd><a href='javascript:void(0)' class='dataIn'><img src='" + dish['thumb'] + "?rnd="+rnd+"' alt='' title='' />"+hotHtml+"</a></dd><dd>"+priceHtml+"</dd><dd class='dpNum'>"+dSubCountHtml+"</dd><dd class='btn'><button class='minus'><strong></strong></button><i>"+dish['total']+"</i><button class='add'><strong></strong></button><em class='fixBig fake'></em></dd></dl>";
+                        str += "<dl shopInfo='' "+attrList+"'><dt><h3>"+dish['title']+"</h3></dt><dd><a href='javascript:void(0)' class='dataIn'><img src='" + dish['thumb'] + " ' alt='' title='' />"+hotHtml+"</a></dd><dd>"+priceHtml+"</dd><dd class='dpNum'>"+dSubCountHtml+"</dd><dd class='btn'><button class='minus'><strong></strong></button><i>"+dish['total']+"</i><button class='add'><strong></strong></button><em class='fixBig fake'></em></dd></dl>";
                     }
                     str += '<div style="margin-top: 60px;"></div>';
 

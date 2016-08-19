@@ -71,3 +71,9 @@ if (!function_exists('getimagesizefromstring')) {
 		return getimagesize($uri);
 	}
 }
+
+
+if (!defined('JSON_UNESCAPED_UNICODE')) {
+	define('JSON_UNESCAPED_UNICODE', 256);
+}
+

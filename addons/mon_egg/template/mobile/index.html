@@ -943,18 +943,19 @@ img {
 
     }
 
+	var cts=0;//添加点击计数
     function submitDh() {
+		cts++;
         var dpassword = $("#dpassword").val();
         if (dpassword == '') {
             dialogMsg("请输入兑换密码");
             return false;
         }
-
-
         var submitData = {
             dpassword: dpassword,
             rid: $("#rid").val()
         };
+        if (cts==1){//兑奖只能点一次
         $.post('{php echo $this->createMobileUrl('DH', array('egid' => $egg['id']), true)}', submitData, function (res) {
 
             if (res.code == 200) {
@@ -969,15 +970,15 @@ img {
                 }, function(){
                         window.location.reload();
                 });
-
-
-
             } else {
                 dialogMsg(res.msg);
             }
 
-        }, "json");
-
+         }, "json");
+		}
+		else{//多次点击提示
+		dialogMsg("尝试次数太多，请刷新后再试！");
+		}
     }
 
     function refreash() {

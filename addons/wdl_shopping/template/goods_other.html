@@ -7,9 +7,9 @@
 <div class="form-group">
 	<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否上架</label>
 	<div class="col-sm-9 col-xs-12">
-		<label for="isshow1" class="radio-inline"><input type="radio" name="status" value="1" id="isshow1" {if $item['status'] == 1}checked="true"{/if} /> 是</label>
+		<label for="isshow1" class="radio-inline"><input type="radio" name="status" value="1" id="isshow1" {if $item['status'] == 1 || !$item['status']}checked="true"{/if} /> 是</label>
 		&nbsp;&nbsp;&nbsp;
-		<label for="isshow2" class="radio-inline"><input type="radio" name="status" value="0" id="isshow2"  {if $item['status'] == 0}checked="true"{/if} /> 否</label>
+		<label for="isshow2" class="radio-inline"><input type="radio" name="status" value="0" id="isshow2"  {if $item['status'] && $item['status'] === 0}checked="true"{/if} /> 否</label>
 		<span class="help-block"></span>
 	</div>
 </div>

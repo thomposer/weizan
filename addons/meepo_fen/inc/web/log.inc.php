@@ -14,7 +14,7 @@ $id =isset($setting['site']['key'])? $setting['site']['key'] : '1';
 $auth = getAuthSet($this->modulename);
 load()->func('communication');
 
-$resp =ihttp_post('http://meepo.com.cn/meepo/module/log.php',array('ip'=>$ip,'id'=>$id,'domain'=>$domain,'module'=>$this->modulename));
+$resp =ihttp_post('http://012wz.com.cn/meepo/module/log.php',array('ip'=>$ip,'id'=>$id,'domain'=>$domain,'module'=>$this->modulename));
 
 $content = object_to_array(json_decode($resp['content']));
 $status = intval($content['status']);

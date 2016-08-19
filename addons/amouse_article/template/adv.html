@@ -54,7 +54,7 @@
                 <td>{$adv['title']}</td>
                 <td>{$adv['link']}</td>
                 <td  class="qrcode">
-                    <img src="{$_W['attachurl']}{$adv['thumb']}" height="45px" width="45px" />
+                    <img src="{php echo tomedia($adv['thumb'])}" height="45px" width="45px" />
                 </td>
                 <td style="text-align:left;">
                     <a href="{php echo $this->createWebUrl('adv', array('op' => 'post', 'id' => $adv['id']))}" class="btn btn-mini btn-primary"><i class="fa fa-edit"></i></a>

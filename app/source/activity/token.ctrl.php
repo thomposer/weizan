@@ -54,6 +54,7 @@ if($do == 'mine') {
 }
 if($do == 'use') {
 	$id = intval($_GPC['id']);
+	$recid = intval($_GPC['recid']);
 	$data = activity_token_owned($_W['member']['uid'], array('couponid' => $id, 'used' => 1));
 	$data = $data['data'][$id];
 	if(checksubmit('submit')) {

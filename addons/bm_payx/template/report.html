@@ -1,0 +1,137 @@
+{template 'common/header'}
+<style>
+.sub-search input,.sub-search select{margin-bottom:0;}
+</style>
+<ul class="nav nav-tabs">
+	<li {if $op == 'detail'}class="active"{/if}>
+		<a href="{php echo $this->createWebUrl('report', array('op' => 'detail'))}">收款明细</a>
+	</li>
+</ul>
+{if $op=='detail'}
+    <div class="main">
+		<div class="panel panel-info">
+			<div class="panel-heading">筛选</div>
+			<div class="panel-body">
+				<form action="" class="form-horizontal" method="get">
+					<input type="hidden" name="c" value="site" />
+					<input type="hidden" name="a" value="entry" />
+					<input type="hidden" name="m" value="bm_payx" />
+					<input type="hidden" name="do" value="report" />				
+					<input type="hidden" name="id" value="{$rid}">
+					<input type="hidden" name="op" value="detail">
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">所属店铺</label>
+						<div class="col-xs-12 col-sm-8 col-md-8 col-lg-2">
+							<input class="form-control" name="store" id="store" type="text" value="{$_GPC['store']}" placeholder="填写店名">
+						</div>
+						<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">开始日期</label>
+						<div class="col-xs-12 col-sm-8 col-md-8 col-lg-2">
+							{php echo tpl_form_field_date('starttime',$starttime,true);}
+							<!--input class="form-control" name="startdate" id="" type="text" value="{$_GPC['startdate']}" placeholder="例如：2015-01-01"-->
+						</div>
+						<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">结束日期</label>
+						<div class="col-xs-12 col-sm-8 col-md-8 col-lg-2">
+							{php echo tpl_form_field_date('endtime',$endtime,true);}
+							<!--input class="form-control" name="enddate" id="" type="text" value="{$_GPC['enddate']}" placeholder="例如：2016-12-31"-->
+						</div>						
+						<div class="col-xs-12 col-sm-2 col-md-1 col-lg-1">
+							<button class="btn btn-default" type="submit"><i class="fa fa-search"></i> 搜索</button>
+						</div>
+						<div class="col-xs-12 col-sm-2 col-md-1 col-lg-1">
+							<button class="btn btn-default" type="submit" id="xls" name="xls" value="xls"><i class="fa fa-search"></i> 导出</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+		<div class="panel panel-default">
+			<div class="panel-body table-responsive">
+				<h4 class="sub-title">详细数据  |  单数:{$total}，共{$totalmoney}元  |  成功支付单数:{$totalsuccess}，共{$totalsuccessmoney}元</h4>
+					<table class="table table-hover">
+						<tbody>
+							<tr>
+								<td style="width:20;text-align:center;" >分店名称</br>客户昵称</td>
+								<td style="width:30%;text-align:center;" >支付码</br>订单号</td>
+								<td style="width:20%;text-align:center;" >提交时间</br>支付时间</td>
+								<td style="width:15%;text-align:center;" >支付方式</br>支付状态</td>
+								<td style="width:15%;text-align:center;" >实收金额</br>应付金额</td>
+							</tr>
+							{loop $list $row}
+							<tr>
+								<td style="text-align:center;" >{$row['storename']}</br>{$row['username']}</td>
+								<td style="text-align:center;" >{$row['paycode']}</br>{$row['clientOrderId']}</td>
+								<td style="text-align:center;" >{php echo date("Y-m-d H:i:s" , $row['dateline'] );}</br>{if !strexists('1970',$row['paytime'])}{php echo date("Y-m-d H:i:s" , $row['paytime'] );}{else}----------{/if}</td>
+								<td style="text-align:center;" >
+									{if $row['paytype'] == 1}
+										<span class="label label-success">余额支付</span>
+									{elseif $row['paytype'] == 2}
+										<span class="label label-warning">支付宝</span>
+									{else}
+										<span class="label label-info">微信支付</span>
+									{/if}
+									</br>
+									{if empty($row['status']) || ($row['status'] == 0)}
+										<span class="label label-success">未支付</span>
+									{elseif $row['status'] == 1}
+										<span class="label label-warning">已支付</span>
+									{elseif $row['status'] == 2}
+									<span class="label label-info">已使用</span>
+									{/if}
+								</td>
+								<td style="text-align:center;" >{$row['qrmoney']}</br>{php echo round($row['qrmoney']*(1-$row['payrate']/100),2)}</td>
+							</tr>
+							{/loop}
+						</tbody>
+					</table>
+					<table class="table">
+						<tr>
+							<td>
+								<input type="hidden" name="token" value="{$_W['token']}" />
+							</td>
+						</tr>
+					</table>
+				{$pager}
+			</div>
+		</div>
+    </div>
+{/if}
+<script>
+$(function() {
+	//详细数据相关操作
+	var tdIndex;
+	$("#table-list thead").delegate("th", "mouseover", function(){
+		if($(this).find("i").hasClass("")) {
+			$("#table-list thead th").each(function() {
+				if($(this).find("i").hasClass("icon-sort")) $(this).find("i").attr("class", "");
+			});
+			$("#table-list thead th").eq($(this).index()).find("i").addClass("icon-sort");
+		}
+	});
+	$("#table-list thead th").click(function() {
+		if($(this).find("i").length>0) {
+			var a = $(this).find("i");
+			if(a.hasClass("icon-sort") || a.hasClass("icon-caret-up")) { //递减排序
+				/*
+					数据处理代码位置
+				*/
+				$("#table-list thead th i").attr("class", "");
+				a.addClass("icon-caret-down");
+			} else if(a.hasClass("icon-caret-down")) { //递增排序
+				/*
+					数据处理代码位置
+				*/
+				$("#table-list thead th i").attr("class", "");
+				a.addClass("icon-caret-up");
+			}
+			$("#table-list thead th,#table-list tbody:eq(0) td").removeClass("row-hover");
+			$(this).addClass("row-hover");
+			tdIndex = $(this).index();
+			$("#table-list tbody:eq(0) tr").each(function() {
+				$(this).find("td").eq(tdIndex).addClass("row-hover");
+			});
+		}
+	});
+});
+</script>
+{template 'common/footer'}

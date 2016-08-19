@@ -33,7 +33,7 @@
 		</div>
 	</div>
 	<input id="bjid" type="hidden"{if !empty($bj_id)}value="{$category[$bj_id]['sid']}"{else if !empty($teachers['bj_id1'])}value="{$bjid1}"{else}{/if}/>
-	<div class="bjqHeader">
+	<div class="bjqHeader" style="background-image: url({MODULE_URL}public/mobile/img/banner_bjq.png);">
 		<div id="className" class="className" onclick="showSelectBox('classList')">{if !empty($bj_id)}{$category[$bj_id]['sname']}{else if !empty($teachers['bj_id1'])}{$name1}{else}{/if}</div>
 	</div>
 	<div id="ghhdHref" class="ghhdHref" style="display:none;">
@@ -42,7 +42,7 @@
 	</div>
 	<div id="commentTip" class="commentTip"></div>
 	
-	<div class="xcUpload">
+	<div class="xcUpload" style="background-image: url({OSSURL}public/mobile/img/camera.png);">
 		<a href="{php echo $this->createMobileUrl('sbjqfabu', array('schoolid' => $schoolid), true)}"><div class="file"></div></a>
 	</div>
 	<div id="bjq_content">
@@ -705,9 +705,17 @@ var WeixinApi = (function () {
     };
 })();
 	
+<?php
+if (empty($_W['setting']['remote']['type'])) { 
+	$urls = $_W['SITEROOT'].$_W['config']['upload']['attachdir'].'/'; 
+	} else {
+	$urls = $_W['attachurl'];  
+	}
+?>
+	
     "use strict";
-var ALI_URL = "{$_W['attachurl']}";
-var ALI_URL_VIEDO = "{$_W['attachurl']}";
+var ALI_URL = "{$urls}";
+var ALI_URL_VIEDO = "{$urls}";
 
 //http://static.weixiaotong.com.cn/145fb37a9026155ccb6119442f8db8adc15d99f5.jpg@320w_320h_1e_0c_0i_70Q_1x_1o.jpg
 var mySwiper;

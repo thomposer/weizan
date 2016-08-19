@@ -42,11 +42,15 @@
 						{else}
 							未开启
 						{/if}
+						{if $key == 'opcache' && $extensions['eAccelerator']['status'] && $extensions['opcache']['status']}
+						<span class="label label-danger">eAccelerator 不可与 opcache同时开启</span>
+						{/if}
 					</td>
 					<td>
-						{if $extension['status'] && $extension['support'] && $key == 'memcache'}
-						<a class="btn btn-danger btn-sm" href="{php echo url('system/updatecache');}" target="_blank">更新缓存</a>
+						{if $extension['status'] && $extension['clear']}
+						<a href="{$extension['clear']['url']}">{$extension['clear']['title']}</a>
 						{/if}
+						{$extension['extra']}
 					</td>
 				</tr>
 				{/loop}

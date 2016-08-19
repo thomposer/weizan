@@ -61,7 +61,7 @@ footer {float:left;margin:0;bottom: 0;height: 45px;position: fixed;width: 100%;z
 	{/if}
 	<div class="mobile-div img-rounded">
 		<div class="mobile-hds">{$activity['title']}
-			<a href="{php echo $this->createMobileUrl('mydayu_yuyuepay', array('name' => 'dayu_yuyuepay', 'weid' => $_W['uniacid'], 'id' => $reid]))}"><span>{if empty($activity['mname'])}我的预约{else}{$activity['mname']}{/if}</span></a></div>
+			<a href="{php echo $this->createMobileUrl('mydayu_yuyuepay', array('name' => 'dayu_yuyuepay', 'weid' => $_W['uniacid'], 'id' => $reid))}"><span>{if empty($activity['mname'])}我的预约{else}{$activity['mname']}{/if}</span></a></div>
 		<div class="mobile-content" style="padding:3px 5px;">
 		{php echo htmlspecialchars_decode($activity['content'])}
 		</div>
@@ -188,4 +188,4 @@ footer {float:left;margin:0;bottom: 0;height: 45px;position: fixed;width: 100%;z
 </div>
 </div>
 {template 'concise/script'}
-{template 'footer-base'}
+{template 'footer'}

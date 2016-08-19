@@ -178,8 +178,13 @@ require(['angular.sanitize', 'bootstrap', 'underscore', 'util'], function(angula
 					editor = UE.getEditor('editor', ueditoroption);
 					element.data('editor', editor);
 					editor.addListener('contentChange', function() {
-						$scope.value = editor.getContent();
+						$scope.value = editor.getContent().replace(/\&quot\;/g, '"');
 						$scope.$root.$$phase || $scope.$apply('value');
+					});
+					$(element).parents('form').submit(function() {
+						if (editor.queryCommandState('source')) {
+							editor.execCommand('source');
+						}
 					});
 					editor.addListener('ready', function(){
 						if (editor && editor.getContent() != $scope.value) {

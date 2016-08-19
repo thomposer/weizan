@@ -35,7 +35,7 @@
 		sharedata = $_share;
 	} else {
 		sharedata['title'] = sharedata['title'] || $_share['title'];
-		sharedata['desc'] = sharedata['desc'] || $_share['desc'];
+		sharedata['desc'] = sharedata['desc'] || $_share['content'];
 		sharedata['link'] = sharedata['link'] || $_share['link'];
 		sharedata['imgUrl'] = sharedata['imgUrl'] || $_share['imgUrl'];
 	}
@@ -74,16 +74,16 @@
 	
 	wx.ready(function () {			
 		wx.onMenuShareAppMessage(sharedata);
-		//wx.onMenuShareTimeline(sharedata);
-		wx.onMenuShareQQ(sharedata);
+		wx.onMenuShareTimeline(sharedata);
+		//wx.onMenuShareQQ(sharedata);
 		//wx.onMenuShareWeibo(sharedata);
 		wx.hideMenuItems({
 		    menuList: [
 		    	'menuItem:share:qq',
-		    	//'menuItem:share:weiboApp',
+		    	'menuItem:share:weiboApp',
 		    	'menuItem:share:facebook',
 		    	'menuItem:share:QZone',
-		    	//'menuItem:copyUrl',
+		    	'menuItem:copyUrl',
 		    	'menuItem:originPage',
 		    	'menuItem:readMode',
 		    	'menuItem:openWithQQBrowser',

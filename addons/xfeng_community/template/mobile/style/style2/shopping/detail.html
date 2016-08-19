@@ -68,7 +68,7 @@
                 </span>
                 <span id="market_price" class="p-price-cost">{$productprice}</span>
                 
-                <p style="font-size: 1.2em;color: #999;margin-top:2px;">赠送积分：<span><b id="discount_sum" style="color: #e4393c;font-size: 1.2em;">{$goods['credit']}</b></span>&nbsp;&nbsp;&nbsp;
+                <p style="font-size: 1.2em;color: #999;margin-top:2px;">赠送积分：<span><b id="discount_sum" style="color: #e4393c;font-size: 1.2em;">{php echo $c = $marketprice*$credit['shop_credit']}</b></span>&nbsp;&nbsp;&nbsp;
                 <span id="market_price" >库存{$stock}</span>
                 </p>
             </div>

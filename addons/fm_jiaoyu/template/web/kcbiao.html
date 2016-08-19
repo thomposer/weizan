@@ -88,11 +88,11 @@ require(['bootstrap'],function($){
 				</div>	
             </form>
         </div>
-    </div>	
+    </div>
     <div class="panel panel-default">
-        <div class="table-responsive panel-body">
-        <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
-		        <input type="hidden" name="leadExcel" value="true">
+        <div class="panel-body">
+            <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
+                <input type="hidden" name="leadExcel" value="true">
                 <input type="hidden" name="c" value="site" />
                 <input type="hidden" name="a" value="entry" />
                 <input type="hidden" name="m" value="fm_jiaoyu" />
@@ -107,12 +107,16 @@ require(['bootstrap'],function($){
                        onchange="document.getElementById('viewfile').value=this.value;this.style.display='none';">
                 <input type="submit" class="btn btn-primary" name="btnExcel" value="导入数据">
                 <a class="btn btn-primary" href="../addons/fm_jiaoyu/public/example/example_kcbiao.xls">下载导入模板</a>
+            </form>
+        </div>
+    </div>	
+    <div class="panel panel-default">
+        <div class="table-responsive panel-body">
         <table class="table table-hover">
 			<thead class="navbar-inner">
 				<tr>
                     <th class='with-checkbox' style="width: 20px;"><input type="checkbox" class="check_all" /></th>
 					<th style="width:5%">授课教师</th>
-					<th style="width:7%;">时间</th>
 					<th style="width:10%;">课程名称</th>	
 					<th style="width:7%;">授课班级</th>
 					<th style="width:7%;">授课科目</th>	
@@ -120,7 +124,7 @@ require(['bootstrap'],function($){
 					<th style="width:7%;">课节或时段</th>						
 					<th style="width:7%;">授课教室</th>
                     <th style="width:7%;">课时</th>						
-                    <th style="width:5%;">状态</th>						
+                    <th style="width:10%;">状态</th>						
 					<th style="text-align:right; width:8%;">操作</th>
 				</tr>
 			</thead>
@@ -130,9 +134,8 @@ require(['bootstrap'],function($){
                     <td class="with-checkbox"><input type="checkbox" name="check" value="{$item['id']}"></td>
 					<td style="overflow:visible; word-break:break-all; text-overflow:auto;white-space:normal">{if !empty($teachers[$item['tid']])}{$teachers[$item['tid']]['tname']}{/if}</td>
 					<td style="overflow:visible; word-break:break-all; text-overflow:auto;white-space:normal">
-              	    <div><span class="label label-info">{php echo date('Y-m-d',$item['date'])}</span></div>                   
-                    </td>					
-					<td>{if !empty($kcming[$item['kcid']])}{$kcming[$item['kcid']]['name']}{/if}</td>	
+              	    <div>{if !empty($kcming[$item['kcid']])}{$kcming[$item['kcid']]['name']}{/if}</br><span class="label label-info">{php echo date('Y-m-d',$item['date'])}</span></div>                   
+                    </td>						
                     <td>
                         {if !empty($category[$item['bj_id']])}{$category[$item['bj_id']]['sname']}{/if}
                     </td>					
@@ -150,6 +153,7 @@ require(['bootstrap'],function($){
                     <td style="overflow:visible; word-break:break-all; text-overflow:visible;white-space:normal">
                     {if $item['date']>TIMESTAMP}<span class="label label-default">未开始</span>{/if}         
                     {if $item['date']<TIMESTAMP}<span class="label label-warning">已结束</span>{/if}
+					{if !empty($item['isxiangqing'])}</br><span class="label label-success"><i class="fa fa-check-circle">有详细内容</i></span>{/if}
                     </td>                  					
 					<td style="text-align:right;">
 						<a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('kcbiao', array('id' => $item['id'], 'op' => 'post', 'schoolid' => $schoolid))}" title="编辑"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;<a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('kcbiao', array('id' => $item['id'], 'op' => 'delete', 'schoolid' => $schoolid))}" onclick="return confirm('此操作不可恢复，确认删除？');return false;" title="删除"><i class="fa fa-times"></i></a>
@@ -165,7 +169,6 @@ require(['bootstrap'],function($){
 			</tr>
 		</table>
         {$pager}
-    </form>
         </div>
     </div>
 </div>
@@ -195,7 +198,7 @@ $(function(){
                 url,
                 {idArr:id},
                 function(data){
-                    alert(data.error);
+                    alert('操作成功!');
                     location.reload();
                 },'json'
             );
@@ -205,6 +208,10 @@ $(function(){
 });
 </script>
 {elseif $operation == 'post'}
+<link rel="stylesheet" type="text/css" href="../addons/fm_jiaoyu/public/web/css/clockpicker.css" media="all">
+<script type="text/javascript" src="../addons/fm_jiaoyu/public/web/js/clockpicker.js"></script>
+<link rel="stylesheet" type="text/css" href="../addons/fm_jiaoyu/public/web/css/standalone.css" media="all">
+<link rel="stylesheet" type="text/css" href="../addons/fm_jiaoyu/public/web/css/uploadify_t.css?v=4" media="all" />
 <div class="panel panel-info">
    <div class="panel-heading"><a class="btn btn-primary" onclick="javascript :history.back(-1);"><i class="fa fa-tasks"></i> 返回</a></div>
 </div>
@@ -307,7 +314,25 @@ $(function(){
                             </div>
                         </div>
 				     </div>					 
+                </div>
+				<div class="form-group">
+                   <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">显示详情</label>
+                        <label class="radio-inline">
+                            <input type="radio" name="isxiangqing" value="1" {if $item['isxiangqing']==1 || empty($item)}checked{/if} id="credit1">是
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="isxiangqing" value="0" {if isset($item['isxiangqing']) && empty($item['isxiangqing'])}checked{/if} id="credit0">否
+                        </label>
+                        <div class="help-block"></div>
                 </div>				
+				<div id="credit-status1" {if $item['isxiangqing'] == 1}style="display:block"{else}style="display:none"{/if}>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label" style="width: 100px;">本节详情</label>
+                    <div class="col-sm-8 col-xs-12">
+                       {php echo tpl_ueditor('content', $item['content']);}
+                    </div>
+                </div>	
+				</div>					
              </div>											   
 		</div>	
         <div class="form-group col-sm-12">
@@ -315,7 +340,16 @@ $(function(){
             <input type="hidden" name="token" value="{$_W['token']}" />
         </div>
     </form>
-</div>	
+</div>
+<script type="text/javascript">
+	var category = {php echo json_encode($children)};
+	$('#credit1').click(function(){
+		$('#credit-status1').show();
+	});
+	$('#credit0').click(function(){
+		$('#credit-status1').hide();
+	});
+</script>
 <script type="text/javascript">
     <!--
     var category = {php echo json_encode($children)};

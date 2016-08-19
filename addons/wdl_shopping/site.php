@@ -599,10 +599,6 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 			if ($total > 0) {
 				if ($_GPC['export'] != 'export') {
 					$limit = ' LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
-				} else {
-					$limit = '';
-					$condition = " o.weid = :weid";
-					$paras = array(':weid' => $_W['uniacid']);
 				}
 
 				$sql = 'SELECT * FROM ' . tablename('shopping_order') . ' AS `o` WHERE ' . $condition . ' ORDER BY
@@ -659,6 +655,7 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 					/* 输出表头 */
 					$filter = array(
 						'ordersn' => '订单号',
+						'goods_title' => '商品',
 						'username' => '姓名',
 						'mobile' => '电话',
 						'paytype' => '支付方式',
@@ -675,9 +672,11 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 						$html .= $title . "\t,";
 					}
 					$html .= "\n";
-
 					foreach ($list as $k => $v) {
 						foreach ($filter as $key => $title) {
+							$good = pdo_get('shopping_order_goods', array('orderid' => $v['id']));
+							$good = pdo_get('shopping_goods', array('id' => $good['goodsid']));
+							$v['goods_title'] = $good['title'];
 							if ($key == 'createtime') {
 								$html .= date('Y-m-d H:i:s', $v[$key]) . "\t, ";
 							} else {
@@ -686,8 +685,6 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 						}
 						$html .= "\n";
 					}
-
-
 					/* 输出CSV文件 */
 					header("Content-type:text/csv");
 					header("Content-Disposition:attachment; filename=全部数据.csv");
@@ -697,7 +694,6 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 				}
 
 			}
-
 		} elseif ($operation == 'detail') {
 			$id = intval($_GPC['id']);
 			$item = pdo_fetch("SELECT * FROM " . tablename('shopping_order') . " WHERE id = :id AND weid = :weid", array(':id' => $id, ':weid' => $_W['uniacid']));
@@ -1238,7 +1234,7 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 	}
 	public function doMobileConfirm() {
 		global $_W, $_GPC;
-		checkauth();
+		$this->checkauth();
 		$totalprice = 0;
 		$allgoods = array();
 		$id = intval($_GPC['id']);
@@ -1682,7 +1678,6 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 		global $_W, $_GPC;
 		$this->checkAuth();
 		$operation = $_GPC['op'];
-
 		if ($operation == 'post') {
 			$id = intval($_GPC['id']);
 			$data = array(
@@ -1765,6 +1760,11 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 				$params[':uid'] = $_W['member']['uid'];
 			}
 			$addresses = pdo_fetchall($sql, $params);
+			$addresses = pdo_fetchall("SELECT * FROM " . tablename('mc_member_address') . " WHERE `uniacid` = :uniacid AND uid = :uid", array(':uid' => $_W['fans']['uid'] , ':uniacid' => $_W['uniacid']));
+			if (empty($addresses)) {
+				$account_api = WeAccount::create();
+				$shareaddress_config = $account_api->getShareAddressConfig();
+			}
 			$carttotal = $this->getCartTotal();
 			include $this->template('address');
 		}
@@ -1772,7 +1772,34 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 
 	private function checkAuth() {
 		global $_W;
-		checkauth();
+		$setting = cache_load('unisetting:'.$_W['uniacid']);
+		if (empty($_W['member']['uid']) && empty($setting['passport']['focusreg'])) {
+			$fan = pdo_get('mc_mapping_fans', array('uniacid' =>$_W['uniacid'], 'openid' => $_W['openid']));
+			if (!empty($fan)) {
+				$fanid = $fan['fanid'];
+			} else {
+				$post = array(
+					'uniacid' => $_W['uniacid'],
+					'updatetime' => time(),
+					'openid' => $_W['openid'],
+					'follow' => 0,
+				);
+				pdo_insert('mc_mapping_fans', $post);
+				$fanid =  pdo_insertid();
+			}
+			if (empty($fan['uid'])) {
+				pdo_insert('mc_members', array('uniacid' => $_W['uniacid']));
+				$uid = pdo_insertid();
+				$_W['member']['uid'] = $uid;
+				$_W['fans']['uid'] = $uid;
+				pdo_update('mc_mapping_fans', array('uid' => $uid), array('fanid' => $fanid));
+			} else {
+				$_W['member']['uid'] = $fan['uid'];
+				$_W['fans']['uid'] = $fan['uid'];
+			}
+		} else {
+			checkauth();
+		}
 	}
 	private function changeWechatSend($id, $status, $msg = '') {
 		global $_W;
@@ -1929,12 +1956,20 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 				if (!empty($this->module['config']['mobile'])) {
 					load()->model('cloud');
 					cloud_prepare();
+					cloud_sms_send($this->module['config']['mobile'], '800001', array('user' => $address[0], 'mobile' => $address[1], 'datetime' => date('m月d日H:i'), 'order_no' => $order['ordersn'], 'totle' => $order['price']));
 
-					$body = '用户' . $address[0] . ',电话:' . $address[1] . '于' . date('m月d日H:i') . '成功支付订单' . $order['ordersn']
-						. ',总金额' . $order['price'] . '元' . '.' . random(3);
-
-					cloud_sms_send($this->module['config']['mobile'], $body);
 				}
+				if(!empty($this->module['config']['mobile'])){
+					load()->func('communication');
+					$target = $_W['siteroot']."framework/model/sendsms/sendmsg.php";
+					$row = pdo_fetchcolumn("SELECT `msg`,`print` FROM ".tablename('uni_settings') . " WHERE uniacid = :uniacid", array(':uniacid' => $_W['uniacid']));
+					$msg = iunserializer($row);
+					$sqla = 'SELECT `settings` FROM ' . tablename('uni_account_modules') . ' WHERE `uniacid` = :uniacid AND `module` = :module';
+					$settings = pdo_fetchcolumn($sqla, array(':uniacid' => $_W['uniacid'], ':module' => 'wdl_shopping'));
+					$settings = iunserializer($settings);
+			                $post_data = "appkey=" . $msg['appkey'] . "&secret=" . $msg['secret'] . "&qianming=" . $msg['qianming'] . "&moban=" . $settings['sms_id']."&phone=".$settings['mobile']."&phonenum=".$address[1]."&name=".$address[0];
+			                $result = ihttp_request($target, $post_data);
+					}
 			}
 
 			$setting = uni_setting($_W['uniacid'], array('creditbehaviors'));
@@ -2137,6 +2172,12 @@ class Wdl_shoppingModuleSite extends WeModuleSite {
 			message('订单已经成功删除！', $redirect, 'success');
 		} else {
 			pdo_update('shopping_order', array('status' => $status), array('id' => $orderId));
+			$order = pdo_get('shopping_order_goods', array('weid' => $_W['uniacid'], 'orderid' => $orderId));
+			$goodid = $order['goodsid'];
+			$good = pdo_get('shopping_goods', array('weid' => $_W['uniacid'], 'id' => $goodid));
+			if ($good['totalcnf'] == 0 && $status == -1) {
+				pdo_update('shopping_goods', array('sales' => $good['sales'] -1),array('weid' => $_W['uniacid'], 'id' => $goodid));
+			}
 			message('订单已经成功取消！', $redirect, 'success');
 		}
 	}

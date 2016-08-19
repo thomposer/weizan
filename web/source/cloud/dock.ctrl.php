@@ -72,7 +72,7 @@ if($do == 'schema') {
 
 if($do == 'download') {
 	$data = base64_decode($post);
-	if (base64_encode($data) != $post) {
+	if (base64_encode($data) !== $post) {
 		$data = $post;
 	}
 	$ret = iunserializer($data);
@@ -200,7 +200,7 @@ if ($do == 'sms.info') {
 function __secure_decode($post) {
 	global $_W;
 	$data = base64_decode($post);
-	if (base64_encode($data) != $post) {
+	if (base64_encode($data) !== $post) {
 		$data = $post;
 	}
 	$ret = iunserializer($data);

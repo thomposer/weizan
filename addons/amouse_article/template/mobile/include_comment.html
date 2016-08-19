@@ -13,10 +13,10 @@
             {loop $cList $comment}
             <li class="discuss_item" id="{$comment['id']}">
                 <div class="discuss_opr">
-                                <span class="media_tool_meta tips_global meta_praise js_comment_praise " data-status="0" contentid="{$comment['id']}">
-                                    <i class="icon_praise_gray" id="comment_praise"></i>
-                                    <span class="praise_num" >{if $comment['praise_num']>=100000}100000+{else}{$comment['praise_num']}{/if}</span>
-                                </span>
+                    <span class="media_tool_meta tips_global meta_praise js_comment_praise" id="comment_praise2_{$comment['id']}" data-status="0" contentid="{$comment['id']}">
+                        <i class="icon_praise_gray{if !empty($myrecord['comment'])} praised{/if}" onclick="ajaxComment({$comment['id']})" id="comment_praise_{$comment['id']}"></i>
+                        <span class="praise_num" >{if $comment['praise_num']>=100000}100000+{else}{$comment['praise_num']}{/if}</span>
+                    </span>
                 </div>
 
                 <div class="user_info">
@@ -68,3 +68,35 @@
         </a>
     </p>
 </div>
+<script>
+    function ajaxComment(commentid) {
+        var d = {};
+        d['commentid'] = commentid;
+        var num = parseInt($("#comment_praise2_" + commentid).find("span").text());
+        console.log(num);
+        $.ajax({
+            url: "{php echo $this->createMobileUrl('ajaxpraise',array(),true)}&_=" + Math.random(),
+            type: "post",
+            data: d,
+            dataType: "json",
+            success: function (res) {
+                console.log(res);
+                if (res && res.code==200) {
+                    $("#comment_praise2_" + commentid).attr("data-status", "1");
+                    $("#comment_praise2_" + commentid + " span").text(num + 1);
+                    $("#comment_praise_" + commentid).addClass("praised");
+                    state2 = true;
+                } else if(res.code==201) {
+                    $("#comment_praise2_" + commentid).attr("data-status", "0");
+                    $("#comment_praise2_" + commentid + " span").text(num - 1);
+                    $("#comment_praise_" + commentid).removeClass("praised");
+                    state2 = true;
+                }
+            },
+            error: function (r) {
+                console.log(r);
+            }
+        });
+    }
+
+</script>

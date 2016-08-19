@@ -123,3 +123,32 @@ if ($do == 'qiniu') {
 		message(error(-1, '配置失败，七牛访问url错误'),'','ajax');
 	}
 }
+if ($do == 'cos') {
+	load()->model('attachment');
+	$url = $_GPC['url'];
+	$bucket =  trim($_GPC['bucket']);
+	if (!strexists($url, '//'.$bucket.'-') && strexists($url, '.cos.myqcloud.com')) {
+		$url = 'http://'.$bucket.'-'.trim($_GPC['appid']).'.cos.myqcloud.com';
+	}
+	$auth= attachment_cos_auth(trim($_GPC['bucket']), trim($_GPC['appid']), trim($_GPC['secretid']), trim($_GPC['secretkey']));
+	if (is_error($auth)) {
+		message(error(-1, '配置失败，请检查配置'), '', 'ajax');
+	}
+	load()->func('communication');
+	$url = strexists($url, 'http') ? trim($url, '/') : 'http://'.trim($url, '/');
+	$filename = 'MicroEngine.ico';
+	$response = ihttp_get($url. '/'.$filename);
+	if (is_error($response)) {
+		message(error(-1, '配置失败，腾讯cos访问url错误'),'','ajax');
+	}
+
+	if (intval($response['code']) != 200) {
+		message(error(-1, '配置失败，腾讯cos访问url错误,请保证bucket为公共读取的'),'','ajax');
+	}
+	$image = getimagesizefromstring($response['content']);
+	if (!empty($image) && strexists($image['mime'], 'image')) {
+		message(error(0,'配置成功'),'','ajax');
+	} else {
+		message(error(-1, '配置失败，腾讯cos访问url错误'),'','ajax');
+	}
+}

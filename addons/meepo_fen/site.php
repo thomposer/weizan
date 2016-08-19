@@ -1,34 +1,108 @@
 <?php
 /**
- * 全民总动员模块订阅器
+ * 关注有礼模块微站定义
  *
  * @author meepo
  * @url http://bbs.012wz.com/
  */
 defined('IN_IA') or exit('Access Denied');
-define('INC_PATH',IA_ROOT.'/addons/meepo_fen/inc/');
-define('TEMPLATE_PATH','../addons/meepo_fen/template/mobile/resource/');
-include INC_PATH.'core/class/mload.class.php';
-mload()->func('common');
-load()->model('activity');
+
+if(!function_exists('M')){
+    function M($name){
+        static $model = array();
+        if(empty($model[$name])) {
+            include IA_ROOT.'/addons/meepo_fen/model/'.$name.'.php';
+            $model[$name] = new $name();
+        }
+        return $model[$name];
+    }
+}
+
+ini_set('display_errors', '0');
+error_reporting(E_ALL ^ E_NOTICE);
 
 class Meepo_fenModuleSite extends WeModuleSite {
-	public $modulename = 'meepo_fen';
-	public function __construct(){
-		mload()->model('frame');
-		$do = $_GPC['do'];
-		$doo = $_GPC['doo'];
-		$act = $_GPC['act'];
-	
-		global $frames;
-		$frames = getModuleFrames('meepo_fen');
-		_calc_current_frames2($frames);
+	public $system_setting = array();
+	public function __construct()
+	{
+		global $_W,$_GPC;
+		if(!empty($_W['openid'])){
+			M('member')->update($_W['openid']);
+		}
 	}
-	
-	public function get_set(){
-		global $_W;
-		$set = pdo_fetch("SELECT * FROM ".tablename('meepo_fen_set')." WHERE uniacid = '{$_W['uniacid']}'");
-		$set = iunserializer($set['set']);
-		return $set;
+
+	public function doMobileindex(){
+	    global $_W,$_GPC;
+	    $_GPC['do'] = 'index';
+	    
+	    include $this->template('index');
+	}
+	public function doWebmember(){
+	    global $_W,$_GPC;
+	    $_GPC['do'] = 'member';
+	    if ($_GPC['act'] == 'edit') {
+	        $id = intval($_GPC['id']);
+	        if($_W['ispost']){
+	            $data = array();
+	            $data['uniacid'] = $_W['uniacid'];
+	            $data['create_time'] = time();
+	            if(!empty($id)){
+	                $data['id'] = $id;
+	                unset($data['create_time']);
+	            }
+	            M('member')->update($data);
+	            message('保存成功',$this->createWebUrl('member'),'success');
+	        }
+	        $item = M('member')->getInfo($id);
+	        include $this->template('member_edit');
+	        exit();
+	    }
+	    if ($_GPC['act'] == 'delete') {
+	        $id = intval($_GPC['id']);
+	        if(empty($id)){
+	            if($_W['ispost']){
+	                $data = array();
+	                $data['status'] = 1;
+	                $data['message'] = '参数错误';
+	                die(json_encode($data));
+	            }else{
+	                message('参数错误',referer(),'error');
+	            }
+	        }
+	        M('member')->delete($id);
+	        if($_W['ispost']){
+	            $data = array();
+	            $data['status'] = 1;
+	            $data['message'] = '操作成功';
+	            die(json_encode($data));
+	        }else{
+	            message('删除成功',referer(),'success');
+	        }
+	    }
+	    $page = !empty($_GPC['page'])?intval($_GPC['page']):1;
+	    $where = "";
+		$list = M('member')->getList($page,$where);
+	    include $this->template('member');
+	}
+	public function doWebsetting(){
+	    global $_W,$_GPC;
+	    $_GPC['do'] = 'setting';
+	    $code = $_GPC['code'];
+	    if(empty($code)){
+	        $code = 'system';
+	    }
+	    if(empty($code)){
+	        message('参数错误',referer(),'error');
+	    }
+	    if($_W['ispost']){
+	        $data = array();
+	        $data['codename'] = $code;
+	        $data['value'] = serialize($_POST);
+	        M('setting')->update($data);
+	        message('保存成功',referer(),'success');
+	    }
+	    $item = M('setting')->getSetting($code);
+
+	    include $this->template($code.'_setting');
 	}
 }

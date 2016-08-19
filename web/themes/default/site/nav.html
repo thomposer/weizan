@@ -420,7 +420,7 @@
 						{$item['title']}
 						{/if}
 					</td>
-					<td class="text-center" style="width:200px; white-space:nowrap;">
+					<td class="text-center" style="width:200px; white-space:nowrap;overflow: visible" >
 						{if $item['remove']}
 						{php echo tpl_form_field_link('url['.$item['id'].']', $item['url'], array('css' => array('input' => ' input-sm', 'btn' => ' btn-sm')));}
 						{else}

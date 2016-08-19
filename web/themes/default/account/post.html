@@ -195,39 +195,6 @@
 				</div>
 			</div>
 		</div>
-	{if $_W['isfounder']}
-		<h5 class="page-header">短信参数</h5>
-		<div class="form-group">
-			<label class="col-xs-12 col-sm-3 col-md-2 control-label">短信剩余条数</label>
-			<div class="col-sm-9 col-xs-12">
-				{php echo tpl_edit_sms('balance', $notify['sms']['balance'], $account['uniacid'], url('account/post/edit_sms'))}
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-xs-12 col-sm-3 col-md-2 control-label">短信签名</label>
-			<div class="col-sm-9 col-xs-12">
-				<input type="text" name="signature" class="form-control" value="{$notify['sms']['signature']}" />
-				<span class="help-block">请填写短信签名。</span>
-			</div>
-		</div>
-
-	{elseif !empty($notify['sms'])}
-		<h5 class="page-header">短信参数</h5>
-		<div class="form-group">
-			<label class="col-xs-12 col-sm-3 col-md-2 control-label">短信剩余条数</label>
-			<div class="col-sm-9 col-xs-12">
-				<p class="form-control-static">{$notify['sms']['balance']}</p>
-				<span class="help-block">短信剩余条数。</span>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-xs-12 col-sm-3 col-md-2 control-label">短信签名</label>
-			<div class="col-sm-9 col-xs-12">
-				<p class="form-control-static">{$notify['sms']['signature']}</p>
-				<span class="help-block">短信签名。</span>
-			</div>
-		</div>
-	{/if}
 	<div class="form-group">
 		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
 		<div class="col-sm-9 col-xs-12">

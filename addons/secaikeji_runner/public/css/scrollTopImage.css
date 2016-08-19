@@ -1,0 +1,26 @@
+.gj-go-top {
+    background-color: rgba(0, 0, 0, 0.4);
+    bottom: 83px;
+    display: none;
+    position: fixed;
+    right: 14px;
+    text-align: center;
+    z-index: 11;
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+	}
+.gj-go-top i {
+	padding: 5px;
+	color: White;
+	font-size: 20px;
+	display: block;
+	height: 50px;
+    width: 50px;
+    margin: 0 auto;  
+}
+.ion-android-arrow-up:before {
+	content: "\f366";
+	display: block;
+	margin-top: 10px;
+}

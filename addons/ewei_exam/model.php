@@ -658,8 +658,8 @@ if(!function_exists('upload_question')) {
 		global $_W;
 
 		//print_r($array);exit;
-
 		$question_type = $strs[0];
+
 		$level = $strs[1];
 		$question = $strs[2];
 		$answer = $strs[3];
@@ -708,6 +708,7 @@ if(!function_exists('upload_question')) {
 			$insert['level'] = $level;
 			$insert['explain'] = $explain;
 			$insert['weid'] = $_W['uniacid'];
+
 			pdo_insert('ewei_exam_question', $insert);
 		}
 	}
@@ -729,13 +730,13 @@ if(!function_exists('uploadFile')) {
 					continue;
 				}
 				$strs = array();
-				foreach ($ques as $questi) {
+				foreach ($ques as $questi){
 					$strs[] = preg_replace('/\s/', '', trim($questi, "\""));
-					if ($array['ac'] == 'question') {
-						upload_question($strs, time(), $array);
-					}elseif ($array['ac'] == 'member') {
-						upload_member($strs, time());
-					}
+				}
+				if ($array['ac'] == 'question') {
+					upload_question($strs, time(), $array);
+				}elseif ($array['ac'] == 'member') {
+					upload_member($strs, time());
 				}
 			}
 			$msg = '1';

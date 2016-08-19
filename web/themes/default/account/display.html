@@ -19,12 +19,12 @@
 				<i class="fa fa-info-circle"></i>
 				Hi，<span class="text-strong">{$_W['username']}</span>，您所在的会员组 <span class="text-strong">{$stat['group_name']}</span>，
 				账号有效期限：<span class="text-strong">{php echo date('Y-m-d', $_W['user']['starttime'])} ~~ {if empty($_W['user']['endtime'])}无限制{else}{php echo date('Y-m-d', $_W['user']['endtime'])}{/if}</span>，
-				可添加 <span class="text-strong">{$stat['maxaccount']} </span>个公众号，已添加<span class="text-strong"> {$stat['uniacid_num']} </span>个，还可添加 <span class="text-strong">{$stat['uniacid_limit']} </span>个公众号。
+				可创建 <span class="text-strong">{$stat['maxaccount']} </span>个公众号，已创建<span class="text-strong"> {$stat['uniacid_num']} </span>个（包含回收站里面的），还可创建 <span class="text-strong">{$stat['uniacid_limit']} </span>个公众号。
 			</div>
 		{/if}
 		<div class="input-group">
-			<a class="btn btn-primary" href="{url 'account/post-step'}"><i class="fa fa-plus"></i> 添加公众号</a>
-			{if $_W['setting']['platform']['authstate']}<a style="margin-left:5px;" href="{$authurl}"><img src="https://open.weixin.qq.com/zh_CN/htmledition/res/assets/res-design-download/icon_button3_2.png" /></a>{/if}
+			<a class="btn btn-primary" href="{url 'account/post-step'}"><i class="fa fa-plus"></i> 普通模式添加公众号</a>
+			{if $_W['setting']['platform']['authstate']}<a  class="btn btn-success" style="margin-left:5px;" href="{$authurl}"><i class="fa fa-weixin"></i> 授权登录添加公众号</a>{/if}
 		</div>
 		<br>
 		<div class="panel panel-info">
@@ -92,7 +92,7 @@
 									套餐 : {$uni['setmeal']['groupname']}
 								</span>
 							</div>
-							<div class="pull-right">
+							<div  class="pull-right" style="margin-right: 15px;">
 								<a href="{php echo url('account/switch', array('uniacid' => $uni['uniacid']))}" target="_blank" class="manage"><i class="fa fa-cog"></i>管理公众号</a>
 							</div>
 						</div>

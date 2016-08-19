@@ -4,8 +4,9 @@
             <table class="table table-hover" ng-controller="advAPI" style="width:100%;" cellspacing="0" cellpadding="0">
                 <thead class="navbar-inner">
                     <tr>
-                        <th width="100">提现单号</th>
+                        <th width="120">提现单号</th>
                         <th width="100">提现金额</th>
+                        <th width="100">提现账号</th>
                         <th width="100">提现时间</th>
                         <th width="80">状态</th>
                         <th width="100" style="text-align:right">操作</th>
@@ -16,6 +17,17 @@
                     <tr>
                         <td>{$item['ordersn']}</td>
                         <td>{$item['price']}元</td>
+                        <td>
+                            <?php
+                                    load()->model('user');
+                                    $result = user_single($item['uid']);
+                                    echo $result['username'];
+
+
+
+                            ?>
+
+                        </td>
                         <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
                         <td><label  class='label  label-default {if $item['status']==1}label-info{/if}' >{if $item['status']==1}已处理{else}未处理{/if}</label></td>
                         <td style="text-align:right">

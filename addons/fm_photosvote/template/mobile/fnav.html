@@ -83,8 +83,21 @@
       display:block;
       line-height:15px;
       text-align:center;
+      {if $rbody['other']}
       background: -webkit-gradient(linear, 0 0, 0 100%, from({if empty($rbody['foobg1'])}#943DBE{else}{$rbody['foobg1']}{/if}), to({if empty($rbody['foobg1'])}#32014A{else}{$rbody['foobg1']}{/if}), color-stop(35% ,{if empty($rbody['foobg1'])}#32014A{else}{$rbody['foobg1']}{/if}), color-stop(50%, {if empty($rbody['foobg1'])}#32014A{else}{$rbody['foobg1']}{/if}) );
+      {/if}
     }
+    {if !$rbody['other']}
+    .nav {
+        width: 100%;
+        height: 50px;
+        background: #28013b url('{FM_STATIC_MOBILE}public/images/nav_bg.jpg') no-repeat;
+        background-size: 100% 100%;
+        position: fixed;
+        bottom: 0;
+        z-index: 10000;
+    }
+    {/if}
     .nav li .a {
       display: block;
       color: {if empty($rbody['foobgtextn'])}#fff{else}{$rbody['foobgtextn']}{/if};

@@ -5,11 +5,15 @@
  */
 defined('IN_IA') or exit('Access Denied');
 load()->classs('weixin.account');
-class coupon extends WeiXinAccount{
+class coupon extends WeiXinAccount {
 	public $account = null;
-	public function __construct($acid) {
-		$acc = self::create($acid);
-		$this->account = $acc->account;
+	public function __construct($acid = '') {
+		$this->account_api = self::create($acid);
+		$this->account = $this->account_api->account;
+	}
+	
+	public function getAccessToken() {
+		return $this->account_api->getAccessToken();
 	}
 
 	public function getCardTicket(){

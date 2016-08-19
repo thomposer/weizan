@@ -29,7 +29,7 @@
 			</div>
 			{if !empty($_W['account']['subscribeurl'])}
 			<div class="subscribeurl">
-				<img src="{$_W['account']['subscribeurl']}" />
+				<img src="{$_W['account']['subscribeurl']}" onerror="this.parentNode.style.display='none'"/>
 			</div>
 			{/if}
 			<div class="rule">

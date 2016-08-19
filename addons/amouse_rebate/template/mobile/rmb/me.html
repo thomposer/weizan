@@ -1,0 +1,156 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <title>{if $set['copyright']}{$set['copyright']}{else}{$_W['account']['name']}{/if}</title>
+    <link rel="stylesheet" href="{AMOUSE_REBATE_RES}css/foundation.css?version=20150101"/>
+    <link rel="stylesheet" href="{AMOUSE_REBATE_RES}css/main.css?version=20150221"/>
+    <script src="{AMOUSE_REBATE_RES}js/modernizr.js?version=20150221"></script>
+    <script src="{AMOUSE_REBATE_RES}js/jquery.js?version=20150221"></script>
+    <script src="{AMOUSE_REBATE_RES}js/foundation.js?version=20150221"></script>
+    <script src="{AMOUSE_REBATE_RES}js/main.js?version=20150221"></script>
+    <link rel="stylesheet" href="{AMOUSE_REBATE_RES}css/view_detail.css?version=20150101"/>
+    <script src="{AMOUSE_REBATE_RES}js/jquery.cookie.js?version=20150101"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="content">
+        <div class="dialog" id="tip">
+            <div class="dialog-cnt">
+                <div class="dialog-bd"><h3>提示</h3>
+
+                    <p class="text"></p><a class="button correct-btn" id="alert_ok">确&nbsp;&nbsp;定</a></div>
+            </div>
+        </div>
+        <div class="detail-user">
+            <div class="portrait portrait-person detail-portrait">
+                <img src="{php echo strpos($fans['headimgurl'],'http://')===FALSE?(tomedia($fans['headimgurl'])):$fans['headimgurl']}" alt=""/>
+            </div>
+            <p>
+                {$fans['nickname']} ({if $fans && $fans['wechatno']}{$fans['wechatno']}{/if})</p>
+
+            <p>用户ID：{$fans['id']}</p></div>
+        <div class="detail-bar">
+            <ul class="row">
+                <li class="small-4 medium-4 columns">地区：{$fans['location_c']}</li>
+                <li class="small-4 medium-4 columns">人气：{$fans['hot']}</li>
+                <li class="small-4 medium-4 columns">{if $custom_set['credittxt']}{$custom_set['credittxt']}{else}积分{/if}：{$top_credit}</li>
+            </ul>
+        </div>
+        <div class="btn-group">
+            <ul class="row">
+                {if $fans && $set && $fans['friend']>=$set['needfriend']}
+                    {if $fans['wechatno']}
+                    <li class="small-4 medium-4 columns detail-btn">
+                        <a class='free_vip' href="{php echo $this->createMobileUrl('release',array('ptype'=>'person','pk'=>pencode($fans['id'])),true)}">
+                            <i class="iconfont btn-icon">&#xe604;</i>
+                        <p>更新名片</p></a>
+                    </li>
+                    {else}
+                    <li class="small-4 medium-4 columns detail-btn"><a href="{php echo $this->createMobileUrl('release',array('ptype'=>'person'),true)}" >
+                        <i class="iconfont btn-icon">&#xe604;</i><p>发布名片</p></a></li>
+                    {/if}
+                {else}
+                    <li class="small-4 medium-4 columns detail-btn"><a href="#" onclick="alert('您还需要加{$needfriend}位好友才能发布名片。');"><i class="iconfont btn-icon">&#xe608;</i><p>发布名片</p></a></li>
+                {/if}
+                <li class="small-4 medium-4 columns detail-btn">
+                    <a href="{php echo $this->createMobileUrl('team',array('op'=>1, 'pageIndex'=>1),true)}"><i class="iconfont btn-icon btn-green">&#xe639;</i><p>推广的好友</p></a>
+                </li>
+                <!---->
+                <li class="small-4 medium-4 columns detail-btn"><a href="{php echo $this->createMobileUrl('logs',array('op'=>'orders'),true)}"><i class="iconfont btn-icon btn-yellow">&#xe698;</i><p>我的订单</p></a></li>
+            </ul>
+            <ul class="row">
+                <li class="small-4 medium-4 columns detail-btn"><a
+                        href="{php echo $this->createMobileUrl('poster',array('pk'=>pencode($fans['id'])),true)}"><i
+                        class="iconfont btn-icon btn-red">&#xe602;</i><p>我的推广码</p></a></li>
+                <li class="small-4 medium-4 columns detail-btn"><a
+                        href="{php echo $this->createMobileUrl('poster',array('op'=>'Invite','pk'=>pencode($fans['id'])),true)}"><i
+                        class="iconfont btn-icon btn-green">&#xe602;</i><p>我的推广链接</p></a>
+                </li>
+                <li class="small-4 medium-4 columns detail-btn">
+                    <a  href="{php echo $this->createMobileUrl('book',array('op'=>'step1'),true)}"><i class="iconfont btn-icon btn-red">&#xe628;</i>
+                        <p>永久会员</p>
+                    </a>
+                </li>
+            </ul>
+            <ul class="row">
+                <li class="small-4 medium-4 columns detail-btn"><a href="{php echo $this->createMobileUrl('sign')}">
+                    <i class="iconfont btn-icon btn-red">&#xe610;</i>
+                    <p>签到奖励</p></a>
+                </li>
+                <li class="small-4 medium-4 columns detail-btn"><a href="{php echo $this->createMobileUrl('vip')}">
+                    <i class="iconfont btn-icon btn-red">&#xe610;</i>
+                    <p>{if $custom_set['credittxt']}{$custom_set['credittxt']}{else}积分{/if}充值</p></a>
+                </li>
+                <li class="small-4 medium-4 columns detail-btn"><a href="{php echo $this->createMobileUrl('logs',array('op'=>'point'),true)}"><i
+                        class="iconfont btn-icon btn-red">&#xe610;</i><p>我的{if $custom_set['credittxt']}{$custom_set['credittxt']}{else}积分{/if}</p></a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).foundation();
+alert_ok = null;
+function new_alert(msg, cb) {
+    alert_ok = cb;
+    $('#tip .text').html(msg);
+    $('#tip').show();
+}
+old_alert = window.alert;
+window.alert = new_alert;
+$('#alert_ok').click(function () {
+    if (alert_ok) {
+        alert_ok();
+    }
+    $('#tip').hide();
+});
+
+currentItem = '{$fans['qrcode']}';
+</script>
+<script>
+    wx.ready(function () {
+        wx.onMenuShareTimeline({
+            imgUrl:"{$shareimg}",
+            desc : "{$sharedesc}",
+            title : "{$sharetitle}",
+            link: "{$shareurl}",
+            success: function () {
+
+            }
+        });
+        wx.onMenuShareAppMessage({
+            imgUrl:"{$shareimg}",
+            desc : "{$sharedesc}",
+            title : "{$sharetitle}",
+            type: 'link',
+            link: "{$shareurl}",
+            success: function () {
+
+            }
+        });
+    });
+</script>
+{template 'footerbar'}
+
+{if $set && $set['admin_tpl']=="0"}
+<script>
+    $(function(){
+        var $free_vip =$.cookie('free_vip_rebate');
+        if($free_vip!='0') {
+            new_alert('分享指定文章到朋友圈即可上传二维码，添加好友即可获得{$credittxt}', function(){
+                window.location = "{php echo $this->createMobileUrl('poster',array('op'=>'Invite','pk'=>pencode($fans['id'])),true)}";
+            });
+            return false;
+        }
+    });
+</script>
+{/if}
+
+{template 'cnzz'}
+</body>
+</html>

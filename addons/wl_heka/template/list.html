@@ -35,7 +35,7 @@
 								{php echo date('Y-m-d', $row[create_time]);}
 							</td>
 							<td>
-								<a href="{$_W['siteroot']}app/{php echo $this->createMobileUrl('show', array('card' => $row['card'],'id'=>$row['rid'],'cid'=>$row['id']));}" target="_blank" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="bottom" title="预览"><i class="fa fa-eye"></i></a>
+								<a href="{$_W['siteroot']}app/{php echo $this->createMobileUrl('show', array('card' => $row['card'],'id'=>$row['rid'],'cid'=>$row['id']));}" target="_blank" class="btn btn-default" title="预览">预览</a>
 							</td>
 						</tr>
 						{/loop}
@@ -57,12 +57,5 @@
 		<input type="hidden" name="token" value="{$_W['token']}" />
 	</div>
 </form>
-
-<script>
-	require(['bootstrap'],function($){
-		$('.btn').tooltip();
-	});
-</script>
-
 {template 'common/footer'}
  

@@ -65,16 +65,20 @@ load()->func('cache');
 if(function_exists('date_default_timezone_set')) {
 	date_default_timezone_set($_W['config']['setting']['timezone']);
 }
-if(!empty($_W['config']['memory_limit']) && function_exists('ini_get') && function_exists('ini_set')) {
-	if(@ini_get('memory_limit') != $_W['config']['memory_limit']) {
-		@ini_set('memory_limit', $_W['config']['memory_limit']);
+if(!empty($_W['config']['setting']['memory_limit']) && function_exists('ini_get') && function_exists('ini_set')) {
+	if(@ini_get('memory_limit') != $_W['config']['setting']['memory_limit']) {
+		@ini_set('memory_limit', $_W['config']['setting']['memory_limit']);
 	}
 }
+$_W['ishttps'] = !empty($_W['config']['setting']['https']) ? true : (strtolower(($_SERVER['SERVER_PORT'] == 443 || (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off') ? true : false)));
+$_W['isajax'] = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+$_W['ispost'] = $_SERVER['REQUEST_METHOD'] == 'POST';
 
+$_W['sitescheme'] = $_W['ishttps'] ? 'https://' : 'http://';
 $_W['script_name'] = htmlspecialchars(scriptname());
-
 $sitepath = substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
-$_W['siteroot'] = htmlspecialchars('http://' . $_SERVER['HTTP_HOST'] . $sitepath);
+$_W['siteroot'] = htmlspecialchars($_W['sitescheme'] . $_SERVER['HTTP_HOST'] . $sitepath);
+
 if(substr($_W['siteroot'], -1) != '/') {
 	$_W['siteroot'] .= '/';
 }
@@ -82,9 +86,6 @@ $urls = parse_url($_W['siteroot']);
 $urls['path'] = str_replace(array('/web', '/app', '/payment/wechat', '/payment/alipay', '/api'), '', $urls['path']);
 $_W['siteroot'] = $urls['scheme'].'://'.$urls['host'].((!empty($urls['port']) && $urls['port']!='80') ? ':'.$urls['port'] : '').$urls['path'];
 $_W['siteurl'] = $urls['scheme'].'://'.$urls['host'].((!empty($urls['port']) && $urls['port']!='80') ? ':'.$urls['port'] : '') . $_W['script_name'] . (empty($_SERVER['QUERY_STRING'])?'':'?') . $_SERVER['QUERY_STRING'];
-
-$_W['isajax'] = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
-$_W['ispost'] = $_SERVER['REQUEST_METHOD'] == 'POST';
 
 if(MAGIC_QUOTES_GPC) {
 	$_GET = istripslashes($_GET);
@@ -114,6 +115,13 @@ if(!$_W['isajax']) {
 }
 
 setting_load();
+if(pdo_tableexists('agent_copyright')) {
+    $copyright = pdo_get('agent_copyright',array('yuming'=>$_SERVER['HTTP_HOST']));
+    if(!empty($copyright)){
+	    $_W['setting']['copyright'] =iunserializer($copyright['copyright']);
+		$_W['setting']['basic']['template'] =$copyright['pifu'];
+    }
+}
 if (empty($_W['setting']['upload'])) {
 	$_W['setting']['upload'] = array_merge($_W['config']['upload']);
 }
@@ -125,6 +133,8 @@ if (!empty($_W['setting']['remote']['type'])) {
 		$_W['attachurl'] = $_W['attachurl_remote'] = $_W['setting']['remote']['alioss']['url'].'/';
 	} elseif ($_W['setting']['remote']['type'] == 3) {
 		$_W['attachurl'] = $_W['attachurl_remote'] = $_W['setting']['remote']['qiniu']['url'].'/';
+	} elseif ($_W['setting']['remote']['type'] == 4) {
+		$_W['attachurl'] = $_W['attachurl_remote'] = $_W['setting']['remote']['cos']['url'].'/';
 	}
 }
 $_W['os'] = Agent::deviceType();

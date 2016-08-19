@@ -125,6 +125,9 @@ function(a) {
 		case "unit_type":
 			j(".sHouseType img").imageModal();
 			break;
+			case "xc":
+				j(".sHouseType img").imageModal();
+				break;
 		case "editor_comments":
 			break;
 		case "user_comments":

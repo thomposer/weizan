@@ -188,7 +188,7 @@ body{background: #f0f0f0;}
                     {/if}                
                 </div>
                 <div class="div_dt" style="border:none;">
-                    <span class="num">{php echo $this->getprojectorder($item['id'])}</span><br />
+                    <span class="num">{php echo $this->getprojectorder($item['id']) + $this->getprojectorder_ws($item['id']);}</span><br />
                     <span class="til">支持者</span>
                 </div>
                 {/if}

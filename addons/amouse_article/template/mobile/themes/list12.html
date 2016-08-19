@@ -32,7 +32,7 @@
             <ul>
                 {loop $advlist $adv}
                 <li><a href="{$adv['link']}">
-                    <img align="absmiddle" src="{php echo strpos($adv['thumb'], 'http://') === FALSE ? ($_W['attachurl'].$adv['thumb']) : $adv['thumb']}"  style="height:154px;width: 100%;" >
+                    <img align="absmiddle" src="{php echo strpos($adv['thumb'], 'http://') === FALSE ? tomedia($adv['thumb']) : $adv['thumb']}"  style="height:154px;width: 100%;" >
                 </a>
                 </li>
                 {/loop}
@@ -46,7 +46,7 @@
     <div class="avatar index">
         <a href="{$set['guanzhuUrl']}">
         {if !empty($set['logo'])}
-            <img src="{php echo strpos($set['logo'],'http://')===FALSE?($_W['attachurl'].$set['logo']):$set['logo']}" height="80" width="80"/>
+            <img src="{php echo strpos($set['logo'],'http://')===FALSE?tomedia($set['logo']):$set['logo']}" height="80" width="80"/>
         {else}
             <img src="http://res.wemedia.cn/mpshare/logo_80.png"  alt="Logo"/>
         {/if}
@@ -73,7 +73,7 @@
     <div class="article-item">
         <a href="{php echo $this->createMobileUrl("detail",array("id" => $row['id'],'op'=>'wemedia'),true)}">
             <div class="item-cover">
-                <img src="http://res.wemedia.cn/mpshare/loading.gif" data-original="{php echo strpos($row['thumb'],'http://')===FALSE?($_W['attachurl'].$row['thumb']):$row['thumb']}" alt="{$row[title]}" />
+                <img src="http://res.wemedia.cn/mpshare/loading.gif" data-original="{php echo strpos($row['thumb'],'http://')===FALSE?tomedia($row['thumb']):$row['thumb']}" alt="{$row[title]}" />
             </div>
             <div class="item-summary">
                 <div class="item-title">{$row[title]}</div>

@@ -39,10 +39,10 @@ switch($_GPC['order']){
 				case '3': $orderStr = 'title ASC';break;
 				      }
 			if($_GPC['order'] == 0){
-$list = pdo_fetchall("SELECT * FROM ".tablename('jufeng_wcy_foods')." WHERE weid = '{$_W['uniacid']}' $condition ORDER BY $orderStr LIMIT ".($pindex - 1) * $psize.','.$psize);
+$list = pdo_fetchall("SELECT * FROM ".tablename('jufeng_wcy_foods')." WHERE weid = '{$_W['uniacid']}' and status = 1 $condition ORDER BY $orderStr LIMIT ".($pindex - 1) * $psize.','.$psize);
 			}
 		
-		$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('jufeng_wcy_foods') . " WHERE weid = '{$_W['uniacid']}' $condition");
+		$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('jufeng_wcy_foods') . " WHERE weid = '{$_W['uniacid']}'  $condition");
 		$pager = pagination($total, $pindex, $psize, $url = '', $context = array('before' => 0, 'after' => 0, 'ajaxcallback' => ''));
 		if (!empty($list)) {
 			foreach ($list as &$row) {

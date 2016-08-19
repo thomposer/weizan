@@ -151,6 +151,18 @@ require(['angular.sanitize', 'bootstrap', 'underscore', 'util'], function(angula
 	});
 	angular.bootstrap(document, ['app']);
 });
+$(function() {
+	require(['jquery.qrcode'], function(){
+		url = $('input[name="url_show"]').val();
+		$('.js-qrcode-show').show();
+		$('.qrcode-block').html('').qrcode({
+			render: 'canvas',
+			width: 150,
+			height: 150,
+			text: url
+		});
+	})
+})
 </script>
 <div class="alert alert-info">
 通过设定这里的选项({$entry['title']})来进入微站的一个独立功能中. 这里的选项是通过微信(易信或App)中的图文消息来回复, 点击图文链接进入微站特定功能. <br />
@@ -166,15 +178,21 @@ require(['angular.sanitize', 'bootstrap', 'underscore', 'util'], function(angula
 				<div class="form-group">
 					<label class="col-xs-12 col-sm-3 col-md-2 control-label">直接URL</label>
 					<div class="col-sm-9 col-xs-12 ">
-						<input type="text" class="form-control" readonly="readonly" value="{$entry['url_show']}" />
+						<input type="text" class="form-control" readonly="readonly" name="url_show" value="{$entry['url_show']}" />
 						<span class="help-block">
 							<strong>直接指向到入口的URL。您可以在自定义菜单（有oAuth权限）或是其它位置直接使用。</strong>
 						</span>
 					</div>
+					
+				</div>
+				<div class="form-group js-qrcode-show">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">二维码</label>
+					<div class="col-sm-9 col-xs-12 ">
+						<div class="qrcode-block" style="margin-top:20px"></div>
+					</div>
 				</div>
 			</div>
 		</div>
-
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				功能封面 <span class="text-muted">{$entry['title']}</span>

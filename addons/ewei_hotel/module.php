@@ -1,10 +1,5 @@
 <?php
 
-/**
- * 微酒店
- *
- * @url
- */
 defined('IN_IA') or exit('Access Denied');
 
 include "../addons/ewei_hotel/model.php";

@@ -15,7 +15,7 @@
         </style>
         <meta id="viewport" name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
         <title>我的学习课程</title>
-		<link rel="stylesheet" href="{OSSURL}public/mobile/css/weixin.css?{php echo time()}">
+		<link rel="stylesheet" href="{MODULE_URL}public/mobile/css/weixin.css?{php echo time()}">
         <link rel="stylesheet" href="{OSSURL}public/mobile/css/reset.css?{php echo time()}">
         <script src="{OSSURL}public/mobile/js/jquery.js?{php echo time()}"></script>
 </head>
@@ -47,13 +47,13 @@
 								{if $item['end']<TIMESTAMP}
 								<div class="hot">
                                     <div style="font-size:12px;">已完</div>                                   
-                                    <a href="{php echo $this->createMobileUrl('kcinfo', array('id' => $item['id'], 'schoolid' =>$item['schoolid']), true)}">查看详情</a>
+                                    <a href="{php echo $this->createMobileUrl('mykcinfo', array('id' => $item['id'], 'schoolid' =>$item['schoolid']), true)}">查看详情</a>
                                 </div>
 								{else}
                                 <div class="add">
                                     <div style="font-size:12px;">{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_kcbiao')." WHERE kcid = '".$item['id']."'")}节</div>
                                     <span>剩余{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_kcbiao')." WHERE date>'".TIMESTAMP."' And kcid = '".$item['id']."'")}节</span>
-                                    <a href="{php echo $this->createMobileUrl('kcinfo', array('id' => $item['id'],'schoolid' =>$item['schoolid']), true)}">查看详情</a>
+                                    <a href="{php echo $this->createMobileUrl('mykcinfo', array('id' => $item['id'],'schoolid' =>$item['schoolid']), true)}">查看详情</a>
                                 </div>
 								{/if}
                            </li>
@@ -74,13 +74,13 @@
 								{if $kecheng[$item1['kcid']]['end']<TIMESTAMP}
 								<div class="hot">
                                     <div style="font-size:12px;">已完</div>                                   
-                                    <a href="{php echo $this->createMobileUrl('kcinfo', array('id' => $item1['kcid'], 'schoolid' =>$item1['schoolid']), true)}">查看详情</a>
+                                    <a href="{php echo $this->createMobileUrl('mykcinfo', array('id' => $item1['kcid'], 'schoolid' =>$item1['schoolid']), true)}">查看详情</a>
                                 </div>
 								{else}
                                 <div class="add">
                                     <div style="font-size:12px;">{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_kcbiao')." WHERE kcid = '".$item1['kcid']."'")}节</div>
                                     <span>剩余{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_kcbiao')." WHERE date>'".TIMESTAMP."' And kcid = '".$item1['kcid']."'")}节</span>
-                                    <a href="{php echo $this->createMobileUrl('kcinfo', array('id' => $item1['kcid'],'schoolid' =>$item1['schoolid']), true)}">查看详情</a>
+                                    <a href="{php echo $this->createMobileUrl('mykcinfo', array('id' => $item1['kcid'],'schoolid' =>$item1['schoolid']), true)}">查看详情</a>
                                 </div>
 								{/if}
                            </li>
@@ -97,13 +97,13 @@
 								{if $kecheng[$item2['kcid']]['end']<TIMESTAMP}
 								<div class="hot">
                                     <div style="font-size:12px;">已完</div>                                   
-                                    <a href="{php echo $this->createMobileUrl('kcinfo', array('id' => $item2['kcid'], 'schoolid' =>$item2['schoolid']), true)}">查看详情</a>
+                                    <a href="{php echo $this->createMobileUrl('mykcinfo', array('id' => $item2['kcid'], 'schoolid' =>$item2['schoolid']), true)}">查看详情</a>
                                 </div>
 								{else}
                                 <div class="add">
                                     <div style="font-size:12px;">{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_kcbiao')." WHERE kcid = '".$item2['kcid']."'")}节</div>
                                     <span>剩余{php echo pdo_fetchcolumn("select count(*) FROM ".tablename('wx_school_kcbiao')." WHERE date>'".TIMESTAMP."' And kcid = '".$item2['kcid']."'")}节</span>
-                                    <a href="{php echo $this->createMobileUrl('kcinfo', array('id' => $item2['kcid'],'schoolid' =>$item2['schoolid']), true)}">查看详情</a>
+                                    <a href="{php echo $this->createMobileUrl('mykcinfo', array('id' => $item2['kcid'],'schoolid' =>$item2['schoolid']), true)}">查看详情</a>
                                 </div>
 								{/if}
                            </li>

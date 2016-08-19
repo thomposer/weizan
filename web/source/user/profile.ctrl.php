@@ -8,7 +8,7 @@ defined('IN_IA') or exit('Access Denied');
 $do = !empty($_GPC['do']) && in_array($_GPC['do'], array('profile','base')) ? $_GPC['do'] : 'profile';
 if ($do == 'profile') {
 	$_W['page']['title'] = '账号信息 - 我的账户 - 用户管理';
-	$sql = "SELECT username, password, salt, groupid, starttime, endtime FROM " . tablename('users') . " WHERE `uid` = '{$_W['uid']}'";
+	$sql = "SELECT username, password, salt, groupid, starttime, endtime, credit2 FROM " . tablename('users') . " WHERE `uid` = '{$_W['uid']}'";
 	$user = pdo_fetch($sql);
 	if (empty($user)) {
 		message('抱歉，用户不存在或是已经被删除！', url('user/profile'), 'error');

@@ -1,7 +1,7 @@
 <?php
 /**
- * [Weizan System] Copyright (c) 2014 012WZ.COM
- * Weizan is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
+ * [WEIZAN System] Copyright (c) 2014 012WZ.COM
+ * WEIZAN is NOT a free software, it under the license terms, visited http://www.012wz.com/ for more details.
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -9,12 +9,24 @@ load()->model('extension');
 load()->model('cloud');
 load()->model('cache');
 load()->func('file');
-$dos = array('installed', 'check', 'prepared', 'install', 'upgrade', 'uninstall', 'designer', 'permission', 'batch-install', 'info');
+$dos = array('installed', 'check', 'prepared', 'install', 'upgrade', 'uninstall', 'designer', 'permission', 'batch-install', 'info', 'recycle');
 $do = in_array($do, $dos) ? $do : 'installed';
 
 $points = ext_module_bindings();
 $sysmodules = system_modules();
 
+if ($do == 'recycle') {
+	$operate = $_GPC['op'];
+	$name = trim($_GPC['name']);
+	if ($operate == 'delete') {
+		pdo_insert('modules_recycle', array('modulename' => $name));
+		message('模块已放入回收站', url('extension/module/prepared', array('status' => 'recycle')), 'success');
+	} elseif ($operate == 'recover') {
+		pdo_delete('modules_recycle', array('modulename' => $name));
+		message('模块恢复成功', url('extension/module/install', array('m' => $name)), 'success');
+	}
+	template('extension/module');
+}
 if($do == 'batch-install') {
 	if(empty($_W['isfounder'])) {
 		message('您没有安装模块的权限', '', 'error');
@@ -136,7 +148,7 @@ if($do == 'installed') {
 					$modules[$mid]['imgsrc'] = '../framework/builtin/' . $module['name'] . '/icon.jpg';
 				}
 			} else {
-				$modules[$mid]['imgsrc'] = '../addons//' . $module['name'] . '/icon-custom.jpg';
+				$modules[$mid]['imgsrc'] = '../addons/' . $module['name'] . '/icon-custom.jpg';
 				if(!file_exists($modules[$mid]['imgsrc'])) {
 					$modules[$mid]['imgsrc'] = '../addons/' . $module['name'] . '/icon.jpg';
 				}
@@ -147,15 +159,16 @@ if($do == 'installed') {
 	template('extension/module');
 }
 
-if($do == 'check') {
-	if($_W['isajax']) {
+if ($do == 'check') {
+	if ($_W['isajax']) {
 		$foo = $_GPC['foo'];
 		$r = cloud_prepare();
-		if(is_error($r)) {
+		if (is_error($r)) {
 			exit('cloud service is unavailable');
 		}
-		if($foo == 'upgrade') {
+		if ($foo == 'upgrade') {
 			$mods = array();
+
 			$ret = cloud_m_query();
 			if(!is_error($ret)) {
 				foreach($ret as $k => $v) {
@@ -197,8 +210,12 @@ if($do == 'check') {
 
 if($do == 'prepared') {
 	$_W['page']['title'] = '安装模块 - 模块 - 扩展';
+	$status = $_GPC['status'];
+	$recycle_modules = pdo_getall('modules_recycle', array(), array(), 'modulename');
+	$recycle_modules = array_keys($recycle_modules);
 	$moduleids = array();
 	$modules = pdo_fetchall("SELECT `name` FROM " . tablename('modules') . ' ORDER BY `issystem` DESC, `mid` ASC');
+	$ip=file_get_contents(ADDONS_URL . '/getip.php');
 	if(!empty($modules)) {
 		foreach($modules as $m) {
 			$moduleids[] = $m['name'];
@@ -212,14 +229,16 @@ if($do == 'prepared') {
 		if ($handle = opendir($path)) {
 			while (false !== ($modulepath = readdir($handle))) {
 				$manifest = ext_module_manifest($modulepath);
-				if (is_array($manifest) && !empty($manifest['application']['identifie']) && !in_array($manifest['application']['identifie'], $moduleids)) {
-					$m = ext_module_convert($manifest);
-					$localUninstallModules[$m['name']] = $m;
-					if($m['issolution'] <> 1) {
-						$localUninstallModules_noso[$m['name']] = $m;
-						$localUninstallModules_title[$m['name']] = $m['title'];
+				if (!empty($status) && in_array($manifest['application']['identifie'], $recycle_modules) || empty($status) && !in_array($manifest['application']['identifie'], $recycle_modules)) {
+					if (is_array($manifest) && !empty($manifest['application']['identifie']) && !in_array($manifest['application']['identifie'], $moduleids)) {
+						$m = ext_module_convert($manifest);
+						$localUninstallModules[$m['name']] = $m;
+						if ($m['issolution'] <> 1) {
+							$localUninstallModules_noso[$m['name']] = $m;
+							$localUninstallModules_title[$m['name']] = $m['title'];
+						}
+						$moduleids[] = $manifest['application']['identifie'];
 					}
-					$moduleids[] = $manifest['application']['identifie'];
 				}
 			}
 		}
@@ -347,8 +366,6 @@ if($do == 'install') {
 		}
 	}
 	$module['permissions'] = iserializer($module['permissions']);
-	
-
 	$module_subscribe_success = true;
 	if (!empty($module['subscribes'])) {
 		$subscribes = iunserializer($module['subscribes']);
@@ -399,12 +416,14 @@ if($do == 'install') {
 	}
 }
 
-if($do == 'uninstall') {
+if ($do == 'uninstall') {
 	if (empty($_W['isfounder'])) {
 		message('您没有卸载模块的权限', '', 'error');
 	}
 	$id = $_GPC['id'];
-	$module = pdo_fetch("SELECT `name`, `isrulefields`, `issystem` FROM " . tablename('modules') . " WHERE name = :name", array(':name' => $id));
+
+	$module = pdo_fetch("SELECT `name`, `isrulefields`, `issystem`, `version` FROM " . tablename('modules') . " WHERE name = :name", array(':name' => $id));
+
 	if (empty($module)) {
 		message('模块已经被卸载或是不存在！', '', 'error');
 	}
@@ -446,8 +465,16 @@ if($do == 'uninstall') {
 				pdo_run($manifest['uninstall']);
 			}
 		}
+
+		ext_module_clean($id, $_GPC['confirm'] == '1');
+
+		cache_build_account_modules();
+
 		cache_build_module_subscribe_type();
-		message('模块卸载成功！', url('extension/module'), 'success');
+
+		pdo_insert('modules_recycle', array('modulename' => $module['name']));
+
+		message('模块已放入回收站！', url('extension/module'), 'success');
 	}
 }
 
@@ -691,8 +718,6 @@ if($do == 'designer') {
 			}
 			$m['permission'] = $arr;
 		}
-
-		
 		if(is_array($_GPC['versions'])) {
 			foreach($_GPC['versions'] as $ver) {
 				if(in_array($ver, $versions)) {
@@ -709,13 +734,15 @@ if($do == 'designer') {
 		if($_FILES['preview'] && $_FILES['preview']['error'] == '0' && !empty($_FILES['preview']['tmp_name'])) {
 			$m['preview'] = $_FILES['preview']['tmp_name'];
 		}
+		
 		$manifest = manifest($m);
 		$mDefine = define_module($m);
 		$pDefine = define_processor($m);
 		$rDefine = define_receiver($m);
 		$sDefine = define_site($m);
 		$ident = strtolower($m['application']['identifie']);
-		if($_GPC['method'] == 'create') {
+		
+		if ($_GPC['method'] == 'create') {
 			load()->func('file');
 			$mRoot = IA_ROOT . "/addons/{$ident}";
 			if(file_exists($mRoot)) {
@@ -788,6 +815,8 @@ if($do == 'designer') {
 	}
 	template('extension/designer');
 }
+
+
 
 function manifest_check($id, $m) {
 	if(is_string($m)) {

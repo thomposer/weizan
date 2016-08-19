@@ -245,7 +245,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
         if ($op == 'display') {
             $pindex = max(1, intval($_GPC['page']));
             $psize  = 20;
-            $condition .= "  o.status='{$status}'";
+            $condition .= "  o.status='{$status}' AND o.weid='{$weid}'";
             if (!empty($_GPC['keyword'])) {
                 $condition .= " AND a.nickname LIKE '%{$_GPC['keyword']}%'";
             }
@@ -1268,7 +1268,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
             die(json_encode(error(-1, '出错了、请重试！')));
         } else {
             $res = $this->getusers($weid, $openid);
-            if (empty($res['constellation'])) {
+            if (empty($res['qq'])) {
                 die(json_encode(error(-2, '请先完善资料！')));
             } else {
                 $toopenid = $_GPC['toopenid'];
@@ -1324,7 +1324,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                 die(json_encode(error(-1, '自己不能给自己打招呼哦！')));
             }
             $res = $this->getusers($weid, $openid);
-            if (empty($res['constellation'])) {
+            if (empty($res['qq'])) {
                 die(json_encode(error(-2, '请先完善资料！')));
             } else {
                 load()->model('mc');
@@ -1561,7 +1561,9 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
     public function doWebList()
     {
         global $_GPC, $_W;
-        $weid = $_W['weid'];
+        $weid   = $_W['weid'];
+        $op     = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
+        $isshow = isset($_GPC['isshow']) ? intval($_GPC['isshow']) : 0;
         checklogin();
         if (checksubmit('verify') && !empty($_GPC['select'])) {
             foreach ($_GPC['select'] as $row) {
@@ -1578,12 +1580,14 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
                 $this->mc_notice_consume2($fans_openid['from_user'], $fans_openid['nickname'] . '你的资料审核通过啦！', $fans_openid['nickname'] . '你的资料审核通过啦！', $this->createMobileUrl('homecenter'));
             }
             message('审核成功！', $this->createWebUrl('list', array(
+                'isshow' => $isshow,
                 'page' => $_GPC['page']
             )), 'success');
         }
         if (checksubmit('delete') && !empty($_GPC['select'])) {
             pdo_delete('hnfans', " id  IN  ('" . implode("','", $_GPC['select']) . "')");
             message('删除成功！', $this->createWebUrl('list', array(
+                'isshow' => $isshow,
                 'page' => $_GPC['page']
             )), 'success');
         }
@@ -1815,8 +1819,6 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
             exit();
         }
         load()->func('tpl');
-        $op     = !empty($_GPC['op']) ? $_GPC['op'] : 'display';
-        $isshow = isset($_GPC['isshow']) ? intval($_GPC['isshow']) : 0;
         if ($op == 'display') {
             $pindex    = max(1, intval($_GPC['page']));
             $psize     = 20;
@@ -1856,26 +1858,9 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
             if (!empty($_GPC['keyword'])) {
                 $condition .= " AND nickname LIKE '%{$_GPC['keyword']}%'";
             }
-            if (!empty($_GPC['yingcang'])) {
-                $yingcang = intval($_GPC['yingcang']);
-                $condition .= " AND yingcang = '{$yingcang}'";
-            }
-            if (!empty($_GPC['tuijian'])) {
-                $tuijian = intval($_GPC['tuijian']);
-                $condition .= " AND tuijian = '{$tuijian}'";
-            }
             if (!empty($_GPC['telephone'])) {
                 $telephone = trim($_GPC['telephone']);
                 $condition .= " AND telephone LIKE '%{$_GPC['telephone']}%'";
-            }
-            if (!empty($_GPC['datelimit'])) {
-                if ($_GPC['datelimit']['start'] != '1970-01-01' && $_GPC['datelimit']['end'] != '1970-01-01') {
-                    $starttime         = strtotime($_GPC['datelimit']['start']);
-                    $endtime           = strtotime($_GPC['datelimit']['end']);
-                    $_GPC['starttime'] = $starttime;
-                    $_GPC['endtime']   = $endtime;
-                    $condition .= " AND time >= {$starttime} AND time <= {$endtime}";
-                }
             }
             $list = pdo_fetchall("SELECT * FROM " . tablename('hnfans') . " WHERE nickname!='' and isshow='{$isshow}'  and weid='{$weid}' {$condition} ORDER BY CASE  WHEN telephone !='' THEN  null  ELSE 1  END,time DESC LIMIT " . ($pindex - 1) * $psize . ",{$psize}");
             if (!empty($list)) {
@@ -3433,39 +3418,56 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
         $it = ihttp_post($url, $data);
         return $it;
     }
-    public function mc_notice_consume2($openid, $title, $content, $url = '', $thumbs = '')
+    public function mc_notice_consume2($openid, $title, $content, $url = '', $thumb = '')
     {
         global $_W;
+        $cfg    = $this->module['config'];
+        $tpl_id = $cfg['tpl_id'];
         load()->model('mc');
         $acc = mc_notice_init();
         if (is_error($acc)) {
             return error(-1, $acc['message']);
         }
-        if (empty($thumb)) {
-            $cfg   = $this->module['config'];
-            $thumb = $_W['attachurl'] . $cfg['kefuimg'];
-        }
         if ($_W['account']['level'] == 4) {
-            $url    = $_W['siteroot'] . 'app/' . $url;
-            $status = mc_notice_public($openid, $title, $_W['account']['name'], $content, $url, $_W['account']['name']);
-        }
-        if (is_error($status)) {
-            $status = $this->mc_notice_custom_news2($openid, $title, $content, $url, $thumbs);
+            $tpl_data             = array();
+            $tpl_data['first']    = array(
+                'value' => $title,
+                'color' => '#173177'
+            );
+            $tpl_data['keyword1'] = array(
+                'value' => $content,
+                'color' => '#173177'
+            );
+            $tpl_data['keyword2'] = array(
+                'value' => date('Y-m-d H:i:s', time()),
+                'color' => '#173177'
+            );
+            $tpl_data['keyword3'] = array(
+                'value' => $content,
+                'color' => '#173177'
+            );
+            $tpl_data['remark']   = array(
+                'value' => $_W['account']['name'],
+                'color' => '#173177'
+            );
+            $real_url             = $_W['siteroot'] . 'app/' . $url;
+            $status               = $acc->sendTplNotice($openid, $tpl_id, $tpl_data, $real_url);
+            if (is_error($status)) {
+                $status = $this->mc_notice_custom_news3($openid, $title, $content, $url, $thumb);
+            }
         }
         if ($_W['account']['level'] == 3) {
-            $status = $this->mc_notice_custom_news2($openid, $title, $content, $url, $thumbs);
+            $status = $this->mc_notice_custom_news3($openid, $title, $content, $url, $thumb);
         }
         return $status;
     }
-    public function mc_notice_custom_news2($openid, $title, $content, $url, $thumb)
+    public function mc_notice_custom_news3($openid, $title, $content, $url, $thumb)
     {
         global $_W;
         load()->model('mc');
-        if (empty($thumb)) {
-            $cfg   = $this->module['config'];
-            $thumb = $_W['attachurl'] . $cfg['kefuimg'];
-        }
-        $acc = mc_notice_init();
+        $cfg   = $this->module['config'];
+        $thumb = $cfg['kefuimg'];
+        $acc   = mc_notice_init();
         if (is_error($acc)) {
             return error(-1, $acc['message']);
         }
@@ -3476,7 +3478,7 @@ class Meepo_weixiangqinModuleSite extends WeModuleSite
         $row                = array();
         $row['title']       = urlencode($title);
         $row['description'] = urlencode($content);
-        !empty($thumb) && ($row['picurl'] = tomedia($thumb));
+        $row['picurl']      = tomedia($thumb);
         if (strexists($url, 'http://') || strexists($url, 'https://')) {
             $row['url'] = $url;
         } else {

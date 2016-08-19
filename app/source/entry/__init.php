@@ -28,7 +28,7 @@ $_GPC['__entry'] = $entry['title'];
 $_GPC['__state'] = $entry['state'];
 
 define('IN_MODULE', $entry['module']);
-
+$_W['current_module'] = $entry['module'];
 $site = WeUtility::createModuleSite($entry['module']);
 if(!is_error($site)) {
 	$method = 'doMobile' . ucfirst($entry['do']);

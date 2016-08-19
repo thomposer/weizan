@@ -81,7 +81,7 @@ if ($do == 'global') {
 				'host' => $_GPC['ftp']['host'],
 				'port' => $_GPC['ftp']['port'],
 				'username' => $_GPC['ftp']['username'],
-				'password' => $_GPC['ftp']['password'],
+				'password' => strexists($_GPC['ftp']['password'], '*') ? $_W['setting']['remote']['ftp']['password'] : $_GPC['ftp']['password'],
 				'pasv' => intval($_GPC['ftp']['pasv']),
 				'dir' => $_GPC['ftp']['dir'],
 				'url' => $_GPC['ftp']['url'],
@@ -89,14 +89,21 @@ if ($do == 'global') {
 			),
 			'alioss' => array(
 				'key' => $_GPC['alioss']['key'],
-				'secret' => $_GPC['alioss']['secret'],
+				'secret' => strexists($_GPC['alioss']['secret'], '*') ? $_W['setting']['remote']['alioss']['secret'] : $_GPC['alioss']['secret'],
 				'bucket' => $_GPC['alioss']['bucket'],
 			),
 			'qiniu' => array(
 				'accesskey' => trim($_GPC['qiniu']['accesskey']),
-				'secretkey' => trim($_GPC['qiniu']['secretkey']),
+				'secretkey' => strexists($_GPC['qiniu']['secretkey'], '*') ? $_W['setting']['remote']['qiniu']['secretkey'] : trim($_GPC['qiniu']['secretkey']),
 				'bucket' => trim($_GPC['qiniu']['bucket']),
 				'url' => trim($_GPC['qiniu']['url'])
+			),
+			'cos' => array(
+				'appid' => trim($_GPC['cos']['appid']),
+				'secretid' => trim($_GPC['cos']['secretid']),
+				'secretkey' => strexists(trim($_GPC['cos']['secretkey']), '*') ? $_W['setting']['remote']['cos']['secretkey'] : trim($_GPC['cos']['secretkey']),
+				'bucket' => trim($_GPC['cos']['bucket']),
+				'url' => trim($_GPC['cos']['url'])
 			)
 		);
 		if ($remote['type'] == '2') {
@@ -152,6 +159,31 @@ if ($do == 'global') {
 			if (is_error($auth)) {
 				$message = $auth['message']['error'] == 'bad token' ? 'Accesskey或Secretkey填写错误， 请检查后重新提交' : 'bucket填写错误，请检查后重新提交';
 				message($message, referer(), 'info');
+			}
+		} elseif ($remote['type'] == 4) {
+			if (empty($remote['cos']['appid'])) {
+				message('请填写APPID', referer(), 'info');
+			}
+			if (empty($remote['cos']['secretid'])) {
+				message('请填写SECRETID', referer(), 'info');
+			}
+			if (empty($remote['cos']['secretkey'])) {
+				message('请填写SECRETKEY', referer(), 'info');
+			}
+			if (empty($remote['cos']['bucket'])) {
+				message('请填写BUCKET', referer(), 'info');
+			}
+			if (empty($remote['cos']['url'])) {
+				$remote['cos']['url'] = 'http://'.$remote['cos']['bucket'].'-'.$remote['cos']['appid'].'.cos.myqcloud.com';
+			} else {
+				if (strexists($remote['cos']['url'], '.cos.myqcloud.com') && !strexists($url, '//'.$remote['cos']['bucket'].'-')) {
+					$remote['cos']['url'] = 'http://'.$remote['cos']['bucket'].'-'.$remote['cos']['appid'].'.cos.myqcloud.com';
+				}
+				$remote['cos']['url'] = strexists($remote['cos']['url'], 'http') ? trim($remote['cos']['url'], '/') : 'http://'. trim($remote['cos']['url'], '/');
+			}
+			$auth = attachment_cos_auth($remote['cos']['bucket'], $remote['cos']['appid'], $remote['cos']['secretid'], $remote['cos']['secretkey']);
+			if (is_error($auth)) {
+				message($auth['message'], referer(), 'info');
 			}
 		}
 		setting_save($remote, 'remote');

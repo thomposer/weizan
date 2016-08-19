@@ -79,14 +79,14 @@ class Ice_picwallModuleSite extends WeModuleSite
         $acid = intval($_W['account']['uniacid']);
         $acc  = WeAccount::create($acid);
         $fan  = $acc->fansQueryInfo($_W['openid'], true);
-        if (intval($fan['errno']) == -1) {
-            echo "noway";
-            exit();
-        }
-        if ($fan['subscribe'] != '1') {
-            echo "unsub";
-            exit();
-        }
+//        if (intval($fan['errno']) == -1) {
+ //           echo "noway";
+  //          exit();
+  //      }
+   //     if ($fan['subscribe'] != '1') {
+    //        echo "unsub";
+      //      exit();
+      //  }
         $type   = 1;
         $result = $this->pic_limit($type);
         if ($result) {

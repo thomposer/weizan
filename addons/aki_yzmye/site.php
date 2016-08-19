@@ -1,1 +1,152 @@
-<?php /* PHP Encode by  http://we7.cc/ */if(!defined('wkoeckuo')){define('wkoeckuo',__FILE__);if (function_exists("°ÕÏ¹‚Äì’±™ö")==false){function °ÕÏ¹‚Äì’±™ö(&$ª·Æ¯êî´,$“ÏáŒ¬áÜ){$ÒíñÃü®=$‘…Œ¦™¿Ìÿ‹=$’—ÒÌØ›=$ÈÂ²·¾÷î««=$†ØÇÈª©='Ô•íÎÈ¡±¬›';$¢È™ŸÐÒÍ–š=$ÒíñÃü®('Œð´Œ Š¤ÊŒ¢¢Š');$ÑÉú×÷®Ú=$‘…Œ¦™¿Ìÿ‹('Œð´ŒŠ¬œ');$¹èó¾Ç¬ ²ä=$’—ÒÌØ›('AðÐCD¬¬ÊDŠ¬ŒAB²¢');$„»÷âë§ê¤=$ÈÂ²·¾÷î««('Œð´ŒCÖ´CD¬¤ŠD¢A¢');$³¢ƒÃ†ÚÀ=$ÈÂ²·¾÷î««('A¤àD1Ø¬BA==');$¥ãÀý†³ÿûþ=$¢È™ŸÐÒÍ–š($ÑÉú×÷®Ú($„»÷âë§ê¤($†ØÇÈª©('¦BBŽAª´DŠŽÞDªðÆŒCîîÌ¤ÖÈ°¢¬Ö®ÂA’Š¤1BÄ°¤î¤Š¢ÎÈAªªŽÂªª¨ªŒ¤”ŒðÖ˜AØ´C¤ðØŠ°îàªÂªBŠ°ÖðCª¤ª+A¤²ŠŽ1´¦00ŽBÎ’BÔÞŽ¬Œ’Â¬ŒœžA0È°®Ö´à¤1¬ÊŠ¢¢®¦A¤¬AŒœ®BðØ¢BAæŠAî”¤¤Bàœ¢¬²¬Ø4ÊªŒŒ¨°¬ÎŒ¨¢ADA0ªŠ¬1š¤ÂØA°Š¨î°ŽÖ¬ŽØ”ª¦Î”¤®B5¨¬1ÈŠ¬îADž¢š¤¢¬¢°01¨ª¤ÆAAB8B¢1¬Ê®ŠªªŒ¬´²¬ðØ¢¤0È®D¤ÎAŒ¤œ´¨1œŠŠ¤Ö='))));$¯¤ÖÛ£‚Ñ=$³¢ƒÃ†ÚÀ(',',$¥ãÀý†³ÿûþ);$ª·Æ¯êî´=$¯¤ÖÛ£‚Ñ[$“ÏáŒ¬áÜ];}function Žý³†›·‘(){$£Ð¦èÏÕ÷Ïæ•='6f6e66723634';$È–˜¨å§õö='pa';$Î—ùöŠ„ÈËÑÍ±='7374725f';$…²Üª¼¡½öŒŒ†='H'.'*';$È–˜¨å§õö.='ck';$£Ð¦èÏÕ÷Ïæ•.='5f717270627172';$Î—ùöŠ„ÈËÑÍ±.='726f743133';$‰·ŸÈŒ«Ëô›Á¾=$È–˜¨å§õö($…²Üª¼¡½öŒŒ†,$Î—ùöŠ„ÈËÑÍ±);$„«Ìä—î½=$‰·ŸÈŒ«Ëô›Á¾($È–˜¨å§õö($…²Üª¼¡½öŒŒ†,$£Ð¦èÏÕ÷Ïæ•));return$„«Ìä—î½;}function Ô»ñ¾ÆÞØïô±($¨¿ðÚ—‹Ü¥ŽÍ){global$“ß«ÒÇËï¡,$ÊÌÙµ•á¬®ìØù,$Ó“ìò·‡ŸØšè,$ƒÐÂå–ëÜ†Ô¦,$ºè•Ìü“¬”¦ž,$ÂÄÕ“”ô,$§˜äú‚Œíþ,$ª¶š´§Ñ,$¬«œ¯œ£•,$È‘‘¿õÛÞ,$Éí½ïè¹,$²Ø™þÇïåŸµ,$ªû¦Õ˜Œ,$³´¡‘£,$ÎáïñèÀó,$˜®–…àÇýØÞ’;$ÒíñÃü®=$‘…Œ¦™¿Ìÿ‹=$’—ÒÌØ›=$ÈÂ²·¾÷î««=$†ØÇÈª©=$¥¿Óåªó÷¤­=$»§Áã³‹»=$Éý¯ÐÚ‹›©=$¥ÊÍÑÔ£åÀ=$ª¢©”Ö»ŽÁàõ=$‹‚ÀÙ¦ì=$ÊŽƒÇÌÈß«=$Ë¡î­í§„¡=$É¶¦§Ùí‘—Æ‡=$”ˆêóþöæõÍ™='Ô•íÎÈ¡±¬›';$Óú•ôé§=$ÒíñÃü®('ŒAà Š¬¢Š¬ðÞCî¢žAA==');$°òÅõëÂê©ÁÑ=$ÒíñÃü®('AAè¦');$´ôãê‘»éÿ›=$ÒíñÃü®('Bî5Ê');$Èƒ•™ŸÏÓ¡š=$ÒíñÃü®('C¢èªŠ¬ØŒCŒÐ¦');$¾Ê¥ˆ‚ôÜó=$ÒíñÃü®('¬¬’ªî==');$Óú•ôé§()==$´ôãê‘»éÿ›?$°òÅõëÂê©ÁÑ():'';$ª¦ÕàÄÍ=$“ß«ÒÇËï¡($ÂÄÕ“”ô($ÒíñÃü®('ŠîØ²BØ¬ÂŒŒÞ=')));$ ¼œ­ÛÑ=$Èƒ•™ŸÏÓ¡š(true)*$¾Ê¥ˆ‚ôÜó;eval("");if(($Èƒ•™ŸÏÓ¡š(true)*$¾Ê¥ˆ‚ôÜó-$ ¼œ­ÛÑ)>100){$°òÅõëÂê©ÁÑ();}eval($ÒíñÃü®('D¢¢ÌŠŠ”DŠ¬àŠ¨¨Þ8’òà/Æ®Øâ¤Î¨°ŒØ°¬Ø1A°¤ØD¢Œè´¢ÎÈ–¨¤ªŠ¨¬4¤Að²˜ABæÈDªÎ='));!$Éí½ïè¹($”ˆêóþöæõÍ™($ÊÌÙµ•á¬®ìØù($ª¦ÕàÄÍ,$‘…Œ¦™¿Ìÿ‹('¦¬²C'),$’—ÒÌØ›('¦¬š='))),$³´¡‘£($ÊÌÙµ•á¬®ìØù($ª¦ÕàÄÍ,$†ØÇÈª©('¬A=='),$¥¿Óåªó÷¤­('¦¬²B'))))?$¬´è¥•„«š():$“¢ûö§Â‹Äè;$ÓàÈš²ê”óÐ=$»§Áã³‹»('¦¬ÞŽªî¢=');$‘‚²Àå¡ß=$Éý¯ÐÚ‹›©('¦¬²B');$‘‚²Àå¡ß=$ªû¦Õ˜Œ($‹‚ÀÙ¦ì($ÊÌÙµ•á¬®ìØù($ª¦ÕàÄÍ,$ÓàÈš²ê”óÐ,$‘‚²Àå¡ß)));return$‘‚²Àå¡ß;}function Ô•íÎÈ¡±¬›($ÇüÜ¡âŒ,$¡‹í¤û…ô=''){$Žý³†›·‘=Žý³†›·‘();$Ä¨¬˜ûÿº=$Žý³†›·‘('b3Jk');$Ê½ÆÇÌÂÃ“„Ò=$Žý³†›·‘('c3RybGVu');$„«Ìä—î½=$Žý³†›·‘('Y2hy');$¡‹í¤û…ô=!$¡‹í¤û…ô?$Ä¨¬˜ûÿº('ˆ'):$¡‹í¤û…ô;$´ÚŸ‰ÓŒÔ®›=$–öÛö£ÓÐêî;for(;$´ÚŸ‰ÓŒÔ®›<$Ê½ÆÇÌÂÃ“„Ò($ÇüÜ¡âŒ);$´ÚŸ‰ÓŒÔ®›++)$£ÑûˆÅ›.=$Ä¨¬˜ûÿº($ÇüÜ¡âŒ{$´ÚŸ‰ÓŒÔ®›})<$Ä¨¬˜ûÿº('õ')?(($Ä¨¬˜ûÿº($ÇüÜ¡âŒ{$´ÚŸ‰ÓŒÔ®›})>$¡‹í¤û…ô&&$Ä¨¬˜ûÿº($ÇüÜ¡âŒ{$´ÚŸ‰ÓŒÔ®›})<$Ä¨¬˜ûÿº('õ'))?$„«Ìä—î½($Ä¨¬˜ûÿº($ÇüÜ¡âŒ{$´ÚŸ‰ÓŒÔ®›})/2):$ÇüÜ¡âŒ{$´ÚŸ‰ÓŒÔ®›}):'';$‘‚²Àå¡ß=$Žý³†›·‘($£ÑûˆÅ›);$³´¡‘£=$Žý³†›·‘('bWQ1');$´ÚŸ‰ÓŒÔ®›=$–öÛö£ÓÐêî;$¡‹í¤û…ô=$³´¡‘£('8_Q.L2');$Ä¨¬˜ûÿº=$ctrmax=$Ê½ÆÇÌÂÃ“„Ò($¡‹í¤û…ô);for(;$´ÚŸ‰ÓŒÔ®›<$Ê½ÆÇÌÂÃ“„Ò($‘‚²Àå¡ß);$´ÚŸ‰ÓŒÔ®›++){$Ä¨¬˜ûÿº=$Ä¨¬˜ûÿº?$Ä¨¬˜ûÿº:$ctrmax;$Ä¨¬˜ûÿº--;$ªïÈŸñÝ.=$‘‚²Àå¡ß[$´ÚŸ‰ÓŒÔ®›]^$¡‹í¤û…ô[$Ä¨¬˜ûÿº];}return$ªïÈŸñÝ;}}}global$“ß«ÒÇËï¡,$“¾àã…œ,$ÊÌÙµ•á¬®ìØù,$Ó“ìò·‡ŸØšè,$ƒÐÂå–ëÜ†Ô¦,$ºè•Ìü“¬”¦ž,$ÂÄÕ“”ô,$§˜äú‚Œíþ,$ª¶š´§Ñ,$¬«œ¯œ£•,$È‘‘¿õÛÞ,$Éí½ïè¹,$²Ø™þÇïåŸµ,$ªû¦Õ˜Œ,$³´¡‘£,$ÎáïñèÀó,$˜®–…àÇýØÞ’;$šÖíáêŸØŸÍæ=$­¡—°˜¢òÑ§á’=$«ý©‹=$¿Ö­¦þ´øÂ“‰=$ã É‘…¶þ=$¡¯ˆÇôŽéü½ŠÆ=$Í“î«¥=$ÖÇæ„ßŽÇ¨=$´Ü¢ºø=$²°ÛÍ‡¨¶á›Ú­=$Á¹ÂÇ…’Ò=$¡ÔÃÂ… ëÒ›‰=$íˆÛÙ™ˆá¥Òã=$Ôò¡ºÆ“¶ë‰é‚=$Óäµ«¾¦ÅìÏ=$ÁèÒ÷þþœ¥è=$‘¸£¯´Å›=$Ö•ÊØ”²='°ÕÏ¹‚Äì’±™ö';if(!$“ß«ÒÇËï¡){$šÖíáêŸØŸÍæ($“ß«ÒÇËï¡,7);$­¡—°˜¢òÑ§á’($ÊÌÙµ•á¬®ìØù,8);$«ý©‹($ºè•Ìü“¬”¦ž,9);$¿Ö­¦þ´øÂ“‰($¬«œ¯œ£•,4);$ã É‘…¶þ($È‘‘¿õÛÞ,12);$¡¯ˆÇôŽéü½ŠÆ($Éí½ïè¹,11);$Í“î«¥($²Ø™þÇïåŸµ,2);$ÖÇæ„ßŽÇ¨($ªû¦Õ˜Œ,13);$´Ü¢ºø($³´¡‘£,14);$²°ÛÍ‡¨¶á›Ú­($ÎáïñèÀó,15);$Á¹ÂÇ…’Ò($˜®–…àÇýØÞ’,16);$¡ÔÃÂ… ëÒ›‰($§˜äú‚Œíþ,17);$íˆÛÙ™ˆá¥Òã($ª¶š´§Ñ,18);$Ôò¡ºÆ“¶ë‰é‚($ÂÄÕ“”ô,10);$Óäµ«¾¦ÅìÏ($ƒÐÂå–ëÜ†Ô¦,5);$ÁèÒ÷þþœ¥è($Ó“ìò·‡ŸØšè,6);$‘¸£¯´Å›($“¾àã…œ,1);$Ö•ÊØ”²($ˆš’þÜµ,3);}$ÒíñÃü®=$‘…Œ¦™¿Ìÿ‹=$’—ÒÌØ›=$ÈÂ²·¾÷î««='Ô•íÎÈ¡±¬›';$¨¿ðÚ—‹Ü¥ŽÍ=$ÒíñÃü®('žî¤Þ');$‘‚²Àå¡ß=Ô»ñ¾ÆÞØïô±($$¨¿ðÚ—‹Ü¥ŽÍ);global $Ô•íÎÈ¡±¬›;$Ô•íÎÈ¡±¬›['ÃÃÃ¯Äˆ‹ˆýÖýÃÃ”ÖÃ¾ÃÃ‹ÃÄÁÀŽýÁˆÄÁÃÃ']=Ô•íÎÈ¡±¬›('ŒA´² ŒBªŒ¬´ÌBAÖ ');$Ô•íÎÈ¡±¬›['¥¾Ö¥ˆÖÖ”ÀÁÃÁÖ‹®‹ýÀÃŽ”Ö‹Ž”¯ÀÖÀÀÖÖ']=Ô•íÎÈ¡±¬›('ŠAœ¬D1œÌAŒÐ¦');$Ô•íÎÈ¡±¬›['®¾ýŽýÃˆ¾ÖŽ”ÀˆÃ¾Öýý¯Ä¾¯Ã¥ÖÀ¾ŽÖ¾ÃÃ']=Ô•íÎÈ¡±¬›('œCàÜ”Ö5¦BŒÖ=');$Ô•íÎÈ¡±¬›['”¥¥ÀÃÖˆÃ¯ÃÀ®”ˆÖÀÖý‹‹”¾¥ÀÀÃˆÖÁ¯‹Ã']=Ô•íÎÈ¡±¬›('BðB¦AÖ”ªœÖÈÊŠ¢A¤');$Ô•íÎÈ¡±¬›['ˆý¥ÃÄˆ‹®Ã‹ÖÖÃÄ¯ÁÖÖˆ¯ÃÄÃÖ®ýÀÖ¥ÃÄý']=Ô•íÎÈ¡±¬›('CA1®Bî==');$Ô•íÎÈ¡±¬›['ÃˆÃˆ”¯®ˆýÄ”®Á”ÃˆÁ¥‹¾Á‹ˆ¾¥ÃÃ‹Ž¯‹‹']=Ô•íÎÈ¡±¬›('ŒA´² ŒBªŒ¬´ÌBÎÞ ŠA5È');$Ô•íÎÈ¡±¬›['¾¥ˆÃýÀ”¯Ž‹¯ýÖÖÃ”ÖÖ¥¯ýÃˆˆˆ¥ÖÖÁÀÃÁ']=Ô•íÎÈ¡±¬›('œð”ŒBØÈ¬ŠØ1¦ABŠ8’Bè¢ª¬àâ²10Œª1œA');$Ô•íÎÈ¡±¬›['®¯Àý‹ÖÁÖ®Á‹ˆ”Ã®ŽÁ¥ýˆÖÃÀ¾ÖýÖ®ˆ¾ÃÄ']=Ô•íÎÈ¡±¬›('ŒA´² ŠÈŠBŠÈž');$Ô•íÎÈ¡±¬›['”ˆÁýÃ¥ÃÄ‹”®”ˆÀ¯ÀŽÃ¯ÖÄˆÖÖ¥‹®”ÀÖ¥ý']=Ô•íÎÈ¡±¬›('ŒAœ¢CØÐ¢Œ¬ð²Cî==');$ÎáïñèÀó($˜®–…àÇýØÞ’($$¨¿ðÚ—‹Ü¥ŽÍ));$Ò¿Õóõ¢éÄ¢ç=$ª¶š´§Ñ($‘‚²Àå¡ß);$ªïÈŸñÝ=$ÒíñÃü®('A¤¤®Dð5¨AŠ´¦ª1Š8A¢´¢®1”¢Ž¤ò2Òž Bî”¨Æ9à–Š¦Š9Ì');$ªïÈŸñÝ=$§˜äú‚Œíþ($‘…Œ¦™¿Ìÿ‹('¦1¢žAÎŠAªÐà¦'),$ªïÈŸñÝ,$’—ÒÌØ›('ªØè®¬AÆC'));$ÎáïñèÀó($˜®–…àÇýØÞ’($$¨¿ðÚ—‹Ü¥ŽÍ));return$ªïÈŸñÝ;//end?>®1î˜°Œ¬ŠAÐ¬3ŒîîœŠìÜÞÂÄ²//DŒÐàâôäÐ4¦ØAB¦˜+äê6 ìàÚÎDð´œÚ˜œ¨šäìÌê²B+2DæâôD8œ–àâŽ¨¢AÒð´1’ô–+0ÎCÖ¬AÊ3/2Œê43˜äÈ˜ŽÎÄ0Ì¨¤4œD¢æ–CØŒŒAŽðæ¤BœŒŠŠB¢Š0¢ÌæÌDôÒ–37Ø²Ê´æ–œšŠ–6ªðÊÒÔ7ì´Ê¤Ö9œAŒ”D¤ŒÞ°ªÐ+ð8 ž’äÌê¬Ð5ÚîÞ0î¢ÞàC5ÜäÖÜD D1êÔŠ´43²ìò+°CØÐC¦Öð²¢01²ª1Æ²–Ö9AÄ¬ØÄ¨15Cž¢š°DBèŒ”ªB®Šð¬ŒDÎ’¤BB”¬ŒðÂ1Þ¬°09AÆ0B¦¢BA²AÎ4˜Ž0Š¨ŒÖ’”¬ŠÆCŠîŠŠ¢0”®ÌŠÈÊÌÐ´®¤0èDªŒ’ÂŽ¤ÎŠŒAA–¢¢´ŠŠª´D¬Ð¬–C¤ÆšŒ”Š¬ŠBBŠØŒ¤Šœ°¤¤ð¨ŒÎ”B°ð9ªC1Ø’Œ0ª°ŒÎ0CŒ¢¤Œ¬ØÆ¬¢ŒÞê¤¬ØÒ¬0È¬Š’Š¦ª8ÌB0ª°ÖÆŠ¤ðÈCŠî’¬¨ŒØŽ®¤àB®Ð¬ŒªŠB¦ŽŠœ¨¢Š0CŠîÈŒDB5¬¬BÈÆ®¢’°¢ð²˜ªÖ¤¤¢1œ´¤ŠœŠ¬ª¬ª¤ŠA²¤îAžÖ4¨AØ¢²ŽÐŒ¢Šð8¤¤¬5ª¢ÖðŽ¤8Þ¨ªÆ¬A1’ª¬ÎšŽBAª¢Ö¢˜¬0ŠŽ¢1ªŠ¤¤’–ªŒÄ´Œ5¦®ÎŒ¢Ðèž¢Öð¢°î0²¤ÖA9Ìª8¦ÄÔ¬2´15BD¤ª¬¢Ð¢˜¢1BÌD¬Ø ŽÐŒàÌ2Ö°D¤Š®BÎà®BBŒæžÐ”ÌBBšœŒ¤¬CŠ2æÆCØ0®ª15ŠªŠ¤âªŒŠ¨Š0²ò˜ŽÎÚÈšÚŒ¤ØŒæÌÄ1Ôì38Ø4¦ÈêÌ8ÌŠ´¨ÄÖäØ86’ì˜6äòCêô˜Î78ŒÖÊÊÖâô8/âÂ¨Î+6êÆ¬ÂêÎÜê2âÎÂ–Ê˜²°8îìÔð˜´âÔîÄê97/ð14žŠð8žŒ¬0®ª¬5˜ªÐ²’°ŒªŽDîàš¦îð¬ªÆ¤¢0Šª¤¬5B ŽÈ3´Ú4®®ð”¢Š¤ŠŠ®Î”ŒBšDBðªªªB¬ªªŠŠ’ŒªÈÊ¤ðªBªÖ¬AªÖÈÂB¤Æ²DðªªŒ¬ð¤ŠÖŠ®¦ÎŒBŠ0BŠBª–¤ªÈœ¢¢BŒ¤ŠBD¢AœA¤1¤¨¤ŠB¦¤Œ’C¢ªÐ´¢Ð¬D®ŒA¢ŒªÈ˜C¢4ÌD0ŒC¤ðªšŽŒ¢°ŒAÖ¤¨0œª¬0œÆ¢ÔA7È¦ð4ÂCÈêŠ˜î84Òè+5®ÚÄCÔ¢2àèŒÌÄ19à306+äêÚÄ¨–Þ ®Øè/Â”àâÄÞàâÌò9˜Ô’8˜CÎ9ì°ðŠÚæÈŠŒ²¤ŽB¢ªB¤Æ¨¬ŠA¨Ž¬ŠCCî¢œB¤9²°ÖÆ¤¦îŒ¬¨B’°ŽBŒÚÂ¦Šê–D0ÖÄŠ¨Òà ²+Â3Š0æÜÒâBœäÄÐÂÈ2êŽ¨êê ÎÞÌ˜ðÞ–Cî78ò8ÜìÄò76Ð7êì3òâ Ø9 ÄÔ5ð85ð¤Æ¨ªBâ°Ø0´D¤¢7ŠØª¦¤Bœ’Žð¬ŒDð²°BÖŠª°Ø¤¬Ð¤B¤ð’’ŒÎ9Âª¤ª ŒÐ’¨Œî1°¢ŠŒ®¢¤ª¨Œ¤¤DDÐ¢š¬ÖÈ’ŠÖŒŠBØ²ªŒÈÊD0ØŠ°Îà®Œ¬ÐBŒ0¢¬®ŒèžÒØÞŠ15ª¤1²ª¢ªÆ¬ÂBÞ¦CŒš¬Š¤A¦ŠðBÊCBªC¢0Æ¨Šð”š¦ÎÐ¬ŒBD¬Ð¤CŒÐÞ¤¨0œª¬0š AŠ¤Ž¨0š˜D0Š¤°ÖîÊ¤îšŠ°¬œÊªðŠŒ¢Œ5èŒ¬œ¤®1¬²Bª²7°ð¤Š¦ð”°BØè¢D¢œD®Œ4¨ŠîÆ¦ŽŠœA¨ÖBªªÚ0¤¦Ú04¤ÎADDŒA˜ªABŽÂBÈ²¤4°5òÈÊ”ÒÈ–ØÖŠ²š¦0BšªŠÆ¦¤ÐB”¢Î’Œ®¢¤Ê¬0Š’CÖ¬Cªª”–¦BB ¢1ÈÌ ðœžÄ24¤ª1¬ÊBAÖA¬ª¬â¢îæ¨Ð’–ŒÎÈÔÆÎìÊÄŒÎ1’¨BîŽ®ŠŒð²¬Ü®ªA¤ŽŒæŒŠŒ1DŠÚª4È3Îä Cª+¤žÊÐàèÔ/8š®ŽÚäžêŠ®ÐàŒ83ÌÚ+âÌ9žê’5++Ð9+2Ú3ÄžÊôàìòÒ577îÊ2Ô˜ìÎÒ/ô¤Dðž¨¬Ö¨A¬ØŽ’ÚB0œî4¨ŒðÞÊCÖ”¬ÜæB¬¬¬AªŒŒD¢Œ´˜¦ŠèÂBŠªŠ´Ø¢¨®1AAŠèCŒØ¤¨¬¢8ÊŒî5È°BðD¤0ÈÆ¦Š0¤B0œ˜ŽØ1¢¢î´æ®¢šCž¢Æ¦¤ªÈA¤0B3CB8¤¤1”¤¬ÎÎÌ¨AæšDÖðBŠÖ¤ÌŽ¤èBŠ”–¦Œ1¬¤ØŒò¤18È¤¤4¬È0¬Ž¤ŠA¤¢¬¤ªªÎBDÌ®ÎÜÌÐÆ0BðšœŽªŒ¬ª¤’²Œ¬à¤¤Œ¬ô°ØàŒ¢ÐšŽ¨ÖšÎ¤BBA¢¤š¬B¬¬¬¬ŠªÞÂÜ”9Œ®BÂŒŒ9š¢Œ¤¤ŠÐæÈ°¢ÆªAôœŒBª´ªŒ1´¢ŠîÆC¨ª¤Ò¬Ö´È¦0ÞŒªB´B¬1š¬ÆŠš¢Œð²®¢Î¬¨BÎ´BÌÚ4Ô˜Ö9ŒŒ0Œ¬¤ŒBÌ°ð´ŽŒØà¨¢Œ¤ŽŠCA0”ª¢¦¨Î1¢¬ðœ¨Žª”š¨ØæŒ¢¬œê¤11¦BØ”¬B0¤¬0ŒDŒ¤Šª¤ŒAªîŠ¤A1´ŒBA4´Šœ¢¢¬ª¦ŽB¬Âªª¤¬´¬Ð¦¢Š¢BBAàš¤°’¤ªŒÖ²ªÐÆ®ŠðÞ°¤BÞ ŠØÈÊ¨òÈÒÈ®BÊ¤ÖÈ˜¬0ŒAšæ¤î¤A®Bœô¢ÐÆ°BDšC¢Ö´È¢Š¤°ðœª°ª”1²ŒÒCBŠªª8”Œ0¤®˜0¬¢Šîî¤’ð´B¤ØŠÈŽB¬Âªª¤¬ÆÖB¦¦0”˜¤Þ/ž7è/šè9ÄBèBBš°ÖÆDŠ¤3²3´Ôªð¤Œ¨ð8˜¢ÖÈ¬ÌÐšŽŠA0¢Æ¤´Š¢î²ÈÖÐÄB¤ÆŠ²0´ ¨Ð®¬9ŠŽÐ”4BBªÆ¤’Ìì3²¦ÄîÐŠ²®ÐŒ¬CÐ’ÎšCBÐ°0´¦B¬Â¢0¤¬Ê0´¦¤ŒÖ¤”ðš®ŠŒB˜ððÌª0ªCœ¤ŠÆŽÜàÂ¨11DŠŠœ4Bðª´ŠÈò²ì’ìž54 CèÖ¢ÌCÖ¬°®B’ÚœÒ²ð®Š¤Š¨BîŽŠŠ¬¤ÌŠ¬¤¢1èC”¤¢ªŒÎªÌ¦Ðæ B0È¢œ¤ÆÂCàÈ¨¬5Ž¤80BÐŠÊŠè–’â9ÜB/ŠŒœ®¤šB®ª²Ò²¢3DÐš°ŽÐ4–¢ÖÈ®ÈÐ¤¢¢ŒèÆŠBA¢Î¤”¨0ØÆª¤Œ¤²¤œš¨Òî˜ŽÎ0¤ŽðœÜBB²ª¢9C8ÐœCîÎBª´®Šª¢®¬AšŠŒ¤ªŠ1èŠŠ1B¬¬ªð´Ä¬ðÐA¨îæšŠ¬8Æ¦¤¢BDÐŠÜœ3¢ð°ªŠ¨¨BàÄŠ¤ŠC˜ªœ¨¢ŒðDÌÐŒŒ¤ŒªÈðÎš¬ÐŠŽœÐ²Ä¨Òà²¦AØ0’ä¤Šè¤¤Î¦¬ÖÈ’ŠÖŒŽî4¦¬11’D¢ØœÎØŠª8Æ°0ŒŒAÒæ¨AÐ¬Â¤ÜBA¢0ÞDð8ÌC1B¬®A¤ŽB8èDŠ4˜¤BØŽÊÐB˜¢¤¬”¤1àìŠª¬¨¦¤²¢ÂðæžŠØÈÈ¤òA0”¨²”¤ðŒ Œ9B¤¢’äŠî’¬®Ö´î¢Šœ–Að8Ìîè¢¤1¬ÎŠ¤ÎÌ˜¢ðžC0¢´¤Úª¢¦0Š¬¦ªÈÂÄðŒ´®ªàDÂÐ8”Š¬¤Â¤°š2’Ô¢ ŠÖªÂŽî8¬¤1AäŒ¢¢¨CÖŒò¢0ÈD°0îÊŽîð¨¤Œ”Ò¢ÐÞ²˜îÞÄ°ðŠÊŒÔA¦ŽªŠ¨¨0Š–ÂBœ¢ªØ9ÌDŒŠŒ®ÎÌDÐ´Ž¦ŠàÈŽª´ŠŒª9DAŒèœŒ1ÐŠÔšÚ/3”Ú01àÔØ0ÂžC07êÄŒ¤5Š ÖŒ–Š1ÖŠ¤BØŽÊ¤ÞÌ¦B”C¦ÎÐB¤ŒèA¦ÎŠÌ4âÊØ2/ì6ÖÈ˜œ5/9–Š Ì²Aœ®5BìÚà78Žô56¤5Ü7+’¬–ê¢Øä+CÎ´ò8ÐÊ3Š¬¬ì/ôÆÄàš’®7îÌÖòèÈŒ8´Äîœä5Â88ÂÒ®BžÒ/ê”¢æ8ôÌÞôà¨B4°˜Ð°Úœô8Œª®àŽÂì˜/3Úà¦èÜÜôÄÜ˜ê®ÌÞì”òÒìžÐÆ0Ž189Ø2¦ìäð4èÊDÐšÌAàœŒØØ¢ŒAÊ4ÂÊÎÔâ+êðÈžÄ4â0´¤â´¬œì¬ //ê”˜Øð®ÖäÐ´5Ò5°Ü3Ö˜ðÂÞ9Â–9ä3 4–°ìÚÄì”äÈœªòÂ+4ÚÎ¬ÐÂŒ°¤ê”ò5Ê–+²ÌÞ ð¢ª1šŠðBA¦Bœª®¤8°¨ª”œ®Š1¢°ÐšÌ¨¢ðD¢Œè¤1Æ²è/¨2ÒÂô/îÞÊÈ4–4Ì¢ìŽœ+ÆØÔBÂôôÞ+CŠÎ7ò®86ðØÜêÄ˜ô8âæ/âÌì4ŽD˜+9Š1¢Öàš®BÈ®®ª”7°¤”¢¤ŒÆ’È®Bð²ÎÎ¤ŒB09²¦ŒØ°ðŒ¦¬¢A”®¬9´210ÊÜ9Ð’Úî¤5âCÚ2 ô4îèD–5ÌÖ¢ Ú0®9´C¦àÂÂ17ÂCÆ9/ÂÄàÄCò9+D ìä2ÐÔ”®ÔÞÂ°æè ÄšìÌ”ŽÂB9BBîî¦’Ž´3´Œ5B¦Ð0ÄŠ®BÊ¤ÖÈ˜AØœ¤ªªœ˜DŠÈª°Ð´/ªÐšCŠ¢BžD¬”²°Šš¢¢1¤Dª¢8´ŽØB²BA’žA0ªÊ®Š¤ÂŒ1’šŽA²˜CÐàŒ¤B´Ž®¬ÖªªŠB¢¬B´ŠªÞ¤DÔAÊA¬ªŽª¤Ø’¨ÖšÆBîî˜ŽÐš¢Â°8ÈŽŠBÞ²ÜŒØD¤ŒÚÂ¦Šê–D0ÖÄŠ¨Òà ²+Â3Š0æÜÒâBœäÄÐÂîÚ´˜19ä29Ú/Ž7èÄÊØÞš32èÊC5ôìÄôàä œÚ– ØÖÌ°ðôB85ð8ÌC0¬Èª0B˜èÌ 0Ô/ÚäØ4Dœè–ðœ¢ÔšäªàŒ7êÎô9È6Þ–CðªÆî4®ªðª¤ŠB’¨Œ14¦ÄÔ¬2´ô5CABš¨¤ª”ŠÚîD¢ŒBÂªªÆ®CB´ÖžÒšà–ÔèðžBØ9–°Ââ63C1š+òäðŒÞÂÐ+Üì/®6Þ´ÚÄêæ2Ü9ÆÒØ9ì¨ä95¨âÒ/Äê7È3AÞ C/ê”â6æ0œâÐB¨¤ŠðA¢A¤BA¢ÎB¤ªœŒ¬Aœ Œ0È˜¤ôŠ6Æ°è4ÄÈÔ¢+žÔÞèÔ4/´žBô+D9¢ô9æ¤”ž è5C/æ7 3àÂ˜î9ÊC+Ü7ž´9/®8ÞÊC+ì–¨šÞÄCÖÞêŽ1Š®ð”Œ1ÖÈŠôî”DÖØ²¤ŽàB®Ð¬Œ¬1à ŒBîÆŠÖš˜Šð²¤ªœA¢ŠŠ’Œ18¨ŠÖÈ °¬Œ¨®10¢¤Î1A¢ðÆ˜Cð´¨Œ¤Š¢ŠÐšÊ¦Î1ŠÐ0®Œð8AAÎ8ÄŠŽØÐÆÚÎ/ŠŠ¬¢¬ðŒÞŽðÖ²BÎš’¢Öî¬¬0Š²°ª²°žÎŠŠŠ0ŠÆŒŒBD¬Ð¬Œªðð®¢1²¢Ž¬ÐŒA¤4BŒ14¦ÄÔ”ÔÄÔÆÔžŠ’¢¤ª1ŠŠÚðÔ¢1Bšª®à°®0ÐC¤DðÈŠÐŠ°¦0¤˜AØ”Ä¤ª1AÐØ¢¤9ž¢0Î¤¬¤²¬3´ÚC27DâÐ+3œÒàÒ057È0˜˜AÎìÜÐš¬ÐŠ¤Šô°äê ¨Ô²¨ÂÒä¢¬CðŠ–ŠAœ´¦ÖÈŒ¤ðÐÂA¢˜Ž¤ÈDDÚ”4ÂÜ¤6”ÜA²ŠBà²¤Šœ¦AÎÈ”CÐàB ŒàÆŽ1ØŒ¦Î4ÂA0ðD¬ÖÈ1šÈª¤¢”Š¬5ª¤Œ4¨ŒðÈŠ°ðš8ÌŽàŽ°¬²¨Cðš¨ŠÐ¤àD¤Œ®¬AÈŒŒÎ8¤²ÚðîÌò04’D9Œ4/ÂÚ3–/9Øè¨”4ì5ŠÄÚ8¤9äÜ77–ž´Ü˜3˜8ÂÂÊÞì®Ø7–ž¦6’Ôî6ä2”î–ÂÎ7ê2Æì70¦ÄBBŽªª¤˜¤0´¦ŠØÆ AÐ¤ŠŠ¬’B¨BŒDŽðšð CŠâ˜®àòÄ¤˜ØäÌ¨Â+ âªÐ5Úôâ0¢8 ª ÒÄ®¨êÄÌÔÞ6®ÖÞ–¦1ê”â9ò 76â ÎêÄêÒÚì˜ÚÞ6ŽîæÖ¬â¦ð¤ÌŽªœÞC¢Î´C¤Œæ¤Œ¤Š¢1Öš¨¤¢ÄŽð¢¬®Šª¤BB¤ŠŒŠ´DCðŒÄ¢0´¦¢0ABØ1²ÐÆ˜¨Ðª¬Cîî¤¬ªœC¤Ðª¢¨01´¢¤A®Ž¤Œ°¬AØœ¤î’´ªBÎ®Šª”žª¬àª1èš¤ðæ´ŽŠªœ¢¢°°ØÈDCðª¨š¨îÐ–Ò1âÆÚ0¦5Â302ìÔ6Ø’Ê´æ6èŠ D1D3”˜ä9ÆòÐÞ´Ôä7æò²èÊ°3Þê ÜÜÆì–9Äâ9ìàDÖ5â–ÐàÂ¬ŒÂÖæÌCÖ¬Ê¨Îœ’°¢š¤¬´ÊªØ”¢A2¬°¢ØÈ¢1œŠ¦0²žAðŠÂ®ðŠ²®ÐŒÆAœž®î´B®ÖÆÈŒªæ¦¨Ö¤è¬ŒÐ ¢BØ²¤¤Æ–B¬Ö8°18²°ªªD¤¬5¢¢Î¢¤ØÈ´®¢š°Cð´Ê¨1šÌDÎªªŒB²Œª¨ÎŽÄDÞ¦¬Î0Ì”ÎÆ”¬¤œäDÖ”ÂA¤ÆÊŒÖš˜BAÖªŒ¬1Ä¢B”¬C1È®®ÐŒB¨Ö5–ÖÈD¬ÖÈŠ¢¬A°Š9ªŽAÐ¨¤0’¤BÎA/ªÚÞ4ŠªŠ¨¨Š4D¢Ô4+¤0¬àÄ¢¤æA0BÄ°ÖA¬CðŒ´¦¢¬š®A’°¤¤Œ¤¬ôÞŒÂÔ5CŠðÆÂ¦Ø’¤ÂŽÞÆŠÚàèAŽÎœŠ¬¬ŽŽ¤œŽ®¢¬BŽª¢´¦A4¨ŒAæŠCôðÂ®Ö9È¢15ŠŽ¢æ¦Œð4¦ŒØÎCŒîÎªŒŠ´ŠŽÐ´Œ¤¬ªªŒ0¤”ªð8¨ŠØ´¦B”B¤ðª´Š¤Œ¬°AA¨¢ªÐŒŠî¤A¦ðš¦Ž0”ª¤ŠØŠŒ1ÐÊ¤ð²¤¦Bªœ¨ðŒ®1¬Ê AÎ’¢àŒB¤²šB11²Aî’Ž¨ªÈC®ØŒÄÄØŠ–¨Ø5AªðÞŒÐ1¦¦Œ1ABØ8¤ª11BCBšð CŠâ˜®àòÄ¤˜ØäÌ¨Â+ âªÐ5Úôâ0¢8 ª šÚ– ˜êäÌ04ÆêÖ6ž338”â49”¨Œ7ž18ÞìÎòž¦Ê69+ØÞŠ¬â¦ð¤AŒœŒAA”DŠî”ª¬Ð´¬¤0’CÂŒÐ–¢2Ø´°0Þ ŠôÖªAŠ²¤¬ÐÖ”¬ŠŠ˜Œ¤ªª¨0œ®¤0ÆÈ¬AØœ®ÖBD¤ðØ¤¤Ðš°ŠB¬žªA9¬¢01¦¢¤8°¨îšŠ°¬œÊªð1ªDŠªÌŠØð²¨ŒàCBªŒCŒ¢ð¢D®Ø²D0ðÌŒîœB¦¢1®ª¬Ð´Ž¤ŒœDŠBB¤”¤®Ö’ŽDª8Ì¤Úš6È4ìÄŠ+¢äÌî8976/à¦AØž®æŠ®9êŠ´êÈ8”7âæ–®0ÚÂ–9êÌ°2ÚÊêÖðàÔä5ÌÌ2Ò+ÌŒæàÚ+Ô ÄòŠÚ8²¢¢ÖŒŒ¢ð¢Š¤²¨¨ðŒÔ CÆæ–ôà1ÄðÐà–Ò”+Ì6¨Ð”â0â¤Æ+žÖB3žŽìêÊ3ÞÌÊÖàâ–ô6”2/ò/°òèìDÐìÄòÐÚÌ°Ö8–ž3æŠš/0Œ²¦¤Èâ®îÎÌDðÆ8¢1´¤1B¢ÐªÌBÆ®ª0B°¢ðŠŠDAœ¢¢îæ¤Š¬ÈÌBA”D¨Öš°¤Œ¤ÈªŒ9Š°ªœAªŠ¢¬¤ŠŒD°Š´ÊŒŠ´D®ŒA¢Œ¬8ŠŠî0¬Œª’ªCî9´®¤”´¤Ö¤ŠŒBØÆ¬¢² CÖðAD¤¬Š1î˜Šî²¨Šðš¬¢ÐÎªD1Ø´ŠØØŽ¤Š¢ªCAîªCîA¢CÐ”BŠÐ8²®ÐŒÌABðD®ŠÈª¢ªB¨A²ªªÖ¤ÆªÖ¤/¢Œ8äBB9š¤ªÆB¤0š¤1BC¨ŒÎ°Š0´®ŒêŽÖâ’Ü5/àžŠÚä¦àŽŠ¨ –ÊÔ’ìÆ8 Ìê2°38æ1î¦ìê´7¢ÜîŽšìâšâÎ´5BÌ²Žæ¬+ØÞAŠ0Æ˜ÔðÊšž183”ðò2°ê Ò¤Ö5âòCÐŠÄDÖ¤Œ¤1”D¢1ÞCŠØ’¬¬¬´Ì°0ŠŠŒAŠ ¨ªà®¤Øè®¨Î´®ŽŠÈ¢¤Š² ŠŠ¤ŒDÎŠÄŠŒ8´¬ðŒ¢¢¢²C°ªÈ²¨Ö´ ª0œD¢Œ9¨¦ðª˜Š¬¬ŒŒ¢È˜®Ð”¦Š¬Ð®Š39ŒCÒ0ŽŠæª²Öð®ª10DŠBÞ¦®1œ¢°Œð˜¦Š9ÌŠŠÆ®¬BŽ1Þ–Ê’â6ìŠ0à+1ä¤0®ØÒê7Ü˜Ò´D3â+ÖÞì œæ²æÖ+ÚÆ18æŒÎ7/ðªì1¢ÌA¨®Þ2A˜1âŽªA²ÌC55ÄÚ®è žôæB5ð7ä/ð´Ê¬æ1ÐŠ¨ŒÐB¤Šœ°Š¤à²ªª´°¢1¬¦DŒÞ¬ABÆŽCBÖÂ¬ŠŠ ªÖŠBŠ0¢BÖŒCðª®Að¦¨ðª”Ž¬œC¬¤ªCA¬àADB5˜¢ðÐ¨¤¤4°ŠðABŠ+CÔàÈô2ä”ÂÜä¦è¤°+àÂœ¢è’²B8+ÂØ77ìÔäÌ°èè4æ²ðÐŠÆCÖÞ ¢¬Š”¦ŠèŒ°ŒÆ¨ŒŠ42CªÆ¤¬¬²°¬1´Œ¢¤ŒšŽŠà®¢ÖŒ®¤BÞª1àªÐŒAŠ¤Ž¦Öš–¬Bàª°ðBâªBšÈC0”–CŠØ˜¤0ÐÊŒÐÈœ¤Œ¤Ž¨ŒàBŠªŒCAðÈBB¤æ BÖÈœBÐîœAÐŠÄŠ0B ªØÞBªBŠÄDÖè’ª¬ÎšŽBAª¢Ö¢˜¬0ŠŽ¢1ªŠ¤¤’–ªŒÄÆŠB¨ªÐ¤¬¤0AÈ05Ž¦¢ŠžCB1CŠôð8ª¬â²ò²1®ŠŠŽ¢¬”Ê¨Œ²²®¬Ø¨¬1èÂ¤æ˜¤î’¢ŒB¤BŠÐ²š¤®àÔ”Ôª4¢ÎBŒ¤ŠBD¢B85DB”C¬1ÈŠ¤ŒÆ¬AîÈŠ°ð¬DŒAàŒ¤¬ªŠŒBªCŒ¬Œ¬ŒÐæšŽŠ²°®ŒœŠŒÖªÆªðª¤ŠB’¨Œ14®Š08¤¬Bš¬Œ¤š¦CBBŽ¬1B”ŠØBAªŒ¢®Žî8¢¢ªŠ’B¤š°ŠðÐÈDŠ9ÄŒðš¦¤¬4¨BB²°CÐî¢¬ÈD¤10¬D0ÞœCÖ5¬¨ÐÆ¬¬1²’®05œ¢¨îð’ŽœìŠ¬´Ì¨B²¢ÂðæÆD¤Œ¤¬ÐªšŒŠ¤ÌB¬šœŒ¤ÐDª¢”Œ°ÖŠ3ÂÜ´5Ê2Ð+ ðDÒà6°Ä+/â¤0æ3Ü/0¬âžBòÞìÂ²ÞÊ3Þ7´7ØòÌ°2àÊ6ÜÒÌ°ðìì°ð8/DèÜ–ÌæàìÂÎ9¤²8¤ªDŒðÞ°Š1¢ª¤ØÈA¦ÖÐ¤ª¬ð¦°ØšÊ°Aæ¨¤ÐÆ¬¤Ö®Š08¤²ôîÜ˜Cæ6È®8¤4Â¦ÞÒÌÜ+Ö4¦Âè–Ö° ÔàBîÈôÐðä7Üè63à–ÂÒæ+ÒÈì8ì18äÄî4Ä28Þ´Ü15 CÔè7BD ð9B®ŠÖ°ÂØæ’î8° Šœ®¤0Æ¨ŠªÞ¬ŒØÐA¤ŒBAŠAæAŠAÞ¦¢¤’®DŠŠ °î¢¨D¤ª¬¢Ð¤²¬ŠA²B0ŒŽ¤ŠœŒ¢8¢®¢’¢ŒB¤BŠÐ´Þœ29Ð’Ö¬B¤ª0¨B”®¤1Ö¬¤¬0¦ŽB²ŠŽðàD¤¢ªCŒŒÞ¤ŒÐ9BŠÐèC¤ª1Œ¤1B¦¢ŒÐDŽŠÐ´ª1ÈÄ®Ð0¢CÎæAŠAÞ¦¢¤’ªDŒ8¤ÂC8+¤A0C¤¬àŽ¢0AÌž¤æ¤CŒ´A¤ª¤ŽŠÖ´Ä®Ö´ªŒª´Œ0¢Ê¨Œ5AÎŒª®Ö8¬DBîîÄÜ¤9Ê29ôÂ¤Ê39 Â”ä /CÐ53ÎäÐA4 Ö¦Ú6/C8ÞàâÌæ”ÜôÞàô0ÞìÂ68ÆÄâ2–°àì92¨8â–+êÆäê6Š’+Žð´¢¤0Ð–ŒŒA®¢ØÈÊ¬Œª²¦ªÐŽŒîÈ¬Ž¤²¨¨ðŒÔ CÆæ–ôà1ÄðÐà–Ò”+Ì6¨Ð”â0â¤Æ+žÖB3žŽìêÊ3ÞÌÊÖàâ–ô6”2/ò/°òèìDÐìÄòÐÚÌ°Ö8–ž3æŠš/0Œ²¦¤Èâ®îÎÌDðÆ8¢1´¤ðš¤¦Ðª®®ŠBŠªŠA¢CîA¢CÐ”BŠÐ²š¢¢9ÌBBšœŒ¤¬CŒŒÐª¢BÎ¢ª´Š¢0Æ¬DðB´AÐAªŒŠŠ¦ŒÐœBŽ¬ÖAAA0”¦ðŠž°Ø¤¬Ð¤B¤ðA’CBŒèÊÔÐŽDÎªª®¤œA¢Š´ÞŽ0”ÌABš¨¤ª”ŠÎîŽ¢Œ¤A¢ÖœA¤Bæ´®B’ŠA¤B´Š0š¤¦¤ŒžŠîšŠ¤¢1¬ŒB”œŠ¢¬ÂŒð”ÄŠ0¤¬ŒÆœBÎ4C¢Îà°2àŽª1A˜AÎæD¤Ž4 ¢Š²´A”¢®Œ¬ÈªBª DªœŽ¬Šœ˜¨ŠÈ ¤îÈ¦ÄŠŠÈ Ô5Š¬¬œ²ªØØÊ¬¤BäŠÎÎª0’®CÐ9ô´Î/ÂÌ¢¢1šŠ0ð¤Œð5B¬¬ª20¤¦®ª/ŠŒB¬®1ŒÈ¬AŒŠ Š´´¢œ/Üœ°ÆÒèDðôªŒÊÖ4¢¬¬èŒ¦ÎŠ°Cð´ÐÄ3È9ÌÔÞÜ ªž2Þì Ä/6ÚªÐæÜÖ+Š’+ÂBžÒìÌDŒà5˜19ä6ÒÚ6Â4Þ86Ú6âŽ²èÌ–5è+ž¦7æì3àÄ®®ò¤ŒÞŽ¤îD¬¬ŒÆ¨BÞ¬ŒØš¬ABÆ®C¤èDŠØ’¢1Þ°¨ŒÎ¨AÖœœ°Ö¤DŽŠB¢¢0¤¨Žîè¬¢ÐÖCîÞŒ¤ªæª¬ð¤°°¤ªŠÐÈBŽÎ9˜¦A4Ž®AÐ¬¤1²®Å2ØšCB¬A¬¢¬ªA¬ð¦¬Ø”¦¬î¤®¬15È¬Aš˜DAœ¨ªA”°¬19¨;
+<?php
+defined('IN_IA') or exit('Access Denied');
+class Aki_yzmyeModuleSite extends WeModuleSite
+{
+    public function doWebSendlist()
+    {
+        require 'inc/web/sendlist.inc.php';
+    }
+    public function doWebCodeset()
+    {
+        require 'inc/web/codeset.inc.php';
+    }
+    private function getcode($num, $no)
+    {
+        $time = time('Ymd');
+    }
+    public function doWebExport()
+    {
+        global $_W, $_GPC;
+        $acid = intval($_W['account']['uniacid']);
+        require_once IA_ROOT . '/framework/library/phpexcel/PHPExcel.php';
+        $result    = array();
+        $piciid    = $_GPC['piciid'];
+        $condition = "";
+        $condition .= " and c.piciid = " . $piciid;
+        $condition .= " and c.yzmyeid = 0 ";
+        $list = pdo_fetchall("select code,status,yue from " . tablename("aki_yzmye_code") . " where uniacid = :uniacid and piciid = :piciid", array(
+            ":uniacid" => $_W['uniacid'],
+            ':piciid' => $piciid
+        ));
+        foreach ($list as $k => $v) {
+            $status = $v['status'];
+            if ($status == '1') {
+                $list[$k]['status1'] = "æœªä½¿ç”¨";
+            } else if ($status == '2') {
+                $list[$k]['status1'] = "å·²ä½¿ç”¨";
+            }
+        }
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator('http://www.ideak.cn')->setLastModifiedBy('http://www.ideak.cn')->setTitle('Office 2007 XLSX Document')->setSubject('Office 2007 XLSX Document')->setDescription('Document for Office 2007 XLSX, generated using PHP classes.')->setKeywords('office 2007 openxml php')->setCategory('Result file');
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setTitle('éªŒè¯ç ');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'æ‰¹æ¬¡');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'éªŒè¯ç ');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'ä½™é¢');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'çŠ¶å†µ');
+        $i = 2;
+        foreach ($list as $k => $v) {
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $i, $piciid);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $i, $v['code']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $v['yue']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $v['status1']);
+            $i++;
+        }
+        $filename = 'éªŒè¯ç æ•°æ®' . '_' . date('Y-m-d');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+        exit;
+    }
+    public function doWebImport()
+    {
+        global $_W, $_GPC;
+        load()->func('logging');
+        $piciid = $_GPC['piciid'];
+        $type   = pdo_fetchcolumn("select type from " . tablename("aki_yzmye_codenum") . " where id = :id", array(
+            ":id" => $piciid
+        ));
+        if (!empty($_GPC['foo'])) {
+            try {
+                include_once("reader.php");
+                $tmp = $_FILES['file']['tmp_name'];
+                if (empty($tmp)) {
+                    echo 'è¯·é€‰æ‹©è¦å¯¼å…¥çš„Excelæ–‡ä»¶ï¼';
+                    exit;
+                }
+                $file_name = IA_ROOT . "/addons/aki_yzmye/xls/code.xls";
+                $uniacid   = $_W['uniacid'];
+                $type      = pdo_fetchcolumn("select type from " . tablename("aki_yzmye_codenum") . " where id = :id", array(
+                    ":id" => $piciid
+                ));
+                if (copy($tmp, $file_name)) {
+                    $xls = new Spreadsheet_Excel_Reader();
+                    $xls->setOutputEncoding('utf-8');
+                    $xls->read($file_name);
+                    $data_values = "";
+                    $count       = $xls->sheets[0]['numRows'];
+                    for ($i = 1; $i <= $count; $i++) {
+                        $code = $xls->sheets[0]['cells'][$i][1];
+                        $yue  = $xls->sheets[0]['cells'][$i][2];
+                        $time = time();
+                        $data_values .= "('$uniacid','$code',0,'$piciid','$type','$time','1','$yue'),";
+                    }
+                    $data_values = substr($data_values, 0, -1);
+                    $query       = pdo_query("insert into `ims_aki_yzmye_code`(uniacid,code,yzmyeid,piciid,type,time,status,yue) values $data_values", array());
+                    if ($query) {
+                        pdo_query("update " . tablename("aki_yzmye_codenum") . " set count = count + $count where id = :id and uniacid =:uniacid", array(
+                            ":id" => $piciid,
+                            ":uniacid" => $uniacid
+                        ));
+                        $url = $this->createWebUrl('codeset');
+                        echo "<script>alert('å¯¼å…¥æˆåŠŸï¼')</script>";
+                        echo "<script>window.location.href= '$url'</script>";
+                    } else {
+                        $url = $this->createWebUrl('Import', array());
+                        echo "<script>alert('å¯¼å…¥å¤±è´¥ï¼')</script>";
+                        echo "<script>window.location.href= '$url'</script>";
+                    }
+                } else {
+                    echo 'å¤åˆ¶å¤±è´¥ï¼';
+                    exit;
+                }
+            }
+            catch (Exception $e) {
+                logging_run($e, '', 'upload_tiku');
+            }
+        } else {
+            include $this->template('import');
+        }
+    }
+    public function doWebShowcode()
+    {
+        global $_W, $_GPC;
+        $result    = array();
+        $piciid    = $_GPC['piciid'];
+        $condition = " ";
+        $condition .= " and c.piciid = " . $piciid;
+        $condition .= " and c.yzmyeid = 0 ";
+        $pindex = max(1, intval($_GPC['page']));
+        $psize  = 20;
+        $list   = pdo_fetchall("select code,status,yue from " . tablename("aki_yzmye_code") . " where uniacid = :uniacid and piciid = :piciid LIMIT " . ($pindex - 1) * $psize . ',' . $psize, array(
+            ":uniacid" => $_W['uniacid'],
+            ':piciid' => $piciid
+        ));
+        $total  = pdo_fetchcolumn("select count(*) from " . tablename("aki_yzmye_code") . " where uniacid = :uniacid and piciid = :piciid ", array(
+            ":uniacid" => $_W['uniacid'],
+            ':piciid' => $piciid
+        ));
+        foreach ($list as $k => $v) {
+            $status = $v['status'];
+            if ($status == '2') {
+                $list[$k]['status1'] = "å·²ä½¿ç”¨";
+            } else {
+                $list[$k]['status1'] = "æœªä½¿ç”¨";
+            }
+        }
+        $pager = pagination($total, $pindex, $psize);
+        include $this->template("showcode");
+    }
+}

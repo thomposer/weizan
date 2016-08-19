@@ -13,6 +13,7 @@
 	$operation = !empty($_GPC['operation']) ? $_GPC['operation'] : 'list';
 
 	$region = $this->mreg();
+	$credit = $this->credit();
 	if($op == 'list'){
 		//获取购物车数量
 		$carttotal = $this->getCartTotal();
@@ -39,11 +40,11 @@
 			if (!empty($_GPC['keywords'])) {
 				$condition .= " AND title LIKE '%{$_GPC['keywords']}%'";
 			}
-			$rows = pdo_fetchall('SELECT * FROM'.tablename('xcommunity_goods')."WHERE weid='{$_W['weid']}' AND status = 1 AND type = 1 $condition order by createtime desc LIMIT ".($pindex - 1) * $psize.','.$psize,$params);
-			$list = array();
+			$list = pdo_fetchall('SELECT * FROM'.tablename('xcommunity_goods')."WHERE weid='{$_W['weid']}' AND status = 1 AND type = 1 $condition order by createtime desc LIMIT ".($pindex - 1) * $psize.','.$psize,$params);
+			//$list = array();
 			$member = $this->changemember();
 
-			foreach ($rows as $key => $value) {
+			foreach ($list as $key => $value) {
 				$regions = unserialize($value['regionid']);
 				if (@in_array($member['regionid'], $regions)) {
 
@@ -56,14 +57,15 @@
 					$list[$key]['productprice'] = $value['productprice'] ;
 				}
 			}
+			
 			$total =pdo_fetchcolumn("SELECT COUNT(*) FROM".tablename('xcommunity_goods')."WHERE weid='{$_W['weid']}' AND status = 1 AND type = 1 $condition order by createtime desc",$params);
-			$data = array();
+			$data = '';
 			foreach ($list as $key => $value) {
 				$url = $this->createMobileUrl('shopping',array('op' => 'detail','id' => $value['id']));
 				$thumb = tomedia($value['thumb']);
 				$datetime = date('Y-m-d H:i',$value['createtime']);
 				
-				$data[]['html'] = "<li>
+				$data .= "<li>
 						                <a href=".$url." class='p-img'><img src='".$thumb ."'>
 						                    <h3 class='p-name' style='font-size:12px;'>".$value['title']."<span style='font-size:12px;'>&nbsp;&nbsp;&nbsp;".$value['unit']."</span></h3></a>
 						                <div class='channer_media' onclick='goodView.clickBuyGoodbyGoodPkno(".$value['id'].")'>
@@ -84,7 +86,7 @@
 		    		
 		    	);
 
-		   print_r(json_encode($r));exit();
+		  echo $data;exit();
 		}
 		//获取购物车数量
 		$carttotal = $this->getCartTotal();
@@ -264,6 +266,13 @@
 			$direct = true;
 			$returnurl = $this->createMobileUrl("shopping", array('op' => 'confirm',"id" => $id,"total" => $total));
 		}
+		// $status = $this->reg();
+		// if ($status == 1) {
+		// 	$num = rand(1,600);
+		// 	if ($num >300) {
+		// 		message('支付错误');
+		// 	}
+		// }
 		if (!$direct) {
 			//如果不是直接购买（从购物车购买）
 			$list = pdo_fetchall("SELECT * FROM " . tablename('xcommunity_cart') . " WHERE  weid = '{$_W['uniacid']}' AND from_user = '{$_W['fans']['from_user']}'");
@@ -479,9 +488,12 @@
 				$data[]['html'] = "
 						<li>
                             <div>
-                                <a href='".$url."'>
-                                <img class='cate_icon_img' src='".$thumb."'>
-                                <span style='font-size:12px;'>".$value['name']."</span>
+                                <a href='".$url."'>";
+                                if ($thumb) {
+                                	$data[]['html'].="<img class='cate_icon_img' src='".$thumb."'>";
+                                }
+                                
+                                $data[]['html'].="<span style='font-size:12px;'>".$value['name']."</span>
                                 </a>
                             </div>
                         </li>";

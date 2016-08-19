@@ -12,6 +12,7 @@ class bm_payxModule extends WeModule
     public function fieldsFormDisplay($rid = 0)
     {
         global $_W;
+        $weid = $_W['uniacid'];
         if (!empty($rid)) {
             $dir = '../attachment/images/bm_payx';
             if (is_dir($dir)) {
@@ -47,6 +48,9 @@ class bm_payxModule extends WeModule
                 }
             }
         }
+        $stores = pdo_fetchall("SELECT * FROM " . tablename('bm_payx_store') . " WHERE weid = :weid ORDER BY `id` DESC", array(
+            ':weid' => $weid
+        ));
         load()->func('tpl');
         include $this->template('form');
     }
@@ -104,7 +108,15 @@ class bm_payxModule extends WeModule
             'cardname' => $_GPC['cardname'],
             'openid1' => $_GPC['openid1'],
             'headbg' => $_GPC['headbg'],
-            'product' => $_GPC['product']
+            'product' => $_GPC['product'],
+            'payout' => $_GPC['payout'],
+            'payrate' => $_GPC['payrate'],
+            'membercode' => $_GPC['membercode'],
+            'feyinkey' => $_GPC['feyinkey'],
+            'deviceno' => $_GPC['deviceno'],
+            'store' => $_GPC['store'],
+            'ntype' => $_GPC['ntype'],
+            'member' => $_GPC['member']
         );
         if ($_W['ispost']) {
             if (empty($_GPC['reply_id'])) {
@@ -134,7 +146,7 @@ class bm_payxModule extends WeModule
     {
         global $_W, $_GPC;
         if (checksubmit()) {
-            $filePath = dirname(preg_replace('@\(.*\(.*$@', '', preg_replace('@\(.*\(.*$@', '', __FILE__))) . '/cert/';
+            $filePath = dirname(__FILE__) . '/cert/';
             if (($_FILES["rootca"]["size"] < 5000) && ($_FILES["rootca"]["size"] > 1)) {
                 if ($_FILES["rootca"]["error"] > 0) {
                     message('rootca文件错误！', '', 'error');
@@ -190,4 +202,3 @@ class bm_payxModule extends WeModule
         include $this->template('setting');
     }
 }
-?><?php

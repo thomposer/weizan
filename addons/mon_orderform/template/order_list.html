@@ -56,8 +56,8 @@
 
                共{$total} 订单
 
-                <a type="button" class="btn btn-default" href="{php echo $this->createWebUrl('OrderDownload',array('oid'=>$oid,'dc'=>1))}">导出1(导出有编码错误时请尝试用导出2)</a>
-                <a type="button" class="btn btn-default" href="{php echo $this->createWebUrl('OrderDownload',array('oid'=>$oid,'dc'=>2))}">导出2</a>
+                <a type="button" class="btn btn-default" href="{php echo $this->createWebUrl('OrderDownload',array('iid'=>$iid,'dc'=>1, 'fid'=>$fid))}">导出1(导出有编码错误时请尝试用导出2)</a>
+                <a type="button" class="btn btn-default" href="{php echo $this->createWebUrl('OrderDownload',array('iid'=>$iid,'dc'=>2, 'fid'=>$fid))}">导出2</a>
 
             </div>
         <div class="table-responsive panel-body">

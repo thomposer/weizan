@@ -254,7 +254,7 @@ function ihttp_email($to, $subject, $body, $global = false) {
 		global $_W;
 		$config = $GLOBALS['_W']['setting']['mail'];
 		if (!$global) {
-			$row = pdo_fetch("SELECT `notify` FROM " . tablename('uni_settings') . " WHERE uniacid = :uniacid", array(':uniacid' => $_W['uniacid']));
+			$row = pdo_get("uni_settings", array('uniacid' => $_W['uniacid']), array('notify'));
 			$row['notify'] = @iunserializer($row['notify']);
 			if (!empty($row['notify']) && !empty($row['notify']['mail'])) {
 				$config = $row['notify']['mail'];
@@ -265,6 +265,9 @@ function ihttp_email($to, $subject, $body, $global = false) {
 		if ($config['smtp']['type'] == '163') {
 			$config['smtp']['server'] = 'smtp.163.com';
 			$config['smtp']['port'] = 25;
+		} elseif ($config['smtp']['type'] == 'qq') {
+			$config['smtp']['server'] = 'ssl://smtp.qq.com';
+			$config['smtp']['port'] = 465;
 		} else {
 			if (!empty($config['smtp']['authmode'])) {
 				$config['smtp']['server'] = 'ssl://' . $config['smtp']['server'];

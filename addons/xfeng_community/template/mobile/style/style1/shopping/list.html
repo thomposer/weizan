@@ -129,7 +129,7 @@
             </header> -->
             <header id="header">
             <div class="header_div">
-                <div id="left_div" onclick="platformCategory.closeCates();"></div>
+                <div id="left_div" onClick="platformCategory.closeCates();"></div>
                 <div id="middle_div" style="padding-top:6px;">
                     <h1 id="title"  style="line-height:30px;">商品分类</h1>
                 </div>
@@ -148,7 +148,7 @@
                     <li></li>
                 </ul>
             </div>
-            <div class="class-box" style="margin-top:-20px">
+            <div class="class-box" style="margin-top:-40px">
                 <!--1 start-->
                 <div class="class-box-sub" id="childCategories">
                     <ul class="clearfix">
@@ -184,7 +184,7 @@
                 </div>
                 <div id="right_div">
                     <div class="right_bottom"></div>
-                    <div class="right_img" onclick="javascript:platformCategory.openCates();"></div>
+                    <div class="right_img" onClick="javascript:platformCategory.openCates();"></div>
                 </div>
             </div>
         </header>
@@ -235,7 +235,7 @@
                 url: url,
                 async: false,
                 type: 'post',
-                dataType: 'json',
+                //dataType: 'json',
                 data: {
                     pcate:pcate,
                     keywords:keywords
@@ -245,16 +245,7 @@
                 },
                 success: function(data) {
 
-                    var $list = $('.floor-two-ul'),
-                        html = (function(data) { //数据渲染
-                            var liArr = [];
-                            $.each(data.allhtml, function() {
-                                liArr.push(this.html);
-                            });
-                            return liArr.join('');
-                        })(data);
-
-                    $('.floor-two-ul').html(html)
+                    $('.floor-two-ul').html(data)
                     if (data.page_count < 2) {
                         $(".ui-refresh-down").html("<span class='ui-refresh-label'>没有更多内容了</span>");
                     } else {

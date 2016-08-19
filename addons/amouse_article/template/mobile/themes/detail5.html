@@ -54,24 +54,20 @@
                     {$detail['content']}
                 </div>
                 {if $detail['isadmire']==0}
-                {if $isMobile}
                     {template 'include_zanshang'}
-                {/if}
                 {/if}
 
                 <div class="rich_media_tool" id="js_toobar">
                     {if $detail['outLink']}<a class="media_tool_meta meta_primary"  href="{$detail['outLink']}">阅读原文</a>{/if}
-
                     <div class="media_tool_meta tips_global meta_primary">阅读
-                        <span id="readNum">{if $detail['clickNum']>=100000}100000+{else}{$detail['clickNum']}{/if}</span>
+                        <span id="readNum">{$readnum}</span>
                     </div>
-
-                <span class="media_tool_meta meta_primary" id="like3"  like="0">
-                    <i class="icon_praise_gray" id="icon_parise"></i><span class="praise_num" id="likeNum3">
-                    {if $detail['zanNum']>=100000}100000+{else}{$detail['zanNum']}{/if}</span>
-                </span>
+                    <span class="media_tool_meta tips_global meta_primary" id="like3">
+                        <i class="icon_praise_gray {if !empty($myrecord['like'])} praised{/if}" id="icon_parise"></i>
+                        <span class="praise_num"  id="likeNum3">{$zanNum}</span>
+                    </span>
                     {if $detail['tel']}<a href="tel:{$detail['tel']}" >一键拨号</a>{/if}
-                    <a id="" class="media_tool_meta tips_global meta_extra" href="{php echo $this->createMobileUrl('jubao')}">举报</a></div>
+                    <a id="" class="media_tool_meta tips_global meta_extra" href="{php echo $this->createMobileUrl('jubao', array("artid" => $detail['id']))}">举报</a></div>
             </div>
 
             <div class="rich_media_area_extra">
@@ -80,9 +76,7 @@
             </div>
 
             {if $detail && $detail['iscomment']=='0'}
-            {if $isMobile}
-            {template 'include_comment'}
-            {/if}
+                {template 'include_comment'}
             {/if}
         </div>
         <div id="js_pc_qr_code" class="qr_code_pc_outer" style="display:none;">
@@ -107,7 +101,7 @@
 <script type="text/javascript" src="{RES}js/weixin_new.js"></script>
 <div id='audiocontainer'></div>
 
-{template 'rec_adv'}
+
 
 </div>
 
@@ -134,34 +128,51 @@
         if (el_toolbar && el_toolbar.querySelector) {
             var el_like = el_toolbar.querySelector("#like3"), el_likeNum = el_toolbar.querySelector("#likeNum3"), el_readNum = el_toolbar.querySelector("#readNum3");
 
-            var tmpAttr = el_like.getAttribute("like"), tmpHtml = el_likeNum.innerHTML, isLike = parseInt(tmpAttr) ? parseInt(tmpAttr) : 0, like = isLike ? 0 : 1, likeNum = parseInt(tmpHtml) ? parseInt(tmpHtml) : 0;
+            var tmpAttr = el_like.getAttribute("like"), tmpHtml = el_likeNum.innerHTML, isLike = parseInt(tmpAttr) ? parseInt(tmpAttr) : 0, like = isLike==0 ? 1 :
+                    0, likeNum = parseInt(tmpHtml) ? parseInt(tmpHtml) : 0;
 
-            $("#like3").click(function() {
-                var id="{$detail['id']}";
+            var state = true;
+            if(state){
+                state = false;
+                $("#like3").click(function() {
+                    var num = parseInt($(this).find("span").text());
+                    var id="{$detail['id']}";
+                    var ajaxurl = "{php echo $this->createMobileUrl('like',array(),true)}&_=" + Math.random();
+                    $.ajax({
+                        url: ajaxurl,
+                        type: "get",
+                        dataType: "json",
+                        data: {"articleid": id,"like":like},
+                        success: function (d) {
+                            console.log(d);
+                            if(d.result==200){
+                                $("#like3").attr("state","1");
+                                $("#like3 span").text(num+1);
+                                $("#icon_parise").addClass("praised");
+                                like1 = true;
+                            }else if(d.result==201){
+                                $("#like3").attr("state","0");
+                                $("#like3 span").text(num-1);
+                                $("#icon_parise").removeClass("praised");
+                                state = true;
+                            }
 
-                var ajaxurl="{php echo $_W['siteroot'].'app/'.murl('entry//like',array('m'=>'amouse_article'),true)}";
-                like = isLike ? 0 : 1 ;
-                $.ajax({
-                    url: ajaxurl,
-                    type: "post",
-                    dataType: "json",
-                    data: {"articleid": id,"like":like},
-                    success: function (res) {
-                        console.log(res);
-                        var menu = $("#icon_parise");
-                        0 == res.ret && (isLike ? (menu.removeClass("praised"), el_like.setAttribute("like", 0),
-                        likeNum > 0 && "100000+" !== tmpHtml && (el_likeNum.innerHTML = likeNum - 1 == 0 ? "赞" : likeNum - 1)) : (el_like.setAttribute("like", 1),
-                                menu.addClass("praised"), "100000+" !== tmpHtml && (el_likeNum.innerHTML = likeNum + 1)));
+                            var menu = $("#icon_parise");
+                            200 == d.result && (isLike ? (menu.removeClass("praised"), el_like.setAttribute("like", 0),
+                            likeNum > 0 && "100000+" !== tmpHtml && (el_likeNum.innerHTML = likeNum - 1 == 0 ? "赞" : likeNum - 1)) : (el_like.setAttribute("like", 1),
+                                    menu.addClass("praised"), "100000+" !== tmpHtml && (el_likeNum.innerHTML = likeNum + 1)));
 
-                    },
-                    error: function (r) {
-                        console.log(r);
-                    }
+                        },
+                        error: function (r) {
+                            console.log(r);
+                        }
+                    });
                 });
-
-            });
+            }
         }
     });
+
+
 
     initShare();
     function initShare(){
@@ -185,29 +196,6 @@
             wx.onMenuShareQZone(shareMeta);
         });
     }
-
-
-    $("#comment_praise").click(function() {
-        var d = {};
-        d['commentid'] =$(this).parent().attr("contentid");
-        $.ajax({
-            url: "{php echo $_W['siteroot'].'app/'.murl('entry//ajaxpraise',array('m'=>'amouse_article'),true)}",
-            type: "post",
-            data : d,
-            dataType: "json",
-            success: function (res) {
-                console.log(res);
-                if(res && res.code ===200){
-                    location.reload(true);
-                }else{
-
-                }
-            },
-            error: function (r) {
-                console.log(r);
-            }
-        });
-    });
 </script>
 
 

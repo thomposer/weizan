@@ -859,7 +859,7 @@
 			{loop $data $da}
 			<tr>
 				<td>{$credits[$type]}</td>
-				<td>{if $da['username']}{$da['username']}{else}本人{/if}</td>
+				<td>{if $da['username']}{$da['username']}{else}系统操作{/if}</td>
 				{if $type == 'credit2'}
 				<td>{php echo abs($da['num'])}元</td>
 				<td>{php echo abs($da['final_num'])}元</td>

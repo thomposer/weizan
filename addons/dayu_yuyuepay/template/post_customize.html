@@ -1,0 +1,176 @@
+
+			
+			
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                预约内容管理
+            </div>
+            <div class="panel-body table-responsive">
+                <div class="alert-new">
+					<table class="table table-hover">
+						<thead>
+						<tr>
+							<th style="width:45%;">自定义字段</th>
+							<th style="width:15%;text-align:center;">排序</th>
+							<th style="width:8%;text-align:center;">是否必填</th>
+							<th style="width:12%;">类型</th>
+							<th style="width:10%;">关联默认值</th>
+							<th style="width:10%;color:red">操作</th>
+						</tr>
+						</thead>
+						<tr>
+							<td>
+							<div class="input-group">
+							<input type="text" name="xmname" class="form-control" value="{$activity['xmname']}" /><span class="input-group-addon">例：服务项目</span>
+							</div>
+							</td>
+							<td><input type="text" class="form-control" value="顶端" readonly /></td>
+							<td style="text-align:center;"><input type="checkbox" title="必填项" checked="checked" disabled="true" /></td>
+							<td>
+								<select class="form-control" readonly>
+									<option>选择(select)</option>
+								</select>
+							</td>
+							<td>
+								<select class="form-control" readonly>
+									<option>不关联粉丝数据</option>
+								</select>
+							</td>
+							<td>
+							</td>
+						</tr>
+						<tr id="is_num"{if $activity['is_num'] == 0} style="display:none"{/if}>
+							<td>
+							<div class="input-group">
+							<input type="text" name="numname" class="form-control" value="{$activity['numname']}" ><span class="input-group-addon">服务项目 × 数量</span>
+							</div>
+							</td>
+							<td><input type="text" class="form-control" value="顶端" readonly /></td>
+							<td style="text-align:center;"><input type="checkbox" title="必填项" checked="checked" disabled="true" /></td>
+							<td>
+								<select class="form-control" readonly>
+									<option>数字(number)</option>
+								</select>
+							</td>
+							<td>
+								<select class="form-control" readonly>
+									<option>不关联粉丝数据</option>
+								</select>
+							</td>
+							<td>
+							</td>
+						</tr>
+						<tr id="time"{if $activity['is_time'] == 1 || $activity['is_time'] == 2} style="display:none"{/if}>
+							<td>
+							<div class="input-group"><input type="text" name="yuyuename" class="form-control" value="{$activity['yuyuename']}" /><span class="input-group-addon">例：预约时间</span>
+							</div>
+							</td>
+							<td><input type="text" class="form-control" value="顶端" readonly /></td>
+							<td style="text-align:center;"><input type="checkbox" title="必填项" checked="checked" disabled="true" /></td>
+							<td>
+								<select class="form-control" readonly>
+									<option>时间(range)</option>
+								</select>
+							</td>
+							<td>
+								<select class="form-control" readonly>
+									<option>不关联粉丝数据</option>
+								</select>
+							</td>
+							<td>
+							</td>
+						</tr>
+						<tbody id="re-items">
+						{loop $ds $r}
+						<tr>
+							<td><input name="title[]" type="text" class="form-control" value="{$r['title']}"/></td>
+							<td><input type="text" name="displayorder[]" class="form-control" value="{$r['displayorder']}" /></td>
+							<td style="text-align:center;"><input name="essential[]" type="checkbox" title="必填项" {if $r['essential']} checked="checked"{/if}/></td>
+							<td>
+								<select name="type[]" class="form-control">
+									{loop $types $k $v}
+									<option value="{$k}"{if $k == $r['type']} selected="selected"{/if}>{$v}</option>
+									{/loop}
+								</select>
+							</td>
+							<td>
+								<select name="bind[]" class="form-control">
+									<option value="">不关联粉丝数据</option>
+									{loop $fields $k $v}
+									<option value="{$k}"{if $k == $r['bind']} selected="selected"{/if}>{$v}</option>
+									{/loop}
+								</select>
+								<input type="hidden" name="value[]" value="{$r['value']}"/>
+								<input type="hidden" name="desc[]" value="{$r['description']}"/>
+								<input type="hidden" name="essentialvalue[]" value="{if $r['essential']}true{else}false{/if}"/>
+							</td>
+							<td>
+								{if !$hasData}
+								<a href="javascript:;" data-toggle="tooltip" data-placement="bottom" title="设置详细信息" onclick="setValues(this);" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> &nbsp;
+								<a href="javascript:;" onclick="deleteItem(this)" data-toggle="tooltip" data-placement="bottom" title="删除此条目" class="btn btn-default btn-sm"><i class="fa fa-times"></i></a>
+								{/if}
+							</td>
+						</tr>
+						{/loop}
+						</tbody>
+					</table>
+				</div>
+				<div class="help-block">
+					{if $hasData}
+					<a href="{php echo $this->createWebUrl('manage', array('id' => $reid));}" target="_blank">已经存在预约数据, 不能修改预约条目信息</a>
+					{else}
+					<a href="javascript:;" class="btn btn-success" onclick="addItem();"><i class="fa fa-plus" title="添加自定义字段"></i> 添加自定义字段</a>
+					{/if}
+				</div>
+				<span class="help-block">关联默认值：关联粉丝资料，免二次输入. </span>
+				<span class="help-block">预约成功启动以后(已经有粉丝用户提交预约信息), 将不能再修改预约条目, 请仔细编辑. </span>
+				<span class="help-block">如果需要关联生日，项目类型设置为日历，只能设置关联一次生日，超出报错。</span>
+            </div>
+        </div>
+		
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                时间设置
+            </div>
+            <div class="panel-body table-responsive">
+                <div class="alert-new">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label" style="color:#ff0000;">预约时间设置</label>
+                    <div class="col-xs-12 col-sm-9 input-group">
+		 				<label class="radio-inline"><input type="radio" name="is_time" value="0" {if empty($activity) || $activity['is_time'] == 0} checked="checked"{/if} onclick="$('#time').show();$('#times').hide();" /> 普通时间</label>
+		 				<label class="radio-inline"><input type="radio" name="is_time" value="2" {if empty($activity) || $activity['is_time'] == 2} checked="checked"{/if} onclick="$('#times').show();$('#time').hide();" /> 时间段预约人数限制</label>
+                		<label class="radio-inline"><input type="radio" name="is_time" value="1" {if $activity['is_time'] == 1} checked="checked"{/if} onclick="$('#time').hide();$('#times').hide();" /> 关闭(我要自己设置)</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label" style="color:#ff0000;">服务项目数量</label>
+                    <div class="col-xs-12 col-sm-9 input-group">
+		 				<label class="radio-inline"><input type="radio" name="is_num" value="1" {if $activity['is_num'] == 1} checked="checked"{/if} onclick="$('#is_num').show();" /> 开启</label>
+                		<label class="radio-inline"><input type="radio" name="is_num" value="0" {if $activity['is_num'] == 0} checked="checked"{/if} onclick="$('#is_num').hide();" /> 关闭</label>
+                    </div>
+                </div>
+			<div id="times"{if $activity['is_time'] == 1 || $activity['is_time'] == 0} style="display:none"{/if}>
+			 	<div class="form-group">
+			 		<label class="col-xs-12 col-sm-3 col-md-2 control-label">预约时间段</label>
+			 		<div class="col-xs-12 col-sm-9">
+						<span class="help-block">选中表示可预约</span>
+				 		<input type="hidden" name="srvtime" class="srvtime" value="{php echo htmlspecialchars($activity['srvtime'])}">
+			 		</div>
+			 	</div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">可预约天数范围</label>
+                    <div class="col-xs-12 col-sm-9 input-group">
+                    	<input type="text" class="form-control" name="day" value="{$activity['day']}" /><span class="input-group-addon">/天。如果设置6天并周六周日不选中，那么1、2、3、4、5、8日可预约，6、7日是周六周日自动排除</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label" style="color:#ff0000;">时间显示方式</label>
+                    <div class="col-xs-12 col-sm-9 input-group">
+		 				<label class="radio-inline"><input type="radio" name="timelist" value="1" {if $activity['timelist'] == 1} checked="checked"{/if} /> 九宫格</label>
+                		<label class="radio-inline"><input type="radio" name="timelist" value="0" {if $activity['timelist'] == 0} checked="checked"{/if} /> 列表</label>
+                    </div>
+                </div>
+			</div>
+		</div>
+		</div>
+		</div>

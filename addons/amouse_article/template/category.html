@@ -174,7 +174,8 @@
                         <a href="{php echo $this->createWebUrl('slide', array('op' => 'post', 'pid' => $row['id']))}" title="添加幻灯片" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top"><i class="fa fa-plus">幻灯片</i></a>
 						{else}
 						<a href="{php echo $this->createWebUrl('slide', array('op' => 'post', 'pid' => $row['id']))}" title="添加幻灯片" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top"><i class="fa fa-plus">幻灯片</i></a>
-						<a href="{php echo $this->createWebUrl('paper', array('op' => 'post', 'pcate' => $row['parentid'], 'ccate' => $row['id']))}" title="添加文章" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top"><i class="fa fa-plus">添加文章</i></a>
+						<a href="{php echo $this->createWebUrl('paper', array('op' => 'post', 'pcate' => $row['id'], 'ccate' => $row['id']))}" title="添加文章"
+						   class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top"><i class="fa fa-plus">添加文章</i></a>
 						{/if}
                         <a href="{php echo $this->createWebUrl('category', array('op' => 'post', 'id' => $row['id']))}" title="编辑" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top"><i class="fa fa-edit"></i></a>
                         <a href="{php echo $this->createWebUrl('category', array('op' => 'delete','id' => $row['id']))}" onclick="return confirm('确认删除此分类吗？');return false;" title="删除" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top"><i class="fa fa-times"></i></a>

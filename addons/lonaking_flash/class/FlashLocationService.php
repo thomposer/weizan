@@ -55,7 +55,7 @@ class FlashLocationService extends FlashCommonService
     {
         global $_W;
         if (empty($w_lng) || empty($w_lat) || empty($b_lat) || empty($b_lng)) {
-            throw new Exception("系统无法识别您的地理位置", 500);
+            throw new Exception("绯荤粺鏃犳硶璇嗗埆鎮ㄧ殑鍦扮悊浣嶇疆", 500);
         }
         if ($openid == null)
             $openid = $_W['openid'];

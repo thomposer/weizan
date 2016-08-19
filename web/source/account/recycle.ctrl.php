@@ -20,7 +20,7 @@ if ($do == 'display') {
 		$uni_info = pdo_get('uni_account', array('uniacid' => $account['uniacid']));
 		$del_accounts[$account['uniacid']] = $uni_info;
 		$sql = "SELECT * FROM ". tablename('account'). " as a LEFT JOIN ". tablename('account_wechats'). " as w ON a.acid = w.acid WHERE a.isdeleted = '1' AND a.uniacid = :uniacid";
-		$del_accounts[$account['uniacid']]['del_accounts'] = pdo_fetchall($sql, array('uniacid' => $account['uniacid']), 'acid');
+		$del_accounts[$account['uniacid']]['del_accounts'] = pdo_fetchall($sql, array(':uniacid' => $account['uniacid']), 'acid');
 		$del_accounts[$account['uniacid']]['is_uniacid'] = in_array($uni_info['default_acid'], array_keys($del_accounts[$account['uniacid']]['del_accounts'])) ? 1 : 0;
 	}
 	$pager = pagination($total, $pindex, $psize);

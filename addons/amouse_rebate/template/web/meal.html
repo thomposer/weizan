@@ -1,0 +1,172 @@
+{template 'common/header'}
+<ul class="nav nav-tabs">
+    <li {if $op=='display'} class="active"{/if}><a href="{php echo $this->createWebUrl('meal',array('op' =>'display'))}">套餐管理</a></li>
+    <li{if empty($item['id']) && $op== 'post'&& empty($auto)} class="active" {/if}><a href="{php echo $this->createWebUrl('meal',array('op' =>'post'))}">添加套餐管理</a></li>
+    {if !empty($item['id']) && $op=='post'}
+        <li class="active"><a href="{php echo $this->createWebUrl('meal',array('op' =>'post','id'=>$item['id']))}">编辑套餐管理</a></li>
+    {/if}
+    
+</ul>
+
+{if $op == 'display'}
+<div class="panel panel-info">
+    <div class="panel-heading">筛选</div>
+    <div class="panel-body">
+        <form role="form" class="form-horizontal" method="get" action="./index.php">
+            <input type="hidden" name="m" value="amouse_rebate" >
+            <input type="hidden" name="do" value="meal" >
+            <input type="hidden" name="c" value="site" />
+            <input type="hidden" name="a" value="entry" />
+            <input type="hidden" value="display" name="op">
+
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">关键字</label>
+                <div class="col-sm-8">
+                    <input type="text" placeholder="搜索套餐管理名称" value="{$_GPC['keyword']}" id="" name="keyword" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="pull-right col-xs-12 col-sm-2 col-lg-1">
+                    <button class="btn btn-block"><i class="fa fa-search"></i> 搜索</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--<div style="padding: 0 15px 0  15px;">
+    <div class="row-fluid">
+        <div class="span8 control-group">
+            <a class="btn btn-default {if empty($type)}active{/if}" href="{php echo $this->createWebUrl('meal',array('op' => 'display'))}">全部</a>
+ <a class="btn btn-default {if $type==7}active{/if}" href="{php echo $this->createWebUrl('meal',array('op' => 'display','type'=>1))}">{if $custom_set&&$custom_set['credittxt']}{$custom_set['credittxt']}{else}积分{/if}充值</a>
+        </div>
+    </div>
+</div>-->
+
+
+<div style="padding:15px;">
+    <form id="form2" class="form-horizontal" method="post">
+        <table class="table table-hover">
+            <thead class="navbar-inner">
+            <tr>
+                <th style="width:10%;">标题</th>
+                <th style="width:10%;">金额</th>
+                <th style="width:8%;">图片</th>
+                <th style="width:8%;">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {loop $list $item}
+            <tr>
+                <td>{$item['title']}</td>
+                <td>
+                    <script>
+                        var reg=/^[0-9]*$/;
+                        var tt={$item['price']};
+                        if(!reg.test(tt)){
+                            tt = tt<0?0:tt.toFixed(3);
+                        }else{
+                            tt = tt<0?0:tt;
+                        }
+                        document.write(tt);
+                    </script>
+                </td>
+                <td>{if $item['img']}
+                    <img src="{php echo strpos($item['img'],'http://')===FALSE?(tomedia($item['img'])):$item['img']}" height="40" width="40"/>
+                {/if}
+                </td>
+
+                <td style="text-align:left;">
+                    <a href="{php echo $this->createWebUrl('meal', array('op' => 'post', 'id' => $item['id']))}" class="btn btn-default btn-sm"><i
+                            class="fa fa-edit">编辑</i>
+                    </a>
+                    <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('meal', array('id' => $item['id'],'op'=>'delete'))}" title="删除" class="btn btn-default btn-sm">
+                        <i class="fa fa-times">删除</i>
+                    </a>
+                </td>
+            </tr>
+            {/loop}
+            </tbody>
+        </table>
+    </form>
+    <div style="margin:0 auto;margin-right: auto;vertical-align: middle;text-align: center;" >
+        {$pager}
+    </div>
+</div>
+{elseif $op == 'post'}
+<div class="main">
+    <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" onsubmit='return formcheck()'>
+        <input type="hidden" name="id" value="{$item['id']}" />
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                套餐管理设置
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style="color:red">*</span>标题</label>
+                    <div class="col-sm-9">
+                        <input type="text" id='title' name="title" class="form-control" value="{$item['title']}" />
+                    </div>
+                </div>
+                <!--<div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">VIP类型</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="radio" name="type" id="form-type-1" value="1" {if $item['type']==1}checked="true"{/if}  />
+                        <label for="form-type-1">{if $custom_set&&$custom_set['credittxt']}{$custom_set['credittxt']}{else}积分{/if}充值</label>
+                        <span class="help-block"> 只有购买了超级VIP才可以充值。</span>
+                    </div>
+                </div>-->
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">
+                        <span style="color:red">*</span>价格
+                    </label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="input-group">
+                            <input type="text" id='price' name="price" class="form-control" value="{php echo intval($item['price'])}" />
+                             <span class="input-group-addon">元</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">{if $credittxt}{$credittxt}{else}积分{/if}个数</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="input-group">
+                        <input type="text" id='desc' name="desc" class="form-control" value="{php echo intval($item['desc'])}" />
+                        <span class="input-group-addon">个</span>
+                        </div>
+                    </div>
+                </div>
+<!--
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">分钟</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="input-group">
+                            <input type="text" id='day' name="day" class="form-control" value="{$item['day']}" />
+
+                        </div>
+                        <span class="help-block">比如 1个挂机券 = 1分钟 <kbd>仅限超级会员购买</kbd></span>
+                    </div>
+                </div>-->
+
+                <div class="form-group">
+                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">套餐图片</label>
+                     <div class="col-sm-9">
+                         {php echo tpl_form_field_image('img', $item['img'])}
+                        <span class="help-block">
+                            建议图片大小为： 40*40 比如:
+                            <img  src="http://hufen.npltec.com/static/img/gold.9c7c443de448.png" width="40" height="40">
+                        </span>
+                     </div>
+                 </div>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1" />
+            <input type="hidden" name="token" value="{$_W['token']}" />
+        </div>
+    </form>
+</div>
+
+{/if}

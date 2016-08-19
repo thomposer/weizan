@@ -1,10 +1,6 @@
 <?php
 /**
  * 龙舟大赛
- *
- * 作者:迷失卍国度
- *
- * qq : 15595755
  */
 defined('IN_IA') or exit('Access Denied');
 include "model.php";

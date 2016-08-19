@@ -8,7 +8,7 @@
 	$params['tid'] = $order['ordersn'];
 	$params['user'] = $_W['fans']['from_user'];
 	$params['fee'] = $order['price'];
-	$params['title'] = $_W['account']['name'];
+	$params['title'] = '拍卖充值';
 	$params['ordersn'] = $order['ordersn'];
 
 	include $this->template('pay');

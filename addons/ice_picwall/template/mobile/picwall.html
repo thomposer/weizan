@@ -54,13 +54,14 @@ link : "{$shareurl}",
 desc : "{$sharecontent}",
 imgUrl :"{$sharephoto}"
 };
-*/
+
 sharedata = {
 title : "你好~！",
-link : "http://mp.weixin.qq.com/s?__biz=MjM5NzQ1MzU2MA==&mid=210537091&idx=1&sn=fcd086bc07f9ccd83fd909fbcacf83f9#rd",
+//link : "http://mp.weixin.qq.com/s?__biz=MjM5NzQ1MzU2MA==&mid=210537091&idx=1&sn=fcd086bc07f9ccd83fd909fbcacf83f9#rd",
+link : {php echo $this->createWebUrl('Index');},
 desc : "活动开启啦~！",
 imgUrl :"http://mmbiz.qpic.cn/mmbiz/y82GcGicjeKPqaibDHWj0efo5jdNoiaWxaqIUkN4eeEuac3rslMQeHjibpl3vyBbW6PaAeLkjt2s7M3oCiaNfHnJ5Qw/640?wx_fmt=jpeg&tp=webp&wxfrom=5"
-};
+};*/
 wx.ready(function () {
 wx.showOptionMenu();
 wx.onMenuShareAppMessage(sharedata);
@@ -159,15 +160,18 @@ function del2(PersonalPicWallId, obj) {
         success: function (result) {
             if (result == "liked") {
                  alert("您已经点过赞啦！");
-            }else if (result == "noway") {
-                alert("请在从公众号中进入后投票");
-                 window.location.href='http://mp.weixin.qq.com/s?__biz=MjM5NzQ1MzU2MA==&mid=210537091&idx=1&sn=fcd086bc07f9ccd83fd909fbcacf83f9#rd';
-                return;
-            }else if (result == "unsub") {
-                alert("您需要先关注后才可以投票！");
-                window.location.href='http://mp.weixin.qq.com/s?__biz=MjM5NzQ1MzU2MA==&mid=210537091&idx=1&sn=fcd086bc07f9ccd83fd909fbcacf83f9#rd';
-                return;
-            }else if (result == "error") {
+            }
+			//else if (result == "noway") {
+             //   alert("请在从公众号中进入后投票");
+            //     window.location.href='http://mp.weixin.qq.com/s?__biz=MjM5NzQ1MzU2MA==&mid=210537091&idx=1&sn=fcd086bc07f9ccd83fd909fbcacf83f9#rd';
+            //    return;
+            //}
+			//else if (result == "unsub") {
+            //    alert("您需要先关注后才可以投票！");
+            //    window.location.href='http://mp.weixin.qq.com/s?__biz=MjM5NzQ1MzU2MA==&mid=210537091&idx=1&sn=fcd086bc07f9ccd83fd909fbcacf83f9#rd';
+             //   return;
+            //}
+			else if (result == "error") {
                 alert("访问出错");
                 return;
             }else if(parseInt(result) > 0){

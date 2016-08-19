@@ -38,7 +38,10 @@ if ($do == 'post') {
 			'name' => $_GPC['name'],
 			'package' => iserializer($package),
 			'maxaccount' => intval($_GPC['maxaccount']),
-			'timelimit' => intval($_GPC['timelimit'])
+			'discount' =>  intval($_GPC['discount']),
+			'price' =>  $_GPC['price'],
+			'timelimit' => intval($_GPC['timelimit']),
+			'domain' => intval($_GPC['domain'])
 		);
 		if (empty($id)) {
 			pdo_insert('users_group', $data);

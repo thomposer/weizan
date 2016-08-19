@@ -21,10 +21,12 @@ if ($do == 'system') {
 		if(!is_error($upgrade) && !empty($upgrade['upgrade'])) {
 			$upgrade = array('version' => $upgrade['version'], 'release' => $upgrade['release'], 'upgrade' => 1, 'lastupdate' => TIMESTAMP);
 			cache_write('checkupgrade:system', $upgrade);
+			cache_delete('cloud:transtoken');
 			message($upgrade, '', 'ajax');
 		} else {
 			$upgrade = array('lastupdate' => TIMESTAMP);
 			cache_write('checkupgrade:system', $upgrade);
+			cache_delete('cloud:transtoken');
 		}
 	} else {
 		message($lock, '', 'ajax');

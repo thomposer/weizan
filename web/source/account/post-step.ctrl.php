@@ -184,8 +184,30 @@ if($step == 1) {
 		exit;
 	}
 } elseif ($step == 3) {
+	load()->model('cloud');
+	$sms_info = cloud_sms_info();
+	$max_num = empty($sms_info['sms_count']) ? 0 : $sms_info['sms_count'];
+	$signatures = $sms_info['sms_sign'];
 	if (empty($_W['isfounder'])) {
 		message('您无权进行该操作！');
+	}
+	if ($do == 'edit_sms') {
+		$max_num = empty($sms_info['sms_count']) ? 0 : $sms_info['sms_count'];
+		if ($max_num == 0) {
+			message(error(-1), '', 'ajax');
+		}
+		$settings = uni_setting($uniacid, array('notify'));
+		$notify = $settings['notify'] ? $settings['notify'] : array();
+		$balance = intval($_GPC['balance']);
+		$notify['sms']['balance'] = $_GPC['status'] == 'add' ? $notify['sms']['balance'] + $balance : $notify['sms']['balance'] - $balance;
+		$notify['sms']['balance'] = min(max(0, $notify['sms']['balance']), $max_num);
+		$count_num = $max_num - $notify['sms']['balance'];
+		$num = $notify['sms']['balance'];
+		uni_setting_save('notify', $notify);
+		$notify = iserializer($notify);
+		$updatedata['notify'] = $notify;
+		pdo_update('uni_settings', $updatedata , array('uniacid' => $uniacid));
+		message(error(1, array('count' => $count_num, 'num' => $num)), '', 'ajax');
 	}
 	if ($do == 'userinfo') {
 		$result = array();
@@ -208,6 +230,16 @@ if($step == 1) {
 				$uid = intval($_GPC['uid']);
 		$groupid = intval($_GPC['groupid']);
 		$uniacid = intval($_GPC['uniacid']);
+		if (!empty($_GPC['signature'])) {
+			$signature = trim($_GPC['signature']);
+			$setting = pdo_get('uni_settings', array('uniacid' => $_W['uniacid']));
+			$notify = iunserializer($setting['notify']);
+			$notify['sms']['signature'] = $signature;
+
+			uni_setting_save('notify', $notify);
+			$notify = serialize($notify);
+			pdo_update('uni_settings', array('notify' => $notify), array('uniacid' => $uniacid));
+		}
 		if (!empty($uid)) {
 						pdo_delete('uni_account_users', array('uniacid' => $uniacid, 'uid' => $uid));
 			$owner = pdo_get('uni_account_users', array('uniacid' => $uniacid, 'role' => 'owner'));
@@ -229,13 +261,6 @@ if($step == 1) {
 		}
 		if (!empty($user)) {
 			user_update($user);
-		}
-		if (!empty($_GPC['signature']) || intval($_GPC['balance']) >= 0) {
-			$notify = array();
-			$notify['sms']['balance'] = intval($_GPC['balance']);
-			$notify['sms']['signature'] = trim($_GPC['signature']);
-			pdo_update('uni_settings', array('notify' => iserializer($notify)) , array('uniacid' => $uniacid));
-			uni_setting_save('notify', $notify);
 		}
 				pdo_delete('uni_account_group', array('uniacid' => $uniacid));
 		if (!empty($_GPC['package'])) {

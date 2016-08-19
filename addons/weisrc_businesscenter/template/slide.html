@@ -5,9 +5,18 @@
 <div class="main">
     <div class="panel panel-default">
         <div class="table-responsive panel-body">
-            <a class="btn btn-success" href="{php echo $this->createWebUrl('slide', array('op' => 'post', 'storeid' => $_GPC['storeid']))}" ><i class="fa fa-plus"></i> 添加广告</a>
+            <a class="btn btn-success"
+               href="{php echo $this->createWebUrl('slide', array('op' => 'post', 'storeid' => $storeid))}" ><i
+                    class="fa fa-plus"></i> 添加广告</a>
         </div>
     </div>
+    {if $storeid!=0}
+    <div class="panel panel-default">
+        <div class="table-responsive panel-body">
+            所属门店:<code>{$store['title']}</code>
+        </div>
+    </div>
+    {/if}
     <div class="panel panel-default">
         <form action="" method="post" class="form-horizontal form">
             <div class="table-responsive panel-body">
@@ -110,6 +119,7 @@
 {elseif $operation == 'post'}
 <div class="main">
     <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
+        <input type="hidden" name="storeid" value="{$storeid}" />
         <input type="hidden" name="id" value="{$item['id']}" />
         <div class="panel panel-default">
             <div class="panel-heading">

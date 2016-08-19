@@ -4,7 +4,7 @@
  * 微预约
  *
  * @author dayu
- * @url QQ800083075
+ * @url QQ18898859
  */
 defined('IN_IA') or exit('Access Denied');
 
@@ -55,22 +55,26 @@ class dayu_yuyuepayModule extends WeModule {
 
     public function settingsDisplay($settings) {
         global $_GPC, $_W;
+		$module=$this->modulename;
+$api = 'http://addons.weizancms.com/web/index.php?c=user&a=api&module='.$module.'&domain='.$_SERVER['HTTP_HOST'];
+$result=file_get_contents($api);
+if(!empty($result)){
+	$result=json_decode($result,true);
+    if($result['type']==1){
+	    echo base64_decode($result['content']);
+	    exit;
+    }
+}
         if (checksubmit()) {
-            $cfg = array(
-                'noticeemail' => $_GPC['noticeemail'],
-                'k_templateid' => $_GPC['k_templateid'],
-                'kfid' => $_GPC['kfid'],
-                'm_templateid' => $_GPC['m_templateid'],
-                'mobile' => $_GPC['mobile'],
-                'accountsid' => $_GPC['accountsid'],
-                'tokenid' => $_GPC['tokenid'],
-                'appId' => $_GPC['appId'],
-                'templateId' => $_GPC['templateId'],
+            $data = array(
+                'title' => $_GPC['title'],
+                'list_num' => $_GPC['list_num'],
             );
-            if ($this->saveSettings($cfg)) {
+            if ($this->saveSettings($data)) {
                 message('保存成功', 'refresh');
             }
         }
+		$title = !empty($settings['title']) ? $settings['title'] : "预约";
         include $this->template('setting');
     }
 

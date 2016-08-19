@@ -309,9 +309,9 @@ function sj(rid,user_ysh,user_wsh,user_tprc,user_cyrs,user_share,user_hits,user_
 function hdurl(rid){
 	 $('#Modal2').modal('toggle');
 	
-	 $('#tpindex').html('{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&j={$_W['uniacid']}&c=entry&rid=' + rid + '&do=photosvote&m=fm_photosvote');
-	 $('#tppaihang').html('{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&j={$_W['uniacid']}&c=entry&rid=' + rid + '&do=paihang&m=fm_photosvote');
-	 $('#tpbaoming').html('{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&j={$_W['uniacid']}&c=entry&rid=' + rid + '&do=reg&m=fm_photosvote');
+	 $('#tpindex').html('{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&c=entry&rid=' + rid + '&do=photosvote&m=fm_photosvote');
+	 $('#tppaihang').html('{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&c=entry&rid=' + rid + '&do=paihang&m=fm_photosvote');
+	 $('#tpbaoming').html('{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&c=entry&rid=' + rid + '&do=reg&m=fm_photosvote');
 }
 function getfunction(rid){
 	 $('#function').modal('toggle');

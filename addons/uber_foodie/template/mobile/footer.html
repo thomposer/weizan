@@ -1,0 +1,51 @@
+{php echo register_jssdk(false);}
+<script>
+var link = lineLink;
+var img = imgUrl;
+
+var title = shareTitle;
+var desc = descContent;
+
+
+wx.ready(function(){
+    //
+    wx.onMenuShareTimeline({
+        title: title,
+        link: link, // 
+        imgUrl: img, // 
+        success: function () {},
+        cancel: function () {}
+    });
+
+    //
+    wx.onMenuShareAppMessage({
+        title: title, // 
+        desc: desc, // 
+        link: link, // 
+        imgUrl: img, // 
+        type: 'link', //
+        dataUrl: '', // 
+        success: function () {},
+        cancel: function () {}
+    });
+	
+	/////////////////////////////////////////
+		//添加卡券
+                document.querySelector('#addCard').onclick = function () {
+                    wx.addCard({
+                      cardList: [
+                        {
+                          cardId: "{$card_id}",
+						  cardExt: '{"timestamp": "{$_W['account']['jssdkconfig']['timestamp']}","nonce_str":"{$_W['account']['jssdkconfig']['nonce_str']}", "signature":"{$card_signature}"}'
+                        }
+                      ],
+                      success: function (res) {
+                        alert('已添加卡券：' + JSON.stringify(res.cardList));
+                      }
+                    });
+                };
+		////////////////////////////////////////
+});
+</script>
+	</body>
+</html>

@@ -16,25 +16,6 @@ $state = uni_permission($_W['uid'], $uniacid);
 if($state != 'founder' && $state != 'manager') {
 	message('没有该公众号操作权限！');
 }
-if ($do == 'edit_sms') {
-	load()->model('cloud');
-	$sms_info = cloud_sms_info();
-	$max_num = empty($sms_info['sms_count']) ? 0 : $sms_info['sms_count'];
-	if ($max_num == 0) {
-		message(error(-1), '', 'ajax');
-	}
-	$settings = uni_setting($uniacid, array('notify'));
-	$notify = $settings['notify'] ? $settings['notify'] : array();
-	$balance = intval($_GPC['balance']);
-	$notify['sms']['balance'] = $_GPC['status'] == 'add' ? $notify['sms']['balance'] + $balance : $notify['sms']['balance'] - $balance;
-	$notify['sms']['balance'] = min(max(0, $notify['sms']['balance']), $max_num);
-	$num = $notify['sms']['balance'];
-	uni_setting_save('notify', $notify);
-	$notify = iserializer($notify);
-	$updatedata['notify'] = $notify;
-	pdo_update('uni_settings', $updatedata , array('uniacid' => $uniacid));
-	message(error(1, $num), '', 'ajax');
-}
 
 if (checksubmit('submit')) {
 	load()->model('module');

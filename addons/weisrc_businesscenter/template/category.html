@@ -4,8 +4,9 @@
 <div class="main">
     <div class="panel panel-default">
         <div class="table-responsive panel-body">
+            <a class="btn btn-success" href="{php echo $this->createWebUrl('category', array('op' => 'post'))}"><i
+                    class="fa fa-plus"></i>添加分类</a>
             <a class="btn btn-danger" href="{php echo $this->createWebUrl('category', array('op' => 'display', 'type' => 'default'))}" onclick="return confirm('确认操作吗？');return false;"><i class="icon-plus"></i> 添加内置分类</a>
-            <a class="btn btn-default" href="{php echo $this->createWebUrl('category', array('op' => 'post'))}"><i class="fa fa-plus"></i>添加分类</a>
         </div>
     </div>
     <div class="panel panel-default">
@@ -14,11 +15,11 @@
                 <table class="table table-hover">
                     <thead class="navbar-inner">
                     <tr>
-                        <th style="width:15%;">显示顺序</th>
+                        <th style="width:10%;">显示顺序</th>
                         <th style="width:30%;">分类名称</th>
                         <th style="width:30%;">图标</th>
                         <th style="width:15%;">属性</th>
-                        <th style="width:10%;text-align: right;">操作</th>
+                        <th style="width:15%;text-align: right;">操作</th>
                     </tr>
                     </thead>
                     <tbody id="level-list">
@@ -56,9 +57,7 @@
                         </td>
                         <td>
                             {if $row['isfirst']==1}
-                            <span class="label" style="background:#56af45;">首页推荐</span>
-                            {else}
-                            <span class="label">未推荐</span>
+                            <span class="label label-success">首页推荐</span>
                             {/if}
                         </td>
                         <td style="text-align: right;">

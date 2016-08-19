@@ -32,7 +32,7 @@ class hl_periarthritisModule extends WeModule {
 			'title' => $_GPC['title'],
 			'picture' => $_GPC['picture'],
 			'content' => $_GPC['content'],
-			'gzurl' => $_GPC['gunzhu'],
+			'gzurl' => $_GPC['gzurl'],
 			'shaketimes' => intval($_GPC['shaketimes']),
 			
 		);

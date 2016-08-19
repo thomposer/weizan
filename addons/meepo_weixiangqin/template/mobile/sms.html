@@ -113,7 +113,7 @@ ul,li{margin:0;padding:0;list-style-type:none; }
 					  <div class="flower_news">
 						  <ul class="flower_li">
 							  <li class="flower_avatar"><img src="{if preg_match('/http:(.*)/',$flowers[0]['from_user']['avatar'])}{$flowers[0]['from_user']['avatar']} {else if preg_match('/images(.*)/',$flowers[0]['from_user']['avatar'])} {$_W['attachurl']}{$flowers[0]['from_user']['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" class="flower_avatar_img" /></li>
-							  <li class="flower_words">{$flowers[0]['from_user']['nickname']}给{$flowers[0]['to_user']}送了{$flowers[0]['flower_num']}朵花！</li>
+							  <li class="flower_words">{php echo cutstr($flowers[0]['from_user']['nickname'],5, true)}给{php echo cutstr($flowers[0]['to_user'],5, true)}送了{$flowers[0]['flower_num']}朵花！</li>
 							  <li class="flower_time">{php echo date('m-d H:i:s', $flowers[0]['createtime']);}</li>
 						  </ul>
 					  </div>  
@@ -122,7 +122,7 @@ ul,li{margin:0;padding:0;list-style-type:none; }
 					  <div class="flower_news">
 						  <ul class="flower_li">
 							  <li class="flower_avatar"><img src="{if preg_match('/http:(.*)/',$sayhis[0]['from_user']['avatar'])}{$sayhis[0]['from_user']['avatar']} {else if preg_match('/images(.*)/',$sayhis[0]['from_user']['avatar'])} {$_W['attachurl']}{$sayhis[0]['from_user']['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" class="flower_avatar_img" /></li>
-							  <li class="flower_words">{$sayhis[0]['from_user']['nickname']}给{$sayhis[0]['to_user']}打招呼了！</li>
+							  <li class="flower_words">{php echo cutstr($sayhis[0]['from_user']['nickname'],5,true)}给{php echo cutstr($sayhis[0]['to_user'],5,true)}打招呼了！</li>
 							  <li class="flower_time">{php echo date('m-d H:i:s', $sayhis[0]['createtime']);}</li>
 						  </ul>
 					  </div>  
@@ -131,7 +131,7 @@ ul,li{margin:0;padding:0;list-style-type:none; }
 					  <div class="flower_news">
 						  <ul class="flower_li">
 							  <li class="flower_avatar"><img src="{if preg_match('/http:(.*)/',$message[0]['senderavatar'])}{$message[0]['senderavatar']} {else if preg_match('/images(.*)/',$message[0]['senderavatar'])} {$_W['attachurl']}{$message[0]['senderavatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" class="flower_avatar_img" /></li>
-							  <li class="flower_words">{$message[0]['sendernickname']}与{$messages[0]['to_user']}正聊得火热</li>
+							  <li class="flower_words">{php echo cutstr($message[0]['sendernickname'],5,true)}与{php echo cutstr($messages[0]['to_user'],5,true)}正聊得火热</li>
 							  <li class="flower_time">{php echo date('m-d H:i:s', $message[0]['stime']);}</li>
 						  </ul>
 					  </div>  
@@ -140,7 +140,7 @@ ul,li{margin:0;padding:0;list-style-type:none; }
 					  <div class="flower_news">
 						  <ul class="flower_li">
 							  <li class="flower_avatar"><img src="{if preg_match('/http:(.*)/',$user[0]['avatar'])}{$user[0]['avatar']} {else if preg_match('/images(.*)/',$user[0]['avatar'])} {$_W['attachurl']}{$user[0]['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" class="flower_avatar_img" /></li>
-							  <li class="flower_words">{$user[0]['nickname']}成功注册了会员！</li>
+							  <li class="flower_words">{php echo cutstr($user[0]['nickname'],5,true)}成功注册了会员！</li>
 							  <li class="flower_time">{php echo date('m-d H:i:s', $user[0]['time']);}</li>
 						  </ul>
 					  </div>  
@@ -153,7 +153,7 @@ ul,li{margin:0;padding:0;list-style-type:none; }
 					  <div class="flower_news">
 						  <ul class="flower_li">
 							  <li class="flower_avatar"><img src="{if preg_match('/http:(.*)/',$flowers[1]['from_user']['avatar'])}{$flowers[1]['from_user']['avatar']} {else if preg_match('/images(.*)/',$flowers[1]['from_user']['avatar'])} {$_W['attachurl']}{$flowers[1]['from_user']['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" class="flower_avatar_img" /></li>
-							  <li class="flower_words">{$flowers[1]['from_user']['nickname']}给{$flowers[1]['to_user']}送了{$flowers[1]['flower_num']}朵花！</li>
+							  <li class="flower_words">{php echo cutstr($flowers[1]['from_user']['nickname'],5,true)}给{php echo  cutstr($flowers[1]['to_user'],5,true)}送了{$flowers[1]['flower_num']}朵花！</li>
 							  <li class="flower_time">{php echo date('m-d H:i:s', $flowers[1]['createtime']);}</li>
 						  </ul>
 					  </div>  
@@ -162,7 +162,7 @@ ul,li{margin:0;padding:0;list-style-type:none; }
 					  <div class="flower_news">
 						  <ul class="flower_li">
 							  <li class="flower_avatar"><img src="{if preg_match('/http:(.*)/',$sayhis[1]['from_user']['avatar'])}{$sayhis[1]['from_user']['avatar']} {else if preg_match('/images(.*)/',$sayhis[1]['from_user']['avatar'])} {$_W['attachurl']}{$sayhis[1]['from_user']['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" class="flower_avatar_img" /></li>
-							  <li class="flower_words">{$sayhis[1]['from_user']['nickname']}给{$sayhis[1]['to_user']}打招呼了！</li>
+							  <li class="flower_words">{php echo cutstr($sayhis[1]['from_user']['nickname'],5,true)}给{php echo cutstr($sayhis[1]['to_user'],5,true)}打招呼了！</li>
 							  <li class="flower_time">{php echo date('m-d H:i:s', $sayhis[1]['createtime']);}</li>
 						  </ul>
 					  </div>  
@@ -171,7 +171,7 @@ ul,li{margin:0;padding:0;list-style-type:none; }
 					  <div class="flower_news">
 						  <ul class="flower_li">
 							  <li class="flower_avatar"><img src="{if preg_match('/http:(.*)/',$message[1]['senderavatar'])}{$message[1]['senderavatar']} {else if preg_match('/images(.*)/',$message[1]['senderavatar'])} {$_W['attachurl']}{$message[1]['senderavatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" class="flower_avatar_img" /></li>
-							  <li class="flower_words">{$message[1]['sendernickname']}与{$messages[1]['to_user']}正聊得火热</li>
+							  <li class="flower_words">{php echo cutstr($message[1]['sendernickname'],5,true)}与{php echo cutstr($messages[1]['to_user'],5,true)}正聊得火热</li>
 							  <li class="flower_time">{php echo date('m-d H:i:s', $message[1]['stime']);}</li>
 						  </ul>
 					  </div>  
@@ -180,7 +180,7 @@ ul,li{margin:0;padding:0;list-style-type:none; }
 					  <div class="flower_news">
 						  <ul class="flower_li">
 							  <li class="flower_avatar"><img src="{if preg_match('/http:(.*)/',$user[1]['avatar'])}{$user[1]['avatar']} {else if preg_match('/images(.*)/',$user[1]['avatar'])} {$_W['attachurl']}{$user[1]['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" class="flower_avatar_img" /></li>
-							  <li class="flower_words">{$user[1]['nickname']}成功注册了会员！</li>
+							  <li class="flower_words">{php echo cutstr($user[1]['nickname'],5,true)}成功注册了会员！</li>
 							  <li class="flower_time">{php echo date('m-d H:i:s', $user[1]['time']);}</li>
 						  </ul>
 					  </div>  
@@ -193,7 +193,7 @@ ul,li{margin:0;padding:0;list-style-type:none; }
 					  <div class="flower_news">
 						  <ul class="flower_li">
 							  <li class="flower_avatar"><img src="{if preg_match('/http:(.*)/',$flowers[2]['from_user']['avatar'])}{$flowers[2]['from_user']['avatar']} {else if preg_match('/images(.*)/',$flowers[2]['from_user']['avatar'])} {$_W['attachurl']}{$flowers[2]['from_user']['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" class="flower_avatar_img" /></li>
-							  <li class="flower_words">{$flowers[2]['from_user']['nickname']}给{$flowers[2]['to_user']}送了{$flowers[2]['flower_num']}朵花！</li>
+							  <li class="flower_words">{php echo cutstr($flowers[2]['from_user']['nickname'],5,true)}给{php echo cutstr($flowers[2]['to_user'],5,true)}送了{$flowers[2]['flower_num']}朵花！</li>
 							  <li class="flower_time">{php echo date('m-d H:i:s', $flowers[2]['createtime']);}</li>
 						  </ul>
 					  </div>  
@@ -202,7 +202,7 @@ ul,li{margin:0;padding:0;list-style-type:none; }
 					  <div class="flower_news">
 						  <ul class="flower_li">
 							  <li class="flower_avatar"><img src="{if preg_match('/http:(.*)/',$sayhis[2]['from_user']['avatar'])}{$sayhis[2]['from_user']['avatar']} {else if preg_match('/images(.*)/',$sayhis[2]['from_user']['avatar'])} {$_W['attachurl']}{$sayhis[2]['from_user']['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" class="flower_avatar_img" /></li>
-							  <li class="flower_words">{$sayhis[2]['from_user']['nickname']}给{$sayhis[2]['to_user']}打招呼了！</li>
+							  <li class="flower_words">{php echo cutstr($sayhis[2]['from_user']['nickname'],5,true)}给{php echo cutstr($sayhis[2]['to_user'],5,true)}打招呼了！</li>
 							  <li class="flower_time">{php echo date('m-d H:i:s', $sayhis[2]['createtime']);}</li>
 						  </ul>
 					  </div>  
@@ -211,7 +211,7 @@ ul,li{margin:0;padding:0;list-style-type:none; }
 					  <div class="flower_news">
 						  <ul class="flower_li">
 							  <li class="flower_avatar"><img src="{if preg_match('/http:(.*)/',$message[2]['senderavatar'])}{$message[2]['senderavatar']} {else if preg_match('/images(.*)/',$message[2]['senderavatar'])} {$_W['attachurl']}{$message[2]['senderavatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" class="flower_avatar_img" /></li>
-							  <li class="flower_words">{$message[2]['sendernickname']}与{$messages[2]['to_user']}正聊得火热</li>
+							  <li class="flower_words">{php echo cutstr($message[2]['sendernickname'],5,true)}与{php echo cutstr($messages[2]['to_user'],5,true)}正聊得火热</li>
 							  <li class="flower_time">{php echo date('m-d H:i:s', $message[2]['stime']);}</li>
 						  </ul>
 					  </div>  
@@ -220,7 +220,7 @@ ul,li{margin:0;padding:0;list-style-type:none; }
 					  <div class="flower_news">
 						  <ul class="flower_li">
 							  <li class="flower_avatar"><img src="{if preg_match('/http:(.*)/',$user[2]['avatar'])}{$user[2]['avatar']} {else if preg_match('/images(.*)/',$user[2]['avatar'])} {$_W['attachurl']}{$user[2]['avatar']}     {else}{MEEPORES}/static/friend/images/cdhn80.jpg{/if}" class="flower_avatar_img" /></li>
-							  <li class="flower_words">{$user[2]['nickname']}成功注册了会员！</li>
+							  <li class="flower_words">{php echo cutstr($user[2]['nickname'],5,true)}成功注册了会员！</li>
 							  <li class="flower_time">{php echo date('m-d H:i:s', $user[2]['time']);}</li>
 						  </ul>
 					  </div>  

@@ -6,7 +6,7 @@
 defined('IN_IA') or exit('Access Denied');
 $dos = array('platform', 'site', 'mc', 'setting', 'ext', 'solution', 'members', 'fournet', 'replystatistics');
 $do = in_array($do, $dos) ? $do : $do;
-$title = array('platform'=>'公众平台','site'=>'微站功能','mc'=>'会员及会员营销','setting'=>'功能选项','ext'=>'扩展功能','solution'=>'行业功能','members'=>'会员续费','fournet'=>'四网融合');
+$title = array('platform'=>'公众平台','site'=>'微站功能','mc'=>'会员及会员营销','setting'=>'功能选项','ext'=>'扩展功能','solution'=>'行业功能','members'=>'应用商店','fournet'=>'四网融合');
 $_W['page']['title'] = $title[$do];
 define('FRAME', $do);
 $frames = buildframes(array(FRAME), $_GPC['m']);
@@ -162,13 +162,60 @@ if($do == 'setting') {
 	
 }
 if($do == 'members') {
-	$title = '会员续费';
-	
-	
+	$title = '应用商店';
+		load()->func('tpl');
+		load()->model('module');
+        $mid    = $_GPC['mid'];
+        $id     = $_GPC['id'];
+        $pindex = max(1, intval($_GPC['page']));
+        $psize  = 2;
+        if (!empty($_GPC['keyword'])) {
+            $condition .= " and title LIKE '%" . $_GPC['keyword'] . "%'";
+        }
+			load()->model('extension');
+			load()->model('cloud');
+			load()->model('cache');
+			load()->func('file');
+			$modtypes = module_types();
+			$modules = pdo_fetchall("SELECT * FROM " . tablename('modules') .'WHERE issystem = 0 ORDER BY `price` DESC,  `mid` ASC', array(), 'mid');
+		if (!empty($modules)) {
+				foreach ($modules as $mid => $module) {
+				$manifest = ext_module_manifest($module['name']);
+				$modules[$mid]['official'] = empty($module['issystem']) && (strexists($module['author'], 'WeiZan Team') || strexists($module['author'], '微赞团队'));
+				$modules[$mid]['description'] = strip_tags($module['description']);
+				$owner   = pdo_get('uni_account_users',array('uniacid' =>$_W['uniacid'],'role' =>'owner'),'uid');
+				$ownerg  = pdo_get('users',array('uid' =>$owner['uid']),'groupid');
+				$taocmd  =getgroupmodules($ownerg['groupid']);
+				$buymodule = pdo_fetch("SELECT * FROM " . tablename('uni_group') . " WHERE uniacid = :uniacid", array(':uniacid' => $_W['uniacid']));
+			    $moduletime=unserialize($buymodule['moduletime']);
+				
+				if(is_array($manifest) && ver_compare($module['version'], $manifest['application']['version']) == '-1') {
+					$modules[$mid]['upgrade'] = true;
+				}
+				if(in_array($module['name'], $sysmodules)) {
+					$modules[$mid]['imgsrc'] = '../framework/builtin/' . $module['name'] . '/icon-custom.jpg';
+					if(!file_exists($modules[$mid]['imgsrc'])) {
+						$modules[$mid]['imgsrc'] = '../framework/builtin/' . $module['name'] . '/icon.jpg';
+					}
+				} else {
+					$modules[$mid]['imgsrc'] = '../addons/' . $module['name'] . '/icon-custom.jpg';
+					if(!file_exists($modules[$mid]['imgsrc'])) {
+						$modules[$mid]['imgsrc'] = '../addons/' . $module['name'] . '/icon.jpg';
+					}
+				}
+			}
+		}
+		$sysmodules = implode("', '", $sysmodules);
 }
 if($do == 'ext') {
 	$title = '扩展功能概况';
 	$installedmodulelist = uni_modules(false);
+	load()->model('module');
+			load()->model('extension');
+			load()->model('cloud');
+			load()->model('cache');
+			load()->func('file');
+			$modtypes = module_types();
 	foreach ($installedmodulelist as $k => &$value) {
 		$value['official'] = empty($value['issystem']) && (strexists($value['author'], 'WeiZan Team') || strexists($value['author'], '微赞团队'));
 	}
@@ -236,6 +283,16 @@ if($do == 'ext') {
 							unset($entries['menu'][$k]);
 						}
 					}
+				}
+			}
+		} else {
+			$site = WeUtility::createModule($m);
+			if (!is_error($site)) {
+				$method = 'welcomeDisplay';
+				if(method_exists($site, $method)){
+					$frames = array();
+					$site->$method($entries);
+					exit;
 				}
 			}
 		}

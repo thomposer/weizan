@@ -47,12 +47,12 @@
 						<tr>
 							<td><input type="text" name="displayorder[]" value="{$v['displayorder']}" class="form-control"></td>
 							<td>
-								<input type="text" class="form-control" style="width:120px;display:inline-block" name="title[]" value="{$v['title']}">
+								<div class=""><input type="text" class="form-control" style="width:120px;display:inline-block" name="title[]" value="{$v['title']}">&nbsp;<i class="fa fa-chevron-down" data-id="{$v['id']}"> </i></div>
 							</td>
 							<td>{$v['name']}</td>
 							<td></td>
 							<td align="center">
-								<div class="input-group">
+								<div class="input-group" style="display:none">
 									<input type="text" class="form-control" name="append_title[]" value="{$v['append_title']}"/>
 									<span class="input-group-addon"><i class="{$v['append_title']}"></i></span>
 									<span class="input-group-btn">
@@ -85,7 +85,7 @@
 							<input type="hidden" name="append_title[]" value="">
 							<input type="hidden" name="is_system[]" value="{$v1['is_system']}">
 							<input type="hidden" name="permission_name[]" value="{$v1['permission_name']}">
-							<tr class="level1 p_{$v1['pid']}">
+							<tr class="level1 p_{$v1['pid']}" style="display: none">
 								<td><input type="text" name="displayorder[]" value="{$v1['displayorder']}" class="form-control"></td>
 								<td>
 									<div class="pad-left">&nbsp; <input type="text" style="width:120px;display:inline-block" name="title[]" value="{$v1['title']}" class="form-control"> <i class="fa fa-chevron-down" data-id="{$v1['id']}"> </i></div>
@@ -115,7 +115,7 @@
 								<input type="hidden" name="id[]" value="{$v2['id']}"/>
 								<input type="hidden" name="is_system[]" value="{$v2['is_system']}">
 								<input type="hidden" name="permission_name[]" value="{$v2['permission_name']}">
-								<tr class="p_{$v2['pid']} p_{$v['id']}">
+								<tr class="p_{$v2['pid']} p_{$v['id']}" style="display: none">
 									<td><input type="text" name="displayorder[]" value="{$v2['displayorder']}" class="form-control"></td>
 									<td><div class="pad-left" style="margin-left:30px"> &nbsp; <input type="text" style="width:120px;display:inline-block" name="title[]" value="{$v2['title']}" class="form-control"></div></td>
 									<td>{$v2['name']}</td>
@@ -164,7 +164,7 @@
 								</tr>
 								{/loop}
 							{/if}
-							<tr class="p_{$v1['id']} p_{$v['id']}">
+							<tr class="p_{$v1['id']} p_{$v['id']}" style="display: none">
 								<td colspan="11">
 									<div class="pad-bottom pull-left" style="margin-left:110px"></div>
 									<div class="pull-left add add_level2" data-pid="{$v1['id']}" data-name="{$v['name']}"> &nbsp;&nbsp;<i class="fa fa-plus-circle"></i> 添加菜单</div>
@@ -173,7 +173,7 @@
 							</tr>
 						{/loop}
 					{/if}
-					<tr class="level1 p_{$v['id']}">
+					<tr class="level1 p_{$v['id']}" style="display: none">
 						<td></td>
 						<td colspan="10"><div class="pad-bottom pull-left"></div> <div class="pull-left add add_level1" data-pid="{$v['id']}" data-name="{$v['name']}"> &nbsp;&nbsp;<i class="fa fa-plus-circle"></i> 添加菜单组</div></td>
 					</tr>
@@ -198,7 +198,14 @@
 	$(function(){
 		$('.fa-chevron-down').click(function(){
 			var id = $(this).attr('data-id');
-			$('tr.p_' + id).slideToggle('fast');
+			var display = $('tr.p_' + id).eq(0).css('display');
+			var clas = $(this).attr('class');
+			$(this).attr('class', clas == 'fa fa-chevron-down' ? 'fa fa-chevron-right' : 'fa fa-chevron-down');
+			if (display == 'none') {
+				$('tr.p_' + id).slideDown('fast');
+			} else {
+				$('tr.p_' + id).slideUp('fast');
+			}
 		});
 		$('.add_level0').click(function(){
 			var pid = $(this).attr('data-pid');
@@ -237,7 +244,7 @@
 					'</tr>';
 			$(this).parents('tr').before(html)
 		});
-
+		var count = 0;
 		$('.add_level2').click(function(){
 			var pid = $(this).attr('data-pid');
 			var name = $(this).attr('data-name');
@@ -245,12 +252,12 @@
 					'<input type="hidden" name="add_child_pid[]" value="'+pid+'">' +
 					'<input type="hidden" name="add_child_name[]" value="'+name+'">' +
 					'<td><input type="text" name="add_child_displayorder[]" value="0" class="form-control"></td>' +
-					'<td><div class="pad-left" style="margin-left:30px"> &nbsp;&nbsp;<input style="width:120px;display:inline-block" type="text" name="add_child_title[]" value="" placeholder="菜单名称" class="form-control"></div></td>' +
+					'<td><div class="pad-left" style="margin-left:30px"> &nbsp;&nbsp;<input style="width:120px;display:inline-block" type="text" name="add_child_title[]" value="" placeholder="菜单名称" class="form-control" data-num="'+count+++'"></div></td>' +
 					'<td>'+name+'</td>' +
 					'<td></td>' +
 					'<td><input type="text" name="add_child_permission[]" value="" class="form-control" placeholder="权限标识"></td>' +
 					'<td colspan="2"></td>' +
-					'<td><input type="text" name="add_child_url[]" value="" class="form-control" placeholder="菜单链接"></td>' +
+					'<td><input type="text" name="add_child_url[]" value="" class="form-control" placeholder="菜单链接" data-num="'+count+++'"></td>' +
 					'<td>' +
 						'<div class="input-group">' +
 							'<input type="text" class="form-control" name="add_child_append_title[]" value="fa fa-link"/>' +
@@ -318,6 +325,17 @@
 				return false;
 			});
 		});
+		$('form').submit(function() {
+			for (var i=0;i<count;i++) {
+				if ($('[data-num='+i+']').val() == '') {
+					var message = i%2 == 0 ? '请填写菜单名称' : '请填写链接地址';
+					util.message(message);
+					$('[data-num='+i+']').focus();
+					return false;
+				}
+			}
+		}
+		);
 	});
 </script>
 {template 'common/footer-gw'}

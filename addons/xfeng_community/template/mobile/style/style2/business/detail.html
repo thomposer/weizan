@@ -99,9 +99,12 @@
                         <div class="hdList_wz">
                             <div class="img fl"><img src="{php echo tomedia($goods['thumb'])}" width="90" height="80"></div>
                             <div class="wz">
-                                <p class="bt overflow_clear">{$goods['title']}</p>
-                                <p class="black9"><span class="price fontcl1">￥{$goods['marketprice']}</span>
-                                    <del>原价:￥{$goods['productprice']}</del> 已售{$goods['sold']}</p>
+                            <p class="bt overflow_clear">{$goods['title']}</p>
+                                <p class="black9">
+                                    <span class="price fontcl1">￥{$goods['marketprice']}</span>
+                                    <del>原价:￥{$goods['productprice']}</del> 已售{$goods['sold']}
+                                    <span>积分:{php echo $c = $goods['marketprice']*$credit['business_credit']}</span>
+                                </p>
                             </div>
                         </div>
                         <div class="clear"></div>

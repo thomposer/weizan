@@ -32,7 +32,20 @@
                 {if $item['bed_show'] == 1}
                 {$item['bed']}
                 {/if}
-            </span><br>
+            </span>
+	        <span class="txt_gray">
+
+		         {if !empty($setting['payment']) && $setting['payment']['alipay']['switch'] == 1}
+		         <span style="border: 1px solid dodgerblue; color: dodgerblue;width: 30px;padding-left: 4px;margin-left: 10px;">支付宝支付 </span>
+		         {/if}
+		          {if !empty($setting['payment']) && $setting['payment']['wechat']['switch'] == 1}
+		         <span style="border: 1px solid dodgerblue; color: dodgerblue;width: 30px;padding-left: 4px;margin-left: 10px;">微信支付 </span>
+		         {/if}
+		           {if !empty($setting['payment']) && $setting['payment']['baifubao']['switch'] == 1}
+		         <span style="border: 1px solid dodgerblue; color: dodgerblue;width: 30px;padding-left: 4px;margin-left: 10px;">百付宝 </span>
+		         {/if}
+	        </span>
+	        <br>
             {if !empty($item['sales'])}
             <div class="hotelicon hotel_cu">促</div>
             {/if}

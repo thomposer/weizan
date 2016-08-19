@@ -15,9 +15,9 @@
 	<section class="deal_box">
 		<!--1-->
     	<div class="imgboxdt">
-		    <a class="" href="#" title="项目名称：{$item['title']}">
-		    	<img src="{$_W['attachurl']}{$item['thumb']}" alt="" />	  				
-			</a>
+    		{if empty($item['video'])}<img src="{php echo tomedia($item['thumb'])}" />{else}
+				<iframe class="video_iframe" style=" z-index:1; " src="{$item['video']}" allowfullscreen="" frameborder="0" height="200" width="100%"></iframe>
+			{/if}
     	</div>
     	<a href="javascript:void(0);" title="项目名称：{$item['title']}" class="deal_title sizing">项目名称：{$item['title']}</a>
     	<!--2-->
@@ -82,7 +82,7 @@
                     {/if}                
                 </div>
                 <div class="div_dt" style="border:none;">
-                    <span class="num">{php echo $this->getprojectorder($item['id'])}</span><br />
+                    <span class="num">{php echo $this->getprojectorder($item['id']) + $this->getprojectorder_ws($item['id']);}</span><br />
                     <span class="til">支持者</span>
                 </div>
                 {/if}

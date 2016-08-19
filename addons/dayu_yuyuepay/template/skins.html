@@ -39,7 +39,7 @@ $(function () {
         });
 });
 </script>
-  <div class="col-xs-6 col-sm-6 col-md-3 template_picker">
+  <div class="col-xs-3 col-md-3 template_picker">
     <div class="thumbnail" style="text-align:center;width:140px;">
       <img  class="imgtip" style="height:100px;overflow:hidden;" src="/addons/dayu_yuyuepay/template/img/submit_s.jpg" bigimg="/addons/dayu_yuyuepay/template/img/submit.jpg">
         <span style="display:block;white-space: nowrap;text-overflow:ellipsis; overflow:hidden">默认</span>
@@ -51,7 +51,7 @@ $(function () {
       </div>
     </div>
   </div>
-  <div class="col-xs-6 col-sm-6 col-md-3 template_picker">
+  <div class="col-xs-3 col-md-3 template_picker">
     <div class="thumbnail" style="text-align:center;width:140px;">
       <img  class="imgtip" style="height:100px;overflow:hidden;" src="/addons/dayu_yuyuepay/template/img/new_s.jpg" bigimg="/addons/dayu_yuyuepay/template/img/new.jpg">
         <span style="display:block;white-space: nowrap;text-overflow:ellipsis; overflow:hidden">新风格</span>
@@ -63,35 +63,15 @@ $(function () {
       </div>
     </div>
   </div>
-  <div class="col-xs-6 col-sm-6 col-md-3 template_picker">
+  <div class="col-xs-3 col-md-3 template_picker">
     <div class="thumbnail" style="text-align:center;width:140px;">
       <img  class="imgtip" style="height:100px;overflow:hidden;" src="/addons/dayu_yuyuepay/template/img/concise_s.jpg" bigimg="/addons/dayu_yuyuepay/template/img/concise.jpg">
         <span style="display:block;white-space: nowrap;text-overflow:ellipsis; overflow:hidden">简约风格</span>
       <div class="radio">
         <label>
-          <input type="radio" name="skins" value="concise" {if $activity['skins'] == 'concise' || empty($$activity['skins'])} checked="checked"{/if}>
+          <input type="radio" name="skins" value="concise" {if $activity['skins'] == 'concise'} checked="checked"{/if}>
           选择
         </label>
       </div>
     </div>
   </div>
-  {template 'dingzhi'}
-  {if $_W['isfounder']}
-  <div class="col-xs-2 col-md-2 template_picker">
-    <div class="thumbnail" style="text-align:center;width:140px;" title="查看更多模板主题">
-      <a target="_blank" href="#">
-      <div style="height:100px;overflow:hidden;padding-top:20px">
-        <span style="padding:10px;font-size:30pt;border:1px dotted gray">
-          <span class="glyphicon glyphicon-plus"></span>
-        </span>
-      </div>
-      </a>
-      <span style="display:block;white-space: nowrap;text-overflow:ellipsis; overflow:hidden">
-        购买模板请联系我
-      </span>
-      <label>
-        本提示仅管理员可见
-      </label>
-    </div>
-  </div>
-  {/if}

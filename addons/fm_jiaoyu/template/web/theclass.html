@@ -56,21 +56,26 @@ font-weight:bold;
 {if $operation == 'post'}
 <div class="main">
     <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
-        <input type="hidden" name="parentid" value="{$parent['id']}" />
+        <!-- <input type="hidden" name="parentid" value="{$parent['id']}" /> -->
         <input type="hidden" name="schoolid" value="{$schoolid}" />		
         <div class="panel panel-default">
             <div class="panel-heading">
                 班级分类编辑
             </div>
             <div class="panel-body">
-                {if !empty($parentid)}
+                
                 <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">上级分类</label>
-                    <div class="col-sm-9">
-                        {$parent['name']}
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">所属年级</label>
+					<div class="col-sm-2 col-lg-2">
+                        <select style="margin-right:15px;" name="parentid" class="form-control">
+                            <option value="0">请选择年级</option>
+                            {loop $xueqi $it}
+                            <option value="{$it['sid']}" {if $it['sid'] == $theclass['parentid']} selected="selected"{/if}>{$it['sname']}</option>
+                            {/loop}
+                        </select>
                     </div>
                 </div>
-                {/if}
+                
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
                     <div class="col-sm-9">
@@ -128,7 +133,7 @@ font-weight:bold;
                     <thead class="navbar-inner">
                     <tr>
 					    <th style="width:100px;">序号</th>
-                        <th style="width:100px;">排序</th>
+						<th>所属年级</th>
                         <th>班级名称</th>
 						<th>班级主任</th>
 						<!--th>班级群二维码</th-->
@@ -140,7 +145,7 @@ font-weight:bold;
                     {loop $theclass $row}
                     <tr>
 					    <td><div class="type-parent">{$row['sid']}</div></td>
-                        <td><input type="text" class="form-control" name="ssort[{$row['ssort']}]" value="{$row['ssort']}"></td>
+						<td><div class="type-parent">{$xq[$row['parentid']]['sname']}</div></td>
                         <td><div class="type-parent">{$row['sname']}&nbsp;&nbsp;</div></td>
 						<td><div class="type-parent">{$teachers[$row['tid']]['tname']}</div></td>
 						<!--td><img src="{$_W['attachurl']}{$row['erwei']}" width="50" onerror="this.src='./resource/images/nopic.jpg';" style="border-radius: 3px;" /></td-->
