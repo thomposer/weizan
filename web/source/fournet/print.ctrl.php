@@ -12,10 +12,9 @@ if(checksubmit('submit')) {
 			'name' => $_GPC['name'],
 			'type' => $_GPC['type'],
 			'use' => $_GPC['use'],
-			'secret' => $_GPC['secret'],
+			'appkey' => $_GPC['appkey'],
 			'dis' => $_GPC['dis'],
 			'code' => $_GPC['code'],
-			'daima' => $_GPC['daima'],
 			'num' => $_GPC['num'],
 		);
 		$row = array();

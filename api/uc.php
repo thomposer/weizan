@@ -232,13 +232,18 @@ class uc_note {
 			return API_RETURN_FORBIDDEN;
 		}
 
-		$data = array();
-		if(is_array($post)) {
-			foreach($post as $k => $v) {
-				$data['findpattern'][$k] = $v['findpattern'];
-				$data['replace'][$k] = $v['replacement'];
-			}
-		}
+        $data = array();
+        if(is_array($post)) {
+            foreach($post as $k => $v) {        
+	//dz uc-key
+	      if(substr($v['findpattern'], 0, 1) != '/' || substr($v['findpattern'], -3) != '/is') {
+	         $v['findpattern'] = '/' . preg_quote($v['findpattern'], '/') . '/is';
+	      }
+	//end            
+                $data['findpattern'][$k] = $v['findpattern'];
+                $data['replace'][$k] = $v['replacement'];
+            }
+        }
 		$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/badwords.php';
 		$fp = fopen($cachefile, 'w');
 		$s = "<?php\r\n";
@@ -266,20 +271,22 @@ class uc_note {
 		return API_RETURN_SUCCEED;
 	}
 
-	function updateapps($get, $post) {
-		global $_G;
+function updateapps($get, $post) {
+        global $_G;
 
-		if(!API_UPDATEAPPS) {
-			return API_RETURN_FORBIDDEN;
-		}
-
-		$UC_API = '';
-		if($post['UC_API']) {
-			$UC_API = str_replace(array('\'', '"', '\\', "\0", "\n", "\r"), '', $post['UC_API']);
-			unset($post['UC_API']);
-		}
-
-		$cachefile = DISCUZ_ROOT.'./uc_client/data/cache/apps.php';
+        if(!API_UPDATEAPPS) {
+            return API_RETURN_FORBIDDEN;
+        }
+                
+	//$UC_API = $post['UC_API'];
+	//dz uc-key
+        $UC_API = '';
+        if($post['UC_API']) {
+            $UC_API = str_replace(array('\'', '"', '\\', "\0", "\n", "\r"), '', $post['UC_API']);
+            unset($post['UC_API']);
+        }
+	//end
+        $cachefile = DISCUZ_ROOT.'./uc_client/data/cache/apps.php';
 		$fp = fopen($cachefile, 'w');
 		$s = "<?php\r\n";
 		$s .= '$_CACHE[\'apps\'] = '.var_export($post, TRUE).";\r\n";

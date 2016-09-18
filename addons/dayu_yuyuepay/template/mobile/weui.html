@@ -4,13 +4,8 @@
 {/if}
 
 <style>
-.m-time .dayu-sub-title {color: #f2f2f2;padding:0 10px;font-size: 12px;text-indent:2em;}
-.dayu-header {padding: 25px 0;}
-.dayu-title {text-align: center;font-size: 25px;color: #3cc51f;font-weight: 400;margin: 0;}
-.dayu-sub-title {color: #888;padding:0 10px;font-size: 14px;text-indent:2em;}
-.dayu-content-padded {padding: 15px;}
-.dayu-second-title {text-align: center;font-size: 24px;color: #3cc51f;font-weight: 400;margin: 0 15%;}
-.m-title{width:90%;margin:0 auto;}
+body{background-color:#fbf9ff;}
+.dayu-header {padding: 25px 0 0;}
 
 .weui_textarea_counter span {font-size:12px;}
 .weui_label{font-size:13px;}
@@ -30,24 +25,41 @@
 
 .weui_tab_bd {padding-bottom: 15px;}
 .weui_select{z-index:0;}
+.weui_grid{width:50%;padding: 10px 10px;}
+.weui_grid:after{height: 0px;border-bottom:0;}
 </style>
-    <div class="weui_tab_bd">
-	{if $activity['isthumb']==1}
+	<div class="weui_tab_bd">
+	{if $activity['isthumb']==0}
+		<div class="weui-header bg-blue"> 
+			<div class="weui-header-left"> <a class="iconfont f-white" href="javascript:history.go(-1)">&#xe60c;</a>  </div>
+			<h1 class="weui-header-title f16">{$activity['subtitle']}</h1>
+			<div class="weui-header-right"><a class="iconfont f-white" href="{php echo $this->createMobileUrl('Mydayu_yuyuepay', array('weid' => $_W['uniacid'], 'id' => $reid))}">&#xe622;</a></div> 
+		</div>
+	{elseif $activity['isthumb']==1}
 	<div class="m-box">
 		<div class="m-img" style="background-image:url({$activity['thumb']});"></div>
 		<div class="m-masker"> 
-			<div class="m-title">{$activity['title']}<br>
-				<a href="javascript:;" data-target="#popup" class="open-popup m-time">
-					{if $activity['description']}<p class="dayu-sub-title">{$activity['description']}<span class="f11"><i class="icon icon-40 f11"></i>详情 >></span></p>{/if}
-				</a>
+				<a href="javascript:;" data-target="#popup" class="open-popup">
+			<div class="weui_media_box weui_media_text" style="position: absolute;bottom:10px;width:90%;">
+				<h1 class="weui_media_title tcenter f-white f20">{$activity['title']}</h1>
+		{if $activity['description']}
+				<p class="weui_media_desc indent f-gray m-time">{$activity['description']}</p>
+				<p class="weui_media_info f-gray tright"><i class="iconfont f11">&#xe61f;</i> 详情 >></p>
+		{/if}
 			</div>
+				</a>
 		</div> 
 	</div>
 	{elseif $activity['isthumb']==2}	
 	<header class="dayu-header">
-		<h1 class="dayu-title">{$activity['title']}</h1>
 		<a href="javascript:;" data-target="#popup" class="open-popup">
-			{if $activity['description']}<p class="dayu-sub-title">{$activity['description']}<span class="f11"><i class="icon icon-40 f11"></i>详情 >></span></p>{/if}
+			<div class="weui_media_box weui_media_text">
+				<h1 class="weui_media_title tcenter f-green f25">{$activity['title']}</h1>
+		{if $activity['description']}
+				<p class="weui_media_desc indent">{$activity['description']}</p>
+				<p class="weui_media_info f-black tright"><i class="iconfont f11">&#xe61f;</i> 详情 >></p>
+		{/if}
+			</div>
 		</a>
 	</header>
 	{/if}
@@ -60,21 +72,12 @@
 			<p class='p'><a href="javascript:;" class="weui_btn bg-blue close-popup">关闭</a></p>
 		</div>
 	</div>
-	{if $activity['isthumbs']}
-	<div class="m-box">
-		<div class="m-img" style="background-image:url({$activity['thumb']});"></div>
-		<div class="m-masker"> 
-			<div class="m-title">{$activity['title']}<br><span class="m-time">{php echo date('Y-m-d', $activity['starttime'])} - {php echo date('Y-m-d', $activity['endtime'])}</span> 
-		</div>
-		</div> 
-	</div>
-	{/if}
 
 <!--	<form method="post" action="{php echo $this->createMobileUrl('index')}"  enctype="multipart/form-data" >	-->
 <form action="{php echo $this->createMobileUrl('dayu_yuyuepay', array('weid' => $_W['uniacid'], 'id' => $reid))}" class="" enctype="multipart/form-data" method="POST" id="form">
 <input type="hidden" name="repeat" value="<?php echo md5(sha1(time())); ?>">
 	{if $activity['is_addr']==1}
-       <div id="address_{$address['id']}" class="weui_panel weui_panel_access" onclick="changeAddress()">
+       <div id="address_{$address['id']}" class="weui_panel weui_panel_access" onclick="changeAddress()" {if $activity['isthumb']==0}style="margin:0;"{/if}>
             <div class="weui_panel_bd">
                 <div class="weui_media_box weui_media_appmsg weui_panel_ft">
                     <div class="weui_media_hd">
@@ -91,76 +94,28 @@
                 </div>
             </div>
         </div>  
-	{/if}
-<div class="weui_cells weui_cells_form">
-	{if $activity['is_addr']==0}
-    <div class="weui_cell">
-        <div class="weui_cell_hd"><label class="weui_label">姓名<span>*</span></label></div>
-        <div class="weui_cell_bd weui_cell_primary">
-            <input class="weui_input" id="member" name="member" type="text" value="{$userinfo['realname']}" placeholder="请输入姓名">
+	{elseif $activity['is_addr']==0}
+       <div class="weui_panel weui_panel_access" onclick="changeInfo()" style="margin:0;">
+            <div class="weui_panel_bd">
+                <div class="weui_media_box weui_media_appmsg weui_panel_ft">
+                    <div class="weui_media_hd">
+                        <img class="weui_media_appmsg_thumb" src="{if !empty($member['avatar'])}{$member['avatar']}{else}{$fans['tag']['avatar']}{/if}" alt="">
+                    </div>
+			{if $member['realname'] && $member['mobile']}
+                    <div class="weui_media_bd">
+						<input id="member" name="member" type="hidden" value="{$member['realname']}">
+						<input id="mobile" name="mobile" type="hidden" value="{$member['mobile']}">
+                        <h4 class="weui_media_title f-black">{$member['realname']}</h4>
+                        <p class="weui_media_desc f16 f-black">{$member['mobile']}</p>
+                    </div>
+			{else}
+            <div class="weui_media_bd">完善我的资料</div>
+			{/if}
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="weui_cell">
-        <div class="weui_cell_hd"><label class="weui_label">手机<span>*</span></label></div>
-        <div class="weui_cell_bd weui_cell_primary">
-            <input class="weui_input" id="mobile" name="mobile" type="tel" pattern="[0-9]*" value="{$userinfo['mobile']}" placeholder="请输入手机号">
-        </div>
-    </div>
-	{if $activity['smsid']!=0}
-    <div class="weui_cell">
-		<input type="hidden" id="htel">
-		<input type="hidden" id="hsms">
-        <div class="weui_cell_hd"><label class="weui_label">验证码<span>*</span></label></div>
-        <div class="weui_cell_bd weui_cell_primary">
-            <input class="weui_input" id="sms" name="sms" type="tel" placeholder="请输入验证码">
-        </div>
-		<div class="weui_cell_ft" style="margin:0;">
-        <input type="button" id="sendsms" class="weui_btn weui_btn_mini weui_btn_primary" value="获取验证码">
-		</div>
-    </div>
-<script type="text/javascript">
-		var wait=60;  
-		function time(o) {
-			if (wait == 0) {
-				o.removeAttribute("disabled");
-				o.value="获取验证码";
-				wait = 60;
-			} else {
-				o.setAttribute("disabled", true);
-				o.value="重新发送(" + wait + ")";
-				wait--;  
-				setTimeout(function() {
-					time(o)
-				},
-            1000)
-			}
-		}
-	$("#sendsms").bind("click",function(){
-		var checktel = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
-			if($.trim($(':input[name="mobile"]').val())=='' || !checktel.test($.trim($('input[name="mobile"]').val()))){
-				$('#mobile').attr("readonly",false);
-				$.toast("请输入正确的手机号码", "cancel");
-				return false;
-			}else{
-				$('#mobile').attr('readonly',true);
-				var submitData = {};
-				$.post("{php echo murl('entry', array('do' => 'SendSms', 'id' => $activity['smsid'], 'm' => 'dayu_sms'), true, true)}"+"&mobile="+$("#mobile").val(), submitData,function(data){
-					if(data.message.state == 1) {
-						$("#htel").val(data.message.mobile);
-						$("#hsms").val(data.message.yzm);
-						$.toast(data.message.msg, "success");
-					}else{
-						$.toast(data.message.msg, "cancel");
-					}
-				},"json");
-				time(this);
-			}
-	});
-</script>
 	{/if}
-	{/if}
-</div>
-<div class="weui_cells weui_cells_form">
+<div class="weui_cells weui_cells_access">
 
 		<div class="weui_cell weui_cell_select weui_select_after">
 			<div class="weui_cell_hd"><label class="weui_label">{$activity['xmname']}<span>*</span></label></div>
@@ -173,6 +128,26 @@
 				</select>
 			</div>
 		</div>
+
+			{if empty($activity['is_num'])}
+		<div class="weui_cell" id="grids" style="display:none;">
+			<div id="prices"></div>
+			<div id="price"></div>
+		</div>
+			{/if}
+					{if $activity['pay'] == 1}
+		<div class="weui_cell weui_cell_select weui_select_after">
+			<div class="weui_cell_hd"><label class="weui_label">支付方式<span>*</span></label></div>
+			<div class="weui_cell_bd weui_cell_primary">
+				<select class="weui_select" name="paytype">
+					<option value="1" label="在线支付">在线支付</option>
+					<option value="9" label="线下付款">线下付款</option>
+				</select>
+			</div>
+		</div>
+		{else}
+		<input class="weui_input" name="paytype" type="hidden" value="1">
+					{/if}
 		{if !empty($activity['is_num'])}
 		<div class="weui_cell">
 			<div class="weui_cell_hd"><label class="weui_label">{$activity['numname']}<span class="f-red">*</span></label></div>
@@ -242,9 +217,10 @@
 	{if $activity['is_time']==0}
 		<div class="weui_cell">
 			<div class="weui_cell_hd"><label for="" class="weui_label">{$activity['yuyuename']}<span>*</span></label></div>
-				<div class="weui_cell_bd weui_cell_primary">
-					<input class="weui_input" type="text" name="yuyuetime" value="" placeholder="点击选择{$activity['yuyuename']}" id="restime" />
-				</div>              
+			<div class="weui_cell_bd weui_cell_primary">
+				<input class="weui_input" type="text" name="yuyuetime" value="" placeholder="点击选择{$activity['yuyuename']}" id="restime" />
+			</div>
+			<div class="weui_cell_ft"></div>
 		</div>
     <script>
       $("#restime").datetimePicker();
@@ -253,32 +229,14 @@
     <a class="weui_cell" href="{php echo $this->createMobileUrl('timelist',array('id' => $reid, 'datetime' => $datetime))}">
         <div class="weui_cell_hd"><label class="weui_label">{$activity['yuyuename']}<span>*</span></label></div>
         <div class="weui_cell_bd weui_cell_primary">
-            <input class="weui_input f-black f16" name="restime" id="restime" type="text" value="{$srvtime}" readonly>
+            <input class="weui_input f-black f16 tleft" name="restime" id="restime" type="text" value="{$srvtime}" readonly>
         </div>
-		<div class="weui_cell_ft f-green">重选</div>
+		<div class="weui_cell_ft f-green f12">重选</div>
     </a>
-	{/if}
-		<div class="weui_cell weui_cell_select weui_select_after">
-			<div class="weui_cell_hd"><label class="weui_label">支付方式<span>*</span></label></div>
-			{if empty($activity['is_num'])}
-			<div class="weui_cell_bd tright">
-			<span name="jsid" id="jsid" class="iconfont f14 f-orange"></span>
-			</div>
-			{/if}
-			<div class="weui_cell_bd weui_cell_primary">
-				<select class="weui_select" name="paytype">
-					<option value="1" label="在线支付">在线支付</option>
-					{if $activity['pay'] == 1}
-					<option value="9" label="线下付款">线下付款</option>
-					{/if}
-				</select>
-			</div>
-		</div>
-
-		
+	{/if}	
 </div>
 
-<div class="weui_cells weui_cells_form">
+<div class="weui_cells weui_cells_access">
 				{loop $ds $fields}
 				
 		{if $fields['type'] == 'text'}
@@ -337,37 +295,52 @@ $(function(){
 		{/if}
 				
 		{if $fields['type'] == 'radio'}
-		<div class="weui_cells_title"><label class="weui_label">{$fields['title']}{if $fields['essential']}<span class="f-red">*</span>{/if}<div class="right">{$fields['tixing']}</div></label></div>
-		<div class="weui_cells weui_cells_radio">
-			{php $i=1;}
-			{loop $fields['options'] $v}
-			<label class="weui_cell weui_check_label" for="r{$fields['refid']}{$i}">
-				<div class="weui_cell_bd weui_cell_primary"><p>{$v}</p></div>
-				<div class="weui_cell_ft">
-					<input type="radio" class="weui_check" name="field_{$fields['refid']}_{$fields['bind']}" id="r{$fields['refid']}{$i}" value="{$v}" {if $i==1}checked="checked"{/if}>
-					<span class="weui_icon_checked"></span>
+		<div class="weui_cell">
+			<div class="weui_cell_hd"><label for="name" class="weui_label">{$fields['title']}{if $fields['essential']}<span>*</span>{/if}</label></div>
+				<div class="weui_cell_bd weui_cell_primary">
+					<input type="text" class="weui_input" id="{$fields['refid']}" name="field_{$fields['refid']}_{$fields['bind']}" placeholder="{$fields['tixing']}" value="">
 				</div>
-			</label>
-				{php $i++;}
-			{/loop}
+				<div class="weui_cell_ft"></div>
 		</div>
+    <script>
+      $("#{$fields['refid']}").select({
+        title: "{$fields['title']}",
+        items: [
+		{loop $fields['options'] $v}
+		"{$v}",
+		{/loop}
+        ],
+        onChange: function(d) {
+		console.log(this, d);
+        }
+      });
+    </script>
 		{/if}
 				
 		{if $fields['type'] == 'checkbox'}
-		<div class="weui_cells_title"><label class="weui_label">{$fields['title']}{if $fields['essential']}<span class="f-red">*</span>{/if}<div class="right">{$fields['tixing']}</div></label></div>
-		<div class="weui_cells weui_cells_checkbox">
-			{php $i=1;}
-			{loop $fields['options'] $v}
-			<label class="weui_cell weui_check_label" for="c{$fields['refid']}{$i}">
-				<div class="weui_cell_hd">
-					<input type="checkbox" class="weui_check" name="field_{$fields['refid']}_{$fields['bind']}[]" id="c{$fields['refid']}{$i}" value="{$v}">
-					<i class="weui_icon_checked"></i>
+		<div class="weui_cell">
+			<div class="weui_cell_hd"><label for="name" class="weui_label">{$fields['title']}{if $fields['essential']}<span>*</span>{/if}</label></div>
+				<div class="weui_cell_bd weui_cell_primary">
+					<input type="text" class="weui_input" id="{$fields['refid']}" name="field_{$fields['refid']}_{$fields['bind']}" placeholder="{$fields['tixing']}" value="">
 				</div>
-				<div class="weui_cell_bd weui_cell_primary"><p>{$v}</p></div>
-			</label>
-				{php $i++;}
-			{/loop}
 		</div>
+    <script>
+      $("#{$fields['refid']}").select({
+        title: "{$fields['title']}",
+        multi: true,
+        items: [
+		{loop $fields['options'] $v}
+			{
+				title: "{$v}",
+				value: "{$v}"
+			},
+		{/loop}
+        ],
+        onChange: function(d) {
+		console.log(this, d);
+        }
+      });
+    </script>
 		{/if}
 						
 		{if $fields['type'] == 'select'}
@@ -519,45 +492,15 @@ $(function(){
     function changeAddress(){
         location.href = '{php echo $this->createMobileUrl('address', array('from'=>'dayu_yuyuepay','returnurl' => $returnUrl))}'
     }
+    function changeInfo(){
+        location.href = '{php echo $this->createMobileUrl('info', array('from'=>'dayu_yuyuepay','returnurl' => $returnUrl))}'
+    }
 	$('#form').submit(function(){
-	{if $activity['is_addr']==1}
-		{if empty($address)}
-			$.toast('联系方式不能为空', "cancel");
-			return false;
-		{/if}
-	{else}
-       var member = /^[\u4E00-\u9FA5]{1,6}$/;
-			if($.trim($(':input[name="member"]').val())=='' || !member.test($.trim($('input[name="member"]').val()))){
-					$.toast("请正确输入姓名", "cancel");
-				return false;
-			}
-       var mobile = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
-			if($.trim($(':input[name="mobile"]').val())=='' || !mobile.test($.trim($('input[name="mobile"]').val()))){
-					$.toast("请输入正确的手机号码", "cancel");
-				return false;
-			}
-		{if $activity['smsid']!=0}
-		var htel=$("#htel").val();
-		var hsms=$("#hsms").val();
-		var tel=$("#mobile").val();
-		var sms=$("#sms").val();
-		if(htel==tel){
-			if(hsms==sms){
-			}else{
-				$.toast("请输入正确验证码", "cancel");
-				return false;
-			}
-		}else{
-			$.toast("请获取验证码", "cancel");
-			return false;
-		}
-		{/if}
-	{/if}
 			if($.trim($('#xmid').val())==''){
 				$.toast('请选择{$activity['xmname']}', "cancel");
 				return false;
 			}
-	{if $activity['is_time']!=1}
+	{if $activity['is_time']==2}
 			if($.trim($('#restime').val())==''){
 				$.toast('请选择{$activity['yuyuename']}', "cancel");
 				return false;
@@ -617,14 +560,22 @@ $(function(){
 				alert(s.message.price, '', '无法获取价格');
 				return;
 			}
+			$('#grids').show();
 			$('#rmb').empty();
 			$('#jsids').empty();
-			$('#jsid').empty();
+			$('#price').empty();
+			$('#prices').empty();
 			if (s.message.price) {
 				for (i in s.message.price) {
 					$('#rmb').append(s.message.price[i].price);
 					$('#jsids').append('&#xe61a; '+s.message.price[i].price+' ×');
-					$('#jsid').append('&#xe61a; '+s.message.price[i].price);
+					if(s.message.price[i].type==1){
+					$('#prices').append('<div class="weui_cell_hd f12">订单金额<i class="iconfont" style="font-size:8px;">&#xe61a;</i> <span class="f14 f-black">'+s.message.price[i].prices+'</span></div>');
+					$("#price").addClass("weui_cell_bd weui_cell_primary");
+					$('#price').append('<div class="tright f-orange f12" style="padding-right:10px">需付定金<i class="iconfont f-orange" style="font-size:8px;">&#xe61a;</i> <span class="f16" id="price">'+s.message.price[i].price+'</span></div>');
+					}else{
+					$('#price').append('<div class="weui_cell_bd weui_cell_primary f-orange f12" style="padding-right:10px">支付金额：<i class="iconfont f-orange" style="font-size:8px;">&#xe61a;</i> <span class="f16" id="price">'+s.message.price[i].price+'</span></div>');
+					}
 				}
 			}
 		});

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>{$reply['title']}</title>
+<link type="text/css" rel="stylesheet" href="{UBER_RES}/default/css/frozen.css" />
+{php echo register_jssdk(false);}
+<script type="text/javascript" src="{UBER_RES}/default/js/jquery.min.js"></script>
+<style>
+.ui-header-positive, .ui-footer-positive {
+background-color: #0da3e7;
+color: #fff;
+}
+a {
+color: #0da3e7;
+}
+</style>
+</head>
+<body ontouchstart="">
+	<header class="ui-header ui-header-positive ui-border-b">
+	<h1>长按下方图片点选保存图片</h1>
+</header>
+<div class="wrapper"><br><br>
+	<img src="{php echo $imageUrl;}" width="100%">
+</div>
+
+</body>
+{template 'footer'}
+</html>

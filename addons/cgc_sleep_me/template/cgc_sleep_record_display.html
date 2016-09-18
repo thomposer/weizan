@@ -1,0 +1,113 @@
+{template 'common/header'}
+
+<ul class="nav nav-tabs">
+	<li class="active"><a href="{php echo $this->createWebUrl('cgc_sleep_record', array('op'=>'display'));}">{$title}列表</a></li>
+	<li><a href="{php echo $this->createWebUrl('cgc_sleep_record', array('op'=>'post'));}">添加{$title}</a></li>
+</ul>
+
+<div class="main">
+	<div class="panel panel-info">
+	<div class="panel-heading">筛选</div>
+	<div class="panel-body">
+		<form action="./index.php" method="get" class="form-horizontal" role="form">
+			<input type="hidden" name="c" value="{$_GPC['c']}">
+			<input type="hidden" name="a" value="{$_GPC['a']}">
+			<input type="hidden" name="do" value="cgc_sleep_record">
+			<input type="hidden" name="m" value="cgc_sleep_me">
+			<input type="hidden" name="op" value="{$op}">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">支付用户</label>
+					<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+						<input class="form-control" name="nickname" id="" type="text" value="{$_GPC['nickname']}" placeholder="参与用户昵称">
+					</div>
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">被睡用户</label>
+					<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+						<input class="form-control" name="sleep_nickname" id="" type="text" value="{$_GPC['sleep_nickname']}" placeholder="被睡用户昵称">
+					</div>
+					
+					<input class="form-control" name="sleep_openid" id="" type="hidden" value="{$_GPC['sleep_openid']}" placeholder="被睡用户id">
+					
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">支付状态</label>
+					
+					<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+						<select name="pay_status" class="form-control">
+							<option value="0" {if $_GPC['pay_status'] == 0}selected{/if}>未支付</option>
+							<option value="1" {if $_GPC['pay_status'] == 1}selected{/if}>已支付</option>
+						</select>
+					</div>
+					<div class="col-xs-12 col-sm-2 col-md-2 col-lg-1">
+						<button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">{$title}列表</div>
+		<div class="panel-body">
+			<div class="table-responsive panel-body">
+				<table class="table table-hover" style="min-width: 300px;">
+					<thead class="navbar-inner">
+						<tr>
+							<th class="col-sm-1">参与用户</th>
+							<th class="col-sm-1">头像</th>
+							<th class="col-sm-1">被睡用户</th>
+							<th class="col-sm-2">订单号</th>
+							<th class="col-sm-1">支付金额</th>							
+							<th class="col-sm-1">手续费</th>
+							<th class="col-sm-1">支付方式</th>
+							<th class="col-sm-1">支付状态</th>
+							<th class="col-sm-2">创建时间</th>
+							<th class="col-sm-2 text-right">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						{loop $list $item}
+						<tr>
+							<td>{$item['nickname']}</td>
+							<td>
+								<image src="{php echo tomedia($item['headimgurl']);}" style="max-width: 48px; max-height: 48px; border: 1px dotted gray">
+							</td>
+							<td>{$item['sleep_nickname']}</td>
+							<td title="{$item['order_sn']}">{$item['order_sn']}</td>
+							<td>{$item['payment']}</td>
+							<td>{$item['sx_fee']}</td>
+							<td>{$item['pay_type']}</td>
+							<td title="{$item['pay_log']}">
+								{if $item['pay_status'] == '1'}
+									已支付
+								{else if $item['pay_status'] == '2'}
+									支付异常
+								{else}
+									未支付
+								{/if}
+							</td>
+							<td>{php echo date('Y-m-d H:i:s', $item['createtime']);}</td>
+							<td class="text-right">
+								<a href="{php echo $this->createWebUrl('cgc_sleep_record', array('op'=>'post', 'id'=>$item['id']));}" class="btn btn-default" data-toggle="tooltip">编辑</a>
+								<a onclick="if(!confirm('删除后将不可恢复,确定删除吗?')) return false;" href="{php echo $this->createWebUrl('cgc_sleep_record', array('op'=>'delete', 'id'=>$item['id']));}" class="btn btn-default btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="删除">删除</a>
+							</td>
+						</tr>
+						{/loop}
+						{if empty($list)}
+						<tr>
+							<td colspan="10">
+								尚未产生{$title}
+							</td>
+						</tr>
+						{else}
+						<tr>
+							<td colspan="10">
+								<a onclick="if(!confirm('删除后将不可恢复,确定删除吗?')) return false;" href="{php echo $this->createWebUrl('cgc_sleep_record', array('op'=>'deleteAll'));}" class="btn btn-default btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="删除所有">删除所有</a>
+							</td>
+						</tr>
+						{/if}
+					</tbody>
+				</table>
+				{$pager}
+			</div>
+		</div>
+	</div>
+</div>
+
+{template 'common/footer'}

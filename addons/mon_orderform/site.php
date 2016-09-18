@@ -122,6 +122,7 @@ class Mon_OrderformModuleSite extends WeModuleSite
 				'ipreview_pg' => $_GPC['ipreview_pg'],
 				'o_num' => $_GPC['o_num'],
 				'displayorder' => $_GPC['displayorder'],
+				'admin_openid' => $_GPC['admin_openid'],
 				'createtime' => TIMESTAMP
 			);
 
@@ -578,6 +579,7 @@ class Mon_OrderformModuleSite extends WeModuleSite
 		$res['oid'] = $oid;
 
 		$this->sendOrderTemplateMsg($orderData,$orderItem ,$form);
+		$this->sendOrderAdminTemplateMsg($orderData,$orderItem ,$form);
 		$this->sendEmail($orderData, $orderItem, $form);
 
 		die(json_encode($res));
@@ -653,6 +655,35 @@ class Mon_OrderformModuleSite extends WeModuleSite
 			$data['orderItemName'] = array('value'=>$form['pname'], 'color'=>'#000000');
 			$data['orderItemData'] = array('value'=>$item['iname'], 'color'=>'#173177');
 			$data['remark'] = array('value'=>"保存好您的凭证哦!欢迎下次再次预定", 'color'=>'#173177');
+			$templateMsg['data'] = $data;
+			$jsonData = json_encode($templateMsg);
+			WeUtility::logging('info',"发送模板消息数据".$jsonData);
+			load()->func('communication');
+			$acessToken = $this->getAccessToken();
+			$apiUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=".$acessToken;
+			$result = ihttp_request($apiUrl, $jsonData);
+			WeUtility::logging('info',"发送模板消息返回内容".$result);
+
+		}
+	}
+
+
+	public function sendOrderAdminTemplateMsg($order, $item, $form) {
+		$templateMsg = array();
+		$template = $this->findTemplateSetting();
+		if ($template['orderenable']==1 && !empty($item['admin_openid'])) {
+			$templateMsg['template_id'] = $template['ordertid'];
+			$templateMsg['touser'] = $item['admin_openid'];
+			$templateMsg['url'] = MonUtil::str_murl($this->createMobileUrl('OrderItem',array('openid'=>$order['openid'], 'iid'=>$item['id']),true));
+			$templateMsg['topcolor'] = '#FF0000';
+			$data = array();
+			$data['first'] = array('value'=>"客户下单通知：".$item['iname']."订单成功!", 'color'=>'#173177');
+			$data['orderType'] = array('value'=>$item['iname']."订单成功!", 'color'=>'#173177');
+			$data['tradeDateTime'] = array('value'=>date('Y-m-d H:i', $order['createtime']), 'color'=>'#173177');
+			$data['customerInfo'] = array('value'=>'客户姓名:'.$order['uname'].' 手机:'.$order['utel'], 'color'=>'#173177');
+			$data['orderItemName'] = array('value'=>$form['pname'], 'color'=>'#000000');
+			$data['orderItemData'] = array('value'=>$item['iname'], 'color'=>'#173177');
+			$data['remark'] = array('value'=>"下单通知", 'color'=>'#173177');
 			$templateMsg['data'] = $data;
 			$jsonData = json_encode($templateMsg);
 			WeUtility::logging('info',"发送模板消息数据".$jsonData);

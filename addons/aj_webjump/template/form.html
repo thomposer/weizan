@@ -1,0 +1,260 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+	    活动设置
+	</div>
+	<div class="panel-body">
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 活动名称</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="title" class="form-control" placeholder="" name="title" value="{$reply['title']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 图文图片</label>
+	        <div class="col-sm-9 col-xs-12">
+	            {php echo tpl_form_field_image('thumb',$reply['thumb']);}
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 活动说明</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <textarea style="height:60px;" id='description' name="description" class="form-control" cols="60">{$reply['description']}</textarea>
+	            <span class="help-block">用于户图文显示</span>
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 背景图片</label>
+	        <div class="col-sm-9 col-xs-12">
+	            {php echo tpl_form_field_image('bgpic',$reply['bgpic']);}
+	        </div>
+	    </div>
+	</div>
+
+    <div class="panel-heading">
+	    活动页面
+	</div>
+	<div class="panel-body">
+		<div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 大标题</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="head" class="form-control" placeholder="" name="head" value="{$reply['head']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 大标题副栏</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="head2" class="form-control" placeholder="" name="head2" value="{$reply['head2']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 活动logo</label>
+	        <div class="col-sm-9 col-xs-12">
+	            {php echo tpl_form_field_image('headthumb',$reply['headthumb']);}
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 小标题</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="minhead" class="form-control" placeholder="" name="minhead" value="{$reply['minhead']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 小标题副栏</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="minhead2" class="form-control" placeholder="" name="minhead2" value="{$reply['minhead2']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 按钮名称</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="button" class="form-control" placeholder="" name="button" value="{$reply['button']}">
+	        </div>
+	    </div>
+	</div>
+
+	<div class="panel-heading">
+	    活动跳转
+	</div>
+	<div class="panel-body">
+		<div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 标题</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="success_otitle" class="form-control" placeholder="" name="success_otitle" value="{$reply['success_otitle']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 副标题</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="success_otitle2" class="form-control" placeholder="" name="success_otitle2" value="{$reply['success_otitle2']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 活动说明</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="success_ttitle" class="form-control" placeholder="" name="success_ttitle" value="{$reply['success_ttitle']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 活动说明副栏</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="success_ttitle2" class="form-control" placeholder="" name="success_ttitle2" value="{$reply['success_ttitle2']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 二维码</label>
+	        <div class="col-sm-9 col-xs-12">
+	            {php echo tpl_form_field_image('qrcode',$reply['qrcode']);}
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 回复说明</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="success_stitle" class="form-control" placeholder="" name="success_stitle" value="{$reply['success_stitle']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 回复说明副栏</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="success_stitle2" class="form-control" placeholder="" name="success_stitle2" value="{$reply['success_stitle2']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>关键字</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="key" class="form-control" placeholder="" name="key" value="{$reply['key']}">
+	        </div>
+	    </div>
+	</div>
+
+
+	<div class="panel-heading">
+	    分享设置
+	</div>
+	<div class="panel-body">
+		<div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 分享标题</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="sharetitle" class="form-control" placeholder="" name="sharetitle" value="{$reply['sharetitle']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 分享图标</label>
+	        <div class="col-sm-9 col-xs-12">
+	            {php echo tpl_form_field_image('sharepic',$reply['sharepic']);}
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 分享描述</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <textarea style="height:60px;" id='sharedes' name="sharedes" class="form-control" cols="60">{$reply['sharedes']}</textarea>
+	            <span class="help-block">分享时的描述</span>
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 跳转链接</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <textarea style="height:60px;" id='tiaozhuan' name="tiaozhuan" class="form-control" cols="60">{$reply['tiaozhuan']}</textarea>
+	            <span class="help-block">分享给朋友时，朋友打开的链接</span>
+	        </div>
+	    </div>
+	</div>
+
+	<div class="panel-heading">
+	    分享按钮
+	</div>
+	<div class="panel-body">
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 第一行</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <textarea style="height:60px;" id='fxz1' name="fxz1" class="form-control" cols="60">{$reply['fxz1']}</textarea>
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 第二行</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <textarea style="height:60px;" id='fxz2' name="fxz2" class="form-control" cols="60">{$reply['fxz2']}</textarea>
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 第三行</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <textarea style="height:60px;" id='fxz3' name="fxz3" class="form-control" cols="60">{$reply['fxz3']}</textarea>
+	        </div>
+	    </div>
+	</div>
+
+	<div class="panel-heading">
+	    活动码页面
+	</div>
+	<div class="panel-body">
+		<div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 标题</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="matitle" class="form-control" placeholder="" name="matitle" value="{$reply['matitle']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 活动码按钮</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="malucky" class="form-control" placeholder="" name="malucky" value="{$reply['malucky']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> logo</label>
+	        <div class="col-sm-9 col-xs-12">
+	            {php echo tpl_form_field_image('logo',$reply['logo']);}
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 小标题</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <textarea style="height:60px;" id='mades' name="mades" class="form-control" cols="60">{$reply['mades']}</textarea>
+	            <span class="help-block">分享时的描述</span>
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 小标题二</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <textarea style="height:60px;" id='mades2' name="mades2" class="form-control" cols="60">{$reply['mades2']}</textarea>
+	            <span class="help-block">分享时的描述</span>
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 版权url</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <textarea style="height:60px;" id='copyrighturl' name="copyrighturl" class="form-control" cols="60">{$reply['copyrighturl']}</textarea>
+	            <span class="help-block">点击logo时触发</span>
+	        </div>
+	    </div>
+	</div>
+
+	<div class="panel-heading">
+	    表单信息
+	</div>
+	<div class="panel-body">
+		<div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 顶部幻灯</label>
+	        <div class="col-sm-9 col-xs-12">
+	            {php echo tpl_form_field_image('formpic',$reply['formpic']);}
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 提交按钮</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="formbutton" class="form-control" placeholder="" name="formbutton" value="{$reply['formbutton']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 提示语</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="mintips" class="form-control" placeholder="" name="mintips" value="{$reply['mintips']}">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 版权信息</label>
+	        <div class="col-sm-9 col-xs-12">
+	            <input type="text" id="copyright" class="form-control" placeholder="" name="copyright" value="{$reply['copyright']}">
+	        </div>
+	    </div>	
+	</div>
+</div>

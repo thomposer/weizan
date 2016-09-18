@@ -8,10 +8,12 @@
 	当前主题: {$activity['title']}
 </div>
 <ul class="nav nav-tabs">
-	<li><a href="{php echo $this->createWebUrl('display')}">返回表单列表</a></li>
-	<li{if $op == 'list'} class="active"{/if}><a href="{php echo $this->createWebUrl('item', array('op' => 'list','reid' => $_GPC['reid']))}">服务项目列表</a></li>
-	<li{if $op == 'post' && !$id} class="active"{/if}><a href="{php echo $this->createWebUrl('item', array('op' => 'post','reid' => $_GPC['reid']))}">添加服务项目</a></li>
-	{if $id}<li class="active"><a href="#">编辑服务项目</a></li>{/if}
+	<li><a href="{php echo $this->createWebUrl('display')}">返回预约列表</a></li>
+	<li><a href="{php echo $this->createWebUrl('post', array('id' => $_GPC['reid']))}">编辑{$activity['title']}</a></li>
+	<li{if $op == 'list'} class="active"{/if}><a href="{php echo $this->createWebUrl('item', array('op' => 'list','reid' => $_GPC['reid']))}">{$activity['xmname']}列表</a></li>
+	<li{if $op == 'post' && !$id} class="active"{/if}><a href="{php echo $this->createWebUrl('item', array('op' => 'post','reid' => $_GPC['reid']))}">添加{$activity['xmname']}</a></li>
+	{if $id}<li class="active"><a href="#">编辑{$activity['xmname']}</a></li>{/if}
+	<li><a href="{php echo $this->createWebUrl('staff', array('op' => 'list','reid' => $_GPC['reid']))}">客服管理</a></li>
 </ul>
 {if $op == 'post'}
 	<form class="form-horizontal form" id="form1" action="" method="post" enctype="multipart/form-data">
@@ -19,67 +21,68 @@
 		<input type="hidden" name="id" value="{$id}">
 		<div class="main">
 			<div class="panel panel-default">
-				<div class="panel-heading">添加服务项目</div>
+				<div class="panel-heading">添加{$activity['xmname']}</div>
 				<div class="panel-body">
 					<div id="tpl">
 						<div class="form-group">
-							<label class="col-xs-12 col-sm-3 col-md-2 control-label">服务项目名称</label>
-							<div class="col-sm-9 col-xs-12">
-								<input type="text" class="form-control" name="title[]" value="{$item['title']}">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-xs-12 col-sm-3 col-md-2 control-label">价格</label>
-							<div class="col-sm-9 col-xs-12">
-								<div class="input-group"><span class="input-group-addon"><i class="fa fa-money"></i></span><input type="text" class="form-control" name="price[]" value="{$item['price']}"></div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-xs-12 col-sm-3 col-md-2 control-label">归属预约</label>
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">归属主题</label>
 							<div class="col-sm-9 col-xs-12">
 								<input type="text" class="form-control" value="{$activity['title']}" readonly>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">{$activity['xmname']}名称</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" class="form-control" name="title" value="{$item['title']}">
+							</div>
+						</div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">全额 / 定金</label>
+                    <div class="col-xs-12 col-sm-9">
+                		<label class="radio-inline"><input type="radio" name="type" value="1" {if $item['type']==1}checked="checked"{/if} /> 全额 + 定金(支付金额)</label>
+		 				<label class="radio-inline"><input type="radio" name="type" value="0" {if $item['type']==0}checked="checked"{/if} /> 支付金额</label>
+                    <div class="help-block">手机端显示2种金额或1种金额</div>
+                    </div>
+                </div>
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">订单金额(全额)</label>
+							<div class="col-sm-6 col-xs-12">
+								<div class="input-group"><span class="input-group-addon"><i class="fa fa-money"></i></span><input type="text" class="form-control" name="prices" value="{$item['prices']}"><span class="input-group-addon">{$activity['xmname']}的全额，只做显示</span></div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">定金 / 支付金额</label>
+							<div class="col-sm-6 col-xs-12">
+								<div class="input-group"><span class="input-group-addon"><i class="fa fa-money"></i></span><input type="text" class="form-control" name="price" value="{$item['price']}"><span class="input-group-addon">需付款的金额</span></div>
 							</div>
 						</div>
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否显示</label>
                     <div class="col-xs-12 col-sm-9">
-                		<label class="radio-inline"><input type="radio" name="isshow[]" value="1" {if $item['isshow']==1}checked="checked"{/if} /> 显示</label>
-		 				<label class="radio-inline"><input type="radio" name="isshow[]" value="0" {if $item['isshow']==0}checked="checked"{/if} /> 隐藏</label>
+                		<label class="radio-inline"><input type="radio" name="isshow" value="1" {if $item['isshow']==1}checked="checked"{/if} /> 显示</label>
+		 				<label class="radio-inline"><input type="radio" name="isshow" value="0" {if $item['isshow']==0}checked="checked"{/if} /> 隐藏</label>
                     <div class="help-block">是否在手机端显示该预约项目</div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
                     <div class="col-xs-12 col-sm-9">
-                         <input type="text" class="form-control" name="displayorder[]" value="{if empty($item)}0{else}{$item['displayorder']}{/if}" id="displayorder" />
+                         <input type="text" class="form-control" name="displayorder" value="{if empty($item)}0{else}{$item['displayorder']}{/if}" id="displayorder" />
                     </div>
                 </div>
 						<hr>
-					</div>
-					<div id="tpl-container"></div>
-					<div class="form-group">
-						<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
-						<div class="col-sm-9 col-xs-12" style="padding-top:7px">
-							<a href="javascipt:;" id="post-add"><i class="fa fa-plus-circle"></i> 继续添加</a>
-						</div>
-					</div>
-				</div>
-			</div>
 			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
 				<div class="col-sm-9 col-xs-9 col-md-9">
 					<input type="hidden" name="token" value="{$_W['token']}">
 					<input name="submit" id="submit" type="submit" value="提交" class="btn btn-primary col-lg-1">
 				</div>	
 			</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</form>
-	<script type="text/javascript">
-		require(['util'], function(u){
-			$('#post-add').click(function(){
-				$('#tpl-container').append($('#tpl').html());
-			});
-		});
-	</script>
 {elseif $op == 'list'}
 	<style type="text/css">
 		.status-toggle{cursor:pointer;}
@@ -96,7 +99,7 @@
 					<input type="hidden" name="op" value="list"/>
 					<input type="hidden" name="reid" value="{$_GPC['reid']}">
 					<div class="form-group clearfix">
-						<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">服务项目</label>
+						<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">{$activity['xmname']}</label>
 						<div class="col-sm-7 col-lg-8 col-md-8 col-xs-12">
 							<input class="form-control" name="keyword" id="" type="text" value="{$_GPC['keyword']}">
 						</div>
@@ -114,8 +117,9 @@
 						<thead class="navbar-inner">
 							<tr>
 								<th style="width:80px;">排序</th>
-								<th>服务项目</th>
+								<th>{$activity['xmname']}</th>
 								<th style="width:80px;">显示</th>
+								<th style="width:120px;">模式</th>
 								<th style="width:180px;">价格</th>
 								<th>归属</th>
 								<th style="width:120px; text-align:right;">操作</th>
@@ -129,11 +133,12 @@
 								<td><input type="number" class="form-control" name="displayorder[]" value="{$item['displayorder']}"></td>
 								<td><input type="text" name="title[]" class="form-control" value="{$item['title']}"></td>
 								<td>{$item['isshow']}</td>
+								<td>{$item['type']}</td>
 								<td class="input-group"><span class="input-group-addon"><i class="fa fa-money"></i></span><input type="text" name="price[]" class="form-control" value="{$item['price']}"></td>
 								<td><input type="text" class="form-control" value="{$activity['title']}" disabled></td>
 								<td style="text-align:right;">
 									<a href="{php echo $this->createWebUrl('item', array('op' => 'post', 'reid' => $item['reid'], 'id' => $item['id']))}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="bottom" title="编辑"><i class="fa fa-edit"></i> 修改</a>
-									<a href="{php echo $this->createWebUrl('item', array('op' => 'itemdel', 'id' => $item['id'], 'reid' => $_GPC['reid']))}" class="btn btn-default btn-sm" title="删除" data-toggle="tooltip" data-placement="top" onclick="if(!confirm('删除服务项目，确定删除吗?')) return false;"><i class="fa fa-times"> </i></a>
+									<a href="{php echo $this->createWebUrl('item', array('op' => 'itemdel', 'id' => $item['id'], 'reid' => $_GPC['reid']))}" class="btn btn-default btn-sm" title="删除" data-toggle="tooltip" data-placement="top" onclick="if(!confirm('删除{$activity['xmname']}，确定删除吗?')) return false;"><i class="fa fa-times"> </i></a>
 								</td>
 							</tr>
 							{/loop}

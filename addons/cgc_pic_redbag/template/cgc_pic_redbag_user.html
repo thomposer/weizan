@@ -1,0 +1,109 @@
+{template 'common/header'}
+<script type="text/javascript" src="./resource/js/lib/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="./resource/js/lib/jquery-ui-1.10.3.min.js"></script>
+<ul class="nav nav-tabs">
+	<li  class="{if $op== 'display'}active{/if}">
+	    <a href="{php echo $this->createWebUrl('cgc_pic_redbag_user',array('op'=>'display'));}">用户管理</a>
+	</li>	
+</ul>
+
+{if $op== 'display'}
+<div class="main">
+<div class="panel panel-info">
+	<div class="panel-heading">筛选</div>
+	<div class="panel-body">
+		<form action="./index.php" method="get" class="form-horizontal" role="form">
+			<input type="hidden" name="c" value="site" />
+			<input type="hidden" name="a" value="entry" />
+			<input type="hidden" name="m" value="cgc_pic_redbag" />
+			<input type="hidden" name="do" value="cgc_pic_redbag_user" />                              
+              <div class="form-group">
+				<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">微信id</label>
+				<div class="col-xs-12 col-sm-8 col-lg-9">
+					<input class="form-control" placeholder="" 
+					name="openid"  type="text" value="{$_GPC['openid']}">
+				</div>
+			</div>
+			
+			  <div class="form-group">
+				<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">昵称</label>
+				<div class="col-xs-12 col-sm-8 col-lg-9">
+					<input class="form-control" placeholder="" 
+					name="nickname"  type="text" value="{$_GPC['nickname']}">
+				</div>
+			</div>
+			
+			 <div class="form-group">
+				<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">地区</label>
+				<div class="col-xs-12 col-sm-8 col-lg-9">
+					<input class="form-control" placeholder="" 
+					name="addr"  type="text" value="{$_GPC['addr']}">
+				</div>
+			</div>
+			
+	       <div class="form-group">
+				<div class=" col-xs-12 col-sm-2 col-lg-2" style="width:9%">
+					<button class="btn btn-default"><i class="fa fa-search"></i>搜索</button>
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+				</div>					
+			</div>
+		</form>
+	</div>
+</div>
+
+
+<div class="panel panel-info">
+    <!-- 按钮触发模态框 -->
+    <button  type="button" class="btn btn-default" onclick="delete_all()">删除所有记录</button> 
+    <label><strong>全部记录:{$total}</strong></label>
+</div>
+ 
+<div class="panel panel-default">
+	<div class="panel-body table-responsive">
+		<table class="table table-hover">
+		<thead class="navbar-inner">
+	    <tr>	
+		 <th style="width:20%;">微信id</th>
+		 <th style="width:10%;">昵称</th>
+		 {if !empty($settings['is_address'])}
+         <th style="width:35%;">地区</th>
+         <th style="width:35%;">地址</th>
+         {/if}
+         <th style="width:20%;">电话</th>
+         <th style="width:25%;">操作</th>
+		</tr>
+		</thead>
+		<tbody>
+		{loop $list $item}
+		<tr>
+	      <td title="{$item['openid']}-{$item['IP']}">{$item['openid']}</td> 
+          <td>{$item['nickname']}</td>       
+          {if !empty($settings['is_address'])}
+          <td>{$item['province']}-{$item['city']}</td>
+          <td>{$item['addr']}</td>      
+          {/if}
+          <td>{$item['tel']}</td>
+		  <td>
+				<div style="padding: 6px 12px;">
+			        <a class="btn btn-default" href="{php echo $this->createWebUrl('cgc_pic_redbag_user', array('op' => 'delete', 'id' => $item['id']))}"
+				     onclick="return confirm('确认删除信息吗？');return false;">删除</a>
+				</div>				
+		  </td>				
+		</tr>
+		{/loop}
+		</tbody>		
+		</table>
+		{$pager}
+	</div>
+  </div>
+</div>
+{/if}
+
+<script type="text/javascript">
+function delete_all(){
+  if (confirm('确认删除所有信息吗,删除完不可恢复?')){
+	  location.href ="{php echo $this->createWebUrl('cgc_pic_redbag_user', array('op' => 'delete_all'))}";	
+  }
+}
+</script>
+{template 'common/footer'}

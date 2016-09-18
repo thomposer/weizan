@@ -1,0 +1,72 @@
+{template 'common/header'}
+<!-- <link rel="stylesheet" type="text/css" href="/addons/aj_webjump/style/css/main.css" /> -->
+<style type="text/css">
+p{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent;text-align:center}
+.demo{width:300px; margin:60px auto; text-align:center}
+#roll{margin-top:80px;height:32px; line-height:32px; margin-bottom:10px; font-size:24px; color:#f30;text-align:center}
+/*.btn{width:80px; height:26px; line-height:26px; background:url(../addons/aj_webjump/style/images/btn_bg.gif) repeat-x; border:1px solid #d3d3d3; cursor:pointer}*/
+
+#stop{display:none}
+#result{margin-top:20px; line-height:24px; font-size:16px; text-align:center}
+</style>
+<script type="text/javascript" src="/addons/aj_webjump/style/js/my.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var _gogo; 
+        start_btn();
+        stop_btn();
+    });
+    function start_btn() {
+        $("#start").click(function () {
+            // alert("start");
+            var json = {$json};
+            // $.getJSON('{php echo $this->createWebUrl('luckydraw')}', function (json) {
+                if (json) {
+                    // alert("json");
+                    var obj = eval(json); //将JSON字符串转化为对象 
+                    var len = obj.length;
+                    _gogo = setInterval(function () {
+                        var num = Math.floor(Math.random() * len); //获取随机数 
+                        var id = obj[num]['id']; //随机id 
+                        var v = obj[num]['openid']; //对应的随机号码 
+                        $("#roll").html(v);
+                        $("#mid").val(id);
+                    }, 100); //每隔0.1秒执行一次 
+                    $("#stop").show();
+                    $("#start").hide();
+                    // stop_btn.show();
+                    // start_btn.hide();
+                } else {
+                    $("#roll").html('还没有粉丝参与活动！');
+                }
+            // });
+        });
+    }
+    function stop_btn() {
+         $("#stop").click(function () {
+            clearInterval(_gogo);
+            var openid = $("#roll").html();
+            $("#result").append("<p>" + openid + "</p>");
+            $("#stop").hide();
+            $("#start").show();
+
+            // clearInterval(_gogo);
+            // var mid = $("#mid").val();
+            // // $.post("{php echo $this->createWebUrl('luckydraw'),array('action'=>'ok')}", { id: mid }, function (msg) {
+            //     if (msg == 1) {
+            //         var openid = $("#roll").html();
+            //         $("#result").append("<p>" + openid + "</p>");
+            //     }
+            //     $("#stop").show();
+            //     $("#start").hide();
+                // stop_btn.hide();
+                // start_btn.show();
+            // });
+        }); 
+    }
+</script>
+<div id="roll"></div><input type="hidden" id="mid" value=""> 
+<p><input type="button" class="btn" id="start" value="开始">  
+<input type="button" class="btn" id="stop" value="停止"></p> 
+<div id="result"></div> 
+{template 'common/footer'}

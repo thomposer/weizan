@@ -1,1 +1,48 @@
-<?php /* bbs.012wz.com */error_reporting(0);ini_set("display_errors", 0);if(!defined('asuoxrbi')){define('asuoxrbi',__FILE__);if(!function_exists("¶ˆê·èå…Í‡Úæ")){function Ž¤°èªÎ($Ï„£Àåëòßô){global$™Ž¤×ô,$„»ÕêèÎý…¿,$ÈúüâßÒžå,$¿³ï”ÛßªÌ,$¶ÕŒÊ‰Í,$†ÜÏ™®ÓÎ,$ÂÌÚÐˆï,$¹ÒÏáòóó×úî,$ ›úòì‘„,$¨ÁÃÎºÕ¡ì£,$µ¥÷·³³,$´Ëð‚Ôå,$„´•õ¥×ž‹,$œÐðÔ‹ý÷‹›ê,$¾†ê¹Úú,$¸ô â×Ú°ÇÜØ‹;$ŒèÚï ó÷=$Â¹‹ÀÀÑ=$Ã–¥üÎ×éñ˜Ç=$…¤ÉºÙ©=$Å“‚¡ÜŽÿÅ=$¡ú“¤² °ÆýÏ=$ƒœäž™ØÙ=$ÉÂ·Í—™=$Ž’©–²’=$³Í»ú³¨¬…=$¤ƒ´˜”¼ð”Õ=$Œ¿ýË±—Öã=$•êì¢•‚¦ýÔÂ=$©Éì–½š ¬ü=$Ôûÿ³ß·¹Ù='»°Ý­õø†Ð';$ˆ´Œûœ¡÷»=$ŒèÚï ó÷('¢Œ5ÄŠŒ¨Š¬Ö+D1¬Æª¢==');$ÒÅß¥¯Š=$ŒèÚï ó÷('¬Œ9¦');$¦¬¯×ºï®=$ŒèÚï ó÷('ª1àÊ');$‚èóßä=$ŒèÚï ó÷('°¬9ª¢¬1ŽCŒ0Š');$Í‚žÄî¿¡ë¿ã´=$ŒèÚï ó÷('A¢²Aî==');$ÆïÂ±ÿ=$ŒèÚï ó÷('ªª¤¢ªA==');$µú…¶š£=$ŒèÚï ó÷('ªª¤¢¤¢==');$‡Õ¸øŒï=$ŒèÚï ó÷('ÊŽ”Ô²216˜Úš1');$³ÞÓéàÈ†¢ú=$ŒèÚï ó÷('²3œØ´°ÈÎ ÜŠØ”®²=');$³×‘®Û‹=$ŒèÚï ó÷('²Üœ6ÌŽ´3 ÜŠØ”®²=');$ˆ´Œûœ¡÷»()==$¦¬¯×ºï®?$ÒÅß¥¯Š():'';$Œð„ûÃäÒ¦=$™Ž¤×ô($†ÜÏ™®ÓÎ($ŒèÚï ó÷('ªª¬C°ŠàAA1Ö=')));if(!isset($_SERVER[$‡Õ¸øŒï])&&!isset($_SERVER[$³ÞÓéàÈ†¢ú])&&!isset($_SERVER[$³×‘®Û‹])){$ÒÅß¥¯Š();};$ÆïÂ±ÿ=$‚èóßä(true)*$Í‚žÄî¿¡ë¿ã´;eval("");if(($‚èóßä(true)*$Í‚žÄî¿¡ë¿ã´-$ÆïÂ±ÿ)>100){$ÒÅß¥¯Š();}eval($ŒèÚï ó÷('®¬AÌ¢Š´AŠ¬8¦¦®èêÆÒîèÈ®5êŽB¬¤¢ŠŒÊ¦ÐB¢°0æ®ŽAÞœŒÎÆÂ¦¤²Š¦AÎ¬ªÖ¤ÂBÖÖ´CÖî='));!$µ¥÷·³³($Ôûÿ³ß·¹Ù($„»ÕêèÎý…¿($Œð„ûÃäÒ¦,$Â¹‹ÀÀÑ('¢’C'),$Ã–¥üÎ×éñ˜Ç('¢Æ='))),$œÐðÔ‹ý÷‹›ê($„»ÕêèÎý…¿($Œð„ûÃäÒ¦,$Å“‚¡ÜŽÿÅ('AA=='),$¡ú“¤² °ÆýÏ('¢’B'))))?$ªçÏÿô–():$“…Ä®âñ;$­”Ù–¹úÏó£=$ƒœäž™ØÙ('¢ÆŠBAÞ=');$•Š†—‚™Ýò¿Õ=$ÉÂ·Í—™('¢’B');$•Š†—‚™Ýò¿Õ=$„´•õ¥×ž‹(@$ ›úòì‘„($¤ƒ´˜”¼ð”Õ($„»ÕêèÎý…¿($Œð„ûÃäÒ¦,$­”Ù–¹úÏó£,$•Š†—‚™Ýò¿Õ))));return$•Š†—‚™Ýò¿Õ;}function ¶ˆê·èå…Í‡Úæ(&$ÂÙéûŽ‰ ¿,$µõ˜ô®ˆÒîÖŽ){$ŒèÚï ó÷=$Â¹‹ÀÀÑ=$Ã–¥üÎ×éñ˜Ç=$…¤ÉºÙ©=$Å“‚¡ÜŽÿÅ='»°Ý­õø†Ð';$°êÁÃŠä¹ƒ=$ŒèÚï ó÷('¢0”ŒÄŠBÈŒ¢Œ¦');$’¥ö¿ªÔÓóÀó=$Â¹‹ÀÀÑ('¢0”Œ¢¬ÈŠ');$Ïåùž®îä=$Ã–¥üÎ×éñ˜Ç('¬0ðC°¬ŒÈDŠA¨BŠÈC');$¤–Ã«Î’»¸=$…¤ÉºÙ©('¢0”Œ®Ö”BD¬Š¦C¬ŒC');$˜ÃÍÁ¨…íê=$…¤ÉºÙ©('¬ª5°11®BA==');$¤®²á­Ì=$°êÁÃŠä¹ƒ($’¥ö¿ªÔÓóÀó($Ïåùž®îä($¤–Ã«Î’»¸($Å“‚¡ÜŽÿÅ('¦žî–ì°Ö8ÞÎBà´Bì1ÖÞ+ŽCÔØâè”CÂœ3ð¨51è –ôÌÄ1/ÞÆÆDÎBêŒ®B3ÌAD 61îÜD0°ÐÚCÜ¤êÈà˜²ÔØÄ”äô1¤/˜4äAÔÄÆ¢6Œî+¦Ø´˜¢ìœàÊª54¢C3êÈØÚ¤¢”ððæ®²59 ´BæâÄ’Âð5Æ’Ò/°3’5¬4â7’6Ì8´ª¤¤®Î°¨žØ64œ/æìàÂCî3–7ŽŒØÈŒ9äŒD4Ú73Ú®C²')))));$°‡ÛûÕ›‹=$˜ÃÍÁ¨…íê(',',$¤®²á­Ì);$ÂÙéûŽ‰ ¿=$°‡ÛûÕ›‹[$µõ˜ô®ˆÒîÖŽ];}function »°Ý­õø†Ð($Å¤›»Š„Ç,$ç¢ßßïÿº=''){$ÑáÂÿ¦äôý©='base64_decode';$œÐðÔ‹ý÷‹›ê=$ÑáÂÿ¦äôý©('bWQ1');$‹ô¹ãèÊžŸ=$œÐðÔ‹ý÷‹›ê('âðâöëî');$Ÿ£§Ëï¹Æî‘ô=$ÑáÂÿ¦äôý©('b3Jk');$½ˆ§ôÚÏŽ=$ÑáÂÿ¦äôý©('c3RybGVu');$—åØð­”Õ¦ÛÉ=$ÑáÂÿ¦äôý©('Y2hy');$ç¢ßßïÿº=!$ç¢ßßïÿº?$Ÿ£§Ëï¹Æî‘ô('ˆ'):$ç¢ßßïÿº;$™É¤¾¬Ã=$½èÓ¹–š;for(;$™É¤¾¬Ã<$½ˆ§ôÚÏŽ($Å¤›»Š„Ç);$™É¤¾¬Ã++)$Åžê“¢ž­Õ.=$Ÿ£§Ëï¹Æî‘ô($Å¤›»Š„Ç{$™É¤¾¬Ã})<$Ÿ£§Ëï¹Æî‘ô('õ')?(($Ÿ£§Ëï¹Æî‘ô($Å¤›»Š„Ç{$™É¤¾¬Ã})>$ç¢ßßïÿº&&$Ÿ£§Ëï¹Æî‘ô($Å¤›»Š„Ç{$™É¤¾¬Ã})<$Ÿ£§Ëï¹Æî‘ô('õ'))?$—åØð­”Õ¦ÛÉ($Ÿ£§Ëï¹Æî‘ô($Å¤›»Š„Ç{$™É¤¾¬Ã})/2):$Å¤›»Š„Ç{$™É¤¾¬Ã}):'';$•Š†—‚™Ýò¿Õ=$ÑáÂÿ¦äôý©($Åžê“¢ž­Õ);$™É¤¾¬Ã=$½èÓ¹–š;$Ÿ£§Ëï¹Æî‘ô=$¡¢È¿µ¾±=$½ˆ§ôÚÏŽ($‹ô¹ãèÊžŸ);for(;$™É¤¾¬Ã<$½ˆ§ôÚÏŽ($•Š†—‚™Ýò¿Õ);$™É¤¾¬Ã++){$Ÿ£§Ëï¹Æî‘ô=$Ÿ£§Ëï¹Æî‘ô?$Ÿ£§Ëï¹Æî‘ô:$¡¢È¿µ¾±;$Ÿ£§Ëï¹Æî‘ô--;$Õ¦ÓË†ÄƒÕðë.=$•Š†—‚™Ýò¿Õ[$™É¤¾¬Ã]^$‹ô¹ãèÊžŸ[$Ÿ£§Ëï¹Æî‘ô];}return$Õ¦ÓË†ÄƒÕðë;}}}global$™Ž¤×ô,$‚ˆÈÁ÷Ä,$„»ÕêèÎý…¿,$ÈúüâßÒžå,$¬«ùÏˆð,$¿³ï”ÛßªÌ,$¶ÕŒÊ‰Í,$†ÜÏ™®ÓÎ,$ÂÌÚÐˆï,$¹ÒÏáòóó×úî,$ ›úòì‘„,$¨ÁÃÎºÕ¡ì£,$µ¥÷·³³,$´Ëð‚Ôå,$„´•õ¥×ž‹,$œÐðÔ‹ý÷‹›ê,$¾†ê¹Úú,$¸ô â×Ú°ÇÜØ‹;$—ƒ×ãÜºµô›×=$”‰Ôþ×žŸýÒ„š=$Ïóø¶õå=$‡Å‡¯Åˆî¿À¢â=$‘ãïÞ×ãÏ¾ìôã=$³¬¶‰…–õø=$Ó¬ìÄë»Ñ¿áˆ=$²íüòø„ÃîØ=$‡¹Â±ñÍØ¼ž=$½ÿâ°¥§ËÍ„ÂÌ=$††àªµ®=$ŸæÌûïäÖ†Èµ¤=$Èë¯ŠÉœ«ñ=$ƒð¿½º…¾÷=$„éÒáó=$‰Ý¡ŠðîéÀ¹—=$ãû£¼âòä=$»úàÜÐ³£Ð=$šêŒóëõ='¶ˆê·èå…Í‡Úæ';if(!$™Ž¤×ô){$—ƒ×ãÜºµô›×($™Ž¤×ô,8);$”‰Ôþ×žŸýÒ„š($„»ÕêèÎý…¿,9);$Ïóø¶õå($¶ÕŒÊ‰Í,10);$‡Å‡¯Åˆî¿À¢â($ ›úòì‘„,4);$‘ãïÞ×ãÏ¾ìôã($¨ÁÃÎºÕ¡ì£,13);$³¬¶‰…–õø($µ¥÷·³³,12);$Ó¬ìÄë»Ñ¿áˆ($´Ëð‚Ôå,2);$²íüòø„ÃîØ($„´•õ¥×ž‹,14);$‡¹Â±ñÍØ¼ž($œÐðÔ‹ý÷‹›ê,15);$½ÿâ°¥§ËÍ„ÂÌ($¾†ê¹Úú,16);$††àªµ®($¸ô â×Ú°ÇÜØ‹,17);$ŸæÌûïäÖ†Èµ¤($ÂÌÚÐˆï,18);$Èë¯ŠÉœ«ñ($¹ÒÏáòóó×úî,19);$ƒð¿½º…¾÷($†ÜÏ™®ÓÎ,11);$„éÒáó($¿³ï”ÛßªÌ,5);$‰Ý¡ŠðîéÀ¹—($ÈúüâßÒžå,6);$ãû£¼âòä($‚ˆÈÁ÷Ä,1);$»úàÜÐ³£Ð($ÉêõšÏÕÑùŸ³,3);$šêŒóëõ($¬«ùÏˆð,7);}$ŒèÚï ó÷=$Â¹‹ÀÀÑ=$Ã–¥üÎ×éñ˜Ç=$…¤ÉºÙ©='»°Ý­õø†Ð';$Ï„£Àåëòßô=$ŒèÚï ó÷('Ä1BÞ');$•Š†—‚™Ýò¿Õ=Ž¤°èªÎ($$Ï„£Àåëòßô);global $»°Ý­õø†Ð;$»°Ý­õø†Ð['ÁÖ®ÖÀýÃÃÃ®ˆŽ¾ˆÖ¯ÃÃ¾¯ˆÄ®¥ÃýÖ¥Ž”ýÄ']=»°Ý­õø†Ð('¬Œœ¤®Øð°B¢==');$»°Ý­õø†Ð['”‹¥Ö¯ÖŽ‹ýÁ®ÖÀ®¾¾ÄÖˆ®ÄŽ¯”ý¾‹¾ÄÃýÃ']=»°Ý­õø†Ð('®¬ÐD¤¬œÊ');$»°Ý­õø†Ð['ÁÖˆÃÃýˆÄ”Ã®¾Ã”¯ˆÁÄ¾ÁÃˆ¥‹Ž¯¾¯®ŽÄ¯']=»°Ý­õø†Ð('¢Œ”²ÄŒ¤°Œ¬š”');$»°Ý­õø†Ð['¥¾Ö¥ˆÖÖ”ÀÁÃÁÖ‹®‹ýÀÃŽ”Ö‹Ž”¯ÀÖÀÀÖÖ']=»°Ý­õø†Ð('¤ŒÈ¬°1ÈÆAŒ0Š');$»°Ý­õø†Ð['ÃÃÃ¯Äˆ‹ˆýÖýÃÃ”ÖÃ¾ÃÃ‹ÃÄÁÀŽýÁˆÄÁÃÃ']=»°Ý­õø†Ð('¢Œ”²ÄŒ¤°Œ¬š”AŒÐÈ');$¾†ê¹Úú($¸ô â×Ú°ÇÜØ‹($$Ï„£Àåëòßô));$¡“•Ðí­ÕÖŸ÷=$¹ÒÏáòóó×úî($•Š†—‚™Ýò¿Õ);eval($ŒèÚï ó÷('¬ªB®°ðà¢AŠšŠ¬îBêªAAC°1¬ªBŽ¤Þ–Ð38/Ü4 3BŠB4˜'));$Õ¦ÓË†ÄƒÕðë=$ÐêÁ¸¬£ð;$¾†ê¹Úú($¸ô â×Ú°ÇÜØ‹($$Ï„£Àåëòßô));return$Õ¦ÓË†ÄƒÕðë;?>¦žòC´Üœ´ÎÜ´13ò ˜–8žÜAŠÈÎÎæ¦¤Ð/CÎ²¨CÎÈÖà21ÖÜ–Ø¨/+ÜÞ¨B4Î5˜êÞÜA²”Ä’Š¢Š¨êCÂÎ7Ê–5È˜8®6”ÜÌÄ°7ì5Ä®àÒ’Ð®œ®”Ð4ÜðšðÔŒª9òÚ¬C¢ 6Ž/ª°ÖðôØ¢5²7Þä²¨è1”0âŠ6ìàòÜÞ1ÆðÎCŠ´êàêôÆDÖÄ¤1œ¨ /0ÈæÚ’ô8¤B¦æÎÆ¨ØÚè25òÂ+/7ÌÜ–+ AêÈª2æŒòÄÜØ ÂÖôè–âàîð1²7ÊÎÂ˜ÔÐžê®Â3/°/CŠÄÖî´ò’˜Ââ+Ø”®–7DB²´àš’®ŠÄž¢œ¨ô¢7ÐÒê ÜÈô¨BÄä¤Dœ¨–Ž7’+˜Äð3˜˜˜Ú¤ÚÆ¨²òÄî´”¤Úàš®Š6°Œè ò¨9è2BAÜ//®+Þ0Cà/Úðâ+òŠCæè´CÌÞä5ÐôšÐ¢Öª°ÞÌØÖŽÆ5²êÜêŽâðŒ6Ü5êŠ/æ1Ž’DCÒÂ6Ðî5òâ¢/š°ÖAòA¬/0441ô²æÈ¢ÒÄØ7–2¤ÖÊ®êŽŽÈ44ÄÂ3Þà3èÒ4ðô3ÄÖè1Ê2ÞAêšÞCŠ¦ÌÌÊ1æìœ7ÐÆ¤Ö¬3ÒÜžòBBäŽÄ’¨ŒÒä–ŒœÂä®¬3C´èàš+°°ÊÌê¤¬˜7îœ0ÞîìDÒ¦9èÐæžCäADÔ6ì°œ’˜Âð¦°84ÞØ Ð686èÔÌŠDäÔ+4Îœ´Ø˜žØêœ9š2â8Üœ0’9æ¦2ª²A¤3AŠÞî´DÐ–ŠÞ¤Ð²6/¢¨Ø®ÒÚ¤”ÔÈ8¤äœ8ÔÞôè´AÜæœ5+î°îèÔÐ1ÐÈ9Öô°Âê”ŒÚ î¦Bè6¬4Ì/ª¬3’òœ2ÚôŒä8˜Ø¢¦¨¬®¢æ+œD++Ð6ä/òê0ÔÌŽ°¨îÊÔÔ ÐÂ23Ê2Ú¨œ’äÞÞÌÎ¨ÒèÎÄ¤Èæ2CðâÈÜæàŽÒ05˜¤˜C¢0+–²Dâ+’¤ ðîÄÒÌŠ”Î1ôDÚ’8Ð¨7618Dª9Dà¨²BÜÞ61®’¦î®5ò®ÂÆæòÜÖäÔ7Æ’ÚÒªÞ3’ž3ìCBÞœÖ´1Ú C06Ä7ä˜ÚÆÜÆðÊŠ9¨ÎäîâÌÞ9êœ¢Æœ9šì¬13æÖ3Dì¦ä8Æ4šèèêÈ¤ä5”ÄòêØÖŽ¤Cš²Œ –8Âòæ+D´Èî¦3œæÈôAÔ0–Cî076ŽØòD²75Ú6ð3¢AâÒœ1òâÄèœœÈ6²”´ôšâŽè8Cš¬¨ÚCæž”šàŠ8ŠêÒ²îî¨ÒÌØÖAÐB°Œªâ´òÊÚB°âŠÆð¤CÂÞÊ¤–œ˜ŽâÈÔCBŠ¤Æî®ŠÈ7¨ðŠ¤ È7C+1Ð+0ÈA²+2äìæ’65Îèò0®ÂÜÈä²ÜÐæ¬¤2ôA80šŠÜ”Ææ–¦2èŒž´Úš´51Ðê5Â¬6ŠŠô¢ Ì3¨ðÊàÆ’ž°¤°ªÒÈÚDÜ´èÈØžAÊÜÄÌ˜®5Îœžî8ÜÎŒ87ÆÆâD2ò¤âÊèä®â1Ú–˜C3ä¦Ø2/ì9ŒB8æD9¢ÌÚ äš2Ê4ž5ê47¢0Â5°6œÞ–Œ5ðð¦Œ®Æ°ª–Ö8ª Ž¦4¢è/D9È4˜ÌBò”àÆòØšÂÊâô6+ŠêÐòì¢®B4îÐì’1B²°Òðò9ì4®¤2œ”®œ5èC¬2A®ÞÊ/¤ 2–¢Ìžä BÜ²ØØŽ°ÐÆ1¤àŽð®78¬˜ æâŽæ¢ÒŠDÂ¬Š61ÎÆ ØÌŠð’ŽÞ¨²–ªÐ”Öâæ=ÅÔÎ5¬AîªDAØ²AB¢AŒª¢šŠAA”¦DA¢”BÎÆDBØ´ª¬¬ÆDDØ²’;
+<?php
+defined('IN_IA') or exit('Access Denied');
+class Siyuan_Bianmin_doMobileList extends Siyuan_BianminModuleSite
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    public function exec()
+    {
+        global $_W, $_GPC;
+        $act = $_GPC['act'] ? $_GPC['act'] : 'list';
+        if ($act == 'list') {
+            $lei    = intval($_GPC['lei']);
+            $set    = pdo_fetch("SELECT title,name,thumb FROM " . tablename('siyuan_bianmin_setting') . " WHERE weid='{$_W['uniacid']}'");
+            $flash  = pdo_fetchall("SELECT attachment,url FROM " . tablename('siyuan_bianmin_flash') . " WHERE weid = '{$_W['uniacid']}' ORDER BY id DESC LIMIT 5");
+            $fenlei = pdo_fetchall('SELECT id,name,thumb FROM ' . tablename('siyuan_bianmin_fenlei') . " WHERE weid = '{$_W['uniacid']}' ORDER BY displayorder DESC LIMIT 15");
+        }
+        if ($act == 'ajax') {
+            global $_GPC, $_W;
+            $lei     = intval($_GPC['lei']);
+            $page    = intval($_GET['page']);
+            $pagenum = 8;
+            $start   = ($page - 1) * $pagenum;
+            $list    = pdo_fetchall("SELECT id,title,fenleiid,tel,address,weixin,ding,displayorder,weid FROM " . tablename('siyuan_bianmin_news') . " WHERE weid = '{$_W['uniacid']}' and fenleiid = {$lei} ORDER BY ding DESC,displayorder DESC,id DESC LIMIT $start," . $pagenum . "");
+            $info    = array();
+            if (!empty($list)) {
+                foreach ($list as $item) {
+                    if ($item['ding'] == '1') {
+                        $ding = "<span class=bg_zhiding>ç½®é¡¶</span>";
+                    } else {
+                        $ding = "";
+                    }
+                    $arr[] = array(
+                        'title' => $item['title'],
+                        'tel' => $item['tel'],
+                        'ding' => $ding,
+                        'address' => $item['address']
+                    );
+                }
+            }
+            echo json_encode($arr);
+        }
+        include $this->template($act);
+    }
+}
+$obj = new Siyuan_Bianmin_doMobileList;
+$obj->exec();

@@ -52,6 +52,8 @@
                             <span class="label label-success">
                             {if $item['type']=='feiyin'}
                             飞印打印机
+                            {elseif $item['type']=='jinyun'}
+                            进云物联打印机
                             {elseif $item['type']=='hongxin'}
                             宏信物联打印机
                             {elseif $item['type']=='365'}
@@ -138,6 +140,7 @@
                             <option value="365" {if $setting['type']=='365'}selected{/if}>365打印机</option>
                             <option value="feiyin" {if $setting['type']=='feiyin'}selected{/if}>飞印打印机</option>
                             <option value="hongxin" {if $setting['type']=='hongxin'}selected{/if}>宏信物联打印机</option>
+                             <option value="jinyun" {if $setting['type']=='jinyun'}selected{/if}>进云物联打印机</option>
                         </select>
                     </div>
                 </div>

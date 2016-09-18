@@ -11,6 +11,7 @@ html {
 body {
   line-height: 1.6;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color:#efeff4;
 }
 * {
   margin: 0;
@@ -1003,7 +1004,7 @@ input.weui_btn_plain_default {
 .weui_tab_bd {
   box-sizing: border-box;
   height: 100%;
-  padding-bottom: 55px;
+  padding-bottom: 50px;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }

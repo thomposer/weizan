@@ -1,0 +1,306 @@
+{template 'header'}
+    
+		<link rel="stylesheet" href="{php echo HT}css/buyCard.css" />
+	<link rel="stylesheet" type="text/css" href="{php echo HT}css/layer.css" />
+	<script type="text/javascript" src="{php echo HT}js/jquery-1.8.2.min.js" ></script>
+	<script type="text/javascript" src="{php echo HT}js/layer.js" ></script>
+    <style>
+    #phone{
+        line-height: 25px;
+    }
+    
+    #wxpay{
+    width: 200px;
+    height: 50px;
+    display: block;
+    font-size: 18px;
+    text-align: center;
+    line-height: 50px;
+    color: #FFFFFF !important;
+    background-color: #1AB54A;
+    position: absolute;
+  
+    left: 50%;
+    margin-left: -100px;
+    border-radius: 4px;
+    }
+    </style>
+	<body>
+		{template 'guanzhu'}
+		
+		
+		<header >
+        
+				<div class="CardStyle">
+					<img src="{php echo tomedia($list['logo'])}"  id="img_wu"/>
+					<p>有效期：{$list['days']}</p>
+					<h1>NO.{$list['no_type']}</h1>
+					<a href="{php echo $this->createMobileUrl('halfoff',array('op'=>'list'))}">查看合作商家</a>
+				</div>
+			</header>
+			<div class="FiveCard_Explain">
+			     {php echo htmlspecialchars_decode($list['desc'])}
+			</div>
+		      <form action="{php echo $this->createMobileUrl('Halfoff', array('op'=>'orderchu'))}" class="form-horizontal form" method="post" onsubmit="return test()">
+			<div class="TelInfors">
+			 <i>手机号码：</i>
+			 <span ><input  type="tel" name="phone" value="{$ulist['mobile']}" id="phone"  placeholder="请输入有效的手机号" /></span>
+			</div>
+		
+			
+			
+		
+		<div id="BuyCardMethod">
+			<p  id="BuyNow" class="methodcurrent">直接购买</p>
+			<p id="MaForBuy" >使用激活码</p>
+		</div>
+		<div class="Way_BuyNow">
+        {loop $cardlist $k $card}
+		<div class="CardInfo">
+					<p class="radio-p">
+                    {if $k == 0}
+						<input type="radio"   name="stype" class="radio-lot" checked="checked" value="{$card['cardtype_id']}"/>
+                         <span class="radio-span radio-act"></span>{$card['type']}
+                        
+                     {else}
+                       	<input type="radio"   name="type" class="radio-lot" checked=""    value="{$card['cardtype_id']}"/> 
+                         <span class="radio-span"></span>{$card['type']}
+                    {/if}
+                   
+					</p>
+					<h2>￥{$card['price']}</h2>	
+			</div>			
+          {/loop}  
+            <br/>
+			<div class="LoginButton">
+				<input type="hidden" id="cardtype" value="y">
+				<input  type="submit" value="微信支付" id="wxpay"  style="border: 0 ;"/>
+                <div style="height: 70px;"></div>
+                	{template 'banquan'}
+			</div>
+        </div>
+			
+		</div>
+        <div class="Way_MaForBuy">
+			<div class="jh-info">
+				<span for="JiHuoMa" class="MaLable">激活码：</span><input type="text"  placeholder="请输入有效的激活码" id="code"/>
+			</div>
+          
+			<div class="LoginButton">
+				<a href="javascript:;" id="Confirm_JiHuo" onclick="act();">确认激活</a>
+                <div style="height: 70px;"></div>
+                	{template 'banquan'}
+			</div>
+		</div>
+		
+	
+		</form>
+		
+		
+	
+	   <script type="text/javascript" src="{php echo HT}js/jquery-1.8.2.min.js" ></script>
+	   <script type="text/javascript" src="{php echo HT}js/jweixin-1.0.0.js"></script>
+		<script type="text/javascript">
+        
+ 
+        
+        
+			$(function(){
+			
+
+				$("#BuyNow").click(function(){
+					$(this).addClass("methodcurrent").siblings().removeClass("methodcurrent");
+					$(".Way_MaForBuy").hide();
+					$(".Way_BuyNow").show();
+				});
+				$("#MaForBuy").click(function(){
+					$(this).addClass("methodcurrent").siblings().removeClass("methodcurrent");
+					$(".Way_BuyNow").hide();
+					$(".Way_MaForBuy").show();
+				});
+				$(".gray,.pay-ma").click(function(){
+					$(".gray").hide();
+					$(".pay-ma").hide();
+				});
+		
+				$(".weui_dialog_ft").click(function(){
+					$("#dialog2").hide();
+					if($(".weui_dialog_bd").html().indexOf('绑定手机')>0)
+	                 {
+		              $("#editphone").trigger("click"); 
+	                   }
+				});
+				$(".CardInfo p").each(function(index){
+			        $(this).click(function(){
+			         
+                        var siteroot = "{$_W['siteroot']}";
+			            $(".CardInfo p").children("input").removeAttr("checked");
+			            $(".CardInfo p").children(".radio-span").removeClass("radio-act");
+			            $(this).children("input").attr('checked','checked');
+			            $("#cardtype").val($(this).children("input").attr('name'));
+			            $(this).children(".radio-span").addClass("radio-act");
+                        var cid =  $('input[name="type"]:checked ').val();
+                        if(!cid){
+                            var cid =  $('input[name="stype"]:checked ').val(); 
+                        }
+                        $.ajax({
+                    		cache: false,
+                    		url: "{php echo $this->createMobileUrl('Halfoff',array('op'=>'query'))}",
+                    		type: 'POST',
+                    		data: {cid: cid},
+                    		dataType: "JSON",
+                    		success: function(res){	
+                    		      
+                    		  if(res.status == 1){
+                    		      $('.FiveCard_Explain ').html(res.desc);
+                    		      $('.CardStyle p').html('有效期：'+res.days);
+                                  $('.CardStyle h1').html('NO.'+res.no_type);
+                                   $("#img_wu").attr('src',siteroot+'attachment/'+res.logo);    
+                    		      
+                    		  }else{
+                    		     	layer.open({
+                            			content: '该信息不存在！',
+                            			style: 'background-color:#E34F63; color:#fff; border:none;',
+                            			time: 1,
+                            			shade:false
+                            		});
+                    		  }
+                    		},
+                    	});
+                                           
+              
+                        
+                        
+                        
+			        });
+    			});
+		
+     
+			});
+	
+	
+		</script>
+		<script type="text/javascript">
+        // 微信支付
+        function test(){
+                var phone = $('#phone').val();
+                   var  rec= /^13[0-9]{1}[0-9]{8}$|15[0-9]{1}[0-9]{8}$|18[0-9]{1}[0-9]{8}$|147[0-9]{8}$|178[0-9]{8}$|177[0-9]{8}$|176[0-9]{8}$|174[0-9]{8}$/;
+               if(!rec.test(phone)){
+                   layer.open({
+                			content: '该手机号格式不对或不能为空！',
+                			style: 'background-color:#E34F63; color:#fff; border:none;',
+                			time: 1,
+                			shade:false
+             		});
+                  
+                  return false; 
+                }
+               
+                return  true;
+                
+        }
+        
+      //激活码
+      function  act(){
+           var phone = $('#phone').val();
+                   var  rec= /^13[0-9]{1}[0-9]{8}$|15[0-9]{1}[0-9]{8}$|18[0-9]{1}[0-9]{8}$|147[0-9]{8}$|178[0-9]{8}$|177[0-9]{8}$|176[0-9]{8}$|174[0-9]{8}$/;
+               if(!rec.test(phone)){
+                   layer.open({
+                			content: '该手机号格式不对或不能为空！',
+                			style: 'background-color:#E34F63; color:#fff; border:none;',
+                			time: 1,
+                			shade:false
+             		});
+                  
+                  return false; 
+                }
+             var code =  $('#code').val();  
+             
+             if(!code){
+                 layer.open({
+                			content: '激活码不能为空！',
+                			style: 'background-color:#E34F63; color:#fff; border:none;',
+                			time: 1,
+                			shade:false
+             		});
+             }
+             var data ={
+                    'phone':phone,
+                    'code':code,
+                }
+                
+              $.ajax({
+                    		cache: false,
+                    		url: "{php echo $this->createMobileUrl('Halfoff', array('op'=>'activation'))}",
+                    		type: 'POST',
+                    		data:  data,
+                    		dataType: "JSON",
+                    		success: function(res){	
+                    		  
+                              
+                    		 
+                    		   if(res == 1){
+                    		      layer.open({
+                                			content: '请先注册会员!',
+                                			style: 'background-color:#E34F63; color:#fff; border:none;',
+                                			time: 1,
+                                			shade:false
+                             		});
+                                    return false;
+                    		   }else if(res == 2){
+                    		       layer.open({
+                                			content: '已经购买过，不能使用激活码!',
+                                			style: 'background-color:#E34F63; color:#fff; border:none;',
+                                			time: 1,
+                                			shade:false
+                             		});
+                                    return false;
+                    		   }else if(res == 3){
+                    		      layer.open({
+                                			content: '该激活码不存在或已使用!',
+                                			style: 'background-color:#E34F63; color:#fff; border:none;',
+                                			time: 1,
+                                			shade:false
+                             		});
+                                    return false;
+                    		   }else if(res == 4){
+                    		       layer.open({
+                                			content: '该激活码不存在或已使用!',
+                                			style: 'background-color:#E34F63; color:#fff; border:none;',
+                                			time: 1,
+                                			shade:false
+                             		});
+                                    return false;
+                    		   }else if(res == 5){
+                    		        layer.open({
+                                			content: '恭喜您成功激活五折卡!',
+                                			style: 'background-color:#E34F63; color:#fff; border:none;',
+                                			time: 1,
+                                			shade:false
+                             		});
+                                   window.location.href="{php echo $this->createMobileUrl('halfoff');}"
+                    		   }else if(res == 6){
+                    		       layer.open({
+                                			content: '网络错误，稍后在试!',
+                                			style: 'background-color:#E34F63; color:#fff; border:none;',
+                                			time: 1,
+                                			shade:false
+                             		});
+                    		   }else if(res == 7){
+                    		      layer.open({
+                                			content: '查询代理人错误，无法查找到此城市代理人!',
+                                			style: 'background-color:#E34F63; color:#fff; border:none;',
+                                			time: 1,
+                                			shade:false
+                             		});
+                    		   }
+                    		},
+                    	});          
+      }
+
+
+
+</script>
+	
+	</body>
+</html>

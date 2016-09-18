@@ -1,0 +1,224 @@
+{template 'common/header'}
+<script type="text/javascript" src="./resource/js/lib/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="./resource/js/lib/jquery-ui-1.10.3.min.js"></script>
+<ul class="nav nav-tabs">
+	<li  class="{if $operation== 'display'}active{/if}">
+	    <a href="{php echo $this->createWebUrl('imp_fansgroup',array('op'=>'display'));}">粉丝列表</a>
+	</li>
+	<li  class="{if $operation== 'post'}active{/if}">
+	    <a href="{php echo $this->createWebUrl('imp_fansgroup',array('op'=>'post'));}">粉丝新增</a>
+	</li>
+</ul>
+
+{if $operation == 'post'}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        粉丝新增
+    </div>
+    <div class="panel-body">
+	<form action="" method="post" class="form-horizontal" role="form" id="form1">
+         <input type="hidden" id="id" class="form-control span7"  placeholder="" name="id" value="{$item['id']}"> 
+                               
+          <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">粉丝昵称</label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" id="nickname" class="form-control span7"
+                       placeholder="" name="nickname" value="{$item[nickname]}">
+                    
+            </div>  
+            </div> 
+            
+             <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">openid</label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" id="openid" class="form-control span7"
+                       placeholder="" name="openid" value="{$item[openid]}">
+                    
+            </div>  
+            </div>
+  
+               		
+			<div class="form-group">
+					<div class="col-sm-8">
+						<input type="submit" name="submit" value="提交" class="btn btn-primary">
+						<input type="hidden" name="token" value="{$_W['token']}" />
+					</div>		
+			</div>
+		
+		</form>
+    </div>
+</div>
+{else}
+<div class="main">
+
+<div class="panel panel-info">
+	<div class="panel-heading">筛选(请到粉丝资料里面下载完所有资料，然后在回到这里操作。<a href="/web/index.php?c=mc&a=fans&">点击查看粉丝记录</a>)</div>
+	<div class="panel-body">
+		<form action="./index.php" method="get" class="form-horizontal" role="form">
+			<input type="hidden" name="c" value="site" />
+			<input type="hidden" name="a" value="entry" />
+			<input type="hidden" name="m" value="cgc_keyword" />
+			<input type="hidden" name="do" value="imp_fansgroup" />
+            <div class="form-group">
+				<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">昵称</label>
+				<div class="col-xs-12 col-sm-8 col-lg-9">
+					<input class="form-control" placeholder="" 
+					name="nickname" id="" type="text" value="{$_GPC['nickname']}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">标识符</label>
+				<div class="col-xs-12 col-sm-8 col-lg-9">
+					<input class="form-control" placeholder="" 
+					name="note" id="" type="text" value="{$_GPC['note']}">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class=" col-xs-12 col-sm-2 col-lg-2">
+					<button class="btn btn-default"><i class="fa fa-search"></i>搜索</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+		<form action="./index.php" method="post" class="form-horizontal" id="submit_form"  enctype="multipart/form-data">
+			<input type="hidden" name="c" value="site" />
+			<input type="hidden" name="a" value="entry" />
+			<input type="hidden" name="m" value="cgc_keyword" />
+			<input type="hidden" name="do" value="imp_fansgroup" />
+		    <input type="hidden" name="op" value="import" />
+		       <input type="file" name="upfile" id="upfile" style="display:none"/>
+	</form>
+              
+
+  <div class="row-fluid" style="padding-bottom: 13px;">
+  	<button  type="button" class="btn btn-default" onclick="loadcsv()"> 导入csv文件</button>
+	<button  type="button" class="btn btn-default" onclick="example()"> 下载csv例子</button>
+	<button type="button" class="btn btn-default" onclick="batdelete()"> 删除全部数据</button>
+  </div>
+
+  <div class="row-fluid" style="padding-bottom: 13px;">
+
+  <div class="form-horizontal">
+  	<div class="form-group">
+		<div class=" col-xs-12 col-sm-2 col-lg-2" style="width:9%">
+			<button class="btn btn-default" onclick="moveFans()">移动粉丝分组</button>
+		</div>
+		
+		<div class=" col-xs-12 col-sm-2 col-lg-2" style="padding-right: 15px;margin-left: 20px;">
+			<!--<input class="btn btn-default" type="submit" name="export" value="导出"/>
+			--><select name="groupid" id="groupid" class="form-control">
+				<option value=""></option>
+				{loop $fansgroup $item}
+				  <option value="{$item['group_id']}"  {if $_GPC['z_groupid'] == $item['group_id']}selected{/if}>{$item['name']}</option>
+				{/loop}
+			</select>
+		</div>
+		<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">标识符</label>
+		<div class=" col-xs-12 col-sm-2 col-lg-2" style="width:20%">
+			<input class="form-control" class="form-control" width="200px" placeholder="" name="note" id="note" type="text" value="{$_GPC['note']}">
+		</div>
+	</div>
+  </div>
+  </div>
+
+
+
+<div class="panel panel-default">
+	<div class="panel-body">
+
+		<table class="table table-hover">
+
+			<thead class="navbar-inner">
+
+				<tr>
+					<th style="width:40px;">粉丝昵称</th>
+				    <th style="width:40px;">openid</th>         
+				    <th style="width:40px;">标识符</th>         
+					<th style="width:40px; text-align:right;">操作</th>
+
+				</tr>
+
+			</thead>
+
+			<tbody>
+				{loop $list $item}
+				<tr>
+					<td>{$item['nickname']}</td>
+					<td>{$item['openid']}</td>
+					<td>{$item['note']}</td>
+					<td style="text-align:right;">
+					<a  class="btn btn-default"   href="{php echo $this->createWebUrl('imp_fansgroup', array('op' => 'post', 'id' => $item['id']))}">修改</a>
+					<a  class="btn btn-default"   href="{php echo $this->createWebUrl('imp_fansgroup', array('op' => 'del', 'id' => $item['id']))}">删除</a>
+					</td>
+				</tr>
+
+				{/loop}
+
+			</tbody>
+
+		</table>
+
+		{$pager}
+
+	</div>
+
+</div>
+
+<script>
+	$("#upfile").change(function(){
+		if($("#upfile").val() != ''){
+			$("#submit_form").submit();
+		}
+	});
+
+	function loadcsv(){
+		$("#upfile").click();
+	}
+	
+	
+	function batdelete() {
+		if(confirm("是否删除全部数据！"))
+		{
+			location.href = "{php echo $this->createWebUrl('imp_fansgroup', array('op' => 'batDelete'))}";
+		}
+	}
+	
+	function moveFans(){
+		if ($("#groupid  option:selected").val()=='') {
+			alert('请选择分组');
+			return false;
+		}
+		location.href = "{php echo $this->createWebUrl('imp_fansgroup', array('op' => 'moveFans'))}&groupid="+$("#groupid  option:selected").val()+"&note="+$("#note").val();
+	}
+
+	$("#exec_target").load(function(){
+		var data = $(window.frames['exec_target'].document.body).find("textarea").html();
+		if(data != null){
+			$('#upfile').show();
+			$('#loaderimg').hide();
+			$("#feedback").append(data.replace(/&lt;/g,'<').replace(/&gt;/g,'>'));
+			
+			//$("#upfile").val('');
+		}
+	});
+	function example(){
+  		location.href ="../addons/{php echo $this->modulename}/example.csv";	
+	}
+	require(['jquery','util'],function($,u){
+				$("#form1").submit(function(){
+					if ($(":text[name='nickname']").val()=='') {
+						u.message('昵称不能为空！','','error');
+						return false;
+					}
+					if ($(":text[name='openid']").val()=='') {
+						u.message('openid不能为空！','','error');
+						return false;
+					}
+					return true;
+				})
+			})
+</script>
+{/if}
+{template 'common/footer'}

@@ -5,7 +5,7 @@
 define(function (require, exports, module) {
     var $ = require('zepto');
     var Music = require('script/music.js');
-    var Common = require('script/common.js?v=10');
+    var Common = require('script/common.js?v=11');
     var $mask = Common.$mask;
     var Game = require('script/game.js');
     Game.init();

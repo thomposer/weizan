@@ -1,0 +1,321 @@
+{template 'common/header'}
+
+<div class="main">
+	<form action="" method="post" class="form-horizontal form" id="setting-form" enctype="multipart/form-data">
+	<div class="panel panel-default">
+		<div class="panel-heading">基本参数设置</div>
+		<div class="panel-body">
+
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">有效层数</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="dat[level]" value="{$settings['level']}" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">推广人数限制</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="dat[num]" value="{$settings['num']}" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">是否开启群主功能</label>
+				<div class="col-sm-5">
+					<label class="radio-inline">
+						<input type="radio" name="dat[enableleader]" value="1"{if $settings['enableleader']==1}checked{/if}>
+						开启
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="dat[enableleader]" value="0"{if $settings['enableleader']==0}checked{/if}>
+						关闭
+					</label>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">群主层级</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="dat[leaderlevel]" value="{$settings['leaderlevel']}" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">群主条件</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="dat[leadercondition]" value="{$settings['leadercondition']}" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">平台管理员UID</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="dat[uid]" value="{$settings['uid']}" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">平台管理员微信号</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="dat[wechat]" value="{$settings['wechat']}" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">平台管理员QQ号</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="dat[qq]" value="{$settings['qq']}" />
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">平台管理员手机号</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="dat[mobile]" value="{$settings['mobile']}" />
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">层级红包设置</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">是否允许线下支付,上级手动审核</label>
+				<div class="col-sm-5">
+					<label class="radio-inline">
+						<input type="radio" name="dat[enabledownline]" value="1"{if $settings['enabledownline']==1}checked{/if}>
+						开启
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="dat[enabledownline]" value="0"{if $settings['enabledownline']==0}checked{/if}>
+						关闭
+					</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-1 control-label">1层</label>
+				<div class="col-sm-2">
+					<div class="input-group"  style="float:left">
+						<input class="form-control" type="text" name="dat[level_money1]" value="{$settings['level_money1']}">
+						<span class="input-group-addon">元</span>
+					</div>
+				</div>
+				<label class="col-sm-1 control-label">2层</label>
+				<div class="col-sm-2">
+					<div class="input-group"  style="float:left">
+						<input class="form-control" type="text" name="dat[level_money2]" value="{$settings['level_money2']}">
+						<span class="input-group-addon">元</span>
+					</div>
+				</div>
+				<label class="col-sm-1 control-label">3层</label>
+				<div class="col-sm-2">
+					<div class="input-group"  style="float:left">
+						<input class="form-control" type="text" name="dat[level_money3]" value="{$settings['level_money3']}">
+						<span class="input-group-addon">元</span>
+					</div>
+				</div>
+				<label class="col-sm-1 control-label">4层</label>
+				<div class="col-sm-2">
+					<div class="input-group"  style="float:left">
+						<input class="form-control" type="text" name="dat[level_money4]" value="{$settings['level_money4']}">
+						<span class="input-group-addon">元</span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-1 control-label">5层</label>
+				<div class="col-sm-2">
+					<div class="input-group"  style="float:left">
+						<input class="form-control" type="text" name="dat[level_money5]" value="{$settings['level_money5']}">
+						<span class="input-group-addon">元</span>
+					</div>
+				</div>
+				<label class="col-sm-1 control-label">6层</label>
+				<div class="col-sm-2">
+					<div class="input-group"  style="float:left">
+						<input class="form-control" type="text" name="dat[level_money6]" value="{$settings['level_money6']}">
+						<span class="input-group-addon">元</span>
+					</div>
+				</div>
+				<label class="col-sm-1 control-label">7层</label>
+				<div class="col-sm-2">
+					<div class="input-group"  style="float:left">
+						<input class="form-control" type="text" name="dat[level_money7]" value="{$settings['level_money7']}">
+						<span class="input-group-addon">元</span>
+					</div>
+				</div>
+				<label class="col-sm-1 control-label">8层</label>
+				<div class="col-sm-2">
+					<div class="input-group"  style="float:left">
+						<input class="form-control" type="text" name="dat[level_money8]" value="{$settings['level_money8']}">
+						<span class="input-group-addon">元</span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-1 control-label">9层</label>
+				<div class="col-sm-2">
+					<div class="input-group"  style="float:left">
+						<input class="form-control" type="text" name="dat[level_money9]" value="{$settings['level_money9']}">
+						<span class="input-group-addon">元</span>
+					</div>
+				</div>
+				<label class="col-sm-1 control-label">10层</label>
+				<div class="col-sm-2">
+					<div class="input-group"  style="float:left">
+						<input class="form-control" type="text" name="dat[level_money10]" value="{$settings['level_money10']}">
+						<span class="input-group-addon">元</span>
+					</div>
+				</div>
+				<label class="col-sm-1 control-label">11层</label>
+				<div class="col-sm-2">
+					<div class="input-group"  style="float:left">
+						<input class="form-control" type="text" name="dat[level_money11]" value="{$settings['level_money11']}">
+						<span class="input-group-addon">元</span>
+					</div>
+				</div>
+				<label class="col-sm-1 control-label">12层</label>
+				<div class="col-sm-2">
+					<div class="input-group"  style="float:left">
+						<input class="form-control" type="text" name="dat[level_money12]" value="{$settings['level_money12']}">
+						<span class="input-group-addon">元</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading">微信支付证书</div>
+		<div class="panel-body">
+				<div class='alert alert-info'>
+                  	请先到 <a href='{php echo url('profile/payment')}'>支付选项</a> 去设置好参数。
+                </div>
+				<div id='certs'>
+                     <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">CERT证书文件</label>
+                        <div class="col-sm-9 col-xs-12">
+                            <input type="hidden" name="dat[weixin_cert]" value="{$settings['weixin_cert']}"/>
+                            
+
+                            <input type="file" name="weixin_cert_file" class="form-control" />
+                            <span class="help-block">
+                                {if !empty($settings['weixin_cert'])}
+                                <span class='label label-success'>已上传</span>
+                                {else}
+                                <span class='label label-danger'>未上传</span>
+                                {/if}
+                                下载证书 cert.zip 中的 apiclient_cert.pem 文件</span>
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">KEY密钥文件</label>
+                        <div class="col-sm-9 col-xs-12">
+                            <input type="hidden" name="dat[weixin_key]"  value="{$settings['weixin_key']}"/>
+                            
+
+                            <input type="file" name="weixin_key_file" class="form-control" />
+                            <span class="help-block">
+                                {if !empty($settings['weixin_key'])}
+                                <span class='label label-success'>已上传</span>
+                                {else}
+                                <span class='label label-danger'>未上传</span>
+                                {/if}
+                                下载证书 cert.zip 中的 apiclient_key.pem 文件
+                            </span>
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">ROOT文件</label>
+                        <div class="col-sm-9 col-xs-12">
+                            <input type="hidden" name="dat[weixin_root]" value="{$settings['weixin_root']}"/>
+                            
+
+                            <input type="file" name="weixin_root_file" class="form-control" />
+                            <span class="help-block">
+                                {if !empty($settings['weixin_root'])}
+                                <span class='label label-success'>已上传</span>
+                                {else}
+                                <span class='label label-danger'>未上传</span>
+                                {/if}
+                                下载证书 cert.zip 中的 rootca.pem.pem 文件 
+                            </span>
+                            
+                        </div>
+                    </div>
+                </div>
+		</div>
+	</div>
+	
+    <div class="panel panel-default">
+		<div class="panel-heading">推荐关注有礼设置</div>
+		<div class="panel-body">
+				<div class="form-group">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启提现</label>
+                    <div class="col-sm-9 col-xs-12">
+                     	<label class="radio-inline">
+							<input type="radio" value="0" name="dat[open_c]" {if $settings['open_c']==0}checked=""{/if}> 关闭
+						</label>
+						<label class="radio-inline">
+							<input type="radio" value="1" name="dat[open_c]" {if $settings['open_c']==1}checked=""{/if}> 开启
+						</label>
+                    </div>
+                </div>
+				
+				<div class="form-group">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">最低提现金额（元）</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="dat[min_tixian]" value="{$settings['min_tixian']}" class="form-control">
+                     <span class="help-block">不填，默认为1元</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">提现手续费（%）</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="dat[tixian_cut]" value="{$settings['tixian_cut']}" class="form-control">
+                     <span class="help-block">不填表示没有手续费(填写0-100的任意数字，例如：填写1，表示1%)</span>
+                    </div>
+                </div>
+				
+				<div class="form-group">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">关注后送红包金额（元）</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="dat[gz_min_amount]" value="{$settings['gz_min_amount']}" class="form-control">
+                     <span class="help-block">关注后送红包金额（存入用户余额），0元或不填表示不送</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">推荐别人关注获得的红包最小金额（元）</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="dat[min_money]" value="{$settings['min_money']}" class="form-control">
+                     <span class="help-block">拉人关注获得的红包(元为单位)（存入用户余额），0元或不填表示不送</span>
+                    </div>
+                </div> 
+                
+                <div class="form-group">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">推荐别人关注获得的红包最大金额（元）</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="dat[min_money1]" value="{$settings['min_money1']}" class="form-control">
+                     <span class="help-block">拉人关注获得的红包(元为单位)（存入用户余额），0元或不填表示不送</span>
+                    </div>
+                </div> 
+				
+		</div>
+	</div>
+    
+	<div class="form-group">
+		<div class="col-sm-12">
+			<input name="token" type="hidden" value="{$_W['token']}" />
+			<input type="submit" class="btn btn-primary col-lg-1" name="submit" value="提交" />
+		</div>
+	</div>
+	</form>
+</div>
+
+{template 'common/footer'}

@@ -284,8 +284,7 @@ class We7_albumModuleSite extends WeModuleSite {
         $params = array(':weid' => $_W['uniacid']);
 
         if (empty($pcate) && empty($ccate)) {
-            $sql = 'SELECT * FROM ' . tablename('album_category') . $where . ' AND `enabled` = :enabled ORDER BY
-                    `displayorder` DESC LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
+            $sql = 'SELECT * FROM ' . tablename('album_category') . $where . ' AND `enabled` = :enabled AND `parentid` = 0 ORDER BY `displayorder` DESC';
             $params[':enabled'] = 1;
             $categories = pdo_fetchall($sql, $params, 'id');
 
@@ -296,13 +295,19 @@ class We7_albumModuleSite extends WeModuleSite {
                     } else {
                         $categories[$key]['url'] = $this->createMobileUrl('list', array('pcate' => $category['parentid'], 'ccate' => $category['id']));
                     }
-                    if ($category['parentid'] > 0) {
-                        $categories[$category['parentid']]['children'][] = $categories[$key];
-                        unset($categories[$key]);
+                    $child_sql = 'SELECT * FROM ' . tablename('album_category') . $where . ' AND `enabled` = :enabled  AND `parentid` = :parentid ORDER BY `displayorder` DESC';
+                    $child_params = array(
+                            ':weid' => $_W['uniacid'],
+                            ':enabled' => 1,
+                            ':parentid' => $category['id']
+                        );
+                    $child_categories = pdo_fetchall($child_sql, $child_params, 'id');
+                    foreach ($child_categories as $child_key => $value) {
+                        $child_categories[$child_key]['url'] = $this->createMobileUrl('list', array('pcate' => $value['parentid'], 'ccate' => $value['id']));
                     }
+                    $categories[$key]['children'] = $child_categories;
                 }
             }
-
             $show_category = true;
         } else {
             $condition = "";

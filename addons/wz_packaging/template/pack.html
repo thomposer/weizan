@@ -1,0 +1,90 @@
+{template 'common/header'}
+<div class="main">
+{if !empty($iframe)}
+    <div class="clearfix">
+				<iframe src="{$iframe}" marginheight="0" marginwidth="0" frameborder="0" width="100%" style="height:1020px;" scrolling="no" allowTransparency="true"></iframe>
+	</div>
+{else}
+	<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
+		<div class="panel panel-default">
+		    <div class="panel-heading">
+                模块云打包
+            </div>
+			<div class='alert alert-warning' style='font-size:14px'>
+			[温馨提示]:部分插件比较大，可能需要耐心等待一段时间！很多的模块数据表是以模块标识开头的，因此可以用模块的标识或者标识的部分作为关键词进行搜索从而锁定数据表。当然这个并非绝对，具体请以实际情况为准
+			</div>
+			<div class='panel-body'>
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">选择要打包的模块</label>
+				<div class="navbar-form navbar-right" role="search">
+					
+				</div>
+				
+				<div>
+					<div id="search-module" style="width:50%;">
+						<input type="text" name="keyword" style="width:50%;" placeholder="输入关键词搜索模块"/>
+				    </div>
+					<select name="mname" class="form-control" id="name" style="width:50%;">
+						<option value="">--请选择，要打包的模块--</option>
+						{loop $modules $key $module}
+						<option class="iteme" data-title={$module['title']} value="{$module['name']}">{$module['title']}(标识：{$module['name']})</option>
+						{/loop}
+					</select>
+				</div>
+			</div>
+			<div class="form-group" id='sql' >
+				<label class="col-xs-12 col-sm-3 col-md-2 control-label">选择该模块的数据表</label>
+				<div id="search-sql" style="width:50%;">
+					<input type="text" name="keyword" style="width:50%;" placeholder="输入关键词搜索数据表"/>
+				</div>
+
+				<div class="form-control" style="width:50%;height:400px;overflow:auto;">
+				 {loop $tables  $tab}
+				    <div class="sqls" data-title={$tab[$tbj]}><input type="checkbox" name="tables[]" value="{$tab[$tbj]}" />{$tab[$tbj]}</div>
+				{/loop}
+				
+				</div>
+
+				<!--<div class="col-sm-8 col-lg-9 col-xs-12">
+					<input name="sql" type="text" class="form-control" placeholder="输入要打包的模块数据表名称,以空格隔开">
+				</div> -->
+			</div>
+		    <div class="form-group col-sm-12">
+			        <input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1" />
+			        <input type="hidden" name="token" value="{$_W['token']}" />
+		    </div>
+		</div>
+	</div>
+	</form>
+	<script type="text/javascript">
+	require(['bootstrap'],function(){
+			$('#search-module input').keyup(function() {
+				var a = $(this).val();
+				$('.iteme').hide();
+				$('.iteme').each(function() {
+					if(a.length > 0 && $(this).attr('data-title').indexOf(a) >= 0) {
+					$(this).show();
+					}
+				});
+				if(a.length ==0) {
+					$('.iteme').show();
+				}
+			});
+			$('#search-sql input').keyup(function() {
+				var a = $(this).val();
+
+				$('.sqls').hide();
+				$('.sqls').each(function() {
+					if(a.length > 0 && $(this).attr('data-title').indexOf(a) >= 0) {
+				$(this).show();
+					}
+				});
+				if(a.length ==0) {
+					$('.sqls').show();
+				}
+			});
+		})
+	</script>
+{/if}
+</div>
+{template 'common/footer'}

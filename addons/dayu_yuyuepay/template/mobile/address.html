@@ -1,89 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<title>{if !empty($title)}{$title} - {elseif !empty($_W['page']['title'])}{$_W['page']['title']} - {/if}{if !empty($_W['page']['sitename'])}{$_W['page']['sitename']}{else}{$_W['account']['name']}{/if}</title>
-	<meta name="format-detection" content="telephone=no, address=no">
-	<meta name="apple-mobile-web-app-capable" content="yes" /> <!-- apple devices fullscreen -->
-	<meta name="apple-touch-fullscreen" content="yes"/>
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-	<meta name="keywords" content="{$_W['page']['keywords']}" />
-	<meta name="description" content="{$_W['page']['description']}" />
-	<link rel="shortcut icon" href="{$_W['siteroot']}{$_W['config']['upload']['attachdir']}/{if !empty($_W['setting']['copyright']['icon'])}{$_W['setting']['copyright']['icon']}{else}images/global/wechat.jpg{/if}" />
-	<script type="text/javascript" src="{$_W['siteroot']}app/resource/js/app/util.js"></script>
-	<script src="{$_W['siteroot']}app/resource/js/require.js"></script>
-	<script src="{$_W['siteroot']}app/resource/js/app/config.js"></script>
-	<script type="text/javascript" src="{$_W['siteroot']}app/resource/js/lib/jquery-1.11.1.min.js"></script>
-	<script type="text/javascript" src="{$_W['siteroot']}app/resource/js/lib/mui.min.js"></script>
-	<script type="text/javascript" src="{$_W['siteroot']}app/resource/js/app/common.js"></script>
-    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-	<script src="{TEMPLATE_WEUI}js/jquery-2.1.4.js"></script>
-	<script src="{TEMPLATE_WEUI}js/jquery-weui.min.js"></script>
-	<link rel="stylesheet" href="{TEMPLATE_WEUI}style/weui.min.css">
-	<link rel="stylesheet" href="{TEMPLATE_WEUI}style/weui.css"/>
-	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=2700be6aa0fd672d91bd3b8a50e743ac"></script>
-	<script type="text/javascript">
-	if(navigator.appName == 'Microsoft Internet Explorer'){
-		if(navigator.userAgent.indexOf("MSIE 5.0")>0 || navigator.userAgent.indexOf("MSIE 6.0")>0 || navigator.userAgent.indexOf("MSIE 7.0")>0) {
-			alert('您使用的 IE 浏览器版本过低, 推荐使用 Chrome 浏览器或 IE8 及以上版本浏览器.');
-		}
-	}
-	window.sysinfo = {
-		{if !empty($_W['uniacid'])}'uniacid': '{$_W['uniacid']}',{/if}
-		{if !empty($_W['acid'])}'acid': '{$_W['acid']}',{/if}{if !empty($_W['openid'])}'openid': '{$_W['openid']}',{/if}
-		{if !empty($_W['uid'])}'uid': '{$_W['uid']}',{/if}
-		'siteroot': '{$_W['siteroot']}',
-		'siteurl': '{$_W['siteurl']}',
-		'attachurl': '{$_W['attachurl']}',
-		'attachurl_local': '{$_W['attachurl_local']}',
-		'attachurl_remote': '{$_W['attachurl_remote']}',
-		{if defined('MODULE_URL')}'MODULE_URL': '{MODULE_URL}',{/if}
-		'cookie' : {'pre': '{$_W['config']['cookie']['pre']}'}
-	};
-	// jssdk config 对象
-	jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} || {};
-	// 是否启用调试
-	jssdkconfig.debug = false;
-	jssdkconfig.jsApiList = [
-		'checkJsApi',
-		'onMenuShareTimeline',
-		'onMenuShareAppMessage',
-		'onMenuShareQQ',
-		'onMenuShareWeibo',
-		'hideMenuItems',
-		'showMenuItems',
-		'hideAllNonBaseMenuItem',
-		'showAllNonBaseMenuItem',
-		'translateVoice',
-		'startRecord',
-		'stopRecord',
-		'onRecordEnd',
-		'playVoice',
-		'pauseVoice',
-		'stopVoice',
-		'uploadVoice',
-		'downloadVoice',
-		'chooseImage',
-		'previewImage',
-		'uploadImage',
-		'downloadImage',
-		'getNetworkType',
-		'openLocation',
-		'getLocation',
-		'hideOptionMenu',
-		'showOptionMenu',
-		'closeWindow',
-		'scanQRCode',
-		'chooseWXPay',
-		'openProductSpecificView',
-		'addCard',
-		'chooseCard',
-		'openCard'
-	];
-	</script>
-</head>
-<body>
+{template 'welocation'}
 <style type='text/css'>
 	#poptip { position: fixed; top:40%;left:50%;width:160px;margin-left:-80px;height: 27px;background:#000; opacity: 0.7;filter:alpha(opacity=0.7); color:#fff;z-index: 999;  border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;}
 	#poptip_content { position: fixed; top:40%;left:50%;width:160px;margin-left:-80px; height: 27px; color:#fff;text-align:center;font-size:14px;z-index: 9909}
@@ -115,44 +30,48 @@ function tip_close(){
 body{background-color:#f0f0f0;}
 h4 span{font-weight:300;font-size:12px;}
 
-.shopcart-main{background:#fcfcfc;color:#999;}
-.shopcart-main1{background:#e0f2f1;color:#333}
+.address-main{background:#fff;color:#999;}
+.address-main1{background:#e3fbfe;color:#333}
 
-.shopcart-footer{width:100%; height:40px; line-height:40px; color:#FFF; padding:0 10px; background:#6d7081; position:fixed; bottom:45px; left:0; filter:alpha(opacity=95); opacity:.95; font-weight:bold;}
-.shopcart-footer .btn{margin-top:3px;}
 .addadd{margin:10px 0 0;}
+.weui_media_box {padding:5px 15px 10px;}
+.weui_media_box.weui_media_text .weui_media_info {
+  margin-top: 10px;
+  padding-bottom: 0px;
+  font-size: 13px;
+  color: #CECECE;
+  line-height: 1em;
+  list-style: none;
+  overflow: hidden;
+}
+.weui_media_box.weui_media_text .weui_media_title {margin-bottom: 0px;}
+.weui_media_box .weui_media_desc {font-size: 13px;line-height: 1.2;}
+.weui_media_desc{padding:0;}
 </style>
-<div class="weui_btn_primary weui-header "> 
+<div class="bg-blue weui-header "> 
 	<div class="weui-header-left"><a class="iconfont f-white f18" href="javascript:history.back();">&#xe60c;</a></div>
 		<h1 class="weui-header-title">我的联系方式</h1>
 	<div class="weui-header-right"><a class="icon icon-10 f-white"></a></div> 
-</div>
-
-<div class="weui_tab">
-    <div class="weui_tab_bd">
+</div>  
+<div class="weui_tab_bd">
 <form class="form-horizontal" method="post" role="form">
 	<input type="hidden" name="goodstype" value="{$goodstype}" />
-		<div id="myaddress">
+	
+		<div class="weui_panel weui_panel_access" style="margin:0;">
+		<div id="myaddress" class="weui_panel_bd">
 		{loop $addresses $row}
-		<div id="address_{$row['id']}" class="weui_panel {if $row['isdefault']==1}shopcart-main1{else}shopcart-main{/if} address_item" onclick="editAddress({$row['id']},{php echo $row['isdefault']==1?'1':'0'})">
-            <div class="weui_panel_bd">
-                <div class="weui_media_box weui_media_text">
-                    <h4 class="weui_media_title">{$row['username']} <span class="iconfont f14 tright">&#xe601; {$row['mobile']}</span></h4>
-                    <p class="weui_media_desc"><i class="iconfont f12">&#xe60e;</i> {$row['province']} {$row['city']} {$row['district']} {$row['address']}</p>
-                    <ul class="weui_media_info">
-                        <li class="weui_media_info_meta"><a href="javascript:;" onclick='editAddress({$row['id']},{php echo $row['isdefault']==1?'1':'0'})' class="weui_btn weui_btn_mini weui_btn_default"><i class="iconfont">&#xe627;</i> 修改</a></li>
-                        <li class="weui_media_info_meta"><a href="javascript:;" onclick="removeAddress(event,{$row['id']})" class="weui_btn weui_btn_mini weui_btn_default"><i class="iconfont">&#xe625;</i> 删除</a></li>
-                        <li class="weui_media_info_meta weui_media_info_meta_extra"><a href="javascript:;" onclick="saveDefaultAddress(event,{$row['id']})" class="weui_btn weui_btn_mini weui_btn_primary right"><i class="iconfont">&#xe626;</i> 设为默认</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+			<div id="address_{$row['id']}" class="weui_media_box weui_media_text {if $row['isdefault']==1}address-main1{else}address-main{/if} address_item" onclick="editAddress({$row['id']},{php echo $row['isdefault']==1?'1':'0'})">
+				<h4 class="weui_media_title">{$row['username']} <span class="iconfont f14 tright">&#xe601; {$row['mobile']}</span></h4>
+				<div class="weui_media_desc">{$row['province']} {$row['city']} {$row['district']} {$row['address']}</div>
+				<ul class="weui_media_info">
+					<li class="weui_media_info_meta"><a href="javascript:;" onclick='editAddress({$row['id']},{php echo $row['isdefault']==1?'1':'0'})' class="weui_btn weui_btn_mini weui_btn_default"><i class="iconfont f12">&#xe627;</i> 修改</a></li>
+					<li class="weui_media_info_meta"><a href="javascript:;" onclick="removeAddress(event,{$row['id']})" class="weui_btn weui_btn_mini weui_btn_default"><i class="iconfont f12">&#xe625;</i> 删除</a></li>
+					<li class="weui_media_info_meta weui_media_info_meta_extra"><a href="javascript:;" onclick="saveDefaultAddress(event,{$row['id']})" class="weui_btn weui_btn_mini weui_btn_primary right"><i class="iconfont f12">&#xe626;</i> 设为默认</a></li>
+				</ul>
+			</div>
 		{/loop}
-        <div class="weui_btn_area">
-		<div class="row">
-		<div class="col-40"><a class="weui_btn weui_btn_primary f-white" href="javascript:history.back();">&#xe60c; 返回</a></div>
-		<div class="col-60"><button type="button" class="weui_btn bg-blue" onclick="addAddress()"><i class="fa fa-plus"></i> 添加联系方式</button></div>
 		</div>
+			<a href="javascript:void(0);" class="weui_panel_ft bold f-black" onclick="addAddress()"><i class="iconfont f-blue f14">&#xe616;</i> 添加联系方式</a>
 		</div>
 		
 		<div class="add-address" id="addAddressPanel" {if !empty($addresses)} style="display:none;"{/if}>
@@ -170,7 +89,7 @@ h4 span{font-weight:300;font-size:12px;}
             <input class="weui_input" id="mobile" name="mobile" type="tel" placeholder="请输入联系电话">
         </div>
     </div>
-	{if $activity['smsid']!=0}
+	{if $setting['smsid']}
     <div class="weui_cell">
 		<input type="hidden" id="htel">
 		<input type="hidden" id="hsms">
@@ -208,7 +127,7 @@ h4 span{font-weight:300;font-size:12px;}
 			}else{
 				$('#mobile').attr('readonly',true);
 				var submitData = {};
-				$.post("{php echo murl('entry', array('do' => 'SendSms', 'id' => $activity['smsid'], 'm' => 'dayu_sms'), true, true)}"+"&mobile="+$("#mobile").val(), submitData,function(data){
+				$.post("{php echo murl('entry', array('do' => 'SendSms', 'id' => $setting['smsid'], 'm' => 'dayu_sms'), true, true)}"+"&mobile="+$("#mobile").val(), submitData,function(data){
 					if(data.message.state == 1) {
 						$("#htel").val(data.message.mobile);
 						$("#hsms").val(data.message.yzm);
@@ -241,6 +160,10 @@ h4 span{font-weight:300;font-size:12px;}
         <div class="weui_cell_bd weui_cell_primary">
             <input class="weui_input" id="address" type="text" name="gpsaddress" placeholder="请输入详细地址">
         </div>
+		{if $setting['qqkey']}
+		<span class="weui_cell_ft"><a href="javascript:void(0);" onclick="getLocation(this);" class="iconfont f-red f18">&#xe60e;</a></span>
+		<script type="text/javascript" src="{TEMPLATE_WEUI}js/QQgetLocation.js"></script>
+		{/if}
     </div>
 
 	<div class="weui_cell row">
@@ -250,10 +173,8 @@ h4 span{font-weight:300;font-size:12px;}
 	</div>
 			</div>
 		</div>
-</div>
 </form>
 	</div>
-</div>
 <script type="text/javascript" src="../app/resource/components/area/cascade.js"></script>
 <script type="text/javascript">
 	var from='{$_GPC['from']}';
@@ -321,7 +242,7 @@ h4 span{font-weight:300;font-size:12px;}
 				}
 				$("input [name='address']").attr('checked', false);
 				
-				var html='<div class="weui_panel shopcart-main1 address_item" onclick="editAddress(' + s.message +')">';
+				var html='<div class="weui_panel address-main1 address_item" onclick="editAddress(' + s.message +')">';
 				var html1='<div class="weui_panel_bd">' +
 					'<div class="weui_media_box weui_media_text">' +
 					'<h4 class="weui_media_title">' +realname+' <span class="iconfont f14 tright">&#xe601; '+mobile+'</span></h4>' +
@@ -336,7 +257,7 @@ h4 span{font-weight:300;font-size:12px;}
 				if ($('#address_'+s.message).get(0)) {
 					$('#address_'+s.message).html(html1);
 				} else {
-					$(".address_item").removeClass("shopcart-main1").addClass("shopcart-main");
+					$(".address_item").removeClass("address-main1").addClass("address-main");
 					$('#myaddress').append($(html + html1 + html2));
 				}
 
@@ -363,8 +284,8 @@ h4 span{font-weight:300;font-size:12px;}
 		$.post('{php echo $this->createMobileUrl('address', array('op' => 'default'))}', {
 			'id' : id,
 		}, function(s) {
-			$(".address_item").removeClass("shopcart-main1").addClass("shopcart-main");
-			$("#address_"+id).addClass("shopcart-main1");
+			$(".address_item").removeClass("address-main1").addClass("address-main");
+			$("#address_"+id).addClass("address-main1");
 			tip_close();
 		}, 'json');
 		e.stopPropagation() ;
@@ -378,8 +299,8 @@ h4 span{font-weight:300;font-size:12px;}
 					function(s) {
 						$("#address_"+id).remove();
 						if(s.maxid!='0'){
-							$(".address_item").removeClass("shopcart-main1").addClass("shopcart-main");
-							$("#address_"+s.maxid).addClass("shopcart-main1");
+							$(".address_item").removeClass("address-main1").addClass("address-main");
+							$("#address_"+s.maxid).addClass("address-main1");
 						}
 						tip_close();
 					},
@@ -419,4 +340,5 @@ h4 span{font-weight:300;font-size:12px;}
 	}
 </script>
 {php $footer_off = 1;}
+{php $share = 1;}
 {template 'footers'}

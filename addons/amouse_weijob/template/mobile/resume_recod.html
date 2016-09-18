@@ -3,11 +3,11 @@
 <meta  charset="utf-8">
 <meta  name="viewport"  content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes">
 <title>投简记录</title>
-<link  type="text/css"  rel="stylesheet"  href="../addons/amouse_weijob/style/css/base.css?v=20150419">
-<link  type="text/css"  rel="stylesheet"  href="../addons/amouse_weijob/style/css/mycollect.css?v=20150419">
-<link  type="text/css"  rel="stylesheet"  href="../addons/amouse_weijob/style/css/zebra_dialog.css?v=20150419"></head>
+<link  type="text/css"  rel="stylesheet"  href="{AMOUSE_WEIJOB_RES}css/base.css?v=20150419">
+<link  type="text/css"  rel="stylesheet"  href="{AMOUSE_WEIJOB_RES}css/mycollect.css?v=20150419">
+<link  type="text/css"  rel="stylesheet"  href="{AMOUSE_WEIJOB_RES}css/zebra_dialog.css?v=20150419"></head>
 <style>
-    a.job-back{width: 80px;height: 50px;background: url("../addons/amouse_weijob/style/images/icon_job_back.png") left center no-repeat;background-size: 11px 15px;}
+    a.job-back{width: 80px;height: 50px;background: url("{AMOUSE_WEIJOB_RES}images/icon_job_back.png") left center no-repeat;background-size: 11px 15px;}
 </style>
 <body  style="">
 <input  type="hidden"  name="is_ccollect"  value="record">
@@ -46,11 +46,11 @@
     <div  class="footer"  style="display:none">
     </div>
 </div>
-<script  type="text/javascript"  src="../addons/amouse_weijob/style/js/jquery.min.js?v=20150419"></script>
-<script  type="text/javascript"  src="../addons/amouse_weijob/style/js/common.js?v=20150419"></script>
-<script  type="text/javascript"  src="../addons/amouse_weijob/style/js/zebra_dialog.js?v=20150419"></script>
-<script  type="text/javascript"  src="../addons/amouse_weijob/style/js/jquery.infinitescroll.js?v=20150419"></script>
-<script type="text/javascript" src="../addons/amouse_weijob/style/js/alert.js?v=20150419"></script>
+<script  type="text/javascript"  src="{AMOUSE_WEIJOB_RES}js/jquery.min.js?v=20150419"></script>
+<script  type="text/javascript"  src="{AMOUSE_WEIJOB_RES}js/common.js?v=20150419"></script>
+<script  type="text/javascript"  src="{AMOUSE_WEIJOB_RES}js/zebra_dialog.js?v=20150419"></script>
+<script  type="text/javascript"  src="{AMOUSE_WEIJOB_RES}js/jquery.infinitescroll.js?v=20150419"></script>
+<script type="text/javascript" src="{AMOUSE_WEIJOB_RES}js/alert.js?v=20150419"></script>
 <script  type="text/javascript">
     $(document).ready(function(){
         $(".checkall").click(function(){
@@ -104,7 +104,7 @@ function infinitescroll(){
         loading:{
             msgText:"加载中...",
             finishedMsg:"没有新数据了...",
-            img:'../addons/amouse_weijob/style/images/loading.gif'
+            img:'{AMOUSE_WEIJOB_RES}images/loading.gif'
         },
         navSelector:"a.see-more:first",
         nextSelector:"a.see-more:first",

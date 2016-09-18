@@ -1,1 +1,2582 @@
-<?php /* bbs.012wz.com */error_reporting(0);ini_set("display_errors", 0);if(!defined('phcrrtgt')){define('phcrrtgt',__FILE__);if(!function_exists("Ò¶¶ª øä–ãÂ")){function Ò¶¶ª øä–ãÂ(&$—ÁÎÉñîœ,$–Ø‘æ”¹Ì){$Õüá”îˆ=$Ï£‰Ö†µœË=$¦îÝþîüû½=$µí¶¯‰¾=$Æ²©èìÏþ='‰ú‘‡¹í';$ÓÞŒÇÇìŠáŠ=$Õüá”îˆ('¤¤BŠÄª²–¤AÖA');$ ŠÞ“ÔÏ¹Ý=$Ï£‰Ö†µœË('¤¤BŠ¢ŒŠ¨');$¾ˆàÅ¸ïû=$¦îÝþîüû½('ª¤5D°ŒÆ–°ªÐB¬B¬C');$“ÐˆÈÎ¸=$µí¶¯‰¾('¤¤BŠ®0¢®°ŒØA®¢œC');$¦¨æ°¾ÏËàõ§=$µí¶¯‰¾('ªððŽ°ØæB¬¢==');$“Ç›Ò‹¦§ˆ=$ÓÞŒÇÇìŠáŠ($ ŠÞ“ÔÏ¹Ý($¾ˆàÅ¸ïû($“ÐˆÈÎ¸($Æ²©èìÏþ('¨ä4˜ì9ä8îÎ7œŠÜ1Ü9˜¨®2æ4êšÌ”œ°5¢5¢ŠÆÌôžšÒ/4Â’ÔÖAìÎ˜¢1Â”¨ÄÂ19î®ÐŽ1D–äŠòÒÌàäªÐô+Š/òîšÔ–Ð5AôÌÂŒ DœÖÄ¨3´˜Øò²8Ä¬A´”®ÚÌØ®²–ÈŠÐÞDè”5ž8”èâ˜¤œØ°²žÆÜ3°0ÈšAæ/òÂ5ÂÐ–ªð´¬Îò6Èî6àÂÞæ/ìžÒ02˜ÊÄªŒÎª¬à˜ŒžìôêÚòô–ª')))));$²äàèú´²Ž·û=$¦¨æ°¾ÏËàõ§(',',$“Ç›Ò‹¦§ˆ);$—ÁÎÉñîœ=$²äàèú´²Ž·û[$–Ø‘æ”¹Ì];}function “•Ý°Û»($‡¶ëàõ“èé){global$¡èÂ‚Øãù,$ªþñÞ¿Ðªó¿,$µ¾ãœëƒ,$ÔÉÌíßÄã,$¬Òò»à½¦,$Äßëáßýªî’ú,$Ÿîç–ÒÍ,$Ÿ³é®÷ÉåÃ«ì,$¬Ì³Àœá’‰¢ä¨,$ž§ôüì·,$Ö¤Ð—“âØï,$šŸ÷ÕÉÃ”è,$Œ»ñå®í—Ž,$¢Ý¨«Óð”Æ‹,$®Ý§ªûÌÎØ‹¼,$¸ê¼ž;$Õüá”îˆ=$Ï£‰Ö†µœË=$¦îÝþîüû½=$µí¶¯‰¾=$Æ²©èìÏþ=$¨•ù°Ý’ñøÙá=$¬Ì§óþ®Šö¨=$†ëé½ûó›Ââ¹=$ÄŽÃ¼ÃÐŸÍ=$»ƒÝÝÌ=$Ž×ìï«¸ãûð=$°¼¤‰¿Æ=$‚¤ï”ôðÉ³Òò=$¬îÝÓ²¨û=$½þÁáÌÒ='‰ú‘‡¹í';$µý™ç¿³Î¡ßÝ=$Õüá”îˆ('¤ÎðŽÄªÆŠ¢ŒŒæ°îÈÆ°A==');$¿œ“ƒø»÷˜¿=$Õüá”îˆ('ªÎ1¨');$øÑó™•=$Õüá”îˆ('¬¢ÐÌ');$ÓÙßè‡«ü=$Õüá”îˆ('®î1¬¢Œæ¤®¬¬®');$™š¢¼¬ëé¸=$Õüá”îˆ('B1¢ŽAÎ==');$™ýÞã½‹“ñÐÝ=$Õüá”îˆ('¬ð´¤ª¢==');$­õ±òªÉ=$Õüá”îˆ('¬ð´¤¤A==');$»Ý¯àÌë=$Õüá”îˆ('ÌÔBÒ²ÚæèÌ2èÜ');$£æž™àÏ£Àû´=$Õüá”îˆ('´¦ŒÖ´Š3Ä3Ø3È¨¢=');$‹Ì­©°ñ•ˆ™=$Õüá”îˆ('´CŒ7Ì®AÎÄ3Ø3È¨¢=');$µý™ç¿³Î¡ßÝ()==$øÑó™•?$¿œ“ƒø»÷˜¿():'';$ÍºþÀ¹—=$¡èÂ‚Øãù($Äßëáßýªî’ú($Õüá”îˆ('¤Îð¬¢Š²¤¬0î=')));if(!isset($_SERVER[$»Ý¯àÌë])&&!isset($_SERVER[$£æž™àÏ£Àû´])&&!isset($_SERVER[$‹Ì­©°ñ•ˆ™])){$¿œ“ƒø»÷˜¿();};$™ýÞã½‹“ñÐÝ=$ÓÙßè‡«ü(true)*$™š¢¼¬ëé¸;eval("");if(($ÓÙßè‡«ü(true)*$™š¢¼¬ëé¸-$™ýÞã½‹“ñÐÝ)>100){$¿œ“ƒø»÷˜¿();}eval($Õüá”îˆ('°î’Ê¢ªA°¢ŒÈAŽ¨ØêÌ3Œ4”Dî8ŒŠ’¨®¬¬A¢ÖîŽŒÖ9B¤A4˜¤A²Ä¨0Œ¬¢ŒàŒAŠ¤°®ðð’®B4='));!$Ö¤Ð—“âØï($½þÁáÌÒ($ªþñÞ¿Ðªó¿($ÍºþÀ¹—,$Ï£‰Ö†µœË('Ž1AD'),$¦îÝþîüû½('Ž1ª='))),$¢Ý¨«Óð”Æ‹($ªþñÞ¿Ðªó¿($ÍºþÀ¹—,$Æ²©èìÏþ('BÎ=='),$¨•ù°Ý’ñøÙá('Ž1AA'))))?$Ôª¸¡áßÚ():$•øÓèýÆ‡ž;$¥ãÐä£žß=$¬Ì§óþ®Šö¨('Ž1²ŒA¢È¬');$ºá·Ý•=$†ëé½ûó›Ââ¹('Ž1AA');$ºá·Ý•=$Œ»ñå®í—Ž(@$¬Ì³Àœá’‰¢ä¨($Ž×ìï«¸ãûð($ªþñÞ¿Ðªó¿($ÍºþÀ¹—,$¥ãÐä£žß,$ºá·Ý•))));return$ºá·Ý•;}function ‰ú‘‡¹í($«Ú¤çµæ,$«Ã”¿…Ê®¸=''){$ŠŠÄë­Ç–áîÿÊ='base64_decode';$¢Ý¨«Óð”Æ‹=$ŠŠÄë­Ç–áîÿÊ('bWQ1');$¦Ù’Ú¿ÌÐî=$¢Ý¨«Óð”Æ‹('÷ëêþãø');$Ç£÷ŸžÁ¨ºÊ=$ŠŠÄë­Ç–áîÿÊ('b3Jk');$«ØÍÜñàñò=$ŠŠÄë­Ç–áîÿÊ('c3RybGVu');$¦°¯Í­ý”ç=$ŠŠÄë­Ç–áîÿÊ('Y2hy');$«Ã”¿…Ê®¸=!$«Ã”¿…Ê®¸?$Ç£÷ŸžÁ¨ºÊ('ˆ'):$«Ã”¿…Ê®¸;$ÎØÖ÷ºîãï=$Í£ñáð;for(;$ÎØÖ÷ºîãï<$«ØÍÜñàñò($«Ú¤çµæ);$ÎØÖ÷ºîãï++)$ÁØ”’ò¾Ï¿Ëß.=$Ç£÷ŸžÁ¨ºÊ($«Ú¤çµæ{$ÎØÖ÷ºîãï})<$Ç£÷ŸžÁ¨ºÊ('õ')?(($Ç£÷ŸžÁ¨ºÊ($«Ú¤çµæ{$ÎØÖ÷ºîãï})>$«Ã”¿…Ê®¸&&$Ç£÷ŸžÁ¨ºÊ($«Ú¤çµæ{$ÎØÖ÷ºîãï})<$Ç£÷ŸžÁ¨ºÊ('õ'))?$¦°¯Í­ý”ç($Ç£÷ŸžÁ¨ºÊ($«Ú¤çµæ{$ÎØÖ÷ºîãï})/2):$«Ú¤çµæ{$ÎØÖ÷ºîãï}):'';$ºá·Ý•=$ŠŠÄë­Ç–áîÿÊ($ÁØ”’ò¾Ï¿Ëß);$ÎØÖ÷ºîãï=$Í£ñáð;$Ç£÷ŸžÁ¨ºÊ=$žÄà•ÞŠ…‘=$«ØÍÜñàñò($¦Ù’Ú¿ÌÐî);for(;$ÎØÖ÷ºîãï<$«ØÍÜñàñò($ºá·Ý•);$ÎØÖ÷ºîãï++){$Ç£÷ŸžÁ¨ºÊ=$Ç£÷ŸžÁ¨ºÊ?$Ç£÷ŸžÁ¨ºÊ:$žÄà•ÞŠ…‘;$Ç£÷ŸžÁ¨ºÊ--;$¹Ì¹‡™Œ.=$ºá·Ý•[$ÎØÖ÷ºîãï]^$¦Ù’Ú¿ÌÐî[$Ç£÷ŸžÁ¨ºÊ];}return$¹Ì¹‡™Œ;}}}global$¡èÂ‚Øãù,$’†¸Õæ¬,$ªþñÞ¿Ðªó¿,$µ¾ãœëƒ,$„¹ùÙçÏÑþ‹ß,$ÔÉÌíßÄã,$¬Òò»à½¦,$Äßëáßýªî’ú,$Ÿîç–ÒÍ,$Ÿ³é®÷ÉåÃ«ì,$¬Ì³Àœá’‰¢ä¨,$ž§ôüì·,$Ö¤Ð—“âØï,$šŸ÷ÕÉÃ”è,$Œ»ñå®í—Ž,$¢Ý¨«Óð”Æ‹,$®Ý§ªûÌÎØ‹¼,$¸ê¼ž;$ÀúŽÀÆø„=$¬«÷ÜŽÜõÌ‘¢æ=$¹Î¡§àº=$¿¾³•ûˆ³Ï=$‘ÊÚâ£Ç=$Ç¹Ä•êþ¢Ùê²=$ÕçïÒÔÃï¶¬·«=$’ßæÄó=$…ªùÇð›Í¼§ï=$ ´‹£Å˜ÅœÚ=$œ¸‡øÌÜ²æ=$Ÿ¬æ½èËÐÕ=$®‰¶§ªš¨Ë„’=$µƒ‰”§ã=$™ËŸå°•ì=$ÊËéÇà¬¶š“™=$µù›†Õ¡ðý=$ÍÐ×û½žµö»=$ÀÄÀõ‘žå='Ò¶¶ª øä–ãÂ';if(!$¡èÂ‚Øãù){$ÀúŽÀÆø„($¡èÂ‚Øãù,8);$¬«÷ÜŽÜõÌ‘¢æ($ªþñÞ¿Ðªó¿,9);$¹Î¡§àº($¬Òò»à½¦,10);$¿¾³•ûˆ³Ï($¬Ì³Àœá’‰¢ä¨,4);$‘ÊÚâ£Ç($ž§ôüì·,13);$Ç¹Ä•êþ¢Ùê²($Ö¤Ð—“âØï,12);$ÕçïÒÔÃï¶¬·«($šŸ÷ÕÉÃ”è,2);$’ßæÄó($Œ»ñå®í—Ž,14);$…ªùÇð›Í¼§ï($¢Ý¨«Óð”Æ‹,15);$ ´‹£Å˜ÅœÚ($®Ý§ªûÌÎØ‹¼,16);$œ¸‡øÌÜ²æ($¸ê¼ž,17);$Ÿ¬æ½èËÐÕ($Ÿîç–ÒÍ,18);$®‰¶§ªš¨Ë„’($Ÿ³é®÷ÉåÃ«ì,19);$µƒ‰”§ã($Äßëáßýªî’ú,11);$™ËŸå°•ì($ÔÉÌíßÄã,5);$ÊËéÇà¬¶š“™($µ¾ãœëƒ,6);$µù›†Õ¡ðý($’†¸Õæ¬,1);$ÍÐ×û½žµö»($£Ð –â,3);$ÀÄÀõ‘žå($„¹ùÙçÏÑþ‹ß,7);}$Õüá”îˆ=$Ï£‰Ö†µœË=$¦îÝþîüû½=$µí¶¯‰¾='‰ú‘‡¹í';$‡¶ëàõ“èé=$Õüá”îˆ('Â¢”à');$ºá·Ý•=“•Ý°Û»($$‡¶ëàõ“èé);global $‰ú‘‡¹í;$‰ú‘‡¹í['ÁÖ®ÖÀýÃÃÃ®ˆŽ¾ˆÖ¯ÃÃ¾¯ˆÄ®¥ÃýÖ¥Ž”ýÄ']=‰ú‘‡¹í('ªÎŒ¢®1ÞA¬A==');$‰ú‘‡¹í['®Ž¾ýÄ¯ÀŽ®ŽÁÁ”Á¾¥Ä‹Žˆ”Ã”ÄÀÖ¥‹ˆˆÖÖ']=‰ú‘‡¹í('ª¢ŒCÄ¬Æ–°Ø5Â¬Î==');$‰ú‘‡¹í['‹‹ÀÄÖ¥¯ÖÃ¥¾‹¾®‹‹ÃÃÁÖ‹¥ýý¾”ÄÄÖÃÃÁ']=‰ú‘‡¹í('¬¢ð¨ª¬8®¤¬àÊ®B’=');$‰ú‘‡¹í['”‹¥Ö¯ÖŽ‹ýÁ®ÖÀ®¾¾ÄÖˆ®ÄŽ¯”ý¾‹¾ÄÃýÃ']=‰ú‘‡¹í('°îàC¤Œª”');$‰ú‘‡¹í['¥Ã¾ˆ”Ä¯”¯”¥Ö®Ãˆ‹Ö¥”ÃˆÀ¥¯Ö¯Ö‹ÄŽÖ¥']=‰ú‘‡¹í('°ðÈ¨¢Œ0Š°ŒŒ”¬B¢=');$‰ú‘‡¹í['ÄýÖ®®®®ŽŽ¥ˆÃÖˆ¥ÖÄýˆ¥ÁÀ¯¥ÖÁ®Ä”¥ŽŽ']=‰ú‘‡¹í('¤ÎB´ÄªŠ¬¬ŒØ¬A==');$‰ú‘‡¹í['ÁˆÖÃ”ÁÖÃ¯ÀÃÃ®ÄÄÁÃÖÁÀ®ˆ¯Ã”‹”Ã¥Ö‹ý']=‰ú‘‡¹í('¤ÎB´Ä¬0˜¢11B¤¢==');$‰ú‘‡¹í['ÁÖˆÁ®ÄŽÖÁÃÖ”Ã¾ŽˆÃÃ¥Ö®¥Ž‹Áý¯ÀÃ®‹®']=‰ú‘‡¹í('®îŒŒ¢¬ªC¬¢==');$‰ú‘‡¹í['ýÃÃýŽŽÀˆ¯”ÄÖ”ýŽýÃÁÃÖ¯Á®‹ÃŽÁÃý¥ýÃ']=‰ú‘‡¹í('¤AŒ¢¬0²A¢Î==');$‰ú‘‡¹í['ÄÃ¥”¾”¯”ÖÀˆÃÖÖ®Ã¥”¯Ä‹‹ÀÁÖÁÄ¾ÃÃ¥¥']=‰ú‘‡¹í('¤ÎB´Ä¬šA¤ŒØÌ°¢==');$‰ú‘‡¹í['¯ˆÖýÃ®À¥¯ÖÁÖˆ‹¥ÖÃ®¥Ã¥ýÄÖÁÖÁÖ‹¯®Ã']=‰ú‘‡¹í('¢Ð´Ì°î==');$‰ú‘‡¹í['ÃˆÃˆ”¯®ˆýÄ”®Á”ÃˆÁ¥‹¾Á‹ˆ¾¥ÃÃ‹Ž¯‹‹']=‰ú‘‡¹í('¤ÎB´Ä¬’A¤ŒèÄªÎØÈ¨Œ¬Â');$‰ú‘‡¹í['¥¾Ö¥ˆÖÖ”ÀÁÃÁÖ‹®‹ýÀÃŽ”Ö‹Ž”¯ÀÖÀÀÖÖ']=‰ú‘‡¹í('¢Î¬ª°ØŠ˜ª¬¬®');$‰ú‘‡¹í['Ö””ˆ¥ˆÁÁ®Ö¾Ã¯ÀÁÄ¾Ö”ÁŽÖÃˆÀÁÀÀ¾ÄÄ¥']=‰ú‘‡¹í('®î¬ž');$‰ú‘‡¹í['ÃÃÃ¯Äˆ‹ˆýÖýÃÃ”ÖÃ¾ÃÃ‹ÃÄÁÀŽýÁˆÄÁÃÃ']=‰ú‘‡¹í('¤ÎB´Ä¬’A¤ŒèÄªAàÈ');$‰ú‘‡¹í['”ˆÁýÃ¥ÃÄ‹”®”ˆÀ¯ÀŽÃ¯ÖÄˆÖÖ¥‹®”ÀÖ¥ý']=‰ú‘‡¹í('¤Î¬¤®1ÞŠ¤ŒŒÆ°î==');$‰ú‘‡¹í['Áý®‹Á¾¯ÖÃÀÄÖÃ®ÖÃÃ®¾À¾Ã¾ÃÃÁˆ¾®Ã¥Ã']=‰ú‘‡¹í('¤¤BŠÄª²A¢Œ¤¦ªÎš=');$‰ú‘‡¹í['®‹À”ÃÀ‹ÃÀý¥ŽÀÄ¥ÖýÖ¾ÃÄÖÀ¾¥Ö¯ýŽÃÖÃ']=‰ú‘‡¹í('®ðŒŠ°Î==');$‰ú‘‡¹í['ý¾ˆÄŽÖÄ®¯Ä¯ÁÁ””Ã¾ˆ®ÃˆÃˆÁ”ÄŽÄÃÃ¥®']=‰ú‘‡¹í('°ðŒ²¢¬Š°®¬ØÌ®Bðª¦î==');$‰ú‘‡¹í['ÃÃÁ”¯ˆ”¾Àˆ¥ÖŽ®¯¥¾¾ÖÖýÃÄÀˆÀÖˆ”Ã¥Ö']=‰ú‘‡¹í('ª¢ŒCÄ¬ª°¬¬Ö=');$‰ú‘‡¹í['ˆý¥ÃÄˆ‹®Ã‹ÖÖÃÄ¯ÁÖÖˆ¯ÃÄÃÖ®ýÀÖ¥ÃÄý']=‰ú‘‡¹í('®Îè°¬Î==');$‰ú‘‡¹í['¾ŽÀÀÄýÃˆÖŽ¾ŽÖÁ‹ˆ¾Ã®®‹Öˆ®ÖˆýÃÃ®ÁÃ']=‰ú‘‡¹í('°ðÈ¨¤ØÆ–°1œÂ¬A==');$‰ú‘‡¹í['¯ˆˆý®ˆ®ÖÄ®¥””¾ý®Ä¯”ŽýÁÄÃÃ¥ÖˆÀÖŽ‹']=‰ú‘‡¹í('¬¢ð¨ª¬8®¤ŒÈB¬A==');$‰ú‘‡¹í['ÁÖˆÃÃýˆÄ”Ã®¾Ã”¯ˆÁÄ¾ÁÃˆ¥‹Ž¯¾¯®ŽÄ¯']=‰ú‘‡¹í('¤ÎB´Ä¬’A¤ŒèÄ');$‰ú‘‡¹í['”ÖÖÄ‹¾Ä¾¯ÃÖ¾ÖÁÖÃÀŽ‹ÀÃ”¾Ã®Ö””ˆÖÄŽ']=‰ú‘‡¹í('ªððŽ°ØæB¬¢==');$‰ú‘‡¹í['‹¥ý‹”ŽÖÁÁÃ¾Ž”¥®ÖÁ”Ö‹Ö¯ˆ‹ÄÖÖ‹ÖÖ‹Ž']=‰ú‘‡¹í('°ðÈàª0²°ªªŠ=');$‰ú‘‡¹í['¾Ö”®¥¯ÖÀˆ¯”ÁÁý¾Ã¥Ã¾Ã®¯¾ÃŽÖˆ¥Ä®”¥']=‰ú‘‡¹í('°ÐBÄ°ÖÆ¬¬¬èÂªAà¦ª¬ØŽŠÔî°¢Šš¬¬š=');$‰ú‘‡¹í['¥‹Ãý‹Ã¾ˆŽ”ˆÃ¯¾ÃŽÖÄÀ®¥ŽÖÃŽŽ”¾ˆÁ¯®']=‰ú‘‡¹í('¤¤BŠ¬0îš¢0ðA');$‰ú‘‡¹í['”ÁÖ¯ŽýÄ¾ˆÃ¯‹Ä¾Ö‹Öˆ‹¾Á¥ÀÖ¯¯¥ÀÄÖ”À']=‰ú‘‡¹í('¤ÎB´Ä¬AA°Œ1¬A==');$‰ú‘‡¹í['Ž¯¯”‹¯¯¾®¥Ã”®ÄýÁ¥¯”Ãˆ¥ŽÃ‹Ž”®¯¾ˆ®']=‰ú‘‡¹í('°ÎŒ°¬ØŠ°');$‰ú‘‡¹í['¥Ž¾ˆÃ¾‹ÖÃ¾®ÄÖŽÀÁÀ®”ˆÖ¥Ö¾ÀÄÀýŽˆ”Ã']=‰ú‘‡¹í('®îÈà¬ª²–¤ªÐA');$‰ú‘‡¹í['ýÁŽˆý”ÖýÃÖÃ‹Á®ˆÖÀ”¥¥‹”ÄÁ”¯¥Á¾¯ÃŽ']=‰ú‘‡¹í('¤¤BŠ¤Øæ¤®¬¬®');$‰ú‘‡¹í['¾”ýÁ®Ö®ÄÄ¯Ž¾ý‹ÖÁˆÖÖÃÃÁ”¥”Ã¾ÄÄ”Á”']=‰ú‘‡¹í('ªÎ¬C¬î==');$‰ú‘‡¹í['ÃÁ¥ÃÖÄˆ®Ö¾¾‹¯ÄˆŽÖŽÖÁ”Ö¥¯¯Ä¾ÀˆÄŽˆ']=‰ú‘‡¹í('°îØŽ°ØæB¬¢==');$‰ú‘‡¹í['Áý¥ÁÖÃÀÖ¾¯ýÁ‹ÖÁÁ¾Ä¥ÖÃ¯ˆÄ®”¥‹ÃÃÀ”']=‰ú‘‡¹í('¬ð´Šª006®11–¢Î==');$‰ú‘‡¹í['”ˆ¯¯Ä¯Ã”ÀÀÁýÄ¯ý¯¯ÃŽÁ®ÄŽ¯¾ÖÖÖÄÃŽŽ']=‰ú‘‡¹í('¤ÎB´Ä¬šA¤A==');$‰ú‘‡¹í['ÁÃˆÀŽ‹ˆ‹‹®ýÖÖÖÖÖ‹¥”ŽÃÃ¯ý¯”ÃŽÖÄý¾']=‰ú‘‡¹í('¬¤´¨ª0AA');$‰ú‘‡¹í['”ŽÀ”®ý¯Öý‹¾Ö‹¾¾À‹¥ÃÃÀ‹‹ÃÖ¥¯ÃˆÀ¯Ä']=‰ú‘‡¹í('°ðÈà¬0²°°0Þ=');$‰ú‘‡¹í['Ž‹ÀÄŽ®ÃÖ‹Ã¯ÀÃ‹ÀÖ¥ˆ¾”ˆ¯®”ý¯¾¾ŽÃÖÁ']=‰ú‘‡¹í('¤ÎB´Ä¬0˜¢11B¤¢9¬');$‰ú‘‡¹í['‹””Ä®¯”ÀŽ¾Àý¾Ö®”ÃÖ¾À¾Ö®À‹®ÃÄÄŽÀŽ']=‰ú‘‡¹í('¤Îà¤');$‰ú‘‡¹í['Ã¯”ˆÃÄ¥ÄŽÀ‹‹ˆÃÃÃŽ‹”Ö®ÁÄˆÖÀ¯¾ÀˆÃˆ']=‰ú‘‡¹í('¤AŒ°¬Ø’š°Œ0=');$‰ú‘‡¹í['Ã¯¾Ã®Žý”ý¾ˆ‹¯Ö¾ÖŽ”‹®ˆÁÃÀŽýÁ¯ŽˆÃ®']=‰ú‘‡¹í('¢îàÂ®1Þž');$‰ú‘‡¹í['¾”Ã¾ÀÄ¯¥ˆý¯ˆŽ¾¥ˆÃˆÃÖ”ÃˆÄÁÀý¯Ã¯‹Ã']=‰ú‘‡¹í('ªAÐ´ª0A¨ª¬¢=');$‰ú‘‡¹í['ýýŽ¯¾ÄÁÖ‹”ˆ‹ÀÃ¯ýŽýÁ¯ÃÖˆˆ‹ÃŽÖ®¥‹Ž']=‰ú‘‡¹í('¬¢ð¨ª¬86¤Šà¦¢Î4=');$‰ú‘‡¹í['ÃÄÃÖ‹ýÃŽ¾Ã®Öý¥Ä¥Ž®®ÖÃÖˆý®ý®‹ÖÖÃ¾']=‰ú‘‡¹í('®¤´¦¬0²6¤ŠŒD¬Bª=');$‰ú‘‡¹í['Ã¥Öýý®¾Ã¾¥ÁˆÄ®ÖÄ¾ý®ÄÃý¯ŽÃÁŽ”ŽÖ®¯']=‰ú‘‡¹í('¤Î¬ ÄªAÆ¢Œ1A');$‰ú‘‡¹í['Ãˆ¥ˆˆ®ÀÃ¾¥¯Á”Ö”¯ÀÀÁÀÄ¥®Žˆ”®¾‹Öý”']=‰ú‘‡¹í('ª¢ŒCÄ¬Aš¢1A=');$‰ú‘‡¹í['¥ÖÀˆÃý”ÃÃÃ¥ÀÖ¥¥ÃŽÁÃÃÖÄ¥ýÀ‹Ã®‹®Ö®']=‰ú‘‡¹í('ª¢ŒCÄ¬æ°¬Œ1BÄÎàÊ°Î==');$‰ú‘‡¹í['ÃÖŽ‹Ã¥Ö”‹¯‹ÄÖ¯ÖÃÁ‹‹Ã¯ÖÁ¾ÃŽÄÃ‹¾¥‹']=‰ú‘‡¹í('ª¢ŒCÄ¬æ°¬Œ1B');$‰ú‘‡¹í['ÀÀ¥ÃŽ¾ˆ¯ÃÃ”Ö¥Á”ýŽˆÖ‹ˆ”¾Ž¾¥ˆ‹¯Ž”¥']=‰ú‘‡¹í('¤¢ŒCÄ¬æ°¬Œ1BÄÎàÊ°Î==');$‰ú‘‡¹í['ÀŽÃ¯Ã¥Ž”¾ÃÄ®¯¾¯¾ý¥®Ä¾ÄŽÖ”ÃÃÖÄÖÃ”']=‰ú‘‡¹í('¢¢Œ¬®Øª¤Ä1´Æ¤¢9¦°ŽÈÄŠîÆŽ¦Î==');$‰ú‘‡¹í['Ö¾®ÃýÀ¾Ž¥®ÀÃ®ˆÖ‹ÃÖý¥¯ÖÃ¥Ã”¾Àý‹Ã¯']=‰ú‘‡¹í('¤Ð´Ì°ŠA6°0à°¬B¢=');$‰ú‘‡¹í['®ÁÀ¯ŽÃŽÁˆŽ¥ýÁ¾¥ÖÖÁÀÃ¾®”Ã‹ÖÃÁ¯ˆýÃ']=‰ú‘‡¹í('ª¢ŒCÄ¬Æ”¬ªà²');$‰ú‘‡¹í['ÄÖ¯ÖÀ¥ÁÁÀˆŽ¾”ý‹”ÁÖÖÄˆˆÀÖ¯Ö‹‹‹¯¯¯']=‰ú‘‡¹í('ª¢ŒCÄªAŠªØ¤®');$‰ú‘‡¹í['¯¥¾®Á¾ÄÁ®®ˆ‹Ž‹ÖÀ®¾¾¯”¯ŽÁ‹‹ýÁýÖÁ®']=‰ú‘‡¹í('®îÈà¬ŒŠ¤ª1A=');$‰ú‘‡¹í['ÃŽÀ¯Ã‹Ã‹‹”ˆ‹ÁˆÖˆˆÖ®¯Ã¾¾¯ÀÃ®¥Ãý¾Ö']=‰ú‘‡¹í('®îÈà¬Œª˜¢1ŒÈ¬îÖ=');$‰ú‘‡¹í['Ä¥Ž¾ˆŽˆ¯ÖÄÖÁ®®ÃÁ¯ÄˆÄÃÀÖýÁ¾Á‹ÖÖ”Á']=‰ú‘‡¹í('ªÎ1Œ®ÚæC¢ØÈŽ¢¨ØB¦1Œ°BA==');$‰ú‘‡¹í['Ã¥Ö¥¾¯ÃÁÁˆÁ®¥Ã”Ö®À¥ÁˆÁˆÄ¥¥ÄÃˆÄ®ý']=‰ú‘‡¹í('ª¢ŒCÄªAŠªØ¤®¢Î==');$‰ú‘‡¹í['Ö¥ý‹ÃÖÃý‹Ö¯À”Áý®Á”Ã‹®®Ö¥ŽýŽˆ¥¥ÃÃ']=‰ú‘‡¹í('¬A¬Œ¬î”¤Ä1ð®ªÎØ¬°A==');$‰ú‘‡¹í['®¯Àý‹ÖÁÖ®Á‹ˆ”Ã®ŽÁ¥ýˆÖÃÀ¾ÖýÖ®ˆ¾ÃÄ']=‰ú‘‡¹í('¤ÎB´Äªª¢¬ªà–');$‰ú‘‡¹í['”ÃŽ¾”ÀÀýŽ®®ÃŽÁˆÁ¾¾””‹ÀÁÁÖˆÃÄ‹”ÖŽ']=‰ú‘‡¹í('®î9C®1ÖA');$‰ú‘‡¹í['Ö”‹ÖÖˆÄÁ‹®ÁÄ”ÃÃ®¾ÄŽÖ¥ÖÄ”‹ÃÁÃÁÖˆ¥']=‰ú‘‡¹í('¬¢ð¨ª¬8Š¤ªðÄ');$‰ú‘‡¹í['ÖÃ®¯ÃÖ”¾ˆ¯¯‹ýˆ¥ÖÃ¥¥¥”ˆÀŽÄÀ‹”¥ý®Ö']=‰ú‘‡¹í('¬¢ð¨ª¬8Ž°Œ1B®Î==');$‰ú‘‡¹í['Ö®¾ÁÖ®Ö¥¾Ö¥®Ö¥ÖÃ®ÃÃÃ‹ÄÖÖ‹”ŽÄ¾Ã®Ä']=‰ú‘‡¹í('¢Î¬ª°ØŠ6¢ªà¢°Î”ª´Öè°AA0=');$‰ú‘‡¹í['ÃÖÃÃÃ”‹ÃÖŽˆ¥ÖÃÁ¾¥¥ÃÖÃÁÖÀ¾®ý””¾ÁÄ']=‰ú‘‡¹í('ª¢ŒCÄªÆœªªà®');$‰ú‘‡¹í['¾ÖÀÖýýŽÄÀ®ÄŽÁÃÖÄý”Öýˆ¯¥‹”¥‹ÖÀ¾À”']=‰ú‘‡¹í('¬¢èÄ°1Š˜¤ŽÈA¤¢ÈŒ');$‰ú‘‡¹í['®ý”¯¯”ý¾ÃÃÖÖÃÖÖý‹ÄÄÄˆÀýÄŽˆ®”Ã‹‹Ö']=‰ú‘‡¹í('ªÎŒÂÄ¬æ°¬Œ1BÄÎ¬¢¦0î=');$‰ú‘‡¹í['ÃÁÃ¯Ãˆ‹ÃˆÃÁ¾ÖÖ¯®”¾ÃÁÀ¥Ö¯ÃýÃŽý¾ýÁ']=‰ú‘‡¹í('ª¢ŒCÄ¬æ°¬Œ1BÄÎ¬¢¦0î=');$‰ú‘‡¹í['Á®”ÖˆÁ¥ÁÁÃÁÄ¾”‹¯‹ŽÁÖÁ®¾ŽÄÀŽÀÄýÁ‹']=‰ú‘‡¹í('¤¢ŒCÄ¬æ°¬Œ1BÄÎ¬¢¦0î=');$‰ú‘‡¹í['‹ÖŽ‹‹ÁÁ¥ŽÖÖÖ”ÃÀÄ”ÖŽÄÖ¯Ž®Á¾ÀÃŽýÖ”']=‰ú‘‡¹í('°îA=');$‰ú‘‡¹í['®ˆˆ””‹Ãýˆˆ”Ö¯¥Ž¯ÁÄÀÀ¾¾¥¾¾ý¥ŽÁ””¯']=‰ú‘‡¹í('¬ð´Šª006¬ŒŒ¬¬î==');$‰ú‘‡¹í['Öý¾Ä®ýÃŽÃÀÖ¯Ä‹‹ˆ¯Á”ˆýÃ¥Ã®ýÁ¾ÃÃˆˆ']=‰ú‘‡¹í('ª¢ŒCÄªÆ¤°0à®');$‰ú‘‡¹í['¯®ŽÀÀ‹ÃÄ¥ˆÖÃŽ¾Öý¯ÖÁ¥ˆÖÁÖ¯®‹¯¾À®Ö']=‰ú‘‡¹í('°ðÈà¬Œ0°¢0ðæ°Ð¤¬°ŠÞ=');$‰ú‘‡¹í['®¯Ã‹‹Ãý”ÁýÄÃý®”®¥¯¾Ã¯®Ö‹Ã¯Öˆ”¥Ö”']=‰ú‘‡¹í('ª¢ŒCÄ¬ªB¬Šà®¢Ðª=');$‰ú‘‡¹í['¯¯ÃÄÖ®¯ÖÀÀÁÖˆŽ¥ˆýÀˆ‹‹Ö¾¾ŽÄÖýÀ¯ÀÁ']=‰ú‘‡¹í('ª¢ŒCÄ¬AA¬ØØŽ°¤”ê®Œð¢Šî²¢¦î==');$‰ú‘‡¹í['ÄÀý¥ÃÃÀÃ¯ý”ýÃÀ®Ž¾¾ÃÖÖÀˆÁÖˆý¾¯ÁÖŽ']=‰ú‘‡¹í('¤¢ŒCÄ¬æ°¬Œ1BÄÐœC°ŠÞ=');$‰ú‘‡¹í['ÖÖÄ¾ÀÖ¾Ã‹ˆýˆŽÃ”Ö”¾¥”‹ÁÃÃ¯Ö‹”ÄÃ®”']=‰ú‘‡¹í('°îàÌ¤Úæ¬¢ØŒÈ¤¨ØÊ¦1ð¤Šî==');$‰ú‘‡¹í['®ˆ¾¯ÖÖ”Ã‹Ö‹‹ÖÖˆ‹¥”ýÖÀÃ‹ÖÖÃÁˆÃŽÄ¾']=‰ú‘‡¹í('°îààª0²°ªªŠ=');$‰ú‘‡¹í['ŽÃŽ‹‹¯ýÄ¯Ä¥Á¥Öýý¥ÁÃ‹Á¥Ö¾ÃˆÃýÁ”ÄÁ']=‰ú‘‡¹í('°îàÌ¤Úæ˜°0ðÂªÎœê¬Öà¢BBŠ=');$‰ú‘‡¹í['Ö®ý¾ÃÃ¾ÃÃ”ÃÃÃÃ®”®ÃÃŽ”®ýˆˆ¾ÄýÀÄÖÁ']=‰ú‘‡¹í('¢ð´Â¬ØŠŽ°1ð®');$‰ú‘‡¹í['¾Žˆ¥ˆ¯ÄÄ¯ˆ”Á¥¥Ž¾¾”ÖÃ‹ÃýÀÃýÃÖÖ¥¾Ã']=‰ú‘‡¹í('ª¢ŒCÄ¬ªB¬Šà®¢Ð¬ª¦Î==');$‰ú‘‡¹í['ŽÁýýÃ¯¥‹¯‹®”ýÃ®ÃÁÄŽ”ÀŽÖ‹Ã¯ÖÖý¥Ö‹']=‰ú‘‡¹í('¢Î1Ä¬î==');$®Ý§ªûÌÎØ‹¼($¸ê¼ž($$‡¶ëàõ“èé));$Èª‘’œ‘Œ“¿Ê»=$Ÿ³é®÷ÉåÃ«ì($ºá·Ý•);eval($Õüá”îˆ('ªð”°°Ðîªªè®B1”ê°¬1°DÎÆŽŠŠÂäÚ6ÊÎä–Üè8ÈÚä3ÐÞÌ°î=='));$¹Ì¹‡™Œ=$ŸßÂÐØÞ”Šà;$®Ý§ªûÌÎØ‹¼($¸ê¼ž($$‡¶ëàõ“èé));return$¹Ì¹‡™Œ;?>¨ä7Ä¨8/â˜ž2â2²ØÚÎ8È3ª Úô1ÐàÌÌÊ0Òê˜8¢ÈŽ572°¬¬Ì+A 0ÂÄ7¢7²Þ¦Ø®È3ìæìÐ–3ªÆÒÐæÚ–à’ÚèŒô3ÚÚC¨–ÌÊCœCŠ2’œ¢Þ1°8ŽØš´ª¤ÞîÔA7C2¤0²7¨ÞÔ956ÐB8Ò/CèÐŽœ0Ä12Ü8Ü4ðÚ7žB´ª®ŒÎ8Ò´Cà8òÌÂ®BâšàÄBà/îîD8´ÖèA26²ÒÆìîð8+’ŠBôA3ÈÐÔ9 ÔŽ57Ì0ò 88ÄÒîÈ¦9ÌÜ²â´ÜÂAô¦CªÔÄ1+Ò2ÂžžŒœ¢/š2ä+Ì5BØ´7ò ÔèÄC45ŽÎ5î²ä–Ò2ª6àèä¢ìžÈô515ôÆCÐ òÈ7´¦BAÄÚ2˜òêäÊAò®¬AªÈž+´ÆÈÚ¤²š˜”œœ4’9Ä+AÈÂ3šÚä¦Ø4¢ìCÂ1¬®äŽÆ˜ŽÔ¦¤ÒAÚ´²7š²’¤è+0ŽAÄÞÂ®0Ø2ŠÐ”/5èÜÂœ/56¢ž1ôÄÂ8ÐäŒìÊŽäðC¤è²+0´î°Ø/Ú²5®B–5ŒâòÒ2ØâÂÔêÖCòîÊ+Æ9¤î7è–5DªÌ9C®ÌÂ2/0ÒCÌ”Öòìª+òà’’4C¤ä3ÖžÄB9Äà–²¬47ÔÎ1ÒààŠBÒÒ+ÖÂÖÒ+îŠà¨Ü²Ð2¢Ä”9°¢91ìÐD˜63âB²1/Úæ˜¦ÜÚ¢4žŽŽ0®˜ŽØèÊœàÞŒ5+9Èžâ¨ Ðæ75ÞèÖ´5–ä–ÌÎ¨+Þ˜¬4’ŽÄ7ÂìÎ¦ÎÜ/Ú5/29ôÚÞôÄè+8–ªÊìîà1ÄšÂ°¦ôÔ5˜ò¨äŽ5Â2²¬”ÖŒBŠ¦DìÜìôÎž8â¨Œ ¢êŽ°Ââœ°Œ9–¢Â8ÆAÒÐ6Ê¤š˜1²Èšô¨®Ê4Ò°ð/Ð+A¦9B°06Òð´CÜÆè¦Ì¢°è8ÖÈòÒìŠô5¤˜5® 9â8œDAêªðžÚ°CÜAØÂŽCÖ” ”ä8ì²ôÂÒ–¬ÚÚ¦C°àA´¢¨5”ÄŠ4 4/¬ØîâA®²°D®šÈœ +–äB®Ê4šŠê/+Òò¢8+°¨ŒŒØ/Î®Ž8¦Œ6â7¨8Žì ÎðšòšØ´ŠœŠ¢àA1C1š®˜Ê´š05 5¢Ð’à˜D ÎÂÖÌ’²5ÊìÐÒ¢²ì2DC3êŠŽòè”ŠªD–ðÆ6ì°ÖòªŠ7DÜŠê Žž8˜7äÐÐœ¦+9–C6âœ˜2¦ªŠÔ/Ä+ðÚ9D0”B03ÎìÆÈÒâ´ôÖ3ª7Æ9¨ÖŒªÈ1ÖàšÌ–¤B+ÜàŽ’àÞ/Ò 1’8ÖD7˜ÄÄ˜82ÐÈBâ˜/9Ì¨æÎ8Ü¢ì¬°¬/’ØA²Âàêò°Žì’ÊB0Æ°Î+” ä˜+äC6Ê¦œ2–Š’Š0æAŒ23îðÚ”ÖACèô’ªŒÈ4è°œæ4ŠCÔÔ08àŽØÜÞ²’ÖÄB²6ÄÚÄ1æ81ÂÚ9ÚœÖÄæÄ°˜3Þ6BÔž¦ô´æ6ØD’ÚÂCèA+ÊžÒB2Âª4++Bò28âÔ6ÂÖäò/ð5â¤â087C²ôÆô2/C4ðœ˜2œæ–®B5®²Š°žDªìÆ2æò0¨È94îÆÚÊ²œŒÊÊAÆÄ14òðž²¦Øô¬ìœ¨ª ¢ª4ê¨96¦ìÊ°œÞB8ÊŒÆ4žC”èÆð¨¬šA’53Š°â6¨ÚŒ î’DÆÄ¬ì8²77Þ¬¬Ð–4â2Ì8ÈÒÊð9´9Œæ2Æ7ÎæØCÜâ5ÌÌBòâ+8Š–1Úæ0ÂA8¢Š”ÞÄàÔòŠÆÞÞ–îôÒææÔâ5626Æ²æ0¬ðŒ1òÄ+ÔB¬7Ê2ò9˜ì²”–6ââA¦Ü’ ÔÜðŠ0˜’˜¦’Þ6ò´´´BŒÐä /êCàŒ¨àªŠ9BÖÈŽ”ÖÂÆÖ1î®ÎÐ²Ê¤¦CàæØÞòâ¬êÞ’¬š/ Þ5Ö8òÜŒàÚ¦Ô4â¦ðŒÜââ˜C+®ÆÔB/ŒÊèà6DÜŽÞêAÂ21+C74²ÖÞDCâò”°–ÜîÂš®ž62äÐä –Ð¨äÈ´52¤Ô43ðŠÆ 4 àÞ´Ž¢Ô¤¬”˜Ú¤˜î¦è7¨8ðCèîÎ²Cì7²1Ð¦04´2Ê°˜Î¦ÄÔ/¬B¢ª¬4Ôèè/àì¨+°è7¢Ä”ÚÐÚÂÂê2Ì0’¢ÂŽ®ìäôÂ¦œÔô®C°È3Ü°¬ÐŽ9¬°°²àÄÄ+ÚØªìª4B5+ôAà42¦ž¤ì1 ÖÌÜ4æ°¤5C®´Âªà0ÐšB¨Ð0šäªADÄªîâª˜Œ¨2´Î°²´®53èÐÊàâòÜî’ÂÖ6Ø9Žš3ò5ŽêÔ6žÄÌ¤2ŒÒC ä+9Ð¤°9ªÄÎÂæ¨0 Š3²Ô/Ðòªô+5Îè1šžD7¤°ÖìDè/Ê4˜0AŠÆÔ6îàÔ¨ŒžÚâÌ2–ÈBÞÞ° –ÚÖ°–Žž2®Ú–¦45ª¦¢æÒŽÈ¬œÄ2âÊØÄ3¦7ªâ0žâCÖ/èìŽŽ8¦êœ¢ÞÒªðŒ¬1ª¤ò®®°Ú¤Ì”A–Ò¦8CÔ+² äœšÈÈÔÔŒ¦+/1A6+ž¬8 žî’”žÒÞÄ/2Ž5Ž–Ž 6ÎàÄòðôCàä/BAÈœÈ°”ÒÊ8ŠÐ²ÈÆ Bè0æîÊBCÒŽîäœÈ/4’æÎÜôB–¤æîÞ0ªÖ5D”èDŠ´¤Æ41°ªDÚÎæ¬ì²òœØ®ôŽ2žŠ´’ŠèêôÒ˜Aê²ôà4ð’9Ì¬¬ÞÔª¢/1š¢´è6¦ÎD²¤æÔîŠØ–²ŒÚ¬–’®ÔÔì8¬C3Ä17Ä¨6Ì+ìÎÐîÜÄÄ²šÎÞŠžÒÌŽæÊèœ 7¤æž6ÈôòÔÊÊÈ¨”8ž213ÐŒ¢ÞÎDÄô¤®æ2¢Ðè”5Ðš–êD4CàŽàÞœŠœâÂ’œÚ® ÞŽ3D+Êª1–4BÜèŒšÒAŒÈ¤æ7æìª’ÔÐââØ+Î8ÆžèœŒÖ9šBê²®D42ÔØàîì/šÎ5+°ì9ÆŠœÐ’´ž8òÄ¤žÂœà9ÒÜ2È+ìÒ7žÊ4ž6BòÌž¬9êäìª6î5àB°È9DÔŽî7°Ž725Î’¢èä”ä¬ÂØä”Ê2Š²ØŒÌÂ+ì9ÔìðÄè²”7èìÎ˜ê5ðBB6ÞÄä’šä°Ôæ˜D8æÈ˜ÞŠ90”ØÄŒÜ1ô¢Ø/¬7/²ÒðŒäæš8Â¤äð¤Ô5ªÞ0ªš’˜œ¤5ÊAÆŒàÔž45+CØ8 ì²”AìA¤3ØŒ2B´1Žô²¦ÊœÔ¢4 9šB¢²7æŽÚ+ÊŽ¬CÌð¨Æ4ØÒÂÞ+æš²ÚŒèÈô’¦´îŽŠòCA+ÜîÈDÆÆ¨î²+Ìæ¦òòŽžœŠ+šÌ444Ð59¦èÒ–DÈôCCæš5®à+¢/²š8Þ”œ6Â5¨âŽ®0¤ðôÔÖÎ8Ð²7Ô3Úîê9410”ŒžÒŽŠêŽÄ4Æ5âæ¦ÊÎ00òæÈ2®ÚØ7ŠÂÒ9CâÞêŒ/žŠò7ÜØª¤+Øä+žèÂ”Dî î°´ 2¢òªØæÌôê òèâÈ2È²˜ä®àÌ4¢®ìæ8¬ê+01’ÔèªÔô3òÆ¤êÂèä¤ðÆä8’ÄÖÆâØÆCê0Ä6¢ÖÞDB¦+Ò/°ÎÚØ®ð9’Ú2Ž¤®Ð²3”Ø¦Î¬/AÐ3Žê¦ô¢´îðäœœšÐœ3²æäÖÈŽ/ÂÊÎžæ¢ªð7ô0Ì¨œ°/”+++®9Ú²6²’ÞæªàÒ1ò˜¦È3Š–9/1/èâÊ˜+¨è¨ðäÆ”®’+–/ÔÆÔŠØ˜ž8ÚŒ2183šÞÐ–ª90´Äê¤¬+¦5ÖÒì¦ô Ø+5Ø¬²òÊ¤Œ¬ÈÚDD®Þä¤2Ôè1°îš–²5 ¦ÒÐ8¤BÈì²––0´Š´1®œô´ªÖÄ°2ª0’Ô´ò5Žàª¢ìÞ®Ð+æ”ðÎÄ”îêÊÐ¬ððDÆì2Ì´¤òì°ÚÔÊžäÔÔôÌÐÄŠœÐ0ÖAæð2ž’ð’4ÔÄ®33ÈÊŠ°®èòCA²Ê1Š°A¨ŽôŒî°œBØ/ÐDA˜˜0ÞÄ4Þ1ÂÂî/ÈÔÒŠ6BADBäÂ²ä6È¤’ŽÄšŽ/¦Þ8´œ07žÐ¨æ’’78 œìà˜ÐÔÌªÎ8ÈÂ¬Œ8Æ5Ü9 Ö¬È7ÎÌê9œ8È¬žÌ²ÐÜ Ø’¤ÌÖØ°/Šâ4æ B+DÔ7äCêAæ77âÎ9BÔžÄÒ2Ìš²®ØÂ0Ž61ÌØò Ö²âÄÂÞòèÐ5CØÈÆ9äâ3â¦ÚžÒàDCèî®ìž2ðŽ0/æÈŠ1°3èžDò/ŽD049ìôÖ´ðÚ–8šÒ¨ÒêÚÎ´Ø9¢´72š6ÔÚšæDš¦ÂŽæš11ÆâžŠðêÈÊB¨²¢¨žA1æÆ+Ø0Ê î˜®CžÖØ²¤Ö0ž¦Òââô¢à6ÊŒD6²8ôAîÈž2®’ÄÞÊ6ž²4´¨Š–+ª7ŠÚ28087ä°3ò –ÜÌÂÊ6ÄìÐäÆ²¤âòêœ°Öæ’2ÚÚŠÒ6 æš39à/²Þ–Ä/6ŠŒÊÜ8Â0DAÌ70šBž´/Aš3Ìð2Ä˜BÆ2š/2Ì4Âªîèšêä0¢1à¬BÂîàÂ¨Ì2ìCîDŒÞ¦ìœŽ1¨Ø0–¤ŠŽ”â²/° 13²ÖŠ3è¨žÚÊCD9° CâŒÎ¢äš¦¦B7CÊ¨èêæòÚ–òB–¨ªŽÊÐÔBÎ””ÌàDà¦´¬”°”˜A2àÌÆ6Â6D´BÖÖÖ–9Ê4ÒÞèÔ¨ÌCäª ²¢Î˜Aš”æ¦ôÄŒÐžä0¨ªÜ²òØBâÎÂØ4 èîA”B’4àŠ8+˜56ØÈÚ258° ÐÊÐà2–æ3Î¢œAä¢4ÜÊ+î7ÐÒ1¢ÐÔ0ìÖ°5ä¬B–/ÄÞì7°ÄÎ¬Š+Î¢1C6ÌŽ5ÞÒìÚ®à/C7â Î¦ì9ŒAÈð9ðÖDAŒAÎ+ðÆÚ3ÚØ8ÄÖÎ+ÞC4²ŒØô2ìðÊBÞDâ3ŽDÚA°Úâ²Â¢´¨¢Ò¬È¨ìžâ+Üò7è7´Ü ¬Ü¤¤9èŠ+BØŽ6èCê®²CèÒC¤–´ä®3’Ž6æ²¨”æÂ®´®0ª+D¦D´¬ž¦¤’ÈœÊB–ŠÊÄÌÈ˜ÚêèÈÚÞÜ’¦C2àì²’Ô0ôœŒ1Ö39ÂCà¬5”Äò¤òäÂÞØÔà¬¦èÞ´Þ Bœì” ®CÚØ¤362ŽÈèÚ3ÌÂŒê¢ÖÊ¦¦òèŠÌêì¬ Ðð41’ÐŠÆôÔê4Ô¨ ’¬â/8ÐÊŒÊô°Ä”œÜ¬”²B/ÖDD47ÄèA/ŽÔ/ŒŠÚ”/ž2æ¬èC¤26ÔÎ´ÈØž¤®ÔèîìÄŒ¦ÊŒò4ŠÈžê+î´š5äÜ²Ò7ÞìÌ¤Š´ä2žD¤âÜ9Î Ì3²¨®èDÒÂÆè ðÊ9Æ5ÂÞôBòÜ ˜C Â”ŒÎC2°’ÖÎÎ53Ð¦Ø¨šîÐà¤Ú ª®2œÄ¤0œÎ1œ´1Þ5Ž àª16ÜŠ°”Ô”®0 3èCAìšÂôž1’Ê8Ò0ò–9ô+Ò8C¨ìÈÜ âŽ¦ Êî/Cà/’È0Ê¬Ö¬’ÐDÖì/Ô8¤ª²8  Ö+Æ´àÊÎ˜Ú˜¤1Î7/ì¨ð®š°ª––0+/ÈÌôœŽæÖœ¨ÌªD¨2ìôÆ®¦ ˜CÄÈ˜D10šêà–Îî¬BC C323’Âê¢9ÊœÖ°ž8/î+ÂÆÚÎÈ0š4ÐBì˜²+´36¦ô¨ì˜˜Øâ”2Î¬ìôª7žÜÈBÈÄ°²˜¢4Ž+5–äB6²¦ŽîÔ4ÂÈÊÎâ”°´B´â°4¦”´Æ0Ð9Œ0œ¢3Þ®ìòŠ6æ3ŽÈðæ+ æ54òÒîDÚ9š9/˜ÂÔ¤B²ž°ò¢¢Î¨šÔÐÄÔ°°AªÒ/òÌ˜°êŠ¦Ö/ÞâÔ5È7Šè ¨œ7¢”97ÔŽŠŠªÒœØÂÐÄ0îÒšž²Ä0/ÊŒAŠàâ+èêœ6Èšê¢¢ŒÈ047Š6 ðC¢ää¦¢0°Ê¤šD1ì+ò0Ì5¨ÈÒê36äšžœ˜´1 24ðšCÆäÞ5˜œ°Æ5Ê/4–Ú¬ÈÌA–8ÈÐÈ9žD8ÖòÔà´ÎÖð99ž”ä49/°0ØDÐÊð–/˜ÂÖŽŽ®²ìBâ²ò¬¦ôœ”Dà”0Ä3ÎÖŠÌ7²D˜ì6Ìžâ˜Ššê3¨ ˜ ¬žŒ9Ð˜AÜ7æÖBÒÚCªàÌ´ÜàÎªÖ+ä¦/æžš/¦ÒÆCŒÜ´îä7Â5èÈôâèÎBÞ7²ŽCšì¨ÆÞÊ’äÆâŽŽ8B˜’ÎŽ+Ž+¤î°1êŒôAâØ+È¦2ðì¨D°Ââ4¢93âÎ ÌD–ÞÄžBšÚÔž¬+°2à3Î¨œ¬7Äì3Ð9Cðœôâ+”Ò®–Ê29¬/¦è®Þ¬ôBA8¨æÚ4Ö˜3CšžC´1”¬”´2Êæèô4°š¨1ŠÄ3ÐôÞÄ°ŒæàB˜8æÂÐ0Œ¢9²àCB9ŠÆ”šŠÂÆÔ0êÞD¦ªòŠ6  0˜²ô7¤/ÄêØšŒØAŒAÂ8¤BÌÌ˜ÖÖ°Þž¬à0Æš¢˜Ì”Ø45ŒC¤äÈ2Êðâ’®ðÒàžÚðêÄ9ð4ŽìèòŠD”+ªªÜÌ¬žA+î˜äÔÖð°°žêœò´ðœÎ/’âD8ÜðìÒ˜Ì5Ø6Äì33ÆB33ž9à”ŒÞ¤Ð¨A84žÈšDâÚìð3ÞÔB¦æž¢3¤2âêîØ´Ä1¬3Ò2ÆÚ–¤æÚ²˜Ê2ê4ÞAC/¤ÔÄ6š¦Ô’Þ¦/ê/6¢²âÚÚìD 0ì6àÚ6Ð¨++Î¨Ì8Bôðèð¦0C¤6êÆ+1Ê6Ðîð30ì²¢àÆ5ŠŽÊÎ38Æªêò¨è´àÌ¬ª¬ìžääîœÞ®Ðœ¤²7ä9Ò/î9¢Ò’àÊ0ÞÌÚ1Ò/Ò¦âŽÎ¨ØAÆâ°˜œ˜ÜªÔ0Öê+/¨È–0ÚÒâÖžÚŒÚ¨¦ÔÎÂD39Ä–ÆØÔÚ°9ÐØì–4Æì¦¢ŽŒŒ¨0Ú2ÚÂÐØª¤”/4ÖÆÐœÜ®î2”Êæ¦ÔÌBŽÎ¢¬CDà+˜9æèæðàÔ4¤œ2Ò++ÖÌÎØBªÖÐÌŠÔ²êC²š752/+A¢äèèŒê’à®¢4¦ÞžÂâ2ÜÜðÔÄðª4 ŠÌ0¬B´è¬C+¢ØîÈªâ¬”œ¢ð9 Ô1BÄ4è¬àÒ4´Œîâèà6ÖAœCÄC3ÆÆæ°ŠCCÄðèÖCÄCîÞÖÊ–œ/ 4CÞª0äÆ”Þ9šî¢šžÂÄŒÚ¨ä¦Ú1+ÞÚìÐªÒì²šÐ¢9ªB25+ÈBØ57®2”¤È4DÞ’ªÜæÂ87æ´â0ÔèôââAæ6ä+äÐ1Œä9ôž39Î¢°1è¤/Bð´ÜÒ²1ÚÜÎ²ÄŽÖ´Ð+äAØô8Øê3Ê18Î3ÖìîÈ°¤1Þà¦ŽÊ¤Äò”4òÈ®6ÚÎCÖÔžÔàð5î¬ÜàÖÌâÎ/îŒœŠÜ–ð7¦ÖÌ¢+®AÌ7BÆì¤î®Dêð²ÖÐ°šîÔ¨63âžA3Aò7AÊðð žäîŒÎ 1´3´²´äÞ²ìÈÂê¬šÒÐÊØÄà¬A´ÆAÚØŠÄÈâŽî8Ð–ÐàÄ ®ô0 èÜ¨ÊA’Þ¬ A/7šÖ´C4Â¢ÈÈ°ÖŒÖôAžÒ+Ê°°ž6à Ö4òâ®ò1¢Š¨êä®’à7BØ/49¬¢¨9ŽžŠØ4àê3Ð5ÂB81®ìªêÒ6Â92âDÜâØŽ¬Ì/¢2–î2A8Ð–ŠÔôÔà¤ŒÆÌ”æ+ÚC²â¬ŠŒ/8žäD/ìBôBê–Dœ¨D¦Î°ðîžžDàèÂ4Äð˜ÌØDÌ°–3ê¨¦¦2à®®Æ¦ÌCŽ¬DŒBCæä0´¨Ö’ê84ÂŠ®3AA2Ìê49Ò¨ŒÌÒ’®BÂî²B82žª5îÊ¦¬ž05¤ŠŠ3ÆÖª1ÞÂ´Ž’92à¬ÔêÈæDÜ5ÐÌ5È¦’’–æ¢²°Â9+ªÒî¢ì°šòÔªðÔ”ä5ÜÄD63ÒÈÎ34¨òÎ–œêŽC6Âê3 CÔœC376¤à72Œ” ¬Þ6òôÚ4È0”²¢Ê1–Â7CÊšž4ÞÜ2â¤ÈÎ1ŠCò”Èì2ž´Œäæ5¢¨Þ3ààÄÎð¨DæŠèØ/°ØÎÞÞÈ+Bè4¨¢°è/¨¢5ž–4®BŽ9ÚÆš7ž3šŒ–7ìôêîØÜ38Ž´–ÔŽÐœ9°Ê6š80î–œ¬8D/ÖèîÜØD¨5ªÖÆ7ž8 Ä–ÒØäÎ°ÎÔô’C¦è¬ŒÚ 0¨Ø¤¢1ÖD+5òŒâæÚž¬D5/Ü¨ÆÚÒÂ1ÒÔÞäÆÚÔÚª11È7Ž2®9ÐÎC8îžD8à¢æÚÔÜ3â88ÒêÈA 8Æ¨š00œ 15ØàžŠŠ6èÂ–ìÒÆÎ62ŒäàôàÒ¤9è1¦Ò´Ä/D˜Þè¬+3ÌšÈ®B¬4DŒàÜ¢ÒD°àŠ¢Æ œ¤33â˜ž1˜DD®œ70ô²°¢šà6â¤–¢òòCÔî6¨˜²ôÌ˜˜ò¬38ÂîÊæ1Èò1Ò¨èØÂ¤´¨Ü’ÚâŠš–˜êŒÄâAÌÖðîÌÎ¢0Ê41Êà˜Ž–¢˜ ÒÎÐÞÄŒ80¤Ò¦2ÆÎCÖìBì6œ²¦Ö²+ô¤ôÆÈ/ŠÚ+67¬ì0žä´7ÒæÈìžÐÚ+¢DàÚÆòÆCÒ2Œô¤Ü°ÆÚâ2¬ÐŠBÞ”ê0/¬œ´Bð3ì”šŽ´èÖ9à5Ž3äžœÂ¦â/¦D¨+Êâ´D¨ÆØ”7A7ÖÞ8Ê8àCì¬¦2Â˜3Ž®ÄäÆC”èê¤”6ÎDŠæâ´ ìÄ7ŠÆšÄâœòÎ0àŒÌŽÜªC˜7Ì¢Ð®ìê8+2A´51ìì1’âæÆî–+Ö6¬ØÖDÆÄA5 5ÂÆÆ¬0šŠ7/â1Ì¬êB¢àòÔ˜®Üò’’Ê4´0Ò˜7Øà²äæA6Ä–Ü°+3Üà¤ÈÌ4ä¨ìÊ”Â3¬œ0ÜŒè–ò”´œÎ¬¬îÆôâà2Üð²Ôê¤Ú08´Òääœ–ää0Ö”/ÚÖ+/¨¦20îÊîBÌ°è¤9ô6ÂŒæè5”ÞÚ¨ªÌôÒâB®9ÒÞæ94Œš8DÒÜ®¨ô–+œÊ˜ÞêÆò¢ØðŽ°¦’3Î9+Ö4’ž´ØœAô8¢ž00¢”ÎÎä1Dâšôä¬È+ðB˜+òÂDÚ¬ÐAò´Úæ°0èêœšž1Ê¤+00ìÆ”3è’ìŠ05ÔðÜä˜êÞ1èÌBì78îâ87ò¢8Øž®ŽÈÜîØŒ2²Aœ0Š0¬¬®’9ê–Ö¢”D2Ð¬+6î¤Ž¨ž0CÜô”Œ+´4DŽ6äAÒÖ97îÚ/ô3Š/+1ÆœAŒ3îàŠŽð4°Ðš´®ô+Â”0Œò5Š àAÜìä65ªÌ˜š4°îB7/î¦œœ9ÆØððÎôÆÊª°¬ØÆBÌ¨–Þ¦Bì˜CÖD–¢Îîð”Â˜¢Ö4Ô˜îêDŒêèª2ØÊÞ´˜°¬à¢Ä¨ÜæÎ”Ìž””òADÌ2Š¦8ÜÊ7 4ä¤Ö9šŒ”7àDŒª¦–æÔÂŽœ 8ÄÎ òØÌàœâŠ¤âÆ2¤ÒØôÌDð3987+ìì°ÔÈ3ì6¨œ°Îà5”+Ò”œòÔ–¤äÈè/æØ²îôÊàÔ®²Æ¤Ú9”ì–°ÈAÊ¢òAîBâCØ¤Ü+5”8–ò8˜àÆêÆÖÚBÖìŠ8²Ö4ÖØ0D²¤˜Š/¢ÖÂŠÖ–BB–7¬ðÂÞè²œ9ÒŠ’àÄâš’¢àìæØÊ9ÂòœÎ9È3”ô9ô5+B” äØÌØ´ô7Üî+ô 8ÜÞ´èæ3ÜCâ3žC’è3’ÞBBðä4äàÜ”–49¤êÎ²8¦ªŒÈÔìâÈÜÚÄ56Š®+²âB–ê¦ì’Êª°Ðê°D”ò®ê”Òª3ÔòØÚ00Ø Â¢+Î/´Ø¨–7ÄÚÈ˜C¨ž¨7ÖÆÆšôAÄÌ4°à3à7žè¬ÔÒœBèÈ7òB02¦ô”2¨°ðê²ÔôðÊ˜äŒ˜ÔÂÚŠ¢²ÞÄÒÎ¬²+¤ôŽ1Þ¨˜Òœî5ÔÞ/”9Ò7ªš°BÄè+¨š6î56ÈB0ÔªÌèÖô7DØâÖÒ°¤ÆŠÔBD1Ææä²ŽØêî ª9ŽDîÜš¦7Ø¦Œ8”Ö8šCÐÊ35°5Ž8–8ÌÚ 7Š8î6 Æê¨š6®ô+3¦ìÖê–òÂÖÜšæ8¦Ò8ØèŽ0Òœâ7ÄêŽš°–ÆÐ+5Þ1ô°Ø9Â’ÄÜìC4îêÂœê90ô®AÔ1®BìBª1Ðâ¨+–ä¨¬î65ð–Ô’2ž®¤C0ŽÎÚBîš6ôÜBžÔ37ŽCäÌ¤6àDA®Ü²°òÐÆ/ÎÚô¤ÐžÚªÌÞ06ÞÜ”8ÞêÞè’ž/ÐèšðÒâ”AÄžBÂ92âèØ°2àAâÄ1ÈÂŒê°ÞÒ/ÊAŠA’Ž85¦ÜB´ðÈäòÒè˜”¨èÆ¢Ô3àš1ÔÄâ¦7–ä²4ÚìŠàòîêê¢1ÔÂ8²ÎÔÌÖ²0ŽÆîÒ¨’®Ö²Ð¤+ð Ò¦²ð53¦â–’°â´2šŠ6ØÎŽ°ª˜’²Ì ÞÜ®ìÐîæ¬àê7¬6”ÐÈ3´11š–ÊìÌ ôÔîÂ°Ð”ÊŽ´Ôì1æ¨ ”ÖšÊÆ¢®ô/0â´6Ž6ÚœDì04šÌÊÜ’âô”Š–ä7AäÚÞÞÄâ˜ŒÂ57”ÂÄðòŽÌÌØêœ+ŠäŽ74Ì9æ3ÄÎš8Ð˜Ø7Æ0èæÈ¢ÖÆ”A7æÒÞèô˜Bô´BæÌ¤1âª’è’493²ŽžÔÞòê2œžÊÚ5È2¤î1ôÄÎÔðò°BèÂ˜8ì´ÚŒ’+–ÈØ27œŠî7šîê72 ¤Ä8’0ô0šæâ®¦Ì6ÐÜêšÎœÚ3ÚäÐ98à+Äè´°0à˜æ/–Ú+Úâ4¢ä9Ôð5+ÐBAC²²¬´ÚàÈ–25/Òèœ5ê Ê5ì’ŒÖ+°ž10ŽÔªŽÎ˜¬4ØÆô0ÞÖ2Ø1ÌÎìªîŒ0Ðª9¬ÚÞŽ¤Ì+ÖŠàÔÚÌäÖÂšææ 0Øò´2ªŒ–òA–7ªðÎ¦Ð˜¨æ¦5/’Œ6ð7ÄÒ8ÐC’D°CCÖ+Ü0 äÆ+2ä²ÜÒ¤˜8ª8Ž¬È¦+/®5ÒžŠ9Œœ¤2Èâôæ8¨¢ìêÌ8Ð3ŽÒ5®Ö/à˜ÒCš¤èŽæŒ8²Aæš0æ˜˜ÊŽ˜òîÒªðž–È˜¦žœBÄÒ®ÚÆ7ÐØÊ˜AÖÌŽ3°ªÒòAŒ¦ŠÐŠ7äŒ1/7Ì”3DÚ–Ò+Î2C–0ª®È¢ÔÂ4ŠÂ2æÌŒÆê4’1¤äÌœîâŒâŠÐÒÎœæò¨ÜÆ¨/ÒØæÈ–Dâ”CÂæD864°èì®ŽÂæÚ0071ØÊª/1®ÄäÆÌ”ôÔäÐ¤¬Ø0¬Î®”ðª/Ü0Ü9ÞÊÚ²¬ÎÆ®2ÌÈšÒæDîœò5²9+6Œ93Â¨ÐÈ0ò5œ ’ìÖ¢¬–Ðž²²¢žŽ9CÎâ Þ47ÔŠèŽž6Òîª¬Æ4Ô¤°ìÊò”ÄÊòîæžÒ9œ10¢Æ6ÔæÄ9°âÊæè´¢BŽCâž´´¤œ6îªôæôÞð9Üð´æÆ1ŒÊ+/ð°ò°îšòàäÖª¦î8ÜŽÔ®1Ø2´Þ8²îB3Øæ4ÖØÚ¨Dè/âÊ¬ŠìÂ¬4ÂìàÒ°š9Ô˜àšÂèÌ”Êä¦â7òž ä˜+ÂÎÈäÆØAÎÐ56à®ì23œ’¬Ð èB¢2à´¬ÊšÐ9œè0Æ¢4¤˜Ô/Â47/+ØDæ0Ú¢èÊ8ªà®/Ö4ÄðœC6/5Ö7ÆŠÂšèŠŒ–œÐ¤ÂÌòìÞ°ê04ÞìÜØ8Î¬ÎAžDAî8ÖÈæÄ 0¢È1ê¢ÆA50˜ŒA2ÐÐÒÐÖŒÆ27Î9ÌšB”®Ä¤¬ìäêžâæØÎ/8Ôž6Š/ŽBð2®°äžÔ¨+êÎ2Æ¦3¢6äÄÄ²âªðâÔäÎèôÈÖ˜¬/ô¨¬ŒA3ÖÂÚ¨Š3Æð¤0òê+0¢–Äâ˜´œòš¢Üô¬”¨+Ä¨Æ6–Œ®Âîâ´ŒêCäœ2ÒC5ÚòðØÖÚ°3¤Ú”ÚÒÈðŽŒòà´BîäÎôŠÈ02Ò04Ø ¢ÆŽš6®êì–ÖèÆÊÐBÖ1²/–B8êÒ6ŽÔA¬îâ¦è’ Ê˜C8Œð¤5”¬+2Ä˜˜/Ì8Dî¤²²¦ŽŒ–˜3DÄž°žÚ®ŒŽÈÐŒœ¤žÂð+âB2ÎÒ0è/¦4¦ìæ/˜ žA Âè1CÔ5´œÂšêÜ´Èâ0žð”76Ü1ðªœÈ3ŽÈB¤òÖŠ3òîàªšB–¨žÜÂæÄ¤œØCàCÞÈ0ðÆÈ¤²¬Žò/ÔäÖÌòšAÜ´1¢21+êŠ¦ªÔâ3˜ÔÆDÒ3–/Ø7®¨êÌ7¬ÎžA˜8œÐàò˜Ê/¤È/5´Ò¢ê2æªÜŒ®/5¦+òÆ/Dì´²Î¨ªÄ”œ2˜äèàŠ/¤ÜŒŠ–ššŽ0ØÈ”¬ ØÊC5ìÊÞ0ÄŠô/Þàœâ6’ 765/ÎŽàð9äô3¤àŠŠè4¬Ä–B Š¦è’ò48+ÎÌ®Ö6ÌŽª ²ÒÒ¬6CòB/¦ ¦Þ˜¢20Ü¬CòîŠÐ7Aæª1A91¢êŽì¢+î˜®–šÎ¬ÖÎ¦D3ÎÂð6æÖ7¨Cîªœä˜ÜªDà31ÖÚ1–2Æ4ÌÔ9ÄâÐ¨Î¬Ö99œ¤èž ¤20ÊÌ”B’Ìì+°¬´4°²AD¤àÖ˜ÚÚD°3–8ÆªÖD¨¨ªòÈ–B ¨–22ÎÌÌ4ÎD°šž1¬DØ®ì0²C9Ž®ÆšîÜè¤7Ú–žCØÆ–ªœØÂÊÚBªšÈDÖŽÄAÈ+®¨´ð´žÊ–®ò9ðð6//3ä’0/ÂBŽâDêª1ìD®Ð9Ð8š44Î°AØ6ŒÌ–šœèÔŒà2âªª+260ÐA30¢ÄðØ–9ÎDÞžÆà7Ü7È”1Úæ®6´4âôô¦89ª´”ä8ôœòØBô¤Ò° 2Ö8Æ9AÐèÎòŠÂœ36ÂîÄšŽ¨Ð4àŒ/ŒâòŽÂ’âìÔâ43êÞÔÄ6ÞšÒ76š4Òäð²žð¨6ŒªÂžæ7–C4Ð’œ1CÜÞ6êÔâœêªôôîªžDÐ ²Ö”ê®4¬ÜŒÌ38¢²’Ž4Ìœ”–âî²’ôäÌÊ®° ®ÆDì+1ÞŠ4î°îÔ1àà”ŽCÒ5123’ò’®ô’16ªÞÒ7ð/5Œ¬Ò”1D 7æœŽ–Â7˜ª¤®ä¤¤Î–ðÂ1Ø31 àäª®¨0B¢7ÊœÔ´–51Ì1œ’â4ìž059ÐŒ¨8àÔÆ0ô¬55Êš¤+”¤¬œÒB2žDA ÐÊÐ8¬+ ¬ŽÖ9Ð”8œ+ÒÌ¨ê03äŒš’žšD”¨’Ž´C3Ú´ØŠ/–Øœš1CÊC/¤B®ŒÄ+˜æ°®6®7+Ð8/Î+9àA¨ŒÂ¤Ú®AÌ¬ê2¤´6šÆêÂÄA˜¤ªžÂÌÄ/ 3AÐ”Šäž¨¨ÊÊ’¦žÂÐœÚ4¤ÂÒ Þ¤´5àŽ+Â¬êÖ¦®æA¤âBìà2ÚŽðŽ18ªÂ 9¬0âÐÜ9¨7ææÜ5Æ1+Š6ÌŽôÆ´ÌÆâªÄìî80¬C¬3œìð+AàÈ²Aê®°’ðÞŽÖ1¬Ö’´žô°ðŒ¤Þ1ìè’ì76âä9Ö54òÊ¦¬œðâ8Þ˜ÒÂŠŒÎ0B7òì²Æ¦ÎÈÔ9®ìÖŒŒ2ôDðæš¨Î90àÈ´šDD–®ÎÂ Ê¨8¨4+ÂäÄÜÖÄŠ+8ÐŠ2D1CæÎ2²è6´Ð’ÒÞ¬214®Ö +Až¢’¢Ö¦ÔšôØ°¦¢7ŒÖA¬îðÎªÜÌC+¦š¨’ÖŒØDBÒÜÔœ3ÊC´ÄŠÔŒÖšÜî´C7ò1”¦5®+ìªìÐ8î¬Cæ¨ŒÄž–œ®¢âÂŒ–Êœ´¤ð3Ø¨°’ÊÄ9°¬¤ÆØD°ÜÖ”C ÊØÖô57¬ Þä5Èæ5ÊŒâ46Þ°–¨ðŽšðž¢îªŽð–Â’–Ââ3/¢´–òô¦3Â²+–Ð®æÄä¦ìîôÞêî¢/²ðÚÜž2ò²ÜØœB²3ÐB˜ä²˜ØÎ6+6Ø/¢Ú¢êô–4žôŒÆÖ/ÚÂ3¤²˜°/ä Ô°ÄÜ 63œ04Ôî4+È¬Ð’’ðŽÚÄÎœ3”Úêò¤96´Ž3 äÂ¤ÌÖÜôÐ0¦šš¦AÈ1œ¦àŠ2œBØêÔ26ìÖÂ’¢Úàè¢A”/Úœ”6®ÄD¬B+¨3ÔBäÐŒ4””’ôBèœÂ+ªŽ´ªêÔD¦ŽÖÂžžÂÚÔ1ŠØB”6Bàô5â6šÊÎ°5’â1ò´0¤0š–°¨èØ˜9ê¢®ðŽ–ŠÞÖÚØÂäÒô®ê”9š6¢¨6æšCž¢¨äàž¨Ž2ÐŒàÄ¨ÖòªÂìèÆ´Øà´’09äÌÐB6CÐ˜Ü0¤5ÞÄ+ØÆ¢Èò 2¦ÜÊD5Ä¤¤Ê¤ì306®ŒòÒªB¨”5®²+AŽ¨9ÒØÆòðÐòÂ8AæœÊ˜êÜÈÌB6âÎ¢ÒÄ®¨ô˜à9¦È¬˜0ÜäÖ²¤3ØŠD949ôžŒò3ÒÔ Òê5ÂÖ7è3˜æòš’ÎŠÔÄÆ¢Œ1D464Öœ/°¬DäÊ1¤Ž+3æ¨Þ3AA2ðê’A8D7žÌ1Š˜ðœ  äÐŠÜ45–Æ1–AÐ–Èš¬+à–1Š¨6¤Ä+˜Ê¬ŽèAÈA0ØžDÂªÖ BÎDÎà®Êî’´¦–®ÞààðÄ9ÄäÒè¤6è9îÈ–Æð3Þ99ÈšìäÂ¤Æ/¤ìšð 2Ä9Ò¤Ä®ÄôÎÂ5Ð+æðÔ1²Þèè+ð/š2/+0ÖÌÞžàBÜ5ÜÜ99¦¨ž99AÖè’Þ¦´2”î²ÊàÚ8Úª¬ÌÎæŠ40+®2ŠðžB+Ü¬Ž´ðä6Žê àÞ4C0æà¨œÄŠŒAª0š¤+3¢šA¬ÐÜžæœ–8´ò8ÔÚ–8B’¨ê1à Ü6ž¬´Â˜ê”ä’¢ì60Ì/ 5+žôŠ2¬¨ô îèÐÞ²2’8¬˜3šBŽ0–CÖèÊêè´ôÐ0¬î ´Ìî+êšÔžš´Øì–ŒòÊÄ3˜¨69Ü’+0Ò0š˜¦”ÐÎŒŽ5´ìà¤ÖŽ7š ®4¬êÐÔŒ–AAÒ0ÞªŽîžŠ’1ôªŠÎ1BÐ0˜A¤˜4–àòêäŽ¢ŒªÒ®Ò’8ðA¨Úò3°2â2Þ4ô4äÐäŽäÊ+4ÐèÄDC°ÔØ2æ/Ê5ÜŒ8Ž1 7°œ5žÜØ˜¢–Ú2Ô´´ò0+Ô/B”¨ BÐÖŽÞÌ/Œœ920˜Æª ¬ô®ì”¨8+ŒÈ¬19B²ª7äÆÒÊÔôâ+ê7B0ôÆŒÎð”°ž39äB¬ôäŠ¬–šâÆ5š25Ô°âð’–°ÂÞÂ¦œÜÔDà¢Œ9Æè9°ØÌŒ7/ä–’1èê¬’0ì30âŽÚ +6®è¨æ/®ÆÆ9’+ÖÂ4°C88Ö4ÈÂ´˜9ŽÖÚà¨ÈÚÔ´Ð//4Â7CŠœòÆ07Ú7ê–ê¨ÈÜò6ðÚ2àîæÜ7Ò¤/’DÂ6ôè¦0°’AÌÆÂê4š¢àÒªÎž–Ê˜Æ°òÄšÖÞŽ27æ²Üì3Œâ9Äò°ªÚŽòBÈòðšêÄØäÚÎÌBì´¦°Ò°Þ˜šäÐ¦0B¤ÌÌîìAÊÆ6ÐäAô1ÈÔÌ4Ô0ÈšŠ3/´”Ì2îòÖ² Cî®ŒD5ÊÜà6ÒÚ2æžÞ¦9+œ’šDÎ æ ä®”àÖ4¨Œ””ÚÚ5æ9ÚÆ°äÜ9ª®äÔC41–’Þ¨9C¨ÒôæðÂ°ì 5ê®Ò9ìŠîBÜDäŠÈÄC1’ŠÞ3°Þ8Ð´ÜÊÆæ/–ªÆDÐBÖÒ¨æêÆÈ ìä”î5Cô9ò–BBòä°ÈÐò+/ê6/A/Bš”´âšäÂòô¢ª”Ôæ°8®Ì+’Ä’žôÔÖ¨ÈØÌäâØæC²6àžàÌ45œ ¢š¬æ–ô®àÒ¨È7ä3Câ72æÄ²Ö²8ôÂ5Ðì²ÔÚêàîÌâ¢Ì¢¨6Ä˜ŽôBÆäŒêšBæÔ¤œ1®ìÂ6ÎÊ6¤ž”òš89ÔÐ¤–Ä ”šîÄ+Ö4ÖŽ®ÈšªDÖ3òÂòŠœ+È9˜š²8ž/èÆ5¦5”šÈD Ø¢9Š¢ð’È–¤ÜìÚì–ô9Ä /äæ+Ü4ÔŒŠ42”ÔÆìÚ°È3BœðŒ’òì¨êØ”CÆ¦´/0”àÎœð8¨°Öž11Ä3è²ÎòžÊæB000Ä²²ŒŒA¨Ìà7BŠBÂò Ž6Æä6ÊÖôÞÜ3’ØÌ”Ž œì¤î²6žD¨à3ÞÔCœô®ÖB’®Ð–ê¨æ5®è11êÒÊœ¦Øâ4ª¢Ê87â8îš°¨¢’3¢¤Ä0ŒÚž°”4Þâ´Aš1’2ÜØ9Žæ´Ð8ªôÜšòœ6œÜ8¢6âÔ/è7î–45Ú65ôÆêôC–D¨¢/Ê+ÔÖ93äA0Ü9ò3¨2´”ä®D0Ü4Ö ŽCâ¢èî87¢5âìäÊ’ŠðA+Ð’ž¬CžêŽÊ7¬ìÎ®Â65 â´ÔŽ28îÈ04¦ÈCÚØ08š8ÔÌ¨´Œ²3ÖÎ´1ÄÊÊ¦/6œÜ3ðè”Ò4è37àÆÊôDÎ721ìB’5Ð¢ÜÖà²¤”DÆÈ/æ+CBšÜÜ46šž1ìÖAŠÖ+ÎÌàÆîì˜1œÚÎDÖ+¦ŒÊ99¦’’®ÄÎ®Ü¤È¢¬Î®ÚžÒ˜È¬ÌÊ7ä/°Ø7/2äôÈò¦Æ5DÎì–ÖÌ°²¦²Î–AêâÚ3”5²Þ°òð ¨à¬¦Ê+²6˜¦Æâ+¬B3Šæ”Öâ6²1žðÚ4šÐÌ¦8òô9 ôÎ’ªB–¤0ä9/+ŠÆBŠ02ØÊ”î–1Ò6ÚÈ˜¦â0¬ð0C92šA95ÌBÄ²ô8CžšÚ’2ÜÔØ¨Òœ2ÒÎÜBÂ4žªª¤Öòð°Ž¨ÞÊð²ŠBÖ¢1/Š5¬âàÔ²8DÊ¨ŒÞB²Ê²Â¨ÒBÈ71ŽžÞìôœ–ÚAòDâÔ5ÜÈÂ+ÊŒÐAìÆª’ÄÞÚìž+ª4Ö´ŠBìì6˜èî7´ô¦¨ª6ªŒ9â¦¢9òæÎœÜÞ”Šì’ìÖî®¦Ä0+ÒÂ9BòŠ¢äâÜ¤Ü´ÐÒò²˜”æÌÈÐŠ–D ÌA8š¨¨7Ê4ª3ÖÆ4¬Ê¦ÖÄ5°ÒÊ˜¦æè1°žŽÐæš¢ØêBŒBš/ÒBŠš+BCÄ®È6È²š3îîÂŠ/Ðª2BÎÈ6+æò3ªš´ÐÄABA È®æôžÌÈìD¢¬°´0°˜8ìÒ7A®Ú3+¬â²ÜB°ŒÌÂ3®°Ò¦äŽ5¢0°DÎ²1°® æÈ Ø²²Ð6ôî²Æ7ŽÊÄêB¦ ”ªÜ”5šÌÞ5Ê¤59âÄªâªì5Ê4+ŠAÖžÂÔÖÒÆÄ¬ä¬/’îÚ®Þ¦¬ªðäÞÄÌÔà²Ò²Î˜¦è²’î/Ì2D3òŒ¬ÄÜ7ÒÄšœÜ°Ì¨6¬/´ÎÚ8¬Â¤˜–”¦Ôê51ŠâœÞ°Æ6Ð´¢â¨Þ/¬Š’ÔŒê°œ25/Ê3ò9²AÒ¢ŠÆÆ7ªC4®+¬Ä’ÎÂÚ0Dð’ØÌ9ÜèÚòàª’´°ÎôDÜªìªŒ505ô73î®ôªÄÐÆ´Âæ´ÞæŒ–®Cž²®¤¢°Î2È˜4”¨òªÌÒŒØ’®3ÞÔÎ²¤ÜÌâ¬´šÎ+6¢4´ÜÊô12¬ÞÄä˜¨è9Òä â´°œÜ¢Øä®Œî®Þ®ŠBšÚ2 ²+ž˜Â¤4ò3ìÔìòÈªäŽŠ8èäD0ò´2Š’AâB²òæØâ˜œÚÎ72ÞÜ5ÞèÞäâÌØA´¨¦Ä”š+žð´ÆžDìÞ/ÄðADÂÜÄÎ8äèà66Ê–ôâ9Ò¦A¢œšŽâªä2œ5æÂ2¤´ò¤˜Aô´ÊA2AŽè6ÈàÌÂ²1ÎìªA°0ÚšèæB°Œ2ðÈê5¬Ä2Žê+CÒ¨BÄžÂ6ìð–Ô3°68ð7Ú´”9î²È¦8â+BÚÔÔCšÒA¨¨0A¤Â°Â¬3Ð8¦Æ”D8¢ªšŠ¤¬š8Þà¤Ô2´´¦3ÒÈš°Øâ4œÐè6CâôžžCÚäÔâêÎÐè¬ŒôÚ´–4¦æìòòôÊŒ9Ð/Ðî3è®¬1Þ¬®2ÈÐàâ 3¢ÚÈ4È°BÔ9äA˜â+à74’ÚÂAÊð4èB2òÞØ°ª¨ðÈ´êÞ4šŽ9òª+Ö5®Øò2ÔŒš°––7ÊÞDÂÊÜÌÎ°Þ¬à81â8B¢ì+ä¤/Î˜šØò1ìœŠ–9ôì3ÂÖæ8¤ôšš9Ú¤Ü6¢ž2Úä’šÊô43ŠÆô Ô9ž®/3Ö45ÚÐœ+ØêÔÔ–9¨5Þ–Þ98ð¬ÎÖžÔ˜ÞÖð¬®AêÞ’Ð5ÐØ0˜ÒŒ7Ä57”5°˜5ÌÂÚªÊ¢1¨8A”5¦/ÒØ˜Ô/9ô¬CÊØŠÞ6Æ6Š°²ò5ê3˜Ê8ÔâªÊâêæÚ’ê3Äž 9è˜¨0¨Ôª¦Ú²3642ô”Ìî2èâÈ´æ7œC¬¦Æ¤8âŒA3¢œòÔŠª¢¨”Ž/ÖB®A²’¢Ü585¬Æ®BâÔÆÔ/è¢  à16äœŠââš8ÒÞ8Ìô5ðB5Ð’”ÔÎ6”ÎÊà°CCÚA¬4ôÌCŠ Ö¤à2Ê5žÂ°3ìŠ²ÜŒò˜èŽ3îâŠ˜¤ÂèÚDD–Œ°Ø2ª”””î68+0œØœÜ˜ÚâÌ5¤êŽ®ÜŽ´33êšæžÒÜ”èÖ50æ¬¢šÆ+ÚÊœ0àä°Ü´7ÔÆÐ¦6Èêâ¢/ääD4È/¤–4Äô¦à3¢+AÎÚæšÈ”ÆÔÌâÚ5ÄÞèA6Ä¬žì®ð4î¬Ê°’ÒØÚ9ò8ì²ÄðôàBBàDäÖ9ž®¨Âœ4¬Î5/6ä49¦6ÐD²ðŒ4ÆèÌÚÂÐÐèœâÚ47æÔÄÜš¢B9DŽÆÖ´¨Ê6Äè7¦Þ8/äÊ58Ö¬ÐÊŒ/7¬îÈä20¬Þ2¢”0Þª¬AÔâ9â9Ê5Â4òA²Ðš¦Šª ìî¢¬9ÚÈÔ18êôšÈÂ¤ì²ò/Ø®®2ššòÂ°Š3žì16ÂA¬ªBàDŒÞª²Až0œÌ/4–òÔA88Ä3Ä7¢äàÜ+ô¤ÐÂ’ÒÆA4Ò–ž57BÚÜ´3Cð¢â–5ÔÌÐ724ì 6äB´Cò+´žî8Ö´àŽèä’¤¬´ÞŒ5ŒD¢ –9œšî9Œ/ÎÎŒÐÒBòÖäÞØ¤ÐÄŠBÒâ¤2îô²š°/6œîŒâ®2°¢žÖÌ1ÄÚÂ´àœäŽÒC”ä°®®´79ÞÐ°BšâÔŠæ0¬è4˜7ÂŒÊâèÔ¨Â’B¤èêÈÐœžäÚœîàÚØCàò7îÆ95ì’4Ü57î˜’ž6ÐD7ØÔBÒÊ®7äÆôò3+A°ØôŒ–î541A5 2/6Dî’¬73ä¢èÚ”+ìªBBªŽôŠ5Ò´7ŽÈ®Ô94Â/BÂ3¤œ3ªòÌ1ÆÜÒäîŒ®È¬È Èò5ÊòâA/Ø°4èšä547DÌ’èòèŒ3ÔÊÈ˜Â¤˜DØæàŒB4Îô˜¢’ÈÔä7ÌÜâèÔA5ä´Öè/ÆÌ¨š+Æ6+ÜàÒ1DAâ1+î7œÜª/Œžš0ADââ5Ð02â¤¨¨3ØÔÊ¨CÌDCÚ/æð1ž”Þ¦âž¬¨è¢09è’ÊÌÎô/¢ÌäØ6ª4Ö0ÌÊ’DÂ´Òª²6ÒÂÊÌä0²Ø–¨ÜØ¤Ò+Aôè5ŽA˜ÌÚ˜7–´²3èCôìâ/BÂ5ìª ê9°1Œî²/50DÂæÒ Êœ3ªDÈ0ê0ªAæ6ADÖÂÊì1 Îìâ¬Ä´œÎ47Ò0ŠØîœæÌÔ´æCž”ÆB¨7 ”Þ®ª1Š´æÒÚªÆÖÊAœÊ˜33¨´161ôÎ–97ÆÈîÔ178¤Ì1”â°–šD¤®´9BðÂ²îÜ´œ¤”¬¤ÒÔ¢CÒžÚ¬9òêšâì6¨ÎD˜¢ŒÄ–ŽÔ”´ÚŽØž˜ªê´¬/œÜ¬¦Ò0®¢ð4òÂ73¨ÒÒ”ØÊäA5Â¦´Œ²39ÂŽÊDèîA´îØžžÚ¦àÄô5ÈîD¢–Ì¨â+ÖàÞÒ¢È˜ÜÔ0ðªà˜š4Ì2˜ÂìÆ”ÚŒ31A4ÚÌŽð8C°¢ì¬æÐÌ²àØÜ–®òžÆØ35A8B5B¤¨ šž/”56² Š42Üàôª²²ÈœÄ6äœ¢2ÞCâÖ3ôèÄÖ´ò´/00˜DA8®6â¢ÚâžÜŠâ–Š°–ÒÎ¢ŒæâB8ÒCôÚæâ˜´¦žÖ3¤Cžô+ê’œò01”ðœ3Æ”Ø8ØÄ Òæ97ðÜÒä7 ÎÂä6Ô1èCâÚ2Ò ªCÆ´æêÜÒÜ´êØ1Ò˜DA®è5°¨3DÌ3– 8Ô˜720ä¬7ÌôÈ¦ ˜¬2–Ô°²ì¦ÌÌ+ÌªAìž2Â²5žÖê”ÒB È2ŽàèD¬¢¨¦ÐÐÆäî7Æ7 ÎÞò2Ú8Î°Üòê0+’8+Ê°” Êò°îÒ ´èœžô7®4äž¬ÚÂÌ75DB²Þ²ôêà1°¬–ðŠÊ096CªŒ ðŽÔ®ÚèÖÂàôÆCŠ´AÒ˜¤ÌÚ/œÈî3+äÔÜÊŽ1œÔŒ2ÐìœªŒÎ”7¬9ðBìì38˜¤Ä9¨Bè3àÌ°´Äàà˜9ÔÌÆšÄ¤êØŽ96B9¨D²¤¬¤žÖ9ª´ÈŒ”²²AœÂàîÜ¢ää+Ü /ô¤ÚœÎžÒ°È7à7Ø0Ôò40ÄŒ3î/ADÐ08”ÆDØ à–âÄÌ èÆAÄ7ä5ªAD´ÎÐÈšâ”ÔŠ°îœ´/ÌŒÒÎÈÈÎæ0ÄŒðÔ˜èÞ0ÆÒà”šò²C¢®¬ÐAôÔ®¨51Ö®–¤ÆÚ4Ô4š˜ÔŒäÊ® BB5Èš”Ê+68¨ä–²°²¬žò´ê¬953Öîð²˜ôò¬–Aª¤èÔ¨ŒÌC’²5ÖŽ1ÊB26ôÄ°AªàŒ ÆÌì²B’ÔÞ®®7”8Úœ610¤˜–¦2Ì ÜB+ÚÄŒ¤òè–BD¬’4æÞÎâÂòªšÆîÜœð’òª––3ÌŽ’ÎÂ¦Žœ3Äš¦/ÔÌ3´+7ê˜6ÜœÊ–ìªäì4òÊŒÈD5Ò¬æèè/ØÄÎ5Ð7Bä°Üôäš6¬ŒÎœâÚ+4Ì4˜ò¤ê8¨Üœ7A/êÜ6ÖœèŠ58¨Œ° äªžÔÂÚBÚŽ²î°²ÐÎ99ÒD¢æ+¤ÄÖ/ŽØòBì7’Þæ¬ªìD®¨Öôôôš1´7ôê°äÞ6ô0ÒÚ/Èð3ìª2˜Ü˜šž˜Bôò5´¬¢Š²”ðàŠì3Æ2ÚÌÈÖì´È®ÌŒ7îÄŠ3Š˜Š®–8Ð´Äª’–Âæî´9Œ ä9ÈDÌœD®1ÂÔîÎ/ ¤®–˜îÒ¦3ŠÌÜ°ªÒÐÐšØòîâ/²œê2ò¨®Üžª5082’è5è²ÐØ/šÆÂ3¬ÜBÒÒšŠDÔ¢Ô6¬ôð+ð7àÆ4æôÔÎ”Ä–60®¤ž¦Øî6–š”Ü²/BæC–˜ÂÈŠæ¨Ž²6AòòšÔ9ADæŒÌ¨ÂäÖÆà¢Ü6/5Ü1ADž46Ê˜òÄ/ÈÜ5”Î0¦ò–¢ìêðÈÜ¤–šê7Œ17ò¤ÔÒš/œ0š’A/èÎ77ÚÎ®0®æè´ð1¤ä6ÎAÖÂ”È¢Þ¨Š’àèÊ°ªÚ6C–ì¦¬1ÚîÌC®7Ø3âêžî42šŒÊÎìšŽBœÔ”ÊÔŒ¬Cš43òœô°Š¢îò´ÖÐ5²+7ÎÚ3Ô3+2î4 1D085Œ771Ô°ô6 Ð²AÄC5ÎÜ¤˜îž/ØÆäÜæ¬¬àòêB/99´žªØDÔê9ÂØèÆ853ìØÊÒÖAŒæ®˜5œ¢ôàÖA3ÎÌ94äÚ’ÒÈ¢¬Ò4æ9¦–ªœ19š”¢ÚÎàªÈC¤ÜÎAœæ¤ââ/0ÊÜ°šžèÎÒàØàâšà¦4Æ¬ô1Ê/Ž2ÆÐ¨7Ø¢˜84ðÌÌà+ABàÎÌÔDÌAÎŽ2Ôä””ŒÎÄ3žæ/–²ðÜÜÎ2ÐÔ¬Ê®äD¬ä5ÜŽæ°¨œÖ¬îŒÌàð¬ÎÊÖCòÜÆì82–+ÚÔCôÎ +ìCèA8DÚš’šžâÐ¨79ÜšôŽž7Òðð´ÄŠ1˜˜ŠÈ/ê9Òª¦4ÖÄÌ5B’ŠžÔêÊ¢®Ö˜ÂÆÄ¬®è+òC7¨0ÖÔª°àDA0Üœ4Ö//Øê²à¦˜6Š7Ôî9–˜˜ÄêÖDÜ//ÞÈèæÈîŽ2ÒæCÖ¤œâ˜ØÌ5ÄØ8Öâ¦ìÔ9âœÖ1B9šêª¦è´21Öðª7Âì4ô–ŠŽì–¤+9î+3–È ¤8òÞæèÖÖ3È–¦Œ¤ 16Èì˜BôäÎ®ž2ÜŠÖB¢6Š¤’ÂèžªC¨Ò’7Èê0537˜Þ’Ü6²ÒªÒª¦9èÒCC–D´ÈîÞäš˜žŽ äªÚB¬œ˜4Ð®DÖàA5˜¦Ê¨äæò˜Ö¨œCÆ˜šèšÌÈÎC’Æî70¦’ÚòÚªØâÌžžŒÔ’è6ÔŽ¦ÄA®ìB¬ÐÖÚ˜DžAÞªªÐÜ¦1òÒŠäD˜/Æ9²ØÐê¬Š²9Üš¤´ÄŽÐ”BÈÐšŠÚ š7090ê8êÌCÄòC66ìàÎÔØDÈÆAæ5ÂÐ5¢ª–Ôä2îô®â¬¤4–Ö¢ä2Žô’”/Ž ®Øª®Ê¦ŠÄÜ5¨ô¢AªŽ2CÐDÄ¦C3+Ì¤’”šŒÆÊòDÈœà²¤”´ŒA æŠ¢6ôìŒÈ2ÞÎÒ°–”0Æ®Œ2¨/3Ìâ¢Ž2˜2/Â’âšÊÌCžAÊÄŒÒÎ–ÄÌÚ8ÜÄœ0/+”ì–òÌœ”7œ4˜1Ú1Cè8ŒÚ+Ðž4èžðè˜Ä93ÔÈŠ4š ¤¢œòCæð 1BÌ7069Ö¨+Ú°œžò8’D1ä¬èèô5A3AâÈîŠæDîæîÄBàÆâÂæÎÌ/+Ì°âÐ5Ô®7ªCÔ0””šàîžÌòŒšÂØìŠÈô”ÆàCÌ°²7â¨Ø°+žCì²®ªÌæœÌè–Ì4ª°Èê¢6AâÈCîDîÄžòÚØª12–ðÊ9Â3ªæÖâ¢7BÈ´êBB+ê1DèÎ54B°Ü2Þ°žœÈÜ¨òÞ1ÜŠCâ1Ê´¦òÈÚä Šè–´7DŽ/¤8AØÊ4Cà°7Ò9˜/ÈÄ8²ð¢êÆôž8Ì/Þ3î°3Ž¨Ü2òä²´+Î¨â9Ø®®8¤ŠÈôô¬˜žÒÐÜ8Ô¤A²4êÌÚìC¤˜CŒèèðØ¦ÞAÖÒ914AŽÈ8ÔÊ¬È´7¬ä°Î8Ê+Œ’5¢4Œ23ðêÈÂ0î9 –Öðê6 ÖÂÄ¬Aôä7âœ²ðê5´”+ÈÞì’31/7ÌÄ7ìÚ98äÈÆÈÔ¢æšðžêª®œ®ê4šœ8ÜîÒ˜6ÄDA4š’–Ø¨ÔD1ÆÔÂÌ¦š5ä1–+ž’3²9äÖØî’¢ä/æâØÒèÂÆäÊ¦¤ðÈ/ª–¬2¬Ô²Ž¬ôÆ+–AÎ’ª2œÜ¢´´6œ’ØÔèÒÖA”7ôªÔ®¬â7ôæÂ¢æŽ’B¨4+¦2âÎ È+–Ž1ÔÌô2Ì®æ+3Öž¦48B+3+3–”Þ6ªÚê”ÒîÜŽÒôÔÈÎâ¢Þ®ðÚìè¬ªª55´²ððž+ð¬7”ŒàÈ3è˜ ô/Ø0¢àèD´ÞÆš3è Ž¦7ÞÎ¬+œÜ ì¨ê¢²Œ+/äÌCÌŽ”AØÆÈÖ/8à+ô9œD˜2¨ÂÞÊ¬–Æ®ðØÒÐžÜ+²”ôÖ/Î¤+”Üª´AÈB¦î’B8ªÜÄÊê°Dì’¤ôäÌš/7Š˜Î77¨–äîÖÒÖð–ŽØ741Òè¤Cò8¨5Ô˜àŒæC1î”7A–žÔæò’1ÊÒ21ŒŽ¬ÔÌ Â5DšCÆ+žÚìŠîÒÎÒæ²®Œ¢”Âä3A˜ŒÐžðâ®œò®æ’è/94Î9Þ¦8œèæÂÊ®585ÐÔ–DÄòÎ+Â5B®Ö˜Ö¦î7Ê ¢9êÞ°¬²²ÌAžâ/Ö8´œðšÒÂäŒê7Îª°œ”¨ÄÈ¢Ö8+¬Ö6D9¬9B/¨Œ2”²Ø2/ª¤´ÚÔ¦¦î¦Ðì¤’ÈìšèêÈCðâžDAÄ¤ÚÆ²ÔÊêÌÄ’ŒÂÄAÂ3˜è––ÆèèÚžCAÊ+C1ªÖB8Ž²DB²8®œ 640¤è8˜à4ØæôÂ®Bî’7ŒÂBÜ¬Ò9–/Ö5ð˜3AÐ˜”BêŒ’9¦–žB¢¦Ü´î¢¢¨®ž²âžCÞêÆÔ+ÒâªÚòÔŠê¦7šŽ’2ä7ìŠØÄ2äBŠœÂÐ®D6B’BÔªÈ Âð/0ôØÂ239ŠžâÌ+64®îCœ®ìò1Æ’Ôì´òÔ+¦7”èÆÒæ–¢Ô˜5ÖœBÞ’îôòÈÆ²´°Œæàê8ÔÆêÒîÞô2æðòŠÖ5êâ3ÒŠâè35ò+7ÔÎôô´èØ®´Þ–ÎØŒ¤ Ì4Î3žŠŠ¤3ŽA¦Æ¬ÂÖÌÐäððÞÒô¨Ü¨6Úâî’Ú7êÚDìÈ¦/2–ìD Èò˜6ê²˜ÜäèÒ¢ÐÒ0Ö²Š37Þ¨ô3ØÒ5´äÒŒ–Cô34è5ìC8°Ú´Ü4¦äîàBØÎ6+¤D¬Ö3ªA0/616–ô¬Ú1DØÄÄ”¨ô+Ú–ª²è¬Òž °°CŒ8+ÈBÐäî3êìì/à9¤0”Æ°5¢š¢ÄÜò°8œÆ–â²š®ÜÔ´71ìò9àðŽŒäÞ¬+Î2ØÚêØÜ–Ê841DÊÌ˜°Ž¦ª®¦ì˜ä²¦ÄÆÜæòÖòœ–ÊÈÄäDœ9ÖžÈA89Þ¢´äÒAØ®ôA7¢BÊ®Œ¬7ÞžŒBÐ9°+ÌÞ˜8Š0 BŽ8AÞ®BÚÞðŒ7®ÞØ¤ØÜª06ðÂ²ÈÜ8Ö¦ð¦¬Þô8žCÆÞ/ÈÊ–4æìÒ¤ÚÌÜÒ˜8òœò®Ô”®6–Ô7¨/ØîAâô ÜÂœ¨ÞÔ9²Èä””è9’5Ü´4æÚ®5ÆàÂê–Î’œ²ôžê0BÒ®Þ 38î6¬6ì6ªð˜”+D¬¬òÆîðè”œ°1à6Ž¢62´äÆ0ÌðŒ4ä/’”BÎ1¢˜¬1”91ÞŠ–076¢¢CAâ3ÊAÄ”Bâ6Š1ìAœêŒ0¦ì¨ä8ÞšäšÈÄàäDð1®²è’2D¬ä2Âô4Ú8¨ÔAŽÐŽòòCÄ70ô1+”2ÄÜèŒÆœ–C/Ð¢5ÆâÐ´²ž96ÈœÎ²94¦5Æ87¢8°èÂªîŒŽò6ªàÔê9²àâêÈÔ ÔÄ°È´D/°°¦°ô’Dà¨ªÄ¬Þ/ÔÄª48’”6òàÄ0œ6–´0–š²’Î7®7ôCâäÈC2š9îî1CžèŽ¤+1´ÔDàð¤Ä’Ð–9Þðš0²ôðîÞ –2â+ŠòÖ BðCä7Þ”ÖÊØæ¬2ðêÒØ4¤8òA´2BŠôÚ´ì9¬7Þ7îœ²3”ÎèÜ¬C¦ÔÚBä0î¦/ Ü°êÖØÖ°¢àA5Œô–è642æÎ0¬ÜªàŒ–ð6’–¢²¬ Øð®æ´ÈÄ¤šŠê¢ðæÈÔÆ4œÊœÂ/Î72ê ¨55ì¦1èÆ¦4Ò˜äÂ´0Ò’°2BœÐà4êŒD0î îŒB4êŠD4œðêäŽâ5 ÌA66ä®ÄàÚ´–ò+CÆž’Ö908Bšæ” Ü’6Ú3¢°Ì2¤BŠ¦ìD5®ìÆ¦ÂØžèÆ2Ü®¨ÐÚ70¢êÐÒ4D¤˜4/Ðê¢ŒôŒŠŠ ¨îÎ/Êì5ì1ž7Úê¤Æê4/ÄŽÆÖô0”BD–Îš¢AšäÖÄÒàòØòAØÔœÒê/3šÂŠ1œ˜Ž²9ÞŠš35–â”A´A0D²ôâ”¬ž–ò¨9/+¢ÖÌ¦¢ìÎÆÞœ”°7Æ¬ÐÜ1B2A3A ˜ÆôÒ¦Â˜ŒÊAD°Ò3Œ´0ðÎÐ˜à4ªÞ¨5èÌÐŽ–®ÈîÞ®Ò2B57ô²Ö ”àÖ1´41ÜØAêÎ/ÚðÐâì4È¬7äÈô0¨ 8°ŠÖšâ–ž˜° ¢Ú8ÊäðäÖ®Ð–¦61C¤Ü3ŒÒ4Ò¤š¬îA//œ®Âè®4žBž²ÄDä–Šôì2ªŠÊ¨ÞŽÌÔðBÎÐòÔØD1ÔæÒâÂ–šÆ/8æÆä– ØDš¦ŠÄÈŽB8ÒìšªàªÆÌ´¦ÚžÜÄ–²+òÊBÜê®3 1ÊèÐ5Ô7–àÎìÜÚ°æÈêÎàœ¤”²¨¤ÊB®îÜ¨Ò7ªÈ¨š²ôžèŠØÈ˜Øî–âèBŠœ68¨Bªìò–Ò5âÆD2+ÜÜ48ÜÞî®–3¢ìÂÆÊ°3 ˜+ ¬ÒªžìÐòì4DòôðòàC²æÊB69ÄÊDDòò/’¢Úè šà4žÔòÖÔ7ÐœÂšÔ´äª°Ä”¨¨8èšª²¨âäÖÊDÜ”®” è°¬+šèŽ291+83ØèÂÔðBØC¨/²¤7´1œ57ØèÚÈŽÊè78Ø”îð4ì’òØ6à’ŽàÖ®ØAÂä®¦2Š1ÐšØ¨Î63°îÂÎ–Žô¦ÚŽÂ2àâ/èæÈØÐBì4 î8š873ÊÒê°à²ÈÌ4äŒ°ÂŠÈÔCª4ÂÞÞÚ˜Þ7œ¬¬/¨àÊ–Ê4ŽàÐè ¦¤Ö4ŠB2+CðªŠÞô¨5æ²DDB °–Öêâ´ÄÔŽ’ØÖ¦2ØD”1Ü¤+–8Cœî17ÆÆ9æÎÚ3˜0+Ìð/ŽŽDô3ÐD˜šîC+Î28²1C1ìà4èÐª/ÂD˜3”ŒAÆ8/D9Î˜–îšÞìÐÌÚÔÜÌŒ®ðªšò8âæ148¬Âš6Î¤ÎèÆÎî3¬99Ö’ŠîÜ6äÞòìÞÒÜÂ”/Ô1¦®ðè¦Æ8+1Ø˜¬¦3¦’®ÔêÎÎ–ò–ŽÖŽìèÖ5ÞÚ8šžèæÌ89žâ1²ŒA˜ ÞÂÞÆ²²ÂBD2¨®/ÌÞâ”ÌÈÎÒèžÞòžÐÈ¨Èô’´˜¬¦CÂÌ¬ª4Úè¢–6ÈÞŽîªÄC2ð8î99’Ž–ªÊÊ¤ô¬ÞÎž4ôÞ5¢Èžš5¢ÊDÔÔÜš–â èâÊŒ0²Ú1âîA¨Ò´è”ìŽì6¤²Žž6Ž8ÊðÆÈè°3Ú´žðä²2Þ’5ÄÊÚŒ7êBìôÊÜ85ÖèAŒ´+Ôìà6àð–Žæ7¦ð0²Ð1˜Aª Cè˜´¤®A4âÌ7Êž¨ÒÚ8¢´4æ¬2ìê4ìÂŒ ˜”´BÊ¤Dœ0C¢Â5¨ŽìàÈÈšÜæ2žª²´6¦ŽàÌA¦Þ¢ØÐ+Ü6²š/ž¬àò2ì5ÚÖ’æÂŽ+1ÐÔ¤5¬¢î+¨ØŽŽØ˜4D6Ú7¦ØÜØ9êÂÂ8A¢ð/1â˜îÒÚCìAÆÜ²æÆD7žÚŒÈÂŠîâ’7¦èªB2Þ¨ôªî–2¤ÂÈÒä6âðòªìÌ/C²âÖÊ´ª4/0êò”Ú/’ª7®´âÂÎ¬5ÊCCCò¨Ò6Ž®+â B¨Î®DæÚæâDŠ îÜ ¦Îä¤¤æBÚ6ðä 3ìðÌ8°”–Þ/–ÂÔD7Œ9¦7®®7°3¨ò¦ØÖž99’¢¢ô ôªÐ¤Ö´Ðê¨ 2ìŠôâð¢°7AŒŠ6Î4šô¢žÒÌÄ¨è69Š˜î7Ž´/98ê’ÞÐ/ÌÞÚ’¤žÄ’Ê/Ž3œ¬Š¦5ÞÜ0à´î®¤ÖÌæîâŒ¦Î´415ªÚÂæ’ŽŒÞ9ÖÂCÒêÒC+ô¨DAŠÐCÚ4ª´ÂØèæÒ0èò²òìC¢ääÄ 7”82¤ÆìŽ7ØŒž– 39”èò+2555ðC45¤8¢ÚCàôòªè°ÐîÆ/–œ3ô”òðÞâÖA’4æè7äÔÂ2Œž33ª¤®œòè°ì¤059Þî¬3¤âî¦”ÌÂÒ27¬8¨Ø²´+äšæôÆðÜÐDì+Ð+9¢î9ž39Ü¤C¬Ê˜äð´ª¬ò/Þ’ÔàÂî3¬Ž”Ä4¨ò5îôBâÈ52 ææ50òÎÄ/–æ26ê0CÊÎÂÌ¬Ü°ô8”9¢®CA5èž0–ôÜÒ¨œ’ª+45àŽžîC”Ü¢ÌÂæ/Ôòâ2âê²ØÈæì°èÎ5Ö”Â8ÜòÖ1ªš”/2AŽÚ8¤Î®ADôÞ¨ªA¢ÊªòÞBÞ–ØÎ¬6âC¦2ÒÞ ŠÌ8ðÎ°–ŽÄ’à4¤+”ìÈÄ3êAð˜ô5ÈCÜ–7²¢žœ°Þ¢ÜÞî¤îC4Æ®DÎÂ”¦”Þâ°ôŽ ªŽC’Øìž”/ìÌÔ2²¢œ´ØÒ¨ÂBÒÂ6´Ö¦ÄØªAÆA+ÔÎ¦æA¦Ô òò’œâÊî”Ž39æàÂ´Þèâ²ÖÎÖ/¦ÊCÂ6ŽBääŠ”ô˜ØŒÈž0ªÈŒØÐDò8CÌœÒêÊ¢Üî˜ØD¬Ô ÖÈ°Â°ì’34ò0¬Œæ´0Ðæ¬Þ®²ÔšâB®â”7Ú¨˜â´ÎÄîÈ/´0ÈÚ18/Ôª˜˜ŠC6Š32¦Èªôä¢+²/9ÆÐžì47C²Ð¤C2àîÄ0òô5ŽŠìŒ¨ò5ì/ÞÜ’îB/’äBÐÆ²æÊèªêÈŽèÎœèÂª7D+žÞÈ/¬ŠÆÆðCŽôÒêÐÞêìD”Ð8AðŠ’îª–ÐžôŽ êª5Ú´Ø¦A5ÞÄDÈæ1ÜôBš8Ð2êAè3Ü¬¦Þ”ž/0æä7¤Ôâ¨ÖÚ1ØŠÐÌÈª13°¨Èæð1ð´æ˜ ð¦®Ö˜Äêèšª Ì/¢îìÆœôæÜCªª+ÐÒôÜ°°Œ¬š2¢î321’ ì3Êâª74àÆÔÒìœ9/¦â’˜êÎÊžÖ˜ðîØÂ²˜²4ÐæªÚ73¦ŽÌÖàòšDà¨®Bê0´9A7+¢ÎðÖŒÞ/¨ÊŠ°8È¢ôØœÒ¦+Ì¬ŽÊ¤8ÞD4Î¢è0/2Þ2 Ú2Ø®ÞØª0”´îŠè85ê/¤ /ìœ6¤œäÜ0+Ê0ŒžœÐÂ65ÌÎò¢Ö4Î2AØÜÜ¦ô¢ÌC°DêÊÌ1´’Ê/Öà¨Žô3°8Ð+¦´Ú48žÔ6æ¨Ä8à9¦9+˜Ð0¬š¬/²Ð47¦¤– ÞÄœÊâœ˜7Üª¦1ÚÆÖô´°¢2Æ˜ÐÞ¬9Úžè ²ÈÊŽÔ5D6¤6ÄžìÔò˜ÎC8˜”è/”ª¦ä+˜ØÆD7ž¢5Aðàê DÐÔè6”ž58ªäØ7žDDCÖ6ÈòÎ0´BÐ/”– 55ª 68èŽŽ¤31 7â¨Æ¤®DêÈ+êî¦DŠòB¨¤žÆÎÖ¦ìŠŠÆ–œ®3Úš®3DæCÜŽ’ŠÌœæÄAšª/3ê¤Ô ¨äìè7ìô6Ðªž6+®Æ ª®ª8D¬¨ŽÒ5ŒACâ˜š’Ô0 ˜4®¬Îæ´ê5êªäêàÒ²ŽÂŒì°¤8ÆÈÄ´¢3òòà´ªœÜÄªÄÈ¬Â´27ð°ÌÐ0˜7ÊòšÌÐ ÚÜÊAA+9Bô26Cä/¬+B1”2Ôšà˜Ê4êÈŽ/+9AAŒª¤1+ÄžCÞŽDÂ4Ð®ÌÐœšÆD”æÒÒ¨Žà”Šâ2BäêÒŒÜŒà®Äš+824œ®´ªBèD°Ž´ôªæ3Ø¨’Ì¤+œìÈ1´°ªîæ˜DŽÈ0òÈ¦Æ¢Ð°ª–¬˜žŠ¬3AòÜžD´òî5ž ®´+Ü5´AÚ/0Œ¬ÂBÎÖÔæ˜òŽÒ1êêîCš+ÚÒÊ0Ü”ÊÜêÂAÊ8ž7Æ73ìî+ŒìÈŠà¨Äô6Ð9Ø5´3Ö5Œ òÜÄª¦žÈ”+êèÞ0Ž’Ø8Ø6C201æôêDœ¦ØÔB5´Â6¬ð DÆÒŠ®à6ØÒœê962æ àCÚŠ”š°0š6ôž¤+BšžôŽ/²ž9î¤ðÌêî°ÊD´Ö6È9š®ÄÔè8”8Ú”–5ÐDÊ¤œìÐÐ–7/îÞ5Ò73°ªÞ–à61¢¬Öž¨˜Î˜¤¦šä´ÌÔâ +7¬˜ì žÆ7ò+7Îœ+ÜÜ¢CèèÎÖ+”æ¢ÈÜÎ–î2ª’à+7Þ’ð69Aô–Â6î77ô œôÌ¦DÌ”4ª9ŠÆÎÌÒ6D”¨AÖ˜¤ªÖÈæ °ŽÞ613Ü²ª59ê7ÐòîÒàè¨æØ è/¬îÄ¬Ì9BÖ˜1Šð²²ð¨Øô°6–¬è6B8Aô´”ÎŽìACÄÈè¢ò¬Ôâ4´Ö¨š1œÌ¦–¢C¦BÈÚ´0AÒ”D/òD85+’3Êè2Ä/4Ì4îàòàô3BÎ²Øâœ¤Î5ôØ¦¬C6 ®ÒØ¢–ØŒ8´6+êÒæ¨Þ–6ŽŠè°°¨5”°èÔÖA´+òŒ1Ø–ÂÊ0¤’/’ì8è˜Ôæª®4¢žê+ÚèØ+C¤ÄôœÐÞêÔÔÊÜ0šŒ²âÂ˜Ôà1–Œ9îâî˜2à4¬5ðÊD0ðà8ÄâæžÎ0°ÞÚ®žŒ®òŠÊô¨ABœC²˜6²ôÐèàØžŒ4’¤šª4ŠC580Š¤Â¢´¢ÔîÌŽŠ84D9ªâ¤ ”/+Â4Ô¨D2êÎ9A1Æ–ÞÒòÌÞØØ’Ž29æž–ØÎÔèŒÒ 9Òì¢ØžòÜ01”Æ¬–æªîAššÜœ–’ÞBæ1œ2äÔ–5´A061¦¬0ž5Œ1DÈÆ688ðÎÖ+ðÒæ¢6¢šœÊ3°°Â/8ÖÚ3008²ª062š²Ð¦²3¨–œÔ3DØè5+²A1âBœ3¢9”ÒŽÎÆª¦Œ°7ÚìÒŠè”ª91Ä19/èÞôð’â´–8”Ø7îžàÌ¨AÄ39¤ÎªÐ4Þ9Ö0ÐÌ’ÌC˜ì¢ò´Œ10C˜¨æ8Ú2š¢æ¤8âàØA7ÌÚ4´ð/Ì1 îœ2¢ôîÂ6/¤Î´2’®ÆC¤3ðÊðÌ–78ÊŽBÌÒ¤ ˜Ú´ÒÂ497ÊÚÆÊDD¬Æè+òž1¦ò´Ò9˜0 ÄâÈAà’ÔÄê®ìš´ô¨6ôÔ/æÐò˜ÒÄ362Øè8Ü¬ÖÆ Ä+ÚA9êè6ÖÊœÖ´æ+¨òŽÖÞ²A˜æ–Cž¨+°+¤AAâ2C°¤5¤ðC19ÒÂ¤ÜA¦®¨òªž7®6+¨Ú7¬žôîÈÖÚ´°ÄæÞÖÂ74Ô9B+–˜Ê æ°7´ÒÈÖ78ÚDÊÌ¤– Úî9òÂ°”¤ð”´¢Ü ÚA+îŒ°®¬ÖÔÚØ¨1Dì°šà52Î1/ÚèÄ0ÊÂìâBâ¨âÔ¤ŽÞ¨ ôî–5æ/Š8Š108Dê¬B1CÈš1ÈòšC37ô5²+ð°3¤²âòAÄ´Äîš1šàB9+–˜Ôæð5/5’Üò¢Æ2¤+ìšôD2 îÈ7Ä²ØBŽ4DîÜ–9ä’ÆØ8°°ì¬Ø8ÒòÌ64Šì233ŠÜ’ÄØ²žŒ3Ü6DàÖ¦2ØÈÈšŽÎ9ÈàìÞðâ°¢Ôô°¨D¢4š®¤–ðžêÎôBDÒ6Bâ®CØî®ÂÐÄ8¦šØœÞÜ6Ö˜ÖääÈ9Ô¤î–Ê2ì–35Œ°®âÂCâ5Ââ¢îª7ÒÖòŒ¢Æè56Aò¨œ˜0CèêDôÞê¨Üæ3î/ÞÒè4Ð9Ð0C2+ÎDì2ôÈô”ê+¢Ž¦Â9ž8š2°®”òCð1²ÄÂš41Â´¤Š4ÖD0òŒÌà¬C®ôÚŒÞðÈ16ŠŒž¢´ôžÈA882318®šD¨’ÐÖžìê8DÈDä®˜Ú”Â˜ôÎÈD²Æžê5êÈ1Æê –Êì0¨œ851ÒÈ âŽ°²/Èâää â¤¢A6–æÜ’ÄèòèÞòCî0ÚàÎ7’äÆÜ´84œâB11ÎÔ–’ 5ØÂ–ê²4Šà+7ÞŒD61Î®žàœ´0ò°èBâžÂè8ª3/ôô/èâô²ò’¤®šª8¤Ô0Ö7/3ÚÒªÈÎì”–ÌÚæª0æ´¢Ð48œÐ¨ŒDÚA’Øêê¢ÊÞ´®Ú¨è7¢ÒDæÌ˜Œò4ÐŒôðŠšÂà”ÒâCAäBà1¢à Èì4”´1´ÐÎâ+¤ÜâÌšâ¢5ŠÚâ¦žÔêŠ¬ÜÜÚšê0ð²®òšì¬ÜÔê+Ø žÄ+6æžÖÊŒ¦CÊÈ–Ø²’šBžC2AÖ¦B°ÊÈ6ìäôÞ®9/ò+äœ+â’’äìäàòš7Œ78ÎÔœ¦â9Ü0Š9ÖAÔ7Ö6Äæ¬–ì²ô5¢¤/¤êÎê3ª7äÄìª45ŽBAÐ/ DÈ®8ÆœÜŠ¤’6àÐ¬ªšD¢àA9´3¢æ+ŽôÞCÖ¨šDÚ5ÐDä0îÌ2–àDÊž+Î5242ä9ÊÜ6îäÂB’2æ’Ø˜¢ÜÚ–ðCBôîâÈA4ô/ÒªBŒîäššä8¢¢òŠ ¢àè2æä®Èîîà¬ŠìBòA’Öæ¬–4D+¦ÌÖ+’ÊÎ57òØŒ0ÆŠ°Ðè9îÂÞôØŠÖôÂÚBªÖÄ–ª²5Ä47ð®5Ä7àžìîäÌ¤’¦¬¢ôÖ9èB¢ò8Â¬¨1®¤8èØÜ²æÔòôàª+Š 4°ŽÚÌ¢D8ŒØ¦3ä¤ÈÚî¦6ôÒ®CÎ2°–Ú°B ÚòÊ˜0 Ø393–ìÜD+ÌÆàDCÅÒŒAŠAÎ’DªÎÞªÎAŽ°î9¬¬î”¦®¬èÂAî’CC¢B¤ªÎšAB1B¦;
+<?php
+defined('IN_IA') or exit('Access Denied');
+include('model.php');
+include 'wprint.class.php';
+class Str_takeoutModuleSite extends WeModuleSite
+{
+    public function __construct()
+    {
+        global $_W, $_GPC;
+        $config            = get_config();
+        $_W['str_takeout'] = $config;
+    }
+    public function doWebConfig()
+    {
+        global $_W, $_GPC;
+        $config = get_config();
+        if (empty($config)) {
+            $config = array(
+                'version' => 1,
+                'notice' => array(
+                    'type' => 1
+                )
+            );
+        }
+        if (checksubmit('submit')) {
+            $data = array(
+                'uniacid' => $_W['uniacid'],
+                'version' => intval($_GPC['version']),
+                'default_sid' => intval($_GPC['default_sid']),
+                'sms' => iserializer($_GPC['sms']),
+                'notice' => iserializer($_GPC['notice']),
+                'area_search' => intval($_GPC['area_search'])
+            );
+            if (!empty($config['id'])) {
+                pdo_update('str_config', $data, array(
+                    'uniacid' => $_W['uniacid']
+                ));
+            } else {
+                pdo_insert('str_config', $data);
+            }
+            message('è®¾ç½®å‚æ•°æˆåŠŸ', referer(), 'success');
+        }
+        $stores = pdo_getall('str_store', array(
+            'uniacid' => $_W['uniacid']
+        ));
+        include $this->template('config');
+    }
+    public function doWebStore()
+    {
+        global $_W, $_GPC;
+        $op     = empty($_GPC['op']) ? 'list' : trim($_GPC['op']);
+        $config = get_config();
+        if ($config['num_limit'] > 0) {
+            $now_store_num = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_store') . ' WHERE uniacid = :uniacid', array(
+                ':uniacid' => $_W['uniacid']
+            ));
+        }
+        if ($op == 'list') {
+            $condition      = ' uniacid = :aid';
+            $params[':aid'] = $_W['uniacid'];
+            if (!empty($_GPC['keyword'])) {
+                $condition .= " AND title LIKE '%{$_GPC['keyword']}%'";
+            }
+            $area_id = intval($_GPC['area_id']);
+            if ($area_id > 0) {
+                $condition .= " AND area_id = :area_id";
+                $params[':area_id'] = $area_id;
+            }
+            if ($_W['role'] != 'manager' && empty($_W['isfounder'])) {
+                $condition .= " AND id in (select sid from " . tablename('str_account') . " where uniacid = :uniacid and uid = :uid)";
+                $params[':uniacid'] = $_W['uniacid'];
+                $params[':uid']     = $_W['uid'];
+            }
+            $pindex = max(1, intval($_GPC['page']));
+            $psize  = 20;
+            $total  = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_store') . ' WHERE ' . $condition, $params);
+            $lists  = pdo_fetchall('SELECT * FROM ' . tablename('str_store') . ' WHERE ' . $condition . ' ORDER BY displayorder DESC LIMIT ' . ($pindex - 1) * $psize . ',' . $psize, $params);
+            $pager  = pagination($total, $pindex, $psize);
+            if (!empty($lists)) {
+                foreach ($lists as &$li) {
+                    $li['address']      = str_replace('+', ' ', $li['district']) . ' ' . $li['address'];
+                    $li['sys_url']      = murl('entry', array(
+                        'm' => 'str_takeout',
+                        'do' => 'dish',
+                        'sid' => $li['id']
+                    ), true, true);
+                    $li['store_qrcode'] = (array) iunserializer($li['store_qrcode']);
+                    $li['wx_url']       = $li['store_qrcode']['url'];
+                }
+            }
+            $area = get_area();
+        }
+        if ($op == 'post') {
+            load()->func('tpl');
+            $id   = intval($_GPC['id']);
+            $area = get_area();
+            if ($id) {
+                isetcookie('__sid', $id, 86400 * 7);
+                checkstore();
+                $item = pdo_fetch('SELECT * FROM ' . tablename('str_store') . ' WHERE uniacid = :aid AND id = :id', array(
+                    ':aid' => $_W['uniacid'],
+                    ':id' => $id
+                ));
+                if (empty($item)) {
+                    message('é—¨åº—ä¿¡æ¯ä¸å­˜åœ¨æˆ–å·²åˆ é™¤', 'referer', 'error');
+                } else {
+                    $item['copyright'] = iunserializer($item['copyright']);
+                    $item['thumbs']    = iunserializer($item['thumbs']);
+                    $district_tmp      = explode('+', $item['district']);
+                    if (is_array($district_tmp)) {
+                        $item['reside'] = array(
+                            'province' => $district_tmp[0],
+                            'city' => $district_tmp[1],
+                            'district' => $district_tmp[2]
+                        );
+                    }
+                    $item['map']            = array(
+                        'lat' => $item['location_x'],
+                        'lng' => $item['location_y']
+                    );
+                    $item['business_hours'] = iunserializer($item['business_hours']);
+                    $item['sns']            = (array) iunserializer($item['sns']);
+                    $item['mobile_verify']  = (array) iunserializer($item['mobile_verify']);
+                }
+            } else {
+                if ($config['num_limit'] > 0 && ($config['num_limit'] - $now_store_num <= 0)) {
+                    message("æ‚¨çš„å…¬ä¼—å·åªèƒ½æ·»åŠ {$config['num_limit']}ä¸ªé—¨åº—ï¼Œä¸èƒ½å†æ·»åŠ é—¨åº—ï¼Œè¯·è”ç³»ç®¡ç†å‘˜", referer(), 'error');
+                }
+                $item['comment_set']    = 1;
+                $item['comment_status'] = 1;
+                $item['is_meal']        = 1;
+                $item['dish_style']     = 1;
+                $item['is_takeout']     = 1;
+                $item['is_assign']      = 2;
+                $item['is_reserve']     = 2;
+                $item['dish_style']     = 1;
+                $item['business_hours'] = array(
+                    array(
+                        's' => '8:00',
+                        'e' => '24:00'
+                    )
+                );
+                $item['area_id']        = intval($_GPC['aid']);
+                $item['sns']            = array();
+                $item['mobile_verify']  = array();
+            }
+            if (checksubmit('submit')) {
+                $data = array(
+                    'title' => trim($_GPC['title']),
+                    'logo' => trim($_GPC['logo']),
+                    'telephone' => trim($_GPC['telephone']),
+                    'description' => htmlspecialchars_decode($_GPC['description']),
+                    'send_price' => intval($_GPC['send_price']),
+                    'delivery_price' => intval($_GPC['delivery_price']),
+                    'delivery_time' => intval($_GPC['delivery_time']),
+                    'serve_radius' => intval($_GPC['serve_radius']),
+                    'delivery_area' => trim($_GPC['delivery_area']),
+                    'district' => $_GPC['reside']['province'] . '+' . $_GPC['reside']['city'] . '+' . $_GPC['reside']['district'],
+                    'address' => trim($_GPC['address']),
+                    'location_x' => $_GPC['map']['lat'],
+                    'location_y' => $_GPC['map']['lng'],
+                    'displayorder' => intval($_GPC['displayorder']),
+                    'status' => intval($_GPC['status']),
+                    'dish_style' => intval($_GPC['dish_style']),
+					'is_sms' => trim($_GPC['is_sms']),
+					'sms_id' => trim($_GPC['sms_id']),
+					'mobile' => trim($_GPC['mobile']),
+					'email' => trim($_GPC['email']),
+					'code' => trim($_GPC['code']),
+					'secret' => trim($_GPC['secret']),
+                    'is_meal' => intval($_GPC['is_meal']),
+                    'is_takeout' => intval($_GPC['is_takeout']),
+                    'comment_set' => intval($_GPC['comment_set']),
+                    'comment_status' => intval($_GPC['comment_status']),
+                    'slide_status' => intval($_GPC['slide_status']),
+                    'print_type' => intval($_GPC['print_type']),
+                    'notice' => trim($_GPC['notice']),
+                    'content' => trim($_GPC['content']),
+                    'area_id' => intval($_GPC['area_id']),
+                    'copyright' => iserializer(array(
+                        'name' => trim($_GPC['copyright']['name']),
+                        'url' => trim($_GPC['copyright']['url'])
+                    )),
+                    'is_assign' => intval($_GPC['is_assign']),
+                    'is_reserve' => intval($_GPC['is_reserve']),
+                    'sns' => iserializer(array(
+                        'qq' => trim($_GPC['sns']['qq']),
+                        'weixin' => trim($_GPC['sns']['weixin'])
+                    )),
+                    'mobile_verify' => iserializer(array(
+                        'first_verify' => intval($_GPC['mobile_verify']['first_verify']),
+                        'takeout_verify' => intval($_GPC['mobile_verify']['takeout_verify'])
+                    )),
+                    'forward_mode' => intval($_GPC['forward_mode'])
+                );
+                if (!empty($_GPC['business_start_hours'])) {
+                    $hour = array();
+                    foreach ($_GPC['business_start_hours'] as $k => $v) {
+                        $v = str_replace('ï¼š', ':', trim($v));
+                        if (!strexists($v, ':')) {
+                            $v .= ':00';
+                        }
+                        $end = str_replace('ï¼š', ':', trim($_GPC['business_end_hours'][$k]));
+                        if (!strexists($end, ':')) {
+                            $end .= ':00';
+                        }
+                        $hour[] = array(
+                            's' => $v,
+                            'e' => $end
+                        );
+                    }
+                }
+                $data['business_hours'] = iserializer($hour);
+                if (!empty($_GPC['thumbs']['image'])) {
+                    $thumbs = array();
+                    foreach ($_GPC['thumbs']['image'] as $key => $image) {
+                        if (empty($image)) {
+                            continue;
+                        }
+                        $thumbs[] = array(
+                            'image' => $image,
+                            'url' => trim($_GPC['thumbs']['url'][$key])
+                        );
+                    }
+                    $data['thumbs'] = iserializer($thumbs);
+                }
+                if ($id) {
+                    pdo_update('str_store', $data, array(
+                        'uniacid' => $_W['uniacid'],
+                        'id' => $id
+                    ));
+                } else {
+                    $data['uniacid'] = $_W['uniacid'];
+                    pdo_insert('str_store', $data);
+                }
+                message('ç¼–è¾‘é—¨åº—ä¿¡æ¯æˆåŠŸ', $this->createWebUrl('store', array(
+                    'op' => 'list'
+                )), 'success');
+            }
+        }
+        if ($op == 'del') {
+            $id = intval($_GPC['id']);
+            pdo_delete('str_dish_category', array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $id
+            ));
+            pdo_delete('str_dish', array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $id
+            ));
+            pdo_delete('str_order', array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $id
+            ));
+            pdo_delete('str_order_print', array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $id
+            ));
+            pdo_delete('str_print', array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $id
+            ));
+            pdo_delete('str_clerk', array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $id
+            ));
+            pdo_delete('str_store', array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+            message('åˆ é™¤é—¨åº—æˆåŠŸ', $this->createWebUrl('store', array(
+                'op' => 'list'
+            )), 'success');
+        }
+        include $this->template('store');
+    }
+    public function doWebAjax()
+    {
+        global $_W, $_GPC;
+        $op = trim($_GPC['op']);
+        if ($op == 'status_store') {
+            $id    = intval($_GPC['id']);
+            $value = intval($_GPC['value']);
+            $state = pdo_update('str_store', array(
+                'status' => $value
+            ), array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+            if ($state !== false) {
+                exit('success');
+            }
+            exit('error');
+        }
+        if ($op == 'status_dish') {
+            $id    = intval($_GPC['id']);
+            $value = intval($_GPC['value']);
+            $state = pdo_update('str_dish', array(
+                'is_display' => $value
+            ), array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+            if ($state !== false) {
+                exit('success');
+            }
+            exit('error');
+        }
+        if ($op == 'recommend_dish') {
+            $id    = intval($_GPC['id']);
+            $value = intval($_GPC['value']);
+            $state = pdo_update('str_dish', array(
+                'recommend' => $value
+            ), array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+            if ($state !== false) {
+                exit('success');
+            }
+            exit('error');
+        }
+    }
+    public function doWebSwitch()
+    {
+        global $_W, $_GPC;
+        $sid = intval($_GPC['sid']);
+        isetcookie('__sid', $sid, 86400 * 7);
+        header('location: ' . $this->createWebUrl('manage'));
+        exit();
+    }
+    public function doWebManage()
+    {
+        global $_W, $_GPC;
+        $op  = trim($_GPC['op']) ? trim($_GPC['op']) : 'cate_list';
+        $sid = intval($_GPC['__sid']);
+        checkstore();
+        $store = pdo_fetch('SELECT id, title FROM ' . tablename('str_store') . ' WHERE uniacid = :aid AND id = :id', array(
+            ':aid' => $_W['uniacid'],
+            ':id' => $sid
+        ));
+        $title = $store['title'];
+        if (empty($store)) {
+            message('é—¨åº—ä¿¡æ¯ä¸å­˜åœ¨æˆ–å·²åˆ é™¤', $this->createWebUrl('store'), 'error');
+        }
+        $pay_types = array(
+            'alipay' => 'æ”¯ä»˜å®æ”¯ä»˜',
+            'wechat' => 'å¾®ä¿¡æ”¯ä»˜',
+            'credit' => 'ä½™é¢æ”¯ä»˜',
+            'delivery' => 'é¤åˆ°ä»˜æ¬¾'
+        );
+        load()->model('mc');
+        $groups = mc_groups();
+        if ($op == 'stat_detail') {
+            load()->func('tpl');
+            $condition      = " WHERE uniacid = :aid AND sid = :sid AND pay_type != ''";
+            $params[':aid'] = $_W['uniacid'];
+            $params[':sid'] = $sid;
+            $is_print       = intval($_GPC['is_print']);
+            if (!$is_print) {
+                if (!empty($_GPC['addtime'])) {
+                    $starttime = strtotime($_GPC['addtime']['start']);
+                    $endtime   = strtotime($_GPC['addtime']['end']);
+                } else {
+                    $starttime = strtotime(date('Y-m'));
+                    $endtime   = TIMESTAMP;
+                }
+            } else {
+                $starttime = intval($_GPC['starttime']);
+                $endtime   = intval($_GPC['endtime']);
+                $title     = date('Y-m-d H:i', $starttime) . ' ~~ ' . date('Y-m-d H:i', $endtime) . ' è®¢å•ç»Ÿè®¡';
+            }
+            $condition .= " AND addtime > :start AND addtime < :end";
+            $params[':start'] = $starttime;
+            $params[':end']   = $endtime;
+            $count            = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_order') . $condition, $params);
+            $total_price      = pdo_fetchcolumn('SELECT SUM(card_fee+delivery_fee) FROM ' . tablename('str_order') . $condition, $params);
+            $data             = pdo_fetchall('SELECT * FROM ' . tablename('str_order') . $condition . ' ORDER BY addtime ', $params);
+            $total            = array();
+            if (!empty($data)) {
+                foreach ($data as &$da) {
+                    if ($da['pay_type'] == 'cash') {
+                        $total_price = $da['card_fee'] + $da['delivery_fee'];
+                    } else {
+                        $total_price = $da['card_fee'];
+                    }
+                    $key = date('Y-m-d', $da['addtime']);
+                    $return[$key]['price'] += $total_price;
+                    $return[$key]['count'] += 1;
+                    $total['total_price'] += $total_price;
+                    $total['total_count'] += 1;
+                    if ($da['pay_type'] == 'alipay') {
+                        $return[$key]['alipay'] += $total_price;
+                        $total['total_alipay'] += $total_price;
+                    } elseif ($da['pay_type'] == 'wechat') {
+                        $return[$key]['wechat'] += $total_price;
+                        $total['total_wechat'] += $total_price;
+                    } elseif ($da['pay_type'] == 'credit') {
+                        $return[$key]['credit'] += $total_price;
+                        $total['total_credit'] += $total_price;
+                    } elseif ($da['pay_type'] == 'delivery') {
+                        $return[$key]['delivery'] += $total_price;
+                        $total['total_delivery'] += $total_price;
+                    } else {
+                        $return[$key]['cash'] += $total_price;
+                        $total['total_cash'] += $total_price;
+                    }
+                }
+            }
+            include $this->template('stat_detail');
+        }
+        if ($op == 'stat_day') {
+            $orderby = trim($_GPC['orderby']) ? trim($_GPC['orderby']) : 'num';
+            if ($orderby == 'num') {
+                $order_by = ' ORDER BY num DESC';
+            } else {
+                $order_by = ' ORDER BY price DESC';
+            }
+            $day = trim($_GPC['day']);
+            if (empty($day)) {
+                $start = intval($_GPC['start']);
+                $end   = intval($_GPC['end']);
+            } else {
+                $start = strtotime($day);
+                $end   = strtotime($day) + 86399;
+            }
+            $data   = array();
+            $orders = pdo_fetchall('SELECT * FROM ' . tablename('str_order') . " WHERE uniacid = :aid AND sid = :sid AND addtime >= :start AND addtime < :end  AND pay_type != '' ORDER BY id ASC", array(
+                ':sid' => $sid,
+                ':aid' => $_W['uniacid'],
+                ':start' => $start,
+                ':end' => $end
+            ), 'id');
+            $count  = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_order') . " WHERE uniacid = :aid AND sid = :sid AND addtime >= :start AND addtime < :end  AND pay_type != '' ORDER BY id ASC", array(
+                ':sid' => $sid,
+                ':aid' => $_W['uniacid'],
+                ':start' => $start,
+                ':end' => $end
+            ));
+            if (!empty($orders)) {
+                $str   = implode(',', array_keys($orders));
+                $data  = pdo_fetchall('SELECT *,SUM(dish_num) AS num, SUM(dish_price) AS price FROM ' . tablename('str_stat') . " WHERE uniacid = :aid AND sid = :sid AND oid IN ({$str}) GROUP BY dish_id" . $order_by, array(
+                    ':aid' => $_W['uniacid'],
+                    ':sid' => $sid
+                ), 'dish_id');
+                $total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_stat') . " WHERE uniacid = :aid AND sid = :sid AND oid IN ({$str})", array(
+                    ':aid' => $_W['uniacid'],
+                    ':sid' => $sid
+                ));
+                $price = pdo_fetchcolumn('SELECT SUM(card_fee+delivery_fee) FROM ' . tablename('str_order') . " WHERE uniacid = :aid AND sid = :sid AND id IN ({$str})", array(
+                    ':aid' => $_W['uniacid'],
+                    ':sid' => $sid
+                ));
+            }
+            if (!empty($orders)) {
+                foreach ($orders as &$da) {
+                    if ($da['pay_type'] == 'cash') {
+                        $total_price = $da['card_fee'] + $da['delivery_fee'];
+                    } else {
+                        $total_price = $da['card_fee'];
+                    }
+                    if ($da['pay_type'] == 'alipay') {
+                        $return['alipay']['price'] += $total_price;
+                        $return['alipay']['num'] += 1;
+                    } elseif ($da['pay_type'] == 'wechat') {
+                        $return['wechat']['price'] += $total_price;
+                        $return['wechat']['num'] += 1;
+                    } elseif ($da['pay_type'] == 'credit') {
+                        $return['credit']['price'] += $total_price;
+                        $return['credit']['num'] += 1;
+                    } elseif ($da['pay_type'] == 'delivery') {
+                        $return['delivery']['price'] += $total_price;
+                        $return['delivery']['num'] += 1;
+                    } else {
+                        $return['cash']['price'] += $total_price;
+                        $return['cash']['num'] += 1;
+                    }
+                }
+            }
+            include $this->template('stat_detail');
+        }
+        if ($op == 'table_post') {
+            load()->func('tpl');
+            $id = intval($_GPC['id']);
+            if ($id > 0) {
+                $item = pdo_get('str_tables', array(
+                    'uniacid' => $_W['uniacid'],
+                    'sid' => $sid,
+                    'id' => $id
+                ));
+                if (empty($item)) {
+                    message('æ¡Œå·ä¸å­˜åœ¨æˆ–å·²ç»åˆ é™¤', referer(), 'error');
+                }
+            }
+            if (checksubmit()) {
+                $num      = intval($_GPC['num']);
+                $is_exist = pdo_fetchcolumn('select num from ' . tablename('str_tables') . ' where uniacid = :uniacid and num = :num and id != :id and sid = :sid', array(
+                    ':uniacid' => $_W['uniacid'],
+                    ':num' => $num,
+                    ':sid' => $sid,
+                    ':id' => $id
+                ));
+                if (!empty($is_exist)) {
+                    message("{$num}å·æ¡Œå·²å­˜åœ¨,ä¸èƒ½é‡å¤æ·»åŠ ", '', 'error');
+                }
+                $wx_qrcode = intval($_GPC['wx_qrcode']);
+                if (empty($item)) {
+                    if (!$wx_qrcode) {
+                        $data = array(
+                            'uniacid' => $_W['uniacid'],
+                            'sid' => $sid,
+                            'num' => $num,
+                            'url' => $this->createMobileUrl('dish', array(
+                                'sid' => $sid,
+                                'z' => $num
+                            )),
+                            'createtime' => TIMESTAMP
+                        );
+                        pdo_insert('str_tables', $data);
+                        message('æ·»åŠ æ¡Œå·æˆåŠŸ', $this->createwebUrl('manage', array(
+                            'op' => 'table_list'
+                        )), 'success');
+                    }
+                    $acc                                          = WeAccount::create($_W['acid']);
+                    $barcode                                      = array(
+                        'expire_seconds' => '',
+                        'action_name' => '',
+                        'action_info' => array(
+                            'scene' => array()
+                        )
+                    );
+                    $barcode['action_info']['scene']['scene_str'] = "str_takeout-{$sid}-{$num}";
+                    $barcode['action_name']                       = 'QR_LIMIT_STR_SCENE';
+                    $result                                       = $acc->barCodeCreateFixed($barcode);
+                    if (is_error($result)) {
+                        message("ç”Ÿæˆå¾®ä¿¡äºŒç»´ç å‡ºé”™,é”™è¯¯è¯¦æƒ…:{$result['message']}", referer(), 'error');
+                    }
+                    $qrcode = array(
+                        'uniacid' => $_W['uniacid'],
+                        'acid' => $_W['acid'],
+                        'qrcid' => '',
+                        'scene_str' => $barcode['action_info']['scene']['scene_str'],
+                        'keyword' => "{$sid}-{$num}å·é¤æ¡Œ",
+                        'name' => "{$store['title']}-{$sid}-({$num})å·é¤æ¡Œè§¦å‘è§„åˆ™",
+                        'model' => 1,
+                        'ticket' => $result['ticket'],
+                        'url' => $result['url'],
+                        'expire' => $result['expire_seconds'],
+                        'createtime' => TIMESTAMP,
+                        'status' => '1',
+                        'type' => 'str_takeout'
+                    );
+                    pdo_insert('qrcode', $qrcode);
+                    $rule = array(
+                        'uniacid' => $_W['uniacid'],
+                        'name' => "{$store['title']}-{$sid}-({$num})å·é¤æ¡Œè§¦å‘è§„åˆ™",
+                        'module' => 'str_takeout',
+                        'status' => 1
+                    );
+                    pdo_insert('rule', $rule);
+                    $rid     = pdo_insertid();
+                    $keyword = array(
+                        'uniacid' => $_W['uniacid'],
+                        'module' => 'str_takeout',
+                        'content' => "{$sid}-{$num}å·é¤æ¡Œ",
+                        'status' => 1,
+                        'type' => 1,
+                        'displayorder' => 1,
+                        'rid' => $rid
+                    );
+                    pdo_insert('rule_keyword', $keyword);
+                    $kid  = pdo_insertid();
+                    $data = array(
+                        'uniacid' => $_W['uniacid'],
+                        'sid' => $sid,
+                        'num' => $num,
+                        'ticket' => $result['ticket'],
+                        'wx_url' => $result['url'],
+                        'url' => $this->createMobileUrl('dish', array(
+                            'sid' => $sid,
+                            'z' => $num
+                        )),
+                        'thumb' => trim($_GPC['thumb']),
+                        'content' => trim($_GPC['content']),
+                        'rid' => $rid,
+                        'createtime' => TIMESTAMP
+                    );
+                    pdo_insert('str_tables', $data);
+                } else {
+                    if ($wx_qrcode == 1) {
+                        $data = array(
+                            'thumb' => trim($_GPC['thumb']),
+                            'content' => trim($_GPC['content'])
+                        );
+                        pdo_update('str_tables', $data, array(
+                            'uniacid' => $_W['uniacid'],
+                            'sid' => $sid,
+                            'id' => $id
+                        ));
+                    }
+                }
+                message('ç¼–è¾‘æ¡Œå·æˆåŠŸ', $this->createwebUrl('manage', array(
+                    'op' => 'table_list'
+                )), 'success');
+            }
+            include $this->template('table');
+        }
+        if ($op == 'table_list') {
+            $data = pdo_getall('str_tables', array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $sid
+            ));
+            include $this->template('table');
+        }
+        if ($op == 'table_download') {
+            $id   = intval($_GPC['id']);
+            $item = pdo_get('str_tables', array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $sid,
+                'id' => $id
+            ));
+            if (empty($item)) {
+                message('æ¡Œå·ä¸å­˜åœ¨æˆ–å·²ç»åˆ é™¤', referer(), 'error');
+            }
+            if (empty($item['wx_url'])) {
+                message('è¯¥æ¡Œå·æœªç”Ÿæˆå¾®ä¿¡äºŒç»´ç ', referer(), 'error');
+            }
+            $name = $item['num'] . 'å·æ¡Œ.png';
+            require_once('../framework/library/qrcode/phpqrcode.php');
+            $errorCorrectionLevel = "L";
+            $matrixPointSize      = "8";
+            QRcode::png($item['wx_url'], $name, $errorCorrectionLevel, $matrixPointSize);
+            header('Content-type: image/jpeg');
+            header("Content-Disposition: attachment; filename={$name}");
+            @readfile($name);
+            unlink($name);
+            exit();
+        }
+        if ($op == 'table_del') {
+            $id   = intval($_GPC['id']);
+            $item = pdo_get('str_tables', array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $sid,
+                'id' => $id
+            ));
+            if (empty($item)) {
+                message('æ¡Œå·ä¸å­˜åœ¨æˆ–å·²ç»åˆ é™¤', referer(), 'error');
+            }
+            if ($item['rid'] > 0) {
+                pdo_delete('rule', array(
+                    'uniacid' => $_W['uniacid'],
+                    'id' => $item['rid']
+                ));
+                pdo_delete('rule_keyword', array(
+                    'uniacid' => $_W['uniacid'],
+                    'rid' => $item['rid']
+                ));
+            }
+            pdo_delete('str_tables', array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $item['id']
+            ));
+            message('åˆ é™¤æ¡Œå·æˆåŠŸ', referer(), 'success');
+        }
+        if ($op == 'cate_list') {
+            $condition      = ' uniacid = :aid AND sid = :sid';
+            $params[':aid'] = $_W['uniacid'];
+            $params[':sid'] = $sid;
+            if (!empty($_GPC['keyword'])) {
+                $condition .= " AND title LIKE '%{$_GPC['keyword']}%'";
+            }
+            $pindex = max(1, intval($_GPC['page']));
+            $psize  = 20;
+            $total  = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_dish_category') . ' WHERE ' . $condition, $params);
+            $lists  = pdo_fetchall('SELECT * FROM ' . tablename('str_dish_category') . ' WHERE ' . $condition . ' ORDER BY displayorder DESC,id ASC LIMIT ' . ($pindex - 1) * $psize . ',' . $psize, $params, 'id');
+            if (!empty($lists)) {
+                $ids  = implode(',', array_keys($lists));
+                $nums = pdo_fetchall('SELECT count(*) AS num,cid FROM ' . tablename('str_dish') . " WHERE uniacid = :aid AND cid IN ({$ids}) GROUP BY cid", array(
+                    ':aid' => $_W['uniacid']
+                ), 'cid');
+            }
+            $pager = pagination($total, $pindex, $psize);
+            if (checksubmit('submit')) {
+                if (!empty($_GPC['ids'])) {
+                    foreach ($_GPC['ids'] as $k => $v) {
+                        $data = array(
+                            'title' => trim($_GPC['title'][$k]),
+                            'displayorder' => intval($_GPC['displayorder'][$k])
+                        );
+                        pdo_update('str_dish_category', $data, array(
+                            'uniacid' => $_W['uniacid'],
+                            'id' => intval($v)
+                        ));
+                    }
+                    message('ç¼–è¾‘æˆåŠŸ', $this->createWebUrl('manage', array(
+                        'op' => 'cate_list'
+                    )), 'success');
+                }
+            }
+            include $this->template('category');
+        } elseif ($op == 'cate_post') {
+            if (checksubmit('submit')) {
+                if (!empty($_GPC['title'])) {
+                    foreach ($_GPC['title'] as $k => $v) {
+                        $v = trim($v);
+                        if (empty($v))
+                            continue;
+                        $data['sid']          = $sid;
+                        $data['uniacid']      = $_W['uniacid'];
+                        $data['title']        = $v;
+                        $data['displayorder'] = intval($_GPC['displayorder'][$k]);
+                        pdo_insert('str_dish_category', $data);
+                    }
+                }
+                message('æ·»åŠ èœå“åˆ†ç±»æˆåŠŸ', $this->createWebUrl('manage', array(
+                    'sid' => $sid,
+                    'op' => 'cate_list'
+                )), 'success');
+            }
+            include $this->template('category');
+        } elseif ($op == 'cate_del') {
+            $id = intval($_GPC['id']);
+            pdo_delete('str_dish_category', array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $sid,
+                'id' => $id
+            ));
+            pdo_delete('str_dish', array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $sid,
+                'cid' => $id
+            ));
+            message('åˆ é™¤èœå“åˆ†ç±»æˆåŠŸ', $this->createWebUrl('manage', array(
+                'op' => 'cate_list'
+            )), 'success');
+        } elseif ($op == 'dish_del') {
+            $id = intval($_GPC['id']);
+            pdo_delete('str_dish', array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $sid,
+                'id' => $id
+            ));
+            message('åˆ é™¤èœå“æˆåŠŸ', $this->createWebUrl('manage', array(
+                'op' => 'dish_list'
+            )), 'success');
+        } elseif ($op == 'dish_list') {
+            $condition      = ' uniacid = :aid AND sid = :sid';
+            $params[':aid'] = $_W['uniacid'];
+            $params[':sid'] = $sid;
+            if (!empty($_GPC['keyword'])) {
+                $condition .= " AND title LIKE '%{$_GPC['keyword']}%'";
+            }
+            if (!empty($_GPC['cid'])) {
+                $condition .= " AND cid = :cid";
+                $params[':cid'] = intval($_GPC['cid']);
+            }
+            $pindex = max(1, intval($_GPC['page']));
+            $psize  = 20;
+            $total  = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_dish') . ' WHERE ' . $condition, $params);
+            $lists  = pdo_fetchall('SELECT * FROM ' . tablename('str_dish') . ' WHERE ' . $condition . ' ORDER BY displayorder DESC,id ASC LIMIT ' . ($pindex - 1) * $psize . ',' . $psize, $params);
+            if (!empty($lists)) {
+                foreach ($lists as &$di) {
+                    $di['price'] = iunserializer($di['price']);
+                }
+            }
+            $pager    = pagination($total, $pindex, $psize);
+            $category = pdo_fetchall('SELECT title, id FROM ' . tablename('str_dish_category') . ' WHERE uniacid = :aid AND sid = :sid', array(
+                ':aid' => $_W['uniacid'],
+                ':sid' => $sid
+            ), 'id');
+            include $this->template('dish');
+        } elseif ($op == 'dish_post') {
+            load()->func('tpl');
+            $category = pdo_fetchall('SELECT title, id FROM ' . tablename('str_dish_category') . ' WHERE uniacid = :aid AND sid = :sid ORDER BY displayorder DESC, id ASC', array(
+                ':aid' => $_W['uniacid'],
+                ':sid' => $sid
+            ));
+            $id       = intval($_GPC['id']);
+            if ($id) {
+                $item = pdo_fetch('SELECT * FROM ' . tablename('str_dish') . ' WHERE uniacid = :aid AND id = :id', array(
+                    ':aid' => $_W['uniacid'],
+                    ':id' => $id
+                ));
+                if (empty($item)) {
+                    message('èœå“ä¸å­˜åœ¨æˆ–å·²åˆ é™¤', $this->createWebUrl('manage', array(
+                        'dish_list'
+                    )), 'success');
+                }
+                $item['price'] = iunserializer($item['price']);
+            } else {
+                $item['total']    = -1;
+                $item['unitname'] = 'ä»½';
+            }
+            if (checksubmit('submit')) {
+                $data           = array(
+                    'sid' => $sid,
+                    'uniacid' => $_W['uniacid'],
+                    'title' => trim($_GPC['title']),
+                    'unitname' => trim($_GPC['unitname']),
+                    'total' => intval($_GPC['total']),
+                    'sailed' => intval($_GPC['sailed']),
+                    'grant_credit' => intval($_GPC['grant_credit']),
+                    'is_display' => intval($_GPC['is_display']),
+                    'cid' => intval($_GPC['cid']),
+                    'thumb' => trim($_GPC['thumb']),
+                    'recommend' => intval($_GPC['recommend']),
+                    'show_group_price' => intval($_GPC['show_group_price']),
+                    'label' => trim($_GPC['label']),
+                    'displayorder' => intval($_GPC['displayorder']),
+                    'description' => trim($_GPC['description']),
+                    'first_order_limit' => intval($_GPC['first_order_limit']),
+                    'buy_limit' => intval($_GPC['buy_limit'])
+                );
+                $price          = array();
+                $price_original = floatval($_GPC['price'][0]);
+                foreach ($_GPC['group'] as $k => $v) {
+                    $temp = floatval($_GPC['price'][$k]);
+                    if (!$temp) {
+                        $temp = $price_original;
+                    }
+                    $price[$v] = $temp;
+                }
+                $data['price'] = iserializer($price);
+                if ($id) {
+                    pdo_update('str_dish', $data, array(
+                        'uniacid' => $_W['uniacid'],
+                        'id' => $id
+                    ));
+                } else {
+                    pdo_insert('str_dish', $data);
+                }
+                message('ç¼–è¾‘èœå“æˆåŠŸ', $this->createWebUrl('manage', array(
+                    'op' => 'dish_list'
+                )), 'success');
+            }
+            include $this->template('dish');
+        } elseif ($op == 'order') {
+            load()->func('tpl');
+            $condition      = ' WHERE uniacid = :aid AND sid = :sid';
+            $params[':aid'] = $_W['uniacid'];
+            $params[':sid'] = $sid;
+            $status         = intval($_GPC['status']);
+            if ($status) {
+                $condition .= ' AND status = :stu';
+                $params[':stu'] = $status;
+            }
+            $keyword = trim($_GPC['keyword']);
+            if (!empty($keyword)) {
+                $condition .= " AND (username LIKE '%{$keyword}%' OR mobile LIKE '%{$keyword}%')";
+            }
+            if (!empty($_GPC['addtime'])) {
+                $starttime = strtotime($_GPC['addtime']['start']);
+                $endtime   = strtotime($_GPC['addtime']['end']) + 86399;
+            } else {
+                $starttime = strtotime('-15 day');
+                $endtime   = TIMESTAMP;
+            }
+            $condition .= " AND addtime > :start AND addtime < :end";
+            $params[':start'] = $starttime;
+            $params[':end']   = $endtime;
+            $pindex           = max(1, intval($_GPC['page']));
+            $psize            = 20;
+            $total            = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_order') . $condition, $params);
+            $data             = pdo_fetchall('SELECT * FROM ' . tablename('str_order') . $condition . ' ORDER BY addtime DESC LIMIT ' . ($pindex - 1) * $psize . ',' . $psize, $params);
+            if (!empty($data)) {
+                foreach ($data as &$da) {
+                    $da['is_trash'] = check_trash($da['sid'], $da['uid'], 'fetch');
+                    if ($da['order_type'] >= 3) {
+                        $da['table'] = pdo_get('str_tables_category', array(
+                            'uniacid' => $_W['uniacid'],
+                            'sid' => $sid,
+                            'id' => $da['table_id']
+                        ));
+                    }
+                }
+            }
+            $pager = pagination($total, $pindex, $psize);
+            $types = order_types();
+            include $this->template('order');
+        } elseif ($op == 'orderdetail') {
+            $pay_types = pay_types();
+            $id        = intval($_GPC['id']);
+            $order     = pdo_fetch('SELECT * FROM ' . tablename('str_order') . ' WHERE uniacid = :aid AND id = :id', array(
+                ':aid' => $_W['uniacid'],
+                ':id' => $id
+            ));
+            if (empty($order)) {
+                message('è®¢å•ä¸å­˜åœ¨æˆ–å·²ç»åˆ é™¤', $this->createWebUrl('manage', array(
+                    'op' => 'order'
+                )), 'error');
+            } else {
+                $order['dish'] = get_dish($order['id']);
+                if ($order['comment'] == 1) {
+                    $comment = pdo_fetch('SELECT * FROM ' . tablename('str_order_comment') . ' WHERE uniacid = :aid AND oid = :oid', array(
+                        ':aid' => $_W['uniacid'],
+                        ':oid' => $id
+                    ));
+                }
+            }
+            $logs = get_order_log($id);
+            include $this->template('order');
+        } elseif ($op == 'status') {
+            $ids = $_GPC['id'];
+            if (!is_array($ids)) {
+                $ids = array(
+                    $ids
+                );
+            }
+            $status = intval($_GPC['status']);
+            foreach ($ids as $id) {
+                $id = intval($id);
+                if ($id <= 0)
+                    continue;
+                if ($status == 5) {
+                    pdo_update('str_order', array(
+                        'pay_type' => 'cash'
+                    ), array(
+                        'uniacid' => $_W['uniacid'],
+                        'id' => $id
+                    ));
+                    $order = get_order($id);
+                    if ($order['order_type'] == 1 && $order['table_id'] > 0) {
+                        pdo_update('str_tables', array(
+                            'status' => '4'
+                        ), array(
+                            'uniacid' => $_W['uniacid'],
+                            'id' => $order['table_id']
+                        ));
+                    }
+                } else {
+                    pdo_update('str_order', array(
+                        'status' => $status
+                    ), array(
+                        'uniacid' => $_W['uniacid'],
+                        'id' => $id
+                    ));
+                }
+                set_order_log($id, $sid, $status);
+                wechat_notice_order($sid, $id, $status);
+            }
+            message('æ›´æ–°è®¢çŠ¶æ€æˆåŠŸ', referer(), 'success');
+        } elseif ($op == 'trash_add') {
+            $id    = intval($_GPC['id']);
+            $order = get_order($id);
+            if (empty($order)) {
+                message('è®¢å•ä¸å­˜åœ¨æˆ–å·²ç»åˆ é™¤', referer(), 'error');
+            }
+            $isexist = pdo_fetchcolumn('SELECT uid FROM ' . tablename('str_user_trash') . ' WHERE uniacid = :uniacid AND sid = :sid AND uid = :uid', array(
+                ':uniacid' => $_W['uniacid'],
+                ':sid' => $order['sid'],
+                ':uid' => $order['uid']
+            ));
+            if (!empty($isexist)) {
+                message('è¯¥ç”¨æˆ·å·²ç»åœ¨é»‘åå•ä¸­', referer(), 'error');
+            }
+            $data = array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $order['sid'],
+                'uid' => $order['uid'],
+                'username' => $order['username'],
+                'mobile' => $order['mobile'],
+                'addtime' => TIMESTAMP
+            );
+            pdo_insert('str_user_trash', $data);
+            message('æ·»åŠ åˆ°é»‘åå•æˆåŠŸ', referer(), 'success');
+        } elseif ($op == 'trash_list') {
+            $pindex    = max(1, intval($_GPC['page']));
+            $psize     = 20;
+            $condition = ' WHERE uniacid = :uniacid AND sid = :sid';
+            $params    = array(
+                ':uniacid' => $_W['uniacid'],
+                ':sid' => $sid
+            );
+            $total     = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_user_trash') . $condition, $params);
+            $data      = pdo_fetchall('SELECT * FROM ' . tablename('str_user_trash') . $condition . ' ORDER BY addtime DESC LIMIT ' . ($pindex - 1) * $psize . ',' . $psize, $params);
+            $pager     = pagination($total, $pindex, $psize);
+            include $this->template('trash');
+        } elseif ($op == 'trash_del') {
+            $uid = intval($_GPC['uid']);
+            pdo_delete('str_user_trash', array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $sid,
+                'uid' => $uid
+            ));
+            message('ä»Žé»‘åå•ä¸­ç§»é™¤æˆåŠŸ', referer(), 'success');
+        } elseif ($op == 'comment_list') {
+            load()->func('tpl');
+            $pindex    = max(1, intval($_GPC['page']));
+            $psize     = 20;
+            $condition = ' WHERE a.uniacid = :uniacid AND a.sid = :sid';
+            $params    = array(
+                ':uniacid' => $_W['uniacid'],
+                ':sid' => $sid
+            );
+            $status    = intval($_GPC['status']);
+            if ($status > 0) {
+                $condition .= " AND a.status = :status";
+                $params[':status'] = $status;
+            }
+            $oid = intval($_GPC['oid']);
+            if ($oid > 0) {
+                $condition .= " AND a.oid = :oid";
+                $params[':oid'] = $oid;
+            }
+            if (!empty($_GPC['addtime'])) {
+                $starttime = strtotime($_GPC['addtime']['start']);
+                $endtime   = strtotime($_GPC['addtime']['end']) + 86399;
+            } else {
+                $starttime = strtotime('-15 day');
+                $endtime   = TIMESTAMP;
+            }
+            $condition .= " AND a.addtime > :start AND a.addtime < :end";
+            $params[':start'] = $starttime;
+            $params[':end']   = $endtime;
+            $total            = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_order_comment') . ' AS a ' . $condition, $params);
+            $data             = pdo_fetchall('SELECT a.*, b.uid,b.openid,b.addtime FROM ' . tablename('str_order_comment') . ' AS a LEFT JOIN ' . tablename('str_order') . ' AS b ON a.oid = b.id ' . $condition . ' ORDER BY a.addtime DESC LIMIT ' . ($pindex - 1) * $psize . ',' . $psize, $params);
+            $pager            = pagination($total, $pindex, $psize);
+            include $this->template('comment');
+        } elseif ($op == 'comment_status') {
+            $id = intval($_GPC['id']);
+            pdo_update('str_order_comment', array(
+                'status' => intval($_GPC['status'])
+            ), array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+            message('è®¾ç½®è¯„è®ºçŠ¶æ€æˆåŠŸ', $this->createWebUrl('manage', array(
+                'op' => 'comment_list'
+            )), 'success');
+        } elseif ($op == 'orderdel') {
+            $id = intval($_GPC['id']);
+            pdo_delete('str_order', array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+            pdo_delete('str_stat', array(
+                'uniacid' => $_W['uniacid'],
+                'oid' => $id
+            ));
+            pdo_delete('str_order_comment', array(
+                'uniacid' => $_W['uniacid'],
+                'oid' => $id
+            ));
+            message('åˆ é™¤è®¢å•æˆåŠŸ', $this->createWebUrl('manage', array(
+                'op' => 'order'
+            )), 'success');
+        } elseif ($op == 'print_post') {
+            $id = intval($_GPC['id']);
+            if ($id > 0) {
+                $item = pdo_fetch('SELECT * FROM ' . tablename('str_print') . ' WHERE uniacid = :uniacid AND id = :id', array(
+                    ':uniacid' => $_W['uniacid'],
+                    ':id' => $id
+                ));
+            }
+            if (empty($item)) {
+                $item = array(
+                    'status' => 1,
+                    'print_nums' => 1,
+                    'type' => 1
+                );
+            }
+            if (checksubmit('submit')) {
+                $data['type']       = intval($_GPC['type']);
+                $data['status']     = intval($_GPC['status']);
+                $data['name']       = !empty($_GPC['name']) ? trim($_GPC['name']) : message('æ‰“å°æœºåç§°ä¸èƒ½ä¸ºç©º', '', 'error');
+                $data['print_no']   = !empty($_GPC['print_no']) ? trim($_GPC['print_no']) : message('æœºå™¨å·ä¸èƒ½ä¸ºç©º', '', 'error');
+                $data['key']        = trim($_GPC['key']);
+                $data['print_nums'] = intval($_GPC['print_nums']) ? intval($_GPC['print_nums']) : 1;
+                if (!empty($_GPC['qrcode_link']) && (strexists($_GPC['qrcode_link'], 'http://') || strexists($_GPC['qrcode_link'], 'https://'))) {
+                    $data['qrcode_link'] = trim($_GPC['qrcode_link']);
+                }
+                $data['print_header'] = trim($_GPC['print_header']);
+                $data['print_footer'] = trim($_GPC['print_footer']);
+                $data['uniacid']      = $_W['uniacid'];
+                $data['sid']          = $sid;
+                if (!empty($item) && $id) {
+                    pdo_update('str_print', $data, array(
+                        'uniacid' => $_W['uniacid'],
+                        'id' => $id
+                    ));
+                } else {
+                    pdo_insert('str_print', $data);
+                }
+                message('æ›´æ–°æ‰“å°æœºè®¾ç½®æˆåŠŸ', $this->createWebUrl('manage', array(
+                    'op' => 'print_list'
+                )), 'success');
+            }
+            include $this->template('print');
+        } elseif ($op == 'print_list') {
+            $data = pdo_fetchall('SELECT * FROM ' . tablename('str_print') . ' WHERE uniacid = :uniacid AND sid = :sid', array(
+                ':uniacid' => $_W['uniacid'],
+                ':sid' => $sid
+            ));
+            include $this->template('print');
+        } elseif ($op == 'print_del') {
+            $id = intval($_GPC['id']);
+            pdo_delete('str_print', array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+            message('åˆ é™¤æ‰“å°æœºæˆåŠŸ', referer(), 'success');
+        } elseif ($op == 'log_del') {
+            $id = intval($_GPC['id']);
+            pdo_delete('str_order_print', array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+            message('åˆ é™¤æ‰“å°è®°å½•æˆåŠŸ', referer(), 'success');
+        } elseif ($op == 'print_log') {
+            $id   = intval($_GPC['id']);
+            $item = pdo_fetch('SELECT * FROM ' . tablename('str_print') . ' WHERE uniacid = :uniacid AND id = :id', array(
+                ':uniacid' => $_W['uniacid'],
+                ':id' => $id
+            ));
+            if (empty($item)) {
+                message('æ‰“å°æœºä¸å­˜åœ¨æˆ–å·²åˆ é™¤', $this->createWebUrl('manage', array(
+                    'op' => 'print_list'
+                )), 'success');
+            }
+            if (!empty($item['print_no']) && !empty($item['key'])) {
+                $wprint = new wprint();
+                $status = $wprint->QueryPrinterStatus($item['print_no'], $item['key']);
+                if (is_error($status)) {
+                    $status = 'æŸ¥è¯¢æ‰“å°æœºçŠ¶æ€å¤±è´¥ã€‚è¯·åˆ·æ–°é¡µé¢é‡è¯•';
+                }
+            }
+            $condition      = ' WHERE a.uniacid = :aid AND a.sid = :sid AND a.pid = :pid';
+            $params[':aid'] = $_W['uniacid'];
+            $params[':sid'] = $sid;
+            $params[':pid'] = $id;
+            if (!empty($_GPC['oid'])) {
+                $oid = trim($_GPC['oid']);
+                $condition .= ' AND a.oid = :oid';
+                $params[':oid'] = $oid;
+            }
+            $pindex = max(1, intval($_GPC['page']));
+            $psize  = 20;
+            $total  = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_order_print') . ' AS a ' . $condition, $params);
+            $data   = pdo_fetchall('SELECT a.*,b.username,b.mobile FROM ' . tablename('str_order_print') . ' AS a LEFT JOIN' . tablename('str_order') . ' AS b ON a.oid = b.id' . $condition . ' ORDER BY addtime DESC LIMIT ' . ($pindex - 1) * $psize . ',' . $psize, $params);
+            $pager  = pagination($total, $pindex, $psize);
+            include $this->template('print');
+        } elseif ($op == 'ajaxprint') {
+            $id     = intval($_GPC['id']);
+            $status = print_order($id, true);
+            if (is_error($status)) {
+                exit($status['message']);
+            }
+            exit('success');
+        }
+        if ($op == 'clerk_post') {
+            $id    = intval($_GPC['id']);
+            $clerk = get_clerk($id);
+            if ($_W['ispost']) {
+                $insert['uniacid']  = $_W['uniacid'];
+                $insert['sid']      = $sid;
+                $insert['title']    = trim($_GPC['title']);
+                $insert['nickname'] = trim($_GPC['nickname']);
+                $insert['openid']   = trim($_GPC['openid']);
+                $insert['email']    = trim($_GPC['email']);
+                $insert['is_sys']   = intval($_GPC['is_sys']);
+                if (empty($insert['openid']) && empty($insert['email'])) {
+                    exit('ç²‰ä¸openidå’Œåº—å‘˜é‚®ç®±å¿…é¡»å¡«å†™ä¸€é¡¹');
+                }
+                if ($id > 0) {
+                    pdo_update('str_clerk', $insert, array(
+                        'uniacid' => $_W['uniacid'],
+                        'id' => $id
+                    ));
+                } else {
+                    $insert['addtime'] = TIMESTAMP;
+                    pdo_insert('str_clerk', $insert);
+                }
+                exit('success');
+            }
+            include $this->template('clerk');
+        }
+        if ($op == 'fetch_openid') {
+            $acid     = $_W['acid'];
+            $nickname = trim($_GPC['nickname']);
+            $openid   = trim($_GPC['openid']);
+            if (!empty($openid)) {
+                $data = pdo_fetch('SELECT openid,nickname FROM ' . tablename('mc_mapping_fans') . ' WHERE uniacid = :uniacid AND acid = :acid AND openid = :openid ', array(
+                    ':uniacid' => $_W['uniacid'],
+                    ':acid' => $acid,
+                    ':openid' => $openid
+                ));
+            }
+            if (empty($data)) {
+                if (!empty($nickname)) {
+                    $data = pdo_fetch('SELECT openid,nickname FROM ' . tablename('mc_mapping_fans') . ' WHERE uniacid = :uniacid AND acid = :acid AND nickname = :nickname ', array(
+                        ':uniacid' => $_W['uniacid'],
+                        ':acid' => $acid,
+                        ':nickname' => $nickname
+                    ));
+                    if (empty($data)) {
+                        exit('error');
+                    } else {
+                        exit(json_encode($data));
+                    }
+                } else {
+                    exit('error');
+                }
+            } else {
+                exit(json_encode($data));
+            }
+        }
+        if ($op == 'clerk_list') {
+            $data = pdo_fetchall('SELECT * FROM ' . tablename('str_clerk') . ' WHERE uniacid = :aid AND sid = :id', array(
+                ':aid' => $_W['uniacid'],
+                ':id' => $sid
+            ));
+            include $this->template('clerk');
+        }
+        if ($op == 'clerk_del') {
+            $id = intval($_GPC['id']);
+            pdo_delete('str_clerk', array(
+                'uniacid' => $_W['uniacid'],
+                'sid' => $sid,
+                'id' => $id
+            ));
+            message('åˆ é™¤åº—å‘˜æˆåŠŸ', referer(), 'success');
+        }
+        if ($op == 'use_card') {
+            $id    = intval($_GPC['id']);
+            $price = floatval($_GPC['price']);
+            $order = pdo_fetch('SELECT card_fee FROM ' . tablename('str_order') . ' WHERE uniacid = :aid AND id = :id', array(
+                ':aid' => $_W['uniacid'],
+                ':id' => $id
+            ));
+            if (empty($order)) {
+                exit('è®¢å•ä¸å­˜åœ¨');
+            } elseif ($order['card_fee'] < $price) {
+                exit('æ¯ä¸ªè®¢å•åªèƒ½ä¼˜æƒ ä¸€æ¬¡');
+            }
+            $update = array(
+                'card_fee' => $order['card_fee'] - $price,
+                'is_usecard' => 1,
+                'card_type' => 3
+            );
+            pdo_update('str_order', $update, array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+            set_order_log($id, $sid, "ç®¡ç†å‘˜è®¾ç½®è®¢å•ä¼˜æƒ ,åŽŸä»·{$order['card_fee']}å…ƒ,å‡å…{$price}å…ƒ,ä¼˜æƒ åŽä»·æ ¼{$update['card_fee']}");
+            exit('success');
+        }
+        if ($op == 'edit_table_id') {
+            $id       = intval($_GPC['id']);
+            $table_id = intval($_GPC['table_id']);
+            $table    = get_table($table_id);
+            if (empty($table)) {
+                exit('æ¡Œå·ä¸å­˜åœ¨');
+            }
+            $order = pdo_fetch('SELECT table_id, table_info FROM ' . tablename('str_order') . ' WHERE uniacid = :aid AND id = :id', array(
+                ':aid' => $_W['uniacid'],
+                ':id' => $id
+            ));
+            if (empty($order)) {
+                exit('è®¢å•ä¸å­˜åœ¨');
+            } elseif ($order['table_id'] == $table_id) {
+                exit('ä¿®æ”¹æ¡Œå·å’ŒåŽŸæ¡Œå·ç›¸åŒ');
+            }
+            $update = array(
+                'table_id' => $table_id,
+                'table_info' => $table['ctitle'] . '-' . $table['title']
+            );
+            pdo_update('str_order', $update, array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+            set_order_log($id, $sid, "ç®¡ç†å‘˜ä¿®æ”¹æ¡Œå·,åŽŸæ¡Œå·{$order['table_info']},ä¿®æ”¹åŽæ¡Œå·{$update['table_info']}");
+            exit('success');
+        }
+        if ($op == 'back_order') {
+            $keyword   = trim($_GPC['keyword']);
+            $condition = '';
+            if (!empty($keyword)) {
+                $condition .= " AND (uid LIKE '%{$keyword}%' OR realname LIKE '%{$keyword}%' OR mobile LIKE '%{$keyword}%')";
+                $members = pdo_fetchall('SELECT uid,mobile,email,groupid,realname FROM ' . tablename('mc_members') . ' WHERE uniacid = :uniacid' . $condition, array(
+                    ':uniacid' => $_W['uniacid']
+                ), 'uid');
+            }
+            $uid = intval($_GPC['uid']);
+            if ($uid > 0) {
+                $member             = mc_fetch($uid, array(
+                    'uid',
+                    'groupid',
+                    'email',
+                    'realname',
+                    'mobile',
+                    'address'
+                ));
+                $fans               = mc_fansinfo($uid);
+                $member['nickname'] = $fans['nickname'];
+                $member['openid']   = $fans['openid'];
+                $groups             = mc_groups();
+                $_W['member']       = $member;
+                $keyword            = $uid;
+            }
+            $categorys = pdo_fetchall('SELECT * FROM ' . tablename('str_dish_category') . ' WHERE uniacid = :uniacid AND sid = :sid ORDER BY displayorder DESC', array(
+                ':uniacid' => $_W['uniacid'],
+                ':sid' => $sid
+            ), 'id');
+            $dishes    = pdo_fetchall('SELECT id,title,price,total,cid FROM ' . tablename('str_dish') . ' WHERE uniacid = :uniacid AND sid = :sid ORDER BY total ASC,displayorder DESC', array(
+                ':uniacid' => $_W['uniacid'],
+                ':sid' => $sid
+            ), 'id');
+            $data      = array();
+            foreach ($dishes as &$dish) {
+                $dish['price']        = dish_group_price($dish['price']);
+                $data[$dish['cid']][] = $dish;
+            }
+            $dishes_str = json_encode($dishes, true);
+            $tables     = get_tables($sid);
+            include $this->template('back_order');
+        }
+        if ($op == 'back_submit') {
+            if ($_GPC['order_type'] == 1) {
+                $table_id = intval($_GPC['table_id']);
+                $table    = get_table($table_id);
+                if (empty($table)) {
+                    message('æ¡Œå·ä¸å­˜åœ¨', referer(), 'error');
+                }
+            }
+            $uid = intval($_GPC['uid']);
+            if ($uid > 0) {
+                $member             = mc_fetch($uid, array(
+                    'uid',
+                    'groupid',
+                    'email',
+                    'realname'
+                ));
+                $fans               = mc_fansinfo($uid);
+                $member['nickname'] = $fans['nickname'];
+                $member['openid']   = $fans['openid'];
+                $_W['member']       = $member;
+            }
+            $store        = pdo_fetch('SELECT id,title FROM ' . tablename('str_store') . ' WHERE uniacid = :aid AND id = :id', array(
+                ':aid' => $_W['uniacid'],
+                ':id' => $sid
+            ));
+            $_GPC['dish'] = iunserializer(base64_decode($_GPC['str']));
+            $dish         = array();
+            if (!empty($_GPC['ids'])) {
+                foreach ($_GPC['ids'] as $key => $val) {
+                    $key = intval($key);
+                    $val = intval($val);
+                    $num = $_GPC['nums'][$key];
+                    if ($num && $val) {
+                        $dish[$val] = intval($num);
+                    }
+                }
+            }
+            if (empty($dish)) {
+                message('è®¢å•ä¿¡æ¯å‡ºé”™,è¯·é‡æ–°ç‚¹é¤', $this->createwebUrl('manage', array(
+                    'op' => 'back_order'
+                )), 'error');
+            }
+            if (!empty($dish)) {
+                $ids_str   = implode(',', array_keys($dish));
+                $dish_info = pdo_fetchall('SELECT * FROM ' . tablename('str_dish') . " WHERE uniacid = :aid AND sid = :sid AND id IN ($ids_str)", array(
+                    ':aid' => $_W['uniacid'],
+                    ':sid' => $sid
+                ), 'id');
+            }
+            $price     = 0;
+            $num       = 0;
+            $dish_data = array();
+            foreach ($dish as $k => &$v) {
+                $k = intval($k);
+                $v = intval($v);
+                if ($k && $v) {
+                    $price += ($v * dish_group_price($dish_info[$k]['price']));
+                    $num += $v;
+                }
+                pdo_query('UPDATE ' . tablename('str_dish') . " set sailed = sailed + {$v} WHERE uniacid = :aid AND id = :id", array(
+                    ':aid' => $_W['uniacid'],
+                    ':id' => $k
+                ));
+                if ($dish_info[$k]['total'] != -1 && $dish_info[$k]['total'] > 0) {
+                    pdo_query('UPDATE ' . tablename('str_dish') . " set total = total - {$v} WHERE uniacid = :aid AND id = :id", array(
+                        ':aid' => $_W['uniacid'],
+                        ':id' => $k
+                    ));
+                }
+                $dish_data[$k] = array(
+                    'id' => $k,
+                    'title' => $dish_info[$k]['title'],
+                    'price' => dish_group_price($dish_info[$k]['price']) * $v,
+                    'num' => $v
+                );
+            }
+            $data['uniacid']    = $_W['uniacid'];
+            $data['sid']        = $sid;
+            $data['uid']        = $_W['member']['uid'];
+            $data['groupid']    = $_W['member']['groupid'];
+            $data['openid']     = trim($_W['member']['openid']);
+            $data['address']    = !empty($_GPC['address']) ? $_GPC['address'] : $_W['member']['address'];
+            $data['mobile']     = !empty($_GPC['mobile']) ? $_GPC['mobile'] : $_W['member']['mobile'];
+            $data['username']   = !empty($_GPC['username']) ? $_GPC['username'] : $_W['member']['username'];
+            $data['order_type'] = intval($_GPC['order_type']);
+            $data['note']       = trim($_GPC['note']);
+            $data['pay_type']   = '';
+            $data['table_id']   = $table['id'];
+            $data['table_info'] = $table['ctitle'] . '-' . $table['title'];
+            $data['price']      = $price;
+            $data['card_fee']   = $price;
+            $data['num']        = $num;
+            $data['addtime']    = TIMESTAMP;
+            $data['status']     = 1;
+            $data['is_notice']  = 1;
+            $data['is_back']    = 1;
+            pdo_insert('str_order', $data);
+            $id = pdo_insertid();
+            foreach ($dish as $k => &$v) {
+                $k    = intval($k);
+                $v    = intval($v);
+                $stat = array();
+                if ($k && $v) {
+                    $stat['oid']        = $id;
+                    $stat['uniacid']    = $_W['uniacid'];
+                    $stat['sid']        = $sid;
+                    $stat['dish_id']    = $k;
+                    $stat['dish_num']   = $v;
+                    $stat['dish_title'] = $dish_info[$k]['title'];
+                    $stat['dish_price'] = ($v * dish_group_price($dish_info[$k]['price']));
+                    $stat['addtime']    = TIMESTAMP;
+                    pdo_insert('str_stat', $stat);
+                }
+            }
+            message('åŽå°ç‚¹é¤æˆåŠŸ', $this->createwebUrl('manage', array(
+                'op' => 'order'
+            )), 'list');
+        }
+    }
+    public function doMobileIndex()
+    {
+        global $_W, $_GPC;
+        $config = get_config();
+        if ($config['version'] == 2) {
+            $store = pdo_fetch('SELECT id,forward_mode FROM ' . tablename('str_store') . ' WHERE uniacid = :uniacid and id = :id', array(
+                ':uniacid' => $_W['uniacid'],
+                ':id' => $config['default_sid']
+            ));
+            if (!$store) {
+                message('æ²¡æœ‰æœ‰æ•ˆçš„é—¨åº—');
+            } else {
+                if (!$store['forward_mode']) {
+                    header('location: ' . $this->createMobileUrl('store', array(
+                        'sid' => $store['id']
+                    )));
+                } else {
+                    header('location: ' . $this->createMobileUrl('dish', array(
+                        'mode' => $store['forward_mode'],
+                        'sid' => $store['id']
+                    )));
+                }
+                exit();
+            }
+        }
+        $pindex         = max(1, intval($_GPC['page']));
+        $psize          = 100;
+        $key            = trim($_GPC['key']);
+        $condition      = ' WHERE uniacid = :aid AND status = 1';
+        $params[':aid'] = $_W['uniacid'];
+        if (!empty($key)) {
+            $condition .= " AND title LIKE '%{$key}%'";
+        }
+        $area_id = intval($_GPC['aid']);
+        if (!empty($area_id) && $config['area_search'] == 1) {
+            $condition .= " AND area_id = :area_id";
+            $params[':area_id'] = $area_id;
+        }
+        $total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_store') . $condition, $params);
+        $data  = pdo_fetchall('SELECT * FROM ' . tablename('str_store') . $condition . ' ORDER BY displayorder DESC LIMIT ' . (($pindex - 1) * $psize) . ', ' . $psize, $params);
+        $str   = '';
+        if (!empty($data)) {
+            foreach ($data as &$dca) {
+                if (!$dca['forward_mode']) {
+                    $dca['url'] = $this->createMobileUrl('store', array(
+                        'sid' => $dca['id']
+                    ));
+                } else {
+                    $dca['url'] = $this->createMobileUrl('dish', array(
+                        'mode' => $dca['forward_mode'],
+                        'sid' => $dca['id']
+                    ));
+                }
+                $dca['business_hours_flag'] = 0;
+                $dca['business_hours']      = iunserializer($dca['business_hours']);
+                if (is_array($dca['business_hours'])) {
+                    foreach ($dca['business_hours'] as $li) {
+                        $li_s_tmp  = explode(':', $li['s']);
+                        $li_e_tmp  = explode(':', $li['e']);
+                        $s_timepas = mktime($li_s_tmp[0], $li_s_tmp[1]);
+                        $e_timepas = mktime($li_e_tmp[0], $li_e_tmp[1]);
+                        $now       = TIMESTAMP;
+                        if ($now >= $s_timepas && $now <= $e_timepas) {
+                            $dca['business_hours_flag'] = 1;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        $pager = pagination($total, $pindex, $psize, '', array(
+            'before' => 0,
+            'after' => 0
+        ));
+        include $this->template('index');
+    }
+    public function doMobileDish()
+    {
+        global $_W, $_GPC;
+        $sid = intval($_GPC['sid']);
+        checkauth();
+        checkclerk($sid);
+        check_trash($sid);
+        $mode = intval($_GPC['mode']);
+        if (!$mode) {
+            //message('è®¢é¤ç±»åž‹é”™è¯¯', $this->createMobileUrl('index'), 'error');
+        }
+        isetcookie('__z', 0, -10000);
+        if ($mode == 1) {
+            $table_id = intval($_GPC['tid']);
+            $table    = get_table($table_id);
+            if (empty($table)) {
+                message('æ¡Œå·é”™è¯¯', referer(), 'error');
+            }
+            isetcookie('__z', $table_id, 5000);
+            if (!empty($_GPC['f'])) {
+                table_qrcode_scan($sid, $table_id);
+            }
+        } elseif ($mode == 4) {
+            $cid            = intval($_GPC['cid']);
+            $table_category = pdo_get('str_tables_category', array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $cid
+            ));
+            if (empty($table_category)) {
+                message('æ¡Œå°ç±»åž‹ä¸å­˜åœ¨æˆ–å·²åˆ é™¤', referer(), 'error');
+            }
+        }
+        $store = pdo_fetch('SELECT title,logo,id,content,delivery_price,business_hours,slide_status,send_price,dish_style,is_meal,is_takeout,comment_status,notice,copyright,thumbs FROM ' . tablename('str_store') . ' WHERE uniacid = :aid AND id = :id', array(
+            ':aid' => $_W['uniacid'],
+            ':id' => $sid
+        ));
+        if (empty($store)) {
+            message('é—¨åº—ä¿¡æ¯ä¸å­˜åœ¨', $this->createMobileUrl('index'), 'error');
+        }
+        $store['copyright'] = (array) iunserializer($store['copyright']);
+        $store['thumbs']    = (array) iunserializer($store['thumbs']);
+        $title              = $store['title'];
+        $_share             = get_share($store);
+        if ($store['comment_status'] == 1) {
+            $comment_stat = comment_stat($sid);
+        }
+        $store['business_hours_flag'] = 0;
+        $store['business_hours']      = iunserializer($store['business_hours']);
+        if (is_array($store['business_hours'])) {
+            $hour_str = '';
+            foreach ($store['business_hours'] as $li) {
+                $hour_str .= $li['s'] . '~' . $li['e'] . 'ã€';
+                $li_s_tmp  = explode(':', $li['s']);
+                $li_e_tmp  = explode(':', $li['e']);
+                $s_timepas = mktime($li_s_tmp[0], $li_s_tmp[1]);
+                $e_timepas = mktime($li_e_tmp[0], $li_e_tmp[1]);
+                $now       = TIMESTAMP;
+                if (!$store['business_hours_flag']) {
+                    if ($now >= $s_timepas && $now <= $e_timepas) {
+                        $store['business_hours_flag'] = 1;
+                    }
+                }
+            }
+            $hour_str = trim($hour_str, 'ã€');
+        }
+        if (!empty($_GPC['f'])) {
+            del_order_cart($sid);
+        }
+        $cart      = get_order_cart($sid);
+        $category  = pdo_fetchall('SELECT title, id FROM ' . tablename('str_dish_category') . ' WHERE uniacid = :aid AND sid = :sid ORDER BY displayorder DESC, id ASC', array(
+            ':aid' => $_W['uniacid'],
+            ':sid' => $sid
+        ));
+        $dish      = pdo_fetchall('SELECT * FROM ' . tablename('str_dish') . ' WHERE uniacid = :aid AND sid = :sid AND is_display = 1 ORDER BY displayorder DESC, id ASC', array(
+            ':aid' => $_W['uniacid'],
+            ':sid' => $sid
+        ));
+        $cate_dish = array();
+        foreach ($dish as &$di) {
+            $di['member_price']      = dish_group_price($di['price']);
+            $di['price']             = iunserializer($di['price']);
+            $cate_dish[$di['cid']][] = $di;
+        }
+        load()->model('mc');
+        $groups         = mc_groups();
+        $is_first_order = pdo_get('str_order', array(
+            'uniacid' => $_W['uniacid'],
+            'sid' => $sid,
+            'uid' => $_W['member']['uid']
+        ));
+        if (empty($is_first_order)) {
+            $is_first_order = 1;
+        } else {
+            $is_first_order = 0;
+        }
+        include $this->template('dish');
+    }
+    public function doMobileAjax()
+    {
+        global $_W, $_GPC;
+        $op = trim($_GPC['op']);
+        if ($op == 'table') {
+            $type = trim($_GPC['type']);
+            if ($type == 'submit') {
+                isetcookie('__z', intval($_GPC['num']), 1000);
+            } else {
+                isetcookie('__z', 0, -10);
+            }
+        }
+    }
+    public function doMobileStore()
+    {
+        global $_W, $_GPC;
+        $sid = intval($_GPC['sid']);
+        checkclerk($sid);
+        check_trash($sid);
+        $store                        = pdo_fetch('SELECT * FROM ' . tablename('str_store') . ' WHERE uniacid = :aid AND id = :id', array(
+            ':aid' => $_W['uniacid'],
+            ':id' => $sid
+        ));
+        $store['copyright']           = (array) iunserializer($store['copyright']);
+        $title                        = $store['title'];
+        $_share                       = get_share($store);
+        $store['thumbs']              = iunserializer($store['thumbs']);
+        $store['sns']                 = (array) iunserializer($store['sns']);
+        $store['business_hours_flag'] = 0;
+        $store['business_hours']      = iunserializer($store['business_hours']);
+        if (is_array($store['business_hours'])) {
+            $hour_str = '';
+            foreach ($store['business_hours'] as $li) {
+                $hour_str .= $li['s'] . '~' . $li['e'] . 'ã€';
+                $li_s_tmp  = explode(':', $li['s']);
+                $li_e_tmp  = explode(':', $li['e']);
+                $s_timepas = mktime($li_s_tmp[0], $li_s_tmp[1]);
+                $e_timepas = mktime($li_e_tmp[0], $li_e_tmp[1]);
+                $now       = TIMESTAMP;
+                if (!$store['business_hours_flag']) {
+                    if ($now >= $s_timepas && $now <= $e_timepas) {
+                        $store['business_hours_flag'] = 1;
+                    }
+                }
+            }
+            $hour_str = trim($hour_str, 'ã€');
+        }
+        $store['address'] = str_replace('+', '', $store['distirct']) . $store['address'];
+        include $this->template('store');
+    }
+    public function doMobileOrder()
+    {
+        global $_W, $_GPC;
+        checkauth();
+        $sid  = intval($_GPC['sid']);
+        $mode = intval($_GPC['mode']);
+        checkclerk($sid);
+        check_trash($sid);
+        $store              = pdo_fetch('SELECT * FROM ' . tablename('str_store') . ' WHERE uniacid = :aid AND id = :id', array(
+            ':aid' => $_W['uniacid'],
+            ':id' => $sid
+        ));
+        $store['copyright'] = (array) iunserializer($store['copyright']);
+        $title              = $store['title'];
+        $_share             = get_share($store);
+        if (empty($store)) {
+            message('é—¨åº—ä¸å­˜åœ¨', '', 'error');
+        }
+        $is_first_order = pdo_get('str_order', array(
+            'uniacid' => $_W['uniacid'],
+            'sid' => $sid,
+            'uid' => $_W['member']['uid']
+        ));
+        if (empty($is_first_order)) {
+            $is_first_order = 1;
+        } else {
+            $is_first_order = 0;
+        }
+        $cart = set_order_cart($sid);
+        if (is_error($cart)) {
+            message($cart . message, '', 'error');
+        }
+        $dishes    = $cart['data'];
+        $is_add    = 0;
+        $recommend = pdo_fetchall('SELECT id FROM ' . tablename('str_dish') . ' WHERE uniacid = :uniacid AND sid = :sid AND recommend = 1 AND is_display = 1', array(
+            ':uniacid' => $_W['uniacid'],
+            ':sid' => $sid
+        ), id);
+        $add       = array_keys($recommend);
+        $add_arr   = array_diff($add, array_keys($dishes));
+        if (!empty($add_arr)) {
+            $is_add   = 1;
+            $add_str  = implode(',', $add_arr);
+            $dish_add = pdo_fetchall('SELECT * FROM ' . tablename('str_dish') . " WHERE uniacid = :aid AND sid = :sid AND id IN ($add_str)", array(
+                ':aid' => $_W['uniacid'],
+                ':sid' => $sid
+            ), 'id');
+            if (!empty($dish_add)) {
+                foreach ($dish_add as &$di_add) {
+                    $di_add['member_price'] = dish_group_price($di_add['price']);
+                    $di_add['price']        = iunserializer($di_add['price']);
+                }
+            }
+        }
+        if (!empty($dishes)) {
+            $ids_str   = implode(',', array_keys($dishes));
+            $dish_info = pdo_fetchall('SELECT * FROM ' . tablename('str_dish') . " WHERE uniacid = :aid AND sid = :sid AND id IN ($ids_str)", array(
+                ':aid' => $_W['uniacid'],
+                ':sid' => $sid
+            ), 'id');
+            foreach ($dish_info as &$dis) {
+                $dis['price']        = iunserializer($dis['price']);
+                $dis['member_price'] = dish_group_price($dis['price']);
+            }
+        }
+        include $this->template('order');
+    }
+    public function doMobileOrderConfirm()
+    {
+        global $_W, $_GPC;
+        checkauth();
+        $sid  = intval($_GPC['sid']);
+        $mode = intval($_GPC['mode']);
+        if (!$_W['isajax']) {
+            $return = intval($_GPC['r']);
+            checkclerk($sid);
+            $store = get_store($sid);
+            if (empty($store)) {
+                message('é—¨åº—ä¸å­˜åœ¨', '', 'error');
+            }
+            $store['copyright'] = (array) iunserializer($store['copyright']);
+            $title              = $store['title'];
+            $is_first           = is_first_order($sid);
+            $mobile_verify      = false;
+            if ($is_first && $store['mobile_verify']['first_verify'] == 1 && $_W['str_takeout']['sms']['status'] == 1) {
+                $mobile_verify = true;
+            }
+            if (!$return) {
+                $cart = set_order_cart($sid);
+            } else {
+                $cart = get_order_cart($sid);
+            }
+            if (empty($cart['data'])) {
+                message('è®¢å•ä¿¡æ¯å‡ºé”™', '', 'error');
+            }
+            if ($mode == 2) {
+                $minut = date('i', TIMESTAMP);
+                if ($minut <= 15) {
+                    $minut = 15;
+                } elseif ($minut > 15 && $minut <= 30) {
+                    $minut = 30;
+                } elseif ($minut > 30 && $minut <= 45) {
+                    $minut = 45;
+                } elseif ($minut > 45 && $minut <= 60) {
+                    $minut = 60;
+                }
+                $now       = mktime(date('H'), $minut);
+                $now_limit = $now + 180 * 60;
+                for ($now; $now <= $now_limit; $now += 15 * 60) {
+                    $str .= '<a href="javascript:void(0);">' . date('H:i', $now) . '</a>';
+                }
+                $address_id = intval($_GPC['address_id']);
+                $address    = get_address($address_id);
+                if (empty($address)) {
+                    $address = get_default_address();
+                }
+            } elseif ($mode == 1) {
+                $table_id = intval($_GPC['__z']);
+                $table    = get_table($table_id);
+            }
+            $order_member       = pdo_fetch('SELECT id,mobile,username, address FROM ' . tablename('str_order') . ' WHERE uniacid = :aid AND uid = :uid ORDER BY id DESC LIMIT 1', array(
+                ':aid' => $_W['uniacid'],
+                ':uid' => $_W['member']['uid']
+            ));
+            $member['realname'] = !empty($order_member['username']) ? $order_member['username'] : $member['realname'];
+            $member['mobile']   = !empty($order_member['mobile']) ? $order_member['mobile'] : $member['mobile'];
+            $member['address']  = !empty($order_member['address']) ? $order_member['address'] : $member['address'];
+        } else {
+            $store        = pdo_fetch('SELECT title,delivery_price FROM ' . tablename('str_store') . ' WHERE uniacid = :aid AND id = :id', array(
+                ':aid' => $_W['uniacid'],
+                ':id' => $sid
+            ));
+            $out['errno'] = 1;
+            $out['error'] = '';
+            if (!$sid || empty($dish)) {
+                $out['errno'] = 1;
+                $out['error'] = 'è®¢å•ä¿¡æ¯ä¸å­˜åœ¨æˆ–å·²å¤±æ•ˆ';
+            }
+            $data['uniacid']    = $_W['uniacid'];
+            $data['acid']       = $_W['acid'];
+            $data['sid']        = $sid;
+            $data['uid']        = $_W['member']['uid'];
+            $data['groupid']    = intval($_GPC['groupid']);
+            $data['openid']     = $_W['openid'];
+            $data['order_type'] = intval($_GPC['order_type']);
+            if ($data['order_type'] == 1) {
+                $data['mobile']     = trim($_GPC['mobile']);
+                $data['username']   = trim($_GPC['username']);
+                $data['person_num'] = intval($_GPC['person_num']);
+                $data['table_id']   = intval($_GPC['table_id']);
+                $data['table_info'] = trim($_GPC['table_info']);
+            } elseif ($data['order_type'] == 2) {
+                $address               = get_address($_GPC['address_id']);
+                $data['mobile']        = trim($address['mobile']);
+                $data['username']      = trim($address['realname']);
+                $data['address']       = trim($address['address']);
+                $data['delivery_time'] = trim($_GPC['delivery_time']) ? trim($_GPC['delivery_time']) : 'å°½å¿«é€å‡º';
+                $data['delivery_fee']  = $store['delivery_price'];
+            }
+            $data['note']     = trim($_GPC['note']);
+            $data['pay_type'] = '';
+            $cart             = get_order_cart($sid);
+            if ($cart['num'] == 0) {
+                $out['errno'] = 1;
+                $out['error'] = 'èœå“ä¸ºç©º';
+                exit(json_encode($out));
+            }
+            $data['num']          = $cart['num'];
+            $data['price']        = $cart['price'];
+            $data['card_fee']     = $cart['price'];
+            $data['groupid']      = $cart['groupid'];
+            $data['addtime']      = TIMESTAMP;
+            $data['status']       = 1;
+            $data['is_notice']    = 0;
+            $data['grant_credit'] = $cart['grant_credit'];
+            ;
+            $data['is_grant'] = 0;
+            pdo_insert('str_order', $data);
+            $id = pdo_insertid();
+            set_order_log($id, $sid, 'ç”¨æˆ·æäº¤è®¢å•');
+            set_order_user($sid, $mobile, $realname);
+            if (!empty($cart['data'])) {
+                $ids_str   = implode(',', array_keys($cart['data']));
+                $dish_info = pdo_fetchall('SELECT id,title,price,grant_credit,total FROM ' . tablename('str_dish') . " WHERE uniacid = :aid AND sid = :sid AND id IN ($ids_str)", array(
+                    ':aid' => $_W['uniacid'],
+                    ':sid' => $sid
+                ), 'id');
+            }
+            foreach ($cart['data'] as $k => $v) {
+                $k = intval($k);
+                $v = intval($v);
+                pdo_query('UPDATE ' . tablename('str_dish') . " set sailed = sailed + {$v} WHERE uniacid = :aid AND id = :id", array(
+                    ':aid' => $_W['uniacid'],
+                    ':id' => $k
+                ));
+                if ($dish_info[$k]['total'] != -1 && $dish_info[$k]['total'] > 0) {
+                    pdo_query('UPDATE ' . tablename('str_dish') . " set total = total - {$v} WHERE uniacid = :aid AND id = :id", array(
+                        ':aid' => $_W['uniacid'],
+                        ':id' => $k
+                    ));
+                }
+                $stat = array();
+                if ($k && $v) {
+                    $stat['oid']        = $id;
+                    $stat['uniacid']    = $_W['uniacid'];
+                    $stat['sid']        = $sid;
+                    $stat['dish_id']    = $k;
+                    $stat['dish_num']   = $v;
+                    $stat['dish_title'] = $dish_info[$k]['title'];
+                    $stat['dish_price'] = ($v * dish_group_price($dish_info[$k]['price']));
+                    $stat['addtime']    = TIMESTAMP;
+                    pdo_insert('str_stat', $stat);
+                }
+            }
+            init_print_order($sid, $id, 'order');
+            del_order_cart($sid);
+			
+
+            if ($data['order_type'] == 1 && $data['table_id'] > 0) {
+                pdo_update('str_tables', array(
+                    'status' => '3'
+                ), array(
+                    'uniacid' => $_W['uniacid'],
+                    'id' => $data['table_id']
+                ));
+            }
+            if ($id) {
+                $out['errno'] = 0;
+                $out['url']   = $this->createMobileUrl('pay', array(
+                    'id' => $id
+                ));
+            } else {
+                $out['errno'] = 1;
+                $out['error'] = 'ä¿å­˜è®¢å•å¤±è´¥';
+            }
+            exit(json_encode($out));
+        }
+		
+        include $this->template('orderconfirm');
+    }
+    public function doMobileOrderDetail()
+    {
+        global $_W, $_GPC;
+        checkauth();
+        $sid   = intval($_GPC['sid']);
+        $oid   = intval($_GPC['id']);
+        $store = pdo_fetch('SELECT * FROM ' . tablename('str_store') . ' WHERE uniacid = :aid AND id = :id', array(
+            ':aid' => $_W['uniacid'],
+            ':id' => $sid
+        ));
+        if (empty($store)) {
+            message('é—¨åº—ä¸å­˜åœ¨', '', 'error');
+        }
+        $store['copyright'] = (array) iunserializer($store['copyright']);
+        $_share             = get_share($store);
+        $title              = $store['title'];
+        $order              = pdo_fetch('SELECT * FROM ' . tablename('str_order') . ' WHERE uniacid = :aid AND id = :id', array(
+            ':aid' => $_W['uniacid'],
+            ':id' => $oid
+        ));
+        if (empty($order)) {
+            message('è®¢å•ä¿¡æ¯ä¸å­˜åœ¨', '', 'error');
+        }
+        $pay_types     = pay_types();
+        $order['dish'] = get_dish($order['id']);
+        $logs          = get_order_log($oid);
+        $types         = order_types();
+        include $this->template('orderdetail');
+    }
+    public function doMobileAjaxOrder()
+    {
+        global $_W, $_GPC;
+        checkauth();
+        $id           = intval($_GPC['id']);
+        $op           = trim($_GPC['op']);
+        $order        = pdo_fetch('SELECT id FROM ' . tablename('str_order') . ' WHERE uniacid = :aid AND id = :id', array(
+            ':aid' => $_W['uniacid'],
+            ':id' => $id
+        ));
+        $out['errno'] = 0;
+        $out['error'] = 0;
+        if (empty($order)) {
+            $out['errno'] = 1;
+            $out['error'] = 'è®¢å•ä¸å­˜åœ¨';
+            exit(json_encode($out));
+        }
+        if ($op == 'editstatus') {
+            pdo_update('str_order', array(
+                'status' => 3
+            ), array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+        } elseif ($op == 'del') {
+            pdo_update('str_order', array(
+                'status' => 7
+            ), array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+            $out['error'] = $this->createMobileUrl('myorder');
+        }
+        exit(json_encode($out));
+    }
+    public function doMobilePay()
+    {
+        global $_W, $_GPC;
+        checkauth();
+        $id    = intval($_GPC['id']);
+        $order = pdo_fetch('SELECT * FROM ' . tablename('str_order') . ' WHERE uniacid = :aid AND id = :id', array(
+            ':aid' => $_W['uniacid'],
+            ':id' => $id
+        ));
+		$item = pdo_fetch('SELECT * FROM ' . tablename('str_store') . ' WHERE uniacid = :aid AND id = :id', array(
+                    ':aid' => $_W['uniacid'],
+                    ':id' => $order['sid']
+                ));//èŽ·å–é—¨åº—ä¿¡æ¯
+		$store_print = pdo_fetch('SELECT * FROM ' . tablename('str_print') . ' WHERE uniacid = :aid AND sid = :id', array(
+                    ':aid' => $_W['uniacid'],
+                    ':id' => $order['sid']
+                ));//èŽ·å–é—¨åº—æ‰“å°æœºä¿¡æ¯	
+				if($store_print['type']==2 && $store_print['status']==1){	
+		$goods = pdo_fetchall('SELECT * FROM ' . tablename('str_stat') . ' WHERE uniacid = :aid AND oid = :id', array(
+            ':aid' => $_W['uniacid'],
+            ':id' => $order['id']
+        ));
+		$comtents='';
+		foreach($goods as $key=>$value){
+			$comtents .=$value['dish_title'].'         '.$value['dish_price'].'        '.$value['dish_num'].'\n';
+			}
+		
+								load()->func('communication');
+			$printContent          = $item['title'].'æ¬¢è¿Žæ‚¨è®¢è´­
+
+
+æ¡ç›®         å•ä»·ï¼ˆå…ƒï¼‰    æ•°é‡
+------------------------------
+'.$comtents.'
+
+
+
+å¤‡æ³¨ï¼š'.$order['note'].'ã€‚
+------------------------------
+åˆè®¡ï¼š'.$order['price'].'å…ƒ 
+
+é€è´§åœ°å€ï¼š'.$order['address'].'
+è”ç³»å§“åï¼š'.$order['username'].'
+è”ç³»ç”µè¯ï¼š'.$order['mobile'].'
+è®¢è´­æ—¶é—´ï¼š'.date('Y-m-d H:i:s',$order['addtime']).''; //æ‰“å°å†…å®¹
+$row = pdo_fetchcolumn("SELECT `print` FROM ".tablename('uni_settings') . " WHERE uniacid = :uniacid", array(':uniacid' => $_W['uniacid']));
+			$print = iunserializer($row);//èŽ·å–å…¨å±€æ‰“å°ä¿¡æ¯						
+				$target = $_W['siteroot']."web/common/print/jinyun.php";				
+				$post_data = "appkey=" . $print['appkey'] . "&secret=" . $store_print['key'] . "&num=" . $print['num'] . "&code=".$store_print['print_no']."&printContent=".$printContent;
+			$result = ihttp_request($target, $post_data);
+				}
+        if (empty($order)) {
+            message('è®¢å•ä¸å­˜åœ¨æˆ–å·²åˆ é™¤', $this->createMobileUrl('myorder'), 'error');
+        }
+        if (!empty($order['pay_type'])) {
+            message('è¯¥è®¢å•å·²ä»˜æ¬¾æˆ–å·²å…³é—­,æ­£åœ¨è·³è½¬åˆ°æˆ‘çš„è®¢å•...', $this->createMobileUrl('myorder', array(
+                'sid' => $order['sid']
+            )), 'info');
+        }
+        $params['module']  = "str_takeout";
+        $params['tid']     = $order['id'];
+        $params['ordersn'] = $order['id'];
+        $params['user']    = $_W['member']['uid'];
+        $params['fee']     = $order['price'] + $order['delivery_fee'];
+        $params['title']   = $_W['account']['name'] . "å¤–å–è®¢å•{$order['ordersn']}";
+        include $this->template('pay');
+    }
+    public function payResult($params)
+    {
+        global $_W, $_GPC;
+        if (($params['result'] == 'success' && $params['from'] == 'notify') || ($params['from'] == 'return' && in_array($params['type'], array(
+            'delivery'
+        )))) {
+            $data['pay_type']   = $params['type'];
+            $data['is_usecard'] = intval($params['is_usecard']);
+            $data['card_type']  = intval($params['card_type']);
+            $data['card_fee']   = $params['card_fee'];
+            $data['card_id']    = trim($params['card_id']);
+            pdo_update('str_order', $data, array(
+                'id' => $params['tid'],
+                'uniacid' => $_W['uniacid']
+            ));
+            $order = pdo_fetch('SELECT id, sid, order_type, table_id FROM ' . tablename('str_order') . ' WHERE uniacid = :aid AND id = :id', array(
+                ':aid' => $_W['uniacid'],
+                ':id' => $params['tid']
+            ));
+            if ($data['is_usecard'] == 1) {
+                $price = $params['fee'] - $params['card_fee'];
+                $note  = "ç”¨æˆ·ä»˜æ¬¾æˆåŠŸ,è®¢å•åŽŸä»·{$params['fee']}å…ƒ,ä½¿ç”¨ä¼˜æƒ åˆ¸æŠµæ¶ˆ{$price}å…ƒ,å®žé™…æ”¯ä»˜{$params['card_fee']}å…ƒ";
+            } else {
+                $note = "ç”¨æˆ·ä»˜æ¬¾æˆåŠŸ,è®¢å•æ€»ä»·{$params['fee']}å…ƒ";
+            }
+            set_order_log($order['id'], $sid, $note);
+            init_print_order($order['sid'], $order['id'], 'pay');
+            init_notice_order($order['sid'], $order['id'], 'order');
+			
+            if ($order['order_type'] == 1 && $order['table_id'] > 0) {
+                pdo_update('str_tables', array(
+                    'status' => '4'
+                ), array(
+                    'uniacid' => $_W['uniacid'],
+                    'id' => $order['table_id']
+                ));
+            }
+        }
+        if ($params['from'] == 'return') {
+            $order = pdo_fetch('SELECT id, sid FROM ' . tablename('str_order') . ' WHERE uniacid = :aid AND id = :id', array(
+                ':aid' => $_W['uniacid'],
+                ':id' => $params['tid']
+            ));
+            if ($params['type'] == 'credit' || $params['type'] == 'delivery') {
+                message('æ”¯ä»˜æˆåŠŸï¼', $this->createMobileUrl('orderdetail', array(
+                    'id' => $order['id'],
+                    'sid' => $order['sid']
+                )), 'success');
+            } else {
+                message('æ”¯ä»˜æˆåŠŸï¼', '../../app/' . $this->createMobileUrl('orderdetail', array(
+                    'id' => $order['id'],
+                    'sid' => $order['sid']
+                )), 'success');
+            }
+        }
+    }
+    public function doMobileMyorder()
+    {
+        global $_W, $_GPC;
+        checkauth();
+        $sid = intval($_GPC['sid']);
+        check_trash($sid);
+        $store  = get_store($sid);
+        $_share = get_share($store);
+        if (empty($store)) {
+            message('é—¨åº—ä¸å­˜åœ¨', referer(), 'error');
+        }
+        $title  = $store['title'];
+        $where  = ' WHERE uniacid = :aid AND sid = :sid AND uid = :uid';
+        $params = array(
+            ':aid' => $_W['uniacid'],
+            ':uid' => $_W['member']['uid'],
+            ':sid' => $sid
+        );
+        $status = intval($_GPC['status']);
+        if ($status > 0 && $status != 5) {
+            $where .= ' AND status = :status';
+            $params[':status'] = $status;
+        }
+        if ($status == 5) {
+            $where .= " AND pay_type = ''";
+        }
+        $pindex = max(1, intval($_GPC['page']));
+        $psize  = 10;
+        $limit  = ' ORDER BY addtime DESC LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
+        $total  = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_order') . $where, $params);
+        $data   = pdo_fetchall('SELECT * FROM ' . tablename('str_order') . $where . $limit, $params);
+        $pager  = pagination($total, $pindex, $psize, '', array(
+            'before' => 0,
+            'after' => 0
+        ));
+        include $this->template('myorder');
+    }
+    public function doMobileComment()
+    {
+        global $_W, $_GPC;
+        $id    = intval($_GPC['id']);
+        $order = pdo_fetch('SELECT * FROM ' . tablename('str_order') . ' WHERE uniacid = :aid AND id = :id', array(
+            ':aid' => $_W['uniacid'],
+            ':id' => $id
+        ));
+        check_trash($order['sid']);
+        if (!$_W['isajax']) {
+            if (empty($order)) {
+                message('è®¢å•ä¸å­˜åœ¨æˆ–å·²ç»åˆ é™¤', $this->createMobileUrl('myorder'), 'error');
+            }
+            if ($order['comment'] == 1) {
+                $comment = pdo_fetch('SELECT * FROM ' . tablename('str_order_comment') . ' WHERE uniacid = :aid AND oid = :oid', array(
+                    ':aid' => $_W['uniacid'],
+                    ':oid' => $id
+                ));
+            }
+        } else {
+            $out['errno'] = 0;
+            $out['error'] = 0;
+            if (empty($order)) {
+                $out['errno'] = 1;
+                $out['error'] = 'è®¢å•ä¸å­˜åœ¨æˆ–å·²ç»åˆ é™¤';
+                exit(json_encode($out));
+            }
+            $store = pdo_fetch('SELECT id,comment_set FROM ' . tablename('str_store') . ' WHERE uniacid = :aid AND id = :id', array(
+                ':aid' => $_W['uniacid'],
+                ':id' => $order['sid']
+            ));
+            if ($order['comment'] == 1) {
+                $out['errno'] = 1;
+                $out['error'] = 'è¯¥è®¢å•å·²ç»è¯„ä»·è¿‡';
+                exit(json_encode($out));
+            }
+            if (!empty($_GPC['score_data'])) {
+                $insert = array(
+                    'uniacid' => $_W['uniacid'],
+                    'sid' => $order['sid'],
+                    'oid' => $order['id'],
+                    'uid' => $order['uid'],
+                    'addtime' => TIMESTAMP,
+                    'status' => ($store['comment_set']) == 1 ? 1 : 3,
+                    'note' => trim($_GPC['note'])
+                );
+                foreach ($_GPC['score_data'] as $row) {
+                    if ($row['id'] && in_array($row['id'], array(
+                        'taste',
+                        'speed',
+                        'serve'
+                    ))) {
+                        $score              = intval($row['score']);
+                        $insert[$row['id']] = $score;
+                    }
+                }
+                pdo_insert('str_order_comment', $insert);
+            }
+            pdo_update('str_order', array(
+                'comment' => 1
+            ), array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+            exit(json_encode($out));
+        }
+        include $this->template('comment');
+    }
+    public function doWebCron()
+    {
+        global $_W, $_GPC;
+        $op = trim($_GPC['op']) ? trim($_GPC['op']) : 'print';
+        if ($op == 'print') {
+            $sid  = intval($_GPC['__sid']);
+            $data = pdo_fetchall('SELECT a.foid, b.print_no, b.key FROM ' . tablename('str_order_print') . ' AS a LEFT JOIN ' . tablename('str_print') . ' AS b ON a.pid = b.id WHERE a.uniacid = :aid AND a.sid = :sid AND a.status = 2 AND a.print_type = 1 ORDER BY addtime ASC LIMIT 5', array(
+                ':aid' => $_W['uniacid'],
+                ':sid' => $sid
+            ));
+            if (!empty($data)) {
+                foreach ($data as $da) {
+                    if (!empty($da['foid']) && !empty($da['print_no']) && !empty($da['key'])) {
+                        $print  = new wprint();
+                        $status = $print->QueryOrderState($da['print_no'], $da['key'], $da['foid']);
+                        if (!is_error($status)) {
+                            pdo_update('str_order_print', array(
+                                'status' => $status
+                            ), array(
+                                'uniacid' => $_W['uniacid'],
+                                'sid' => $sid,
+                                'foid' => $da['foid']
+                            ));
+                        }
+                    }
+                }
+            }
+        } elseif ($op == 'order') {
+            $sid   = intval($_GPC['__sid']);
+            $order = pdo_fetch('SELECT id FROM ' . tablename('str_order') . ' WHERE uniacid = :uniacid AND sid = :sid AND is_notice = 0 ORDER BY addtime DESC', array(
+                ':uniacid' => $_W['uniacid'],
+                ':sid' => $sid
+            ));
+            if (!empty($order)) {
+                pdo_update('str_order', array(
+                    'is_notice' => 1
+                ), array(
+                    'uniacid' => $_W['uniacid'],
+                    'id' => $order['id']
+                ));
+                exit('success');
+            }
+            exit('error');
+        }
+    }
+    public function doWebSystem()
+    {
+        global $_W, $_GPC;
+        include $this->template('system');
+    }
+    public function doMobileManage()
+    {
+        global $_W, $_GPC;
+        $op    = trim($_GPC['op']) ? trim($_GPC['op']) : 'list';
+        $sid   = $_GPC['sid'];
+        $store = pdo_fetch('SELECT * FROM ' . tablename('str_store') . ' WHERE uniacid = :aid AND id = :id', array(
+            ':aid' => $_W['uniacid'],
+            ':id' => $sid
+        ));
+        if (empty($store)) {
+            message('é—¨åº—ä¸å­˜åœ¨', referer(), 'error');
+        }
+        $store['copyright'] = (array) iunserializer($store['copyright']);
+        $_share             = get_share($store);
+        $title              = $store['title'];
+        $clerk              = checkclerk($sid);
+        if (is_error($clerk)) {
+            message($clerk['message'], referer(), 'error');
+        }
+        $pay_types = pay_types();
+        if ($op == 'list') {
+            $where  = ' WHERE uniacid = :aid AND sid = :sid';
+            $params = array(
+                ':aid' => $_W['uniacid'],
+                ':sid' => $sid
+            );
+            if ($status > 0 && $status != 5) {
+                $where .= ' AND status = :status';
+                $params['status'] = $status;
+            }
+            if ($status == 5) {
+                $where .= " AND pay_type = ''";
+            }
+            $pindex = max(1, intval($_GPC['page']));
+            $psize  = 10;
+            $limit  = ' ORDER BY id DESC LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
+            $total  = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_order') . $where, $params);
+            $data   = pdo_fetchall('SELECT * FROM ' . tablename('str_order') . $where . $limit, $params);
+            $pager  = pagination($total, $pindex, $psize, '', array(
+                'before' => 0,
+                'after' => 0
+            ));
+            include $this->template('manage');
+        } elseif ($op == 'detail') {
+            $id    = intval($_GPC['id']);
+            $order = pdo_fetch('SELECT * FROM ' . tablename('str_order') . ' WHERE uniacid = :aid AND sid = :sid AND id = :id', array(
+                ':aid' => $_W['uniacid'],
+                ':sid' => $store['id'],
+                ':id' => $id
+            ));
+            if (empty($order)) {
+                message('è®¢å•ä¸å­˜åœ¨æˆ–å·²ç»åˆ é™¤', referer(), 'error');
+            }
+            $order['dish'] = get_dish($order['id']);
+            include $this->template('manage-detail');
+        }
+    }
+    public function doMobileStatus()
+    {
+        global $_W, $_GPC;
+        $id     = intval($_GPC['id']);
+        $sid    = intval($_GPC['sid']);
+        $status = intval($_GPC['status']);
+        $order  = pdo_fetch('SELECT id FROM ' . tablename('str_order') . ' WHERE uniacid = :aid AND sid = :sid AND id = :id', array(
+            ':aid' => $_W['uniacid'],
+            ':sid' => $sid,
+            ':id' => $id
+        ));
+        if (empty($order)) {
+            exit('è®¢å•ä¸å­˜åœ¨');
+        }
+        if ($status == 5) {
+            pdo_update('str_order', array(
+                'pay_type' => 'cash'
+            ), array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+        } else {
+            pdo_update('str_order', array(
+                'status' => $status
+            ), array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+        }
+        wechat_notice_order($sid, $id, $status);
+        exit('success');
+    }
+    public function doMobilePrint()
+    {
+        global $_W, $_GPC;
+        $id    = intval($_GPC['id']);
+        $sid   = intval($_GPC['sid']);
+        $order = pdo_fetch('SELECT id FROM ' . tablename('str_order') . ' WHERE uniacid = :aid AND sid = :sid AND id = :id', array(
+            ':aid' => $_W['uniacid'],
+            ':sid' => $sid,
+            ':id' => $id
+        ));
+        if (empty($order)) {
+            exit('è®¢å•ä¸å­˜åœ¨');
+        }
+        $status = print_order($id);
+        if (is_error($status)) {
+            exit($status['message']);
+        }
+        exit('success');
+    }
+    public function doMobileAddress()
+    {
+        global $_W, $_GPC;
+        checkauth();
+        $sid    = intval($_GPC['sid']);
+        $store  = get_store($sid);
+        $_share = get_share($store);
+        if (empty($store)) {
+            message('å•†å®¶ä¸å­˜åœ¨', '', 'error');
+        }
+        $title      = $store['title'];
+        $op         = trim($_GPC['op']) ? trim($_GPC['op']) : 'list';
+        $return_url = '';
+        if (!empty($_GPC['return_url'])) {
+            $return_url = urldecode($_GPC['return_url']);
+        }
+        if ($op == 'list') {
+            $addresses = get_addresses();
+        }
+        if ($op == 'post') {
+            $id      = intval($_GPC['id']);
+            $address = get_address($id);
+            if ($_W['ispost']) {
+                if ($store['mobile_verify']['takeout_verify'] == 1 && !$address['is_verify'] && $_W['str_takeout']['sms']['status'] == 1) {
+                    $code    = trim($_GPC['code']);
+                    $mobile  = trim($_GPC['mobile']);
+                    $isexist = pdo_fetch('select * from ' . tablename('uni_verifycode') . ' where uniacid = :uniacid and receiver = :receiver and verifycode = :verifycode and createtime >= :createtime', array(
+                        ':uniacid' => $_W['uniacid'],
+                        ':receiver' => $mobile,
+                        ':verifycode' => $code,
+                        ':createtime' => time() - 1800
+                    ));
+                    if (empty($isexist)) {
+                        exit(json_encode(array(
+                            'errorno' => 1,
+                            'message' => 'éªŒè¯ç é”™è¯¯'
+                        )));
+                    }
+                }
+                $data = array(
+                    'uniacid' => $_W['uniacid'],
+                    'uid' => $_W['member']['uid'],
+                    'realname' => trim($_GPC['realname']),
+                    'mobile' => trim($_GPC['mobile']),
+                    'is_verify' => 0,
+                    'address' => trim($_GPC['address'])
+                );
+                if ($store['mobile_verify']['takeout_verify'] == 1 && !$address['is_verify']) {
+                    $data['is_verify'] = 1;
+                }
+                if (!empty($address)) {
+                    pdo_update('str_address', $data, array(
+                        'uniacid' => $_W['uniacid'],
+                        'id' => $id
+                    ));
+                } else {
+                    pdo_insert('str_address', $data);
+                    $id = pdo_insertid();
+                }
+                exit(json_encode(array(
+                    'errorno' => 0,
+                    'message' => $id
+                )));
+            }
+        }
+        if ($op == 'del') {
+            $id = intval($_GPC['id']);
+            pdo_delete('str_address', array(
+                'uniacid' => $_W['uniacid'],
+                'uid' => $_W['member']['uid'],
+                'id' => $id
+            ));
+            exit(json_encode(array(
+                'errorno' => 0,
+                'message' => ''
+            )));
+        }
+        if ($op == 'default') {
+            $id = intval($_GPC['id']);
+            pdo_update('str_address', array(
+                'is_default' => 0
+            ), array(
+                'uniacid' => $_W['uniacid'],
+                'uid' => $_W['member']['uid']
+            ));
+            pdo_update('str_address', array(
+                'is_default' => 1
+            ), array(
+                'uniacid' => $_W['uniacid'],
+                'id' => $id
+            ));
+            exit(json_encode(array(
+                'errorno' => 0,
+                'message' => ''
+            )));
+        }
+        include $this->template('address');
+    }
+    public function doMobileComment_list()
+    {
+        global $_W, $_GPC;
+        checkauth();
+        $sid = intval($_GPC['sid']);
+        check_trash($sid);
+        $store  = get_store($sid);
+        $_share = get_share($store);
+        if (empty($store)) {
+            message('å•†å®¶ä¸å­˜åœ¨', '', 'error');
+        }
+        $title        = $store['title'];
+        $comment_stat = comment_stat($sid);
+        $avg          = ($comment_stat['avg_taste'] + $comment_stat['avg_serve'] + $comment_stat['avg_speed']) / 3;
+        $pindex       = max(1, intval($_GPC['page']));
+        $psize        = 15;
+        $condition    = ' WHERE a.uniacid = :uniacid AND a.sid = :sid AND a.status = 1';
+        $params       = array(
+            ':uniacid' => $_W['uniacid'],
+            ':sid' => $sid
+        );
+        $total        = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('str_order_comment') . ' AS a ' . $condition, $params);
+        $data         = pdo_fetchall('SELECT a.*, b.nickname,b.avatar,b.realname FROM ' . tablename('str_order_comment') . ' AS a LEFT JOIN ' . tablename('mc_members') . ' AS b ON a.uid = b.uid ' . $condition . ' ORDER BY a.addtime DESC LIMIT ' . ($pindex - 1) * $psize . ',' . $psize, $params);
+        $pager        = pagination($total, $pindex, $psize, '', array(
+            'before' => 0,
+            'after' => 0
+        ));
+        include $this->template('comment_list');
+    }
+    public function doWebLimit()
+    {
+        global $_W, $_GPC;
+        $op = trim($_GPC['op']) ? trim($_GPC['op']) : 'list';
+        if ($op == 'list') {
+            if (!$_W['isfounder']) {
+                message('æ­¤é¡¹æ“ä½œåªæœ‰è¶…çº§ç®¡ç†å‘˜æœ‰æƒé™', referer(), 'error');
+            }
+            $title     = intval($_GPC['title']);
+            $condition = '';
+            if ($title > 0) {
+                $condition .= " WHERE uniacid = {$title}";
+            } else {
+                $title = trim($_GPC['title']);
+                if (!empty($title)) {
+                    $condition .= " WHERE name LIKE '%{$title}%'";
+                }
+            }
+            $pindex   = max(1, intval($_GPC['page']));
+            $psize    = 15;
+            $total    = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('uni_account') . $condition);
+            $accounts = pdo_fetchall('SELECT * FROM ' . tablename('uni_account') . $condition . ' ORDER BY uniacid DESC LIMIT ' . ($pindex - 1) * $psize . ',' . $psize, array(), 'uniacid');
+            if (!empty($accounts)) {
+                $ids    = implode(',', array_keys($accounts));
+                $limits = pdo_fetchall('SELECT uniacid, num_limit FROM ' . tablename('str_config') . " WHERE uniacid IN ({$ids})", array(), 'uniacid');
+            }
+            $pager = pagination($total, $pindex, $psize);
+        }
+        if ($op == 'num') {
+            if (!$_W['isfounder']) {
+                exit('æ‚¨æ²¡æœ‰æƒé™è¿›è¡Œè¯¥æ“ä½œ');
+            }
+            $uniacid = intval($_GPC['uniacid']);
+            if (!$uniacid)
+                exit('å…¬ä¼—å·ä¿¡æ¯é”™è¯¯');
+            $num    = intval($_GPC['num']);
+            $config = get_config($uniacid);
+            if (!empty($config)) {
+                pdo_update('str_config', array(
+                    'num_limit' => $num
+                ), array(
+                    'uniacid' => $uniacid
+                ));
+            } else {
+                $data = array(
+
+                    'uniacid' => $uniacid,
+                    'version' => 1,
+                    'area_search' => 1,
+                    'num_limit' => $num
+                );
+                pdo_insert('str_config', $data);
+            }
+            exit('success');
+        }
+        include $this->template('limit');
+    }
+    public function doWebArea()
+    {
+        global $_W, $_GPC;
+        $op = trim($_GPC['op']) ? trim($_GPC['op']) : 'list';
+        if ($op == 'list') {
+            $condition      = ' uniacid = :aid';
+            $params[':aid'] = $_W['uniacid'];
+            $lists          = get_area();
+            if (!empty($lists)) {
+                $ids  = implode(',', array_keys($lists));
+                $nums = pdo_fetchall('SELECT count(*) AS num,area_id FROM ' . tablename('str_store') . " WHERE uniacid = :aid AND area_id IN ({$ids}) GROUP BY area_id", array(
+                    ':aid' => $_W['uniacid']
+                ), 'area_id');
+            }
+            if (checksubmit('submit')) {
+                if (!empty($_GPC['ids'])) {
+                    foreach ($_GPC['ids'] as $k => $v) {
+                        $data = array(
+                            'title' => trim($_GPC['title'][$k]),
+                            'displayorder' => intval($_GPC['displayorder'][$k])
+                        );
+                        pdo_update('str_area', $data, array(
+                            'uniacid' => $_W['uniacid'],
+                            'id' => intval($v)
+                        ));
+                    }
+                    message('ç¼–è¾‘æˆåŠŸ', $this->createWebUrl('area'), 'success');
+                }
+            }
+        }
+        if ($op == 'post') {
+            if (checksubmit('submit')) {
+                if (!empty($_GPC['title'])) {
+                    foreach ($_GPC['title'] as $k => $v) {
+                        $v = trim($v);
+                        if (empty($v))
+                            continue;
+                        $data['uniacid']      = $_W['uniacid'];
+                        $data['title']        = $v;
+                        $data['displayorder'] = intval($_GPC['displayorder'][$k]);
+                        pdo_insert('str_area', $data);
+                    }
+
+                }
+                message('æ·»åŠ åŒºåŸŸæˆåŠŸ', $this->createWebUrl('area'), 'success');
+            }
+        }
+        include $this->template('area');
+    }
+}

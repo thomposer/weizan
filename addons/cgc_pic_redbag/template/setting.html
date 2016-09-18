@@ -1,0 +1,390 @@
+{template 'common/header'}
+
+<script>
+	require(
+	[ 'jquery', 'util' ], function($, u)
+	{
+		$(function()
+		{
+			$('#setting-form').submit(function()
+			{
+				var message = '';
+				if ($.trim($(':text[name=appid]').val()) == '')
+				{
+					message += '必须输入AppID<br>';
+				}
+				if ($.trim($(':text[name=secret]').val()) == '')
+				{
+					message += '必须输入AppSecret<br>';
+				}
+				if ($.trim($(':text[name=mchid]').val()) == '')
+				{
+					message += '必须输入微信支付商户号<br>';
+				}
+				if ($.trim($(':text[name=password]').val()) == '')
+				{
+					message += '必须输入微信支付商户密钥<br>';
+				}
+
+				if (message)
+				{
+					u.message(message);
+					return false;
+				}
+				return true;
+			});
+		});
+	});
+</script>
+
+
+<div class="main">
+	<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" id="setting-form">
+		<div class="panel panel-default">
+			<div class="panel-heading">参数设置</div>
+			<div class="panel-body">
+				<ul class="nav nav-tabs" id="myTab">
+					<li class="active"><a href="#tab_basic"> 发红包的接口参数</a></li>
+					<li><a href="#tab_share1">限制提醒</a></li>
+
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane  active" id="tab_basic">
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+							<div class="col-sm-9 col-xs-12">
+								<div class="alert alert-info">
+									发放红包需要使用 <br> <span class="label label-info">认证服务号并开通微信支付</span> <br>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">AppID</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="appid" value="{$settings['appid']}" class="form-control"> <span class="help-block">自己的的appid</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">AppSecret</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="secret" value="{$settings['secret']}" class="form-control"> <span class="help-block">自己的的AppSecret</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">商户号</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="mchid" value="{$settings['mchid']}" class="form-control"> <span class="help-block">微信支付商户号, 开通微信支付才能获得商户号</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">商户支付密钥</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="password" value="{$settings['password']}" class="form-control"> <span class="help-block">微信支付商户所使用的支付密钥, 开通微信支付才能获得商户号</span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">服务器IP</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="ip" value="{$settings['ip']}" class="form-control"> <span class="help-block">发放红包接口需要服务器IP. 程序将自动获取你的服务器IP, 如果获取失败, 请手动指定</span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">商户支付证书</label>
+							<div class="col-sm-9 col-xs-12">
+								<input name="apiclient_cert" type="hidden" class="form-control" value="{$settings['apiclient_cert']}" /> <input name="apiclient_cert_file" type="file" class="form-control" value="" /> <span class="help-block"> {if !empty($settings['apiclient_cert'])} <label style="color: red">已保存成功</label>{else} <label style="color: red">未上传</label>{/if} 从商户平台上下载支付证书, 解压并取得其中的 <mark>apiclient_cert.pem</mark>上传此文件
+								</span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">支付证书私钥</label>
+							<div class="col-sm-9 col-xs-12">
+								<input name="apiclient_key" type="hidden" class="form-control" value="{$settings['apiclient_key']}" /> <input name="apiclient_key_file" type="file" class="form-control" value="" /> <span class="help-block"> {if !empty($settings['apiclient_key'])} <label style="color: red">已保存成功</label>{else} <label style="color: red">未上传</label>{/if} 从商户平台上下载支付证书, 解压并取得其中的 <mark>apiclient_key.pem</mark>上传此文件
+								</span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">支付根证书</label>
+							<div class="col-sm-9 col-xs-12">
+								<input name="rootca" type="hidden" class="form-control" value="{$settings['rootca']}" /> <input name="rootca_file" type="file" class="form-control" value="" /> <span class="help-block"> {if !empty($settings['rootca'])} <label style="color: red">已保存成功</label>{else} <label style="color: red">未上传</label>{/if} 从商户平台上下载支付证书, 解压并取得其中的 <mark>rootca.pem</mark>上传此文件
+								</span>
+							</div>
+						</div>
+						
+						
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否借用发红包</label>
+							<div class="col-xs-12 col-sm-9">
+								<label class="radio-inline"><input type="radio" name="wechat_mode" value="0" {if empty($settings['wechat_mode'])} checked="checked"{/if}>否</label> <label class="radio-inline"><input type="radio" name="wechat_mode" value="1" {if !empty($settings['wechat_mode'])}  checked="checked"{/if}>是</label> <span class="help-block"> 如果是认证订阅号借用的话，可以选择是.不过必须让粉丝点击借用模式绑定地址，才可以发红包成功。如果是借用发红包，下面必须选择企业付款这样红包才直接到用户的零钱里面。 </span>
+							</div>
+						</div>
+
+
+
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">发红包类型接口</label>
+							<div class="col-xs-12 col-sm-9">
+								<label class="radio-inline"><input type="radio" onclick="sendtype(false)" name="sendtype" value="0" id="hide" {if empty($settings['sendtype'])} checked="checked"{/if}>企业付款(默认)</label> <label class="radio-inline"><input type="radio" name="sendtype" value="1" onclick="sendtype(true)" id="show" {if !empty($settings['sendtype'])}  checked="checked"{/if}>现金红包</label> <span class="help-block">企业付款接口(直接冲入用户的零钱，认证订阅号借用发红包模式下最好选择这个选项，不然粉丝不知道钱到哪里去了) 现金红包接口(要用户点击下才可以领取)。 </span>
+							</div>
+						</div>
+
+
+
+						<div class="form-group sendtype" style="display: {if empty($ settings ['sendtype'])">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">红包活动名称</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="act_name" value="{$settings['act_name']}" class="form-control"> <span class="help-block">现金红包的活动名称,不要超过8个字</span>
+							</div>
+						</div>
+
+						<div class="form-group sendtype" style="display: {if empty($ settings ['sendtype'])">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">红包发起人</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="send_name" value="{$settings['send_name']}" class="form-control"> <span class="help-block">发红包人的名称,不要超过8个字</span>
+							</div>
+						</div>
+
+						<div class="form-group sendtype" style="display: {if empty($ settings [ 'sendtype' ])">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">红包备注</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="remark" value="{$settings['remark']}" class="form-control"> <span class="help-block">备注,不要超过8个字</span>
+							</div>
+						</div>
+
+						<div class="form-group sendtype1" style="display: {if($ settings [ 'sendtype' ])">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">企业付款描述</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="pay_desc" value="{$settings['pay_desc']}" class="form-control"> <span class="help-block">备注,不要超过8个字，必填</span>
+							</div>
+						</div>
+
+
+
+						<div class="form-group" style="display:none">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">红包金额</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="hb_money" value="{$settings['hb_money']}" class="form-control"> <span class="help-block">粉丝发送图片的红包金额</span>
+							</div>
+						</div>
+						
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">福利类型</label>
+							<div class="col-xs-12 col-sm-9">
+								<label class="radio-inline"><input type="radio" name="issue_type" value="0" {if empty($settings['issue_type'])} checked="checked"{/if}>发红包</label> <label class="radio-inline"><input type="radio" name="issue_type" value="1" {if !empty($settings['issue_type'])&&$settings['issue_type']=='1' }  checked="checked"{/if}>发积分</label><label class="radio-inline"><input type="radio" name="issue_type" value="2" {if !empty($settings['issue_type'])&&$settings['issue_type']=='2'}  checked="checked"{/if}>发余额</label> <span class="help-block">  </span>
+							</div>
+						</div>
+						
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">福利最小金额</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="min_hb_money" value="{$settings['min_hb_money']}" class="form-control">
+								 <span class="help-block">此红包会在最大金额和最小金额之间随机发放,最低一块</span>
+							</div>
+						</div>
+						
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">福利最大金额</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="max_hb_money" 
+								value="{$settings['max_hb_money']}" class="form-control"> 
+								<span class="help-block">红包会在最大金额和最小金额之间随机发放,最低一块</span>
+							</div>
+						</div>
+						
+						
+							<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">微信卡券id</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="wx_cardid" value="{$settings['wx_cardid']}" class="form-control"> 
+								<span class="help-block">需要发卡券给粉丝的时候，这里填一个，仅适合认证服务号。</span>
+							</div>
+						</div>
+
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">粉丝得到红包提示</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="hb_info" value="{$settings['hb_info']}" class="form-control"> <span class="help-block">粉丝领取红包提示</span>
+							</div>
+						</div>
+
+					
+
+
+					</div>
+
+
+					<div class="tab-pane" id="tab_share1">
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">图片已经审核提示</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="sh_info" value="{$settings['sh_info']}" class="form-control"> <span class="help-block">
+								例如:图片已经审核了，请 #user_url#以便收到礼物,或者图片已经审核了。
+								  <br>请 点击#hb_url#得到零钱。
+								   <br>请 点击#card_url#获得卡券。 </span>
+							</div>
+						</div>
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">粉丝发送图片文字消息</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="pic_info" value="{$settings['pic_info']}" class="form-control"> <span class="help-block">例如:图片已经在审核了,审核通过就可以发红包,如果是借用发红包模式#url#代表借用模式绑定地址。 如果是需要填写资料，#user_url#代表资料填写地址。 例如可以这样提示：你的图片已经在审核了，请点击#user_url#绑定下账户,以备发红包之用。</span>
+							</div>
+						</div>
+
+
+						<div class="form-group model0">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">返回的图片消息</label>
+							<div class="col-sm-9 col-xs-12">
+								{php echo tpl_form_field_image('pic',$settings['pic']);}
+								<div class="help-block">这里可以对粉丝返回一个图片消息，例如客服的二维码等等，不支持外网地址，只支持本服务器的地址。</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动开始时间</label>
+							<div class="col-xs-12 col-sm-9">
+								{php echo tpl_form_field_date('start_time', $settings['start_time'], true)} <span>精确到分钟</span>
+							</div>
+
+						</div>
+
+
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动没开始的提示</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="start_time_info" value="{$settings['start_time_info']}" class="form-control"> <span class="help-block">例如:活动没开始，请先加小编微信 xxx</span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动结束时间</label>
+							<div class="col-xs-12 col-sm-9">
+								{php echo tpl_form_field_date('end_time', $settings['end_time'], true)} <span>精确到分钟</span>
+							</div>
+						</div>
+
+
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动结束提示</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="end_time_info" value="{$settings['end_time_info']}" class="form-control"> <span class="help-block">例如:活动已结束，请先加小编微信 xxx</span>
+							</div>
+						</div>
+
+
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">个人领取红包的最大数量</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="max_person_num" value="{$settings['max_person_num']}" class="form-control"> <span class="help-block"></span>
+							</div>
+						</div>
+
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">超过个人最大领取数量提示</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="max_person_info" value="{$settings['max_person_info']}" class="form-control"> <span class="help-block">例如:超过个人最大领取数量，等下一次活动吧，加小编微信xxx</span>
+							</div>
+						</div>
+
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">活动发放的红包最大数量</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="max_hb_num" value="{$settings['max_hb_num']}" class="form-control">
+
+							</div>
+						</div>
+
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">超过活动最大数量提示</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="max_hb_info" value="{$settings['max_hb_info']}" class="form-control"> <span class="help-block">例如:活动红包已经被领取完，等下一次活动吧，加小编微信xxx</span>
+							</div>
+						</div>
+
+
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">系统可以接收的最多图片数</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="max_pic_num" value="{$settings['max_pic_num']}" class="form-control"> <span class="help-block"></span>
+							</div>
+						</div>
+
+
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">个人可以发送的最多图片数</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="max_person_pic_num" value="{$settings['max_person_pic_num']}" class="form-control"> <span class="help-block"></span>
+							</div>
+						</div>
+
+
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">资料保存成功跳转链接</label>
+							<div class="col-sm-9 col-xs-12">
+								<input type="text" name="succ_url" value="{$settings['succ_url']}" class="form-control"> <span class="help-block">http开头,不懂就随便写个链接，看看效果</span>
+							</div>
+						</div>
+
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">批量审批输入红包金额</label>
+							<div class="col-xs-12 col-sm-9">
+								<label class="radio-inline"><input type="radio" name="check_redpack" value="0" {if empty($settings['check_redpack'])} checked="checked"{/if}>否</label> <label class="radio-inline"><input type="radio" name="check_redpack" value="1" {if !empty($settings['check_redpack'])}  checked="checked"{/if}>是</label> <span class="help-block"> 图片批量审核时，可以输入红包金额，批量发红包时，按输入金额进行发送。 </span>
+							</div>
+						</div>
+						
+						<div class="form-group" style="display:">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否显示地区</label>
+							<div class="col-xs-12 col-sm-9">
+								<label class="radio-inline"><input type="radio" name="is_address" value="0" {if empty($settings['is_address'])} checked="checked"{/if}>否</label> <label class="radio-inline"><input type="radio" name="is_address" value="1" {if !empty($settings['is_address'])}  checked="checked"{/if}>是</label> <span class="help-block"> 用户资料输入是否显示地区信息。 </span>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+
+
+			</div>
+		</div>
+		<div class="form-group col-sm-12">
+			<input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1" /> <input type="hidden" name="token" value="{$_W['token']}" />
+		</div>
+</div>
+</form>
+</div>
+
+
+<script>
+	$("#hide").click(function()
+	{
+		$(".sendtype").hide();
+		$(".sendtype1").show();
+	});
+	$("#show").click(function()
+	{
+		$(".sendtype").show();
+		$(".sendtype1").hide();
+	});
+
+	$("#text").click(function()
+	{
+		$(".answer_type").hide();
+	});
+
+	$(function()
+	{
+		window.optionchanged = false;
+		$('#myTab a').click(function(e)
+		{
+			e.preventDefault();//阻止a链接的跳转行为
+			$(this).tab('show');//显示当前选中的链接及关联的content
+		});
+
+		$('.tpl-district').remove();
+
+	});
+</script>
+{template 'common/footer'}

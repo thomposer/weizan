@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-	<!--<script type="text/javascript">
+{if ($this->is_weixin() == false && $_GPC['do'] != 'stopllq') }
+	<script type="text/javascript">
 		var useragent = navigator.userAgent;
 		if (useragent.match(/MicroMessenger/i) != 'MicroMessenger') {
-		
+
 			alert('已禁止本次访问：您必须使用微信内置浏览器访问本页面！');
 			var url = '{php echo $this->createMobileUrl('stopllq',array('rid'=> $rid))}';
 			var opened = window.open(url, '_self');
 			//opened.opener = null;
 			//opened.close();
 		}
-	</script>-->
+	</script>
+{/if}
+
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<title>{php if(isset($title)) $_W['page']['title'] = $title}{if !empty($_W['page']['title'])}{$_W['page']['title']} - {/if}{if !empty($_W['account']['name'])}{$_W['account']['name']}{/if}{if !empty($_W['page']['sitename'])} - {$_W['page']['sitename']}{else}{if IMS_FAMILY != 'x'} - Powered by {$rdisplay['copyright']}{/if}{/if}</title>
@@ -25,22 +28,27 @@
 	<link rel="shortcut icon" href="{$_W['siteroot']}{$_W['config']['upload']['attachdir']}/{if !empty($_W['setting']['copyright']['icon'])}{$_W['setting']['copyright']['icon']}{else}images/global/wechat.jpg{/if}" />
 	<link href="{$_W['siteroot']}app/resource/css/bootstrap.min.css" rel="stylesheet">
 	<link href="{$_W['siteroot']}app/resource/css/font-awesome.min.css" rel="stylesheet">
-	<link href="{$_W['siteroot']}app/resource/css/animate.css" rel="stylesheet">
+	<!--<link href="{$_W['siteroot']}app/resource/css/animate.css" rel="stylesheet">-->
 	<link href="{$_W['siteroot']}app/resource/css/common.css" rel="stylesheet">
 	<script type="text/javascript" src="{$_W['siteroot']}app/resource/js/lib/jquery-1.11.1.min.js"></script>
-	<!--<script type="text/javascript" src="{$_W['siteroot']}addons/fm_photosvote/template/mobile/jquery.lazyload.js"></script>-->
 	<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="{FM_STATIC_MOBILE}public/360play/360player.css?v=1.1" />
+	<link rel="stylesheet" type="text/css" href="{FM_STATIC_MOBILE}public/360play/360player-visualization.css" />
+	<!--[if IE]><script type="text/javascript" src="{FM_STATIC_MOBILE}public/360play/script/excanvas.js"></script><![endif]-->
+	<script type="text/javascript" src="{FM_STATIC_MOBILE}public/360play/script/berniecode-animator.js"></script>
+	<script type="text/javascript" src="{FM_STATIC_MOBILE}public/360play/script/soundmanager2.js"></script>
+	<script type="text/javascript" src="{FM_STATIC_MOBILE}public/360play/script/360player.js"></script>
 	<script type="text/javascript">
-	function _removeHTMLTag(str) {
-		if(typeof str == 'string'){
-			str = str.replace(/<script[^>]*?>[\s\S]*?<\/script>/g,'');
-			str = str.replace(/<style[^>]*?>[\s\S]*?<\/style>/g,'');
-			str = str.replace(/<\/?[^>]*>/g,'');
-			str = str.replace(/\s+/g,'');
-			str = str.replace(/&nbsp;/ig,'');
+		function _removeHTMLTag(str) {
+			if(typeof str == 'string'){
+				str = str.replace(/<script[^>]*?>[\s\S]*?<\/script>/g,'');
+				str = str.replace(/<style[^>]*?>[\s\S]*?<\/style>/g,'');
+				str = str.replace(/<\/?[^>]*>/g,'');
+				str = str.replace(/\s+/g,'');
+				str = str.replace(/&nbsp;/ig,'');
+			}
+			return str;
 		}
-		return str;
-	}
 	</script>
 	<script type="text/javascript" src="{FM_STATIC_MOBILE}public/photos/js/main.js?ver=1.0"></script>
 

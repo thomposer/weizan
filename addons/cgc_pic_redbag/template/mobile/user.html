@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>会员资料填写</title>
+    <link rel="stylesheet" href="{STYLE_PATH}/weui/weui.css"/>
+    <link rel="stylesheet" href="{STYLE_PATH}/weui/example.css"/>
+	<script type="text/javascript" src="./resource/js/lib/jquery-1.11.1.min.js"></script>
+</head>
+<body ontouchstart>
+	<div class="hd">
+        <h1 class="page_title">会员资料填写</h1>
+    </div>
+    
+    <form id="form1" action="{php echo $this->createMobileUrl('user',array('op'=>'post'))}" method="post"  >
+	    <div class="bd">
+			<div class="weui_cells weui_cells_form">	   
+	          	<input name="fromuser" type="hidden" value="{$openid}"  class="weui_input"  />
+	            <div class="weui_cell">
+	                <div class="weui_cell_hd"><label class="weui_label">姓名</label></div>
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <input name="realname" value="{$member['realname']}"  class="weui_input"  placeholder="请输入姓名"/>
+						<input name="id" type="hidden" value="{$member['id']}"  class="weui_input"  />
+	                </div>
+	            </div>
+		        <div class="weui_cell">
+	                <div class="weui_cell_hd"><label class="weui_label">电话</label></div>
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <input class="weui_input" name="tel"  value="{$member['tel']}" />
+	                </div>
+	            </div>
+
+				{if !empty($settings['is_address'])}
+				<div class="weui_cell">
+					<div class="weui_cell_hd">地区选择</div>
+					<div class="weui_cell_primary">
+						<select id="city" name="city" class="weui_select" style="width: 90px; float: right; text-align-last: right; text-align: right; padding-right: 15px;"> {if !empty($member['city']) }
+							<option selected="selected" value="{$member['city']}">{$member['city']}</option> {else}
+							<option value="" selected="selected">全部</option> {/if}
+						</select> <select id="province" name="province" onchange="getcity1();" class="weui_select" style="width: 100px; float: right; text-align: right; text-align-last: right; padding-right: 15px;">
+							<option value="">省份</option>
+							<option value="北京市">北京市</option>
+							<option value="广东省">广东省</option>
+							<option value="上海市">上海市</option>
+							<option value="天津市">天津市</option>
+							<option value="重庆市">重庆市</option>
+							<option value="辽宁省">辽宁省</option>
+							<option value="江苏省">江苏省</option>
+							<option value="湖北省">湖北省</option>
+							<option value="四川省">四川省</option>
+							<option value="陕西省">陕西省</option>
+							<option value="河北省">河北省</option>
+							<option value="山西省">山西省</option>
+							<option value="河南省">河南省</option>
+							<option value="吉林省">吉林省</option>
+							<option value="黑龙江">黑龙江</option>
+							<option value="内蒙古">内蒙古</option>
+							<option value="山东省">山东省</option>
+							<option value="安徽省">安徽省</option>
+							<option value="浙江省">浙江省</option>
+							<option value="福建省">福建省</option>
+							<option value="湖南省">湖南省</option>
+							<option value="广西省">广西省</option>
+							<option value="江西省">江西省</option>
+							<option value="贵州省">贵州省</option>
+							<option value="云南省">云南省</option>
+							<option value="西藏">西藏</option>
+							<option value="海南省">海南省</option>
+							<option value="甘肃省">甘肃省</option>
+							<option value="宁夏">宁夏</option>
+							<option value="青海">青海省</option>
+							<option value="新疆">新疆</option>
+							<option value="香港">香港</option>
+							<option value="澳门">澳门</option>
+							<option value="台湾">台湾</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="weui_cell">
+	                <div class="weui_cell_hd"><label class="weui_label">地址</label></div>
+	                <div class="weui_cell_bd weui_cell_primary">
+	                    <input class="weui_input" name="addr"  value="{$member['addr']}"   placeholder="请输入地址"/>
+	                </div>
+	            </div>
+	            
+	            {/if}
+	        </div>
+	        <div class="bd spacing">
+		        <button class="weui_btn weui_btn_primary" type="submit">提交</button>
+		    </div>
+	    </div>
+    </form>
+    
+    
+
+
+<script>
+
+	$("form").submit(function(e){
+		if ($(":text[name='nickname']").val()=='') {
+			alert('姓名不能为空！');
+			return false;
+		}
+		if ($(":text[name='tel']").val()=='') {
+			alert('手机不能为空！');
+			return false;
+		}
+		{if !empty($settings['is_address'])}
+		if ($("#city option:selected").text()=='城市'||$("#province option:selected").text()=='省份') {
+			alert('请选择你所在城市！');
+			return false;
+		}
+		
+		if ($(":text[name='addr']").val()=='') {
+			alert('地址不能为空！');
+			return false;
+		}
+		{/if}
+		
+		if (!validatemobile($(":text[name='tel']").val())) {
+			return false;
+		}
+
+		return true;
+	});
+	
+	function validatemobile(mobile)
+    {
+        if(mobile.length==0)
+        {
+		   alert('请输入手机号码！');
+           return false;
+        }    
+        if(mobile.length!=11)
+        {
+			alert('请输入有效的手机号码！');
+            return false;
+        }
+       /*  var myreg = /^(((13[0-9]{1})|159|153)+\d{8})$/;
+        if(!myreg.test(mobile))
+        {
+			alert('请输入有效的手机号码！');
+            return false;
+        } */
+		return true;
+    }
+</script>
+
+<script>
+        var city=[
+        ["东城","西城", "崇文", "宣武","朝阳","海淀","丰台","石景山","房山","通州","顺义","昌平",
+        "大兴","怀柔","平谷","门头沟","密云","延庆","其他"],
+        ["广州","深圳", "珠海","汕头","韶关","佛山","江门","湛江","茂名","肇庆","惠州","梅州","汕尾","河源","阳江","清远",
+        "东莞","中山","潮州","揭阳","云浮","其他"],
+        ["黄浦","卢湾", "徐汇","长宁","静安","普陀","闸北","虹口","杨浦","宝山","闵行","嘉定","松江",
+        "金山","青浦","南汇","奉贤","浦东新","崇明","其他"],
+        ["和平","河东", "河西","南开","河北","红桥","塘沽","汉沽","大港","东丽","西青","北辰","津南",
+        "武清","宝坻","静海","宁河","蓟","其他"],
+        ["渝中","大渡口", "江北","南岸","北碚","渝北","巴南","长寿","双桥","沙坪坝","万盛","万州","涪陵",
+        "黔江","永川","合川","江津","九龙坡","南川","綦江","潼南","荣昌","璧山","大足","铜梁",
+        "梁平","开","忠","城口","垫江","武隆","丰都","奉节","云阳","巫溪","巫山","其他"],
+        ["沈阳","大连","鞍山","抚顺","本溪","丹东","锦州","营口","阜新","辽阳","盘锦","铁岭","朝阳","葫芦岛","其他"],
+        ["南京","昆山","苏州","无锡","常州","镇江","南通","泰州","扬州","盐城","连云港","徐州","淮安","宿州","其他"],
+        ["武汉","黄石","十堰","荆州","宜昌","襄樊","鄂州","荆门","孝感","黄冈","咸宁","随州","仙桃","天门","潜江","神农架","其他"],
+        ["成都","自贡","攀枝花","泸州","德阳","绵阳","广元","遂宁","内江","乐山","南充","眉山","宜宾","广安","达州","雅安","巴中","资阳","其他"],
+        ["西安","铜川","宝鸡","咸阳","渭南","延安","汉中","榆林","安康","商洛","其他"],
+        ["石家庄","唐山","秦皇岛","邯郸","邢台","保定","张家口","承德","沧州","廊坊","衡水","其他"],
+        ["太原","大同","阳泉","长治","晋城","朔州","晋中","运城","忻州","临汾","吕梁","其他"],
+        ["郑州","开封","洛阳","平顶山","安阳","鹤壁","新乡","焦作","濮阳","许昌","漯河","三门峡","南阳","商丘","信阳","周口","驻马店","焦作","其他"],
+        ["吉林","四平","辽源","通化","白山","松原","白城","延边朝鲜自治","其他"],
+        ["哈尔滨","齐齐哈尔","鹤岗","双鸭山","鸡西","大庆","伊春","牡丹江","佳木斯","七台河","黑河","绥远","大兴安岭地","其他"],
+        ["呼和浩特","包头","乌海","赤峰","通辽","鄂尔多斯","呼伦贝尔","巴彦淖尔","乌兰察布","锡林郭勒盟","兴安盟","阿拉善盟"],
+        ["济南","青岛","淄博","枣庄","东营","烟台","潍坊","济宁","泰安","威海","日照","莱芜","临沂","德州","聊城","滨州","菏泽","其他"],
+        ["合肥","芜湖","蚌埠","淮南","马鞍山","淮北","铜陵","安庆","黄山","滁州","阜阳","宿州","巢湖","六安","亳州","池州","宣城"],
+        ["杭州","宁波","温州","嘉兴","湖州","绍兴","金华","衢州","舟山","台州","丽水","其他"],
+        ["福州","厦门","莆田","三明","泉州","漳州","南平","龙岩","宁德","其他"],
+        ["长沙","株洲","湘潭","衡阳","邵阳","岳阳","常德","张家界","益阳","滨州","永州","怀化","娄底","其他"],
+        ["南宁","柳州","桂林","梧州","北海","防城港","钦州","贵港","玉林","百色","贺州","河池","来宾","崇左","其他"],
+        ["南昌","景德镇","萍乡","九江","新余","鹰潭","赣州","吉安","宜春","抚州","上饶","其他"],
+        ["贵阳","六盘水","遵义","安顺","铜仁","毕节","其他"],
+        ["昆明","曲靖","玉溪","保山","邵通","丽江","普洱","临沧","其他"],
+        ["拉萨","那曲地","昌都地","林芝地","山南","阿里","日喀则","其他"],
+        ["海口","三亚","五指山","琼海","儋州","文昌","万宁","东方","澄迈","定安","屯昌","临高","其他"],
+        ["兰州","嘉峪关","金昌","白银","天水","武威","酒泉","张掖","庆阳","平凉","定西","陇南","临夏","甘南","其他"],
+        ["银川","石嘴山","吴忠","固原","中卫","其他"],
+        ["西宁","海东地","海北藏族自治","海南藏族自治","黄南藏族自治","果洛藏族自治","玉树藏族自治州","还西藏族自治","其他"],
+        ["乌鲁木齐","克拉玛依","吐鲁番地","哈密地","和田地","阿克苏地","喀什地","克孜勒苏柯尔克孜","巴音郭楞蒙古自治",
+        "昌吉回族自治州","博尔塔拉蒙古自治","石河子","阿拉尔","图木舒克","五家渠","伊犁哈萨克自治","其他"],
+        ["中西","湾仔","东","南","深水埗","油尖旺","九龙城","黄大仙","观塘","北","大埔","沙田","西贡",
+        "元朗","屯门","荃湾","葵青","离岛","其他"],
+        ["花地玛塘","圣安多尼塘","大堂","望德堂","风顺堂","嘉模堂","圣方济各堂","路凼","其他"],
+        ["台北市","高雄市","台北","桃园","新竹","苗栗","台中","彰化","南投","云林","嘉义","台南","高雄",
+        "屏东","宜兰","花莲","台东","澎湖","基隆市","新竹市","台中市","嘉义市","台南市","其他"]];
+    
+    	{if !empty($member['province']) }
+          $("#province").val("{$member['province']}");       
+        {/if}
+    
+    function getcity1(){   	
+	    var sltProvince = document.getElementById("province");        
+	    var sltCity = document.getElementById("city") ;      	        
+	    var provinceCity = city[sltProvince.selectedIndex - 1];         
+	    sltCity.length = 1;	       
+	    for ( i = 0 ; i < provinceCity.length ; i++) {
+	           sltCity[i] = new Option(provinceCity[i], provinceCity[i]);
+	          // obj.add(new Option("文本","值")); 
+	    }
+	    $("#city").val(sltCity[1]);       
+	   // console.log(sltCity);
+    }
+    </script>
+</body>
+</html>
+
+ <script type="text/javascript" src="{STYLE_PATH}/js/jquery-1.7.2.min.js"></script>
+ <div style="text-align:center;clear:both">
+</div>

@@ -1,0 +1,223 @@
+{template 'common/header'}
+{php load()->func('tpl');}
+<ul class="nav nav-tabs">	
+  <li {if $operation == 'display'} class="active"{/if}><a  href="{php echo $this->createWebUrl('fansoper')}">移动粉丝分组</a></li>
+</ul>
+
+{if $operation == 'display'}
+<div class="main">
+
+
+<div class="panel panel-info">
+	<div class="panel-heading">筛选(请到粉丝资料里面下载完所有资料，然后在回到这里操作。<a href="/web/index.php?c=mc&a=fans&">点击查看粉丝记录</a>)</div>
+	<div class="panel-body">
+		<form action="./index.php" method="get" class="form-horizontal" role="form">
+			<input type="hidden" name="c" value="site" />
+			<input type="hidden" name="a" value="entry" />
+			<input type="hidden" name="m" value="cgc_keyword" />
+			<input type="hidden" name="do" value="fansoper" />
+	
+			
+		  <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">分组名称</label>
+                    <div class="col-xs-12 col-sm-8 col-lg-5">
+                        <select name="group_id" class="form-control">
+                            <option value="">所有分组</option>
+                            {loop $fansgroup $item}
+                              <option value="{$item['group_id']}" 
+                              {if $_GPC['group_id'] == $item['group_id']}selected{/if}>{$item['name']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                
+                  <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">会员等级</label>
+                    <div class="col-xs-12 col-sm-8 col-lg-5">
+                        <select name="groupid" class="form-control">
+                            <option value="">所有等级</option>
+                            {loop $mc_groups $item}
+                              <option value="{$item['groupid']}" 
+                              {if $_GPC['groupid'] == $item['groupid']}selected{/if}>{$item['title']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                
+                  <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">性别</label>
+                    <div class="col-xs-12 col-sm-8 col-lg-5">
+                        <select name="gender" class="form-control">
+                            <option value="">全部</option>                         
+                              <option value="1" 
+                               {if $_GPC['gender'] == 1}selected{/if}>男</option>
+                              <option value="2" 
+                               {if $_GPC['gender'] == 2}selected{/if}>女</option>
+                        </select>
+                    </div>
+                </div>
+                
+                
+                 <div class="form-group">
+				<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">昵称</label>
+				<div class="col-xs-12 col-sm-8 col-lg-9">
+					<input class="form-control" placeholder="" 
+					name="nickname" id="" type="text" value="{$_GPC['nickname']}">
+				</div>
+			</div>
+               
+               <div class="form-group">
+				<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">地区</label>
+				<div class="col-xs-12 col-sm-8 col-lg-9">
+					<input class="form-control" placeholder="" 
+					name="addr" id="" type="text" value="{$_GPC['addr']}">
+				</div>
+			</div>
+                
+             
+                
+     
+			
+						
+			<div class="form-group">
+				<div class=" col-xs-12 col-sm-2 col-lg-2">
+					<button class="btn btn-default"><i class="fa fa-search"></i>搜索</button>
+				</div>
+			</div>
+			
+			
+		</form>
+	</div>
+</div>
+
+
+  <div class="row-fluid" style="padding-bottom: 13px;">
+  <div class="form-horizontal">
+  	<div class="form-group">
+		<div class=" col-xs-12 col-sm-2 col-lg-2" style="width:9%">
+			<button class="btn btn-default" onclick="moveFans();">移动粉丝分组</button>
+		</div>
+		
+		<div class=" col-xs-12 col-sm-2 col-lg-2" style="padding-right: 15px;margin-left: 20px;">
+			<select name="groupid" id="groupid" class="form-control">
+				<option value=""></option>
+				{loop $fansgroup $item}
+				  <option value="{$item['group_id']}" 
+				   {if $_GPC['z_groupid'] == $item['group_id']}selected{/if}>{$item['name']}</option>
+				{/loop}
+			</select>
+		</div>
+		
+	</div>
+  </div>
+  </div>
+       <div class="panel panel-default">
+	<div class="panel-body">
+
+
+	<div style="padding:15px;">
+
+		<table class="table table-hover"  style="width:100%;z-index:-10;" cellspacing="0" cellpadding="0">
+			<thead class="navbar-inner">
+				<tr>
+					<th style="width:30px;"><input type="checkbox" id="delete"  /></th>
+					<th style="width:90px;">用户id</th>
+					<th style="width:90px;">头像</th>
+					<th style="width:100px;">昵称</th>
+					<th style="width:100px;">对应用户</th>
+					<th style="width:100px;">所在分组</th>
+					<th style="width:100px;">会员分组</th>
+				<th style="width:100px;">地址</th>
+				
+					<th style="width:180px;">关注/取消时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				{loop $list $item}
+				<tr>
+					<td><input type="checkbox" name="delete[]" value="{$item['openid']}" /></td>
+					<td title='{$item['openid']}'>{$item['openid']}</td>
+					<td><img src="{if !empty($item['user']['avatar'])}{$item['user']['avatar']}{else}resource/images/noavatar_middle.gif{/if}" width="48"></td>
+					<td>{$item['user']['nickname']}{if $item['gender']==1}男{else $item['gender']==2}女{else}未知{/if}</td>
+					<td>
+
+						<a href="{php echo url('mc/member/post', array('uid'=>$item['uid']));}"><span>{if $item['user']['niemmo_effective'] == 1}{$item['user']['niemmo']}{else}{$item['uid']}{/if}</span></a>
+					
+					</td>
+					<td>{$item['groupname']}</td>
+					<td>{$item['memberlevel']}</td>
+					<td>{$item['resideprovince']}({$item['residecity']})</td>
+					
+					
+					<td>
+{php echo date('Y-m-d H:i:s', $item['followtime'])}
+					</td>
+					
+					</tr>
+				{/loop}
+			</tbody>
+		</table>
+
+		{$pager}
+
+	</div>
+
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		$("#delete").click(function(){
+			if($("#delete").is(':checked')){
+				$("input[name='delete[]']").prop("checked", true);
+			}else{
+				$("input[name='delete[]']").prop("checked", false);
+			}
+		});
+	});
+	function checkGroup(){
+		if($("input:checkbox[name='delete[]']:checked").length==0){
+			alert("请选中要移动分组的用户!");
+			return false;
+		}else if($("#groupid").val()==""||$("#groupid").val()==null){
+			alert("请选择要移动至的分组!");
+			return false;
+		}
+		return true;
+	}
+	function moveFans(){
+		var url="{php echo $this->createWebUrl('fansoper',array('op'=>'move'))}";
+		var openids="";
+		$("input:checkbox[name='delete[]']:checked").each(function(i){
+		       if(0==i){
+		    	   openids = $(this).val();
+		       }else{
+		    	   openids += ","+$(this).val();
+		       }
+		      });
+			if(checkGroup()){
+				if (confirm('确认将选中所有用户移动至选中分组吗？')){
+				 $.ajax({
+			            'url':url,
+			            'data':{'openid_list':openids,"to_groupid":$("#groupid").val()},
+			            'type':'POST',
+			            'dataType':'json',
+			            'async':'false',
+			            'success':function(data){
+				            alert(data['error']);
+				            if(data['result']==1){
+				            	// var url = '{php echo $this->createWebUrl("fansoper")}';
+								 window.location.href= data['url']+"&z_groupid="+$("#groupid").val();
+							}
+			            }
+			        });
+					
+			  }
+			 }
+				
+		}
+</script>
+{/if}
+
+
+{template 'common/footer'}
+

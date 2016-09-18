@@ -1,0 +1,112 @@
+{template 'common/header'}
+<ul class="nav nav-tabs">
+	<li {if $op=='display'}class="active"{/if}><a href="{php echo $this->createWebUrl('packet',array('tixian'=>1))}">升级红包提现管理</a></li>
+    <li {if $op=='credit'}class="active"{/if}><a href="{php echo $this->createWebUrl('packet',array('op'=>'credit','tixian'=>1))}">会员余额提现管理</a></li>
+</ul>
+<div class="clearfix">
+	<div class="panel panel-info">
+		<div class="panel-heading">筛选</div>
+		<div class="panel-body">
+		<form action="" method="get" class="form-horizontal" role="form">
+		<input type="hidden" name="c" value="site">
+		<input type="hidden" name="a" value="entry">
+		<input type="hidden" name="op" value="display">
+		<input type="hidden" name="do" value="packet">
+		<input type="hidden" name="m" value="yun_fkz">
+				
+				<div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">提现时间</label>
+                      <div class="col-sm-2">
+                            <label class='radio-inline'>
+                                <input type='radio' value='0' name='searchtime' {if $_GPC['searchtime']=='0'}checked{/if}>不搜索
+                            </label>
+                             <label class='radio-inline'>
+                                <input type='radio' value='1' name='searchtime' {if $_GPC['searchtime']=='1'}checked{/if}>搜索
+                            </label>
+                     </div>
+                    <div class="col-sm-7 col-lg-9 col-xs-12">
+                        {php echo tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d H:i', $starttime),'endtime'=>date('Y-m-d  H:i', $endtime)),true);}
+                    </div>
+                         
+                </div>
+           
+               <div class="form-group">
+	                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">状态</label>
+	                <div class="col-sm-8 col-lg-9 col-xs-12">
+                       <select name='tixian' class='form-control'>
+                       	 <option value='1' {if $tixian=='1'}selected{/if}>申请中</option>
+                         <option value='2' {if $tixian=='2'}selected{/if}>完成</option>
+                         <option value='-1' {if $tixian=='-1'}selected{/if}>失败</option>
+                    	</select>
+                	</div>
+                	
+                	<div class=" col-xs-12 col-sm-2">
+						<button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+					</div>
+               </div>
+				
+				
+			</form>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			会员升级记录列表
+		</div>
+		<div class="table-responsive panel-body">
+		<form action="" method="post" id="form1" >
+			<table class="table table-hover">
+				<thead>
+					<tr>
+	                    <th style='width:200px;'>申请人</th>
+	                    <th style='width:150px;'>提现金额</th>
+	                    <th style='width:100px;'>手续费</th>
+	                    <th style='width:100px;'>实际提现金额</th>
+	                    <th style='width:200px;'>提现时间</th>
+	                    <th style='width:150px;'>状态</th>
+	                    {if $_GPC['tixian']==1 || empty($_GPC['tixian'])}
+	                    <th style='width:300px;'>操作</th>
+	                    {/if}
+					</tr>
+				</thead>
+				<tbody>
+					{loop $list $row}
+                <tr>
+                    
+                    <td>
+                    <img src='{$row['avatar']}' style='width:30px;height:30px;padding1px;border:1px solid #ccc' />
+                    {if $row['realname']}{$row['realname']}{else}{$row['nickname']}{/if}<br/>{$row['mobile']}
+                    </td>
+                    
+                    <td>{$row['packet']}</td>
+                    <td>{$row['tixian_cut']}</td>
+                    <td>{php echo $row['packet']-$row['tixian_cut']}</td>
+                    <td>{php echo date('Y-m-d H:i',$row['tixian_time'])}</td>
+                    <td>
+                        {if $row['tixian']==1}
+                        <span class='label label-default'>申请中</span>
+                        {else if $row['tixian']==2}
+                        <span class='label label-success'>成功</span>
+                        {else if $row['tixian']==-1}
+                        <span class='label label-warning'>失败</span>
+                        {/if}
+                    </td> 
+                    {if $row['tixian']==1}
+                    <td>
+                        <a class='btn btn-default' onclick="return confirm('确认微信钱包提现?')" href="{php echo $this->createWebUrl('packet',array('op'=>'pay','paytype'=>'wechat','ids' => $row['ids']));}">微信提现</a>		
+                        <!-- <a class='btn btn-default' onclick="return confirm('确认手动提现完成?')" href="{php echo $this->createWebUrl('packet',array('op'=>'pay','paytype'=>'manual','ids' => $row['ids']));}">手动提现</a>		 -->
+                        <a class='btn btn-default' onclick="return confirm('确认拒绝提现申请?')" href="{php echo $this->createWebUrl('packet',array('op'=>'pay','paytype'=>'refuse','ids' => $row['ids']));}">拒绝</a>		
+                    </td>
+                    {/if}
+                </tr>
+                {/loop}
+				</tbody>
+			</table>
+			<div class="panel-body text-right">
+				{$pager}
+			</div>
+		</form>
+		</div>
+	</div>
+</div>
+{template 'common/footer'}

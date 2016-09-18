@@ -1,0 +1,547 @@
+{template 'common/header'}
+<script type="text/javascript" src="./resource/js/lib/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="./resource/js/lib/jquery-ui-1.10.3.min.js"></script>
+<script type="text/javascript" src="{STYLE_PATH}/js/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="{STYLE_PATH}/js/lhgdialog/lhgdialog.js?skin=idialog"></script>
+<script type="text/javascript" src="{STYLE_PATH}/js/layout.js"></script>
+<link href="{STYLE_PATH}/css/style.css" rel="stylesheet" type="text/css" />
+<link href="{STYLE_PATH}/css/pagination.css" rel="stylesheet" type="text/css" />
+
+
+<script type="text/javascript">
+    $(function () {
+        imgLayout();
+        $(window).resize(function () {
+            imgLayout();
+        });
+        //图片延迟加载
+        $(".pic img").lazyload({ load: AutoResizeImage, effect: "fadeIn" });
+        //点击图片链接
+        //$(".pic img").click(function () {
+        //    //$.dialog({ lock: true, title: "查看大图", content: "<img src=\"" + $(this).attr("src") + "\" />", padding: 0 });
+        //    var linkUrl = $(this).parent().parent().find(".foot a").attr("href");
+        //    if (linkUrl != "") {
+        //        location.href = linkUrl; //跳转到修改页面
+        //    }
+        //});
+    });
+    //排列图文列表
+    function imgLayout() {
+        var imgWidth = $(".imglist").width();
+        var lineCount = Math.floor(imgWidth / 300);
+        var lineNum = imgWidth % 300 / (lineCount);
+        $(".imglist ul").width(imgWidth + Math.ceil(lineNum));
+        $(".imglist ul li").css("margin-right", parseFloat(lineNum));
+    }
+    //等比例缩放图片大小
+    function AutoResizeImage(e, s) {
+        var img = new Image();
+        img.src = $(this).attr("src")
+        var w = img.width;
+        var h = img.height;
+        var wRatio = w / h;
+        if ((300 / wRatio) >= 300) {
+            $(this).width(300); $(this).height(300 / wRatio);
+        } else {
+            $(this).width(300 * wRatio); $(this).height(300);
+        }
+    }
+</script>
+
+<ul class="nav nav-tabs">
+	<li class="{if $op=='post'}active{/if}"><a href="{php echo $this->createWebUrl('bat_pic_approve',array('op'=>'post'));}">添加用户</a></li>
+	<li class="{if $op== 'display'}active{/if}"><a href="{php echo $this->createWebUrl('bat_pic_approve',array('op'=>'display'));}">用户管理</a></li>
+</ul>
+
+
+
+{if $op== 'display'}
+<div class="main">
+
+
+	<div class="panel panel-info">
+		<div class="panel-heading">筛选</div>
+		<div class="panel-body">
+			<form action="./index.php" method="get" class="form-horizontal" role="form">
+				<input type="hidden" name="c" value="site" /> <input type="hidden" name="a" value="entry" /> <input type="hidden" name="m" value="cgc_pic_redbag" /> <input type="hidden" name="do" value="bat_pic_approve" />
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">微信id</label>
+					<div class="col-xs-12 col-sm-8 col-lg-9">
+						<input class="form-control" placeholder="" name="openid" type="text" value="{$_GPC['openid']}">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">昵称</label>
+					<div class="col-xs-12 col-sm-8 col-lg-9">
+						<input class="form-control" placeholder="" name="nickname" type="text" value="{$_GPC['nickname']}">
+					</div>
+				</div>
+
+
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">红包状态</label>
+					<div class="col-xs-12 col-sm-8 col-lg-5">
+						<select name="hb_status" class="form-control">
+							<option value="">所有状态</option>
+							<option value="0" {if $_GPC['hb_status']==='0'}selected{/if}>未发</option>
+							<option value="1" {if $_GPC['hb_status'] ==1}selected{/if}>已发</option>
+
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">审核状态</label>
+					<div class="col-xs-12 col-sm-8 col-lg-5">
+						<select name="sh_status" class="form-control">
+							<option value="">所有状态</option>
+							<option value="0" {if $_GPC['sh_status']==='0'}selected{/if}>未审核</option>					
+							<option value="1" {if $_GPC['sh_status'] ==1}selected{/if}>已审核</option>
+						</select>
+					</div>
+				</div>
+				
+					<div class="form-group">
+                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">地址</label>
+				<div class="col-xs-12 col-sm-8 col-lg-9">
+					<input class="form-control" placeholder="" 
+					name="addr"  type="text" value="{$_GPC['addr']}">
+				</div>
+             </div>	
+                
+				
+				<div class="form-group">
+					<div class=" col-xs-12 col-sm-2 col-lg-2" style="width: 9%">
+						<button class="btn btn-default">
+							<i class="fa fa-search"></i>搜索
+						</button>
+					</div>
+				</div>
+
+				<div class=" col-xs-12 col-sm-2 col-lg-2" style="padding-right: 15px; padding-left: 2px;">
+					<input class="btn btn-default" type="submit" name="export" value="导出" />
+
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+
+
+	<div class="panel panel-info">
+		<!-- 按钮触发模态框 -->
+		<button type="button" class="btn btn-default" onclick="delete_all()">删除所有记录</button>
+		<button type="button" class="btn btn-default" onclick="note()">文案地址</button>
+		<label><strong>全部记录:{$total}</strong></label>
+	</div>
+
+	<div class="panel panel-info">
+		<button type="button" class="btn btn-default" onclick="checkAll(this);">全选</button>
+		<button type="button" class="btn btn-default" onclick="checkReverse()">反选</button>
+		<button type="button" class="btn btn-default" onclick="checkBat()">批量审核</button>
+		<button type="button" class="btn btn-default" onclick="sendRadBagBat()">
+		批量{$issue}
+		</button>
+		<button type="button" class="btn btn-default" onclick="javascript:$('#modal-module-message').modal();">批量发送消息</button>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<button type="button" class="btn btn-default" onclick="deleteBat()">批量删除</button>
+		<label><strong>参加人数：<span style="color: red">{$num}</span>&nbsp;&nbsp;&nbsp;&nbsp;审核：<span style="color: red">{$checkNum}</span>&nbsp;&nbsp;&nbsp;&nbsp;未审核：<span style="color: red">{$unCheckNum}</span>&nbsp;&nbsp;&nbsp;&nbsp;已发红包：<span style="color: red">{$hbNum}</span>&nbsp;&nbsp;&nbsp;&nbsp;未发红包：<span style="color: red">{$unHbNum}</span></strong></label>
+	</div>
+
+
+	<div class="panel panel-default">
+		<div class="imglist">
+			<ul>
+				{loop $list $item}
+				<li>
+					<div class="details">
+						<div class="check">
+							<span class="checkall"><input type="checkbox" name="cb" value="{$item['id']}" /></span>
+						</div>
+						<div class="pic">
+							<img class="showmodal" src='{php echo tomedia($item["pic"]);}' data-original='{php echo tomedia($item["pic"]);}'
+							 data-toggle="modal" src="{php echo tomedia($item['pic']);}" 
+							 data_id="{$item['id']}" sh_status="{$item['sh_status']}" />
+						</div>
+						<i class="absbg"></i>
+						<h1>
+							<span>{$item['nickname']} </span>
+						</h1>
+						<div class="remark">
+						姓名:<span style="color: red;">{$item['realname']}</span> 	红包：{if empty($item['hb_status'])}<span style="color: red;">未发</span>{else}已发{/if} &nbsp;&nbsp;审核：{if empty($item['sh_status'])}<span style="color: red;">未审核</span>{else} <span style="color: blue;">已审</span> {if $settings['check_redpack']=='1' } &nbsp;&nbsp;金额：<span style="color: red;">¥{$item['check_redpack_money']}</span> {/if}{/if} <br /> 流水号：{$item['id']}&nbsp;&nbsp;地址：{$item['province']}-{$item['city']}-{$item['addr']}
+						</div>
+						<div class="tools"></div>
+						<div class="foot">
+							<p class="time">{php echo date('Y-m-d H:i:s', $item['createtime'])}</p>
+							<!--        <a  title="预览" class="pic selected showmodal" data-toggle="modal" -->
+							<!--src="{php echo tomedia($item["pic"]);}" data_id="{$item['id']}" sh_status="{$item['sh_status']}">预览</a>-->
+							<a href="{php echo $this->createWebUrl('bat_pic_approve', array('op' => 'post', 'id' => $item['id']))}" title="编辑" class="edit">编辑</a>
+						</div>
+					</div>
+				</li> {/loop}
+			</ul>
+			{$pager}
+		</div>
+	</div>
+
+	{elseif $op == 'post'}
+	<div class="panel panel-default">
+		<div class="panel-heading">用户修改</div>
+		<div class="panel-body">
+			<form action="" method="post" class="form-horizontal" role="form" id="form1">
+				<input type="hidden" id="id" class="form-control span7" placeholder="" name="id" value="{$item['id']}">
+				<div class="form-group model0">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">头像</label>
+					<div class="col-sm-9 col-xs-12">
+						{php echo tpl_form_field_image('headimgurl',$item['headimgurl']);}
+						<div class="help-block"></div>
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">微信id</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="text" id="openid" class="form-control span7" placeholder="" name="openid" value="{$item['openid']}"> <span class="help-block"> </span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">借用的微信id</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="text" id="openid" class="form-control span7" placeholder="" name="jy_openid" value="{$item['jy_openid']}"> <span class="help-block"> 认证订阅号借用模式有效 </span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">昵称</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="text" id="nickname" class="form-control span7" placeholder="" name="nickname" value="{$item['nickname']}"> <span class="help-block"> </span>
+					</div>
+				</div>
+
+
+
+				<div class="form-group model0">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">发送的照片</label>
+					<div class="col-sm-9 col-xs-12">
+						{php echo tpl_form_field_image('pic',$item['pic']);}
+						<div class="help-block"></div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">手机号</label>
+					<div class="col-sm-9 col-xs-12">
+						<input class="form-control" placeholder="" name="tel" type="text" value="{$item['tel']}">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">省份</label>
+					<div class="col-sm-9 col-xs-12">
+						<input class="form-control" placeholder="" name="province" type="text" value="{$item['province']}">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">城市</label>
+					<div class="col-sm-9 col-xs-12">
+						<input class="form-control" placeholder="" name="city" type="text" value="{$item['city']}">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">地区</label>
+					<div class="col-sm-9 col-xs-12">
+						<input class="form-control" placeholder="" name="addr" type="text" value="{$item['addr']}">
+					</div>
+				</div>
+
+
+
+				<div class="form-group">
+					<label class="col-sm-2 control-label">红包状态</label>
+					<div class="col-sm-10">
+						<div>
+							<label class="radio-inline"> <input type="radio" name="hb_status" ng-model="type" {if (!$item['hb_status'])} checked="checked" {/if}
+                                value="0" class="ng-pristine ng-valid ng-touched"> 未发
+							</label> <label class="radio-inline"> <input type="radio" name="hb_status" ng-model="type" {if ($item['hb_status']==1)} checked="checked" {/if}
+                                value="1" class="ng-pristine ng-valid ng-touched"> 已发
+							</label>
+						</div>
+
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-sm-2 control-label">审核状态</label>
+					<div class="col-sm-10">
+						<div>
+							<label class="radio-inline"> <input type="radio" name="sh_status" ng-model="type" {if (!$item['sh_status'])} checked="checked" {/if}
+                                value="0" class="ng-pristine ng-valid ng-touched"> 未审
+							</label> <label class="radio-inline"> <input type="radio" name="sh_status" ng-model="type" {if ($item['sh_status']==1)} checked="checked" {/if}
+                                value="1" class="ng-pristine ng-valid ng-touched"> 已审
+							</label>
+						</div>
+
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-8">
+						<input type="submit" name="submit" value="提交" class="btn btn-primary"> <input type="hidden" name="token" value="{$_W['token']}" />
+					</div>
+				</div>
+
+			</form>
+		</div>
+	</div>
+	{/if}
+
+
+
+	<div id="modal-module-menus" class="modal fade" tabindex="-1">
+		<div class="modal-dialog" style='width: 520px;'>
+			<div class="modal-content">
+				<div class="modal-header">
+					<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+					<h3>请输入红包金额</h3>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="input-group">
+							<input type="text" class="form-control" name="check_redpack_money" value="" id="check_redpack_money" placeholder="红包金额" /> <span class='input-group-btn'><button type="button" class="btn btn-primary" onclick="checkAndRedpack();">确定</button></span>
+						</div>
+					</div>
+					<div id="module-menus" style="padding-top: 5px;"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" onclick="checkAndRedpack2();">审核并{$issue}</button>
+					<a href="#" class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="modal-module-message" class="modal fade" tabindex="-1">
+		<div class="modal-dialog" style='width: 520px;'>
+			<div class="modal-content">
+				<div class="modal-header">
+					<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+					<h3>请输入消息内容</h3>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="input-group">
+							<input type="text" class="form-control" name="message" value="" id="message" placeholder="消息内容" /> <span class='input-group-btn'><button type="button" class="btn btn-default" onclick="sendMessageBat();">确定</button></span>
+						</div>
+					</div>
+					<div id="module-menus" style="padding-top: 5px;"></div>
+				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">预览</h4>
+				</div>
+				<div class="modal-body">
+
+					<img id="preview_id" src="http://www.weibox.com/attachment/images/2/2016/04/YSr6aC0uKuI5kT0X7iD5stgAtUT6Ve.png" style="width: 100%; height: 600px;" />
+
+
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="input-group">
+							<input type="text" class="form-control" name="myModal_message" value="" id="myModal_message" placeholder="消息内容" /><span class='input-group-btn'><button type="button" class="btn btn-default" onclick="sendMessage();">发送消息</button></span>
+						</div>
+						
+					</div>
+					<br/>
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" id="sh" class="btn btn-primary" onclick="sh()">审核</button>
+					<button type="button" class="btn btn-primary" onclick="send_hb()">{$issue}</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+
+		<script type="text/javascript">
+var id="";
+var sh_status="";
+$('.showmodal').click(function(){
+	id=$(this).attr("data_id");
+	sh_status=$(this).attr("sh_status");
+	var src=$(this).attr("src");
+	$('#preview_id').attr("src",src);
+	$("#myModal").modal();
+	if (sh_status=="1"){
+	  	$('#sh').text("取消审核");
+    } else {
+    	$('#sh').text("审核");
+    }
+	
+});
+
+//全选取消按钮函数
+function checkAll(chkobj) {
+    if ($(chkobj).text() == "全选") {
+        $(chkobj).text("取消");
+        $(".checkall input:enabled").prop("checked", true);
+    } else {
+        $(chkobj).text("全选");
+        $(".checkall input:enabled").prop("checked", false);
+    }
+}
+
+function checkReverse(){
+     $(".checkall input:enabled").prop("checked", function(index, attr){ return !attr; });
+}
+
+function checkBat() {
+    var chk_value =[];
+    $('input[name="cb"]:checked').each(function(){
+        chk_value.push($(this).val());    
+    });
+    //alert(chk_value.join(','));
+    if(chk_value.length==0)
+    {
+    	alert('请选择图片');
+    	return;
+    }
+    
+    //alert({$settings['check_redpack']});
+    if("{$settings['check_redpack']}"=="1")
+    {
+    	$('#modal-module-menus').modal();
+    	//location.href ="{php echo $this->createWebUrl('bat_pic_approve', array('op' => 'check_all'))}&ids="+chk_value.join(',')+"&hb_status="+$("select[name='hb_status'] option:selected").val()+"&nickname="+$("input[name='nickname']").val()+"&openid="+$("input[name='openid']").val()+"&sh_status="+$("select[name='sh_status'] option:selected").val();
+    }
+    else
+    {
+    	location.href ="{php echo $this->createWebUrl('bat_pic_approve', array('op' => 'check_all'))}&ids="+chk_value.join(',')+"&hb_status="+$("select[name='hb_status'] option:selected").val()+"&nickname="+$("input[name='nickname']").val()+"&openid="+$("input[name='openid']").val()+"&sh_status="+$("select[name='sh_status'] option:selected").val();
+    }
+}
+
+function checkAndRedpack(){
+	var chk_value =[];
+    $('input[name="cb"]:checked').each(function(){
+        chk_value.push($(this).val());    
+    });
+    
+    if($("input[name='check_redpack_money']").val()=='')
+    {
+    	alert('请输入红包金额！');
+    	return;
+    }
+    $('#modal-module-menus').modal('hide');
+  	location.href ="{php echo $this->createWebUrl('bat_pic_approve', array('op' => 'check_redpack_all'))}&ids="+chk_value.join(',')+"&check_redpack_money="+$("input[name='check_redpack_money']").val()+"&hb_status="+$("select[name='hb_status'] option:selected").val()+"&nickname="+$("input[name='nickname']").val()+"&openid="+$("input[name='openid']").val()+"&sh_status="+$("select[name='sh_status'] option:selected").val();
+  	
+}
+
+
+function checkAndRedpack2(){
+	var chk_value =[];
+    $('input[name="cb"]:checked').each(function(){
+        chk_value.push($(this).val());    
+    });
+    
+    if($("input[name='check_redpack_money']").val()=='')
+    {
+    	alert('请输入{$issue}金额！');
+    	return;
+    }
+    $('#modal-module-menus').modal('hide');
+  	location.href ="{php echo $this->createWebUrl('bat_pic_approve', array('op' => 'check_redpack_all2'))}&ids="+chk_value.join(',')+"&check_redpack_money="+$("input[name='check_redpack_money']").val()+"&hb_status="+$("select[name='hb_status'] option:selected").val()+"&nickname="+$("input[name='nickname']").val()+"&openid="+$("input[name='openid']").val()+"&sh_status="+$("select[name='sh_status'] option:selected").val();
+  	
+}
+
+function sendRadBagBat()
+{
+    var chk_value =[];
+    $('input[name="cb"]:checked').each(function(){
+        chk_value.push($(this).val());    
+    });
+    location.href ="{php echo $this->createWebUrl('bat_pic_approve', array('op' => 'send_hb_Bat'))}&ids="+chk_value.join(',')+"&check_redpack_money="+$("input[name='check_redpack_money']").val()+"&hb_status="+$("select[name='hb_status'] option:selected").val()+"&nickname="+$("input[name='nickname']").val()+"&openid="+$("input[name='openid']").val()+"&sh_status="+$("select[name='sh_status'] option:selected").val();
+}
+
+function sendMessageBat()
+{
+	var chk_value=[];
+	$('input[name="cb"]:checked').each(function(){
+		chk_value.push($(this).val());
+	})
+	location.href ="{php echo $this->createWebUrl('bat_pic_approve', array('op' => 'send_message_Bat'))}&ids="+chk_value.join(',')+"&message="+$("input[name='message']").val()+"&hb_status="+$("select[name='hb_status'] option:selected").val()+"&nickname="+$("input[name='nickname']").val()+"&openid="+$("input[name='openid']").val()+"&sh_status="+$("select[name='sh_status'] option:selected").val();
+}
+
+
+function showmodal(){
+	
+}
+
+function note(){	  
+  window.location.href='http://mp.weixin.qq.com/s?__biz=MzI1MjE2Nzc0MQ==&mid=502054638&idx=1&sn=61ccc8ae9edd600a0bc53d785364d045#rd';
+}
+
+function send_hb(){
+	window.location.href='{php echo $this->createWebUrl('bat_pic_approve', array('op' => 'send_hb'))}&id='+id;
+}
+
+
+function sendMessage(){
+	
+	if($("input[name='myModal_message']").val()==''){
+		alert('请输入消息内容！');
+		return ;
+	}
+	
+	window.location.href="{php echo $this->createWebUrl('bat_pic_approve', array('op' => 'send_message_Bat'))}&ids="+id+"&message="+$("input[name='myModal_message']").val()+"&hb_status="+$("select[name='hb_status'] option:selected").val()+"&nickname="+$("input[name='nickname']").val()+"&openid="+$("input[name='openid']").val()+"&sh_status="+$("select[name='sh_status'] option:selected").val();
+}
+
+
+
+function sh(){
+	window.location.href='{php echo $this->createWebUrl('bat_pic_approve', array('op' => 'sh'))}&id='+id+'&sh_status='+sh_status;
+}
+
+
+function delete_all(){
+  if (confirm('确认删除所有信息吗,删除完不可恢复?')){
+	  location.href ="{php echo $this->createWebUrl('bat_pic_approve', array('op' => 'delete_all'))}";	
+  }
+}
+
+function deleteBat(){
+	var chk_value =[];
+    $('input[name="cb"]:checked').each(function(){
+        chk_value.push($(this).val());    
+    });
+    
+    if(chk_value.length==0)
+    {
+    	alert('请选择图片');
+    	return;
+    }
+	
+	if(confirm('确认删除相关信息吗，删除完不可恢复！')){
+		location.href ="{php echo $this->createWebUrl('bat_pic_approve', array('op' => 'delete_bat'))}&ids="+chk_value.join(',')+"&hb_status="+$("select[name='hb_status'] option:selected").val()+"&nickname="+$("input[name='nickname']").val()+"&openid="+$("input[name='openid']").val()+"&sh_status="+$("select[name='sh_status'] option:selected").val();
+	}
+}
+
+
+
+</script>
+		{template 'common/footer'}

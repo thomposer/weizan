@@ -4,7 +4,7 @@
 	<!--<script type="text/javascript">
 		var useragent = navigator.userAgent;
 		if (useragent.match(/MicroMessenger/i) != 'MicroMessenger') {
-		
+
 			alert('已禁止本次访问：您必须使用微信内置浏览器访问本页面！');
 			var url = '{php echo $this->createMobileUrl('stopllq',array('rid'=> $rid))}';
 			var opened = window.open(url, '_self');
@@ -122,7 +122,7 @@
         </div>
         <ul>
 			{loop $picarrs $mid $row}
-				<li {if !empty($_GPC['ti']) && $mid == $_GPC['ti']}class="cur"{/if}><div style="background-image: url({php echo toimage($row['photos'])})"></div></li>	
+				<li {if !empty($_GPC['ti']) && $mid == $_GPC['ti']}class="cur"{/if}><div style="background-image: url({php echo toimage($row['photos'])})"></div></li>
 			{/loop}
         </ul>
     </div>
@@ -136,27 +136,27 @@
 </div>
 <div class="lapiao">
 	<a href="{php echo $this->createMobileUrl('tuser', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}" class="l">详情模式</a>
-	{if !empty($rdisplay['lapiao'])}<em class="r" onclick="button2()">{$rdisplay['lapiao']}</em>{/if}
+	<a  href="{php echo $this->createMobileUrl('member', array('rid'=> $rid))}"><em class="r">个人中心</em></a>
     <div id="mcover" onclick="weChat()" style="display:none;">
             <img src="{FM_STATIC_MOBILE}public/photos/guide.png">
     </div>
 	{if $uallonetp >= $rvote['allonetp']}
 		<a href="Javescript::;"> <div class="addl" id="id"><div class="i"><i><img src="{FM_STATIC_MOBILE}public/photos/xin.png"></i>已投</div><span class="jia">+1</span></div></a>
-		
-	{else}	
-		{if $udayonetp >= $rvote['dayonetp']}							
+
+	{else}
+		{if $udayonetp >= $rvote['dayonetp']}
 			<a href="Javescript::;"> <div class="addl" id="id"><div class="i"><i><img src="{FM_STATIC_MOBILE}public/photos/xin.png"></i>已投</div><span class="jia">+1</span></div></a>
-		{else}	
+		{else}
 			 <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" onclick="tvote()"> <div class="addl" id="id"><div class="i"><i><img src="{FM_STATIC_MOBILE}public/photos/xin.png"></i>投票</div><span class="jia">+1</span></div></a>
-					
-		{/if}								
+
+		{/if}
 	{/if}
-	
+
 </div>
 
 <div class="con_tm">
     <div id="tangmu">
-         
+
     </div>
 </div>
 <div class="int" id="int">
@@ -175,8 +175,8 @@
 	}
 
 	$('#text').blur(function(){
-		$('.swipe').css('top','0px')	
-		$('.swipe li').css('top','0px')	
+		$('.swipe').css('top','0px')
+		$('.swipe li').css('top','0px')
 	})
 	$('#tanmu').bind('click',function(){
 			$('.add,.addl').find('i img').removeClass('changesize')	;
@@ -203,7 +203,7 @@
 			success:function(data){
 				if(data!=''){
 					var data = eval('('+data+')');
-					
+
 					var i=0;
 					function tanmuStart(data){
 						createDiv(data[i]);
@@ -211,7 +211,7 @@
 						if(i==data.length){
 							clearInterval(TIMER);
 							TIMER2 = setTimeout('tanmuAjax()',2000)
-						}	
+						}
 					}
 					if(data.length<=10){
 						tanmuStart(data)
@@ -224,9 +224,9 @@
 							tanmuStart(data)
 						},300)
 					}
-				}	
+				}
 			}
-		})	
+		})
 	}
 
 
@@ -253,9 +253,9 @@
 	function getCookie(name)
 	{
 		var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-	
+
 		if(arr=document.cookie.match(reg))
-	
+
 			return (arr[2]);
 		else
 			return null;
@@ -272,7 +272,7 @@
 	function convertBizUrl() {
 		if(ary_biz_jump_id.length > 0) {
 
-			
+
 			var pid = '{$user['uid']}';
 			var fmoons_id = getFmoonsId();
 			var i = 0;
@@ -296,18 +296,18 @@
 		}
 
 	}
-			
+
 	//弹幕
 	function addEvent(obj,sEv,fn){
 		if(obj.addEventListener){
-			obj.addEventListener(sEv,fn,false);	
+			obj.addEventListener(sEv,fn,false);
 		}else{
-			obj.attachEvent('on'+sEv,fn);	
-		}	
+			obj.attachEvent('on'+sEv,fn);
+		}
 	}
 	$(document).delegate('#int_btn','click',function(){
 		var $txt = $('#int_txt');
-		
+
 		var content = $txt.val();
 		if(content == '' || content == null) {
 			fmloadding('.overlay_container', '请输入内容！');
@@ -322,9 +322,9 @@
 			setInterval(function(){
 				$('.floatTxt').each(function(){
 					if(parseInt($(this).css('left'))<=-320){
-						$(this).remove();	
-					}	
-				})	
+						$(this).remove();
+					}
+				})
 			},5000)
 		}
 	})
@@ -338,11 +338,11 @@
 		oDiv.addEventListener('touchstart',function(event){
 			event.preventDefault();
 			return false;
-		})	
+		})
 		oDiv.addEventListener('touchmove',function(event){
 			event.preventDefault();
 			return false;
-		})	
+		})
 		oDiv.addEventListener('touchend',function(event){
 			event.preventDefault();
 			return false;
@@ -356,7 +356,7 @@
 		arr:[],
 		fontHtml:'',
 		oId:''	,
-		oName:''	
+		oName:''
 	}
 
 </script>

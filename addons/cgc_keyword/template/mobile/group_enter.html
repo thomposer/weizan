@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>选择分组</title>
+<link href="{STYLE_PATH}/css/area.css" rel="stylesheet" type="text/css" />
+<script language='javascript' src='{STYLE_PATH}/js/jquery-1.7.2.min.js'></script>
+</head>
+<body bgcolor="#fbf9fe">
+<div class="area_nav">
+<div class="area_banner">
+<img src="{php echo tomedia($settings['top'])}" width="100%" />
+</div>
+<div class="area_item">
+<div class="area_item_title">选择您所在的分组：</div>
+<ul>
+{loop $list $item}
+<li><span>{$item['name']}</span>
+<a class={if $group['groupid']!=$item['group_id']}"radio_bg"{else}"radio_bged"{/if} value="{$item['group_id']}"></a></li>
+{/loop}
+</ul>
+<div class="area_qd"><a class="btn_qd" onclick="dopost()">确定</a></div>
+</div>
+</div>
+</body>
+<script>
+function dopost(){
+	var group_id=$(".radio_bged").attr("value");
+	if (group_id==undefined || group_id==""){
+		alert("请选择分组");
+		return;
+	}
+	window.location.href="{php echo $this->createMobileUrl('group_enter',array('op'=>'post'))}&group_id="+group_id;
+}
+
+$(document).ready(function(){
+	  $("ul li a").click(function(){
+		  $("ul li a").attr('class','radio_bg');
+		  
+		  $(this).attr('class','radio_bged');
+		  
+	  });
+	});
+
+
+</script>
+</html>

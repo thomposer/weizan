@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html class="expanded">  
+<head>
+{php $MOBILE = '../addons/'.$this->modulename.'/style/';}
+<meta charset="utf-8" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<title>{$list['title']}</title>  
+<meta name="applicable-device" content="mobile" />
+<meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="msapplication-tap-highlight" content="no" />
+<meta name="keywords" content="{$list['description']}">
+<meta name="description" content="{$list['description']}" name="description">
+<link rel="shortcut icon" href="{$MOBILE}images/favicon.ico">
+<link rel="shortcut icon" href="{$MOBILE}images/favicon.ico" type="image/x-icon" />      
+<script>var PAGE_MAX_WIDTH=640,BASE_FONT_SIZE=50;!function(){function n(){var n=Math.max(t.clientWidth||0,window.innerWidth||0);e.fontSize=Math.min(n/PAGE_MAX_WIDTH*BASE_FONT_SIZE,BASE_FONT_SIZE)+"px"}var e=document.documentElement.style,t=document.documentElement||document.body;window.addEventListener("load",n),window.addEventListener("resize",n),n()}();</script>    	
+<link rel="stylesheet" href="{$MOBILE}css/base_da1ad7f.css" />
+<link rel="stylesheet" href="{$MOBILE}css/give-book_30bbf26.css" />
+</head>	
+<style type="text/css">
+body
+{
+    font:14px/25px 'microsoft yahei',Arial,Helvetica,sans-serif; min-width:320px; 
+    background:url('../attachment/{$list['bgpic']}') no-repeat center;
+    background-size:100%; 
+    color:#dbe5ff;
+}
+</style>
+<body >       
+<script>
+    window._hmt = window._hmt || [];
+    window._mvq = window._mvq || []; 
+    window._mvq = _mvq;
+    _mvq.push(['$setAccount', 'm-145572-0']);
+    //_mvq.push(['$setGeneral', '', '', /*用户名*/ '', /*用户id*/ '']);//如果不传用户名、用户id，此句可以删掉
+    _mvq.push(['$logConversion']);
+</script>		
+<img style="position: absolute; top: -9999px; left: 0" src="{$MOBILE}images/wechat_88d3ea5.jpg" alt="" id="wechat-thumb">
+<div id="wrapper" class="page-view">
+<div class="layout">
+    <div class="maskbox">
+        <p class="white">{$list['matitle']}</p>
+        <p class="yellow">{$list['malucky']}</p></br>
+        <p class="bigyellow">{$res['openid']}</p>
+    </div>
+    <p class="grey">{$list['mades']}<br/>{$list['mades2']}</p>
+    <a class="logo" href="{$list['copyrighturl']}" >
+        <img src="../attachment/{$list['logo']}" alt="">
+    </a> 
+</div>
+</div> 	
+
+{php echo register_jssdk(false);}
+<script type="text/javascript"> 
+  wx.ready(function () {
+        shareMeta = {           
+            imgUrl:"../attachment/{php echo tomedia($list['sharepic'])}",
+            desc : "{$list['sharedes']}",
+            title : "{$list['sharetitle']}",
+            link : "{$list['tiaozhuan']}",
+            success: function(){ 
+               
+            },
+            cancel: function(){
+                // alert("分享失败，可能是网络问题，一会儿再试试？");
+            }
+        };
+        
+         wx.onMenuShareTimeline(shareMeta);
+         wx.onMenuShareAppMessage(shareMeta);
+         wx.hideOptionMenu();
+         wx.showMenuItems({
+           menuList: ["menuItem:favorite"] // 要显示的菜单项，所有menu项见附录3
+         });
+     
+    });
+</script>
+
+<script type="application/json" data-id="zm.data.url">
+ {} 
+</script>	
+<script type="application/json" data-id="zm.data.api">
+ {} 
+</script>    
+<script type="text/javascript" src="{$MOBILE}js/mod_96dd55b.js"></script>
+<script type="text/javascript" src="{$MOBILE}js/jquery_c2128d6.js"></script>
+<script type="text/javascript" src="{$MOBILE}js/zm_19e3b1c.js"></script>
+<script type="text/javascript" src="{$MOBILE}js/jweixin-1.0.0_7719bb4.js"></script>
+<script type="text/javascript" src="{$MOBILE}js/give-book_d8af9f7.js"></script>
+<script type="text/javascript">!function() {
+    (function() {
+        if (!/(?:zmlearn|zm1v1)\.com/.test(location.host)) return;                
+        var hm = document.createElement("script");
+        hm.src = "{$MOBILE}js/hm.js";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+    })();
+    (function() {
+        if (!/(?:zmlearn|zm1v1)\.com/.test(location.host)) return;
+        var mvl = document.createElement('script');
+        mvl.type = 'text/javascript'; mvl.async = true;
+        mvl.src = ('https:' == document.location.protocol ? 'https://static-ssl.mediav.com/mvl.js' : 'http://static.mediav.com/mvl.js');
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(mvl, s);
+    })();
+}();
+!function() {
+    var $ = require('common:widget/jquery/1.11.3/jquery.js');
+    window.onerror = function(message, url, line, column, error) {
+        
+        $.ajax({
+            url: '/api/log/write',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                message: message, 
+                url: url, 
+                line: line || 0, 
+                column: column || 0,
+                stack: error && error.stack,
+                userAgent: navigator.userAgent,
+                time: new Date().getTime()
+            })
+        });
+        
+        return false;
+    };
+}();
+!function() {
+    window._sogou_sa_q = window._sogou_sa_q || [];
+    window._sogou_sa_q.push(['_sid', '260667-268155']);
+    (function() {
+        if (!/(?:zmlearn|zm1v1)\.com/.test(location.host)) return;
+        var _sogou_sa_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+        var _sogou_sa_src=_sogou_sa_protocol+"hermes.sogou.com/sa.js%3Fsid%3D260667-268155";
+        document.write(unescape("%3Cscript src='" + _sogou_sa_src + "' type='text/javascript'%3E%3C/script%3E"));
+    })();
+}();</script>
+</body>
+</html>

@@ -1,7 +1,9 @@
 {template 'header'}
+
 <link rel="stylesheet" type="text/css" href="{FM_STATIC_MOBILE}public/css/style.css?v=3.03">
 <link rel="stylesheet" type="text/css" href="{FM_STATIC_MOBILE}public/css/tuser.css?v=1">
 {template 'hnav'}
+
 <style type="text/css">
 {if $rbody['tuser']}
 	.container-fill {
@@ -90,8 +92,13 @@
 	    color: {$rbody_tuser['tuser_bottom_text_color']};
 	    background:url({FM_STATIC_MOBILE}public/photos/lapiao.png) no-repeat 20px 12px;background-size:24px;
 	}
-	.lapiao .r{ background:url({FM_STATIC_MOBILE}public/photos/lapiao.png) no-repeat 20px -25px;background-size:24px;}
+	.lapiao .r{
+		color: {$rbody_tuser['tuser_bottom_text_color']};
+		background:url({FM_STATIC_MOBILE}public/photos/lapiao.png) no-repeat 20px -25px;background-size:24px;}
 {/if}
+	.product .uli dd .ulis {
+	   height: 85px;
+	}
 	.videoadv {
 		    position: relative;
     /* top: 21%; */
@@ -102,6 +109,22 @@
     margin-top: -200px;
     /* z-index: 11111111111; */
     height: 200px;
+	}
+	.center .lititle {
+    		font-size: 1.1em;
+    }
+    .lapiao .shouhu {
+  		float: none;
+  		padding: 15px 20px 25px 50px;
+  		background: url({FM_STATIC_MOBILE}public/photos/lapiao.png) no-repeat 20px -105px;
+    		background-size: 24px;
+	    color: #FFF;
+	    height:50px;
+	    line-height: 50px;
+	}
+	.headtitle {
+		width: 100%;
+		float:left;
 	}
 </style>
  <div class="center">
@@ -117,35 +140,91 @@
 					<div style="position: relative;top:-90px;margin-bottom: -60px;">
 						<dd style="position: relative; min-height: 66px;top: -20px;border-bottom: 0;">
 							<img src="{php echo $this->getphotos($user['avatar'], $fmimage['photos'], $rbasic['picture'])}" width="50" height="50" style="border-radius: 50px;margin-right:10px;float:left; display: table-cell;  position: absolute;">
-							<strong style="margin-left: 60px;color:#fff;    position: relative;top: 5px;">{php echo $this->getusernames($user['realname'], $user['nickname'], '6')} <span class="level level_{$level}">{$level}</span> <span class="level {if $user['sex'] == 2}female{else}male{/if}"></span> {if ($tfrom_user == $from_user && !empty($from_user))}<span> <a href="{php echo $this->createMobileUrl('reg', array('rid' => $rid, 'from_user' => $from_user))}" style="color:#fff">【 <i class="fa fa-edit"></i> 编辑 】</a></span>
-							<p style="margin-left: 60px;">{if $rvote['regpay']}{if $user['ordersn']}<span class="label label-success" style="color:#fff">已付费</span>{else}<a href="{php echo $this->createMobileUrl('reg', array('rid' => $rid, 'from_user' => $from_user))}#saveover" class="label label-warning" style="color:#fff">未付费</a>{/if}{/if} {if $user['status']==1}<span class="label label-success" style="color:#fff">已审核</span>{else}<a class="label label-warning" style="color:#fff">未审核</a>{/if} <a class="label label-info" style="color:#fff">{$tagname}</a></p>{else}<p style="margin-left: 60px;"><span class="label label-info" style="color:#fff">{$tagname}</span></p>{/if}
+							<strong style="margin-left: 60px;color:#fff;    position: relative;top: 5px;">
+								{php echo $this->getname($rid, $tfrom_user, '8');}
+								<span class="level level_{$level}">{$level}</span>
+								<span class="level {if $user['sex'] == 2}female{else}male{/if}"></span>
+								{if ($tfrom_user == $from_user && !empty($from_user))}
+									<span>
+										<a href="{php echo $this->createMobileUrl('reg', array('rid' => $rid, 'from_user' => $from_user))}" style="color:#fff">【 <i class="fa fa-edit"></i> 编辑 】</a>
+									</span>
+									<p style="margin-left: 60px;">
+									{if $rvote['regpay']}
+										{if $user['ordersn']}
+											<span class="label label-success" style="color:#fff">已付费</span>
+										{else}
+											<a href="{php echo $this->createMobileUrl('reg', array('rid' => $rid, 'from_user' => $from_user))}#saveover" class="label label-warning" style="color:#fff">未付费</a>
+										{/if}
+									{/if}
+									{if $user['status']==1}
+										<span class="label label-success" style="color:#fff">已审核</span>
+									{else}
+										<a class="label label-warning" style="color:#fff">未审核</a>
+									{/if}
+										<a class="label label-info" style="color:#fff">{$tagname}</a>
+									</p>
+								{else}
+									<p style="margin-left: 60px;"><span class="label label-info" style="color:#fff">{$tagname}</span></p>
+								{/if}
 
 							</strong>
 						</dd>
 						<div class="tongji" >
 							<ul>
 						    	<li><span class="tj_display"><i class="fa fa-list-ul"></i> 编号 ID</span><br /><span><strong>{$user['uid']}</strong></span></li>
-						    	<li><span class="tj_display"><i class="fa fa-cubes"></i> {$rdisplay['tpsname']}</span><br /><span id=""><strong>{php echo $user['photosnum'] + $user['xnphotosnum']}</strong></span></li>
+						    	<li><span class="tj_display"><i class="fa fa-cubes"></i> {$rdisplay['tpsname']}</span><br /><span id=""><strong>{if ($rdisplay['open_vote_count'])}{php echo $user['photosnum'] + $user['xnphotosnum']}{else}****{/if}</strong></span></li>
 						    	<li><span class="tj_display"><i class="fa fa-eye"></i> {$rdisplay['rqname']}</span><br /><span id=""><strong>{php echo $user['hits'] + $user['xnhits']}</strong></span></li>
-						    	<li><span class="tj_display"><i class="fa fa-external-link-square"></i> 转发量</span><br /><span id=""><strong>{php echo $sharenum}</strong></span></li>
+						    	{if ($rjifen['is_open_jifen'])}
+						    		<li><span class="tj_display"><i class="fa fa-gift"></i> 礼物数</span><br /><span id=""><strong>{$total_gift}</strong></span></li>
+						    	{else}
+						    		<li><span class="tj_display"><i class="fa fa-external-link-square"></i> 转发量</span><br /><span id=""><strong>{php echo $sharenum}</strong></span></li>
+						    	{/if}
 						    </ul>
 						</div>
-						
 						<dd class="paihangcha">
 							<div style="    text-align: center;">
 								<p style="border-bottom:0; ">{php echo $this->getusernames($user['realname'], $user['nickname'], '6')} 当前排名：<strong style="font-size: 1.5em;">{$paihangcha['rank']}</strong></p>
 								{if $paihangcha['rank'] == 1}
-									<p style="border-bottom:0; ">与第二名相差 <strong style="font-size: 1.5em;">{$paihangcha['aps']}</strong> 票，继续保持吧！</p>	
+									<p style="border-bottom:0; ">与第二名相差 <strong style="font-size: 1.5em;">{$paihangcha['aps']}</strong> 票，继续保持吧！</p>
 								{else}
-									<p style="border-bottom:0; ">与前一名相差 <strong style="font-size: 1.5em;">{$paihangcha['qps']}</strong> 票 | 与后一名相差 <strong style="font-size: 1.5em;">{$paihangcha['aps']}</strong> 票</p>	
+									<p style="border-bottom:0; ">与前一名相差 <strong style="font-size: 1.5em;">{$paihangcha['qps']}</strong> 票 | 与后一名相差 <strong style="font-size: 1.5em;">{$paihangcha['aps']}</strong> 票</p>
 								{/if}
 
 
 							</div>
 						</dd>
+
+						{if ($rjifen['is_open_jifen'])}
+							<dd style="    padding-top: 0;border-bottom: 0;z-index: 1;">
+								<!--<div>
+									<div class="lititle" ><strong><i class="fa fa-gift"></i> {if ($tfrom_user <> $from_user && !empty($from_user))}他收到的{else}我收到的{/if}礼物</strong></div>
+									{if ($tfrom_user == $from_user && !empty($from_user))}
+										<span class="pull-right"><a href="{php echo $this->createMobileUrl('giftlist', array('rid' => $rid, 'tfrom_user'=> $tfrom_user))}">查看 <i class="fa fa-angle-right"></i></a></span>
+									{/if}
+								</div>-->
+								<div class="licon" style="    padding-top: 0;">
+									{if !empty($zsgift)}
+									<ul>
+									{loop $zsgift $mid $row}
+										<li class="ulis" style="width: 25%;">
+											<a href="javascript:;">
+												<img src="{$row['images']}" width="50" height="50" style="border-radius: 50px;" />
+												<p>{$row['title']} x{$row['num']}</p>
+											</a>
+										</li>
+									{/loop}
+									</ul>
+									{else}
+									<div class = "lapiao" style="text-align: center;position: relative;">
+										{if ($tfrom_user <> $from_user && !empty($from_user))}<a  href="{php echo $this->createMobileUrl('giftvote', array('rid'=> $rid, 'tfrom_user'=>$tfrom_user))}"><em class="shouhu">让我来第一个守护你 #^_^#</em></a>{else}<a  href="{php echo $this->createMobileUrl('giftvote', array('rid'=> $rid, 'tfrom_user'=>$tfrom_user))}"><em class="shouhu">我要自己守护我自己</em></a>{/if}
+									</div>
+									{/if}
+								</div>
+							</dd>
+						{/if}
 						{if $regtitlearr['open_photosname_zs']}
 							<dd class="photoname">
-								<div class="lititle" style="    text-align: center;">
+								<div class="lititle" style="text-align: center;">
 									<strong style="border-bottom:0; ">{if !empty($user['photoname'])}{php echo cutstr($user['photoname'], '20')}{else}投我一票吧{/if}</strong>
 								</div>
 							</dd>
@@ -170,8 +249,8 @@
 						{if $rvote['mediatype']}
 							{if !empty($picarrs)}
 								<dd>
-									<div >
-										<span class="lititle" ><strong><i class="fa fa-photo"></i> 相册</strong></span>
+									<div class="headtitle">
+										<div class="lititle pull-left" ><strong><i class="fa fa-photo"></i> 相册</strong></div>
 										<span class="pull-right"><a href="{php echo $this->createMobileUrl('tuserphotos', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}">查看 <i class="fa fa-angle-right"></i></a></span>
 									</div>
 									<div class="licon">
@@ -195,58 +274,56 @@
 								</dd>
 							{/if}
 						{/if}
-					
+
 						{if $rvote['mediatypem']}
 							{if $user['voice'] || $user['music']}
 								<!--<dd ><strong><i class="fa fa-volume-up"></i> 倾听好声音</strong></dd>-->
 								<dd style="  text-align: center;  margin: 0 auto; ">
 									<div class="lititle"><strong><i class="fa fa-volume-up"></i> 好声音 </strong></div>
 									{if $user['voice']}
-										<div class="licon">
-											<audio controls="controls" width="100%">
-												<source src="{php echo tomedia($user['voice'])}">
-												您的浏览器不支持 audio tag.
-											</audio>
+										<div class="licon pull-left" style="width: 50%;">
+											<div class="ui360 pull-left">
+												<a href="{php echo tomedia($user['voice'])}" class="pull-right">{php echo $this->getname($rid, $from_user,'8');}</a>
+											</div>
 										</div>
 									{/if}
 									{if $user['music']}
-										<div class="licon">
-											<audio controls="controls" width="100%">
-												<source src="{php echo tomedia($user['music'])}">
-												您的浏览器不支持 audio tag.
-											</audio>
+										<div class="licon pull-left" style="width: 50%;">
+											<div class="ui360 pull-left">
+												<a href="{php echo tomedia($user['music'])}" class="pull-right">{php echo $this->getname($rid, $from_user,'8');}</a>
+											</div>
 										</div>
 									{/if}
 								</dd>
 							{/if}
-						{/if}						
-						{if $rvote['mediatypev']}							
+						{/if}
+						{if $rvote['mediatypev']}
 							{if $user['vedio'] || $user['youkuurl']}
 								<dd>
 									{if $user['vedio']}
 										<div class="lititle"><strong><i class="fa fa-video-camera"></i> 展示视频</strong></div>
 										<div class="licon" style="  text-align: center;  margin: 0 auto; ">
-											
+
 											<video id="videocon" controls width="100%"  height="264" poster="{php echo $this->getphotos($fmimage['photos'], $user['avatar'], $rbasic['picture'])}" webkit-playsinline>
 												<source src="{php echo tomedia($user['vedio'])}" type='video/mp4' />
 												<p class="vjs-no-js">你的浏览器不支持该视频</a></p>
 											</video>
 											<div class="videoadv" id="wd" style=" display: none;">
-                          					
+
 					                          <div><a href="{$zanzhu['link']}" target="_blank"><img src="{php echo tomedia($zanzhu['thumb'])}" style="width:100%"></a></div>
-                          					
+
 					                        </div>
 					                        <script type="text/javascript">
 					                          /**var video = document.getElementById("videocon");
-					                          video.addEventListener("contextmenu", function (e) { e.preventDefault(); e.stopPropagation(); }, false); 
-					                          video.onloadedmetadata = function () { 
-					                              var vLength = video.duration; 
-					                             // console.log(vLength); 
+					                          video.addEventListener("contextmenu", function (e) { e.preventDefault(); e.stopPropagation(); }, false);
+					                          video.onloadedmetadata = function () {
+					                              var vLength = video.duration;
+					                             // console.log(vLength);
 					                          }
 				                          	setInterval(function(){
 												var vTime = parseInt(video.currentTime);
 
-												//console.log(vTime); 
+												//console.log(vTime);
 				                              	if (vTime == '2') {
 				                              		$("#wd").show();
 				                                	video.pause();
@@ -259,7 +336,7 @@
 				                              	}
 											},1000);
 											video.loop = false;
-					                          video.ontimeupdate = function (e) { 
+					                          video.ontimeupdate = function (e) {
 					                              var vTime = video.currentTime;
 					                              if (vTime < '2' && vTime > '1') {
 					                              	$("#wd").show();
@@ -274,28 +351,28 @@
 					                          };
 					                          **/
 					                        </script>
-					                    </div> 
+					                    </div>
 									{/if}
 									{if $user['youkuurl']}
-										<div class="lititle"><strong><i class="fa fa-video-camera"></i> 网络视频</strong></div>	
+										<div class="lititle"><strong><i class="fa fa-video-camera"></i> 网络视频</strong></div>
 										<div class="licon" style="  text-align: center;  margin: 0 auto; ">
 											<iframe  src="{if (substr($user['youkuurl'],0,7)=='http://')}{$user['youkuurl']}{else}http://player.youku.com/embed/{$user['youkuurl']}{/if}" frameborder="0" allowfullscreen="" style="width:100%; height: 200px;">
 											</iframe>
 										</div>
-									
+
 									{/if}
 								</dd>
 							{/if}
 						{/if}
-						
-						
+
+
 						{if $rbasic['isdaojishi']}
 								{if $totaltime == 0}
-									<dd style="margin:10px 0;background:red" >	
+									<dd style="margin:10px 0;background:red" >
 										<div class="lititle" style="font-size: 23px;background:red;color:#fff" >{$rbasic['ttipvote']}</div>
 									</dd>
 								{else}
-									<dd style="text-align:center;">	
+									<dd style="text-align:center;">
 										<div class="lititle"><strong style="font-size: 23px;text-align:left;"><i class="fa fa-history"></i> 投票倒计时  </strong></div>
 										<div class="licon">
 											<h1 style="font-size: 23px;"><strong id="RemainD">XX</strong>天<strong id="RemainH">XX</strong>小时<strong id="RemainI">XX</strong>分<strong id="RemainS">XX</strong>秒</h1>
@@ -327,24 +404,24 @@
 									</dd>
 								{/if}
 						{/if}
-						
+
 
 						{if $rdisplay['isvoteusers']}
 							<dd>
-								<div>
-									<span class="lititle" ><strong><i class="fa fa-user"></i> {if ($tfrom_user <> $from_user && !empty($from_user))}投Ta的人{else}投我的人{/if}</strong></span>
+								<div class="headtitle">
+									<div class="lititle pull-left" ><strong><i class="fa fa-user"></i> {if ($tfrom_user <> $from_user && !empty($from_user))}投Ta的人{else}投我的人{/if}</strong></div>
 									{if ($tfrom_user == $from_user && !empty($from_user))}
 										<span class="pull-right"><a href="{php echo $this->createMobileUrl('paihang', array('rid' => $rid, 'tfrom_user'=> $tfrom_user, 'votelog' => '1'))}">查看 <i class="fa fa-angle-right"></i></a></span>
 									{/if}
 
 								</div>
-								
-								
+
+
 								<div class="licon">
 									<ul>
 									{loop $voteuserlist $mid $row}
 										<li class="ulis" style="    width: 20%;">
-											<a href="javascript::;">
+											<a href="javascript:;">
 												<img src="{php echo toimage($row['avatar'])}" width="50" height="50" style="    border-radius: 50px;" />
 												<p>{if empty($row['realname'])}{php echo cutstr($row['nickname'], '5')}{else}{php echo cutstr($row['realname'], '5')}{/if}</p>
 											</a>
@@ -356,12 +433,12 @@
 						{/if}
 						{if ($rvote['isbbsreply'] == 1) }
 							<dd class="reply" >
-								<div >
-									<span class="lititle" >
-										<strong ><i class="fa fa-comments-o"></i> {if ($tfrom_user <> $from_user && !empty($from_user))}Ta的评论{else}我的评论{/if}  
+								<div class="headtitle">
+									<div class="lititle pull-left" >
+										<strong ><i class="fa fa-comments-o"></i> {if ($tfrom_user <> $from_user && !empty($from_user))}Ta的评论{else}我的评论{/if}
 											<a class="bnum" style="font-size:15px;color:#31708f">{if !empty($btotal)}( {$btotal} ){else}( 0 ){/if}</a>
-										</strong> 
-									</span>
+										</strong>
+									</div>
 									<span class="pull-right"><a href="{php echo $this->createMobileUrl('comment', array('rid'=>$rid,'tfrom_user'=>$tfrom_user));}">查看 <i class="fa fa-angle-right"></i></a></span>
 								</div>
 
@@ -374,18 +451,18 @@
 									</div>
 								</div>
 								{loop $bbsreply $brow}
-									{php $blevel = intval($this->fmvipleavel($rid, $uniacid, $brow['from_user']));}
+									{php $blevel = intval($this->fmvipleavel($rid, $uniacid, $brow['from_user']));$fmimage = $this->getpicarr($uniacid,$rid, $brow['from_user'],1);}
 									{if $brow['zan']}{php $browcontent = '👍 赞了一个 ~~~'}{else}{php $browcontent = $this->emotion($brow['content']);}{/if}
 									<div class="licon rdes">
-										<strong ><img src="{if !empty($brow['avatar'])}{php echo toimage($brow['avatar'])}{else}{php echo toimage($rbasic['picture'])}{/if}" width="30" height="30" style="border-radius:30px;"/>{php echo cutstr($brow['nickname'], '10')}  <span class="level level_{$blevel}">{$blevel}</span> ： </strong><span class="pull-right" style="line-height:30px;color:#737373;">{php echo date('Y-m-d H:i:s',$brow['createtime'])}</span>
+										<strong ><img src="{php echo $this->getphotos($fmimage['photos'], $brow['avatar'], $rbasic['picture']);}" width="30" height="30" style="border-radius:30px;"/>{php echo $this->getname($rid, $brow['from_user']);}  <span class="level level_{$blevel}">{$blevel}</span> ： </strong><span class="pull-right" style="line-height:30px;color:#737373;">{php echo date('Y-m-d H:i:s',$brow['createtime']);}</span>
 										<p style="text-indent:2em;">{$browcontent}</p>
 									</div>
 								{/loop}
 								<div class="licon alert alert-info more"><a href="{php echo $this->createMobileUrl('comment', array('rid'=>$rid,'tfrom_user'=>$tfrom_user));}" style="color:#31708f">更多评论</a></div>
 							</dd>
-							
+
 						{/if}
-						
+
 						{if ($rdisplay['iscontent'] == 1) }
 						<style type="text/css">
 						.desall .licon img {width:100%;}
@@ -394,44 +471,48 @@
 								<div class="lititle" style="margin-bottom: 10px;"><strong ><i class="fa fa-tag"></i> 活动介绍： </strong></div>
 								<div class="licon">{$rbasic['content']}</div>
 							</dd>
-							
+
 						{/if}
 					</div>
 				</dl>
-			</li>				
+			</li>
  		</ul>
  	</div>
-	
+
 	{if $rdisplay['isvotexq'] == 1}{template 'zanzhu'}{/if}
 	<div class="copyright">
 	{if $rdisplay['iscopyright']==1}<a href="{$rdisplay['copyrighturl']}">&copy;{$rdisplay['copyright']}</a>{else}<a href="javascript:;">&copy;{if empty($_W['account']['name'])}FantasyMoons Team团队{else}{$_W['account']['name']}{/if}&nbsp;&nbsp;{$_W['setting']['copyright']['statcode']}</a>{/if}
 	</div>
-	
- 	
+
+
 </div>
 <div class="lapiao" style="background: {if empty($rbody_tuser['tuser_bottom_bg_color'])}#942768{else}{$rbody_tuser['tuser_bottom_bg_color']}{/if};">
-	<a href="{php echo $this->createMobileUrl('photosvote', array('rid'=> $rid))}" class="l">主页</a>
-	{if !empty($rdisplay['lapiao'])}<em class="r" onclick="button2()">{$rdisplay['lapiao']}</em>{/if}
+	<a href="{php echo $this->createMobileUrl('photosvote', array('rid'=> $rid, 'tfrom_user' => $tfrom_user))}" class="l">主页</a>
+	{if ($rjifen['is_open_jifen'])}
+		<a href="{php echo $this->createMobileUrl('giftvote', array('rid'=> $rid, 'tfrom_user'=>$tfrom_user))}"><em class="r">送礼物</em></a>
+	{else}
+		<a href="{php echo $this->createMobileUrl('member', array('rid'=> $rid))}"><em class="r">个人中心</em></a>
+	{/if}
     <div id="mcover" onclick="weChat()" style="display:none;">
             <img src="{FM_STATIC_MOBILE}public/photos/guide.png">
     </div>
     {if ($tfrom_user <> $from_user)}
 		{if $uallonetp >= $rvote['allonetp']}
 			<a href="Javescript:;"> <div class="addl" id="id"><div class="i"><i><img src="{if empty($rbody_tuser['tuser_bottom_yuan_image'])}{FM_STATIC_MOBILE}public/photos/xin.png{else}{php echo tomedia($rbody_tuser['tuser_bottom_yuan_image'])}{/if}"></i>已投</div><span class="jia"></span></div></a>
-			
-		{else}	
-			{if $udayonetp >= $rvote['dayonetp']}							
+
+		{else}
+			{if $udayonetp >= $rvote['dayonetp']}
 				<a href="Javescript:;"> <div class="addl" id="id"><div class="i"><i><img src="{if empty($rbody_tuser['tuser_bottom_yuan_image'])}{FM_STATIC_MOBILE}public/photos/xin.png{else}{php echo tomedia($rbody_tuser['tuser_bottom_yuan_image'])}{/if}"></i>已投</div><span class="jia"></span></div></a>
-			{else}	
+			{else}
 				 <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" onclick="tvote()"> <div class="addl" id="id"><div class="i"><i><img src="{if empty($rbody_tuser['tuser_bottom_yuan_image'])}{FM_STATIC_MOBILE}public/photos/xin.png{else}{php echo tomedia($rbody_tuser['tuser_bottom_yuan_image'])}{/if}"></i>投票</div><span class="jia"></span></div></a>
-						
-			{/if}								
+
+			{/if}
 		{/if}
 	{else}
 		<a href="{php echo $this->createMobileUrl('paihang', array('rid' => $rid, 'tfrom_user'=> $tfrom_user, 'votelog' => '1'))}"> <div class="addl" id="id"><div class="i"><i><img src="{if empty($rbody_tuser['tuser_bottom_yuan_image'])}{FM_STATIC_MOBILE}public/photos/xin.png{else}{php echo tomedia($rbody_tuser['tuser_bottom_yuan_image'])}{/if}"></i>我的</div><span class="jia"></span></div></a>
-		
+
 	{/if}
-	
+
 </div>
 {template 'tvote'}
 <script type="text/javascript">
@@ -443,8 +524,8 @@
             url:url,
             type:"post",
             dataType:"json",
-            success:function(result){		
-               if(result.flag == '1'){ 
+            success:function(result){
+               if(result.flag == '1'){
                		$("#diySuccess" + mid).addClass('isfm');
                		$("#diySuccess" + mid).html('当前封面');
 					$("#diySuccess" + result.delmid).removeClass('isfm');
@@ -455,12 +536,12 @@
 	             	fmloadding('.overlay_container', result.msg);
 	            }else{
 	               fmloadding('.overlay_container', result.msg);
-	            }       
+	            }
             }
         });
 		return false;
 	}
-	var iscode = "{$rvote['iscode']}";		
+	var iscode = "{$rvote['iscode']}";
 	$('.submit').click(function(){
 		var content = $('#content').val();
 		if(content == '' || content == null) {
@@ -469,8 +550,8 @@
 		}
 		var bbstype = "bbsreply";
 		bbsreply(content, iscode, bbstype);
-		
-	});	
+
+	});
 </script>
 
 

@@ -1,0 +1,151 @@
+{template 'header'}
+<link rel="stylesheet" href="{HT}css/Home.css" />
+<body>
+{template 'guanzhu'}
+<!-- 五折内容的开始-->
+<div class="weui_cells weui_cells_access YouHui" style="display:block;" id="jwz">
+	{loop $buslist $list} 
+		<a class="weui_cell" href="{php echo $this->createMobileUrl('halfbus',array('op'=>'info','bus_id'=> $list['bus_id'],'type'=>1));}">
+			<div class="weui_cell_hd">
+				<img src="{php echo tomedia($list['img'])}"   class="ticket_Img">
+			</div>
+			<div class="weui_cell_bd weui_cell_primary">
+				<p style="color: #080808;" class="text_flow">{$list['name']}</p>
+				<p class="text_flow m-p">
+					【{if $list['discount_sign'] == 1}
+					每周{php echo $this->exchange($list['discount_time']);}
+					{elseif $list['discount_sign'] == 2}
+					每月{$list['discount_time']}
+					{else}
+					天天享
+					{/if}
+					】{$list['desc_img']}
+				</p>
+				<p class="font12">{php echo $this->get_categoryname($list['pid']);}|{$list['district']} <span style="float: right; color: #E34F63;"></span></p>
+			</div>
+			<span class="juli font12" latlng="{$list['lat']}, {$list['lng']}"></span>
+		</a>
+	{/loop}
+</div>
+<!--五折内容的结束-->
+<div style="height: 40px;"></div>
+<div style="height: 50px; text-align:center;">版权所有 {$confing['copyright']}</div>
+<div style="height: 40px;"></div>
+<!-- 尾部的开始-->
+{template 'footer'}
+</body>
+<script type="text/javascript" src="{php echo HT}js/jquery-1.8.2.min.js" ></script>
+<script type="text/javascript" src="{php echo HT}js/yxMobileSlider.js" ></script>
+<script type="text/javascript" src="{php echo HT}js/dropload.min.js" ></script>
+<script src="{php echo HT}js/lyz.delayLoading.min.js" type="text/javascript"></script><!-- 延迟加载的js-->
+<script type="text/javascript" src="{php echo HT}js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak={$confing['baiduak']}"></script>
+<script>
+var latitude;
+var longitude;
+var dropObj;
+var geolocation = new BMap.Geolocation();
+geolocation.getCurrentPosition(function(r){
+	if(this.getStatus() == BMAP_STATUS_SUCCESS){
+		var mk = new BMap.Marker(r.point);
+		latitude = r.point.lat; 
+		longitude = r.point.lng;
+		if(latitude > 1 && longitude > 1){
+			for(var i = 0; i < $('.juli').length; i++){
+				var latlng = $('.juli').eq(i).attr('latlng').split(',');
+				if(latlng[0] > 1 && latlng[1] > 1){
+					$('.juli').eq(i).html(getdistance(latlng[0], latlng[1], latitude, longitude));
+				}   
+			} 
+		}
+	}
+	else {
+		alert('failed'+this.getStatus());
+	}        
+},
+{enableHighAccuracy: true});
+
+function getRad(d){ 
+	return d*Math.PI/180.0; 
+} 
+function getdistance(lat1,lng1,lat2,lng2) {
+	var f = getRad((parseFloat(lat1) + parseFloat(lat2))/2); 
+	var g = getRad((parseFloat(lat1) - parseFloat(lat2))/2); 
+	var l = getRad((parseFloat(lng1) - parseFloat(lng2))/2); 
+
+	var sg = Math.sin(g); 
+	var sl = Math.sin(l); 
+	var sf = Math.sin(f); 
+
+	var s,c,w,r,d,h1,h2; 
+	var a = 6378137.0; 
+	var fl = 1/298.257; 
+
+	sg = sg*sg; 
+	sl = sl*sl; 
+	sf = sf*sf; 
+
+	s = sg*(1-sl) + (1-sf)*sl; 
+	c = (1-sg)*(1-sl) + sf*sl; 
+
+	w = Math.atan(Math.sqrt(s/c)); 
+	r = Math.sqrt(s*c)/w; 
+	d = 2*w*a; 
+	h1 = (3*r -1)/2/c; 
+	h2 = (3*r +1)/2/s;
+	
+	return (d*(1 + fl*(h1*sf*(1-sg) - h2*(1-sf)*sg))/1000).toFixed(1)+'km'; 
+}
+
+wx.config({
+    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+    appId: "{$jssdkconfig['appId']}", // 必填，公众号的唯一标识
+    timestamp: '{$jssdkconfig["timestamp"]}', // 必填，生成签名的时间戳
+    nonceStr: '{$jssdkconfig["nonceStr"]}', // 必填，生成签名的随机串
+    signature: '{$jssdkconfig["signature"]}',// 必填，签名，见附录1
+    jsApiList: ['checkJsApi','openLocation','getLocation','onMenuShareAppMessage','onMenuShareTimeline'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+});
+
+wx.ready(function(){
+	wx.checkJsApi({
+		jsApiList: [
+			'getLocation',
+		],
+		success: function (res) {
+			//alert(JSON.stringify(res));
+			// alert(JSON.stringify(res.checkResult.getLocation));
+			if (res.checkResult.getLocation == false) {
+				alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+				return;
+			}
+		}
+	});
+       
+	wx.onMenuShareAppMessage({
+		title: "{$confing['share_title']}", // 分享标题
+		desc: "{$confing['share_desc']}", // 分享描述
+		link: "{$_W['siteurl']}", // 分享链接
+		imgUrl: "{php echo tomedia($confing['share_img']);}", // 分享图标
+		success: function () { 
+			
+		},
+		cancel: function () { 
+			alert("分享失败，可能是网络问题，一会儿再试试？");
+		}
+	});
+
+	wx.onMenuShareTimeline({
+		title: "{$confing['share_title']}", // 分享标题
+		desc: "{$confing['share_desc']}", // 分享描述
+		link: "{$_W['siteurl']}", // 分享链接
+		imgUrl: "{php echo tomedia($confing['share_img']);}", // 分享图标
+		success: function () {
+			
+		},
+		cancel: function () { 
+			alert("分享失败，可能是网络问题，一会儿再试试？");
+		}
+	});
+});
+</script>
+</html>

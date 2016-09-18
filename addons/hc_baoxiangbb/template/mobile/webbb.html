@@ -518,14 +518,15 @@ dl.wap-list-3 dd li i{ float:right; display:inline-block; width:45%; height:1.4r
 <form name="form1" method="post" action="" id="form1" >
   <div style="margin:5px auto 60px  auto;">
        <div style=" height:120px; width:320px; margin:0 auto;">
-	{if empty($webbb['headurl'])}{else}<a href="{$webbb['headurl']}" target="_blank">{/if}
-				{if empty($webbb['headpic'])}
+       
+	{if empty($weibb['headurl'])}{else}<a href="{$weibb['headurl']}" target="_blank">{/if}
+				{if empty($weibb['headpic'])}
 				<img src="../addons/hc_baoxiangbb/template/images/wenzi.png" width="100%" />
 				
 				{else}
-				<img src="{$_W['attachurl']}{$webbb['headpic']}" width="100%">
+				<img src="{$_W['attachurl']}{$weibb['headpic']}" width="100%">
 				{/if}
-				{if empty($webbb['headurl'])}{else}</a>{/if}
+				{if empty($weibb['headurl'])}{else}</a>{/if}
 	
       
     </div>
@@ -543,7 +544,7 @@ dl.wap-list-3 dd li i{ float:right; display:inline-block; width:45%; height:1.4r
       			<p>分享到朋友圈可额外获得摇次数</p>
 		<!--	<span class="boyiba" style="font-weight: normal;" onclick="location='{php echo $this->createMobileUrl('myaward', array('id' => $id))}'">博饼记录</span>-->
 			
-			<span class="boyiba" style="font-weight: normal;" onclick="location='{php echo $this->createMobileUrl('select', array('weid' => $_W['weid']))}'">查看包厢</span>
+			<span class="boyiba" style="font-weight: normal;" onclick="location='{php echo $this->createMobileUrl('baoxiang', array('weid' => $_W['weid']))}'">查看包厢</span>
 			<span class="boyiba" style="font-weight: normal;" onclick="addOne()">马上分享</span>
 			<br>
 			

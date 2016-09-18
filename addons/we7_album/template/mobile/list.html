@@ -165,35 +165,34 @@
                     		<span class='pull-left' style="padding-top:2px;margin-left:10px;">
                     			<span style="font-weight:600;">{$row1['name']}</span>
 								{if !empty($row1['description'])}<br/>{$row1['description']}{/if}
-                   	 		</span>
-                        </a>
-                    </p>
-                    {/loop}
-                </li>
-                {/loop}
-            </ul>
-            <div class="show-more"><a href="javascript:;" onclick="loadRecPage();" class="img-rounded pager">显示更多</a>
-            </div>
-            {else}
-            <p style='padding:5px;'>
-                {if $pc}{$pc} - {/if}
-                {if $cc}{$cc}{/if}
-            </p>
-            <ul id="gallery" class="gallery clearfix">
-                {loop $list $row}
-                <li style="">
-                    <a href="{php echo $this->createMobileUrl('detail', array('id' => $row['id'], 'weid' => $_W['uniacid']))}">
-                        {if !empty($row['thumb'])}
-                        <img src="{php echo tomedia($row['thumb'])}" title="{$row['title']}">
-                        {/if}
-                        <p>{$row['title']}</p>
-                    </a>
-                </li>
-                {/loop}
-            </ul>
-        </div>
-    </div>
-    {/if}
+				   	 		</span>
+						</a>
+					</p>
+					{/loop}
+				</li>
+				{/loop}
+			</ul>
+			</div>
+			{else}
+			<p style='padding:5px;'>
+				{if $pc}{$pc} - {/if}
+				{if $cc}{$cc}{/if}
+			</p>
+			<ul id="gallery" class="gallery clearfix">
+				{loop $list $row}
+				<li style="">
+					<a href="{php echo $this->createMobileUrl('detail', array('id' => $row['id'], 'weid' => $_W['uniacid']))}">
+						{if !empty($row['thumb'])}
+						<img src="{php echo tomedia($row['thumb'])}" title="{$row['title']}">
+						{/if}
+						<p>{$row['title']}</p>
+					</a>
+				</li>
+				{/loop}
+			</ul>
+		</div>
+	</div>
+	{/if}
 </div>
 {$pager}
 

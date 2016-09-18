@@ -6,7 +6,7 @@
 		</a>
 		<a href="{php echo $this->createMobileUrl('members', array('weid' => $weid))}" class="weui_tabbar_item {if in_array($_GPC['do'], array("members"), TRUE)}weui_bar_item_on{/if}">
 			<div class="weui_tabbar_icon"><i class="iconfont">&#xe61d;</i></div>
-			<p class="weui_tabbar_label">个人中心</p>
+			<p class="weui_tabbar_label">我</p>
 		</a>
 	{if in_array($_GPC['do'], array("manage_detail","manage"), TRUE)}
 		<a href="{php echo $this->createMobileUrl('manage', array('id' => $reid))}" class="weui_tabbar_item">
@@ -43,10 +43,16 @@
 		}
 	}
 ?>
-	<script type="text/javascript">
+<script type="text/javascript">
 	
-	wx.config(jssdkconfig);
-	
+	wx.config(jssdkconfig);	
+	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+		{if $share==1}
+		WeixinJSBridge.call('hideOptionMenu');
+		{else}
+		WeixinJSBridge.call('showOptionMenu');
+		{/if}
+	});
 	var $_share = {php echo json_encode($_share);};
 	
 	if(typeof sharedata == 'undefined'){
@@ -111,6 +117,6 @@
 			$.post(url, function(dat){});
 		}
 	{/if}
-	</script>
+</script>
 </body>
 </html>

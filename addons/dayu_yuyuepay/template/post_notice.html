@@ -1,4 +1,4 @@
-        <div class="panel panel-default">
+        <div class="panel panel-success">
             <div class="panel-heading">邮件通知设置</div>
             <div class="panel-body">
                 <div class="form-group">
@@ -10,27 +10,7 @@
                 </div>
             </div>
         </div>
-		<!--
-		<div class="panel panel-default">
-            <div class="panel-heading">微信端管理员</div>
-            <div class="panel-body">
-                <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">微信昵称</label>
-                    <div class="col-xs-12 col-sm-9 ">
-					<li class="input-group">
-						<input type="text" name="nikename" value="{$activity['nikename']}" class="form-control" placeholder="请输入完整的微信昵称">
-						<span class="input-group-addon btn btn-success btn-openid">检 测</span>
-						<span class="input-group-addon" style="color:red">管理员openid</span>
-                    	<input type="text" name="kfid" class="form-control" value="{$activity['kfid']}" placeholder="请输入粉丝编号" />
-						<span class="input-group-addon btn btn-success btn-openid">检 测</span>
-					</li>
-	        			<span class="help-block">请填写完整的微信昵称。点击<font style="color:red">【检测】</font>根据微信昵称自动获取对应公众号的openid。<a href="/web/index.php?c=mc&a=fans&" target="_blank">openid：粉丝管理中的粉丝编号</a> 接收通知、微信端管理用</span>
-					</div>
-                </div>
-            </div>
-        </div>
-		-->
-        <div class="panel panel-default">
+        <div class="panel panel-success">
             <div class="panel-heading">模板消息设置</div>
             <div class="panel-body">
                 <div class="form-group" style="background-color:#eee;">
@@ -120,8 +100,8 @@
             </div>
         </div>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">短信通知设置</div>
+        <div class="panel panel-success">
+            <div class="panel-heading">短信通知设置 （表单所有内容-包含预约填写的所有项目,内容较多可能分拆成数条短信,请慎用）</div>
             <div class="panel-body">
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">提醒接收手机</label>
@@ -130,28 +110,27 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">短信accountsid</label>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">短信通知模板</label>
                     <div class="col-xs-12 col-sm-9">
-                        <input type="text" name="accountsid" class="form-control" value="{$activity['accountsid']}" />
+					{if pdo_tableexists('dayu_sms')}
+						<select name="smsid" class='form-control'>
+							<option value="0">不使用短信</option>
+							{loop $sms $s}
+							<option value="{$s['id']}" {if $s['id'] == $activity['smsid']}selected="selected"{/if}>{$s['title']}</option>
+							{/loop}
+						</select>
+					{else}
+						<span class="btn btn-default" disabled>需要【dayu短信】支持</span>
+					{/if}
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">短信token</label>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">通知内容</label>
                     <div class="col-xs-12 col-sm-9">
-                        <input type="text" name="tokenid" class="form-control" value="{$activity['tokenid']}" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">短信appId</label>
-                    <div class="col-xs-12 col-sm-9">
-                        <input type="text" name="appId" class="form-control" value="{$activity['appId']}" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">短信模板ID</label>
-                    <div class="col-xs-12 col-sm-9">
-                        <input type="text" name="templateId" class="form-control" value="{$activity['templateId']}" />
-	        			<span class="help-block"><a href="http://www.ucpaas.com/" target="_blank">短信API接口是云之讯，5分一条，无套餐。</a> 短信模板：您有新预约，客户：{1}，手机：{2}，预约项目：{3}，请登录后台了解预约详情</span>
+						<select name="smstype" class='form-control'>
+							<option value="1" {if $activity['smstype'] == 1}selected="selected"{/if}>姓名、手机、预约标题</option>
+							<option value="2" {if $activity['smstype'] == 2}selected="selected"{/if}>姓名、手机、表单所有内容</option>
+						</select>
                     </div>
                 </div>
             </div>

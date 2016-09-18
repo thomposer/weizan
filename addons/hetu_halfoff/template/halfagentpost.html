@@ -1,0 +1,238 @@
+{template 'common/header'}
+<div class="main">
+	<ul class="nav nav-tabs">
+		<li ><a href="{php echo $this->createWebUrl('halfoffagent', array('op'=>'list'));}">代理商列表</a></li>
+		<li {if empty($item['id'])} class="active"{/if} ><a href="{php echo $this->createWebUrl('halfoffagent', array('op'=>'post', 'id'=>$id));}">代理商添加</a></li>
+		{if $item['id']}
+		  <li  class="active" ><a href="{php echo $this->createWebUrl('halfoffagent', array('op'=>'post', 'id' => $item['id']));}">代理商编辑</a></li>
+		{/if}
+	</ul>
+<div class="main">
+    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return formcheck()">
+		<input type="hidden" name="id"  id="id" value="{$item['id']}">
+		<div class="panel panel-default">
+			<div class="panel-heading">代理商基本信息</div>
+			<div class="panel-body"> 
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">代理商名称：</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="text" name="name" id="name"  class="form-control" value="{$item['name']}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">代理商密码：</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="password" name="password" id="password"  class="form-control" value="">
+						{if $item['id']}
+							<div class="help-block">如不修改，可留空！</div>
+						{/if}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">代理商确认密码：</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="password" name="confirmpassword" id="confirmpassword"  class="form-control" value="" onblur="checkpwd();">
+						{if $item['id']}
+							<div class="help-block">如不修改，可留空！</div>
+						{/if}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">代理商手机号码：</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="text" name="phone" id="phone"  class="form-control" value="{$item['phone']}">
+						<span style="color:red;">此联系方式为代理商WEB登录账号，请填写手机号码</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">代理商详细地址：</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="text" name="address" id="address"  class="form-control" value="{$item['address']}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">状态：</label>
+					<div class="col-sm-9 col-xs-12">
+						<label class="radio-inline">
+							<input type="radio" name="status" value="0" {if $item['status'] == 0}checked{/if}/>隐藏
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="status" value="1" {if $item['status'] == 1}checked{/if}/>显示
+						</label>
+						<span class='help-block'>手机前台是否显示</span>
+					</div>
+				</div>
+			</div>
+			<div class="panel-heading">代理区域信息
+			<span style="color:red;">&nbsp;【注意：跨县代理商请注册多个代理商，此添加功能仅用于多区的县市代理商】</span>
+			</div>
+			<div class="panel-body" id="div">
+				{if empty($districtlist)}
+					<div class="form-group">
+						<div class="col-sm-9 col-xs-12">
+							{php echo tpl_form_field_district('district[]');}
+						</div>
+					</div>
+				{else}
+					{loop $districtlist $key $district}
+						<div class="form-group" id="div{$key}">
+							<div class="col-sm-9 col-xs-12">
+								{php echo tpl_form_field_district('district[]', array('province'=>$district['province'], 'city'=>$district['city'], 'district'=>$district['district']));}
+							</div>
+							<input class="btn btn-default" type="button" value="删除" onclick="delDistrict({$key});">
+						</div>
+					{/loop}
+				{/if}
+				<span class="help-block">
+					<input class="btn btn-default" type="button" value="添加区域" onclick="addDistrict();">
+				</span>
+			</div>
+       	</div>      
+		<div class="form-group col-sm-12">
+			<input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1" />
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+var i = 0; //添加省市县区使用
+function addDistrict(){
+	var html = "";
+	html += '<div class="form-group" id="div'+i+'">';
+	html += '<div class="col-sm-9 col-xs-12">';
+	// form_field_district开始
+	html += '<div class="row row-fix tpl-district-container'+i+'">';
+	html += '<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">';
+	html += '<select name="district[][province]" id="province'+i+'" data-value="" class="form-control tpl-province">';
+	html += '</select>';
+	html += '</div>';
+	html += '<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">';
+	html += '<select name="district[][city]" id="city'+i+'" data-value="" class="form-control tpl-city">';
+	html += '</select>';
+	html += '</div>';
+	html += '<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">';
+	html += '<select name="district[][district]" id="district'+i+'" data-value="" class="form-control tpl-district">';
+	html += '</select>';
+	html += '</div>';
+	html += '</div>';
+	//form_field_district结束
+	html += '</div>';
+	html += '<input class="btn btn-default" type="button" value="删除" onclick="delDistrict('+i+');">';
+	html += '</div>';
+	$("#div").append(html);
+	var str = ".tpl-district-container"+i;
+	require(["jquery", "district"], function($, dis){
+		$(str).each(function(){
+			var elms = {};
+			elms.province = $(this).find(".tpl-province")[0];
+			elms.city = $(this).find(".tpl-city")[0];
+			elms.district = $(this).find(".tpl-district")[0];
+			var vals = {};
+			vals.province = $(elms.province).attr("data-value");
+			vals.city = $(elms.city).attr("data-value");
+			vals.district = $(elms.district).attr("data-value");
+			dis.render(elms, vals, {withTitle: true});
+		});
+	});
+	i++;
+}
+
+function delDistrict(obj){
+	var divobj = document.getElementById('div' + obj);
+	divobj.parentNode.removeChild(divobj);
+}
+
+function checkpwd(){
+	var pwd = $("#password").val().trim();
+	var confirmpwd = $("#confirmpassword").val().trim();
+	if(pwd != '' && confirmpwd != '' && pwd != confirmpwd){
+		util.message('两次密码输入不一致，请重新输入！','','error');
+	}
+}
+	
+$(function() {
+	$("select[name='category']").change(function() {
+		var cat_id = $.trim($("select[name='category']").val());
+		// alert(cat_id);
+		var data = {
+			'category_id':cat_id
+		} 
+		$.ajax({
+			url: "{php echo $this->createMobileUrl('HalfcategoryAjax')}",
+			type: "POST",
+			data: data,
+			cache:false,
+			dataType: "JSON",
+			success: function (res) {
+				$("#fl_son").html(res);
+			}
+		});  
+	});
+});
+  
+function formcheck() {
+	//根据i值判断添加了几个区域
+	if(i > 0){
+		for(var j = 0;j < i;j++){
+			var province = $("#province"+j).val();
+			var city = $("#city"+j).val();
+			var district = $("#district"+j).val();
+			if(province == '' || province == null){
+				util.message('请选择字段 ' + (j+1) + ' 的省/直辖市', '', 'error');
+				return false;
+			}
+			if(city == '' || city == null){
+				util.message('请选择字段 ' + (j+1) + ' 的市', '', 'error');
+				return false;
+			}
+			if(district == '' || district == null){
+				util.message('请选择字段 ' + (j+1) + ' 的县/区', '', 'error');
+				return false;
+			}
+		}
+	}
+	
+	if ($("#name").val().trim() == '') {
+		util.message('请填写代理商名称','','error');
+		return false;
+	}
+	var id = $("#id").val();
+	if(!id){
+		if ($("#password").val().trim() == '') {
+			util.message('请填写商家登陆密码','','error');
+			return false;
+		}
+	}
+	if ($("#phone").val().trim() == '') {
+		util.message('请填写代理商电话','','error');
+		return false;
+	}
+	if ($("#address").val().trim() == '') {
+		util.message('请填写代理商详细地址','','error');
+		return false;
+	}
+	var province = $.trim($("select[name='district[][province]']").val());
+	if (!province) {
+		util.message('请选择省/直辖市','','error');
+		return false;
+	}
+	var city = $.trim($("select[name='district[][city]']").val());
+	if (!city) {
+		util.message('请选择市','','error');
+		return false;
+	} 
+	var district = $.trim($("select[name='district[][district]']").val());
+	if (!district) {
+		util.message('请选择县/区','','error');
+		return false;
+	} 
+	return true;
+}
+</script>
+
+<script type="text/javascript">
+	require(['bootstrap']);
+	$('.js-clip').each(function(){
+		util.clip(this, $(this).attr('data-url'));
+	});
+</script>
+{template 'common/footer'}

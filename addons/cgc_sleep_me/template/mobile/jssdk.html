@@ -1,0 +1,30 @@
+{php echo register_jssdk(false);}
+<script type="text/javascript"> 
+	  wx.ready(function () {        
+	        shareMeta = {      		
+	                imgUrl:"{php echo tomedia($settings['share_thumb'])}",
+	                link:"{$settings['share_url']}",
+	                desc:"{$settings['share_desc']}",
+	                title:"{$settings['share_title']}",
+	                success: function(){  
+	                	insert_member();
+	                },
+	                cancel: function(){
+	                   
+	                }
+	            };
+	        wx.onMenuShareTimeline(shareMeta);
+	        wx.onMenuShareAppMessage(shareMeta);	        
+	        wx.onMenuShareQQ(shareMeta); 
+	        wx.onMenuShareQZone(shareMeta); 
+	        
+	        wx.error(function(res){
+	          alert("js安全分享接口没设好");
+	          alert(res);
+	        });
+	    });
+	  
+	 
+
+
+</script>

@@ -15,17 +15,21 @@
 		<div class="weui_cells_title"></div>
        <div class="weui_panel weui_panel_access">
             <div class="weui_panel_bd">
-                <a href="{php echo url('mc/profile')}" class="weui_media_box weui_media_appmsg weui_panel_ft">
+                <a href="{php echo $this->createMobileUrl('info', array('from'=>'dayu_yuyuepay','returnurl' => $returnUrl))}" class="weui_media_box weui_media_appmsg weui_panel_ft">
                     <div class="weui_media_hd">
-                        <img class="weui_media_appmsg_thumb" src="{if !empty($fans['tag']['avatar'])}{$fans['tag']['avatar']}{else}resource/images/noavatar_middle.gif{/if}" alt="">
+                        <img class="weui_media_appmsg_thumb radius-md" src="{if !empty($member['avatar'])}{$member['avatar']}{else}{$fans['tag']['avatar']}{/if}" alt="">
                     </div>
                     <div class="weui_media_bd">
-                        <h4 class="weui_media_title">{$profiles['nickname']}<span class="f14" style="margin-left:10px;">{$profiles['mobile']}</span></h4>
-                        <p class="weui_media_desc">{if !$profiles['address']}添加地址{else}{$profiles['resideprovince']} {$profiles['residecity']} {$profiles['residedist']} {$profiles['address']}{/if}</p>
+					{if $member['realname'] && $member['mobile']}
+                        <h4 class="weui_media_title">{$member['nickname']}<span class="f14" style="margin-left:10px;">{$member['mobile']}</span></h4>
+                        <p class="weui_media_desc">{$member['resideprovince']} {$member['residecity']} {$member['residedist']} {$member['address']}</p>
+					{else}
+                        <h4 class="weui_media_title">完善我的资料</h4>
+					{/if}
                     </div>
                 </a>
             </div>
-            <a class="weui_panel_ft -wrap ell" href="{php echo $this->createMobileUrl('address', array('from'=>'dayu_yuyuepay','pcate'=>$_GPC['pcate'],'returnurl' => $returnUrl))}">{if !$address['address']}添加联系方式{else}{$address['username']} {$address['mobile']} | {$address['address']}{$address['address']}{/if}</a>
+            <a class="weui_panel_ft -wrap ell" href="{php echo $this->createMobileUrl('address', array('from'=>'dayu_yuyuepay','pcate'=>$_GPC['pcate'],'returnurl' => $returnUrl))}">{if !$address['address']}添加联系方式{else}{$address['username']} {$address['mobile']} | {$address['address']}{/if}</a>
         </div>
 		
 		<div class="weui_panel">
@@ -78,4 +82,5 @@
 		
 	</div>
 	
+{php $share = 1;}
 {template 'footers'}

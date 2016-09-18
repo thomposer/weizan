@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+<link rel="stylesheet" href="../addons/aj_webjump/style/css/qcode.css"/>
+<script type="text/javascript" src="../addons/aj_webjump/style/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../addons/aj_webjump/style/js/jquery.cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="../addons/aj_webjump/style/css/sweetalert.css" /> 
+<script type="text/javascript" src="../addons/aj_webjump/style/js/sweetalert.min.js"></script> 
+<script type="text/javascript" src="../addons/aj_webjump/style/js/sweetalert-dev.js"></script>
+<script type="text/javascript" src="../addons/aj_webjump/style/js/jquery.blockUI.js"></script>
+<title>{$list['head']}</title>
+<style type="text/css">
+	.getcode-area .newtitle{
+    padding-top: 20px;
+    font-size: 18px;
+    line-height: 18px;
+    color: #444;
+    text-align: center;
+}
+</style>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+{php echo register_jssdk(false);}
+
+<script type="text/javascript"> 
+  wx.ready(function () {
+        shareMeta = {           
+            imgUrl:"../attachment/{php echo tomedia($list['sharepic'])}",
+            desc : "{$list['sharedes']}",
+            title : "{$list['sharetitle']}",
+            link : "{$list['tiaozhuan']}",
+            success: function(){ 
+               
+            },
+            cancel: function(){
+                // alert("分享失败，可能是网络问题，一会儿再试试？");
+            }
+        };
+        
+         wx.onMenuShareTimeline(shareMeta);
+         wx.onMenuShareAppMessage(shareMeta);
+         wx.hideOptionMenu();
+         wx.showMenuItems({
+           menuList: ["menuItem:favorite"] // 要显示的菜单项，所有menu项见附录3
+         });
+     
+    });
+</script>
+</head>
+
+<body>
+<script>
+</script>
+
+<style type="text/css">
+.getcode-area{
+    position: relative;
+}
+
+.getcode-area .mobile{
+    display: block;
+    font-size: 14px;
+    height: 30px;
+    background-color: #eee;
+    border: 1px solid #a0a0a0;
+    border-radius: 4px;
+    width: 240px;
+    margin: 25px auto 0;
+    -webkit-appearance:none;
+}
+
+.cover{
+    position: relative;
+    height: 214px;
+    background: url('../attachment/{$list['formpic']}') center no-repeat;
+    background-size: cover;
+}
+@media screen and (min-width: 374px) {
+    .cover{height: 251px;}
+}
+@media screen and (min-width: 413px) {
+    .cover{height: 277px;}
+}
+
+</style>
+<form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" onsubmit="return validate(this);">
+<div class="wrapper" style="display:">
+	<div class="cover"></div>
+	<div class="getcode-area">
+		 <p class="newtitle">{$list['head']}</p> 		
+		 <input type="tel" placeholder="请输入手机号" name="mobile" class="mobile" style="" id="mobile"/>
+		 <input type="text" placeholder="真实姓名" name="realname" style="" class="mobile" id="realname" />
+		 <p class="desc">{$list['mintips']}</p>
+
+		 <div class="getcode-area">
+    <!-- <input type="submit" name="submit" value="{$list['formbutton']}" class="btn" /> -->
+	       <input type="submit" name="submit" style="outline:none" value="{$list['formbutton']}" class="btn" />
+	       <input type="hidden" name="token" value="{$_W['token']}" />
+	     </div>
+
+		<!-- <a href="javascript:validate();" class="btn">{$list['formbutton']}</a> -->
+	</div>
+</div>
+
+<!-- <div class="getcode-area">
+    <input type="submit" name="submit" value="{$list['formbutton']}" class="btn" />
+    <input type="submit" name="submit" style="outline:none" value="提交" class="btn" />
+    <input type="hidden" name="token" value="{$_W['token']}" />
+</div>  -->
+</form>
+<div class="bottom">{$list['copyright']}</div>
+
+<script type="text/javascript">
+function validate(){
+	
+    var mobile = $('#mobile').val();
+	if(!mobile || mobile.length != 11){
+		swal('请填写正确的手机号');
+		return false;
+	        }
+		
+	
+	var realname = $('#realname').val();
+	if(!realname){
+		swal('请填写姓名');
+		return false;
+			}
+
+}
+
+
+
+doing=false;
+send_yzm=false;
+get_yzm=false;
+
+</script>
+
+</body>
+</html>

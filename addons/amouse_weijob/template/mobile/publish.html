@@ -3,14 +3,14 @@
 <meta  charset="utf-8">
 <meta  name="viewport"  content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=no">
 <title>发布岗位</title>
-<link type="text/css" rel="stylesheet" href="../addons/amouse_weijob/style/css/jquery.mmenu.all.css">
-<link  type="text/css"  rel="stylesheet"  href="../addons/amouse_weijob/style/css/base.css">
-<link  type="text/css"  rel="stylesheet"  href="../addons/amouse_weijob/style/css/resume.css">
+<link type="text/css" rel="stylesheet" href="{AMOUSE_WEIJOB_RES}css/jquery.mmenu.all.css">
+<link  type="text/css"  rel="stylesheet"  href="{AMOUSE_WEIJOB_RES}css/base.css">
+<link  type="text/css"  rel="stylesheet"  href="{AMOUSE_WEIJOB_RES}css/resume.css">
 <link type="text/css" rel="stylesheet" href="../app/resource/css/font-awesome.min.css" />
     <script type="text/javascript" src="../app/resource/js/lib/jquery-1.11.1.min.js"></script>
 <style>
     .head{text-align: left;padding-top: 0px;height: 50px;line-height: 50px;background-image: none;}
-    .head a.job-back{width: 80px;height: 50px;background: url("../addons/amouse_weijob/style/images/icon_job_back.png") left center no-repeat;background-size: 11px 15px;}
+    .head a.job-back{width: 80px;height: 50px;background: url("{AMOUSE_WEIJOB_RES}images/icon_job_back.png") left center no-repeat;background-size: 11px 15px;}
 select{
     float: left;
     width: 65%;
@@ -137,10 +137,40 @@ select{
                 <input  type="text"  name="offer"  placeholder="0为面议，其他则正常" value="{$item['offer']}">
             </p>
             <p  class="clearfix form-item">
+                <label><span  class="red-color">*</span>省</label>
+                <select name="location_p" id="location_p"   class="cs-select cs-skin-elastic">></select>
+
+                <label class="error"></label>
+            </p>
+
+            <p  class="clearfix form-item">
+                <label><span  class="red-color">*</span>城市</label>
+                <select name="location_c" id="location_c">
+                    <option value="0">请选择市</option>
+                </select>
+
+                <label class="error"></label>
+            </p>
+
+            <!--<p  class="clearfix form-item">
+                <label><span  class="red-color">*</span>地区</label>
+                    <select name="location_a" id="location_a">
+                        <option value="0">请选择区</option>
+                    </select>
+                <label class="error"></label>
+            </p>
+            <script type="text/javascript" src="{AMOUSE_WEIJOB_RES}js/region_select.js"></script>
+            <script type="text/javascript">
+                var location_p = "{if !empty($item['location_p'])}{$item['location_p']}{else}{/if}";
+                var location_c = "{if !empty($item['location_c'])}{$item['location_c']}{else}{/if}";
+                var location_a = "{if !empty($item['location_a'])}{$item['location_a']}{else}{/if}";
+                new PCAS("location_p", "location_c", "location_a", location_p, location_c, location_a);
+            </script>
+            <p  class="clearfix form-item">
                 <label><span  class="red-color">*</span>工作地点</label>
                 <input  type="text"  name="workplace" value="{$item['workplace']}">
                 <label class="error"></label>
-            </p>
+            </p>-->
             <p  class="clearfix form-item">
                 <label>工作年限</label>
                 <input  type="text"  name="workyear"  value="{$item['workyear']}">
@@ -148,8 +178,8 @@ select{
             <p  class="clearfix form-item">
                 <label><span  class="red-color">*</span>截止日期</label>
                 <input type="text"  name="endtime" id="endtime" value="{$item['endtime']}" readonly="readonly" />
-                <link rel="stylesheet" href="../addons/amouse_weijob/style/css/mobiscroll.custom-2.6.2.min.css"  />
-                <script src="../addons/amouse_weijob/style/js/mobiscroll.custom-2.6.2.min.js?v=2014060101"></script>
+                <link rel="stylesheet" href="{AMOUSE_WEIJOB_RES}css/mobiscroll.custom-2.6.2.min.css"  />
+                <script src="{AMOUSE_WEIJOB_RES}js/mobiscroll.custom-2.6.2.min.js?v=2014060101"></script>
                 <script type="text/javascript">
                     $(function () {
                         var opt = {
@@ -187,9 +217,9 @@ select{
 </div>
 <div  class="footer"></div>
 
-<script  type="text/javascript"  src="../addons/amouse_weijob/style/js/resume-publish.jsv=20150419"></script>
-<script type="text/javascript" src="../addons/amouse_weijob/style/js/jquery.mmenu.min.all.jsv=20150419"></script>
-<script type="text/javascript" src="../addons/amouse_weijob/style/js/alert.js?v=20150419"></script>
+<script  type="text/javascript"  src="{AMOUSE_WEIJOB_RES}js/resume-publish.js?v=20150419"></script>
+<script type="text/javascript" src="{AMOUSE_WEIJOB_RES}js/jquery.mmenu.min.all.js?v=20150419"></script>
+<script type="text/javascript" src="{AMOUSE_WEIJOB_RES}js/alert.js?v=20150419"></script>
 <script type="text/javascript">
 $(function() {
 	// 为所有的 class="sec" 下的 select 绑定 onchange 事件

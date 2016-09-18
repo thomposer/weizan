@@ -214,12 +214,32 @@ a{color:#666}
 			<div class="weui_cell_ft">{$activity['xmname']}</div>
 		</div>
 		{/if}
+	{if $row['paytype']==9}
+		<div class="weui_cell">
+			<div class="weui_cell_bd weui_cell_primary">
+							{if !empty($row['remit'])}
+			<image class="weui_uploader_file weui_uploader_status" src="{php echo tomedia($row['remit'])}" height="50" id="showremit">
+<script>
+document.querySelector('#showremit').onclick = function () {
+  wx.previewImage({
+    current: '{php echo tomedia($row['remit'])}',
+    urls: [
+      '{php echo tomedia($row['remit'])}'
+    ]
+  });
+};
+</script>
+							{/if}
+			</div>
+			<div class="weui_cell_ft">转账凭据</div>
+		</div>
+	{/if}
 		<div class="weui_cell">
 			<div class="weui_cell_bd weui_cell_primary">
 				{if $row['paystatus'] == 1}<span class="weui_btn weui_btn_mini weui_btn_default">未支付</span>
                 {elseif $row['paystatus'] == 2}<span class="weui_btn weui_btn_mini weui_btn_warn">已支付</span>
 				{/if}
-				<span class="right f-{$row['css']}">{$row['paytype']}</span>
+				<span class="right f-{$row['css']}">{$row['paytypes']}</span>
 			</div>
 			<div class="weui_cell_ft">付款状态</div>
 		</div>
@@ -278,4 +298,5 @@ a{color:#666}
                     }
 		});
 </script>
+{php $share = 1;}
 {template 'footers'}

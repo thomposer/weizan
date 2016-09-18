@@ -50,10 +50,10 @@
 	{if $rid!=''}
 		{template 'web/nav'}
 	{/if}
-
+{if $op == 'display'}
 	<div class="panel panel-default">
 		<div class="panel panel-info">
-			<div class="panel-heading">筛选</div>
+			<div class="panel-heading">筛选{if $rvote['votepay']}<a class="btn btn-default pull-right" href="{php echo $this->createWebUrl('votelog', array('rid'=>$rid, 'op' => 'loupiao'))}" style="    position: relative; top: -7px;">查看漏票</a>{/if}</div>
 			<div class="panel-body">
 				<form action="./index.php" method="get" class="form-horizontal" role="form">
 					<input type="hidden" name="c" value="site" />
@@ -61,12 +61,15 @@
 					<input type="hidden" name="m" value="fm_photosvote" />
 					<input type="hidden" name="do" value="votelog" />
 					<input type="hidden" name="rid" value="{$_GPC['rid']}" />
+					<input type="hidden" name="tfrom_user" value="{$tfrom_user}" />
+					<input type="hidden" name="from_user" value="{$from_user}" />
+					<input type="hidden" name="afrom_user" value="{$atfrom_user}" />
 					<div class="form-group">
 						<label class="col-xs-12 col-sm-3 col-md-4 col-lg-1 control-label">综合搜索</label>
 						<div class="col-xs-12 col-sm-5 col-lg-4">
 							<input class="form-control" name="keyword" id="" type="text" value="{$_GPC['keyword']}" placeholder="投票人昵称或者投票IP或者被投票人昵称">
 
-							<div class="help-block label label-info " style="position: relative;  top: 10px;  font-size: 15px;">总票数：{$alltotal}&nbsp;&nbsp;&nbsp;当前系统已搜索到 {$total} 条{if $keyword}包含 “{$keyword}” 的相关{/if}数据......</div>
+							<div class="help-block label label-info " style="position: relative;  top: 10px;  font-size: 15px;">当前系统已搜索到 {$total} 条{if $keyword}包含 “{$keyword}” 的相关{/if}数据......</div>
 						</div>
 						<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">投票数状态</label>
 			            <div class="col-xs-3 col-sm-3 col-lg-2" style="    padding-top: 7px;">
@@ -147,7 +150,7 @@
 						<td>{$row['vote_times']} 票</td>
 						<td>{php echo date('Y-m-d H:i:s', $row[createtime]);}</td>
 						<td><span {if strstr($keyword, $row['ip'])}class="active"{/if}>{$row['ip']}</span></td>
-						<td style="white-space: normal;word-break: break-all;">{if is_array($iparr)}{$iparr['country']}{/if}|{if is_array($iparr)}{$iparr['province']}{/if}|{if is_array($iparr)}{$iparr['city']}{/if}</td>
+						<td style="white-space: normal;word-break: break-all;">{if is_array($iparr)}{$iparr['country']}|{$iparr['province']}|{$iparr['city']}{else}{$row['iparr']}{/if}</td>
 						<td><img src="{php echo toimage($fuser['avatar'])}" width="30px;"/> <br /><span {if $fn}class="active"{/if}>{$fuser['nickname']}</span> <span class="level level_{$tlevel}">{$tlevel}</span></td>
 						<td>{if $row['is_del'] == 1}<a href="javascript:;" class="label label-danger" data-toggle="tooltip" data-placement="top" title="取消关注而被删除的票">已删</a>{else}<a href="javascript:;" class="label label-success" data-toggle="tooltip" data-placement="top" title="正常票数">正常</a>{/if}</td>
 						<td>{if empty($row['afrom_user'])}无{else}<img src="{php echo toimage($auser['avatar'])}" width="30px;"/> <br />{if empty($auser['nickname'])}{$row['afrom_user']}{else}{$auser['nickname']}  <span class="level level_{$alevel}">{$alevel}</span>{/if}{/if}</td>
@@ -235,4 +238,95 @@ function drop_confirm(msg, url){
 	}
 }
 </script>
+
+{elseif $op == 'loupiao'}
+	<div class="panel panel-default">
+		<div class="panel panel-info">
+			<div class="panel-heading"><a class="btn btn-default" href="{php echo $this->createWebUrl('votelog', array('rid'=>$rid))}">查看投票</a></div>
+			<div class="panel-body">
+				<form action="./index.php" method="get" class="form-horizontal" role="form">
+					<input type="hidden" name="c" value="site" />
+					<input type="hidden" name="a" value="entry" />
+					<input type="hidden" name="m" value="fm_photosvote" />
+					<input type="hidden" name="do" value="votelog" />
+					<input type="hidden" name="op" value="loupiao" />
+					<input type="hidden" name="rid" value="{$_GPC['rid']}" />
+					<div class="form-group">
+
+						<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">漏票状态</label>
+			            <div class="col-xs-3 col-sm-3 col-lg-2" style="    padding-top: 7px;">
+			              <input  name="ispayvote" id="ispayvote" type="radio" value="1" placeholder="" {if $_GPC['ispayvote'] == 1}checked="checked" {/if}> 正常
+			              <input  name="ispayvote" id="ispayvote" type="radio" value="2" placeholder="" {if $_GPC['ispayvote'] == 2}checked="checked" {/if}> 漏票
+			            </div>
+			            <label class="col-xs-12 col-sm-3 col-md-4 col-lg-1 control-label"></label>
+						<div class="col-xs-12 col-sm-5 col-lg-4">
+							<div class="help-block label label-info " style="position: relative;  top: 10px;  font-size: 15px;">{if $_GPC['ispayvote'] > 1}当前页漏票数：{$total}&nbsp;&nbsp;&nbsp;{/if}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-8 col-sm-8 col-md-8 col-lg-1 control-label"></label>
+						<div class="col-xs-12 col-sm-9 col-lg-8">
+							<button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+							<a class="btn btn-default pull-right" href="{php echo $this->createWebUrl('votelog', array('rid'=>$rid, 'op' => 'loupiao', 'foo' => 'huifu'))}">恢复票数</a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<form method="post" class="form-horizontal" id="formfans">
+		<input type="hidden" name="op" value="del" />
+		<div style="position:relative">
+			<div class="panel-body table-responsive">
+				<table class="table table-hover" style="position:relative">
+				<thead class="navbar-inner">
+					<tr>
+						<th style="width:70px;">订单号</th>
+						<th style="width:120px;">投票人</th>
+						<th style="width:80px;">投票数</th>
+						<th style="width:80px;">费用</th>
+						<th style="width:100px;">创建时间</th>
+						<th style="width:100px;">付费时间</th>
+						<th style="width:100px;">被投票人</th>
+						<th style="width:100px;">状态</th>
+						<th style="width:200px;">微信订单号</th>
+					</tr>
+				</thead>
+				<tbody>
+					{loop $votelogs $row}
+					{php $user = $this->_getloguser($rid, $row['from_user']);$tuser = $this->_getuser($rid, $row['tfrom_user'])}
+
+					<tr>
+						<td style="word-break: break-all;">{$row['ordersn']}</td>
+						<td style="white-space: nowrap;">
+							<a href="javascript:;" data-toggle="tooltip">
+								<img src="{if empty($row['avatar'])}{php echo toimage($user['avatar'])}{else}{php echo toimage($row['avatar'])}{/if}" width="30px;"/>
+								<span {if $rn}class="active"{/if}>{if empty($row['realname'])}{if !empty($user['nickname'])}{$user['nickname']}{else}{$row['from_user']}{/if}{else}{$row['realname']}{/if}</span>
+							</a>
+						</td>
+						<td>{$row['vote_times']} 票</td>
+						<td>{$row['price']} 元</td>
+						<td>{php echo date('Y-m-d H:i:s', $row[createtime]);}</td>
+						<td>{php echo date('Y-m-d H:i:s', $row[paytime]);}</td>
+						<td style="white-space: nowrap;">
+							<a href="javascript:;" data-toggle="tooltip">
+								<img src="{php echo toimage($tuser['avatar'])}" width="30px;"/>
+								<span {if $rn}class="active"{/if}>{php echo $this->getusernames($tuser['realname'], $tuser['nickname'],'20', $row['tfrom_user'])}</span><br>{$tuser['uid']}
+							</a>
+						</td>
+						<td>{if $row['ispayvote'] == 1}<a href="javascript:;" class="label label-success" data-toggle="tooltip" data-placement="top" title="正常">正常</a>{elseif $row['ispayvote'] > 1}<a href="javascript:;" class="label label-danger" data-toggle="tooltip" data-placement="top" title="漏票">漏票</a>{else}<a href="javascript:;" class="label label-info" data-toggle="tooltip" data-placement="top" title="漏票">免费投票</a>{/if}</td>
+						<td>{if !empty($row['transid'])}{$row['transid']}{else}<a href="javascript:;" class="label label-danger" data-toggle="tooltip" data-placement="top" title="未支付">未支付</a>{/if}</td>
+
+					</tr>
+					{/loop}
+				</tbody>
+				</table>
+			</div>
+		</div>
+		</form>
+	</div>
+		{$pager}
+
+    </div>
+{/if}
 {template 'web/_footer'}

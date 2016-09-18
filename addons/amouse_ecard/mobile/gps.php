@@ -15,5 +15,5 @@ $id = $_GPC['id'];
 $cid = $_GPC['cid'];
 if($op == 'list'){
     $member = pdo_fetch(" SELECT * FROM ".tablename('amouse_weicard_member')." WHERE id=".$id );
-    include $this->template('gps');
+    include $this->template('qianxian/gps');
 }

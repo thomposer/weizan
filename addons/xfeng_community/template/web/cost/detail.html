@@ -65,7 +65,7 @@
                             <td>{$row['homenumber']}</td>
                             <td>{$row['total']}元</td>
                             <td>
-                            <label data='{$row['status']}' class='label  label-default {if $row['status']=='是'}label-success{/if}' onclick="setProperty(this,{$row['id']},status)">{if $row['status']=='是'}已缴费{else}未缴费{/if}</label>
+                            <label data='{$row['status']}' class='label  label-default {if $row['status']=='1'}label-success{/if}' onclick="setProperty(this,{$row['id']},status)">{if $row['status']=='1'}已缴费{else}未缴费{/if}</label>
                             </td>
                             <td>
                                 <a href="{php echo $this->createWebUrl('cost',array('op' => 'edit','id' => $row['id']))}" title="详情" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-search"></i>编辑</a>

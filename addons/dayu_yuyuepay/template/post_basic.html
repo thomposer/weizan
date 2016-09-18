@@ -1,4 +1,7 @@
 
+        <div class="panel panel-primary">
+            <div class="panel-heading">基本设置</div>
+            <div class="panel-body">
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">预约主题</label>
                     <div class="col-xs-12 col-sm-9">
@@ -21,19 +24,15 @@
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">预约说明</label>
                     <div class="col-xs-12 col-sm-9">
-						{if IMS_VERSION==0.7}
 						{php echo tpl_ueditor('content', $activity['content']);}
-						{else}
-                        <textarea  id="content" type="text" class="form-control richtext-clone" placeholder="" name="content">{$activity['content']}</textarea>
-						{/if}
 	        			<span class="help-block">显示于提交页使用说明</span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">提交成功提示</label>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">线下付款<br>提交成功提示</label>
                     <div class="col-xs-12 col-sm-9">
                             <textarea type="text" class="form-control"  placeholder="" name="information">{$activity['information']}</textarea>
-	        			<span class="help-block">此预约的说明信息. 例如: 请提交你的预约内容. 我们会尽快联系你</span>
+	        			<span class="help-block">此预约的说明信息. 例如: 您的预约申请我们已经收到, 请等待客服确认.</span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -48,3 +47,5 @@
                  		{php echo tpl_form_field_date('endtime', $activity['endtime'], true)}
                     </div>
                 </div>
+            </div>
+        </div>

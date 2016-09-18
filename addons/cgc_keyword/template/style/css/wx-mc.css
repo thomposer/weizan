@@ -1,0 +1,41 @@
+/* CSS Document */
+body{font-size: 100%;}
+html{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;font-size:100%;}
+html, body{padding:0;margin:0;width:100%;height:100%;}
+*{box-sizing:border-box;padding:0;margin:0;}
+body{font-weight:normal;line-height:1.6em;font-family:"Microsoft Yahei", arial, "Hiragino Sans GB", sans-serif;}
+ul,li{ list-style:none;}
+.l{ float:left;}
+.r{ float:right;}
+.tl{text-align:left;}
+.tr{ text-align:right;}
+.tc{ text-align:center;}
+.orange{ color:#f7ac05;}
+.clear:after { content:''; display:table; clear:both; height:0;}
+.pb60{ padding-bottom:60px;}
+.fs-8{ font-size:0.8em;}
+.b{ font-weight:bold;}
+/*********************************************人人众筹-列表******************************************/
+.rrzc_nav{}
+.rrzc_tip{ line-height:2.2em; text-align:center; background:#eeeeee; font-size:1em;}
+.rrzc_banner img{ width:100%;}
+.rrzc_list ul li{ border-bottom:1px solid #d3d3d3;}
+.rrzc_list ul li img{ width:15%; margin-left:0.5em; margin-top:0.5em; margin-bottom:0.5em; display:inline-block; vertical-align:top;}
+.rrzc_list ul li span{ float:right; width:98%; margin-right:0.3em; margin-left:0.3em; font-size:1em; line-height:2.4em; display:inline-block; vertical-align:top;}
+.rrzc_list ul li span b{ width:50%; display:inline-block; vertical-align:middle;}
+.rrzc_list ul li span:last-child{ color:#999; font-size:0.8em; line-height:1.4em; margin-bottom:0.5em;}
+.rrzc_list ul li div{ width:79%; margin-left:1.5%; display:inline-block; vertical-align:top;}
+.rrzc_total{ position:fixed; bottom:0px; height:60px; line-height:60px; width:100%;}
+.rrzc_total span, .rrzc_total a{ width:28%; background:#fea700; color:#FFF; display:inline-block; vertical-align:top; line-height:60px; font-size:1em; text-align:center; border-right:1px solid #FFF;}
+.rrzc_total span:first-child{ width:44%; background:#008a89; color:#bde260; }
+.rrzc_total a:last-child{ border-right:0px;}
+/*********************************************人人众筹-须知******************************************/
+.rrzc_xz{ margin:1em;}
+.rrzc_xz_info{ background:#FFF; border:1px solid #e0e0e0;}
+.xz_title{ margin:0.5em; background:#008a89; color:#fff; text-align:center; line-height:1.8em; font-size:1.8em;}
+.rrzc_xz_info b{ padding:0.5em 0.5em 0 0.5em; font-weight:bold; display:inline-block; color:#666;}
+.rrzc_xz_info b a{ color:#3d60b4; text-decoration:none;}
+.xz_jlz{ border-top:2px solid #d1e9ab; margin-top:0.5em; padding:0.5em;}
+.mb-5{ margin-bottom:0.5em;}
+.xz_jlz p{ word-break:break-all;}
+.btn_zdl{ width:100%; border-radius:8px; font-size:1.4em; text-align:center; line-height:2.2em; display:inline-block; background:#fea700; color:#FFF; margin:0.5em 0px;}

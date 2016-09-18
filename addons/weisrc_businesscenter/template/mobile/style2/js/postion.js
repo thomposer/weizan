@@ -24,7 +24,7 @@ $(function() {
             var mk = new BMap.Marker(r.point);
             locLng = r.point.lng;
             locLat = r.point.lat;
-            $("#all_shops").each(function() {
+            $(".morelist").each(function() {
                 var ShopLngLat = $(this).find("#showlan").val();
                 var InputOF = ShopLngLat.indexOf(",");
                 var InputOFLast = ShopLngLat.length;

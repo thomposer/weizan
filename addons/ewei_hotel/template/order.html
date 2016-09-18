@@ -56,7 +56,13 @@
 							<option value="1" {if $_GPC['paystatus'] == '1'} selected="selected"{/if}>已支付</option>
 						</select>
 					</div>
-					<div class=" col-xs-12 col-sm-2 col-lg-2">
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">订单时间</label>
+					<div class="col-sm-3 col-xs-12">
+						{php echo tpl_form_field_daterange('date', $_GPC['date'])}
+					</div>
+					<div class="col-xs-12 col-sm-2 col-lg-2">
 						<button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
 						<button name="export" value="export" class="btn btn-default"><i class="fa fa-download"></i> 导出数据</button>
 					</div>

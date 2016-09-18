@@ -1,0 +1,243 @@
+{template 'common/header'}
+
+<div class="main">
+	<form action="" method="post" class="form-horizontal form"
+		enctype="multipart/form-data">
+		<input type="hidden" name="id" value="{$item['id']}" />
+
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				基本设置
+			</div>
+			<div class="panel-body">
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">系统名称</label>
+					<div class="col-sm-7 col-xs-12">
+						<input type="text" name="aname" class="form-control" value="{$item['aname']}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">系统标题</label>
+					<div class="col-sm-7 col-xs-12">
+						<input type="text" name="title" class="form-control" value="{$item['title']}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">默认头像</label>
+					<div class="col-sm-7 col-xs-12">
+						{php echo tpl_form_field_image("thumb",$item['thumb']);}
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">系统公告</label>
+					<div class="col-sm-5">
+						<input type="text" name="notice" class="form-control" value="{$item['notice']}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">系统主色调</label>
+					<div class="col-sm-7 col-xs-12">
+						{php echo tpl_form_field_color('color',$item['color']);}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-2 col-md-2 control-label">是否同步系统表中的手机姓名</label>
+					<div class="col-sm-5">
+						<label for="enabled11" class="radio-inline"><input type="radio" name="sync" value="1" id="enabled11" {if !empty($item['sync']) && $item['sync'] == 1}checked="true"{/if} /> 是</label>
+	                    &nbsp;&nbsp;&nbsp;
+	                    <label for="enabled10" class="radio-inline"><input type="radio" name="sync" value="0" id="enabled10"  {if empty($item['sync']) || $item['sync'] == 0}checked="true"{/if} /> 否</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-2 col-md-2 control-label">是否同步系统表中的个人信息</label>
+					<div class="col-sm-5">
+						<label for="enabled12" class="radio-inline"><input type="radio" name="sync2" value="1" id="enabled12" {if !empty($item['sync2']) && $item['sync2'] == 1}checked="true"{/if} /> 是</label>
+	                    &nbsp;&nbsp;&nbsp;
+	                    <label for="enabled13" class="radio-inline"><input type="radio" name="sync2" value="0" id="enabled13"  {if empty($item['sync2']) || $item['sync2'] == 0}checked="true"{/if} /> 否</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				分享设置
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享标题</label>
+					<div class="col-sm-7 col-xs-12">
+						<input type="text" name="sharetitle" class="form-control"
+							   value="{$item['sharetitle']}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享描述</label>
+					<div class="col-sm-7 col-xs-12">
+						<input type="text" name="sharedesc" class="form-control"
+							   value="{$item['sharedesc']}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享logo</label>
+					<div class="col-sm-7 col-xs-12">
+						{php echo tpl_form_field_image('sharelogo', $item['sharelogo']);}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				短信接口设置
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">短信平台</label>
+					<div class="col-sm-7 col-xs-12">
+						<label for="enabled1" class="radio-inline"><input type="radio" name="sms_type" value="0" id="enabled1" onclick="sms_change()" {if empty($item['sms_type']) || $item['sms_type'] == 0}checked="true"{/if} /> 网讯</label> <label for="enabled2" class="radio-inline"><input type="radio" name="sms_type" value="1" id="enabled2" onclick="sms_change1()" {if !empty($item['sms_type']) && $item['sms_type'] == 1}checked="true"{/if} /> 互亿无线</label> <label for="enabled3" class="radio-inline"><input type="radio" name="sms_type" value="2" id="enabled3" onclick="sms_change2()" {if !empty($item['sms_type']) && $item['sms_type'] == 2}checked="true"{/if} /> 无需</label>
+	                    <br>
+	                   	<span class="help-block">网讯接口为(http://120.24.55.238/msg/index.jsp) ; 互亿无线接口为(http://106.ihuyi.cn) ; 无需时则没有手机认证</span>
+					</div>
+				</div>
+
+				<div class="form-group" id="sms_sign">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">短信平台签名</label>
+					<div class="col-sm-7 col-xs-12">
+						<input type="text" name="sms_sign" class="form-control" value="{$item['sms_sign']}" />
+					</div>
+				</div>
+
+				<div class="form-group" id="sms_product">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">短信平台产品名</label>
+					<div class="col-sm-7 col-xs-12">
+						<input type="text" name="sms_product" class="form-control" value="{$item['sms_product']}" />
+					</div>
+				</div>
+
+				<div class="form-group" id="sms_username">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">短信平台用户名</label>
+					<div class="col-sm-7 col-xs-12">
+						<input type="text" name="sms_username" class="form-control" value="{$item['sms_username']}" />
+					</div>
+				</div>
+
+				<div class="form-group" id="sms_pwd">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">短信平台密码</label>
+					<div class="col-sm-7 col-xs-12">
+						<input type="text" name="sms_pwd" class="form-control" value="{$item['sms_pwd']}" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				版权设置
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">版权文字</label>
+					<div class="col-sm-7 col-xs-12">
+						<input type="text" name="copyright" class="form-control" value="{$item['copyright']}" />
+						<span class="help-block">不填则无版权显示</span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">版权跳转url</label>
+					<div class="col-sm-7 col-xs-12">
+						<input type="text" name="copyrighturl" class="form-control" value="{$item['copyrighturl']}" />
+						<span class="help-block">不填则不跳转</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-danger">
+			<div class="panel-heading">
+				引导关注设置
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">引导关注图标设置</label>
+					<div class="col-sm-7 col-xs-12">
+						{php echo tpl_form_field_image('follow_logo', $item['follow_logo']);}
+						<div class="help-block">请使用png图片，不设置则不显示</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">关注地址url</label>
+					<div class="col-sm-7 col-xs-12">
+						<input type="text" name="follow_url" class="form-control" value="{$item['follow_url']}" />
+						<div class="help-block">请于url前增加http://</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				百度接口设置
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">百度地图APP KEY</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="bd_ak" class="form-control" value="{$item['bd_ak']}"/>
+                    </div>
+                </div>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+			<div class="col-sm-9 col-xs-12">
+				<input name="submit" type="submit" value="提交" class="btn btn-primary span3"> 
+				<input type="hidden" name="token" value="{$_W['token']}" />
+			</div>
+		</div>
+
+	</form>
+</div>
+<script>
+	function sms_change()
+	{
+		$("#sms_product").show();
+		$("#sms_sign").show();
+		$("#sms_username").show();
+		$("#sms_pwd").show();
+	}
+	function sms_change1()
+	{
+		$("#sms_product").hide();
+		$("#sms_sign").hide();
+		$("#sms_username").show();
+		$("#sms_pwd").show();
+	}
+	function sms_change2()
+	{
+		$("#sms_product").hide();
+		$("#sms_sign").hide();
+		$("#sms_username").hide();
+		$("#sms_pwd").hide();
+	}
+	$(function () {
+
+		{if $item['sms_type']==1}
+			$("#sms_product").hide();
+			$("#sms_sign").hide();
+		{/if}
+
+		{if $item['sms_type']==2}
+			$("#sms_product").hide();
+			$("#sms_sign").hide();
+			$("#sms_username").hide();
+			$("#sms_pwd").hide();
+		{/if}
+	});
+</script>

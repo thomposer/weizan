@@ -138,30 +138,6 @@
 	</form>
 </div>
 
-<!--<div id="modal-module-menus" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="left:30%;width:1000px;">
-	<div class="modal-header">
-		<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
-		<h3>应聘者简历</h3></div>
-	<div class="modal-body">
-	<table style="width:100%" class="table table-hover table-striped">
-		<thead class="navbar-inner">
-			<tr>
-				<th style="width:30px;">姓名</th>
-				<th style="width:20px;">性别</th>
-				<th style="width:20px;">年龄</th>
-				<th style="width:50px;">联系电话</th>
-				<th style="width:150px;">自我评价</th>
-				<th style="width:150px">求职意向</th>
-				<th style="width:100px;">投简时间</th>
-			</tr>
-		</thead>
-		<tbody id="items">
-			
-		</tbody>
-	<table>
-	</div>
-	<div class="modal-footer"><a href="#" class="btn" data-dismiss="modal" aria-hidden="true">关闭</a></div>
-</div>-->
 {elseif $op=='post'}
 {template 'common'}
 <div class="clearfix">
@@ -188,27 +164,28 @@
                     <div class="col-sm-8 col-xs-12">
                         <!--<select class="form-control" name="companyid" id="companyid">
                             <option value="{$company['id']}">{$company['title']}</option>
-                        </select>-->
+                        </select>
+-->
 						{if !empty($_GPC['companyid'])}
-                        <input  type="hidden" name="companyid" value="{$companyid}">
-                        <input type="text" class="form-control"  name="title" id="title" readonly value="{$company['title']}">
-                        {else}
-                            {php include_once IA_ROOT . '/addons/amouse_weijob/model.php'}
-                            <select class="form-control" name="companyid" id="companyid">
-                                {if empty($item['id']) && empty($_GPC['companyid'])}
-                                <option value="0">请选择</option>
-                                {else if !empty($_GPC['companyid'])}
-                                <option value="{$_GPC['companyid']}">
-                                {php $company = search_company($_GPC['companyid'])}{$company['title']}
-                                {else}
-                                <option value="{$item['companyid']}">
-                                {php $company = search_company($item['companyid'])}{$company['title']}</option>
-                                {/if}
-                                {php $companyall = search_companyall()}
-                                {loop $companyall $com}
-                                <option value="{$com['id']}">{$com['title']}</option>
-                                {/loop}
-                            </select>
+						 <input type="text" class="form-control"  name="companyid" id="companyid" value="{$company['title']}"> 
+						 {else} 
+                        {php include_once IA_ROOT . '/addons/amouse_weijob/model.php'}
+                       
+                        <select class="form-control" name="companyid" id="companyid">
+                            {if empty($item['id']) && empty($_GPC['companyid'])}
+                            <option value="0">请选择</option>
+                            {else if !empty($_GPC['companyid'])}
+                            <option value="{$_GPC['companyid']}">
+                            {php $company = search_company($_GPC['companyid'])}{$company['title']}
+                            {else}
+                            <option value="{$item['companyid']}">
+                            {php $company = search_company($item['companyid'])}{$company['title']}</option>
+                            {/if}
+                            {php $companyall = search_companyall()}
+                            {loop $companyall $com}
+                            <option value="{$com['id']}">{$com['title']}</option>
+                            {/loop}
+                        </select>
 						{/if}
                     </div>
                 </div>
@@ -252,6 +229,27 @@
                     <div class="col-sm-8 col-xs-12">
                         <input type="text" class="form-control" placeholder="0为面议，其他则正常" name="offer" id="offer" value="{$item['offer']}">
                     </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">所在地区</label>
+                    <div class="col-xs-12 col-sm-2 col-md-2 col-lg-3">
+                        <select name="location_p" id="location_p" class="form-control tpl-province"></select></div>
+                    <div class="col-xs-12 col-sm-2 col-md-2 col-lg-3">
+
+                        <select name="location_c" id="location_c" class="form-control tpl-city"></select></div>
+
+                    <div class="col-xs-12 col-sm-2 col-md-4 col-lg-3">
+
+                        <select name="location_a" id="location_a" class="form-control tpl-district"></select></div>
+
+                    <script type="text/javascript" src="../addons/amouse_weijob/style/js/region_select.js"></script>
+
+                    <script type="text/javascript">
+                        var location_p = "{if !empty($item['location_p'])}{$item['location_p']}{else} {/if}";
+                        var location_c = "{if !empty($item['location_c'])}{$item['location_c']}{else} {/if}";
+                        var location_a = "{if !empty($item['location_a'])}{$item['location_a']}{else} {/if}";
+                        new PCAS("location_p", "location_c", "location_a", location_p, location_c, location_a);
+                    </script>
                 </div>
 
                 <div class="form-group">
@@ -299,7 +297,11 @@
             return false;
         }
 
-
+        if($.trim($('select[name="companyid"]').val()) == ''
+                ||$.trim($('select[name="companyid"]').val()) == 0) {
+            Tip.select("companyid","请选择所属公司!","right");
+            return false;
+        }
         if($("#offer").isEmpty()){
             Tip.focus("offer","请填写月薪!","right");
             return false;

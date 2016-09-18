@@ -41,7 +41,7 @@
 
 <style>
 
- body {background: {$rbody_reg['reg_bgcolor']} url({php echo toimage($rbody_reg['reg_bgimg'])}); background-size: 100% auto;} 
+ body {background: {$rbody_reg['reg_bgcolor']} url({php echo toimage($rbody_reg['reg_bgimg'])}); background-size: 100% auto;}
 
 .product li{ width: 100%; float: left; display: block;
    margin:0 auto;
@@ -55,49 +55,49 @@
   position: relative;
   background-color: {if empty($rbody['bodytscolor'])}#fff{else}{$rbody['bodytscolor']}{/if};
   background: {if empty($rbody['bodytscolor'])} #FFFFFF{else}{$rbody['bodytscolor']}{/if} url({php echo toimage($rbody['bodytsbg'])}) center no-repeat {$rbody['bodytscolor']};
-  
+
   }
 
 .product li dd{
-  line-height: 18px; 
+  line-height: 18px;
   font-size: 14px;overflow: hidden;white-space :nowrap ;  padding: 5px;
   color: {if empty($rbody['bodytextcolor'])}#555555{else}{$rbody['bodytextcolor']}{/if};
 }
 .product li dt{
-  margin:0 auto;text-align:left; 
-   border-top: 1px solid {$rbody_reg['reg_xx_border_color']}; 
+  margin:0 auto;text-align:left;
+   border-top: 1px solid {$rbody_reg['reg_xx_border_color']};
    border-bottom: 1px solid {$rbody_reg['reg_xx_border_color']};
-   background: {$rbody_reg['reg_xx_bg_color']}; 
+   background: {$rbody_reg['reg_xx_bg_color']};
 }
 .product li dl {
     overflow: hidden;
-    background: {$rbody_reg['reg_xx_jg_color']}; 
+    background: {$rbody_reg['reg_xx_jg_color']};
 }
   .mingc {
-    border-bottom: 1px solid {$rbody_reg['reg_xx_input_jg_color']}; 
-    color:{$rbody_reg['reg_xx_input_text_color']}; 
+    border-bottom: 1px solid {$rbody_reg['reg_xx_input_jg_color']};
+    color:{$rbody_reg['reg_xx_input_text_color']};
   }
 .ptitle {
-    color:{$rbody_reg['reg_xx_title_color']}; 
+    color:{$rbody_reg['reg_xx_title_color']};
   }
   textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-      background-color: {$rbody_reg['reg_xx_input_bg_color']}; 
-      border: 0px solid {$rbody_reg['reg_xx_input_bg_color']}; 
+      background-color: {$rbody_reg['reg_xx_input_bg_color']};
+      border: 0px solid {$rbody_reg['reg_xx_input_bg_color']};
       -webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075);
       -moz-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075);
       box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075);
-      color:{$rbody_reg['reg_xx_input_text_color']}; 
+      color:{$rbody_reg['reg_xx_input_text_color']};
     }
   .saveregstyle {
     margin: 0 auto;  text-align: center;
-    background: {$rbody_reg['reg_xx_save_bg_color']}; 
+    background: {$rbody_reg['reg_xx_save_bg_color']};
   }
   .saveregstyle .submit {
-    font-size: 20px; 
+    font-size: 20px;
     padding: 6px 20px;
-    color: {$rbody_reg['reg_xx_save_an_text_color']}; 
-    background:{$rbody_reg['reg_xx_save_an_bg_color']}; 
-    border: 1px solid {$rbody_reg['reg_xx_save_an_bg_color']}; 
+    color: {$rbody_reg['reg_xx_save_an_text_color']};
+    background:{$rbody_reg['reg_xx_save_an_bg_color']};
+    border: 1px solid {$rbody_reg['reg_xx_save_an_bg_color']};
   }
 </style>
 
@@ -107,8 +107,8 @@
   <div class="product">
     <ul>
         <li>
-          <dl>          
-            <form class="form-horizontal" role="form" id="form" name="form" method="post" action="" enctype="multipart/form-data">          
+          <dl>
+            <form class="form-horizontal" role="form" id="form" name="form" method="post" action="" enctype="multipart/form-data">
                   <input type="hidden" name="i" id = "i" value="{$uniacid}" />
                   <input type="hidden" name="c" id="c" value="entry" />
                   <input type="hidden" name="m" id="m" value="fm_photosvote" />
@@ -127,7 +127,7 @@
                   </div>
                   </dt>
                 {/if}
-                 
+
                 <dt style="">
                   <div style="float:left;width: 25%; padding: 20px 4%;"><img src="{if !empty($avatar)}{php echo toimage($avatar)}{elseif !empty($mygift['avatar'])}{php echo toimage($mygift['avatar'])}{else}{FM_STATIC_MOBILE}public/images/noavatar.png?v=3.0{/if}" width="50" style="border-radius:1000px; max-width: 80px;"/></div>
                   <div style="float:right;width: 75%;">
@@ -209,77 +209,76 @@
                       <img src="{FM_STATIC_MOBILE}public/images/tp.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 15px;"/>
                     </div>
                     <div style="float:right;width: 85%;">
-                      <p class="mingc ptitle">上传图片 [ 请上传图片后保存报名信息 ]</p>
+                      <p class="mingc ptitle">上传图片</p>
                       {if !empty($photosarr)}
                         {loop $photosarr $row}
-                          <div class="parentFileBox allbox{$row['id']}" id="parentFileBox{$row['id']}" style="width: 140px;"> 
-                            <a href="javascript:;" class="webuploader-pick" id="webuploader{$row['id']}" onclick="javascript:$('#photo{$row['id']}').click();" style="display:none" /><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"/></a>
+                          <div class="parentFileBox allbox{$row['id']}" id="parentFileBox{$row['id']}" style="width: 140px;">
+                            <a href="javascript:;" class="webuploader-pick" id="webuploader{$row['id']}"  onclick="clickup('photo', '{$row['id']}')" style="display:none" /><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"/></a>
                               <ul class="fileBoxUl">
-                                <li id="fileBox_WU_FILE_{$row['id']}" class="diyUploadHover"> 
+                                <li id="fileBox_WU_FILE_{$row['id']}" class="diyUploadHover">
                                   <div class="viewThumb"  id="viewThumb{$row['id']}">
                                       <a href="javascript:;" onclick="javascript:$('#photo{$row['id']}').click();" ><img src="{php echo toimage($row['photos'])}" id="preview{$row['id']}" width="100%;" /></a>
-                                  </div> 
+                                  </div>
                                   <div id="imagedel{$row['id']}" class="imagedel"><a href="javascript:;" onclick="imagedel('{$row['id']}')"><div class="diyCancel" id="diyCancel{$row['id']}" style="display:block;" ></div></a></div>
                                   <div id="setfm{$row['id']}" class="setfm"><a href="javascript:;" id="setfm{$row['id']}" onclick="setfm('{$row['id']}')"><div class="diySuccess {if $row['isfm']}isfm{/if}" id="diySuccess{$row['id']}" width="100%;" style="display:block;" >{if !$row['isfm']}设为封面{/if}</div></a></div>
-                                  <div class="diyFileName" id="diyFileName{$row['id']}">preview.png</div> 
-                                  <div class="diyBar" id="diyBar{$row['id']}" style="display:none"> 
-                                      <div class="diyProgress" id="diyProgress{$row['id']}"></div> 
-                                      <div class="diyProgressText" id="diyProgressText{$row['id']}"></div> 
+                                  <div class="diyFileName" id="diyFileName{$row['id']}">preview.png</div>
+                                  <div class="diyBar" id="diyBar{$row['id']}" style="display:none">
+                                      <div class="diyProgress" id="diyProgress{$row['id']}"></div>
+                                      <div class="diyProgressText" id="diyProgressText{$row['id']}"></div>
                                   </div>
                                 </li>
-                              </ul> 
+                              </ul>
                            </div>
-                           <div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">
-                            <input type="file" name="photo{$row['id']}" id="photo{$row['id']}" class="webuploader-element-invisible" style="display:none;" accept="image/*" capture="camera" onchange="changeone('photo{$row['id']}', '{$row['id']}', '{$row['photoname']}')" >
+                           <div style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px; overflow: hidden; bottom: auto; right: auto;">
+                            <input type="file" name="photo{$row['id']}" id="photo{$row['id']}" class="webuploader-element-invisible" style="display:block;" accept="image/*" capture="camera" onchange="changeone('photo{$row['id']}', '{$row['id']}', '{$row['photoname']}')" >
                           </div>
                         {/loop}
                         {if $photosarrnum < $rvote['tpxz']}
-                          <div class="parentFileBox allbox{$mid}" id="parentFileBox{$mid}" style="width: 140px;"> 
-                            <a href="javascript:;" class="webuploader-pick" id="webuploader{$mid}" onclick="javascript:$('#photo{$mid}').click();"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"/></a>
-                            
+                          <div class="parentFileBox allbox{$mid}" id="parentFileBox{$mid}" style="width: 140px;">
+                            <a href="javascript:;" class="webuploader-pick" id="webuploader{$mid}" onclick="clickup('photo', '{$mid}')"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"  /></a>
+
                               <ul class="fileBoxUl">
-                                <li id="fileBox_WU_FILE_{$mid}" class="diyUploadHover"> 
+                                <li id="fileBox_WU_FILE_{$mid}" class="diyUploadHover">
                                   <div class="viewThumb" >
                                       <img src="" id="preview{$mid}"/>
-                                  </div> 
+                                  </div>
                                   <div id="imagedel{$mid}" class="imagedel"><a href="javascript:;" onclick="imagedel('{$mid}')"><div class="diyCancel" id="diyCancel{$mid}" width="100%;"></div></a></div>
                                   <div id="setfm{$mid}" class="setfm"><a href="javascript:;" id="setfm{$mid}" onclick="setfm('{$mid}')"><div class="diySuccess" id="diySuccess{$mid}" width="100%;">设为封面</div></a></div>
-                                  <div class="diyFileName" id="diyFileName{$mid}">preview.png</div> 
-                                  <div class="diyBar" id="diyBar{$mid}" style="display:none"> 
-                                      <div class="diyProgress" id="diyProgress{$mid}"></div> 
-                                      <div class="diyProgressText" id="diyProgressText{$mid}"></div> 
+                                  <div class="diyFileName" id="diyFileName{$mid}">preview.png</div>
+                                  <div class="diyBar" id="diyBar{$mid}" style="display:none">
+                                      <div class="diyProgress" id="diyProgress{$mid}"></div>
+                                      <div class="diyProgressText" id="diyProgressText{$mid}"></div>
                                   </div>
                                 </li>
-                              </ul> 
+                              </ul>
                            </div>
-                           <div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">
-                            <input type="file" name="photo{$mid}" id="photo{$mid}" class="webuploader-element-invisible" style="display:none;" accept="image/*" capture="camera" onchange="changeone('photo{$mid}', '{$mid}', '')" >
+                           <div style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px; overflow: hidden; bottom: auto; right: auto;">
+                            <input type="file" name="photo{$mid}" id="photo{$mid}" class="webuploader-element-invisible" style="display:block;" accept="image/*" capture="camera" onchange="changeone('photo{$mid}', '{$mid}', '')" >
                           </div>
                         {/if}
                         <div id="afteradd"></div>
                       {else}
-                        
-                        <div class="parentFileBox allbox{$mid}" id="parentFileBox{$mid}" style="width: 140px;"> 
-                          <a href="javascript:;" class="webuploader-pick" id="webuploader{$mid}" onclick="javascript:$('#photo{$mid}').click();"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"/></a>
+                        <div class="parentFileBox allbox{$mid}" id="parentFileBox{$mid}" style="width: 140px;">
+                          <a href="javascript:;" class="webuploader-pick" id="webuploader{$mid}" onclick="clickup('photo', '{$mid}')"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"/></a>
                             <ul class="fileBoxUl">
-                              <li id="fileBox_WU_FILE_{$mid}" class="diyUploadHover"> 
+                              <li id="fileBox_WU_FILE_{$mid}" class="diyUploadHover">
                                 <div class="viewThumb" >
                                     <img src="" id="preview{$mid}" width="100%;"/>
-                                </div> 
+                                </div>
                                 <div id="imagedel{$mid}" class="imagedel"><a href="javascript:;"  onclick="imagedel('{$mid}')"><div class="diyCancel" id="diyCancel{$mid}" ></div></a></div>
                                 <div id="setfm{$mid}" class="setfm"><a href="javascript:;" id="setfm{$mid}" onclick="setfm('{$mid}')"><div class="diySuccess" id="diySuccess{$mid}" width="100%;">设为封面</div></a></div>
-                                <div class="diyFileName" id="diyFileName{$mid}">preview.png</div> 
-                                <div class="diyBar" id="diyBar{$mid}" style="display:none"> 
-                                    <div class="diyProgress" id="diyProgress{$mid}"></div> 
-                                    <div class="diyProgressText" id="diyProgressText{$mid}"></div> 
+                                <div class="diyFileName" id="diyFileName{$mid}">preview.png</div>
+                                <div class="diyBar" id="diyBar{$mid}" style="display:none">
+                                    <div class="diyProgress" id="diyProgress{$mid}"></div>
+                                    <div class="diyProgressText" id="diyProgressText{$mid}"></div>
                                 </div>
                               </li>
-                            </ul> 
+                            </ul>
                          </div>
-                         <div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">
-                          <input type="file" name="photo{$mid}" id="photo{$mid}" class="webuploader-element-invisible" style="display:none;" accept="image/*" capture="camera" onchange="changeone('photo{$mid}', '{$mid}', 'fm')" >
+                         <div style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px; overflow: hidden; bottom: auto; right: auto;">
+                          <input type="file" name="photo{$mid}" id="photo{$mid}" class="webuploader-element-invisible" style="display:block;" accept="image/*" capture="camera" onchange="changeone('photo{$mid}', '{$mid}', 'fm')" >
                         </div>
-                                   <div id="afteraddnew"></div>
+                         <div id="afteraddnew"></div>
                       {/if}
                     </div>
                   </dt>
@@ -293,7 +292,7 @@
                       <p class="mingc ptitle">录制一分钟音频</p>
 
                         <div id="luyin" {if !empty($mygift['voice'])}style="display:none"{else}style="height:50px;line-height:50px;margin-top:15px;"{/if}>
-                          <p id="startRecord" class="btn btn-danger ">开始录制</p>   
+                          <p id="startRecord" class="btn btn-danger ">开始录制</p>
                           <p id="stopRecord" class="btn btn-danger" style="display:none">停止录制</p>
                           <p id="playVoice" class="btn btn-primary " style="display:none">试听</p><span id="mm"></span>
                         </div>
@@ -304,10 +303,10 @@
                           </audio>
                           </p>
                           <p id="cxluyin" class="btn btn-danger">重新录音</p>
-                          
+
                         </div>
-                      
-                      
+
+
 
                     </div>
                   </dt>
@@ -315,7 +314,7 @@
                     $("#cxluyin").click(function(){
                       $('#yilu').css('display','none');
                       $('#luyin').css('display','inline');
-                    }); 
+                    });
                   </script>
                   <dt style="margin:0 auto;text-align:left;  border-top: 1px solid #E7E7E7; border-bottom: 1px solid #E7E7E7;margin-top:15px;">
                     <div style="float:left;width: 15%;  padding: 0 15px;">
@@ -323,17 +322,17 @@
                     </div>
                     <div style="float:right;width: 85%;">
                       <p class="mingc ptitle">上传音频</p>
-                      <div class="parentFileBox allboxm" id="parentFileBoxm" style="width: 100%;"> 
-                        <a href="javascript:;" class="webuploader-pick" id="webuploaderm" onclick="javascript:$('#music').click();" style="{if !empty($mygift['music'])}display:none;{/if} width: 90%;height: 200px;"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;" /></a>
-                        
+                      <div class="parentFileBox allboxm" id="parentFileBoxm" style="width: 100%;">
+                        <a href="javascript:;" class="webuploader-pick" id="webuploaderm"  style="{if !empty($mygift['music'])}display:none;{/if} width: 90%;height: 200px;"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;" onclick="javascript:$('#music').click();"/></a>
+
                           <ul class="fileBoxUl">
-                            <li id="fileBox_WU_FILE_m" class="diyUploadHover" style="  width: 90%;height: 200px;"> 
-                              <div class="viewThumb" id="musicpreview" style="  width: 100%;height: 200px;"> 
+                            <li id="fileBox_WU_FILE_m" class="diyUploadHover" style="  width: 90%;height: 200px;">
+                              <div class="viewThumb" id="musicpreview" style="  width: 100%;height: 200px;">
                                   {if !empty($mygift['music'])}
                                   <link rel="stylesheet" href="{FM_STATIC_MOBILE}audio/css/style.css?ver=1.0" media="screen" type="text/css" />
                                 <div id="players" style="position: absolute;top: 32%;bottom: 0;  text-align: center; left: 42%;  background: rgba(0, 0, 0, 0.5);">
                                   <audio id="audio" controls preload="none">
-                                    <source src="{php echo tomedia($mygift['music'])}" type="audio/mpeg" codecs="mp3"></source>    
+                                    <source src="{php echo tomedia($mygift['music'])}" type="audio/mpeg" codecs="mp3"></source>
                                   </audio>
                                   <div class="coveraudio" style="top: 5%;right: 18px;opacity: 0.8;">
                                     <div class="controls">
@@ -343,54 +342,53 @@
                                 </div><!-- #player -->
                                 <script src="{FM_STATIC_MOBILE}audio/js/audio.js?{TIMESTAMP}"></script>
                               {/if}
-                              </div> 
+                              </div>
                               <div id="musicdel" class="musicdel"><a href="javascript:;" onclick="musicdel('{$mygift['music']}')"><div class="diyCancel" id="diyCancelm" width="100%;" {if !empty($mygift['music'])}style="display:block;"{/if}></div></a></div>
-                              <div class="diyFileName" id="diyFileNamev">preview.png</div> 
-                              <div class="diyBar" id="diyBarm" style="display:none"> 
-                                  <div class="diyProgress" id="diyProgressm" style="top:0;height:200px;"></div> 
-                                  <div class="diyProgressText" id="diyProgressTextm" style="font-size: 25px;"></div> 
+                              <div class="diyFileName" id="diyFileNamev">preview.png</div>
+                              <div class="diyBar" id="diyBarm" style="display:none">
+                                  <div class="diyProgress" id="diyProgressm" style="top:0;height:200px;"></div>
+                                  <div class="diyProgressText" id="diyProgressTextm" style="font-size: 25px;"></div>
                               </div>
                             </li>
-                          </ul> 
+                          </ul>
                       </div>
-                      <div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">
-                        <input type="file" name="music" id="music" class="webuploader-element-invisible" style="display:none;" accept="audio/*" capture="camcorder" onchange="audios('music', 'm')" >
+                      <div style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px; overflow: hidden; bottom: auto; right: auto;">
+                        <input type="file" name="music" id="music" class="webuploader-element-invisible" style="display:block;" accept="audio/*" capture="camcorder" onchange="audios('music', 'm')" >
                       </div>
                       <div id="musicafter"></div>
                     </div>
                   </dt>
-                {/if}           
-                {if $rvote['mediatypev']}   
+                {/if}
+                {if $rvote['mediatypev']}
                   <dt style="margin:0 auto;text-align:left;  border-top: 1px solid #E7E7E7; border-bottom: 1px solid #E7E7E7;margin-top:15px;">
                     <div style="float:left;width: 15%;  padding: 0 15px;">
                       <img src="{FM_STATIC_MOBILE}public/images/video.png?v=3.0" width="30" style=" width: 30px;float:left;margin-top: 8px;"/>
                     </div>
                     <div style="float:right;width: 85%;">
                       <p class="mingc ptitle">上传视频 (<a onclick="webinfo();">上传说明</a>)</p>
-                      <div class="parentFileBox allboxv" id="parentFileBoxv" style="width: 100%;"> 
-                        <a href="javascript:;" class="webuploader-pick" id="webuploaderv" onclick="javascript:$('#vedio').click();" style="{if !empty($mygift['vedio'])}display:none;{/if} width: 90%;height: 200px;"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;" /></a>
-                        
+                      <div class="parentFileBox allboxv" id="parentFileBoxv" style="width: 100%;">
+                        <a href="javascript:;" class="webuploader-pick" id="webuploaderv"style="{if !empty($mygift['vedio'])}display:none;{/if} width: 90%;height: 200px;"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;"  onclick="javascript:$('#vedio').click();" /></a>
+
                           <ul class="fileBoxUl">
-                            <li id="fileBox_WU_FILE_v" class="diyUploadHover" style="  width: 90%;height: 200px;"> 
-                              <div class="viewThumb" id="vediopreview" style="  width: 100%;height: 200px;"> 
-                                  
-                                    <video controls preload="auto" width="100%" height="200" id="previewv" poster="{if !empty($mygift['vedio'])}{php echo $this->getphotos($fmimage['photos'], $mygift['avatar'], $rbasic['picture'])}{/if}">
+                            <li id="fileBox_WU_FILE_v" class="diyUploadHover" style="  width: 90%;height: 200px;">
+                              <div class="viewThumb" id="vediopreview" style="  width: 100%;height: 200px;">
+                                 <video controls preload="auto" width="100%" height="200" id="previewv" poster="{if !empty($mygift['vedio'])}{php echo $this->getphotos($fmimage['photos'], $mygift['avatar'], $rbasic['picture'])}{/if}" {if empty($mygift['vedio'])}style="display:none;"{/if}>
                                   <source src="{php echo tomedia($mygift['vedio'])}" type='video/mp4' />
                                   <p class="vjs-no-js">你的浏览器不支持该视频</a></p>
-                                </video>
-                              
-                              </div> 
+                                	</video>
+
+                              </div>
                               <div id="videodel" class="videodel"><a href="javascript:;" onclick="videodel('{$mygift['vedio']}')"><div class="diyCancel" id="diyCancelv" width="100%;" {if !empty($mygift['vedio'])}style="display:block;"{/if}></div></a></div>
-                              <div class="diyFileName" id="diyFileNamev">preview.png</div> 
-                              <div class="diyBar" id="diyBarv" style="display:none"> 
-                                  <div class="diyProgress" id="diyProgressv" style="top:0;height:200px;"></div> 
-                                  <div class="diyProgressText" id="diyProgressTextv" style="font-size: 25px;"></div> 
+                              <div class="diyFileName" id="diyFileNamev">preview.png</div>
+                              <div class="diyBar" id="diyBarv" style="display:none">
+                                  <div class="diyProgress" id="diyProgressv" style="top:0;height:200px;"></div>
+                                  <div class="diyProgressText" id="diyProgressTextv" style="font-size: 25px;"></div>
                               </div>
                             </li>
-                          </ul> 
+                          </ul>
                       </div>
-                      <div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">
-                        <input type="file" name="vedio" id="vedio" class="webuploader-element-invisible" style="display:none;" accept="video/*" capture="camcorder" onchange="audios('vedio', 'v')" >
+                      <div style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px; overflow: hidden; bottom: auto; right: auto;">
+                        <input type="file" name="vedio" id="vedio" class="webuploader-element-invisible" style="display:block;" accept="video/*" capture="camcorder" onchange="audios('vedio', 'v')" >
                       </div>
                       <div id="vedioafter"></div>
                     </div>
@@ -405,19 +403,19 @@
                     </div>
                   </dt>
                 {/if}
-                  
+
                 <dt style="margin:0 auto;text-align:left;  border-top: 1px solid #E7E7E7; border-bottom: 1px solid #E7E7E7;margin-top:15px;">
                   <div style="float:left;width: 15%;  padding: 0 15px;">
                     {if $rdisplay['isweixin']}
-                    <img src="{FM_STATIC_MOBILE}public/images/weixin.png?v=3.3" width="30" style=" width: 30px;float:left;margin-top: 8px;"/>{/if}          
+                    <img src="{FM_STATIC_MOBILE}public/images/weixin.png?v=3.3" width="30" style=" width: 30px;float:left;margin-top: 8px;"/>{/if}
                     {if $rdisplay['isqqhao']}
-                    <img src="{FM_STATIC_MOBILE}public/images/qq.png?v=3.3" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}          
+                    <img src="{FM_STATIC_MOBILE}public/images/qq.png?v=3.3" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}
                     {if $rdisplay['isemail']}
-                    <img src="{FM_STATIC_MOBILE}public/images/email.png?v=3.3" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}         
+                    <img src="{FM_STATIC_MOBILE}public/images/email.png?v=3.3" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}
                     {if $rdisplay['isjob']}
-                    <img src="{FM_STATIC_MOBILE}public/images/job.png?v=3.3" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}         
+                    <img src="{FM_STATIC_MOBILE}public/images/job.png?v=3.3" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}
                     {if $rdisplay['isxingqu']}
-                    <img src="{FM_STATIC_MOBILE}public/images/xingqu.png?v=3.3" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}          
+                    <img src="{FM_STATIC_MOBILE}public/images/xingqu.png?v=3.3" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}
                     {if $rdisplay['isaddress']}
                     <img src="{FM_STATIC_MOBILE}public/images/address.png?v=3.3" width="30" style=" width: 30px;float:left;margin-top: 70px;"/>{/if}
                   </div>
@@ -426,27 +424,27 @@
                     <p class="mingc ptitle">{$regtitlearr['cmmweixin']}</p>
                     <input type="text" id="weixin" name="weixin" class="mingc" value="{$mygift['weixin']}" placeholder="{$regtitlearr['cmmweixin']}" style="line-height: 38px;" onBlur="autosave('weixin');" onFocus="$(this).removeClass('onblur');if(this.value=='不能为空')this.value='';">
                     <img src="{FM_STATIC_MOBILE}public/images/right.png?v=3.0" id="right_weixin"  style=" width: 25px; display: none;  position: absolute;  top: 65px;right:10px;"/>
-                    {/if}         
+                    {/if}
                     {if $rdisplay['isqqhao']}
                     <p class="mingc ptitle">{$regtitlearr['cmmqqhao']}</p>
                     <br /><input type="text" id="qqhao" name="qqhao"  class="mingc" value="{$mygift['qqhao']}" placeholder="{$regtitlearr['cmmqqhao']}" style="line-height: 38px;" onBlur="autosave('qqhao');" onFocus="$(this).removeClass('onblur');if(this.value=='不能为空')this.value='';">
                     <img src="{FM_STATIC_MOBILE}public/images/right.png?v=3.0" id="right_qqhao"  style=" width: 25px; display: none;  position: absolute;  top: 65px;right:10px;"/>
-                    {/if}         
+                    {/if}
                     {if $rdisplay['isemail']}
                     <p class="mingc ptitle">{$regtitlearr['cmmemail']}</p>
                     <br /><input type="text" id="email" name="email" class="mingc" value="{$mygift['email']}" placeholder="{$regtitlearr['cmmemail']}" style="line-height: 38px;" onBlur="autosave('email');" onFocus="$(this).removeClass('onblur');if(this.value=='不能为空')this.value='';">
                     <img src="{FM_STATIC_MOBILE}public/images/right.png?v=3.0" id="right_email"  style=" width: 25px; display: none;  position: absolute;  top: 65px;right:10px;"/>
-                    {/if}         
+                    {/if}
                     {if $rdisplay['isjob']}
                     <p class="mingc ptitle">{$regtitlearr['cmmjob']}</p>
                     <br /><input type="text" id="job" name="job" class="mingc" value="{$mygift['job']}" placeholder="{$regtitlearr['cmmjob']}" style="line-height: 38px;" onBlur="autosave('job');" onFocus="$(this).removeClass('onblur');if(this.value=='不能为空')this.value='';">
                     <img src="{FM_STATIC_MOBILE}public/images/right.png?v=3.0" id="right_job"  style=" width: 25px; display: none;  position: absolute;  top: 65px;right:10px;"/>
-                    {/if}         
+                    {/if}
                     {if $rdisplay['isxingqu']}
                     <p class="mingc ptitle">{$regtitlearr['cmmxingqu']}</p>
                     <br /><input type="text" id="xingqu" name="xingqu" class="mingc" value="{$mygift['xingqu']}" placeholder="{$regtitlearr['cmmxingqu']}" style="line-height: 38px;" onBlur="autosave('xingqu');" onFocus="$(this).removeClass('onblur');if(this.value=='不能为空')this.value='';">
                     <img src="{FM_STATIC_MOBILE}public/images/right.png?v=3.0" id="right_xingqu"  style=" width: 25px; display: none;  position: absolute;  top: 65px;right:10px;"/>
-                    {/if}         
+                    {/if}
                     {if $rdisplay['isaddress']}
                     <p class="mingc ptitle">{$regtitlearr['cmmaddress']}</p>
                     <br /><input type="text" id="address" name="address" class="mingc" value="{$mygift['address']}" placeholder="{$regtitlearr['cmmaddress']}" style="border-bottom:0px solid #e7e7e7;" onBlur="autosave('address');" onFocus="$(this).removeClass('onblur');if(this.value=='不能为空')this.value='';">
@@ -459,10 +457,10 @@
                   <dd class="saveregstyle">
                     <input type="hidden" name="token" value="{$_W['token']}" />
                     <input type="submit" id="savereg" class="btn btn-large submit" value="{if $rvote['regpay'] == 1 && $voteordersn['ordersn'] == ''}保存并付款{else}保存{/if}" onclick="reg();return false" name="submit">
-                  </dd> 
+                  </dd>
                 </div>
 
-                  
+
               </form>
             </dd>
           </dl>
@@ -475,7 +473,7 @@
   </div>
 </div>
 
-{template 'fnav'}
+
 <!-- Modal -->
   <div class="modal fade" id="showpic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="  margin-top: 20%;">
       <div class="modal-dialog modal-lg">
@@ -490,8 +488,8 @@
             </div>
         </div>
       </div>
-  </div>  
-  
+  </div>
+
 <!-- Modal -->
   <div class="modal fade" id="webinfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="  margin-top: 20%;">
       <div class="modal-dialog modal-lg">
@@ -505,17 +503,17 @@
             </div>
         </div>
       </div>
-  </div>  
-{template 'tvote'}  
+  </div>
+{template 'tvote'}
 
-  
+
 <script type="text/javascript">
   var mygift = "{$mygift}";
   var subscribe = "{$rshare['subscribe']}";
   var follow = "{$follow}";
   if (subscribe == 1) {
     if (follow == 0 || follow == null) {
-    subsribe();
+    		subsribe();
     }
   }
   if  (mygift == '' || mygift == null) {
@@ -533,6 +531,10 @@
       //return false;
     }
   }
+	function clickup(type, mid){
+		var id = type + mid;
+		$("#" + id).click();
+	}
   function autosave(gid) {
       var id = "#"+gid;
       var value_id = $(id).val();
@@ -548,24 +550,24 @@
           //fmloadding('.overlay_container', data.msg);
           id = "#right_" + gid;
           $(id).show();
-          return 
+          return
         } else {
-          
+
           if (data.flag == 1) {
             if (data.isopenname) {
                $(id).val(data.msg);
                $(id).addClass('onblur');
             }
-            return 
+            return
           }
           if (data.flag ==2) {
             fmloadding('.overlay_container', data.msg);
-            return 
+            return
           }
         }
       },"json")
 
-  }   
+  }
   function reg() {
     fmloadding('.overlay_container','正在验证中...');
     var now = "{$now}";
@@ -594,17 +596,17 @@
     var open_address = "{$regtitlearr['open_address']}";
     var isphoto = "{$mygift['photo']}";
     var youkuurl = "{$mygift['youkuurl']}";
-    
+
 
 
     var subscribe = "{$rshare['subscribe']}";
     var follow = "{$follow}";
-  
+
     if (subscribe == 1) {
       if (follow == 0) {
-        
+
         subsribe();
-        
+
         return false;
       }
     }
@@ -616,7 +618,7 @@
       fmloadding('.overlay_container', btipend);
       return false;
     }
-    
+
     if (isrealname) {
       if ($('#realname').val() == '') {
       fmloadding('.overlay_container', '{$regtitlearr['cmmrealname']} 没有填写');
@@ -626,7 +628,7 @@
 
     if (open_mobile && ismobile) {
       if ($('#mobile').val() == '') {
-      fmloadding('.overlay_container', '{$regtitlearr['cmmmobile']} 没有填写');     
+      fmloadding('.overlay_container', '{$regtitlearr['cmmmobile']} 没有填写');
       return false;
       }
     }
@@ -636,7 +638,7 @@
         fmloadding('.overlay_container', '{$regtitlearr['cmmphotosname']} 没有填写');
         return false;
       }
-    }    
+    }
     if (open_regdes && isregdes) {
       if ($('#description').val() == '') {
         fmloadding('.overlay_container', '{$regtitlearr['cmmregdes']} 没有填写');
@@ -704,29 +706,29 @@
       var posturl = "{php echo $this->createMobileUrl('Treg', array( 'treg' => '1', 'from_user' => $from_user, 'rid' => $rid))}";
     }
     $.post(posturl, submitData, function(data) {
-      if (data.success == true) {   
+      if (data.success == true) {
         fmloadding('.overlay_container', data.msg);
         if (regpay == 1 && ordersn == '') {
           $('#pay').modal('show');
         }else{
           setTimeout(function () {
             window.location.href = data.linkurl;
-          },3000) 
+          },3000)
         }
-        return 
-        
+        return
+
       } else {
-        
+
         if (data.success == -1) {
           fmloadding('.overlay_container', data.msg);
-          return 
+          return
         }
-        
+
         if (data.success == 3) {
           fmloadding('.overlay_container', data.msg);
-          setTimeout(function () {                
+          setTimeout(function () {
             window.location.href = data.linkurl;
-          },1000) 
+          },1000)
           return
         }
       }
@@ -737,12 +739,12 @@
   function sendpic(){
     var subscribe = "{$rshare['subscribe']}";
     var follow = "{$follow}";
-  
+
     if (subscribe == 1) {
       if (follow == 0) {
-        
+
         subsribe();
-        
+
         return false;
       }
     }
@@ -763,12 +765,12 @@
 
     var subscribe = "{$rshare['subscribe']}";
     var follow = "{$follow}";
-  
+
     if (subscribe == 1) {
       if (follow == 0) {
-        
+
         subsribe();
-        
+
         return false;
       }
     }
@@ -778,15 +780,15 @@
      $('#webinfo').modal('toggle');
   }
   function sendp(){
-    
+
     var subscribe = "{$rshare['subscribe']}";
     var follow = "{$follow}";
-  
+
     if (subscribe == 1) {
       if (follow == 0) {
-        
+
         subsribe();
-        
+
         return false;
       }
     }
@@ -800,7 +802,7 @@
   }
   function afteradd(addmid){
     var html ='<div class="parentFileBox allbox' + addmid + '" id="parentFileBox' + addmid + '" style="width: 140px;"> ';
-            html +='<a href="javascript:;" class="webuploader-pick" id="webuploader' + addmid + '" onclick="javascript:$(\'#photo' + addmid + '\').click();"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;"/></a>';
+            html +='<a href="javascript:;" class="webuploader-pick" id="webuploader' + addmid + '" ><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;  top: 15%;" onclick="javascript:$(\'#photo' + addmid + '\').click();"/></a>';
             html +='<ul class="fileBoxUl">';
       html +='      <li id="fileBox_WU_FILE_' + addmid + '" class="diyUploadHover"> ';
       html +='        <div class="viewThumb" >';
@@ -815,22 +817,22 @@
       html +='        </div>';
       html +='      </li>';
       html +='    </ul></div>';
-            html += '<div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">';
-            html +='<input type="file" name="photo' + addmid + '" id="photo' + addmid + '" class="webuploader-element-invisible" style="display:none;" accept="image/*" capture="camera" onchange="changeone(\'photo' + addmid + '\', \'' + addmid + '\', \'\');" ></div>';
+            html += '<div style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px; overflow: hidden; bottom: auto; right: auto;">';
+            html +='<input type="file" name="photo' + addmid + '" id="photo' + addmid + '" class="webuploader-element-invisible" style="display:block;" accept="image/*" capture="camera" onchange="changeone(\'photo' + addmid + '\', \'' + addmid + '\', \'\');" ></div>';
        {if !empty($photosarr)}
          $("#afteradd").parent().append( html );
         {else}
          $("#afteraddnew").parent().append( html );
         {/if}
     return false;
-        
+
     }
-    
-    
+
+
     function vedioafter(mid){
     var html ='<div class="parentFileBox allboxv" id="parentFileBoxv" style="width: 100%;"> ';
-      html +='      <a href="javascript:;" class="webuploader-pick" id="webuploaderv" onclick="javascript:$(\'#vedio\').click();" style="width: 90%;height: 200px;"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;" /></a>';
-            
+      html +='      <a href="javascript:;" class="webuploader-pick" id="webuploaderv"  style="width: 90%;height: 200px;"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;" onclick="javascript:$(\'#vedio\').click();"/></a>';
+
       html +='        <ul class="fileBoxUl">';
       html +='          <li id="fileBox_WU_FILE_v" class="diyUploadHover" style="  width: 90%;height: 200px;"> ';
       html +='            <div class="viewThumb" id="vediopreview" style="  width: 100%;height: 200px;"> ';
@@ -848,17 +850,17 @@
       html +='          </li>';
       html +='        </ul> ';
       html +='    </div>';
-      html +='    <div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">';
-      html +='      <input type="file" name="vedio" id="vedio" class="webuploader-element-invisible" style="display:none;" accept="video/*" capture="camcorder" onchange="changeaudios(\'vedio\', \'v\')" >';
+      html +='    <div style="position: absolute; top: 0px; left: 0px; width:0px; height: 0px; overflow: hidden; bottom: auto; right: auto;">';
+      html +='      <input type="file" name="vedio" id="vedio" class="webuploader-element-invisible" style="display:block;" accept="video/*" capture="camcorder" onchange="changeaudios(\'vedio\', \'v\')" >';
       html +='    </div>';
         $("#vedioafter").parent().append( html );
     return false;
-        
+
     }
      function musicafter(mid){
     var html ='<div class="parentFileBox allboxm" id="parentFileBoxm" style="width: 100%;"> ';
-      html +='      <a href="javascript:;" class="webuploader-pick" id="webuploaderm" onclick="javascript:$(\'#music\').click();" style="width: 90%;height: 200px;"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;" /></a>';
-            
+      html +='      <a href="javascript:;" class="webuploader-pick" id="webuploaderm" style="width: 90%;height: 200px;"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 20%;" onclick="javascript:$(\'#music\').click();" /></a>';
+
       html +='        <ul class="fileBoxUl">';
       html +='          <li id="fileBox_WU_FILE_m" class="diyUploadHover" style="  width: 90%;height: 200px;"> ';
       html +='            <div class="viewThumb" id="musicpreview" style="  width: 100%;height: 200px;"> ';
@@ -872,12 +874,12 @@
       html +='          </li>';
       html +='        </ul> ';
       html +='    </div>';
-      html +='    <div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">';
-      html +='      <input type="file" name="music" id="music" class="webuploader-element-invisible" style="display:none;" accept="audio/*" capture="camcorder" onchange="changeaudios(\'music\', \'m\')" >';
+      html +='    <div style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px; overflow: hidden; bottom: auto; right: auto;">';
+      html +='      <input type="file" name="music" id="music" class="webuploader-element-invisible" style="display:block;" accept="audio/*" capture="camcorder" onchange="changeaudios(\'music\', \'m\')" >';
       html +='    </div>';
         $("#musicafter").parent().append( html );
     return false;
-        
+
     }
   function imagedel(mid) {
     fmloadding('.overlay_container', '正在删除中');
@@ -887,10 +889,10 @@
             url:url,
             type:"post",
             dataType:"json",
-            success:function(result){   
+            success:function(result){
                if(result.flag == '1'){
 
-                $(".allbox" + mid).remove();      
+                $(".allbox" + mid).remove();
                 fmloadding('.overlay_container', result.msg);
                 var tpxz = "{$rvote['tpxz']}";
           //if (result.photosarrnum < tpxz) {
@@ -898,7 +900,7 @@
           //}
               }else{
                  fmloadding('.overlay_container', result.msg);
-              }       
+              }
             }
         });
     return false;
@@ -911,14 +913,14 @@
             url:url,
             type:"post",
             dataType:"json",
-            success:function(result){   
+            success:function(result){
                if(result.flag == '1'){
-                  $(".allboxv").remove();  
+                  $(".allboxv").remove();
                   vedioafter(result.mid);
                 fmloadding('.overlay_container', result.msg);
               }else{
                  fmloadding('.overlay_container', result.msg);
-              }       
+              }
             }
         });
     return false;
@@ -932,14 +934,14 @@
             url:url,
             type:"post",
             dataType:"json",
-            success:function(result){   
+            success:function(result){
                if(result.flag == '1'){
-                  $(".allboxm").remove();  
+                  $(".allboxm").remove();
                   musicafter(result.mid);
                 fmloadding('.overlay_container', result.msg);
               }else{
                  fmloadding('.overlay_container', result.msg);
-              }       
+              }
             }
         });
     return false;
@@ -952,8 +954,8 @@
             url:url,
             type:"post",
             dataType:"json",
-            success:function(result){   
-               if(result.flag == '1'){ 
+            success:function(result){
+               if(result.flag == '1'){
                   $("#diySuccess" + mid).addClass('isfm');
                   $("#diySuccess" + mid).html('');
           $("#diySuccess" + result.delmid).removeClass('isfm');
@@ -961,13 +963,13 @@
                 fmloadding('.overlay_container', result.msg);
               }else{
                  fmloadding('.overlay_container', result.msg);
-              }       
+              }
             }
         });
     return false;
   }
-  
-  
+
+
     function upload(filename, posturl, mid, photoname) {
         var width = "{$rvote['autolitpic']}";
         var zl = "{php echo $rvote['autozl']/100}";
@@ -985,33 +987,33 @@
             fmloadding('.overlay_container', amsg);
             return false;
           }
-          
+
             //console.log(rst.base64);
           setTimeout(function () {
             document.getElementById('webuploader' + mid).style.display = 'none';
             document.getElementById('diyBar' + mid).style.display = 'block';
-            
+
             // 发送到后端
             var xhr = new XMLHttpRequest();
             var data = {
               base64: rst.base64,
               size: rst.base64.length // 校验用，防止未完整接收
             };
-          
-          
-          
+
+
+
             xhr.upload.addEventListener('progress', function(e, m){ uploadProgress(e,mid); }, false);
             xhr.addEventListener("load",  function(e, m){ uploadComplete(e,mid); }, false);
             xhr.addEventListener("error", function(e, m){ uploadFailed(e,mid); }, false);
             xhr.addEventListener("abort", function(e, m){ uploadCanceled(e,mid); }, false);
-            
+
 
             xhr.open('POST', posturl);
             xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
             xhr.onreadystatechange = function () {
               if (xhr.readyState === 4 && xhr.status === 200) {
                 var result = JSON.parse(xhr.response);
-                console.log(result);            
+                console.log(result);
                 //uppic();
                 if (result.success == true) {
                   fmloadding('.overlay_container', result.msg);
@@ -1021,16 +1023,16 @@
                   $("#parentFileBox" + mid).removeClass("allbox" + mid);
                   $("#parentFileBox" + mid).addClass("allbox" + result.lastmid);
                   document.getElementById('diyBar' + mid).style.display = 'none';
-                  document.getElementById('preview' + mid).style.display = 'block';           
+                  document.getElementById('preview' + mid).style.display = 'block';
                   document.getElementById('preview' + mid).src = result.imgurl;
                   document.getElementById('diyCancel' + result.lastmid).style.display = 'block';
                   document.getElementById('diySuccess' + result.lastmid).style.display = 'block';
                   if (photoname == 'fm') {
-                  //  console.log(result.lastmid);        
+                  //  console.log(result.lastmid);
                     $("#diySuccess" + result.lastmid).addClass('isfm');
                     $("#diySuccess" + result.lastmid).html('');
                   }
-                  
+
 
                   if (photoname != '' && photoname != 'fm') {
                     document.getElementById('viewThumb' + mid).innerHTML = '<img src="'+result.imgurl+'" id="preview'+mid+'" width="100%;">';
@@ -1040,25 +1042,25 @@
                     afteradd(result.addlastmid);
                   }
                   //return false;
-                  
+
                 } else {
                   fmloadding('.overlay_container', result.msg);
                   //alert(result.msg);
                   if (result.flag == 3) {
-                    setTimeout(function () {                
+                    setTimeout(function () {
                       window.location.href = result.linkurl;
-                    },1000) 
+                    },1000)
                   }
                   return false;
                 }
-                return            
+                return
               }
             };
             xhr.send(JSON.stringify(data)); // 发送base64
             //rst.base64 = null;
             //xhr.Response.End();
-          }, 100);            
-          
+          }, 100);
+
         })
 
             .catch(function (err) {
@@ -1067,28 +1069,28 @@
                 alert(err);
             });
     }
-    
-    function uploadProgress(evt,mid) {      
+
+    function uploadProgress(evt,mid) {
        if (evt.lengthComputable) {
         //iBytesUploaded = evt.loaded;
         //iBytesTotal = evt.total;
         var iPercentComplete = Math.round(evt.loaded * 100 / evt.total);
         //var iBytesTransfered = bytesToSize(iBytesUploaded);
 
-        
+
         document.getElementById('diyProgressText' + mid).innerHTML = iPercentComplete.toString() + '%' ;
         document.getElementById('diyProgress' + mid).style.left = (iPercentComplete * 1).toString() + '%';
         document.getElementById('diyProgressText' + mid).style.left = (iPercentComplete * 1 - 15).toString() + '%';
-        
-        
+
+
         if (iPercentComplete == 100) {
           document.getElementById('diyProgressText' + mid).innerHTML = '上传云端中...' ;
           document.getElementById('diyProgressText' + mid).style.left = '30%';
-        }     
+        }
             }
             else {
         document.getElementById('diyProgressText' + mid).innerHTML = 'unable to compute';
-        
+
             }
         }
     function bytesToSize(bytes) {
@@ -1100,28 +1102,28 @@
     function uploadComplete(evt,mid) {
             /* This event is raised when the server send back a response */
             //alert(evt.target.responseText);
-      
+
       var progressNumber = 'diyProgressText' + mid;
-      
+
       document.getElementById(progressNumber).innerHTML = '上传完成';
       document.getElementById(progressNumber).style.left = '35%';
     }
- 
+
     function uploadFailed(evt,mid) {
       var progressNumber = 'diyProgressText' + mid;
       document.getElementById(progressNumber).innerHTML = '上传时出错！';
       document.getElementById(progressNumber).style.left = '31%';
            // alert("There was an error attempting to upload the file.");
     }
- 
+
     function uploadCanceled(evt,mid) {
-    
+
       var progressNumber = 'diyProgressText' + mid;
            // alert("The upload has been canceled by the user or the browser dropped the connection.");
       document.getElementById(progressNumber).innerHTML = '取消上传';
       document.getElementById(progressNumber).style.left = '35%';
    }
-    
+
   function changeone(photo, mid, photoname) {
     var subscribe = "{$rshare['subscribe']}";
     var follow = "{$follow}";
@@ -1134,27 +1136,27 @@
     var preview = 'preview' + mid,
       pic = document.getElementById(preview),
       file = document.getElementById(photo);
-   
+
     var ext=file.value.substring(file.value.lastIndexOf(".")+1).toLowerCase();
-    //alert(ext); 
+    //alert(ext);
      // gif在IE浏览器暂时无法显示
      if(ext!='png'&&ext!='jpg'&&ext!='jpeg'){
        fmloadding('.overlay_container', '图片的格式必须为png或者jpg或者jpeg格式！');
        return;
      }
-     
-    
+
+
     var posturl = "{php echo $this->createMobileUrl('treg', array('from_user' => $from_user, 'upphotosone' => 'start','rid' => $rid))}&mid=" + mid + "&photoname=" + photoname;
     //var mid = '0';
     upload(file, posturl, mid, photoname);
-     
+
      var isIE = navigator.userAgent.match(/MSIE/)!= null,
        isIE6 = navigator.userAgent.match(/MSIE 6.0/)!= null;
 
      if(isIE) {
       file.select();
       var reallocalpath = document.selection.createRange().text;
-   
+
       // IE6浏览器设置img的src为本地路径可以直接显示图片
        if (isIE6) {
         pic.src = reallocalpath;
@@ -1192,24 +1194,24 @@
       //var music = "#" + audio;
         //空对象然后添加
       var file = document.getElementById(audio).files[0];
-      
+
       var fd = new FormData();
-       
+
       //fd.append(audio, $(music).val());
       fd.append("audiotype", audio);
       fd.append("files", file);
-        
+
       setTimeout(function () {
         document.getElementById('webuploader' + mid).style.display = 'none';
         document.getElementById('diyBar' + mid).style.display = 'block';
 
         //XMLHttpRequest 原生方式发送请求
-        var xhr = new XMLHttpRequest();  
+        var xhr = new XMLHttpRequest();
         xhr.upload.addEventListener('progress', function(e, m){ uploadProgress(e,mid); }, false);
         xhr.addEventListener("load",  function(e, m){ uploadComplete(e,mid); }, false);
         xhr.addEventListener("error", function(e, m){ uploadFailed(e,mid); }, false);
         xhr.addEventListener("abort", function(e, m){ uploadCanceled(e,mid); }, false);
-        
+
         xhr.open("POST" ,"{php echo $this->createMobileUrl('Treg', array('from_user' => $from_user, 'upaudios' => 'start', 'rid' => $rid))}" , true);
         xhr.send(fd);
         //xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
@@ -1221,25 +1223,25 @@
               if (result.success == true) {
 
                 fmloadding('.overlay_container', result.msg);
-                
-                return 
+
+                return
               } else {
                 fmloadding('.overlay_container', result.msg);
                   //alert(result.msg);
                   if (result.flag == 3) {
-                    setTimeout(function () {                
+                    setTimeout(function () {
                       window.location.href = result.linkurl;
-                    },1000) 
+                    },1000)
                   }
                   return false;
-              }             
-              return false;           
-            }     
+              }
+              return false;
+            }
         };
       });
       return false;
     }
-</script> 
+</script>
   </div>
   <style>
     h5{color:#555;}
@@ -1267,12 +1269,12 @@
   }
 ?>
   <script type="text/javascript">
-  
-  
+
+
   wx.config(jssdkconfig);
-  
+
   var $_share = {php echo json_encode($_share);};
-  
+
   if(typeof sharedata == 'undefined'){
     sharedata = $_share;
   } else {
@@ -1281,7 +1283,7 @@
     sharedata['link'] = sharedata['link'] || $_share['link'];
     sharedata['imgUrl'] = sharedata['imgUrl'] || $_share['imgUrl'];
   }
-  
+
   function tomedia(src) {
     if(typeof src != 'string')
       return '';
@@ -1297,7 +1299,7 @@
       return window.sysinfo.attachurl+ src;
     }
   }
-  
+
   if(sharedata.imgUrl == ''){
     var _share_img = $('body img:eq(0)').attr("src");
     if(_share_img == ""){
@@ -1306,7 +1308,7 @@
       sharedata['imgUrl'] = tomedia(_share_img);
     }
   }
-  
+
   if(sharedata.desc == ''){
     var _share_content = _removeHTMLTag($('body').html());
     if(typeof _share_content == 'string'){
@@ -1333,7 +1335,7 @@
           'menuItem:share:email'
         ]
     });
-    
+
     document.querySelector('#startRecord').onclick = function () {
       $(this).css('display','none');
       $("#playVoice").css('display','none');
@@ -1346,10 +1348,10 @@
       });
       startTimer();
     };
-        
+
     var localId;
     document.querySelector('#stopRecord').onclick = function () {
-      stopTimer(); 
+      stopTimer();
       wx.stopRecord({
         success: function (res) {
         localId = res.localId;
@@ -1389,10 +1391,10 @@
               $("#startRecord").css('display','inline-block');
         }
       });
-    };  
+    };
     wx.onVoiceRecordEnd({
       complete: function (res) {
-        stopTimer(); 
+        stopTimer();
         localId = res.localId;
          wx.uploadVoice({
           localId: localId,
@@ -1441,7 +1443,7 @@
     });
 
   });
-   
+
   var seconds = 60;
    var handle;
    function startTimer() {
@@ -1450,14 +1452,14 @@
    function stopTimer() {
     clearInterval(handle);
     seconds = 60;
-    $("#mm").html(''); 
+    $("#mm").html('');
     document.getElementById('mm').style.padding = '0';
    }
   function timer() {
     seconds -= 1;
     $("#mm").html(seconds);
     document.getElementById('mm').style.padding = '6px';
-  
+
     if (seconds == 0) {
     stopTimer();
     }

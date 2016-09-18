@@ -1,7 +1,7 @@
 
 .ctn-search{background-color: #f7f9f8;padding: 15px 0px 15px 15px;margin-bottom: 15px;}
 .search-input{position: relative;}
-.job-search{border: 1px solid #b7b7b7;border-radius: 4px;width: 85%;height: 32px;line-height: 32px;font-size: 16px;padding: 0px 0.5em;padding-right: 30px;}
+.job-search{border: 1px solid #b7b7b7;border-radius: 4px;width: 74%;height: 32px;line-height: 32px;font-size: 16px;padding: 0px 0.5em;padding-right: 30px;}
 .job-search-btn{display: block;width: 18px;height: 32px;position: absolute;left: 87%;top:0px;background: url("../images/icon_search_gray.png") no-repeat center center;z-index: 2;background-size: 18px 20px;}
 .job-search:focus+.job-search-btn{background: url("../images/icon_search.png") no-repeat center center;}
 

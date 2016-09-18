@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=1.0">
+ <script type="text/javascript" src="{STYLE_PATH}/js/jquery-1.7.2.min.js"></script> 
+ <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+</head>
+<title></title>
+<style>
+body {
+    background-color: #ECECEC;
+    font-family: Microsoft YaHei,Helvitica,Verdana,Tohoma,Arial,san-serif;
+    margin: 0;
+    overflow-x: hidden;
+    padding: 0;
+	color: #666666;
+}
+</style>
+    
+</head>
+<body style="background-color: ;">
+
+<script>
+$(function(){  
+	getLocation(); 
+		
+  });
+
+	function getLocation(){
+	    var options={
+	        enableHighAccuracy:true, 
+	        maximumAge:1000
+	    }
+	//   swal({title: "系统加载中",text: "请耐心等待",showConfirmButton: false});
+	    if(navigator.geolocation){
+	        //浏览器支持geolocation
+	        navigator.geolocation.getCurrentPosition(showPosition,errorPosition,options);	        
+	    }else{	    	
+	    	alert("浏览器不支持geolocation定位，请打开gps");
+	    	wx.closeWindow();
+	        //浏览器不支持geolocation
+	    }
+	}
+
+
+	function errorPosition(error){
+		alert("获取地址失败，请打开gps");
+		wx.closeWindow();
+		
+		
+	}
+
+	function showPosition(position)
+	{
+	console.log(position.coords.latitude +
+	"<br />Longitude: " + position.coords.longitude);
+
+	var location= position.coords.latitude+"," + position.coords.longitude;
+
+	/* var point = new BMap.Point(116.331398,39.897445); */
+
+	//百度接口
+	var url="http://api.map.baidu.com/geocoder/v2/"+
+	 "?ak=qen1OGw9ddzoDQrTX35gote2&callback=renderReverse&location="+location+"&output=json&pois=0";
+	$.ajax({
+	      type : "get",
+	      async:false,
+	      url : url,
+	      dataType : "jsonp",
+	      jsonp: "callback",//传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(默认为:callback)
+	      jsonpCallback:"renderReverse",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
+	      success : function(json){    	
+	          if (json.status=="0"){
+	        	  var address=json.result.addressComponent;
+	   
+	        	  var str=address.province+address.city+address.district+address.street;
+	        	 
+	              str=str+address.sematic_description;
+	              //alert(str);
+	        	  var url_fansgroup="{php echo $this->createMobileUrl('addr_group',array('op'=>'moveFansGroup'))}";
+	        	$.ajax({
+	        	  type : "post",
+	      	      async:false,
+	      	      url : url_fansgroup,
+	      	      dataType : "json",
+	      	      data:{'address':str},
+	      	      success:function(result){
+					if(result['code']==1){
+						alert(result['msg']);
+						if (result['url']==""){
+						  wx.closeWindow();
+						  return;
+						}
+						window.location.href=result['url'];
+					}else{
+						alert("处理失败，"+result['msg']);
+				
+						  wx.closeWindow();
+					}
+		      	      }
+		        	});
+	          } else {
+	        	  alert("获取定位失败");
+	        }
+	      },
+	      error:function(){
+	          alert('fail');
+	      }
+	  });
+
+	}
+	
+
+
+</script>
+</body>
+</html>

@@ -14,7 +14,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes"> <!-- apple devices fullscreen -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <!-- Mobile Devices Support @end -->
-      
+
  	<link rel='stylesheet' href='{FM_STATIC_MOBILE}stylebase/css/style.css?{php echo time()}' type='text/css' media='all' />
 	<script type="text/javascript" src="{$_W['siteroot']}app/resource/js/lib/jquery-1.11.1.min.js"></script>
 
@@ -23,10 +23,10 @@
 	<script type="text/javascript">
 	// jssdk config 对象
 	jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} || {};
-	
+
 	// 是否启用调试
 	jssdkconfig.debug = false;
-	
+
 	jssdkconfig.jsApiList = [
 		'checkJsApi',
 		'onMenuShareTimeline',
@@ -41,7 +41,7 @@
 
 <body>
 <!--body-->
-{template 'templates/stylebase/tvote'}
+{template 'tvote'}
 <!--<div style="width:100%;border:0px;"><img style="vertical-align:top; display:block;border:0;width:100%;padding:0;margin:0;width:100%;border:0px;" alt="" src="{php echo toimage($reply['picture'])}"></div>-->
 <div id="content" style="max-width: 640px;margin: 0 auto;">
     <div class="masonry" style="margin: 0px auto; ">
@@ -79,42 +79,42 @@
 				</div>
 			</div>
 		</div>
-		<script type="text/javascript">  
+		<script type="text/javascript">
 			$(document).ready(function() {
-			    var track_click = 0; //track user click on "load more" button, righ now it is 0 click  
+			    var track_click = 0; //track user click on "load more" button, righ now it is 0 click
 			    var total_pages = {$total_pages};
-			    $('#results').load("{php echo $this->createMobileUrl('commentdata', array('rid' => $rid,'pagesnum' => $psize,'tfrom_user' => $tfrom_user))}", {'page':track_click}, function() {track_click++;}); //initial data to load   
-			    $(".load_more").click(function (e) { //user clicks on button      
-			        $(this).hide(); //hide load more button on click  
-			        $('.animation_image').show(); //show loading image   
-			        if(track_click <= total_pages) //make sure user clicks are still less than total pages  
-			        {  
-			            $.post('{php echo $this->createMobileUrl('commentdata', array('rid' => $rid,'pagesnum' => $psize,'tfrom_user' => $tfrom_user))}',{'page': track_click}, function(data) {  
-			                $(".load_more").show(); //bring back load more button  
-			                $("#results").append(data); //append data received from server  
-			                //$("html, body").animate({scrollTop: $("#load_more_button").offset().bottom}, 500);  
-			                $('.animation_image').hide(); //hide loading image once data is received  
-			                track_click++; //user click increment on load button  
-			            }).fail(function(xhr, ajaxOptions, thrownError) {   
-			                alert(thrownError); //alert any HTTP error  
-			                $(".load_more").show(); //bring back load more button  
-			                $('.animation_image').hide(); //hide loading image once data is received  
-			            });  
-			            if(track_click >= total_pages-1)  
-			            {  
+			    $('#results').load("{php echo $this->createMobileUrl('commentdata', array('rid' => $rid,'pagesnum' => $psize,'tfrom_user' => $tfrom_user))}", {'page':track_click}, function() {track_click++;}); //initial data to load
+			    $(".load_more").click(function (e) { //user clicks on button
+			        $(this).hide(); //hide load more button on click
+			        $('.animation_image').show(); //show loading image
+			        if(track_click <= total_pages) //make sure user clicks are still less than total pages
+			        {
+			            $.post('{php echo $this->createMobileUrl('commentdata', array('rid' => $rid,'pagesnum' => $psize,'tfrom_user' => $tfrom_user))}',{'page': track_click}, function(data) {
+			                $(".load_more").show(); //bring back load more button
+			                $("#results").append(data); //append data received from server
+			                //$("html, body").animate({scrollTop: $("#load_more_button").offset().bottom}, 500);
+			                $('.animation_image').hide(); //hide loading image once data is received
+			                track_click++; //user click increment on load button
+			            }).fail(function(xhr, ajaxOptions, thrownError) {
+			                alert(thrownError); //alert any HTTP error
+			                $(".load_more").show(); //bring back load more button
+			                $('.animation_image').hide(); //hide loading image once data is received
+			            });
+			            if(track_click >= total_pages-1)
+			            {
 			                $(".load_more").attr("disabled", "disabled");
 							$(".load_more").html("全部加载完成");
-			            }  
-			         }  
-			    });  
-			});  
+			            }
+			         }
+			    });
+			});
 		</script>
 		<ul id="results" class="list" style="   overflow: hidden; background: #f5f7fa;">
 		</ul>
-		{if $total > $psize}	
-			<div align="center">  
+		{if $total > $psize}
+			<div align="center">
 				<button class="usr_more load_more label label-info" id="load_more_button" style="  width: 100%;"><i class="fa fa-random"></i> 查看更多</button>
-				<div class="animation_image" style="display:none;width:50px;color:#fff"><img src="{FM_STATIC_MOBILE}public/photos/ajax-loader.gif" width="50"> Loading...</div>  
+				<div class="animation_image" style="display:none;width:50px;color:#fff"><img src="{FM_STATIC_MOBILE}public/photos/ajax-loader.gif" width="50"> Loading...</div>
 			</div>
 		{/if}
 
@@ -189,13 +189,13 @@
 				<ul class="j_smile_container smile_list scroller">
 					<li>
 					<div>
-						  <a href="#" data-smile="呵呵"><span class="smile_popo" style="background-position-y: -0px;"></span></a> 
-						  <a href="#" data-smile="哈哈"><span class="smile_popo" style="background-position-y: -30px;"></span></a> 
-						  <a href="#" data-smile="吐舌"><span class="smile_popo" style="background-position-y: -60px;"></span></a> 
-						  <a href="#" data-smile="啊"><span class="smile_popo" style="background-position-y: -90px;"></span></a> 
-						  <a href="#" data-smile="酷"><span class="smile_popo" style="background-position-y: -120px;"></span></a> 
-						  <a href="#" data-smile="怒"><span class="smile_popo" style="background-position-y: -150px;"></span></a> 
-						  <a href="#" data-smile="开心"><span class="smile_popo" style="background-position-y: -180px;"></span></a> 
+						  <a href="#" data-smile="呵呵"><span class="smile_popo" style="background-position-y: -0px;"></span></a>
+						  <a href="#" data-smile="哈哈"><span class="smile_popo" style="background-position-y: -30px;"></span></a>
+						  <a href="#" data-smile="吐舌"><span class="smile_popo" style="background-position-y: -60px;"></span></a>
+						  <a href="#" data-smile="啊"><span class="smile_popo" style="background-position-y: -90px;"></span></a>
+						  <a href="#" data-smile="酷"><span class="smile_popo" style="background-position-y: -120px;"></span></a>
+						  <a href="#" data-smile="怒"><span class="smile_popo" style="background-position-y: -150px;"></span></a>
+						  <a href="#" data-smile="开心"><span class="smile_popo" style="background-position-y: -180px;"></span></a>
 						  <a href="#" data-smile="汗"><span class="smile_popo" style="background-position-y: -210px;"></span></a>
 						  <a href="#" data-smile="泪"><span class="smile_popo" style="background-position-y: -240px;"></span></a>
 						  <a href="#" data-smile="黑线"><span class="smile_popo" style="background-position-y: -270px;"></span></a>
@@ -310,7 +310,7 @@
         });
     })
      $('#bottom-share-button').click(function(){
-         fminfo("点击右上角，进行分享"); 
+         fminfo("点击右上角，进行分享");
         $('#share_layer').show();
     });
     $('.smile_btn_font').click(function(){
@@ -331,7 +331,7 @@
     $('.j_postor_blue_kit_btn_return').click(function(){
         $(".pb_poster_layer").toggle();
     });
-    
+
 	$('.j_submit_btn').click(function(){
 		var content = $('#comment_content').val();
 		//alert (content);
@@ -340,10 +340,10 @@
 			return false;
 		}
 		var bbstype = "bbsreply";
-		var iscode = "{$rvote['iscode']}";		
+		var iscode = "{$rvote['iscode']}";
 		bbsreply(content, iscode, bbstype);
-		
-	});	
+
+	});
 </script>
 
 
@@ -369,12 +369,12 @@
 	}
 ?>
 	<script type="text/javascript">
-	
-	
+
+
 	wx.config(jssdkconfig);
-	
+
 	var $_share = {php echo json_encode($_share);};
-	
+
 	if(typeof sharedata == 'undefined'){
 		sharedata = $_share;
 	} else {
@@ -383,7 +383,7 @@
 		sharedata['link'] = sharedata['link'] || $_share['link'];
 		sharedata['imgUrl'] = sharedata['imgUrl'] || $_share['imgUrl'];
 	}
-	
+
 	function tomedia(src) {
 		if(typeof src != 'string')
 			return '';
@@ -399,7 +399,7 @@
 			return window.sysinfo.attachurl+ src;
 		}
 	}
-	
+
 	if(sharedata.imgUrl == ''){
 		var _share_img = $('body img:eq(0)').attr("src");
 		if(_share_img == ""){
@@ -408,14 +408,14 @@
 			sharedata['imgUrl'] = tomedia(_share_img);
 		}
 	}
-	
+
 	if(sharedata.desc == ''){
 		var _share_content = _removeHTMLTag($('body').html());
 		if(typeof _share_content == 'string'){
 			sharedata.desc = _share_content.replace($_share['title'], '')
 		}
 	}
-	wx.ready(function () {			
+	wx.ready(function () {
 		wx.onMenuShareAppMessage(sharedata);
 		wx.onMenuShareTimeline(sharedata);
 		wx.onMenuShareQQ(sharedata);

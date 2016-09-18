@@ -13,7 +13,7 @@
     .con {
       padding: 15px 0;
       margin-top: -60px;
-      background-size: 100% auto; 
+      background-size: 100% auto;
       max-width: 640px;
       margin: 0 auto;
 
@@ -24,7 +24,7 @@
       height: 60px;
       background-size: auto 100%;
       position: relative;
-      z-index: 10px; 
+      z-index: 10px;
       max-width: 640px;
       margin: 0 auto;
       background: {$rbody_photosvote['photosvote_tj_bgcolor']} url({php echo toimage($rbody_photosvote['photosvote_tj_bgimg'])}) repeat-x -60px 0;
@@ -70,7 +70,7 @@
         .con {
             padding: 15px 0;
             margin-top: -60px;
-            background-size: 100% auto; 
+            background-size: 100% auto;
             max-width: 640px;
             margin: 0 auto;
 
@@ -78,7 +78,7 @@
 
           .con .desnr{
               text-indent:2em;
-              
+
           }
           .con .desnr .more {
               text-decoration: none;
@@ -91,7 +91,7 @@
     {/if}
 
      .top { font-size: 14px; }
-     
+
      .modal-open .modal {
       overflow-x: hidden;
       overflow-y: auto;
@@ -110,10 +110,9 @@
       font-size: 14px;
       margin-top: 0px;
       background: rgba(0, 0, 0, 0.4);
-      
+
     }
 </style>
-
 
 {if !empty($banners)}
   <style type="text/css">
@@ -179,7 +178,7 @@
           {/loop}
       </ul>
       <ol>
-        {loop $banners $$slideNum $banner}
+        {loop $banners $slideNum $banner}
           <li{if $slideNum == 0} class="on"{/if}></li>
         {/loop}
       </ol>
@@ -215,37 +214,25 @@
       <a href="{php echo $this->createMobileUrl('tags', array('rid' => $rid, 'tagpid' => $_GPC['category']['parentid'] , 'tagid' => $_GPC['category']['childid'], 'from' => $_GPC['do']))}" class="btn  btn-danger pull-right">选择分组</a>
     </p>
   {/if}
-  
+
   {template 'tmoshi'}
   {if ($rdisplay['tmoshi'] == 1 || $rdisplay['tmoshi'] == 2 || $rdisplay['tmoshi'] == 3)}
-      {if $total > $psize}  
-        <div align="center">  
+      {if $total > $psize}
+        <div align="center">
           <button class="usr_more load_more label label-info" id="load_more_button"><i class="fa fa-random"></i> 查看更多</button>
-          <div class="animation_image" style="display:none;width:50px;color:#fff"><img src="{FM_STATIC_MOBILE}public/photos/ajax-loader.gif" width="50"> Loading...</div>  
+          <div class="animation_image" style="display:none;width:50px;color:#fff"><img src="{FM_STATIC_MOBILE}public/photos/ajax-loader.gif" width="50"> Loading...</div>
         </div>
       {/if}
       {if $rdisplay['isindex'] == 1 && !empty($advs)}{template 'zanzhu'}{/if}
   {/if}
-  
+
   <img src="{FM_STATIC_MOBILE}styleeasy/img/back.png" class="backtop" onclick="gotoTop();return false" style="width:25%;    position: fixed;bottom: 4rem;right: .3rem;vertical-align: middle;">
 
   <div class="copyright">
     {if $rdisplay['iscopyright']==1}<a href="{$rdisplay['copyrighturl']}">&copy;{$rdisplay['copyright']}</a>{else}<a href="javascript:;">{if empty($footer_off)}&copy;{if empty($_W['account']['name'])}FantasyMoons Team团队{else}{$_W['account']['name']}{/if}&nbsp;&nbsp;{$_W['setting']['copyright']['statcode']}{/if}</a>{/if}
   </div>
   <div class="h"></div>
-</div><!--
-<script>
-    var url = 'http://chaxun.1616.net/s.php?type=ip&output=json&callback=?&_=' + Math.random();
-    $.getJSON(url, function(data) {
-        var ipurl="{php echo $this->createMobileUrl('Local_ip', array('rid'=>$rid))}";
-        $.post(ipurl,{ip:data.Ip},function(data){
-         // alert(data);
-        });
-         
-      //  alert(data.Ip);
-    });
-</script>-->
-
+</div>
 {template 'fnav'}
 {template 'tvote'}
 {template 'footer'}

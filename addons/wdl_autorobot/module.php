@@ -45,12 +45,12 @@ class wdl_autorobotModule extends WeModule
                                         return $this->analyzeText($message, $order);                        
                                     }';
                 } else {
-                    preg_match('/$autorobot_flag='(.*)'\;/', $api_content_arr[1], $res);
+                    preg_match('/$autorobot_flag="(.*)"\;/', $api_content_arr[1], $res);
                     if ($res[0]) {
                         $api_content_arr[1] = str_replace($res[0], '$autorobot_flag="' . $autorobot_flag . '";', $api_content_arr[1]);
                     }
                     unset($res);
-                    preg_match("/$rule_robot_keyword="(.*)"\;/", $api_content_arr[1], $res);
+                    preg_match('/$rule_robot_keyword="(.*)"\;/', $api_content_arr[1], $res);
                     if ($res[0]) {
                         $api_content_arr[1] = str_replace($res[0], '$rule_robot_keyword="' . $rule_data . '";', $api_content_arr[1]);
                     }

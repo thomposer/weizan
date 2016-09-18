@@ -1,0 +1,220 @@
+{template 'header'}
+<html>
+	<head>
+		<title>商户管理</title>
+		<style>
+			body,input,button,a{font:normal 14px "Microsoft Yahei";margin:0;padding:0}
+			.odform-tit{font-weight:normal;font-size:25px;color:#595757;line-height:40px;text-align:center;border-bottom:1px solid #c9cacb;margin:0;padding:5% 0}
+			.odform-tit img{height:40px;vertical-align:middle;margin-right:15px}
+			.odform{padding:5%}
+			.input-group{margin-bottom:5%;position:relative}
+			.input-group label{padding:2% 0;position:absolute;color:#595757}
+			.input-group input{margin-left:5em;padding:3% 5%;box-sizing:border-box;background:#efeff0;border:0;border-radius:5px;color:#595757;width:75%}
+			.odform button{background:#8ec31f;color:#fff;text-align:center;border:0;border-radius:10px;padding:3%;width:100%;font-size:16px}
+			background-repeat:no-repeat;background-position:95% center;background-size:auto 50%}
+			background-repeat:no-repeat;background-position:95% center;background-size:auto 20%}
+		</style>
+	</head>
+	<body>
+		<h1 class="odform-tit">商户管理</h1>
+		<div class="odform">
+			<form action="{php echo $this->createMobileUrl('halfbusshop',array('op'=>'modify', 'bus_id'=>$list['bus_id']));}" method="post" enctype="multipart/form-data">
+				<div class="input-group">
+					<img src="{php echo tomedia($list['img']);}" width="100%">
+				</div>
+				<div class="input-group">
+					<a href="{php echo $this->createMobileUrl('halfbusshop', array('op'=>'openchangepwd', 'bus_id'=>$list['bus_id']));}" style="color:red;">修改密码</a>
+				</div>
+				<div class="input-group">
+					<label for="wdname">商户名称</label>
+					<input type="text" id="name"  name="name" value="{$list['name']}" />
+				</div>
+				<div class="input-group">
+					<label for="khname">商户图片</label>
+					<input type="file" class="file" id="img" name="img">
+					<p style="color:red">注：若不修改商户图片，无需上传</p>
+				</div>
+				<div class="input-group">
+					<label for="khname">营业时间</label>
+					<input type="text" id="businesshour"  name="businesshour" value="{$list['businesshour']}" />
+				</div>
+				<div class="input-group">
+					<label for="khname">省</label>
+					<select onblur="getcity(this.value);" id="province" name="province" style="margin-left:6.5em;padding:3% 5%;box-sizing:border-box;background:#efeff0;border:0;border-radius:5px;color:#595757;width:75%;height:40px">
+						{loop $province $item}
+							<option value="{$item['province']}">{$item['province']}</option>
+						{/loop}
+					</select>
+				</div>
+				<div class="input-group">
+					<label for="khname">市</label>
+					<select id="city" onblur="getcountry(this.value);" name="city" style="margin-left:6.5em;padding:3% 5%;box-sizing:border-box;background:#efeff0;border:0;border-radius:5px;color:#595757;width:75%;height:40px">
+						<option value="{$list['city']}">{$list['city']}</option>
+					</select>
+				</div>
+				<div class="input-group">
+					<label for="khname">县/区</label>
+					<select id="country" onblur="getcir(this.value);" name="country" style="margin-left:6.5em;padding:3% 5%;box-sizing:border-box;background:#efeff0;border:0;border-radius:5px;color:#595757;width:75%;height:40px">
+						<option value="{$list['county']}">{$list['county']}</option>
+					</select>
+				</div>
+				<div class="input-group">
+					<label for="khname">中心圈</label>
+					<select id="cir" name="cir" style="margin-left:6.5em;padding:3% 5%;box-sizing:border-box;background:#efeff0;border:0;border-radius:5px;color:#595757;width:75%;height:40px">
+						<option value="{$list['cir_id']}">{$list['cir_name']}</option>
+					</select>
+				</div>
+				<div class="input-group">
+					<label for="khname">详细地址</label>
+					<input type="text" id="address"  name="address" value="{$list['address']}"/>
+				</div>
+				<div class="input-group">
+					<label for="khname">联系方式</label>
+					<input type="text" id="phone"  name="phone" value="{$list['phone']}"/>
+				</div>
+				<div class="input-group">
+					<label for="khname">优惠方式</label>
+					<select id="discountsign" onblur="getdiscounttime(this.value);" name="discountsign" style="margin-left:6.5em;padding:3% 5%;box-sizing:border-box;background:#efeff0;border:0;border-radius:5px;color:#595757;width:75%;height:40px">
+						<option value="0" {if $list['discount_sign'] == 0}selected{/if}>天天享</option>
+						<option value="1" {if $list['discount_sign'] == 1}selected{/if}>每周</option>
+						<option value="2" {if $list['discount_sign'] == 2}selected{/if}>每月</option>
+					</select>
+				</div>
+				<div class="input-group">
+					<label for="khname">优惠时间</label>
+					<input type="text" id="discounttime"  name="discounttime" value="{$list['discounttime']}"/>
+					<p style="color:red">如：每周二享填写“2”  每月2号享填写“02”  注：【天天享】无需填写</p>
+				</div>
+				<div class="input-group">
+					<label for="khname">优惠次数</label>
+					<input type="text" id="discount_num"  name="discount_num" value="{$list['discount_num']}"/>
+					<p style="color:red">注：每次打折限多少人使用，用完则不再提供打折服务。0为不限量。</p>
+				</div>
+				<div class="input-group">
+					<label for="khname">浏览次数</label>
+					<input type="text" id="browse_num"  name="browse_num" value="{$list['browse_num']}" disabled="true"/>
+				</div>
+				<div class="input-group">
+					<label for="khname">收藏次数</label>
+					<input type="text" id="browse_num"  name="browse_num" value="{$collectionnum}" disabled="true"/>
+				</div>
+				<div class="input-group">
+					<label for="khname">核销次数</label>
+					<input type="button" style="font:normal 14px 'Microsoft Yahei';margin:0;padding:0;margin-left:5em;padding:3% 5%;box-sizing:border-box;background:#efeff0;border:0;border-radius:5px;color:#595757;width:50%" value="{$confirmnum}" onclick="conlist();"/>
+					<p style="color:red">注：点击可查看核销列表</p>
+					<!-- <a href="{php echo $this->createMobileUrl('halfbusshop',array('op'=>'confirmlist', 'bus_id'=>$list['bus_id']));}" >{$confirmnum}</a> -->
+				</div>
+				<div class="input-group">
+					<label for="khname"></label>
+					<input type="button" style="font:normal 14px 'Microsoft Yahei';margin:0;padding:0;margin-left:5em;padding:3% 5%;box-sizing:border-box;background:#efeff0;border:0;border-radius:5px;color:#595757;width:50%" value="点击管理优惠券" onclick="couponmanager();"/>
+				</div>
+				<div class="input-group">
+					<label for="khname">商户状态</label>
+					{if $list['status'] == 0}
+					<input type="text" id="status"  name="status" value="显示" disabled="true"/>
+					{elseif $list['status'] == 1}
+						<input type="text" id="status"  name="status" value="隐藏" disabled="true"/>
+					{elseif $list['status'] == 2}
+						<input type="text" id="status"  name="status" value="审核中" disabled="true"/>
+					{else}
+						<input type="text" id="status"  name="status" value="其他状态" disabled="true"/>
+					{/if}
+				</div>
+				<div style="color:red">注意：修改内容需重新审核通过。</div>
+				<input type="hidden" id="bus_id" name="bus_id" value="{$list['bus_id']}">
+				<input type="submit" id="submit" value="提交修改" style="font:normal 14px 'Microsoft Yahei';margin:0;padding:0;background:#8ec31f;color:#fff;text-align:center;border:0;border-radius:10px;padding:3%;width:100%;font-size:16px"/>
+			</form>
+		</div>
+	</body>
+	{template 'banquan'}
+	<script type="text/javascript" src="{HT}js/jquery-1.8.2.min.js" ></script>
+	<script type="text/javascript">
+	function conlist(){
+		var url = "{php echo $this->createMobileUrl('halfbusshop')}";
+		setTimeout("location.href='" + url + "&op=confirmlist&bus_id="+$('#bus_id').val()+"'", 100);
+	}
+	function couponmanager(){
+		var url = "{php echo $this->createMobileUrl('halfbusshop')}";
+		setTimeout("location.href='" + url + "&op=couponlist&bus_id="+$('#bus_id').val()+"'", 100);
+	}
+	function getcity(province){
+		var data = {
+			'province':province
+		} 
+		$.ajax({
+			url: "{php echo $this->createMobileUrl('halfbusshop', array('op'=>'getcityajax'))}",
+			type: "POST",
+			data: data,
+			cache:false,
+			dataType: "JSON",
+			success: function (res) {  
+				$("#city").html(res);
+			}
+		}); 
+	}
+	
+	function getcountry(city){
+		var data = {
+			'city':city
+		} 
+		$.ajax({
+			url: "{php echo $this->createMobileUrl('halfbusshop', array('op'=>'getcountryajax'))}",
+			type: "POST",
+			data: data,
+			cache:false,
+			dataType: "JSON",
+			success: function (res) {  
+				$("#country").html(res);
+			}
+		});
+	}
+	
+	function getcir(country){
+		var data = {
+			'country':country
+		} 
+		$.ajax({
+			url: "{php echo $this->createMobileUrl('halfbusshop', array('op'=>'getcirajax'))}",
+			type: "POST",
+			data: data,
+			cache:false,
+			dataType: "JSON",
+			success: function (res) {  
+				$("#cir").html(res);
+			}
+		});
+	}
+	
+	function getdiscounttime(sign){
+		if(sign == 0){
+			document.getElementById("discounttime").options.length=0;
+			document.getElementById("discounttime").options.add(new Option("请选择", ""));
+		}
+		if(sign == 1){
+			document.getElementById("discounttime").options.length=0;
+			document.getElementById("discounttime").options.add(new Option("周一", "1"));
+			document.getElementById("discounttime").options.add(new Option("周二", "2"));
+			document.getElementById("discounttime").options.add(new Option("周三", "3"));
+			document.getElementById("discounttime").options.add(new Option("周四", "4"));
+			document.getElementById("discounttime").options.add(new Option("周五", "5"));
+			document.getElementById("discounttime").options.add(new Option("周六", "6"));
+			document.getElementById("discounttime").options.add(new Option("周日", "7"));
+		}
+		if(sign == 2){
+			var myDate = new Date();
+			var year = myDate.getFullYear();
+			var month = myDate.getMonth()+1;
+			var max = new Date(year,month,0).getDate(); //获取天数
+			document.getElementById("discounttime").options.length=0;
+			for(var i=1;i<=max;i++){
+				document.getElementById("discounttime").options.add(new Option(i+"号", i));
+			}
+		}
+	}
+	</script>
+	<style type="text/css"> 
+　　.SellerLogin{margin-top:12px;background-color:#FFFFFF;height:280px;}
+	.SellerLogin .StoreName,.SellerLogin .SellerPwd{height:40px;border-bottom:1px solid #F2F2F2;display:-webkit-box;display:flex;flex-flow:row;}
+	.StoreName .Slable,.SellerPwd  .SPwdlable{width:40%;height:40px;display:block;text-align:right;line-height:40px;font-size:16px;color:#636363;}
+	</style> 
+</html>

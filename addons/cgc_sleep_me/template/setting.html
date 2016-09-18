@@ -1,0 +1,539 @@
+{template 'common/header'}
+
+<script>
+    require(['jquery', 'util'], function($, u) {
+        $(function(){
+            $('#setting-form').submit(function(){
+                var message = '';
+                if($.trim($(':text[name=appid]').val()) == '') {
+                    message += '必须输入AppID<br>';
+                }
+                if($.trim($(':text[name=secret]').val()) == '') {
+                    message += '必须输入AppSecret<br>';
+                }
+                if($.trim($(':text[name=mchid]').val()) == '') {
+                    message += '必须输入微信支付商户号<br>';
+                }
+                if($.trim($(':text[name=password]').val()) == '') {
+                    message += '必须输入微信支付商户密钥<br>';
+                }
+                
+                if($.trim($(':text[name=pay_desc]').val()) == '') {
+                    message += '必须输入企业付款描述<br>';
+                }
+                if(message) {
+                    u.message(message);
+                    return false;
+                }
+                return true;
+            });
+        });
+    });
+</script>
+
+
+<div class="main">
+	<form action="" method="post" class="form-horizontal form"  enctype="multipart/form-data"  id="setting-form">
+		<div class="panel panel-default">
+			<div class="panel-heading">参数设置</div>
+			<div class="panel-body">
+				<ul class="nav nav-tabs" id="myTab">
+					<li class="active" ><a href="#tab_basic">付款以及支付接口参数</a></li>				
+					<li><a href="#tab_share2">分享设置</a></li>
+					<li><a href="#tab_share4" style="display:">防封杀的考虑</a></li>
+					<li><a href="#tab_share5">自定义文字设置</a></li>
+					<li><a href="#tab_share3">其他设置</a></li>					
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane  active" id="tab_basic">
+						<div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="alert alert-info">
+                            发放红包需要使用 <br>
+                            <span class="label label-info">认证服务号并开通微信支付</span> <br>
+                        </div>
+                    </div>
+                </div>
+                             
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">AppID</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="appid" value="{$settings['appid']}" class="form-control">
+                        <span class="help-block">就是本公众号的appid</span>                       
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">AppSecret</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="secret" value="{$settings['secret']}" class="form-control">
+                        <span class="help-block">就是本公众号的AppSecret</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商户号</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="mchid" value="{$settings['mchid']}" class="form-control">
+                        <span class="help-block">微信支付商户号, 开通微信支付才能获得商户号</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商户支付密钥</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="password" value="{$settings['password']}" class="form-control">
+                        <span class="help-block">微信支付商户所使用的支付密钥, 开通微信支付才能获得商户号</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">服务器IP</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="ip" value="{$settings['ip']}" class="form-control">
+                        <span class="help-block">发放红包接口需要服务器IP. 程序将自动获取你的服务器IP, 如果获取失败, 请手动指定</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商户支付证书</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input name="apiclient_cert" type="hidden"  class="form-control" value="{$settings['apiclient_cert']}"/> 
+                        <input name="apiclient_cert_file" type="file"  class="form-control" value=""/> 
+                        <span class="help-block">
+            {if !empty($settings['apiclient_cert'])} <label style="color:red">已保存成功</label>{else}
+                        <label style="color:red">未上传</label>{/if}                       
+                        从商户平台上下载支付证书, 解压并取得其中的 <mark>apiclient_cert.pem</mark>上传此文件</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付证书私钥</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input name="apiclient_key" type="hidden"  class="form-control" value="{$settings['apiclient_key']}"/> 
+                        <input name="apiclient_key_file" type="file"  class="form-control" value=""/> 
+                        <span class="help-block">
+                        {if !empty($settings['apiclient_key'])} <label style="color:red">已保存成功</label>{else}
+                        <label style="color:red">未上传</label>{/if}
+                                                            从商户平台上下载支付证书, 解压并取得其中的 <mark>apiclient_key.pem</mark>上传此文件</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付根证书</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input name="rootca" type="hidden"  class="form-control" value="{$settings['rootca']}"/> 
+                        <input name="rootca_file" type="file"  class="form-control" value=""/> 
+                        <span class="help-block">
+             {if !empty($settings['rootca'])} <label style="color:red">已保存成功</label>{else}
+                        <label style="color:red">未上传</label>{/if}              
+                        从商户平台上下载支付证书, 解压并取得其中的 <mark>rootca.pem</mark>上传此文件</span>
+                    </div>
+                </div>
+                
+                 <div class="form-group sendtype" style="">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><font color='red'>*</font>企业付款描述</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="pay_desc" value="{$settings['pay_desc']}" class="form-control">
+                        <span class="help-block">企业零钱红包的描述(不要太长),#nickname#代表用户昵称。例如:#nickname#向你支付了一笔风流账。</span>
+                    </div>
+                </div> 
+                
+              
+               <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">红包提现方式</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="tx_type" value="0"
+                         {if empty($settings['tx_type'])} checked="checked" {/if}>系统自动提现</label>
+	         			<label class="radio-inline"><input type="radio" name="tx_type" value="1" 
+	         			 {if $settings['tx_type']==1} checked="checked" {/if}>后台提现</label>	         			 	         			 	         			 
+	         			  <span class="help-block">后台在参与用户资料有一个提现按钮</span>
+                    </div>
+              </div>
+              
+              <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">最低提现金额(&yen)</label>
+                    <div class="col-xs-12 col-sm-9">
+                          <input type="text" name="tx_limit" value="{$settings['tx_limit']}" class="form-control">	 	         			 	         			 
+	         			  <span class="help-block">用户红包达到提现最低金额，才可以系统自动提现，默认为0</span>
+                    </div>
+              </div>
+              
+               <div class="form-group" style="display:">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付类型</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="ys_pay" value="0" onclick="$('#yun_pay_div').hide();"
+                         {if empty($settings['ys_pay'])} checked="checked" {/if}>微赞收银台支付</label>
+	         			<label class="radio-inline"><input type="radio" name="ys_pay" value="1" onclick="$('#yun_pay_div').hide();"
+	         			 {if $settings['ys_pay']==1} checked="checked" {/if}>原生支付</label>
+	         			 <label class="radio-inline"><input type="radio" name="ys_pay" value="2" onclick="$('#yun_pay_div').hide();"
+	         			 {if $settings['ys_pay']==2} checked="checked" {/if}>虚拟支付</label>
+	         			 <label class="radio-inline"><input type="radio" name="ys_pay" value="3" onclick="$('#yun_pay_div').show();"
+	         			 {if $settings['ys_pay']==3} checked="checked" {/if}>云支付</label>       			 	          			 	         			 	         			 
+	         			  <span class="help-block">原生支付就是直接在页面弹出微信支付，不用跳到微赞收银台。
+	         			  原生支付必须在微信后台设置支付授权目录路径如下:<label style="color:red">{$_W['siteroot']}app/</label>
+	         			  <br>虚拟支付就是不用付款直接支付，适合商家把钱存进去做活动，
+	         			   <label style="color:red">虚拟支付的话，可以订阅号直接玩了。</label>
+	         			   <br>云支付申请<a href="http://www.yunpay.net.cn/yunpay.php" target="_blank">http://www.yunpay.net.cn/yunpay.php</a>
+	         			  </span>
+                    </div>
+              </div>
+              <div id="yun_pay_div" style="display:  {if $settings['ys_pay']==3} block;{else}none;{/if}">
+              <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">云支付账号</label>
+                    <div class="col-xs-12 col-sm-9">
+                          <input type="text" name="yunpay_no" value="{$settings['yunpay_no']}" class="form-control">	 	         			 	         			 
+	         			  <span class="help-block">使用云支付的支付类型时，申请的云支付账号，其余支付方式不填。</span>
+                    </div>
+              </div>
+              
+              <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">云支付PID</label>
+                    <div class="col-xs-12 col-sm-9">
+                          <input type="text" name="yunpay_pid" value="{$settings['yunpay_pid']}" class="form-control">	 	         			 	         			 
+	         			  <span class="help-block">使用云支付的支付类型时，申请的云支付PID，其余支付方式不填。</span>
+                    </div>
+              </div>
+              
+              <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">云支付KEY</label>
+                    <div class="col-xs-12 col-sm-9">
+                          <input type="text" name="yunpay_key" value="{$settings['yunpay_key']}" class="form-control">	 	         			 	         			 
+	         			  <span class="help-block">使用云支付的支付类型时，申请的云支付KEY，其余支付方式不填。</span>
+                    </div>
+              </div>
+              
+              </div>
+              
+           
+              
+                <div class="form-group sendtype" style="display:{if empty($settings['sendtype'])} none {/if}">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">红包活动名称</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="act_name" value="{$settings['act_name']}" class="form-control">
+                        <span class="help-block">现金红包的活动名称,不要超过8个字</span>
+                    </div>
+                </div>
+                
+                   <div class="form-group sendtype" style="display:{if empty($settings['sendtype'])} none {/if}">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">红包发起人</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="send_name" value="{$settings['send_name']}" class="form-control">
+                        <span class="help-block">发红包人的名称,不要超过8个字</span>
+                    </div>
+                  </div>
+                
+                  <div class="form-group sendtype" style="display:{if empty($settings['sendtype'])} none {/if}" >
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">红包备注</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="remark" value="{$settings['remark']}" class="form-control">
+                        <span class="help-block">备注,不要超过8个字</span>
+                    </div>
+                </div>
+                
+               <div class="form-group sendtype" style="">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付商品详情说明</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="pay_title" value="{$settings['pay_title']}" class="form-control">
+                        <span class="help-block">例如:花钱睡我。</span>
+                    </div>
+                </div> 
+              
+              
+                  <div class="form-group sendtype" style="">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付费率</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="sx_bl" value="{$settings['sx_bl']}" class="form-control">
+                        <span class="help-block">0-100之间，发钱给用户的时候，扣掉手续费</span>
+                    </div>
+                </div> 
+                
+        
+                													
+				</div>
+				
+			<div class="tab-pane" id="tab_share1" style="display:none">	
+			
+			 <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区定位类型</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="locationtype" value="0"
+                         {if empty($settings['locationtype'])} checked="checked" {/if}>ip定位</label>
+	         			<label class="radio-inline"><input type="radio" name="locationtype" value="1" 
+	         			 {if $settings['locationtype']==1} checked="checked" {/if}>gps定位</label>	         			 	         			 	         			 
+	         			  <span class="help-block">在非wifi网络下，利用ip地址定位地区的话，不准确。利用gps定位更准确，
+	         			  不过页面会弹出获取用户地理信息的提示,页面也会出现一点卡顿，地理位置会被人模拟作弊，这无法避免,微信资料就是抓取微信用户填写的地理信息来判断的</span>
+                    </div>
+              </div>
+                
+           
+                
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">粉丝地区不符跳转网页</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="zdyurl" value="{$settings['zdyurl']}" class="form-control">
+                        <span class="help-block">地址必须是http开头。</span>
+                    </div>
+                </div>
+		 </div>
+					
+					
+	     <div class="tab-pane" id="tab_share2">
+			<div class="form-group" style="display:">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">分享标题</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="share_title" value="{$settings['share_title']}" class="form-control">
+                      <span class="help-block">#nickname#代表用户昵称,#beatPerc#代表超过全国百分多少的数字，#amount#代表用户收入。例如#nickname#邀请你花钱来睡我。
+                      界面分享标题(微信后台设置好jssdk安全接口)</span>
+                    </div>
+                </div> 
+                
+                 <div class="form-group" style="display:">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">分享描述</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="share_desc" value="{$settings['share_desc']}" class="form-control">
+                      <span class="help-block">#nickname#代表用户昵称,,#beatPerc#代表超过全国百分多少的数字,#amount#代表用户收入。界面的分享描述</span>
+                    </div>
+                </div> 
+                
+                 
+                 <div class="form-group" style="display:none">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">分享链接</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="share_url" value="{$settings['share_url']}" class="form-control">
+                      <span class="help-block">分享链接</span>
+                    </div>
+                </div> 
+                
+            <div class="form-group model0">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">分享的图片</label>
+                  <div class="col-sm-9 col-xs-12">            
+                    {php echo tpl_form_field_image('share_thumb',$settings['share_thumb']);}
+                     <div class="help-block">
+                                                                    如果不设置这个参数的话，那默认分享出去的是粉丝的头像。
+                     </div>  
+                </div>            
+          </div>
+          
+               <div class="form-group" style="display:">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">分享跳转的地址</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="succ_url" value="{$settings['succ_url']}" class="form-control">
+                      <span class="help-block">分享跳转的地址，比如诱导关注的链接</span>
+                    </div>
+                </div>   
+                
+                 <div class="form-group" style="display:">
+                  <label class="col-xs-12 col-sm-3 col-md-2 control-label">生成主页是否必须关注</label>
+	              <div class="col-xs-12 col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="must_guanzhu" value="0"
+                         {if empty($settings['must_guanzhu'])} checked="checked" {/if}>否</label>
+	         			<label class="radio-inline"><input type="radio" name="must_guanzhu" value="1" 
+	         			 {if $settings['must_guanzhu']==1} checked="checked" {/if}>是</label>
+                      <span class="help-block">如果选择关注，则下面做个诱导关注链接,地址必须是http开头。</span>
+                   </div>
+                </div>  
+                
+                  <div class="form-group" style="display:">
+                   <label class="col-xs-12 col-sm-3 col-md-2 control-label">没关注的用户的跳转的链接</label>
+                    <div class="col-sm-9 col-xs-12">
+                     <input type="text" name="guanzhu_url" value="{$settings['guanzhu_url']}" class="form-control">
+                      <span class="help-block">地址必须是http开头。</span>
+                    </div>
+                </div> 
+                
+                 <div class="form-group" style="display:">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">分享类型</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="share_type" value="0"
+                         {if empty($settings['share_type'])} checked="checked" {/if}>仅朋友和群</label>
+	         			<label class="radio-inline"><input type="radio" name="share_type" value="1" 
+	         			 {if $settings['share_type']==1} checked="checked" {/if}>全部(朋友圈和群)</label>	         			 	         			 	         			 
+	         			  <span class="help-block">
+	         			  </span>
+                    </div>
+              </div>
+                        
+			</div>	
+			
+			
+		 <div class="tab-pane" id="tab_share4" style="display:">			
+			 <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">防封杀模块集成</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="dead_module" value="0"
+                         {if empty($settings['dead_module'])} checked="checked" {/if}>否</label>
+	         			<label class="radio-inline"><input type="radio" name="dead_module" value="1" 
+	         			 {if $settings['dead_module']==1} checked="checked" {/if}>神秘防封</label>	         			 	         			 	         			 
+	         			  <span class="help-block">如果有安装神秘防封模块的话，并且用户有上级的话，才可以打开网站。没安装的话，不要勾选</span>
+                    </div>
+              </div>
+              
+              <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">个人页面是否出现诱导提示</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="followinfo_show" value="0"
+                         {if empty($settings['followinfo_show'])} checked="checked" {/if}>否</label>
+	         			<label class="radio-inline"><input type="radio" name="followinfo_show" value="1" 
+	         			 {if $settings['followinfo_show']==1} checked="checked" {/if}>是</label>	         			 	         			 	         			 
+	         			  <span class="help-block"></span>
+                    </div>
+              </div>
+              
+          
+                
+                <div class="form-group"  style="display:none">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">粉丝地区不符跳转网页</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="zdyurl" value="{$settings['zdyurl']}" class="form-control">
+                        <span class="help-block">地址必须是http开头。</span>
+                    </div>
+                </div>
+		 </div>
+				
+			
+			<div class="tab-pane" id="tab_share5">
+              <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">活动标题描述</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="header_desc" value="{$settings['header_desc']}" class="form-control">
+                        <span class="help-block">活动页面的标题描述，例如：你愿意花多少钱和我睡一觉？</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">参与活动页面底部描述</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="footer_desc1" value="{$settings['footer_desc1']}" class="form-control">
+                        <span class="help-block">参与活动页面底部描述，例如：爱情的床单说滚就滚</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">参与活动底部按钮文字</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="footer_btn1" value="{$settings['footer_btn1']}" class="form-control">
+                        <span class="help-block">参与活动底部按钮文字，例如：睡Ta</span>
+                    </div>
+                </div>
+                
+                  <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">我的主页按钮文字</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="footer_home" value="{$settings['footer_home']}" class="form-control">
+                        <span class="help-block">我的主页按钮文字，自定义。例如:我的主页，或者 我也试试。</span>
+                    </div>
+                </div>
+                
+                 <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">我的主页按钮自定义链接</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="footer_url" value="{$settings['footer_url']}" class="form-control">
+                        <span class="help-block">
+                        <a target=_blank href="http://mp.weixin.qq.com/s?__biz=MzI1MjE2Nzc0MQ==&mid=502054640&idx=1&sn=113b53056fca931ba8b544e6de48d82e#rd">
+                                                                   查看素材例子。
+                        </a>                                   
+                                                                例如:这个主页按钮可以设置让用户关注，然后去公众号里面获得个人中心的活动链接，达到默认关注的作用,不设置的话，就是默认值。如果不懂可以先不设置。
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">返回个人页面按钮文字</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="footer_btn2" value="{$settings['footer_btn2']}" class="form-control">
+                        <span class="help-block">返回个人页面按钮文字，例如：先不睡Ta，看看谁想睡我</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">生成个人页面底部文字</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="footer_desc2" value="{$settings['footer_desc2']}" class="form-control">
+                        <span class="help-block">生成个人页面底部描述，例如：看看谁想睡我</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">活动底部logo</label>
+                    <div class="col-xs-12 col-sm-9">
+                    	 {php echo tpl_form_field_image('footer_logo',$settings['footer_logo']);}
+                        <span class="help-block"></span>
+                    </div>
+                </div>
+               
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">活动俏皮语</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="user_word" value="{$settings['user_word']}" class="form-control">
+                        <span class="help-block">微信头像下的俏皮语，例如：我当你们是兄弟，你们竟然想睡我!!</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">参与活动的用户</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="users_text" value="{$settings['users_text']}" class="form-control">
+                        <span class="help-block">参与活动微信头像上的文字，例如：想睡Ta的人</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">参与活动提醒文字</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="footer_text" value="{$settings['footer_text']}" class="form-control">
+                        <span class="help-block">引导用户参与活动的提醒文字，例如：睡完Ta可以看到其他睡过Ta的人喔！</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">个人页面分享按钮文字</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="share_btn" value="{$settings['share_btn']}" class="form-control">
+                        <span class="help-block">个人页面分享按钮文字，例如：调戏好友，看看谁想睡你</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">个人页面底部文字</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="pay_text" value="{$settings['pay_text']}" class="form-control">
+                        <span class="help-block">个人页面底部文字，例如：好友支付后，金额将存进你的微信钱包中（暂不支持分享朋友圈）</span>
+                    </div>
+                </div>
+         </div>
+      
+              <div class="tab-pane" id="tab_share3">
+         <div class="form-group">
+	       <label class="col-xs-12 col-sm-3 col-md-2 control-label">系统是否关闭</label>
+	      <div class="col-xs-12 col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="close_mode" value="0"
+                         {if empty($settings['close_mode'])} checked="checked" {/if}>否</label>
+	         			<label class="radio-inline"><input type="radio" name="close_mode" value="1" 
+	         			 {if $settings['close_mode']==1} checked="checked" {/if}>是</label>
+                      <span class="help-block">做个开关，代表系统关闭</span>
+            </div>
+         </div> 
+         
+        
+                
+                
+	  </div>	
+		</div>
+		</div>
+			</div>
+		</div>
+		<div class="form-group col-sm-12">
+			<input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1" />
+			<input type="hidden" name="token" value="{$_W['token']}" />
+		</div>
+	</form>
+</div>
+
+
+<script>
+
+$(function () {
+		window.optionchanged = false;
+		$('#myTab a').click(function (e) {
+			e.preventDefault();//阻止a链接的跳转行为
+			$(this).tab('show');//显示当前选中的链接及关联的content
+		});
+		
+		$('.tpl-district').remove();
+
+	});
+	
+</script>
+{template 'common/footer'}

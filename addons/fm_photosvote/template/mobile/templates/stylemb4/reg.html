@@ -400,9 +400,8 @@
         </div>
     </div>
 </section>
-
 <div id="console"></div>
-{template 'templates/'.$templatename.'/tvote'}
+{template 'tvote'}
 <script type="text/javascript">
     $('.ico_1').on('click', function(){
       location.href = "{php echo $this->createMobileurl('photosvote', array('rid'=>$rid))}";

@@ -1,0 +1,10 @@
+<?php //00020
+//  bbs.012wz.com
+
+?>
+HR+cPtBFH6jLBBrC87BHIDtvFOKHXT8qRCuQJvkuudzvFMVbcxgexcnW88MoRFvg0XrgzdSig2vG
+8jVaqKjxpj4w0yqm/qcEYNw9u4I54jMvMlPQUsYDzlNzWhAoAeATQgxFwoxSS6213LYIK7rhJ+2K
+MHiUO5Z9Hkmv5f4Oo2bJ11h0lXZsAsqcXWwEM1S2nG6qIicGB3dZRKmuOXBBLIdfiJ4EK4/ZGPDw
+rihR4Q+SusNeqQcwDTjsBL1uC5MuqxCXwClQv0Axofaxru+Mq7+rLN1ragDe0TnJZp4Q5V3/hSrF
+SLz6BUt2a2v3E3tZ/WlultYFeYEpvpB935oKtdpAK/AWU5qEtdDjICygv3z+Xmq9huOi90drRrzg
+1UhLw8I4cbaSgj+hhQxEm2Vefws8/iByRNXrkW/kIdviRRdYThp6CBA9

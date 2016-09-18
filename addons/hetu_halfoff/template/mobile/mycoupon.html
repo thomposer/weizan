@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>我的优惠券</title>
+	<link rel="stylesheet" href="http://wx.katim.me/app/resource/css/bootstrap.min.css">
+	<link rel="stylesheet" href="{HT}css/coupon.css">
+	<script src="http://wx.katim.me/app/resource/js/lib/jquery-1.11.1.min.js"></script>
+	<script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+	<style type="text/css" media="screen">
+		body{background-color: #f0f0f4; padding-top: 0;}
+	</style>
+	<div class="top">
+		<div class="pull-left"><i class="icon-left"></i></div>
+		<h3>我的优惠卷</h3>
+	</div>
+	<div class="slist">
+		{loop $list $item}
+		<a href="{php echo $this->createMobileUrl('halfcoupon', array('op'=>'coupondetails', 'bus_id'=>$item['bus_id'], 'id'=>$item['id']));}">
+			<dl class="clearfix">
+				<dt>
+					<img src="{php echo tomedia($item['busimg'])}" alt="">
+				</dt>
+				<dd class="t1">{$item['busname']}</dd>
+				<dd class="t2">{$item['title']}</dd>
+				<dd class="t3">有效期至：{php echo date("Y-m-d", $item['endtime'])}</dd>
+				{if $item['iscoupondue'] == 1}
+					<dd class="up"><span>即将到期</span></dd>
+				{/if}
+			</dl>
+		</a>
+		<!-- <a href="#">
+			<dl class="clearfix">
+				<dt><img src="images/pic1.jpg" alt=""></dt>
+				<dd class="t1">德州横陇酒店</dd>
+				<dd class="t2">房间费9折扣优惠卷</dd>
+				<dd class="t3">有效期：2016-06-30</dd>		
+			</dl>
+		</a>
+		<a href="#">
+			<dl class="clearfix">
+				<dt><img src="images/pic1.jpg" alt=""></dt>
+				<dd class="t1">德州横陇酒店</dd>
+				<dd class="t2">房间费9折扣优惠卷</dd>
+				<dd class="t3">有效期：2016-06-30</dd>
+				<dd class="up"><span>即将到期</span></dd>
+			</dl>
+		</a> -->
+		{/loop}
+	</div>
+	{template 'banquan'}
+</body>
+<script>
+	$(".pull-left").click(function(){
+		var url = "{php echo $this->createMobileUrl('halfuser')}";
+		setTimeout("location.href='" + url + "'", 500);
+	});
+</script>
+</html>

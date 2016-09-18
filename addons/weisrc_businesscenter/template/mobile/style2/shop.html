@@ -166,7 +166,11 @@ font-size: 14px;">
     {/if}
     <script>
         function subcomment() {
-            var anonymous = $("#cc").val()
+            var anonymous = 0;
+            if ($("#cc").get(0).checked) {
+                anonymous = 1;
+            }
+//            var anonymous = $("#cc").val()
             var content = $("#tj_text").val()
             if (content == '') {
                 fhalert("请输入评论内容！");

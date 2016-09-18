@@ -1,0 +1,94 @@
+{template 'common/header'}
+
+{template 'common'}
+<div class="panel panel-danger">
+		<div class="panel-heading">【借权适用】失败用户重发领取消息,自己设置问题导致红包领取失败,需要手动点击发送补发</div>
+		<div class="panel-body" id="blink"> 
+			<font color="red"><b>商用统计,借权情况下用户领取红包失败原因是:</b></font><br/>
+			因为在多人回复关键词情况下,服务器在5秒内没有回复粉丝<br/>
+			导致的用户没有收到领取的消息链接！<br/>
+			这里的消息重发是给领取失败用户发送那条没有领取的链接！
+			
+		</div> 
+		<div class="panel-body">
+				<div class="form-group">
+					<div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+					<div class="col-sm-9">
+                     <a href="{php echo $this->createWebUrl('notice', array('rid' => $rid))}" onclick="return confirm('确认发送吗，发送后，无法撤回？');return false;" class="btn btn-success btn-sm">重发领取消息</a>
+                    </div>
+					</div>
+				</div>
+		</div>
+</div>
+<div class="main">
+	<div class="category">
+	<div class="panel panel-default">
+                <div class="panel-body table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th width="100">粉丝头像</th>
+							<th width="150">粉丝昵称</th>
+                            <th width="150">奖品</th>
+                            <th width="150">领取时间</th>
+							<th width="150">领取状态</th>
+                            <th width="150">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $row}
+                        <tr>
+							<td style="white-space:normal;">
+                            <img src="{php echo tomedia($row['headimgurl']);}" width="50" onerror="this.src='resource/images/noavatar_middle.gif'" style="border-radius: 3px;"/>
+                            
+							</td>
+                            
+							<td>{$row['nickname']}</td>
+                            {if $row['money']/100}
+                            <td>{php echo $row['money']/100}元</td>
+							{else}
+							<td>{php echo $row['money']}</td>
+							{/if}
+                            <td>{php echo date('Y-m-d H:i:s',$row['time'])}</td>
+							<td>
+                                {if $row['status'] == 1}
+                                    <span class="label label-success">领取成功</span>
+                                {/if}
+								{if $row['status'] == 2}
+									<span class="label label-danger">领取失败</span>
+                                {/if}
+								{if $row['status'] == 3}
+									<span class="label label-warning">待领取</span>
+                                {/if}
+								{if $row['status'] == 4}
+									<span class="label label-info">IP判断中</span>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $row['status'] == 1 || $row['status'] == 4}
+                                    <span class="label label-success">无需操作</span>
+								{elseif $_W['account']['level'] < 4}
+								<a href="{php echo $this->createWebUrl('sendred', array('op' => 'send', 'id' => $row['id'],'openid' => $row['bopenid'],'money' => $row['money'],'rid' => $row['rid']))}" onclick="return confirm('确认发送吗，发送后，无法撤回？');return false;" title="手动发送"><span class="label label-danger">点击发送红包</span></a>
+                                {else}
+                                    <a href="{php echo $this->createWebUrl('sendred', array('op' => 'send', 'id' => $row['id'],'openid' => $row['openid'],'money' => $row['money'],'rid' => $row['rid']))}" onclick="return confirm('确认发送吗，非认证服务号无此功能，发送后，无法撤回？');return false;" title="手动发送"><span class="label label-danger">点击发送</span></a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+	</div>
+
+</div>
+{$pager}
+<script language="javascript"> 
+function changeColor(){ 
+var color="#f00|#0f0|#00f|#880|#808|#088|red|green|blue|gray"; 
+color=color.split("|"); 
+document.getElementById("blink").style.color=color[parseInt(Math.random() * color.length)]; 
+} 
+setInterval("changeColor()",500); 
+</script>		
+{template 'common/footer'}

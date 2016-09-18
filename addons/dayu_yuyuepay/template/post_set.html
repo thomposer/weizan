@@ -1,24 +1,4 @@
-        <div class="panel panel-default">
-            <div class="panel-heading">短信验证 <span style="color:red;">短信验证手机号码的真实性</span></div>
-            <div class="panel-body">
-                <div class="form-group">
-                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">请选择短信模板</label>
-                    <div class="col-xs-12 col-sm-9">
-					{if pdo_tableexists('dayu_sms')}
-						<select name="smsid" class='form-control'>
-							<option value="0">不使用短信</option>
-							{loop $sms $s}
-							<option value="{$s['id']}" {if $s['id'] == $activity['smsid']}selected="selected"{/if}>{$s['title']}</option>
-							{/loop}
-						</select>
-					{else}
-						<span class="btn btn-default" disabled>需要【dayu短信】支持</span>
-					{/if}
-                    </div>
-                </div>
-			</div>
-        </div>
-<div class="panel panel-default">
+<div class="panel panel-warning">
 	<div class="panel-heading">参数设置 <span style="color:red;">蓝色按钮为激活状态</span></div>
 		<div class="panel-body">
 			<div class="form-group">

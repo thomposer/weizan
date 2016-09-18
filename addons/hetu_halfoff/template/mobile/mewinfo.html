@@ -1,0 +1,19 @@
+{template 'header'}
+    <link rel="stylesheet" href="{HT}css/Recommend.css" />
+    <header>
+	<p class="Inforcurrent" style="width: 100%;">
+		{if mb_strlen($item['title'], 'utf-8') > 10} {php echo mb_substr($item['title'], 0, 10, 'utf-8').'...'} {else} {$item['title']} {/if}
+	</p>
+	</header>
+    <body>
+    <div style="height: 25px;"></div>
+    {php echo htmlspecialchars_decode($item['content'])}
+    
+     <!-- 尾部的开始-->
+    {template 'banquan'}
+    {template 'footer'}
+     <!-- 尾部的结束-->
+    </body>
+
+
+</html>

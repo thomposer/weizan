@@ -1,0 +1,284 @@
+<html style="width: 100%;maigin:0 auto;">
+<head>
+    {php include_once IA_ROOT . '/addons/amouse_weijob/model.php'}
+    {php $id = $_GPC['id']}
+    {php $job = search_job($id)}
+    {php $company = search_company($job['companyid'])}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{$job['jobname']}-职位详情</title>
+    <meta name="keywords" content=" 商家 优惠 招聘 微信定制开发">
+    <meta name="description" content="{$job['jobname']}">
+    <script  type="text/javascript"  src="{AMOUSE_WEIJOB_RES}js/jquery.min.js?v=20150419"></script>
+    <link href="http://www.xuxiaofu.com/plugin/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="http://www.xuxiaofu.com/css/main.css" rel="stylesheet">
+    <style type="text/css">
+        img {
+            width: 100%;
+        }
+        .container{
+            background: #f5f5f6;
+        }
+        body{
+            background: #f5f5f6;
+        }
+        .pages {
+            margin: 0px auto;
+            padding: 3px;
+            text-align: center;
+        }
+
+        .pages strong {
+            background: #4BC7E5;
+            color: white;
+        }
+        .pages em, .pages strong {
+            border-color: #DB60CC;
+        }
+
+        .pages * {
+            padding: 3px 6px;
+            color: #999;
+        }
+    </style>
+</head>
+
+<body style="width:100%;margin: 0 auto;">
+
+<div class="container" style="width:100%;margin: 0 auto;">
+    <style>
+        #mess_info {
+            font-size: 14px;
+            color: #666666;
+            margin-top: 4px;
+        }
+        #attch_list {
+            font-size: 14px;
+        }
+        #attch_list, #more_list {
+            background-color: #f7f7f7;
+        }
+        #attch_list, #more_list, #list {
+            margin: 8px 0 15px 0;
+        }
+        #attch_list, #test_result, #more_list, #list {
+            border: 1px solid #d9d9d9;
+            border-radius: 3px;
+        }
+        .attch_item {
+            padding: 8px;
+        }
+        .attch_item, .list_item {
+            border-bottom: 1px solid #d9d9d9;
+        }
+        .button2 {
+            font-size: 16px;
+            padding: 8px 0;
+            border: none;
+            color: white;
+            background-color:#334265;
+            border-radius: 0px;
+        }
+        button {
+            width: 100%;
+            text-align: center;
+            border-radius: 3px;
+        }
+        .hidden{
+            display: none;
+        }
+        .button {
+            margin:0;
+        }
+        #weixinshare{
+            width: 100%;
+            opacity: 0.9;
+            background-color: #1b1b1b;
+            height: 1000%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #weixinshare img{
+            right: 0;
+            top: 0;
+            position: fixed;
+            background-color: #1b1b1b;
+        }
+        .header {
+            width: 100%;
+            height: 40px;
+            background: #334265;
+            background-size: contain;
+            color: #334265;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        .header a img {
+            max-width: 100%;
+            height: 26px;
+            width: 26px;
+            vertical-align: middle;
+        }
+        .header ul{
+            list-style: none;
+        }
+        .header ul li{
+            list-style: none;
+        }
+        .selfinfo{
+            color: #000000;
+            list-style: none;
+            margin-left: 16px;
+            float: left;
+        }
+        .selfinfo li{
+            width: 45%;
+            float: left;
+            margin-right: 5%;
+            background: white;
+            margin-top: 8px;
+        }
+        .tuijianul{
+
+        }
+        .tuijianul li{
+            list-style: none;
+            padding: 0 10px 0 4px;
+            margin: 0 8px 0 8px;
+            background: url('http://www.xuxiaofu.com/images/arrow3.png') no-repeat right 50%;
+            -webkit-background-size: 5.5px 10px;
+            background-size: 5.5px 10px;
+            border-bottom: 1px solid rgb(211, 204, 204);
+            line-height: 36px;
+            height: 26px;
+        }
+        .tuijianul li a{
+            color: #000000;
+        }
+        a:hover{text-decoration: none;}
+        .contentgray{
+            color:gray;
+        }
+    </style>
+    <header class="header" style="">
+        <div style="font-size: 14px;line-height: 40px;height: 40px;text-align: center;">
+            <a href="javascript:history.back();"><span style="padding-left: 8px;color: white;float: left;">返回</span></a>
+            <span style="font-size: 16px;">求职详情</span>
+        </div>
+    </header>
+
+
+    <h4 style="margin-top:50px;margin-bottom: 8px;padding-top:8px;font-size: 16px;color: rgb(3, 3, 3);">
+        <img style="width: 40px;margin-top: -6px;" src="http://www.xuxiaofu.com/images/job/zhiwei.png">{$job['jobname']}
+    </h4>
+    <div style=" padding: 8px 16px; background: white; margin: 0 2%;border: 1px solid rgb(223, 226, 223); ">
+本消息由 {$company['title']} 发布
+    </div>
+
+    <ul class="selfinfo" style="background: white;margin: 0 2%;width: 94%;padding: 0 0 8px 2%;border: 1px solid rgb(223, 226, 223);">
+        <li>招聘类型：<span class="contentgray">{if $job['type'] == 0}(全职){else if $job['type'] == 1}(兼职){else}(实习){/if}</span></li>
+        <li>浏览：<span class="contentgray">{$job['hits']}次</span>
+        <li>招聘人数：<span class="contentgray">{if $job['number']==0}若干{else}{$job['number']}{/if}</span></li>
+        <li>薪资：<span class="contentgray">{if $job['offer']==0}{php echo '面议'}{else}{$job['offer']}{/if} </span> </li>
+        <li>联系电话：<span class="contentgray"><a href="tel:{$company['tel']}">{$company['tel']} </a></span></li>
+        <li>联系人：<span class="contentgray">{$company['linkman']}</span></li>
+        <li>发布日期：<span class="contentgray">{php echo date("Y-m-d",$job['createtime'])}</span></li>
+
+        <li>号码：<a href="tel:{$company['phone']}" onclick="callCount(5108);"><span class="contentgray">{$company['phone']}</span></a></li>
+        <li>截止日期：<span class="contentgray">{if $job['endtime']!=0}{php echo date('Y-m-d',$job['endtime'])}{/if}</span></li>
+        <li>工作地：<span class="contentgray">{$job['workplace']}</span></li>
+        <li style="width: 96%;">公司地址：<span class="contentgray">{$company['address']}</span></li>
+    </ul>
+
+    <div class="well" style="padding: 0px;margin: 10px 0 20px 0px;float: left;background: #f5f5f6;box-shadow: none;border: none;width: 100%;">
+        <h4 style="padding-bottom: 8px;color: rgb(91,170,0);"> <img style="width: 40px;margin-top: -6px;" src="http://www.xuxiaofu.com/images/job/selfintro.png">
+            职位描述</h4>
+        <div style=" padding: 8px 16px; background: white; margin: 0 2%;border: 1px solid rgb(223, 226, 223); ">
+            {$job['description']}
+            <br>
+            <p style="color:red;font-weight:bold">注：应聘者请自行核对信息！</p>
+        </div>
+    </div>
+    <div id="mess_share" style="margin: auto;width: 100%;float: left;">
+        <div id="share_1" style="width: 30%;float:left;margin: 0 5% 0 15%;">
+            {php $res = get_tjgl($_GPC['id'],$from_user)}
+            {php $cv = search_cv('',$from_user)}
+            {if $endtime > $nowtime || $endtime==$createtime || $job['endtime'] == 0}
+                {if !empty($cv)}
+                    {if empty($res)}
+                    <button class="button2 button" onclick="location.href='{php echo $this->createMobileUrl('mail',array('from_user'=>$from_user,'id'=>$_GPC['id']),true)}'">
+                        投简历
+                    </button>
+                    {else}
+                    <button class="button2 button">简历已投</button>
+                    {/if}
+                {else}
+                    <button class="button2 button" onclick="location.href='{php echo $this->createMobileUrl('myresume',array('from_user'=>$from_user),true)}'">
+                    提交简历
+                    </button>
+                {/if}
+            {else}
+                <button class="button2 button" style="width:100%">已过期</button>
+            {/if}
+        </div>
+
+        <div id="share_2" style="width: 30%;float: left;margin: 0 15% 0 5%;">
+            <button class="button2 button" onclick="location.href='{$setting['followurl']}'">关注我</button>
+        </div>
+        <div class="clear">
+
+        </div>
+    </div>
+
+    <div class="well" style="padding: 0px;margin: 10px 0 20px 0px;float: left;background: #f5f5f6;box-shadow: none;border: none;width: 100%;margin-bottom: 50px;">
+        <h4 style="padding-bottom: 0px;color: rgb(91,170,0);">
+            <img style="width: 40px;margin-top: -6px;" src="http://www.xuxiaofu.com/images/job/tuijian.png">
+            其他职位
+        </h4>
+
+        <ul class="tuijianul" style=" background: white; margin: 0 2%;padding: 0 0 8px 2%; border: 1px solid rgb(223, 226, 223);">
+           {loop $otheremploy $oth}
+            <li><a href="{php echo $this->createMobileUrl('job',array('from_user'=>$from_user,'id'=>$oth['id']),true)}">
+                <div style="width: 100%;">『{$oth['ctitle']}』招 {$oth['jobname']}</div></a></li>
+            {/loop}
+        </ul>
+    </div>
+
+
+    <script type="text/javascript">
+        $(".button").bind("click", function(){
+            $(".button").each(function(){
+                $(this).removeClass("clicked");
+            });
+            $(this).toggleClass("clicked");
+            if($("#"+$(this).attr("showdiv")).hasClass("hidden")){
+
+
+                $("#"+$(this).attr("showdiv")).show(200);
+
+            }else{
+                $("#"+$(this).attr("showdiv")).hide(200);
+            }
+            $("#"+$(this).attr("showdiv")).toggleClass("hidden");
+        });
+        $("#weixinshare").bind("click", function(){
+            $(this).addClass("hidden");
+            $(this).hide(200);
+        });
+
+        function callCount(id) {
+            $.ajax({
+                type: "GET",
+                url: "wap.php?m=jianli&a=callcount&id=" + id,
+                dataType: 'json',
+                success: function (data) {
+                }
+            });
+        }
+    </script>
+</div>
+
+</body>
+</html>

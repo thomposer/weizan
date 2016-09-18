@@ -57,10 +57,12 @@
                <!-- <td>{$item['address']}</td>-->
                 <td>{$item['tel']}</td>
                 <td>
-                    <img src="{$_W['attachurl']}{$item['thumb']}" height="45px" width="45px" />
+                    <img src="{php echo strpos($item['thumb'], 'http://') === FALSE ? ($_W['attachurl'].$item['thumb']) : $item['thumb']}"  height="45px"
+                         width="45px" />
                 </td>
                 <td>
-                    <img src="{$_W['attachurl']}{$item['thumb1']}" height="45px" width="45px" />
+                    <img src="{php echo strpos($item['thumb1'], 'http://') === FALSE ? ($_W['attachurl'].$item['thumb1']) : $item['thumb1']}"  height="45px"
+                         width="45px" />
                 </td>
                 <td style="text-align:right;">
                     <a href="{php echo $this->createWebUrl('employ', array('companyid' => $item['id'], 'op' => 'post'))}" class="btn btn-default btn-sm" title="发布岗位" >

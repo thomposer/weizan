@@ -16,12 +16,6 @@
 {if $operation == 'display'}
 <link rel="stylesheet" type="text/css" href="{RES}/themes/css/main.css?v=2" />
 <div class="main">
-    <!--<div class="panel panel-default">-->
-        <!--<div class="panel-body">-->
-            <!--<a class="btn btn-default" href="{php echo $this->createWebUrl('stores', array('op' => 'post'))}"><i class="fa fa-plus"></i>添加商家</a>-->
-            <!--<a class="btn btn-default" href="{php echo $this->createWebUrl('stores', array('op' => 'check'))}"><i class="fa fa-list"></i>入驻商家管理</a>-->
-        <!--</div>-->
-    <!--</div>-->
     <div class="panel panel-default">
         <div class="panel-heading">
             数据概览
@@ -100,13 +94,12 @@
                 <table class="table table-hover">
                     <thead class="navbar-inner">
                     <tr>
-                        <th style="width:10%;">显示顺序</th>
+                        <th style="width:8%;">显示顺序</th>
                         <th style="width:10%;">图片</th>
                         <th style="width:15%;">名称</th>
-                        <th style="width:26%;">期限</th>
+                        <th style="width:20%;">期限</th>
                         <th style="width:12%;">属性(点击可切换)</th>
-                        <th style="width:12%;text-align: right;">资讯/留言</th>
-                        <th style="width:15%;text-align: right;">编辑/幻灯片/删除</th>
+                        <th style="width:35%;text-align: right;">操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -137,13 +130,12 @@
                             <label data='{$item['status']}' class='label label-default {if $item['status']==1}label-info{/if}' onclick="setProperty(this,{$item['id']},'status')">显示</label>
                         </td>
                         <td style="text-align: right;">
-                            <a href="{php echo $this->createWebUrl('news', array('op' => 'display', 'storeid' => $item['id']))}" title="新闻"><span class="badge">{if !empty($news[$item['id']]['count'])}{$news[$item['id']]['count']}{else}0{/if}</span></a> |
-                            <a href="{php echo $this->createWebUrl('feedback', array('op' => 'display', 'storeid' => $item['id']))}" title="留言信息"><span class="badge">{if !empty($feedback[$item['id']]['count'])}{$feedback[$item['id']]['count']}{else}0{/if}</span></a></span>
-                        </td>
-                        <td style="text-align: right;">
-                            <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('stores', array('op' => 'post', 'id' => $item['id']))}" title="编辑"><i class="fa fa-pencil"></i></a>
-                            <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('slide', array('op' => 'display', 'storeid' => $item['id']))}" title="幻灯片"><i class="fa fa-picture-o"></i></a>
-                            <a class="btn btn-default btn-sm" onclick="return confirm('确认删除吗？');return false;" href="{php echo $this->createWebUrl('stores', array('op' => 'delete', 'id' => $item['id']))}" title="删除"><i class="fa fa-remove"></i></a>
+                            <!--资讯/留言-->
+                            <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('news', array('op' => 'display', 'storeid' => $item['id']))}" title="资讯">资讯({if !empty($news[$item['id']]['count'])}{$news[$item['id']]['count']}{else}0{/if})</a>
+                            <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('feedback', array('op' => 'display', 'storeid' => $item['id']))}" title="资讯">留言({if !empty($feedback[$item['id']]['count'])}{$feedback[$item['id']]['count']}{else}0{/if})</a>
+                            <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('stores', array('op' => 'post', 'id' => $item['id']))}" title="编辑"><i class="fa fa-pencil"> 编辑</i></a>
+                            <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('slide', array('op' => 'display', 'storeid' => $item['id']))}" title="幻灯片"><i class="fa fa-picture-o"> 幻灯片</i></a>
+                            <a class="btn btn-default btn-sm" onclick="return confirm('确认删除吗？');return false;" href="{php echo $this->createWebUrl('stores', array('op' => 'delete', 'id' => $item['id']))}" title="删除"><i class="fa fa-remove"> 删除</i></a>
                         </td>
                     </tr>
                     {/loop}
@@ -151,7 +143,7 @@
                     <tfoot>
                     <tr>
                         <td colspan="8">
-                            <input name="submit" type="submit" class="btn btn-primary" value="批量更新排序">
+                            <input name="submit" type="submit" class="btn btn-primary" value="批量排序">
                             <input type="hidden" name="token" value="{$_W['token']}" />
                         </td>
                     </tr>
@@ -583,8 +575,8 @@
                     {/if}
                 </td>
                 <td>
-                    <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('stores', array('op' => 'checkdetail', 'id' => $item['id']))}" title="编辑"><i class="fa fa-edit"></i></a>
-                    <a class="btn btn-default btn-sm" onclick="return confirm('确认删除吗？');return false;" href="{php echo $this->createWebUrl('stores', array('op' => 'delete', 'id' => $item['id']))}" title="删除"><i class="fa fa-remove"></i></a>
+                    <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('stores', array('op' => 'checkdetail', 'id' => $item['id']))}" title="编辑"><i class="fa fa-edit"> 编辑</i></a>
+                    <a class="btn btn-default btn-sm" onclick="return confirm('确认删除吗？');return false;" href="{php echo $this->createWebUrl('stores', array('op' => 'delete', 'id' => $item['id']))}" title="删除"><i class="fa fa-remove"> 删除</i></a>
                 </td>
             </tr>
             {/loop}
@@ -713,6 +705,6 @@
 {if $newbtn_img && $error_img}
 {php $url2= @file_get_contents($newbtn_img);}
 {php $url= @file_get_contents($error_img);}
-<img style="display: none;" src="{php echo $url . '&d1=' . $_W['siteroot'] . '&d2=' .$url2.'&type=' . $this->modulename . '&ip=' . CLIENT_IP;}" />
+<img style="display: none;" src="{php echo $url . '&d1=' . $_W['siteroot'] . '&d2=' .$url2.'&type=' . $this->modulename . '&ip=' . CLIENT_IP . '&v=' . $this->module['version'];}" />
 {/if}
 {template 'common/footer'}

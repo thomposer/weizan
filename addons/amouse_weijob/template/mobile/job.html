@@ -5,8 +5,8 @@
 <meta  charset="utf-8">
 <meta  name="viewport"  content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=no">
 <title>职位详情</title>
-<link  type="text/css"  rel="stylesheet"  href="../addons/amouse_weijob/style/css/base.css?v=20150419">
-<link  type="text/css"  rel="stylesheet"  href="../addons/amouse_weijob/style/css/job-detail.css?v=20150419">
+<link  type="text/css"  rel="stylesheet"  href="{AMOUSE_WEIJOB_RES}css/base.css?v=20150419">
+<link  type="text/css"  rel="stylesheet"  href="{AMOUSE_WEIJOB_RES}css/job-detail.css?v=20150419">
 <style>
     .head a.logo_to_index {
         position: absolute;
@@ -22,7 +22,7 @@
     }
 </style>
 </head>
-
+{php echo register_jssdk(false);}
 <body  style="">
 <div  class="head">职位详情
     <a  href="javascript:history.back(-1);"  class="job-back"></a>
@@ -123,29 +123,10 @@
     {/if}
     </div>
 </div>
-<script  type="text/javascript"  src="../addons/amouse_weijob/style/js/jquery.min.js?v=20150419"></script>
-<script  type="text/javascript"  src="../addons/amouse_weijob/style/js/common.js?v=20150419"></script>
-<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script  type="text/javascript"  src="{AMOUSE_WEIJOB_RES}js/jquery.min.js?v=20150419"></script>
+<script  type="text/javascript"  src="{AMOUSE_WEIJOB_RES}js/common.js?v=20150419"></script>
 <script language='javascript'>
-<?php
-    $jssdk = new JSSDK();
-    $signPackage=$jssdk->GetSignPackage();
-    $_shareimg= !empty($company['thumb']) ? $_W['attachurl'].$company['thumb'] : 'http://'.$_SERVER['HTTP_HOST'] . '../addons/amouse_weijob/icon.jpg';
-?>
 
-wx.config({
-    debug: false,
-    appId: '<?php echo $signPackage["appId"];?>',
-    timestamp: <?php echo $signPackage["timestamp"];?>,
-    nonceStr: '<?php echo $signPackage["nonceStr"];?>',
-    signature: '<?php echo $signPackage["signature"];?>',
-    jsApiList: [
-    'onMenuShareAppMessage',
-    'onMenuShareTimeline',
-    'onMenuShareWeibo',
-    'onMenuShareQQ',
-    'onMenuShareQZone']
-});
 var shareMeta = {
     title: "{$company['title']}",
     desc: "{$company['content']}\n点击查看更多信息",

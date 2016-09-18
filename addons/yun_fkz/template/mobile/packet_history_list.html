@@ -1,0 +1,26 @@
+{loop $list $l}
+		{if $type=="packet"}
+    	<li>
+			<div class="shouzhi_time">
+                <h3>{if $l['tixian']==-1}提现失败{/if}{if $l['tixian']==1}提现待审核{/if}{if $l['tixian']==2}提现成功{/if}</h3>
+                {if $l['tixian_cut']}<p>提现：￥{$l['packet']}，手续费：￥{$l['tixian_cut']}</p>{/if}
+                <p>
+                {php echo date('Y-m-d H:i:s',$l['tixian_time'])}
+                </p>
+            </div>
+            <span {if $l['tixian']==2}class="lv"{else}class="cheng"{/if}>￥{php echo $l['packet']-$l['tixian_cut']}</span>
+		</li> 
+        {else}
+        <li>
+			<div class="shouzhi_time">
+                <h3>{$l['remark']}{if $l['remark']=='提现失败'}（提现金额￥{php echo abs($l['num'])}已返回您的账户余额）{/if}</h3>
+                {if $l['tixian_cut']}<p>提现：￥{php echo abs($l['num'])}，手续费：￥{$l['tixian_cut']}</p>{/if}
+                <p>
+                {php echo date('Y-m-d H:i:s',$l['createtime'])}
+                </p>
+            </div>
+            <span {if $l['tixian']==2}class="lv"{else}class="cheng"{/if}>￥{php echo abs($l['num'])-$l['tixian_cut']}</span>
+		</li> 
+        {/if}
+{/loop}
+

@@ -4,38 +4,38 @@
 .form .alert{width:700px;}
 .btn-group .active{background-color:#428bca;color:#fff;}
 </style>
-<ul class="nav nav-tabs">
-	<li><a href="{php echo $this->createWebUrl('display')}">预约列表</a></li>
-	<li{if !$reid} class="active"{/if}><a href="{php echo $this->createWebUrl('post')}">新建预约</a></li>
-	{if $reid}<li class="active"><a href="{php echo $this->createWebUrl('post', array('id' => $reid))}">编辑预约</a></li>{/if}
+<ul class="breadcrumb">
+	<li><a href="{php echo $this->createWebUrl('display')}"><i class="fa fa-list-alt"></i> 预约列表</a></li>
+	{if !$reid}
+	<li class="active">新建预约</li>
+	{else}
+	<li class="active"><a href="{php echo $this->createWebUrl('post')}">新建预约</a></li>
+	{if $reid}<li class="active">编辑预约</li>{/if}	
+	<li><a href="{php echo $this->createWebUrl('staff', array('op' => 'list','reid' => $reid))}">管理客服</a></li>
+	<li><a href="{php echo $this->createWebUrl('item', array('op' => 'list','reid' => $reid))}">管理服务项目</a></li>
+	{/if}
 </ul>
 <div class="main">
 	<form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" onsubmit="return validate(this);">
-    	<div class="panel panel-default">
-            <div class="panel-heading">
-                预约 <span class="text-muted">通过预约你可以实现服务预约功能</span>
-            </div>
-            <div class="panel-body">
 		<ul class="nav nav-tabs" id="myTab">
 			<li class="active"><a href="#tab_basic">基本设置</a></li>
 			<li><a href="#tab_customize">自定义字段</a></li>
+			<li><a href="#tab_time">时间设置</a></li>
 			<li><a href="#tab_list">首页主题列表</a></li>
-			<li><a href="#tab_notice">通知设置</a></li>
 			<li><a href="#tab_skins">模板设置</a></li>
+			<li><a href="#tab_notice">通知设置</a></li>
 			<li><a href="#tab_set">参数设置</a></li>
 		</ul>
-		
 		<div class="tab-content">
 		<div class="tab-pane  active" id="tab_basic">{template 'post_basic'}</div>
 		<div class="tab-pane" id="tab_customize">{template 'post_customize'}</div>
+		<div class="tab-pane" id="tab_time">{template 'post_time'}</div>
 		<div class="tab-pane" id="tab_list">{template 'post_list'}</div>
-		<div class="tab-pane" id="tab_notice">{template 'post_notice'}</div>
 		<div class="tab-pane" id="tab_skins">{template 'post_skins'}</div>
+		<div class="tab-pane" id="tab_notice">{template 'post_notice'}</div>
 		<div class="tab-pane" id="tab_set">{template 'post_set'}</div>
 		</div>
 				
-            </div>
-        </div>
 		
 <script type="text/javascript">
 <!--	

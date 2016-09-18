@@ -1,0 +1,48 @@
+{template 'common/header'}
+<div class="main">
+	<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" id="form1"> 
+		<div class="panel panel-default">
+		<div class="panel-heading">模板选择切换</div>
+		
+			<div class="panel-body">
+				<div class="form-group">
+		                    <label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">模板选择：</label>
+		                    <div class="col-sm-8 col-xs-12">
+		                        <select class='form-control' name='style'>
+		                            {loop $styles  $style}
+		                            <option value='{$style}' {if $style==$settings['style']}selected{/if}>{$style}</option>
+		                            {/loop}
+		                        </select>
+		                    </div>
+		                </div> 
+  
+                  <div class="form-group">
+                  <label class="col-xs-12 col-sm-3 col-md-2 control-label">生成大字图存储：</label>
+                  <div class="col-sm-9">
+                    <label class="radio-inline">
+                      <input type="radio" name="savetype" value="0" {if empty($settings['savetype']) } checked{/if} />
+                      模块内DATA存储</label>
+                    <label class="radio-inline">
+                      <input type="radio" name="savetype" value="1" {if $settings['savetype'] == 1} checked{/if} />
+                      服务器附件存储</label>
+                      <label class="radio-inline">
+                      <input type="radio" name="savetype" value="2" {if $settings['savetype'] == 2} checked{/if} />
+                      七牛云存储</label>
+                      <label class="radio-inline">
+                      <input type="radio" name="savetype" value="3" {if $settings['savetype'] == 3} checked{/if} />
+                      阿里云OSS存储</label>
+                    <div class="help-block">服务器附件存储 必须附件服务器类型 <a target="_blank" href="index.php?c=system&a=attachment&do=remote">远程附件</a>，微赞自带的七牛云存储+阿里云OSS 系统-附件设置 <a target="_blank" href="index.php?c=system&a=attachment&do=remote">七牛云存储</a></div>
+                  </div>
+                </div>
+                   
+				<div class="form-group col-sm-12">
+			        <input type="submit" name="submit" value="保存" class="btn btn-primary col-lg-1" />
+			        <input type="hidden" name="token" value="{$_W['token']}" />
+		        </div>
+			</div>
+	    </div>
+	 
+		
+	</form>
+</div>
+{template 'common/footer'}

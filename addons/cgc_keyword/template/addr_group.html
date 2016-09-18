@@ -1,0 +1,141 @@
+{template 'common/header'}
+{php 	load()->func('tpl');}
+
+	<ul class="nav nav-tabs">	
+	    <li {if $operation == 'display'} class="active"{/if}><a  href="{php echo $this->createWebUrl('addr_group')}">地区分组</a></li>
+	    <li  {if $operation == 'edit'} class="active"{/if}><a href="{php echo $this->createWebUrl('addr_group',array('op'=>'edit'))}">添加分组</a></li>
+	</ul>
+
+{if $operation == 'display'}
+
+
+<div class="main">
+  <div class="row-fluid" style="padding-bottom: 13px;">
+                                <div class="span8 control-group">
+                                </div>
+                            </div>
+       <div class="panel panel-default">
+	<div class="panel-body">
+
+
+	<div style="padding:15px;">
+
+		<table class="table table-hover">
+
+			<thead class="navbar-inner">
+				<tr>
+					<th style="width:40px;">用户地址</th>
+					<th style="width:40px;">分组id</th>
+	               <th style="width:40px;">分组名称</th>   
+					<th style="width:60px;">跳转链接</th>
+					<th style="width:60px;">备注</th>
+					<th style="width:40px; text-align:right;">操作</th>
+
+				</tr>
+
+			</thead>
+
+			<tbody>
+				{loop $list $item}
+				<tr>
+					<td>{$item['addr']}</td>
+                    <td>{$item['group_id']}</td>
+              
+					<td>{$item['group_name']}</td>					              
+                    <td>{$item['url']}</td>
+                     <td>{$item['remark']}</td>
+
+					<td style="text-align:right;">
+
+					<a class="btn btn-default" href="{php echo $this->createWebUrl('addr_group', array('op' => 'edit', 'id' => $item['id']))}">编辑</a>
+					<a  class="btn btn-default"   href="{php echo $this->createWebUrl('addr_group', array('op' => 'del', 'id' => $item['id']))}">删除</a>
+					</td>
+
+				</tr>
+
+				{/loop}
+
+			</tbody>
+
+		</table>
+
+		{$pager}
+
+	</div>
+
+</div>
+
+
+
+{elseif $operation == 'edit'}
+
+<div class="main">
+<div class="panel panel-default">
+
+	<div class="panel-body table-responsive">
+	<form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" onsubmit="return formcheck(this)">
+         <input type="hidden" class="form-control" name="id" value="{$item['id']}" />
+	   
+	    <div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">用户地址</label>
+		<div class="col-sm-9 col-xs-12">
+			<input type="text" name="addr" class="form-control" value="{$item['addr']}" >
+		
+		</div>
+	</div>
+	
+
+	<div class="form-group">
+	    <label class="col-xs-12 col-sm-3 col-md-2 control-label">分组名称</label>
+	    <div class="col-xs-12 col-sm-8 col-lg-5">
+			<select  name="group_id"  class="form-control">
+		        <option value="0">请选择分组</option>
+		        {loop $group_list $row}
+		        <option value="{$row['group_id']}" {if $row['group_id'] == $item['group_id']} selected="selected"{/if}>{$row['name']}</option>
+		        {/loop}
+		    </select>
+		</div>
+	</div>
+	
+	   <div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">跳转链接</label>
+		<div class="col-sm-9 col-xs-12">
+			<input type="text" name="url" class="form-control" value="{$item['url']}" >
+			<span class="help-block">分组成功跳转链接,以http开头</span>
+		</div>
+		>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">备注</label>
+		<div class="col-sm-9 col-xs-12">
+			<textarea id="remark" name="remark" class="form-control" rows="5" cols="60">{$item['remark']}</textarea>
+		</div>
+	</div>
+	 
+
+        </div>
+		<div class="form-group col-sm-12">
+
+			<input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1" />
+
+			<input type="hidden" name="token" value="{$_W['token']}" />
+
+		</div>
+		</form>
+		</div>
+</div>
+{/if}
+
+<script>
+function sycfans(){
+ // if (confirm('确认删除所有信息吗？')){
+	location.href ="{php echo $this->createWebUrl('fansgroup',array('op'=>'sync'))}";	
+  //}
+	
+}
+</script>
+
+
+
+{template 'common/footer'}
+

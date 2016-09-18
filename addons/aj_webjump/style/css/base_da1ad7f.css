@@ -1,0 +1,14 @@
+.flexbox{display:-webkit-box!important;
+	display:-webkit-flex!important;
+	display:-ms-flexbox!important;
+	display:flex!important;
+	-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap}
+	.clearfix-b{overflow:hidden}*,:before,:after{margin:0;padding:0;box-sizing:border-box}@font-face{font-family:iconfont;src:url("../t/font_1449898664_92609.eot");src:url("../t/font_1449898664_92609.eot-#iefix") format('embedded-opentype'),url("../t/font_1449898664_92609.woff") format('woff'),url("../t/font_1449898664_92609.ttf") format('truetype'),url("../t/font_1449898664_92609.svg#iconfont") format('svg')}
+	.iconfont{font-family:iconfont!important;font-size:16px;font-style:normal;-webkit-font-smoothing:antialiased;-webkit-text-stroke-width:.2px;-moz-osx-font-smoothing:grayscale}
+	.layout{margin:0 auto}@media only screen and (min-width:641px){.layout{width:640px!important}}
+	.like-table{display:table}.like-table .row{display:table-row}
+	.like-table .col{display:table-cell}
+	html{font-size:312.5%}
+	html,body{height:100%;width:100%;-webkit-text-size-adjust:none}
+	body{font-size:.28rem;line-height:1;font-family:Dengxian,"Helvetica Neue",Helvetica,STHeiTi,sans-serif,'Microsoft YaHei UI','Microsoft YaHei';background:#ededed}
+	a{text-decoration:none}a,img,a:focus,img:focus,a:active,img:active{-webkit-touch-callout:none;-webkit-user-select:none!important}a,button{-webkit-tap-highlight-color:rgba(255,255,255,0);-webkit-tap-highlight-color:transparent;outline:0}@media only screen and (min-width:320px){html{font-size:25px}}@media only screen and (min-width:340px){html{font-size:26.5625px}}@media only screen and (min-width:360px){html{font-size:28.125px}}@media only screen and (min-width:380px){html{font-size:29.6875px}}@media only screen and (min-width:480px){html{font-size:37.5px}}@media only screen and (min-width:640px){html{font-size:50px}}

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
+  <meta name="HandheldFriendly" content="true">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+  <!-- 微软的老式浏览器 -->
+  <meta name="MobileOptimized" content="320">
+  <!-- UC QQ强制竖屏 -->
+  <meta name="screen-orientation" content="portrait">
+  <meta name="x5-orientation" content="portrait">
+  <link rel="stylesheet" type="text/css" href="{STYLE_PATH}/css/normalize.min.css?t=1461150968">
+  <link rel="stylesheet" type="text/css" href="{STYLE_PATH}/css/style.css?t=1461150979">
+  <script src="{STYLE_PATH}/js/sweetalert.min.js"></script>
+   <link rel="stylesheet" type="text/css" href="{STYLE_PATH}/css/sweetalert.css?t=1461150979">
+  <title>{if $settings['header_desc']}{$settings['header_desc']}{else}你愿意花多少钱和我睡一觉？{/if}</title>
+</head>
+<body>
+{template 'jssdk'}
+  <header class="headerWords">
+    <div id="assist"></div>
+    <img src="{php echo tomedia($show_user["headimgurl"])}">
+    <span id="userName">{$show_user["nickname"]}<br></span>
+    <div class="userWords">
+      <span><br></span>
+      <span>{if $settings['user_word']}{$settings['user_word']}{else}我当你们是兄弟，你们竟然想睡我!!{/if}</span>
+    </div>
+  </header>
+
+  <div id="money">
+    <span class="icon iconfont">&#xe607;</span>
+    <span>财富收入：<span>&yen {$total_amount}</span></span>
+  </div>
+  <div class="award">
+    <span class="icon iconfont">&#xe604;</span>
+    <span>超过了全国 {$beatPerc}%  的人</span>
+  </div>
+
+  <section id="list">
+    <div class="words">
+      <span class="icon iconfont">&#xe630;</span>
+      <span>{if $settings['users_text']}{$settings['users_text']}{else}想睡Ta的人 {/if}</span>
+    </div>
+    <div id="imgGroup"  {if empty($show)} class="fuzzy" {/if}>
+      {loop $records $record}
+        <img src="{php echo tomedia($record['headimgurl'])}" alt='{$record['nickname']}, · ￥ {$record['payment']}'>
+      {/loop}
+      {if empty($records) and empty($show)}
+        <img src="{STYLE_PATH}/images/1.jpg" alt='刘敏, · ￥ 319'>
+        <img src="{STYLE_PATH}/images/2.jpg" alt='德华, · ￥ 119'>
+        <img src="{STYLE_PATH}/images/3.jpg" alt='小东, · ￥ 3.19'>
+        <img src="{STYLE_PATH}/images/4.jpg" alt='小帅, · ￥ 31'>
+        <img src="{STYLE_PATH}/images/5.jpg" alt='water, · ￥ 11'>
+        <img src="{STYLE_PATH}/images/6.jpg" alt='火舞, · ￥ 39'>
+     {/if}         
+    </div>  
+  </section>
+  <div class="remindFuzzy">  
+    <span>{if $settings['footer_text']}{$settings['footer_text']}{else}睡完Ta可以看到其他睡过Ta的人喔！{/if}</span>   
+  </div>
+  {if empty($show)}
+  <footer>
+    <img src="{if $settings['footer_logo']}{php echo tomedia($settings['footer_logo'])}{else}{STYLE_PATH}/images/sleep1.jpg{/if}">
+    <span>{if $settings['footer_desc1']}{$settings['footer_desc1']}{else}爱情的床单说滚就滚{/if}</span>
+    <button class="sleep_him">{if $settings['footer_btn1']}{$settings['footer_btn1']}{else}睡Ta{/if}</button>
+  </footer>
+  {else}  
+  <footer>
+    <img src="{if $settings['footer_logo']}{php echo tomedia($settings['footer_logo'])}{else}{STYLE_PATH}/images/sleep1.jpg{/if}">
+    <span>{if $settings['footer_desc2']}{$settings['footer_desc2']}{else}看看谁想睡我{/if}</span>
+    <button onclick="window.location.href='{if !empty($settings['footer_url'])}{$settings['footer_url']}{else}{php echo $this->createMobileUrl("forward",array("form"=>'person'))}{/if}'">
+   {if $settings['footer_home']}{$settings['footer_home']}{else}我的主页{/if} </button>
+  </footer> 
+  {/if}
+  <div id="bodyAssist"></div>
+  <div id="packet">
+    <img id="refresh" src="{STYLE_PATH}/images/refresh.png">
+    <div id="packetMoney">
+      <ul id="scroll1"></ul>
+      <span class="point">.</span>
+      <ul id="scroll2"></ul>
+      <span class="unit"> 元</span>
+    </div>
+    <span id="packetWords">一块就好，我陪你睡到天荒地老</span>
+    <button id="pay-btn">{if $settings['footer_btn1']}{$settings['footer_btn1']}{else}睡Ta{/if}</button>
+  </div>
+  <div id="remind">
+    <span>支付成功后，你的好友将收到对应金额的零钱<br>同时可以查看已经支付过的人喔</span>   
+  </div>
+  <button id="createPage">{if $settings['footer_btn2']}{$settings['footer_btn2']}{else}先不睡Ta，看看谁想睡我{/if}</button>
+
+  <script>
+  var _redpack_list={php echo json_encode($fees,true)};
+  var _redpack_money = 0;
+  var money_random = 0;
+  </script>
+  
+  <script src="{STYLE_PATH}/js/zepto.1.1.6.min.js"></script>
+  <script src="{STYLE_PATH}/js/zepto.touch.js"></script>
+  <script src="{STYLE_PATH}/js/global.js?t=1461150968"></script>
+  <script type="text/javascript">
+    $('#createPage').tap(function() {
+      window.location.href='{php echo $this->createMobileUrl("forward",array("form"=>'person'))}';
+    });
+    _redpack_money  = generate_money(_redpack_list);
+    for (var i = 0; i <9; i++) {
+      var li_high = Math.floor(Math.random()*10).toString();
+      var li_low = Math.floor(Math.random()*10).toString() + Math.floor(Math.random()*10).toString();
+      $('#scroll1').append('<li>' + li_high + '</li>');
+      $('#scroll2').append('<li>' + li_low + '</li>');
+    }    
+    var li = document.querySelectorAll("li");
+    var liHeight = li[0].offsetHeight;
+
+    function generate_money(money_list){
+      var random = Math.floor(Math.random()*money_list.length);
+      
+      var money = money_list[random].fee;
+      money_random= money_list[random].id;
+      var description = money_list[random].desc;
+      var money_high = money.split('.')[0];
+      var money_low = money.split('.')[1];
+      $('#scroll1').append('<li>'+money_high+'</li>');
+      $('#scroll2').append('<li>'+money_low+'</li>');
+      $('#packetWords').text(description);
+      return money;
+    }
+    var scroll_flag = true;
+    var scroll_speed = 0.5,flag = 0,stop_flag = false;
+
+    $('#refresh').on('tap',function(e){
+      if(scroll_flag == true){
+        scroll_start();
+        scroll_remove();
+      }
+    });
+
+    function scrolling(){
+      if(stop_flag == true)return ;
+      flag++;
+      document.getElementById('scroll1').scrollTop++;
+      document.getElementById('scroll2').scrollTop++;
+      if(flag>document.getElementById('scroll1').scrollTop){
+        flag = 0;
+        document.getElementById('scroll1').scrollTop = 0;
+        document.getElementById('scroll2').scrollTop = 0;
+      }
+      $('#refresh').css({
+        'animation':'refreshMove 1s linear infinite',
+        '-webkit-animation':'refreshMove 1s linear infinite',
+        '-moz-animation':'refreshMove 1s linear infinite'
+      });
+    }
+    function scroll_stop(){
+      $('#refresh').css({
+        'animation':'',
+        '-webkit-animation':'',
+        '-moz-animation':''
+      });
+      stop_flag = true;
+      scroll_flag = true;
+      _redpack_money  = generate_money(_redpack_list);
+      document.getElementById('scroll1').scrollTop = liHeight*10;
+      document.getElementById('scroll2').scrollTop = liHeight*10;   
+    }
+    function scroll_remove(){
+      $('#scroll1 :nth-child(2)').remove();
+      $('#scroll2 :nth-child(2)').remove();
+    }
+    function scroll_start(){
+      scroll_flag = false;
+      setInterval('scrolling()',scroll_speed);
+      setTimeout('scroll_stop()',800);
+      stop_flag = false;
+    }
+  </script>
+  
+  <script>  
+    Zepto(function($) {
+      $('#pay-btn').tap(function() {
+    		{if $settings['ys_pay']==3}
+    			var url = "{php echo $this->createMobileUrl('payment', array('op'=>'display'), true)}"+"&fee="+_redpack_money+"&money_random="+money_random;
+    			window.location.href=url;
+    		{else}
+        $.ajax({
+          type: 'post',
+          url: '{php echo $this->createMobileUrl('payment', array('op'=>'display'), true)}',
+          data: { 
+            fee: _redpack_money,  
+            money_random:money_random,
+            timeline_id: 23174
+          },
+          dataType: 'json',
+          timeout: 20000,
+          beforeSend: function(xhr, settings) {
+
+          }, 
+          success: function(data) {
+            if (data.code == 1) {
+            	{if empty($settings['ys_pay'])}
+            	  var charge_url ="{php echo $this->createMobileUrl('payment', array('op'=>'tj'), true)}"+"&orderid=" + data.orderid;
+                  window.location.href=charge_url;
+                {/if}
+                //虚拟支付
+               	{if $settings['ys_pay']==2}
+               	  swal({   
+               		//title: "恭喜你", 
+					type: "success",
+					title:"{if $settings['footer_btn1']}{$settings['footer_btn1']}{else}睡Ta{/if}成功",
+					confirmButtonText: "确定"
+				  },function(){
+					  window.location.href ="{php echo $this->createMobileUrl('forward', array('sleep_openid'=>$_GPC['sleep_openid']), true)}";
+				  });
+         	    
+               	
+                {/if}
+               
+              wx.chooseWXPay({
+            	  debug:true,
+                  timestamp: data.wx.timestamp,
+                  nonceStr: data.wx.nonce,
+                  package:  data.wx.package,
+                  signType: 'MD5',
+                  paySign: data.wx.signature,
+                  success: function(res) {
+                      if(res.errMsg == 'chooseWXPay:ok') {
+                    	  window.location.href ="{php echo $this->createMobileUrl('forward', array('sleep_openid'=>$_GPC['sleep_openid']), true)}";
+                      }
+                  },
+                  fail: function(res) {
+                	  alert(res.errMsg);
+                     alert("出错了");
+                  },
+                  cancel: function(res) {
+                	  alert("取消");
+                  }
+              });
+         
+            } else {
+              alert(data.msg);
+            }
+          },
+          error: function(xhr, type){
+            alert('网络异常,请您重新提交');
+          }
+        });
+        {/if}
+      });
+    });
+    
+    
+    Zepto(function($){
+        //fonIndex.html
+        $('#imgGroup img').on('tap',function(e){
+          $('.imageValue').remove();
+          // Be careful to the DOM executeing order !
+          $(this).after('<div class="imageValue">'+this.alt.split(',')[0]+'.'+this.alt.split(',')[1]+'</div>');
+          $('.imageValue').css({position:'absolute',fontSize:'0.6rem'});
+          var left = $(this).offset().left+$(this).offset().width/2-$('.imageValue').offset().width/2-16;
+          var top = '-5';
+          $('.imageValue').css({
+            marginLeft:(left+'px'),
+            marginTop:(top+'rem'),
+          });
+        });
+      })
+      
+     
+       function insert_member(){
+    	  $.ajax({
+              type: 'post',
+              url: '{php echo $this->createMobileUrl('insert_member', array(), true)}',             
+              dataType: 'json',
+              timeout: 2000,
+              success: function(data) {
+                //alert(data.msg);
+              } 
+             });
+    	    
+              
+		  
+	  }
+    
+    
+  </script> 
+
+</body>
+</html>

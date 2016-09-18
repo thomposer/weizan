@@ -1079,6 +1079,7 @@ vertical-align: middle;
 	height:auto;
 	float:left;
 	padding:0;
+	width: 100%;
 }
 
 #scroller ul {
@@ -1095,7 +1096,7 @@ vertical-align: middle;
 #scroller li {
 	
 	display:block; float:left;
-	width:auto; height:auto;
+	width:100%; height:auto;
 	text-align:center;
 	font-size:0px;
 	padding:0;

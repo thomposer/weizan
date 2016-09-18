@@ -1,5 +1,6 @@
 {template 'timeheader'}
 <div class="weui_tab_bd">
+	{if $activity['is_addr']==1}
        <div id="address_{$address['id']}" class="weui_panel weui_panel_access" onclick="changeAddress()">
             <div class="weui_panel_bd">
                 <div class="weui_media_box weui_media_appmsg weui_panel_ft">
@@ -17,6 +18,25 @@
                 </div>
             </div>
         </div>
+	{elseif $activity['is_addr']==0}
+       <div class="weui_panel weui_panel_access" onclick="changeInfo()">
+            <div class="weui_panel_bd">
+                <div class="weui_media_box weui_media_appmsg weui_panel_ft">
+                    <div class="weui_media_hd">
+                        <img class="weui_media_appmsg_thumb" src="{if !empty($member['avatar'])}{$member['avatar']}{else}{$fans['tag']['avatar']}{/if}" alt="">
+                    </div>
+			{if !empty($member)}
+                    <div class="weui_media_bd">
+                        <h4 class="weui_media_title">{$member['realname']}<span class="f14" style="margin-left:10px;">{$member['mobile']}</span></h4>
+                        <p class="weui_media_desc">{$member['resideprovince']} {$member['residecity']} {$member['residedist']} {$member['address']}</p>
+                    </div>
+			{else}
+            <div class="weui_media_bd">完善我的资料</div>
+			{/if}
+                </div>
+            </div>
+        </div>
+	{/if}
         <div class="weui_cells weui_cells_form" style="margin:0;">
             <div class="weui_cell" style="background-color: #4fc3f7;">
                 <div class="weui_cell_hd"><i class="iconfont f-white f20">&#xe621;</i> </div>
@@ -85,6 +105,9 @@
 <script type="text/javascript">
     function changeAddress(){
         location.href = '{php echo $this->createMobileUrl('address', array('from'=>'dayu_yuyuepay','returnurl' => $returnUrl))}'
+    }
+    function changeInfo(){
+        location.href = '{php echo $this->createMobileUrl('info', array('from'=>'dayu_yuyuepay','returnurl' => $returnUrl))}'
     }
 </script>
 {template 'footers'}

@@ -1,0 +1,420 @@
+{template 'header'}
+<link rel="stylesheet" href="{HT}css/Home.css" />
+
+  <body>
+      {template 'guanzhu'}
+    <header data-am-widget="header" class="am-header am-header-default">
+		<div class="am-header-left am-header-nav">
+			<a href="{php echo $this->createMobileUrl('halfhome', array('op'=>'city'));}"><span class="am-header-nav-title" id="city" value="1">{$confing['district']}</span><i class="iconfont turndown">&#xe603;</i></a>
+		</div>
+		<i></i>
+		<form class="am-header-title" method="post" action="{php echo $this->createMobileUrl('halfhome', array('op'=>'searchBus'));}" onsubmit="return formSearch();"><input type="text" id="SearchBar" name="SearchBar" placeholder="搜索"/></form>
+		<!-- <i class="iconfont icon_search" style="text-align:center; color:#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$_W['account']['name']}</i> -->
+        <div class="am-header-right am-header-nav">
+			<a href="{php echo $this->createMobileUrl('halfnews');}" class="am-btn am-btn-secondary infoSum"><i class="iconfont remind">&#xe606;</i> <div class="xiaoxiL">{$news_num}</div></a>
+        </div>
+    </header>
+    <!--导航栏的结束位置-->
+    <!--轮播图的开始-->
+  
+ <div class="slider row">
+        <ul>
+        {loop $bannerlist $val}
+            <li>
+                {loop $bannerurl $url}
+                <a href="{$url}">
+                    <img src="{php echo tomedia($val)}" alt="">
+                </a>
+                {/loop}
+            </li>
+        {/loop}
+ </div>
+    
+  <!--轮播图的结束-->
+
+ <!--分类的开始-->
+         <div class="classify">
+            <ul class="classifyone">
+                {loop $modilist  $key $list}
+                    {if $key < 4}
+                    <li>
+                        <a href="{$list['url']}">
+                            <div class="AllClassify">
+                                <img src="{php echo tomedia($list['img'])}"/>
+                            </div>
+                            <p class="classifyName">{$list['name']}</p>
+                        </a>
+                    </li>
+                    {/if}
+                 {/loop}              
+            </ul>
+            <ul class="classifyone">
+                {loop $modilist  $key $list}
+                    {if $key > 3}
+                    <li>
+                        <a href="{$list['url']}">
+                            <div class="AllClassify">
+                                <img src="{php echo tomedia($list['img'])}"/>
+                            </div>
+                            <p class="classifyName">{$list['name']}</p>
+                        </a>
+                    </li>
+                    {/if}
+                 {/loop}              
+            </ul>
+         </div>
+
+<!-- 今日喜讯的开始位置-->
+ 
+  <div class="GoodNews">
+        <span class="xixun_explain" style="width:30%;"><i class="iconfont xixun">&#xe604;</i>  通知中心</span>
+        <div id="news" style="width: 72%; padding-left: 4px; box-sizing: border-box; margin-top: 1px; font-size: 12px;">
+            <ul>
+            {if empty($news)}
+              <li class="text_flow"><a href="#">暂无通知</a></li>
+            {else}
+              {loop $news $news_son}
+                  <li class="text_flow">{$news_son['content']}</li>
+              {/loop}
+            {/if}
+            </ul>
+        </div>
+     </div>
+ <!-- 今日喜讯的结束位置-->
+ <!--今日疯抢这块活动的开始位置-->
+ <div class="activityOne">
+  <div class="Berserk">
+      <a href="{$confing['left_url']}"  class="BerserkA">
+        <div class="berserkContent">
+          <h1 class="textberserk">{$confing['left_title']}</h1>
+          <p class="Time" value="1462684494">
+			<em class="hour">{$left_word1}</em>:
+            <em class="minute">{$left_word2}</em>:
+            <em class="second">{$left_word3}</em>
+          </p>
+          <img src="{php echo tomedia($left_img)}" class="BerserkGoodImg"/>
+          <h2 class="font12 text_flow">{$confing['left_tleson']}</h2>
+        </div>
+      </a>
+    </div>
+
+  <div class="boonAndTicket">
+    <div class="weui_panel_bd">
+            <a href="{$confing['top_url']}" class="weui_media_box weui_media_appmsg">
+                
+                <div class="weui_media_bd">
+                    <h4 class="weui_media_title text_flow" style="color: #7CC2FE;">{$confing['top_title']}</h4>
+                    <p class="weui_media_desc text_flow font12">{$confing['top_tleson']}</p>
+                </div>
+                <div class="weui_media_hd">
+                    <img src="{php echo tomedia($top_img)}" width="60px" height="60px;"/>
+                </div>
+            </a>
+            <a href="{$confing['bottom_url']}" class="weui_media_box weui_media_appmsg">
+                 <div class="weui_media_bd">
+                    <h4 class="weui_media_title text_flow" style="color: #FE3595;">{$confing['bottom_title']}</h4>
+                    <p class="weui_media_desc font12 text_flow">{$confing['bottom_tleson']}</p>
+                </div>
+                <div class="weui_media_hd">
+                    <img src="{php echo tomedia($bottom_img)}" width="60px" height="60px"/>
+                </div>
+            </a>
+        </div>
+  </div>
+ </div>
+ <!--今日疯抢这块活动的结束位置-->
+ <!--今日五折的开始-->
+  <div class="alltitles" style="color: #E34F63;">
+  <span><i class="iconfont xixun">&#xe608;</i>&nbsp;今日五折</span> 
+ </div>
+<!--今日五折的结束-->
+
+<!-- 五折内容的开始-->
+<div class="weui_cells weui_cells_access YouHui" style="display:block;" id="jwz">
+	{loop $buslist $list} 
+		<a class="weui_cell" href="{php echo $this->createMobileUrl('halfbus',array('op'=>'info','bus_id'=> $list['bus_id'],'type'=>1));}">
+			<div class="weui_cell_hd">
+				<img originalSrc="{php echo tomedia($list['img'])}"   class="ticket_Img">
+			</div>
+			<div class="weui_cell_bd weui_cell_primary">
+				<p style="color: #080808;" class="text_flow">{$list['name']}</p>
+				<p class="text_flow m-p">
+					【{if $list['discount_sign'] == 1}
+					每周{php echo $this->exchange($list['discount_time']);}
+					{elseif $list['discount_sign'] == 2}
+					每月{$list['discount_time']}
+					{else}
+					天天享
+					{/if}
+					】{$list['desc_img']}
+				</p>
+				<p class="font12">{php echo $this->get_categoryname($list['pid']);}|{$list['district']} <span style="float: right; color: #E34F63;"></span></p>
+			</div>
+			<span class="juli font12" latlng="{$list['lat']},{$list['lng']}"></span>
+		</a>
+	{/loop}
+</div>
+<!--五折内容的结束-->
+
+<!--查看更多的开始-->
+<div class="clickMore"  onclick="window.location.href='{php echo $this->createMobileUrl('halfoff');}'">
+    >>查看全部<<
+  </div>
+  <!--查看更多的结束-->
+<!-- 推荐商家的开始-->
+<div class="alltitles" style="color: #E34F63;">
+  <span><i class="iconfont tuijian">&#xe609;</i>&nbsp;附近商家</span>
+ </div>
+<!-- 推荐商家的结束-->
+<!--推荐商家内容的开始-->
+
+<div class="weui_cells weui_cells_access YouHui shangjia" style="display:block;">
+
+</div>
+<!--推荐商家内容的结束-->
+ <!--查看更多的开始  ' --> 
+<div class="clickMore" onclick="window.location.href='{php echo $this->createMobileUrl('halfbus',array('op'=>'shopList'));}'">
+    >>查看全部<<
+  </div>
+ <!--查看更多的结束-->
+ <div style="height: 40px;"></div>
+ <div style="height: 50px; text-align:center;">版权所有 {$confing['copyright']}</div>
+ <div style="height: 40px;"></div>
+<!-- 尾部的开始-->
+{template 'footer'}
+ <!-- 尾部的结束-->
+
+</body>
+<script type="text/javascript" src="{php echo HT}js/jquery-1.8.2.min.js" ></script>
+<script type="text/javascript" src="{php echo HT}js/yxMobileSlider.js" ></script>
+<script type="text/javascript" src="{php echo HT}js/dropload.min.js" ></script>
+<script src="{php echo HT}js/lyz.delayLoading.min.js" type="text/javascript"></script><!-- 延迟加载的js-->
+<script type="text/javascript" src="{php echo HT}js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak={$confing['baiduak']}"></script>
+
+
+<script>
+
+var latitude;
+var longitude;
+var dropObj;
+var geolocation = new BMap.Geolocation();
+geolocation.getCurrentPosition(function(r){
+  if(this.getStatus() == BMAP_STATUS_SUCCESS){
+    var mk = new BMap.Marker(r.point);
+    latitude = r.point.lat; 
+      longitude = r.point.lng;
+      if(latitude > 1 && longitude > 1){
+        for(var i = 0; i < $('.juli').length; i++){
+          var latlng = $('.juli').eq(i).attr('latlng').split(',');
+          if(latlng[0] > 1 && latlng[1] > 1){
+            $('.juli').eq(i).html(getdistance(latlng[0],latlng[1],latitude,longitude));
+          }   
+        } 
+      }
+      $.post("{php echo $this->createmobileurl('halfhome',array('op'=>'nearby'))}",{latitude:latitude,longitude:longitude},function(data){
+          var str = '';
+          var res = eval('('+data+')');
+          $.each(res,function(index,value) {
+              str+='<a class="weui_cell" href="{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&c=entry&op=info&do=halfbus&m=hetu_halfoff&type=2&bus_id='+value.bus_id+'">';
+              str+='<div class="weui_cell_hd">';
+              str+='<img originalSrc="{$_W['attachurl']}'+value.img+'"   class="ticket_Img">';
+              str+='</div>';
+              str+='<div class="weui_cell_bd weui_cell_primary">';
+              str+='<p style="color: #080808;" class="text_flow">'+value.name+'';
+			  if(value.couponnum > 0){ //有优惠券
+				  str+='<em class="font-class" style="background-color: #2CBBFF;">券</em>';
+				  str+='<em class="font-class" style="background-color: #FE6D3E;">折</em>';
+			  }else { //无优惠券
+				  str+='<em class="font-class" style="background-color: #FE6D3E;">折</em>';
+			  }
+              //2016年6月17日 10:37:36 先设置为“折”
+              //str+='<em class="font-class" style="background-color: #FE6D3E;">折</em>';
+              if (value.qiang > 0) {
+                str+='<em class="font-class">抢</em>';
+              }
+              if (value.zhe > 0) {
+                str+='<em class="font-class" style="background-color: #FE6D3E;">折</em>';
+              }
+              if (value.quan > 0) {
+                str+='<em class="font-class" style="background-color: #2CBBFF;">券</em>';
+              }
+              if (value.dui > 0) {
+                str+='<em class="font-class" style="background-color: rgb(234,50,130);">兑</em>';
+              }
+              str+='</p>';
+              str+='<p class="text_flow m-p">'+value.businesshour+'营业</p>';
+              str+='<p class="font12">'+value.cat_name+'|'+value.district+' <span style="float: right; color: #E34F63;">'+value.latlng+'km</span></p>';
+              str+='</div>';
+              str+='</a>';
+          });
+          $('.shangjia').append(str);
+          $("img").delayLoading({
+            defaultImg: "/wx/Public/Home/img/loading.jpg",           // 预加载前显示的图片
+            errorImg: "",                        // 读取图片错误时替换图片(默认：与defaultImg一样)
+            imgSrcAttr: "originalSrc",           // 记录图片路径的属性(默认：originalSrc，页面img的src属性也要替换为originalSrc)
+            beforehand: 0,                       // 预先提前多少像素加载图片(默认：0)
+            event: "scroll",                     // 触发加载图片事件(默认：scroll)
+            duration: "normal",                  // 三种预定淡出(入)速度之一的字符串("slow", "normal", or "fast")或表示动画时长的毫秒数值(如：1000),默认:"normal"
+            container: window,                   // 对象加载的位置容器(默认：window)
+            success: function (imgObj) { },      // 加载图片成功后的回调函数(默认：不执行任何操作)
+            error: function (imgObj) { }         // 加载图片失败后的回调函数(默认：不执行任何操作)
+          });
+      }); 
+
+  }
+  else {
+    alert('failed'+this.getStatus());
+  }        
+},{enableHighAccuracy: true});
+
+
+wx.config({
+    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+    appId: "{$jssdkconfig['appId']}", // 必填，公众号的唯一标识
+    timestamp: '{$jssdkconfig["timestamp"]}', // 必填，生成签名的时间戳
+    nonceStr: '{$jssdkconfig["nonceStr"]}', // 必填，生成签名的随机串
+    signature: '{$jssdkconfig["signature"]}',// 必填，签名，见附录1
+    jsApiList: ['checkJsApi','openLocation','getLocation','onMenuShareAppMessage','onMenuShareTimeline'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+});
+wx.ready(function(){ 
+        
+        wx.checkJsApi({
+            jsApiList: [
+                'getLocation',
+            ],
+            success: function (res) {
+                //alert(JSON.stringify(res));
+                // alert(JSON.stringify(res.checkResult.getLocation));
+                if (res.checkResult.getLocation == false) {
+                    alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+                    return;
+                }
+            }
+        });
+       
+      wx.onMenuShareAppMessage({
+          title: "{$confing['share_title']}", // 分享标题
+          desc: "{$confing['share_desc']}", // 分享描述
+          link: "{$_W['siteurl']}", // 分享链接
+          imgUrl: "{php echo tomedia($confing['share_img']);}", // 分享图标
+          success: function () { 
+
+          },
+          cancel: function () { 
+            alert("分享失败，可能是网络问题，一会儿再试试？");
+          }
+      });
+
+      wx.onMenuShareTimeline({
+           title: "{$confing['share_title']}", // 分享标题
+          desc: "{$confing['share_desc']}", // 分享描述
+          link: "{$_W['siteurl']}", // 分享链接
+          imgUrl: "{php echo tomedia($confing['share_img']);}", // 分享图标
+          success: function () {
+        
+          },
+          cancel: function () { 
+             alert("分享失败，可能是网络问题，一会儿再试试？");
+          }
+      });
+      
+})
+
+
+
+  /*轮播图*/
+$(".slider").yxMobileSlider({width:480,height:150,during:5000});
+
+    /*图片懒加载的*/
+  
+  $("img").delayLoading({
+    defaultImg: "{$_W['attachurl']}/images/loading.jpg",           // 预加载前显示的图片
+    errorImg: "{$_W['attachurl']}/images/loading.jpg",                        // 读取图片错误时替换图片(默认：与defaultImg一样)
+    imgSrcAttr: "originalSrc",           // 记录图片路径的属性(默认：originalSrc，页面img的src属性也要替换为originalSrc)
+    beforehand: 0,                       // 预先提前多少像素加载图片(默认：0)
+    event: "scroll",                     // 触发加载图片事件(默认：scroll)
+    duration: "normal",                  // 三种预定淡出(入)速度之一的字符串("slow", "normal", or "fast")或表示动画时长的毫秒数值(如：1000),默认:"normal"
+    container: window,                   // 对象加载的位置容器(默认：window)
+    success: function (imgObj) { },      // 加载图片成功后的回调函数(默认：不执行任何操作)
+    error: function (imgObj) { }         // 加载图片失败后的回调函数(默认：不执行任何操作)
+  });
+
+
+    function getdistance_opt(lat1,lng1,lat2,lng2){
+        // alert(lat1+"+++++"+lng1);
+        // alert(lat2+"+++++"+lng2);
+        var result = 6378.138*2*Math.asin(Math.sqrt(Math.pow(Math.sin((lat2*Math.PI/180-lat1*Math.PI/180)/2),2)+Math.cos(lat2*Math.PI/180)*Math.cos(lat1*Math.PI/180)*Math.pow(Math.sin((lng2*Math.PI/180-lng1*Math.PI/180)/2),2)));
+        return result.toFixed(1)+'km';
+    }
+
+    function getRad(d){ 
+      return d*Math.PI/180.0; 
+    } 
+    function getdistance(lat1,lng1,lat2,lng2){ 
+      var f = getRad((parseFloat(lat1) + parseFloat(lat2))/2); 
+      var g = getRad((parseFloat(lat1) - parseFloat(lat2))/2); 
+      var l = getRad((parseFloat(lng1) - parseFloat(lng2))/2); 
+
+      var sg = Math.sin(g); 
+      var sl = Math.sin(l); 
+      var sf = Math.sin(f); 
+
+      var s,c,w,r,d,h1,h2; 
+      var a = 6378137.0; 
+      var fl = 1/298.257; 
+
+      sg = sg*sg; 
+      sl = sl*sl; 
+      sf = sf*sf; 
+
+      s = sg*(1-sl) + (1-sf)*sl; 
+      c = (1-sg)*(1-sl) + sf*sl; 
+
+      w = Math.atan(Math.sqrt(s/c)); 
+      r = Math.sqrt(s*c)/w; 
+      d = 2*w*a; 
+      h1 = (3*r -1)/2/c; 
+      h2 = (3*r +1)/2/s; 
+       // ROUND(6378.138*2*ASIN(SQRT(POW(SIN((37.446705*PI()/180-b.lat*PI()/180)/2),2)+COS(37.446705*PI()/180)*COS(b.lat*PI()/180)*POW(SIN((116.36173*PI()/180-b.lng*PI()/180)/2),2)))*1000);
+
+      return (d*(1 + fl*(h1*sf*(1-sg) - h2*(1-sf)*sg))/1000).toFixed(1)+'km'; 
+    } 
+
+    
+   window.onload=function(){
+            $('#news').vTicker({
+                        speed: 700,
+                        pause: 3000,
+                        animation: 'fade',
+                        mousePause: false,
+                        showItems: 1
+                    });
+                    
+          }          
+        
+
+    
+    var _hmt = _hmt || [];
+    setTimeout(function(){
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "http://s4.cnzz.com/stat.php?id=1256263775&web_id=1256263775";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    },0);
+   
+</script>
+<script>
+
+function formSearch(){
+	if($("#SearchBar").val().trim() == ''){
+		alert("搜索关键字不能为空！");
+		return false;
+	}
+	return true;
+}
+
+</script>
+</html>

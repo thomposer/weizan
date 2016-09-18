@@ -27,7 +27,7 @@
 							<div class="input-group">
 								<input type="hidden" name="group[]" value="0">
 								<span class="input-group-addon">原价</span>
-								<input type="text" class="form-control" name="price[]" value="{$item['price'][0]}">
+								<input type="text" class="form-control" name="price[]" value="{$item['price']['0']}">
 								<span class="input-group-addon">元</span>
 							</div>
 							<br>
@@ -243,8 +243,8 @@
 								<th>菜品名称</th>
 								<th>所属分类</th>
 								<th>单位</th>
-								<th>价格</th>
-								<th>总库存</th>
+								<th width="200">价格</th>
+							  <th>总库存</th>
 								<th>已售出</th>
 								<th>赠送积分</th>
 								<th>是否上架</th>
@@ -261,7 +261,7 @@
 								<td>{$category[$item['cid']]['title']}</td>
 								<td>{$item['unitname']}</td>
 								<td>
-									原价：{$item['price'][0]}元 <br>
+									原价：{$item['price']['0']}元 <br>
 									{loop $groups $group}
 										{$group['title']}：{$item['price'][$group['groupid']]}元<br>
 									{/loop}

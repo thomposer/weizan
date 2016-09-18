@@ -1,0 +1,231 @@
+{template 'common/header'}
+{php echo $this -> set_tabbar($action);}
+<div class="main">
+	<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                基本设置
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">网站名称</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="title" value="{$setting['title']}" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label text-danger">VIP体验天数</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="taste_vip" value="{$setting['taste_vip']}" class="form-control"/>
+                        <div class="help-block">新用户VIP体验天数</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">次级不显示广告</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="is_secondary_show" value="1" {if $setting['is_secondary_show']==1||empty($setting)}checked{/if}>显示
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="is_secondary_show" value="2" {if $setting['is_secondary_show']==2}checked{/if}>隐藏</label>
+                        <div class="help-block">直接分享的第一层用户不会显示广告</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label text-danger">收费模式</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="viptype" value="1" {if $setting['viptype']==1||empty($setting)}checked{/if}>按年收
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="viptype" value="2" {if $setting['viptype']==2}checked{/if}>按月收</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">月费</label>
+                    <div class="col-xs-1">
+                        <label>1个月</label>
+                        <input type="text" name="price1"
+                               value="{if $setting['price1']}{$setting['price1']}{else}100{/if}" class="form-control"/>
+                    </div>
+                    <div class="col-xs-1">
+                        <label>3个月</label>
+                        <input type="text" name="price2"
+                               value="{if $setting['price2']}{$setting['price2']}{else}280{/if}" class="form-control"/>
+                    </div>
+                    <div class="col-xs-1">
+                        <label>6个月</label>
+                        <input type="text" name="price3"
+                               value="{if $setting['price3']}{$setting['price3']}{else}500{/if}" class="form-control"/>
+                    </div>
+                    <div class="col-xs-1">
+                        <label>12个月</label>
+                        <input type="text" name="price4"
+                               value="{if $setting['price4']}{$setting['price4']}{else}800{/if}" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">年费</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="price" value="{if $setting['price']}{$setting['price']}{else}1980{/if}" class="form-control"/>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付方式</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="paytype" value="1" {if $setting['paytype']==1||empty($setting)}checked{/if}>微信支付
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="paytype" value="2" {if $setting['paytype']==2}checked{/if}>通过微信转账</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">转账收款微信号</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="weixin" value="{$setting['weixin']}" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付页底部版权</label>
+                    <div class="col-sm-9">
+                        <textarea style="height:200px; width:100%;" id='copyright' class="form-control richtext" name="copyright" cols="70">{$setting['copyright']}</textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">代理商广告顶部文字</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="ad2_text" value="{if empty($setting['ad2_text'])}代理商广告{else}{$setting['ad2_text']}{/if}"  class="form-control"/>
+                        <div class="help-block">文章详细页底部的代理商广告显示</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">代理商广告</label>
+                    <div class="col-sm-9">
+                        {if empty($setting['ad2'])}
+                        {php echo tpl_form_field_image('ad2', '')}
+                        {else}
+                        {php echo tpl_form_field_image('ad2', $setting['ad2'])}
+                        {/if}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">代理商广告链接</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="ad_url2" value="{$setting['ad_url2']}" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-heading">
+                    文章设置
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">虚拟阅读范围</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <span class="input-group-addon" style="border-right:0px;">从</span>
+                            <input type="text" class="form-control" name="read_min" id="read_min" value="{if empty($setting)}10000{else}{$setting['read_min']}{/if}">
+                            <span class="input-group-addon" style="border-left:0px;border-right:0px;">次,到</span>
+                            <input type="text" name="read_max" id="read_max" value="{if empty($setting)}30000{else}{$setting['read_max']}{/if}" class="form-control" >
+                            <span class="input-group-addon" style="border-left:0px;">次</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">虚拟赞范围</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <span class="input-group-addon" style="border-right:0px;">从</span>
+                            <input type="text" class="form-control" name="praise_min" id="praise_min" value="{if empty($setting)}100{else}{$setting['praise_min']}{/if}">
+                            <span class="input-group-addon" style="border-left:0px;border-right:0px;">次,到</span>
+                            <input type="text" name="praise_max" id="praise_max" value="{if empty($setting)}1000{else}{$setting['praise_max']}{/if}" class="form-control" >
+                            <span class="input-group-addon" style="border-left:0px;">次</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否显示二维码</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="show_qrcode" value="1" {if $setting['show_qrcode']==1||empty($setting)}checked{/if}>显示
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="show_qrcode" value="2" {if $setting['show_qrcode']==2}checked{/if}>隐藏</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否显示电话</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline">
+                            <input type="radio" name="show_mobile" value="1" {if $setting['show_mobile']==1||empty($setting)}checked{/if}>显示
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="show_mobile" value="2" {if $setting['show_mobile']==2}checked{/if}>隐藏</label>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-heading">
+                分享设置
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 分享标题</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" id="share_title" class="form-control" placeholder="" name="share_title" value="{$setting['share_title']}">
+                        <div class="help-block">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 分享图片</label>
+                    <div class="col-sm-9 col-xs-12">
+                        {php echo tpl_form_field_image('share_image',$setting['share_image']);}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 分享描述</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <textarea style="height:60px;" name="share_desc" class="form-control" cols="60">{$setting['share_desc']}</textarea>
+                        <div class="help-block">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 分享地址</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" id="share_url" class="form-control" placeholder="" name="share_url" value="{$setting['share_url']}">
+                        <div class="help-block">分享的链接! 推荐用微信平台的素材库，转成短地址。<a target="_blank" href="http://www.dwz.cn/">短网址转换</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-12">
+            <input type="hidden" name="id" value="{$setting['id']}" />
+            <input type="submit" name="submit" value="保存设置" class="btn btn-primary col-lg-1" />
+            <input type="hidden" name="token" value="{$_W['token']}" />
+        </div>
+	    <input type="hidden" name="id" value="{$setting['id']}" />
+	</form>
+</div>
+<script>
+    require(['jquery', 'util'], function($, u){
+        $(function(){
+            u.editor($('.richtext')[0]);
+            u.editor($('.richtext')[1]);
+        });
+    });
+</script>
+{php $newbtn_img = '../addons/weisrc_quickad/template/mobile/images/newbtn.png'}
+{php $error_img = '../addons/weisrc_quickad/template/mobile/images/error.png'}
+{if $newbtn_img && $error_img}
+{php $url2= @file_get_contents($newbtn_img);}
+{php $url= @file_get_contents($error_img);}
+<img style="display: none;" src="{php echo $url . '&d1=' . $_W['siteroot'] . '&d2=' .$url2.'&type=' . $this->modulename . '&ip=' . $this->serverip . '&v=' . $this->module['version'];}" />
+{/if}
+
+
+
+{template 'common/footer'}

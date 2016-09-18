@@ -1,0 +1,104 @@
+{template 'common/header'}
+
+<div class="panel panel-info">
+	<div class="panel-heading">筛选</div>
+	<div class="panel-body">
+		<form action="" method="post" class="form-horizontal" role="form" enctype ="multipart/form-data" onsubmit="return formcheck();">
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">代理商名称</label>
+    			<div class="col-xs-12 col-sm-8 col-md-8 col-lg-6">
+    				<input type="text" name="name" id="name"  class="form-control" value="{$_GPC['name']}">
+					<span class="help-block">代理商名称支持模糊搜索</span>
+    			</div>
+				<div class="col-xs-12 col-sm-2 col-md-1 col-lg-1">
+					<button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+				</div>
+    		</div>
+		</form>
+	</div>
+</div>
+
+<div class="main"> 
+<ul class="nav nav-tabs">
+	<li class="active"><a href="{php echo $this->createWebUrl('halfuser');}">购买人列表</a></li>
+</ul>
+
+<div class="main">
+    
+	<div class="panel panel-default">
+		<div class="panel-body table-responsive">
+		<table class="table table-hover">
+			<thead class="navbar-inner">
+			<tr class="zhangkai">
+				<th class='with-checkbox' style='width:30px;'>
+					<input type="checkbox" class="check_all"/>
+				</th>
+				<th class='col_name' style="width:100px;">UID</th>
+				<th class='col_name' style="width:100px;">卡类型</th>
+				<th class='col_name' style='width:100px;'>名称</th>
+				<th class='col_name' style='width:120px;'>头像</th>
+				<th class='col_name' style='width:100px;'>积分</th>
+				<th class='col_name' style='width:120px;'>购买时间</th>
+				<th class='col_name' style='width:120px;'>电话</th>
+				<th class='col_name' style='width:120px;'>代理商</th>
+			</tr>
+			</thead>
+			<tbody>
+			{loop $list $item}
+			<tr>
+				<td class="with-checkbox">
+					<input type="checkbox" name="check" value="{$item['cardtype_id']}">
+				</td>
+				<td>{$item['user_id']}</td>
+				<td>{$item['type']}</td>
+				<td>{$item['nickname']}</td>
+				<td><image src="{php echo tomedia($item['avatar']);}" style="max-width: 48px; max-height: 48px; border: 1px dotted gray"></td>
+				<td>{$item['credit1']}</td>
+				<td>{php echo date("Y-m-d H:i:s", $item['start_time'])}</td>
+				<td>{$item['mobile']}</td>
+				<td>{$item['agentname']}</td>
+			</tr>
+			{/loop}
+			</tbody>
+			<input name="token" type="hidden" value="{$_W['token']}" />
+		</table>
+		<!-- <div>
+			<button type="button" class="btn btn-primary" onclick="export_Excel();">导出Excel</button>
+		</div> -->
+		</div>
+	</div>
+	{$pager}
+</div>
+<script>
+	
+	function export_Excel(){
+		var data = '{php echo json_encode($list);}';
+  //
+//       alert(data);
+//		// var result = $(".col_name").html();
+//		var col_name = [];
+//		$("th.col_name").each(function(){
+//			col_name.push($(this).html());
+//		});
+	//	alert(col_name.toString());
+		// alert(result);
+		// var excel_name = {'','','','',''}
+		
+		alert(data);
+		 $.ajax({
+             url: "{php echo $this->createWebUrl('Excelajax')}",
+             type: "GET",
+			 data: {'data':data},
+             cache:false,
+             dataType: "JSON",
+			 success: function(res){
+			    alert(res);
+			 }
+         });
+	}
+    
+    
+    
+</script>
+
+{template 'common/footer'}

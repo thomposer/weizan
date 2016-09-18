@@ -1125,7 +1125,7 @@ color: #FFF !important;
   position: relative;
   display: inline-block;
   line-height: 22px;
-  padding: 0 6px; }
+  padding: 0; }
   .ui-reddot:after, .ui-reddot-border:after, .ui-reddot-s:after {
     content: '';
     position: absolute;

@@ -8,6 +8,7 @@ body{background-color:#fff;}
 {/if}
 </style>
     <div class="weui_tab_bd">
+	
 	<div class="swiper-container">
 		<div class="swiper-wrapper">
 		{loop $list $item}
@@ -18,6 +19,24 @@ body{background-color:#fff;}
 		{/loop}
 		</div>
 	</div>
+	{if $setting['list_num']==1}
+	<div class="weui_panel weui_panel_access" style="margin:0;">
+		<div class="weui_panel_bd">
+		{loop $projects $project}
+			<a href="{$project['link']}" class="weui_media_box weui_media_appmsg">
+				<div class="weui_media_hd">
+					<img class="weui_media_appmsg_thumb" src="{php echo tomedia($project['icon'])}" alt="{$project['subtitle']}">
+				</div>
+				<div class="weui_media_bd">
+					<h4 class="weui_media_title">{$project['subtitle']}</h4>
+					<p class="weui_media_desc">{$project['description']}</p>
+				</div>				
+                <div class="weui_panel_ft"></div>
+			</a>
+		{/loop}
+            </div>
+        </div>
+	{else}
 		<div class="weui_grids">
 		{loop $projects $project}
 			<a href="{$project['link']}" class="weui_grid js_grid">
@@ -26,6 +45,7 @@ body{background-color:#fff;}
 			</a>
 		{/loop}
 		</div>
+	{/if}
 	</div>
 <script src="{TEMPLATE_WEUI}js/swiper.min.js"></script>
     <script>

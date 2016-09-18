@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/> 
+<title>{$reply['title']}</title>
+<link type="text/css" rel="stylesheet" href="{UBER_RES}/default/css/frozen.css" />
+{php echo register_jssdk(false);}
+<script type="text/javascript" src="{UBER_RES}/default/js/jquery.min.js"></script>
+<style>
+.ui-header-positive, .ui-footer-positive {
+background-color: #0da3e7;
+color: #fff;
+}
+a {
+color: #0da3e7;
+}
+</style>
+</head>
+<body ontouchstart="">
+<header class="ui-header ui-header-positive ui-border-b">
+	<h1>{$reply['title']}</h1>
+</header>
+<div class="wrapper"><br>
+	<img src="{media $reply['coverurl']}" width="50%" style="margin:30px 25%;"/>
+	<div class="ui-form">
+    	<form action="" id="form_main" method="post"  enctype="multipart/form-data" autocomplete = "off">
+        	<div class="ui-form-item ui-border-b">
+            	<label for="#">大声说</label>
+            	<input type="text" name="sayname" placeholder="30字以内，＃可以用来强行分行"/>
+        	</div>
+			<div class="ui-form-item ui-border-b">
+            	<label>选择风格</label>
+            	<div class="ui-select">
+                	<select name="selectstyle">
+                    	<option value ="1">微信绿框</option>
+                    	<option value ="2">苹果风格</option>
+                    	<!--<option value ="3">便签风格</option> -->            	
+                	</select>
+            	</div>
+        	</div>
+			<div class="ui-btn-wrap">
+            	<a href="javascript:$('#form_main').submit();" class="ui-btn-lg ui-btn-danger">确认</a>
+                <input type="hidden" name="btnsubmit" value="btnsubmit"/>
+                <input type="hidden" name="token" value="{$_W['token']}"/>
+			</div>
+    	</form>
+	</div>
+
+</div>		
+</body>
+{template 'footer'}
+</html>

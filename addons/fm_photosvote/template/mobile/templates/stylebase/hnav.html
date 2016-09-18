@@ -24,17 +24,17 @@
   {else}
 	background: url({if !empty($rbody['topbgright'])}{php echo toimage($rbody['topbgright'])}{else}{FM_STATIC_MOBILE}public/images/bm.png{/if}) center no-repeat ;
   {/if}
- 
-  
-  
+
+
+
   color: {$rbody['topbgtext']};
   background-size: 100% 100%;
 }
 
 	        #speaker {
-			
+
 				top: 0px;
-		
+
              width: 100%;
             height: 40px;
             line-height: 40px;
@@ -52,7 +52,7 @@
             width: 20px;
             height: 20px;
             position: fixed;
-			
+
 				    top: 10px;
             left: 10px;
             /*background-color: #fffddf;*/
@@ -80,7 +80,7 @@
             width: 15px;
             height: 15px;
             position: fixed;
-			
+
 				    top: 12px;
             right: 10px;
             background-color: {if !empty($rbody['bodytscolor'])}{$rbody['bodytscolor']}{else}#CB418E{/if};
@@ -105,7 +105,7 @@
 
 }
 </style>
-{if $rdisplay['ipannounce'] == 1} 	
+{if $rdisplay['ipannounce'] == 1}
 	<div id="topannounce" class="topannounce">
 			 <div id="speaker">
 					<div id="s-icon"></div>
@@ -113,7 +113,7 @@
 						<marquee behavior="scroll" scrollamount="4" direction="left" width="100%">
 							{loop $announce $ac}
 							<a href="{$ac['url']}">
-								{php echo date('Y-m-d h:i', $ac['createtime'])}: {$ac['content']}  --- {$ac['nickname']}       
+								{php echo date('Y-m-d h:i', $ac['createtime'])}: {$ac['content']}  --- {$ac['nickname']}
 							</a>
 							{/loop}
 						</marquee>
@@ -121,15 +121,15 @@
 					<div id="s-fork"></div>
 				</div>
 				<div id="div_margin" style="margin-top:40px;"></div>
-		
-	</div>	
+
+	</div>
 	<script type="text/javascript">
         $('#s-fork').click(function(){
             $('#topannounce').hide();
             $('.mui-global-m-smart-banner').css({top:'0'});
 
         });
-	</script>	
+	</script>
 {/if}
 
 {if (($rhuihua['ishuodong'] == 2 || $rhuihua['ishuodong'] == 3) && !empty($rhuihua['huodongurl'])) }
@@ -148,15 +148,15 @@
   .mui-global-m-sb-btn-close{background: url({FMURL}images/yellowfork.png) top center no-repeat;width: 21px;height: 20px;background-size: 100% 100%;position: absolute;top: 26px;left: 10px;cursor: pointer;}
   .mui-global-m-sb-app-inf{margin-left: 20px;}
   .mui-global-m-smart-banner a{text-decoration: none;display: block;}
- 
+
   .mui-global-m-sb-meta{float: left;}
   .mui-global-m-sb-meta h5{font-size: 14px;line-height: 14px;color: #fff;font-weight: 400;margin: 2px 0 3px;}
   .mui-global-m-sb-meta h4{font-size: 12px;line-height: 12px;color: #acacac;font-weight: 400;}
   .mui-global-m-sb-estimate{overflow: hidden;margin: 2px auto;background: #2f2f2f;}
- 
+
   .mui-global-m-sb-download{position: absolute;font-size: 15px;color: #fff;text-decoration: none;line-height: 64px;top: 0;right: 30px;}
 
-  
+
 </style>
 <div class="mui-global-m-smart-banner" id="J_GlobalSmartBanner">
   <div class="mui-global-m-sb-close-wrap">
@@ -166,7 +166,7 @@
       <a id="J_GlobalSmartBannerLink" href="{$rhuihua['huodongurl']}&from=fm_photosvote&oid={$from_user}" target="_blank">
         <div style="width:50px;height:50px;overflow:hidden;margin-right:20px;margin-left:10px;float:left;">
           <img src="{php echo toimage($rhuihua['hhhdpicture'])}" width="50" style="">
-        </div>  
+        </div>
         <div class="mui-global-m-sb-meta">
           <h5>{$rhuihua['huodongname']}</h5>
           <h4>{$rhuihua['huodongdes']}</h4>
@@ -186,14 +186,17 @@
   }
 </script>
 {/if}
-{if $rdisplay['isbgaudio']}  
-	<span id="playbox" class="btn_music musicplay" style="display:block;"><audio id="audio" loop="" preload="none" src="{php echo tomedia($rdisplay['bgmusic'])}"></audio>
+{if $rdisplay['isbgaudio']}
+	<span id="playbox" class="btn_music musicplay" style="display:block;"><audio id="audio" preload="none" src="{php echo tomedia($rdisplay['bgmusic'])}"></audio>
 	</span>
 	<script>
-	    $(function(){
-	        if($(document).find("#playbox")){
+	   /** $(function(){
+	    		//setTimeout("lastaudio()",4000);
+	    })
+	    function lastaudio() {
+	    		if($(document).find("#playbox")){
 	            createbgmusic(1);
 	        }
-	    })
+	    }**/
 	</script>
 {/if}

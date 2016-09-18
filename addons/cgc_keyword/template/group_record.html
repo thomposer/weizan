@@ -1,0 +1,163 @@
+{template 'common/header'}
+{php 	load()->func('tpl');}
+
+	<ul class="nav nav-tabs">	
+	    <li><a  href="{php echo $this->createWebUrl('fansgroup')}">粉丝分组</a></li>
+	    <li><a href="{php echo $this->createWebUrl('fansgroup',array('op'=>'edit'))}">添加分组</a></li>
+	      <li class="active"><a  href="{php echo $this->createWebUrl('group_record')}">分组记录</a></li>
+	</ul>
+
+{if $operation == 'display'}
+
+<div class="main">
+
+
+<div class="panel panel-info">
+	<div class="panel-heading">筛选</div>
+	<div class="panel-body">
+		<form action="./index.php" method="get" class="form-horizontal" role="form">
+			<input type="hidden" name="c" value="site" />
+			<input type="hidden" name="a" value="entry" />
+			<input type="hidden" name="m" value="cgc_keyword" />
+			<input type="hidden" name="do" value="group_record" />
+	
+			
+			   <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">来源类型</label>
+                    <div class="col-xs-12 col-sm-8 col-lg-5">
+                        <select name="type" class="form-control">
+                            <option value="">所有类型</option>
+                            {loop $types $key $value}
+                              <option value="{$key}" {if $_GPC['type'] == $key}selected{/if}>{$value}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                
+                
+                 <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">分组名称</label>
+                    <div class="col-xs-12 col-sm-8 col-lg-5">
+                        <select name="group_id" class="form-control">
+                            <option value="">所有分组</option>
+                            {loop $fansgroup $item}
+                              <option value="{$item['group_id']}" 
+                              {if $_GPC['group_id'] == $item['group_id']}selected{/if}>{$item['name']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                
+                       
+                 <div class="form-group">
+				<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">关键字</label>
+				<div class="col-xs-12 col-sm-8 col-lg-9">
+					<input class="form-control" placeholder="" 
+					name="content" id="" type="text" value="{$_GPC['content']}">
+				</div>
+			</div>
+                
+                
+                <div class="form-group">
+					<label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">创建时间</label>
+					<div class="col-sm-4 col-xs-12">
+						{php echo tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d', $starttime),'endtime'=>date('Y-m-d', $endtime)));}
+					</div>
+					<div class="col-sm-4 col-xs-12" style="display:none">
+					
+						<button name="export" value="export" class="btn btn-default"><i class="fa fa-download"></i> 
+						导出数据</button>
+					
+						
+						<button type="button" class="btn btn-default">总记录数：{$total}</button>
+					</div>
+				</div>
+			
+						
+			<div class="form-group">
+				<div class=" col-xs-12 col-sm-2 col-lg-2">
+					<button class="btn btn-default"><i class="fa fa-search"></i>搜索</button>
+				</div>
+			</div>
+			
+			
+		</form>
+	</div>
+</div>
+
+<div class="panel panel-info">
+
+<label>全部记录:{$total}</label>
+
+</div>
+
+
+
+       <div class="panel panel-default">
+	<div class="panel-body">
+
+
+	<div style="padding:15px;">
+
+		<table class="table table-hover">
+
+			<thead class="navbar-inner">
+
+				<tr>
+				    <th style="width:40px;">openid</th>
+					<th style="width:40px;">分组id</th>          
+	   		        <th style="width:40px;">分组名称</th>	          
+					<th style="width:60px;">类型</th>
+			        <th style="width:40px;">关键字</th>
+			      
+					<th style="width:90px;">创建时间</th>
+					<th style="width:40px; text-align:right;">操作</th>
+				</tr>
+
+			</thead>
+
+			<tbody>
+				{loop $list $item}
+				<tr>
+					<td>{$item['openid']}</td>
+					<td>{$item['group_id']}</td>
+                    <td>{$group[$item['group_id']]['name']}</td>            
+					<td>{if $item['type']==1}关键字分组{elseif $item['type']==2}扫码 {else}默认关注{/if}</td>
+					<td>{$item['content']}</td>	
+									              
+					<td>{php echo date('Y-m-d H:i:s', $item['createtime'])}</td>
+					<td style="text-align:right;">
+					<a  class="btn btn-default"   href="{php echo $this->createWebUrl('group_record', array('op' => 'del', 'id' => $item['id']))}">删除</a>
+				
+					</td>
+
+				</tr>
+
+				{/loop}
+
+			</tbody>
+
+		</table>
+
+		{$pager}
+
+	</div>
+
+</div>
+
+
+{/if}
+
+<script>
+function sycfans(){
+ // if (confirm('确认删除所有信息吗？')){
+	location.href ="{php echo $this->createWebUrl('fansgroup',array('op'=>'sync'))}";	
+  //}
+	
+}
+</script>
+
+
+
+{template 'common/footer'}
+

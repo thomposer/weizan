@@ -1,0 +1,45 @@
+{template 'common/header'}
+
+<ul class="nav nav-tabs">
+	<li class="active"><a href="{php echo $this->createWebUrl('cgc_sleep_mps', array('op'=>'display'));}">公众号列表</a></li>
+	<li><a href="{php echo $this->createWebUrl('cgc_sleep_mps', array('op'=>'post'));}">公众号添加</a></li>
+</ul>
+
+<div class="main">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="table-responsive panel-body">
+				<table class="table table-hover" style="min-width: 300px;">
+					<thead class="navbar-inner">
+						<tr>
+							<th class="col-sm-2">公众号名称</th>
+							<th class="col-sm-2">地区</th>
+							<th class="col-sm-2">生成主页的自定义链接</th>
+							<th class="col-sm-2">分享跳转的自定义链接</th>
+							<th class="col-sm-2">关注的跳转链接</th>
+							<th class="col-sm-2 text-right">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						{loop $list $item}
+						<tr>
+						    <td>{$item['mp_name']}</td>
+							<td>{$item['addr']}</td>
+							<td>{$item['url1']}</td>
+							<td>{$item['url2']}</td>
+							<td>{$item['url3']}</td>
+							<td class="text-right">
+								<a href="{php echo $this->createWebUrl('cgc_sleep_mps', array('op'=>'post', 'id'=>$item['id']));}" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="" data-original-title="编辑">编辑</a>
+								<a onclick="if(!confirm('删除后将不可恢复,确定删除吗?')) return false;" href="{php echo $this->createWebUrl('cgc_sleep_mps', array('op'=>'delete', 'id'=>$item['id']));}" class="btn btn-default btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="删除">删除</a>
+							</td>
+						</tr>
+						{/loop}
+					</tbody>
+				</table>
+				{$pager}
+			</div>
+		</div>
+	</div>
+</div>
+
+{template 'common/footer'}

@@ -2,7 +2,7 @@
     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启极验验证码</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="iscode" radiotype = "fmcodekey" {if $rvote['iscode']} checked="checked" {/if} />
-       		
+
 		<div class="help-block">开启极验验证码，包括会话界面、首页、选手展示页投票验证码，及评论验证码（解决苹果不兼容问题，增强防作弊功能，滑动验证）</div>
     </div>
 </div>
@@ -11,14 +11,14 @@
         <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 极验验证ID：</label>
         <div class="col-sm-9">
             <input type="text" class="form-control" name="codekey" value="{$rvote['codekey']}" placeholder="如果开启验证码，这里必须设置，极验验证 ID"/>
-            
+
         </div>
     </div>
 	<div class="form-group">
 		<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span> 极验验证KEY：</label>
 		<div class="col-sm-9">
 			<input type="text" class="form-control" name="codekeykey" value="{$rvote['codekeykey']}" placeholder="如果开启验证码，这里必须设置，极验验证 KEY"/>
-			<div class="help-block">获取ID,KEY请点击 <a href="http://my.geetest.com/accounts/register/?inviter_email=cwzbooth@126.com" target="_blank">此处</a>{if $_W['role']=='founder'}，获取方法请点击  <a href="http://bbs.012wz.com/forum.php?mod=viewthread&tid=16&extra=page%3D1"  target="_blank">获取方法</a>{/if}
+			<div class="help-block">获取ID,KEY请点击 <a href="http://account.geetest.com/" target="_blank">此处</a>{if $_W['role']=='founder'}，获取方法请点击  <a href="http://bbs.012wz.com/forum.php?mod=viewthread&tid=16&extra=page%3D1"  target="_blank">获取方法</a>{/if}
 		    </div>
         </div>
 	</div>
@@ -27,23 +27,32 @@
     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启投票用户填写信息</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="voteerinfo" {if $rvote['voteerinfo']} checked="checked" {/if} />
-            
+
         <div class="help-block">开启投票用户填写信息</div>
     </div>
 </div>
 <div class="form-group">
-    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启投票用户自定投票数</label>
+    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启额外投票功能</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="votenumpiao" {if $rvote['votenumpiao']} checked="checked" {/if} />
-       
-        <div class="help-block">开启投票用户自定投票数</div>
+
+        <div class="help-block">开启该项，必须开启付费投票，用户投过限制的(当日投票总数)免费票数后，既会显示该项，进行付费投票</div>
     </div>
 </div>
+
+<div class="form-group">
+    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启送礼物</label>
+    <div class="col-sm-9 col-xs-12">
+        <input class="js-flag" type="checkbox" name="giftvote" radiotype = "giftvote" {if $rvote['giftvote']} checked="checked" {/if} />
+        <div class="help-block">开启送礼物功能，用户可以使用礼物来获取更多的票数</div>
+    </div>
+</div>
+
 <div class="form-group">
     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启付费投票</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="votepay" radiotype = "votepay" {if $rvote['votepay']} checked="checked" {/if} />
-               
+
         <div class="help-block">开启付费投票</div>
     </div>
 </div>
@@ -79,7 +88,7 @@
     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启付费报名</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="regpay" radiotype = "regpay" {if $rvote['regpay']} checked="checked" {/if} />
-            
+
         <div class="help-block">开启报名付费功能</div>
     </div>
 </div>
@@ -115,7 +124,7 @@
     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>前端是否开启报名</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="addpvapp" {if $rvote['addpvapp']} checked="checked" {/if} />
-        
+
         <div class="help-block">前端是否允许用户报名</div>
     </div>
 </div>
@@ -123,7 +132,7 @@
     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>报名数据是否同步至系统粉丝数据表</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="isfans" {if $rvote['isfans']} checked="checked" {/if} />
-       	
+
 		<div class="help-block">报名数据是否同步至系统粉丝数据表</div>
     </div>
 </div>
@@ -146,7 +155,7 @@
         <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启必须上传图片</label>
         <div class="col-sm-9 col-xs-12">
             <input class="js-flag" type="checkbox" name="ismediatype" {if $rvote['ismediatype']} checked="checked" {/if} />
-            
+
             <div class="help-block">选中图片模式后，是否开启必须上传图片</div>
         </div>
     </div>
@@ -167,7 +176,7 @@
     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启必须上传声音</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="ismediatypem" {if $rvote['ismediatypem']} checked="checked" {/if} />
-        
+
         <div class="help-block">选中好声音模式后，是否开启必须上传声音</div>
     </div>
 </div>
@@ -175,14 +184,14 @@
     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启必须上传视频</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="ismediatypev" {if $rvote['ismediatypev']} checked="checked" {/if} />
-        
+
         <div class="help-block">选中视频模式后，是否开启必须上传视频</div>
     </div>
 </div>
 <div class="form-group">
 	<label class="col-xs-12 col-sm-2 col-md-2  control-label">多媒体上传说明</label>
 	<div class="col-sm-8">
-		<textarea name="webinfo" style="height:200px; " class="form-control richtexti" cols="70" rows="100">{$rvote['webinfo']}</textarea>				
+		<textarea name="webinfo" style="height:200px; " class="form-control richtexti" cols="70" rows="100">{$rvote['webinfo']}</textarea>
 		<div class="help-block">对上传图片、声音、视频、网络视频的详细说明{if $_W['role']=='founder'}（<a href="http://bbs.012wz.com/forum.php?mod=viewthread&tid=6&extra=page%3D1" target="_blank">查看默认说明</a>）{/if}</div>
 	</div>
 </div>
@@ -191,43 +200,51 @@
     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否可重复投票</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="cqtp" {if $rvote['cqtp']} checked="checked" {/if} />
-       
+
     </div>
 </div>
 <div class="form-group">
     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>报名是否需审核</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="tpsh" {if $rvote['tpsh']} checked="checked" {/if} />
-       	
+
     </div>
 </div>
 <div class="form-group">
     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启评论</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="isbbsreply" {if $rvote['isbbsreply']} checked="checked" {/if} />
-       
+
     </div>
 </div>
 <div class="form-group">
     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启弹幕预设</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="tmyushe" {if $rvote['tmyushe']} checked="checked" {/if} />
-       
+
     </div>
 </div>
 <div class="form-group">
     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>弹幕评论是否同步到数据库</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="tmreply" {if $rvote['tmreply']} checked="checked" {/if} />
-       
+
     </div>
 </div>
 
 <div class="form-group">
+    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启智能作弊判断模式</label>
+    <div class="col-sm-9 col-xs-12">
+        <input class="js-flag" type="checkbox" name="open_smart" radiotype = "open_smart" {if $rvote['open_smart']} checked="checked" {/if} />
+
+		<div class="help-block">是否开启智能作弊判断模式，开启请注意，可能会有少量误判</div>
+    </div>
+</div>
+<div class="form-group">
     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启IP作弊限制</label>
     <div class="col-sm-9 col-xs-12">
         <input class="js-flag" type="checkbox" name="isipv" radiotype = "isipv" {if $rvote['isipv']} checked="checked" {/if} />
-       		
+
 		<div class="help-block">是否开启IP作弊限制,注意：开启IP防作弊，会大大减慢服务器的速度，请谨慎开启。</div>
     </div>
 </div>
@@ -236,7 +253,7 @@
         <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>存在作弊ip后是否开启继续允许访问</label>
         <div class="col-sm-9 col-xs-12">
             <input class="js-flag" type="checkbox" name="ipturl" {if $rvote['ipturl']== 0} checked="checked" {/if} />
-           
+
             <div class="help-block">存在作弊ip后是否开启继续允许访问等</div>
         </div>
     </div>
@@ -248,21 +265,89 @@
         </div>
     </div>
 </div>
-
 <div class="form-group">
-    <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区限制</label>
-    <div class="col-xs-12 col-sm-9">
-        <input type="text" name="iplocallimit" value="{$rvote['iplocallimit']}" class="form-control">
-        <span class="help-block">输入重庆就全重庆的都可以用, 输入北京就只有北京的可以用，用英文逗号隔开地区就可以支持多地区，支持到区县，比如直接输入海淀区(不要加北京)就可以了，如果不符合地区，会自动跳转到限制页面。</span>
+    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>是否开启LBS定位投票限制</label>
+    <div class="col-sm-9 col-xs-12">
+        <input class="js-flag" type="checkbox" name="open_lbs_localtion" radiotype = "open_lbs_localtion" {if $rvote['open_lbs_localtion']} checked="checked" {/if} />
+
+		<div class="help-block"></div>
     </div>
 </div>
-
-<div class="form-group">
-    <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区限制提示</label>
-    <div class="col-xs-12 col-sm-9">
-        <input type="text" name="iplocaldes" value="{$rvote['iplocaldes']}" class="form-control">
-        <span class="help-block">不在活动范围内的用户提示，可以使用的命令有：<br /> #限制地区#  允许的活动范围地区<br />#用户地区#  用户的实际地区</span>
-    </div>
+<div id="open_lbs_localtion" {if !$rvote['open_lbs_localtion']}style="display:none"{/if}>
+	<div class="form-group" >
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label">定位方式</label>
+		<div class="col-sm-6 col-xs-12">
+			<style>
+				li {list-style: none;}
+			</style>
+			<ul>
+				<li>
+					<label class="radio-inline">
+	               	 	<input type="radio" name="open_lbs_type" value="1" {if $rvote['open_lbs_type'] == 1} checked="checked"{/if}/>H5 定位
+	                </label>
+					<label class="radio-inline">
+	               	 	<input type="radio" name="open_lbs_type" value="2" {if $rvote['open_lbs_type'] == 2} checked="checked"{/if}/>腾讯LBS定位
+	                </label>
+					<label class="radio-inline">
+	               	 	<input type="radio" name="open_lbs_type" value="3" {if $rvote['open_lbs_type'] == 3} checked="checked"{/if}/>百度LBS定位
+	                </label>
+				</li>
+			</ul>
+			<span class="help-block">
+				<p>LBS定位方式</p>
+				<p>1、H5 定位方式，获取位置粗略、定位速度快</p>
+				<p>2、腾讯LBS定位方式，获取位置精确、定位速度慢</p>
+				<p>3、百度LBS定位方式，获取位置精确度小于腾讯LBS、定位速度适中</p>
+			</span>
+		</div>
+	</div>
+	<div class="form-group">
+	    <label class="col-xs-12 col-sm-3 col-md-2 control-label">百度 AK</label>
+	    <div class="col-xs-12 col-sm-9">
+	        <input type="text" name="open_lbs_key_baidu" value="{$rvote['open_lbs_key_baidu']}" class="form-control">
+	        <span class="help-block">
+	        		<p>与定位方式相互对应，填写相应的key</p>
+	        		<p>1、H5定位KEY,请填写使用百度 AK 申请地址：<a href="http://lbsyun.baidu.com/apiconsole/key" target="_blank">申请</a></p>
+	        		<p>2、百度 AK 申请地址：<a href="http://lbsyun.baidu.com/apiconsole/key" target="_blank">申请</a></p>
+	        </span>
+	    </div>
+	</div>
+	<div class="form-group">
+	    <label class="col-xs-12 col-sm-3 col-md-2 control-label">腾讯 key</label>
+	    <div class="col-xs-12 col-sm-9">
+	        <input type="text" name="open_lbs_key_qq" value="{$rvote['open_lbs_key_qq']}" class="form-control">
+	        <span class="help-block">
+	        		<p>腾讯 KEY 申请地址：<a href="http://lbs.qq.com/mykey.html" target="_blank">申请</a></p>
+	        </span>
+	    </div>
+	</div>
+	<div class="form-group">
+	    <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区限制</label>
+	    <div class="col-xs-12 col-sm-9">
+	        <input type="text" name="iplocallimit" value="{$rvote['iplocallimit']}" class="form-control">
+	        <span class="help-block">
+	        		<p>输入重庆就全重庆的都可以用, 输入北京就只有北京的可以用；</p>
+	        		<p>用英文逗号隔开地区就可以支持多地区，支持到区县;</p>
+	        		<p>比如直接输入海淀区(不要加北京)就可以了，如果不符合地区，会自动跳转到限制跳转链接。</p>
+	        </span>
+	    </div>
+	</div>
+	<div class="form-group">
+	    <label class="col-xs-12 col-sm-3 col-md-2 control-label">限制跳转链接</label>
+	    <div class="col-xs-12 col-sm-9">
+	        <input type="text" name="open_lbs_link" value="{$rvote['open_lbs_link']}" class="form-control">
+	        <span class="help-block">可以自定义不在该地区时跳转的链接，不填写为默认限制跳转页面</span>
+	    </div>
+	</div>
+	<div class="form-group">
+	    <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区限制提示（默认跳转页面）</label>
+	    <div class="col-xs-12 col-sm-9">
+	        <input type="text" name="iplocaldes" value="{$rvote['iplocaldes']}" class="form-control">
+	        <span class="help-block">
+	        		不在活动范围内的用户提示，可以使用的命令有：<br /> #限制地区#  允许的活动范围地区<br />#用户地区#  用户的实际地区
+	        </span>
+	    </div>
+	</div>
 </div>
  <div class="form-group">
 		<label class="col-xs-12 col-sm-3 col-md-2 control-label">报名照片数限制</label>
@@ -312,15 +397,29 @@
 </div>
 
 <div class="form-group">
-    <label class="col-xs-12 col-sm-3 col-md-2 control-label">投票限速</label>
+    <label class="col-xs-12 col-sm-3 col-md-2 control-label">参赛者投票限速</label>
     <div class="col-xs-12 col-sm-9">
         <div class="input-group">
-            <span class="input-group-addon">全体用户每</span>
+            <span class="input-group-addon">全体参赛者每</span>
             <input type="text" name="limitsd" id="limitsd" class="form-control" value="{$rvote['limitsd']}" />
             <span class="input-group-addon">分钟可获得</span>
             <input type="text" name="limitsdps" id="limitsdps" class="form-control" value="{$rvote['limitsdps']}" />
             <span class="input-group-addon">票</span>
         </div>
+        <div class="help-block">此设置针对参赛者，当参赛者在规定的时间内达到该指定票数后，就无法获取票数，会对投票的人提示</div>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-xs-12 col-sm-3 col-md-2 control-label">投票者投票限速</label>
+    <div class="col-xs-12 col-sm-9">
+        <div class="input-group">
+            <span class="input-group-addon">全体投票者每</span>
+            <input type="text" name="limitsd_voter" id="limitsd_voter" class="form-control" value="{$rvote['limitsd_voter']}" />
+            <span class="input-group-addon">分钟可投</span>
+            <input type="text" name="limitsdps_voter" id="limitsdps_voter" class="form-control" value="{$rvote['limitsdps_voter']}" />
+            <span class="input-group-addon">票</span>
+        </div>
+        <div class="help-block">此设置针对投票者，当投票者在规定的时间内投了该指限制票数后，就无法再投票，只能在下个时间投票</div>
     </div>
 </div>
 <div class="form-group">
@@ -372,6 +471,8 @@
                 <input type="text" class="form-control" name="u_daytpxz" value="{$rvote['daytpxz']}" />
                 <span class="input-group-addon">次票</span>
             </div>
+
+            <div class="help-block">开启额外投票功能，该条件为限制免费票数，设置每日投多少票，即为多少免费次投票</div>
         </div>
     </div>
     <div class="form-group">
@@ -404,7 +505,7 @@
             </div>
         </div>
     </div>
-	
+
     <div class="form-group">
         <label class="col-xs-12 col-sm-2 col-md-2  control-label text-danger">子公众号选择</label>
 		<div class="col-sm-9 col-xs-6">
@@ -417,8 +518,8 @@
 			<div class="help-block">开启方法：重要：借用授权模式请选择：高级借用授权方式【<a href="http://bbs.012wz.com/forum.php?mod=viewthread&tid=42&extra=page%3D1" target="_blank">设置方法</a>】。  点击选择要开启的多公众号</div>
         </div>
     </div>
-	
-	
+
+
 
     <div class="form-group">
         <label class="col-xs-12 col-sm-3 col-md-2 control-label">所有公众号最多投票数(A)</label>
@@ -438,6 +539,7 @@
                 <input type="text" class="form-control" name="daytpxz" value="{$rvote['daytpxz']}" />
                 <span class="input-group-addon">次票</span>
             </div>
+            <div class="help-block">开启额外投票功能，该条件为限制免费票数，设置每日投多少票，即为多少免费次投票</div>
         </div>
     </div>
     <div class="form-group">
@@ -479,6 +581,7 @@
                 <input type="text" class="form-control" name="uni_daytpxz" value="{$rvote['uni_daytpxz']}" />
                 <span class="input-group-addon">次票</span>
             </div>
+            <div class="help-block">开启额外投票功能，该条件为限制免费票数，设置每日投多少票，即为多少免费次投票</div>
         </div>
     </div>
     <div class="form-group">
@@ -510,7 +613,7 @@
             </label>
             <label class="radio-inline">
                 <input type="radio" name="uni_all_users" value="0" {if $rvote['uni_all_users'] == 0} checked="checked"{/if}/>不允许
-            </label>                
+            </label>
             <div class="help-block">单公众号是否允许查看所有用户,点击允许则与主公众号显示的相同</div>
         </div>
     </div>
@@ -529,7 +632,7 @@
 	<label class="col-xs-12 col-sm-2 col-md-2  control-label">投票成功提示语</label>
 	<div class="col-sm-9">
 		<input type="text" class="form-control" name="votesuccess" value="{$rvote['votesuccess']}" />
-	<div class="help-block">此设置用于投票成功提示语<br />参赛者编号、姓名 可用变量：<br/>#编号# （参赛者编号）<br/>#参赛人名#（参与人昵称或者真实姓名）<br/>#投票票数#（投票的票数）</div>
+	<div class="help-block">此设置用于投票成功提示语<br />参赛者编号、姓名 可用变量：<br/>#编号# （参赛者编号）<br/>#参赛人名#（参与人昵称或者真实姓名）<br/>#投票票数#（投票的票数）<br/>#积分#（投票增加的积分，当开启积分功能时，此项有效）</div>
 	</div>
 </div>
 <script type="text/javascript">

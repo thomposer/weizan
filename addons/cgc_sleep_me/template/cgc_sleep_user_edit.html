@@ -1,0 +1,103 @@
+{template 'common/header'}
+
+<ul class="nav nav-tabs">
+	<li><a href="{php echo $this->createWebUrl('cgc_sleep_user', array('op'=>'display'));}">{$title}列表</a></li>
+	<li {if empty($id)}class="active"{/if}><a href="{php echo $this->createWebUrl('cgc_sleep_user', array('op'=>'post'));}">添加{$title}</a></li>
+	{if !empty($id)}
+	<li class="active"><a href="{php echo $this->createWebUrl('cgc_sleep_user', array('op'=>'post', 'id'=>$id));}">编辑{$title}</a></li>
+	{/if}
+</ul>
+
+<div class="main">
+	<form action="" method="post" class="form-horizontal form" id="form">
+		<div class="panel panel-default">
+			<div class="panel-heading">{$title}信息</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">openid</label>
+					<div class="col-xs-12 col-sm-4">
+						<input type="text" name="data[openid]" class="form-control" value="{$data['openid']}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">昵称</label>
+					<div class="col-xs-12 col-sm-4">
+						<input type="text" name="data[nickname]" class="form-control" value="{$data['nickname']}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">头像</label>
+					<div class="col-xs-12 col-sm-8">
+						{php echo tpl_form_field_image('data[headimgurl]', $data['headimgurl']);}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">好友openid</label>
+					<div class="col-xs-12 col-sm-4">
+						<input type="text" name="data[friend_openid]" class="form-control" value="{$data['friend_openid']}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">好友昵称</label>
+					<div class="col-xs-12 col-sm-4">
+						<input type="text" name="data[friend_nickname]" class="form-control" value="{$data['friend_nickname']}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">好友头像</label>
+					<div class="col-xs-12 col-sm-8">
+						{php echo tpl_form_field_image('data[friend_headimgurl]', $data['friend_headimgurl']);}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">财富收入</label>
+					<div class="col-xs-12 col-sm-2">
+						<input type="text" name="data[amount]" class="form-control" value="{$data['amount']}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">支出金额</label>
+					<div class="col-xs-12 col-sm-2">
+						<input type="text" name="data[pay_amount]" class="form-control" value="{$data['pay_amount']}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">未到账金额</label>
+					<div class="col-xs-12 col-sm-2">
+						<input type="text" name="data[no_account_amount]" class="form-control" value="{$data['no_account_amount']}" />
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">总金额</label>
+					<div class="col-xs-12 col-sm-2">
+						<input type="text" name="data[total_amount]" class="form-control" value="{$data['total_amount']}" />
+						<span>未到账金额和财富收入的总和</span>
+					</div>
+				</div>
+				
+				
+				<div class="form-group">
+					<div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 col-sm-offset-3 col-md-offset-2 col-lg-offset-2">
+						<input type="hidden" name="id" value="{$data['id']}" />
+						<input name="submit" type="submit" value="提交" class="btn btn-primary" />
+						<input type="hidden" name="token" value="{$_W['token']}" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<script>
+require(['jquery', 'util'], function($, util){
+	$(function(){
+		$('#form').submit(function(){
+			return true;
+		});
+		
+	});
+});
+</script>
+
+{template 'common/footer'}

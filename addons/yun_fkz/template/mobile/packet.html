@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>{if $type=="packet"}升级红包{else}商城余额{/if}提现</title>
+    <!-- Bootstrap -->
+    <link href="../addons/yun_fkz/template/mobile/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../addons/yun_fkz/template/mobile/css/common.css"
+          media="screen, projection">
+    <script type="text/javascript" src="../addons/yun_fkz/template/mobile/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../addons/yun_fkz/template/mobile/js/alert.js"></script>
+    
+</head>
+<body  style="background: #ECF3FA;">
+<div class="container-fluid">
+	<div class="row clearfix">
+		<div class="col-md-12">
+			<div style="margin-right:-15px;margin-left:-15px;">
+			<div class="deal-info" data-type="daishengji" style="border-bottom: 2px solid red;color:red;">
+				<a class="c-to-manage" href="javascript:;"><font color="red">可提现</font></a>
+			</div>
+			<div class="deal-info" data-type="yishengji">
+				<a class="c-to-manage" href="{php echo $this->createMobileUrl('myinfo',array('op'=>'packet_history','type'=>$type))}"><font color="black">提现记录</font></a>
+			</div>
+			</div>
+		</div>
+	</div>
+	
+    {template 'navbar'}
+    <div class="row clearfix">
+        <div class="col-xs-12">
+            <div class="thumbnail hdiv-common"
+                 style="margin-right:-15px;margin-left:-15px;text-align:center;background: no-repeat;background-size: 200%, 100%;">
+                <div style="margin-top:25px;">
+                    <span style="font-size:18px;font-weight:bold;color:red">可提现{$packet}元</span>
+                </div>
+                {if $type=="credit"}<input placeholder="请输入提现金额" id="credit">{/if}
+                
+                <input type="hidden" id="packet" value="{$packet}">
+                <div style="margin-top:25px;padding: 0 20px">
+                	<a class="pay_btn" href="javascript:">申请提现（最低提现金额{$min_tixian}元{if $cfg['tixian_cut']}，提现手续费为：{$cfg['tixian_cut']}%{/if}）</a>
+                </div>
+                <script>
+                	var paying = false;
+					var min_tixian = parseFloat("{$min_tixian}")
+                	$('.pay_btn').click(function(){
+                		if(paying) return;
+                		paying = true;
+                		
+                		packet = parseInt($('#packet').val());
+						credit = $('#credit').val();
+                		if(packet<min_tixian){
+                			alert("可提现金额少于"+min_tixian+"元");
+                			paying = false;
+                			return;
+                		}else{
+                			$.post( "{php echo $this->createMobileUrl('myinfo',array('op' => 'packet','type'=>$type))}", 
+                			{'opp' : 'tixian','credit' : credit}, function(data){
+                				var info = eval(data);
+                				if(info.s == 'ok'){
+                					window.location.href="{php echo $this->createMobileUrl('myinfo',array('op' => 'packet_history','type'=>$type))}";
+                				}else{
+                					alert(info.msg);
+									paying = false;
+                				}
+                			},'json');
+                		}
+                	})
+                </script>
+                
+            </div>
+        </div>
+    </div>
+    <!--<button onclick="location.reload(true)">RELOAD</button>-->
+</div>
+
+<div class="index-content">
+    <div class="readme">
+        <div class="title">提现说明</div>
+        <div class="content">
+            <ol>
+                <li><p>体现方式为：微信企业支付</p></li>
+                <li><p>提现审核后将直接到达您的微信零钱账户</p></li>
+                <li><p>如果您有疑问请联系在线客服</p></li>
+                <li><p>体现时间：9:00至24:00（根据微信接口时间）</p></li>
+				{if $cfg['tixian_cut']}
+                <li><p>提现手续费：{$cfg['tixian_cut']}%（例如：您提现100元，将收取手续费为 100 * {$cfg['tixian_cut']}% = {$cfg['tixian_cut']}元，提现成功后，实际到账为：{php echo 100-$cfg['tixian_cut']}元）</p></li>
+                {/if}
+            </ol>
+        </div>
+    </div>
+</div>
+</body>
+</html>

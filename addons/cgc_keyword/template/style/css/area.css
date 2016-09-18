@@ -1,0 +1,42 @@
+/* CSS Document */
+body{font-size: 100%;}
+html{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;font-size:100%;}
+html, body{padding:0;margin:0;width:100%;height:100%;}
+*{box-sizing:border-box;padding:0;margin:0;}
+body{font-weight:normal;line-height:1.6em;font-family:"Microsoft Yahei", arial, "Hiragino Sans GB", sans-serif;}
+ul,li{ list-style:none;}
+.l{ float:left;}
+.r{ float:right;}
+.tl{text-align:left;}
+.tr{ text-align:right;}
+.tc{ text-align:center;}
+.clear:after { content:''; display:table; clear:both; height:0;}
+.pb60{ padding-bottom:60px;}
+.fs-8{ font-size:0.8em;}
+.b{ font-weight:bold;}
+/*********************************************地区分组-列表******************************************/
+.area_nav{}
+.area_banner{}
+.area_item{}
+.area_item ul li span,.area_item ul li a{ display:inline-block; vertical-align:middle;}
+.area_item_title{ background:#fbf9fe; line-height:2.7em; font-size:1em; border-bottom:1px solid #d9d9d9; color:#888; padding-left:10px;}
+.area_item ul li{ line-height:1.7em; padding:0.5em 0; font-size:1em; color:#000; border-bottom:1px solid #d9d9d9; background:#FFF;}
+.area_item ul li span{ width:86%; padding-left:2.5%; overflow:hidden;}
+.area_item ul li a{ width:1.4em; margin-left:2%; height:1.4em;}
+.area_item ul li a.radio_bg{ background:url(../images/radio-default.png) no-repeat;  background-size:contain;}
+.area_item ul li a.radio_bged{ background:url(../images/radio-gx.png) no-repeat; background-size:contain; }
+.area_qd{ text-align:center; margin:1em 0;}
+.area_qd a.btn_qd{ display:inline-block; width:80%; background:#04be02; border-radius:6px; line-height:2.7em; text-align:center; color:#FFF; font-size:1em;}
+
+
+
+
+
+
+
+
+
+
+
+
+

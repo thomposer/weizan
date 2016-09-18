@@ -7,12 +7,10 @@
 <div class="panel panel-default">
   <div class="panel-heading">导入费用</div>
   <div class="panel-body">
-  {if $user['regionid']}
     <div class="alert alert-info" role="alert">
-        默认导入格式:当前小区费用,请按照此格式导入：姓名|手机号码|房号|房屋面积|时间|{$cate['name']}|总计|是否缴费,用是代表缴费，否或者默认空代表未缴费。查询已房号为准。。
-      
+        默认导入格式:当前小区费用,请按照此格式导入：姓名|手机号码|房号|房屋面积|时间|{$cate['name']}|总计|是否缴费,用是代表缴费，否或者默认空代表未缴费。查询已房号为准，具体请下载模版格式
+       <p>(<a href="{MODULE_URL}template/upFile/cost.xlsx" target="_blank" style="font-size:16px;color:red">点击下载上传费用格式示例</a>)</p>
     </div>
-  {/if}
     <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
     {if !$user['regionid']}
       <div class="form-group">

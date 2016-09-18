@@ -1,0 +1,39 @@
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                时间设置
+            </div>
+            <div class="panel-body table-responsive">
+                <div class="alert-new">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label" style="color:#ff0000;">预约时间设置</label>
+                    <div class="col-xs-12 col-sm-9 input-group">
+		 				<label class="radio-inline"><input type="radio" name="is_time" value="0" {if empty($activity) || $activity['is_time'] == 0} checked="checked"{/if} onclick="$('#time').show();$('#times').hide();" /> 普通时间</label>
+		 				<label class="radio-inline"><input type="radio" name="is_time" value="2" {if empty($activity) || $activity['is_time'] == 2} checked="checked"{/if} onclick="$('#times').show();$('#time').hide();" /> 时间段预约人数限制</label>
+                		<label class="radio-inline"><input type="radio" name="is_time" value="1" {if $activity['is_time'] == 1} checked="checked"{/if} onclick="$('#time').hide();$('#times').hide();" /> 关闭(我要自己设置)</label>
+                    </div>
+                </div>
+			<div id="times"{if $activity['is_time'] == 1 || $activity['is_time'] == 0} style="display:none"{/if}>
+			 	<div class="form-group">
+			 		<label class="col-xs-12 col-sm-3 col-md-2 control-label">预约时间段</label>
+			 		<div class="col-xs-12 col-sm-9">
+						<span class="help-block">选中表示可预约</span>
+				 		<input type="hidden" name="srvtime" class="srvtime" value="{php echo htmlspecialchars($activity['srvtime'])}">
+			 		</div>
+			 	</div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">可预约天数范围</label>
+                    <div class="col-xs-12 col-sm-9 input-group">
+                    	<input type="text" class="form-control" name="day" value="{$activity['day']}" /><span class="input-group-addon">/天。如果设置6天并周六周日不选中，那么1、2、3、4、5、8日可预约，6、7日是周六周日自动排除</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label" style="color:#ff0000;">时间显示方式</label>
+                    <div class="col-xs-12 col-sm-9 input-group">
+		 				<label class="radio-inline"><input type="radio" name="timelist" value="1" {if $activity['timelist'] == 1} checked="checked"{/if} /> 九宫格</label>
+                		<label class="radio-inline"><input type="radio" name="timelist" value="0" {if $activity['timelist'] == 0} checked="checked"{/if} /> 列表</label>
+                    </div>
+                </div>
+			</div>
+		</div>
+		</div>
+		</div>

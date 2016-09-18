@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>{if $type=="packet"}升级红包{else}商城余额{/if}提现</title>
+    <!-- Bootstrap -->
+    <link href="../addons/yun_fkz/template/mobile/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../addons/yun_fkz/template/mobile/css/common.css"
+          media="screen, projection">
+    <script type="text/javascript" src="../addons/yun_fkz/template/mobile/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../addons/yun_fkz/template/mobile/js/alert.js"></script>
+    <style>
+	#loadTip{text-align: center;font-size:16px;line-height:40px;background: #fff;margin:10px;}
+	.shouzhi_list{ background-color: #fff;padding-left: 0;}
+	.shouzhi_list li{ padding: 12px; box-sizing: border-box; overflow: hidden; border-bottom: 1px solid #e5e5e5;}
+	.shouzhi_time{width: 80%; float: left;}
+	.shouzhi_time > h3{ color: #353535;    font-size: 16px;}
+	.shouzhi_time > p{ color: #999; font-size: 1em;}
+	.shouzhi_list span{ display: block; width: 20%; float: left; text-align: right; font-size: 1.6em; line-height: 3;}
+	.cheng{ color: #ff3300;}
+	.lv{ color: green;}
+	</style>
+</head>
+<body style="background: #ECF3FA;">
+<div class="container-fluid">
+{template 'navbar'}
+	<div class="row clearfix">
+		<div class="col-md-12">
+			<div style="margin-right:-15px;margin-left:-15px;">
+			<div class="deal-info" data-type="daishengji">
+				<a class="c-to-manage" href="{php echo $this->createMobileUrl('myinfo',array('op'=>'packet','type'=>$type))}"><font color="black">可提现</font></a>
+			</div>
+			<div class="deal-info" data-type="yishengji" style="border-bottom: 2px solid red;color:red;">
+				<a class="c-to-manage" href="javascript:;" ><font color="red">提现记录</font></a>
+			</div>
+			</div>
+		</div>
+	</div>
+	<div style="height:20px;"></div>
+	<ul class="shouzhi_list"> 
+	
+	</ul>
+	<div class="loadTip" id="loadTip"></div>
+</div>
+<script>
+var moreURL="{php echo $this->createMobileUrl('myinfo',array('op'=>'packet_history','opp'=>'ajax_list','type'=>$type))}"; 
+
+ var page=0;
+ var ismax=false;
+ var isLoadding=false;
+ function loadMore(){
+	 if(isLoadding) return;
+	 if(ismax) return;
+	 page++;
+	 isLoadding=true;
+	 
+	 $("#loadTip").animate({ height:"40px" }, function(){
+		 
+			$("#loadTip").text("正在加载中");
+			 
+	 });
+	// $(document).animate({ scrollTop:$(document).height-$(window).height } );
+	 $("#loadTip").show();
+	 //$(document).scrollTop = $(document).height-$(window).height;
+	// location.href="#loadTip";
+	 setTimeout(function(){
+		 
+		 $.ajax({
+			 url:moreURL+"&page="+page ,
+			 success:function(ret){
+			 	 if(ret==0){
+			 		 ismax=true;
+			 		 
+			 		$("#loadTip").text("没有更多")
+				 	if(page!=1){
+				 		setTimeout(function(){
+						 	$("#loadTip").text("");
+					 		isLoadding=false;
+					 	 $("#loadTip").animate({ height:"0px" },function(){
+							 
+							//	$("#loadTip").hide();
+						 })},1000);
+				 	}
+					 
+			  
+			 	 }else{
+			 		if(page==1){
+			 			$(".shouzhi_list").html(ret);
+			 		}else{
+			 			$(".shouzhi_list").append(ret);
+			 		} 
+			 	 //$("#data-list-reg").append(ret);
+			 	
+			 	$("#loadTip").text("")
+		 		isLoadding=false;
+			 	
+		 	 $("#loadTip").animate({ height:"0px" },function(){
+				 
+				//	$("#loadTip").hide();
+			 });
+		  
+			 	 
+			 	 }
+		 	
+			 },
+			 error:function(ret){
+				// alert("error"+ret)
+				
+				$("#loadTip").text("")
+				 	 $("#loadTip").animate({ height:"0px" },function(){
+						 
+							//$("#loadTip").hide();
+					 });
+				 	isLoadding=false;
+				 	page--;
+			 }
+			 
+		 })
+		 
+	 },800)
+	 
+ }
+ 
+
+ 
+ function checkLoadMore(){
+	 
+	  if ($(document).scrollTop() + $(window).height() > $(document).height()-8 ) {
+	    	 loadMore();
+	     }
+	  
+ }
+ $(function(){
+	 $(window).on('scroll', function () {
+		 checkLoadMore()
+	 });
+	 checkLoadMore();
+ })
+ 
+</script>
+
+</body>
+</html>

@@ -12,6 +12,8 @@
 	<li{if $op == 'list'} class="active"{/if}><a href="{php echo $this->createWebUrl('staff', array('op' => 'list','reid' => $_GPC['reid']))}">客服列表</a></li>
 	<li{if $op == 'post' && !$id} class="active"{/if}><a href="{php echo $this->createWebUrl('staff', array('op' => 'post','reid' => $_GPC['reid']))}">添加客服</a></li>
 	{if $id}<li class="active"><a href="#">编辑客服</a></li>{/if}
+	<li><a href="{php echo $this->createWebUrl('post', array('id' => $_GPC['reid']))}">编辑{$activity['title']}</a></li>
+	<li><a href="{php echo $this->createWebUrl('item', array('op' => 'list','reid' => $_GPC['reid']))}">{$activity['xmname']}管理</a></li>
 </ul>
 {if $op == 'post'}
 	<form class="form-horizontal form" id="form1" action="" method="post" enctype="multipart/form-data">

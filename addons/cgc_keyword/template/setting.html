@@ -1,0 +1,277 @@
+{template 'common/header'}
+
+<div class="clearfix">
+    <form id="theform" class="form form-horizontal" action="" method="post">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                  设置
+            </div>
+            <div class="panel-body">
+            
+            
+            
+                   <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启本模块</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="enabled" value="0"
+                         {if empty($settings['enabled'])} checked="checked" {/if}>否</label>
+	         			<label class="radio-inline"><input type="radio" name="enabled" value="1" 
+	         			 {if !empty($settings['enabled'])} checked="checked" {/if}>是</label>
+	         			  <span class="help-block">有时候会和系统的其他功能冲突，如果出错请选择否。</span>
+                    </div>
+                </div>
+            
+         
+            
+             <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">分组成功以后的文本消息</label>                    
+                       <div class="col-sm-8 col-xs-12">
+            <textarea id="group_success" name="group_success" class="form-control" rows="5" cols="60">{$settings['group_success']}</textarea>                   
+                      <span class="help-block">
+                                    例如:你分组到#group_name#成功,可以使用超链接a标签，如果设置空则不回复。
+               #group_desc#代表 粉丝分组表 中 粉丝分组描述 字段内容，这样不同粉丝移动到不同 的分组就有个性化的回复。  
+                  <br>  如果想要使用下面的图文回复，本选项必须设置为空  (文本消息或者分组成功回调标题必须设置一个，不然模块不起作用)                            
+                     </span>
+                    </div>          
+                </div>
+                
+     
+             
+              <div class="panel-body">
+       <div class="form-group answer_type" style="display:">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">分组成功图文回复标题：</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="group_title" value="{$settings['group_title']}" class="form-control">
+                      <span class="help-block">
+                                       支持#group_name#和#group_desc#符号。(文本消息或者分组成功回调标题必须设置一个，不然模块不起作用)  
+                                   
+                     </span>
+                    </div>
+                  
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">回复描述：</label>
+                    <div class="col-sm-9 col-xs-12">
+                       <textarea style="min-height: 120px;" id="group_desc" name="group_desc"
+                            class="form-control span7" cols="60">{$settings['group_desc']}</textarea>
+                                 <span class="help-block">
+                                       支持#group_name#和#group_desc#符号。
+                                   
+                     </span>
+                </div>
+                
+              
+                
+              </div>  
+                 <div class="form-group answer_type" style="display:">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">回复图片：</label>
+                    <div class="col-sm-9 col-xs-12">
+                        {php echo tpl_form_field_image('group_thumb',$settings['group_thumb']);}
+                    </div>
+                </div>
+
+
+
+                
+
+                <div class="form-group answer_type" style="">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">图文回复链接：</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="group_url" value="{$settings['group_url']}" class="form-control">
+                                <span class="help-block">http开头</span>
+                    </div>
+                </div>
+                
+                
+                
+                
+                
+                
+                
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否根据省份自动分组</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="auto_province" value="0"
+                         {if empty($settings['auto_province'])} checked="checked" {/if}>否</label>
+	         			<label class="radio-inline"><input type="radio" name="auto_province" value="1" 
+	         			 {if !empty($settings['auto_province'])} checked="checked" {/if}>是</label>
+	         			  <span class="help-block">粉丝资料的省份如果和自定义分组的名称一模一样，就自动在关注的时候给他分组，
+	         			    此选项和其他选项是互相冲突的关系，只能选择一个</span>
+                    </div>
+                </div>
+                
+                                     
+                 <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否根据城市自动分组</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="auto_city" value="0"
+                         {if empty($settings['auto_city'])} checked="checked" {/if}>否</label>
+	         			<label class="radio-inline"><input type="radio" name="auto_city" value="1" 
+	         			 {if !empty($settings['auto_city'])} checked="checked" {/if}>是</label>
+	         			  <span class="help-block">粉丝资料的城市如果和自定义分组的名称一模一样，就自动在关注的时候给他分组，
+	         			  此选项和其他选项是互相冲突的关系，只能选择一个</span>
+                    </div>
+                </div>
+                
+                
+                               
+                
+                <div class="form-group"style="display:">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">自定义地区分组</label>
+                      <div class="col-sm-9 col-xs-12">
+                        <div class="input-group">
+                   
+                            <div class="input-group-addon">粉丝所在城市</div>
+
+                            <input type="text" class="form-control" 
+                            placeholder="" name="city" value="{$settings['city']}">
+
+                            <div class="input-group-addon">自动分组</div>
+                            
+                            <select name="city_group_id" class="form-control" name="city_group_id">
+                           
+                           <option value="" selected="">不选择</option>
+				
+				{loop $fansgroup $key $value}
+				<option value="{$value[group_id]}" {if $settings['city_group_id'] == $value[group_id]} 
+				selected="selected" {/if}>
+				{$value['name']}</option>
+				{/loop}
+				</select>
+                                             
+                            
+                                 <div class="input-group-addon">粉丝所在省份</div>
+
+                            <input type="text" class="form-control" 
+                            placeholder="" name="province" value="{$settings['province']}">
+
+                            <div class="input-group-addon">自动分组</div>
+                           
+                                       <select name="province_group_id" class="form-control" name="province_group_id">
+                           
+                           <option value="" selected="">不选择</option>
+				
+				{loop $fansgroup $key $value}
+				<option value="{$value[group_id]}" {if $settings['province_group_id'] == $value[group_id]} 
+				selected="selected" {/if}>
+				{$value['name']}</option>
+				{/loop}
+				</select>
+              
+                        </div>
+                         <div class="help-block">
+                             粉丝关注以后自动分组,性别和省份和城市只能选择一个起作用
+                            </div>
+      
+                    </div>
+
+                </div>  
+                
+                
+                 <div class="form-group"style="display:">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">性别分组</label>
+                      <div class="col-sm-9 col-xs-12">
+                        <div class="input-group">
+               
+                            <div class="input-group-addon">男性</div>
+
+                           
+                            <div class="input-group-addon">自动分组</div>
+                            
+                            <select name="man_group_id" class="form-control" name="man_group_id">
+                           
+                           <option value="" selected="">不选择</option>
+				
+				{loop $fansgroup $key $value}
+				<option value="{$value[group_id]}" {if $settings['man_group_id'] == $value[group_id]} 
+				selected="selected" {/if}>
+				{$value['name']}</option>
+				{/loop}
+				</select>
+                                             
+                            
+                
+              <div class="input-group-addon">女性</div>
+
+                            <div class="input-group-addon">自动分组</div>
+                            <select name="woman_group_id" class="form-control" name="woman_group_id">
+                           
+                           <option value="" selected="">不选择</option>
+				
+				{loop $fansgroup $key $value}
+				<option value="{$value[group_id]}" {if $settings['woman_group_id'] == $value[group_id]} 
+				selected="selected" {/if}>
+				{$value['name']}</option>
+				{/loop}
+				</select>
+              
+                        </div>
+                         <div class="help-block">
+                              粉丝关注以后自动分组,性别和省份和城市只能一个起作用
+                            </div>
+      
+                    </div>
+
+                </div> 
+                
+                
+                          
+        
+                
+                
+                   <div class="form-group answer_type" style="display:">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">手机网页头部图片：</label>
+                    <div class="col-sm-9 col-xs-12">
+                        {php echo tpl_form_field_image('top',$settings['top']);}
+                    </div>
+                </div>
+                 </div>
+                
+               </div>
+        </div>     
+                  <div class="panel panel-default">
+            <div class="panel-heading">
+                  粉丝地区分组选项(地区分组是根据粉丝gps或者ip的地址自动给他分组)
+            </div>
+            <div class="panel-body">
+            
+               <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">分组定位类型</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="locationtype" value="0"
+                         {if empty($settings['locationtype'])} checked="checked" {/if}>ip定位</label>
+	         			<label class="radio-inline"><input type="radio" name="locationtype" value="1" 
+	         			 {if !empty($settings['locationtype'])} checked="checked" {/if}>gps定位</label>
+	         			  <span class="help-block">ip定位在非wifi环境，不准确。gps定位准确，不过如果没有开启gps功能，就无效了</span>
+                    </div>
+                </div>
+                
+                
+ 
+                   <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否重新分组</label>
+                    <div class="col-xs-12 col-sm-9">
+                        <label class="radio-inline"><input type="radio" name="re_group" value="0"
+                         {if empty($settings['re_group'])} checked="checked" {/if}>是</label>
+	         			<label class="radio-inline"><input type="radio" name="re_group" value="1" 
+	         			 {if !empty($settings['re_group'])} checked="checked" {/if}>否</label>
+	         			  <span class="help-block">已经有分组信息的粉丝点击地区分组网页的时候，是否能够继续被分组</span>
+                    </div>
+                </div>
+                
+        
+                
+       
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                    <div class="col-md-2 col-lg-1">
+                        <input name="submit" type="submit" value="保存" class="btn btn-primary btn-block" />
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{template 'common/footer'}
